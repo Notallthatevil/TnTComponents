@@ -12,4 +12,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0-rc.2.23455.8" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\TnTComponents\TnTComponents.csproj" />
+  </ItemGroup>
+
 </Project>

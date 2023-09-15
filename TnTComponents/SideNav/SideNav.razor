@@ -1,0 +1,38 @@
+﻿@using Microsoft.AspNetCore.Components.Routing
+@inherits TnTBaseComponent
+
+<div theme="@Theme" class="tnt-sidebar @(Fixed ? "tnt-sidebar-fixed" : string.Empty) @(Close ? "tnt-sidebar-closed" : string.Empty)">
+    <ul>
+        <li>
+            <NavLink href="#">
+                <i class="material-icons">search</i>Item 1
+            </NavLink>
+        </li>
+
+        <li>
+            <NavLink href="#">
+                <i class="material-icons on-surface-variant-text">
+                    inventory
+                </i>Item 2
+            </NavLink>
+        </li>
+        <li>
+            <NavLink href="#">
+                Item 3
+            </NavLink>
+        </li>
+    </ul>
+</div>
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    [Parameter]
+    public string Theme { get; set; } = "default";
+
+    [Parameter]
+    public bool Fixed { get; set; } = true;
+
+    [Parameter]
+    public bool Close { get; set; } = false;
+}

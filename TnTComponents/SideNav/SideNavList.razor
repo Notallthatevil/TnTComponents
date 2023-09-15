@@ -1,0 +1,11 @@
+﻿@inherits TnTBaseComponent
+
+<ul class="@Class">
+    @ChildContent
+</ul>
+
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+}
