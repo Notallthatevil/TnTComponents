@@ -1,0 +1,14 @@
+﻿@inherits TnTComponents.Common.TnTBaseComponent
+
+<button class="@GetClass()" theme="@Theme" @onclick="@((args) => OnClick.InvokeAsync(args))">
+    @if (!string.IsNullOrWhiteSpace(Icon)) {
+        <span>
+            <i class="@IconClass">@Icon</i>
+        </span>
+    }
+    @if (!string.IsNullOrWhiteSpace(Text)) {
+        <span>
+            @Text
+        </span>
+    }
+</button>

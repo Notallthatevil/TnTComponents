@@ -14,7 +14,7 @@
    backface-visibility: hidden;
    transform: translateX(-105%);
 
-   @extend .z-depth-1;
+   @extend .tnt-z-depth-1;
    // Right Align
    &.right-aligned {
       right: 0;
@@ -128,27 +128,6 @@
    transform: translateX(0);
    position: fixed;
 }
-
-// Fixed tnt-sidebar hide on smaller
-//@media #{$medium-and-down} {
-//   .tnt-sidebar {
-//      &.tnt-sidebar-fixed {
-//         transform: translateX(-105%);
-//
-//         &.right-aligned {
-//            transform: translateX(105%);
-//         }
-//      }
-//
-//      > a {
-//         padding: 0 $tnt-sidebar-padding;
-//      }
-//
-//      .user-view {
-//         padding: $tnt-sidebar-padding $tnt-sidebar-padding 0;
-//      }
-//   }
-//}
 
 .tnt-sidebar[theme=default] {
    width: $tnt-sidebar-width;

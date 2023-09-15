@@ -10,5 +10,8 @@ namespace TnTComponents.Common {
 
         [Parameter]
         public string Class { get; set; } = string.Empty;
+
+        [Parameter]
+        public string Theme { get; set; } = "default";
     }
 }

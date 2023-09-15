@@ -1,0 +1,86 @@
+﻿@use "sass:color";
+
+.tnt-btn {
+   border: none;
+   min-width: 2.5rem;
+   border-radius: 2rem;
+   font-weight: 700;
+   font-size: 1rem;
+   padding: 0.5rem 1.5rem;
+   line-height: 1.25rem;
+   align-content: center;
+   align-items: center;
+   cursor: pointer;
+   transition: background-color 100ms ease-out;
+   margin: 0.25rem;
+   @extend .tnt-z-depth-1;
+
+   span {
+      vertical-align: middle;
+   }
+
+   i {
+      display: inline-block;
+      text-align: center;
+      font-size: 1.3rem;
+      vertical-align: bottom;
+      margin-right: 0.3rem;
+   }
+
+   &:hover {
+      @extend .tnt-z-depth-2;
+   }
+}
+
+.tnt-btn-filled {
+   @extend .tnt-btn;
+   @extend .tnt-z-depth-0;
+
+   &:hover {
+      @extend .tnt-z-depth-0;
+   }
+}
+
+.tnt-btn-outlined {
+   @extend .tnt-btn;
+   @extend .tnt-z-depth-0;
+
+   &:hover {
+      @extend .tnt-z-depth-0;
+   }
+
+   background-color: #00000000 !important;
+   outline-style: solid;
+   outline-width: 1px;
+   padding: 0.45rem 1.45rem;
+}
+
+
+.tnt-btn[theme=default] {
+   background-color: $tnt-color-primary-container;
+   color: $tnt-color-on-primary-container;
+
+   &:hover {
+      background-color: color.adjust($tnt-color-primary-container, $lightness: -10%);
+   }
+}
+
+.tnt-btn-filled[theme=default] {
+   background-color: $tnt-color-primary;
+   color: $tnt-color-on-primary;
+
+   &:hover {
+      background-color: color.adjust($tnt-color-primary, $lightness: -10%);
+   }
+}
+
+.tnt-btn-outlined[theme=default] {
+   outline-color: $tnt-color-primary;
+   color: $tnt-color-primary;
+
+   &:hover {
+      background-color: #00000022 !important;
+      color: color.adjust($tnt-color-primary, $lightness: -30%);
+      outline-color: color.adjust($tnt-color-primary, $lightness: -10%);
+   }
+}
