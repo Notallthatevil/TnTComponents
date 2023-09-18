@@ -3,126 +3,108 @@
    left: 0;
    top: 0;
    margin: 0;
-   transform: translateX(-100%);
    height: 100%;
-   height: calc(100% + 60px);
-   height: -moz-calc(100%); //Temporary Firefox Fix
-   padding-bottom: 60px;
    z-index: 999;
    overflow-y: auto;
    will-change: transform;
    backface-visibility: hidden;
    transform: translateX(-105%);
-
    @extend .tnt-z-depth-1;
    // Right Align
-   &.right-aligned {
-      right: 0;
-      transform: translateX(105%);
-      left: auto;
-      transform: translateX(100%);
-   }
-
-   .collapsible {
-      margin: 0;
+   //   &.right-aligned {
+   //      right: 0;
+   //      transform: translateX(105%);
+   //      left: auto;
+   //      transform: translateX(100%);
+   //   }
+   //   .collapsible {
+   //      margin: 0;
+   //   }
+   ul {
+      padding: 0;
    }
 
    li {
       float: none;
-      list-style-type:none;
-
-      &.active {
-         background-color: rgba(0,0,0,.05);
-      }
-   }
-
-   li > a {
-      display: block;
-      font-weight: bold;
-      text-decoration:none;
+      list-style-type: none;
+      line-height: 3rem;
+      vertical-align: middle;
 
       &:hover {
          background-color: rgba(0,0,0,.05);
       }
 
-      &.btn, &.btn-large, &.btn-flat, &.btn-floating {
-         margin: 10px 15px;
+      &:active {
+         background-color: rgba(0,0,0,.05);
       }
 
-
-      & > i,
-      & > [class^="mdi-"], li > a > [class*="mdi-"],
-      & > i.material-icons {
-         float: left;
-         color: rgba(0,0,0,.54);
-      }
-   }
-
-
-
-   .subheader {
-      &:hover {
-         background-color: transparent;
-      }
-
-      cursor: initial;
-      pointer-events: none;
-      color: rgba(0,0,0,.54);
-      font-weight: 500;
-   }
-
-   .user-view {
-      position: relative;
-
-      & > a {
-         &:hover {
-            background-color: transparent;
-         }
-
-         height: auto;
-         padding: 0;
-      }
-
-      .background {
-         overflow: hidden;
-         position: absolute;
-         top: 0;
-         right: 0;
-         bottom: 0;
-         left: 0;
-         z-index: -1;
-      }
-
-      .circle, .name, .email {
+      > a {
          display: block;
-      }
+         font-weight: bold;
+         text-decoration: none;
+         vertical-align: top;
 
-      .circle {
-         height: 64px;
-         width: 64px;
-      }
-
-
-      .name {
-         margin-top: 16px;
-         font-weight: 500;
-      }
-
-      .email {
-         padding-bottom: 16px;
-         font-weight: 400;
+         > i,
+         > i.material-icons {
+            float: left;
+            padding-right: 1rem;
+            line-height: 3rem;
+         }
       }
    }
+   //   .subheader {
+   //      &:hover {
+   //         background-color: transparent;
+   //      }
+   //      cursor: initial;
+   //      pointer-events: none;
+   //      color: rgba(0,0,0,.54);
+   //      font-weight: 500;
+   //   }
+   //   .user-view {
+   //      position: relative;
+   //      & > a {
+   //         &:hover {
+   //            background-color: transparent;
+   //         }
+   //         height: auto;
+   //         padding: 0;
+   //      }
+   //      .background {
+   //         overflow: hidden;
+   //         position: absolute;
+   //         top: 0;
+   //         right: 0;
+   //         bottom: 0;
+   //         left: 0;
+   //         z-index: -1;
+   //      }
+   //      .circle, .name, .email {
+   //         display: block;
+   //      }
+   //      .circle {
+   //         height: 64px;
+   //         width: 64px;
+   //      }
+   //      .name {
+   //         margin-top: 16px;
+   //         font-weight: 500;
+   //      }
+   //      .email {
+   //         padding-bottom: 16px;
+   //         font-weight: 400;
+   //      }
+   //   }
 }
 
 
 // Fixed tnt-sidebar shown
 .tnt-sidebar.tnt-sidebar-fixed {
    // Right Align
-   &.right-aligned {
-      right: 0;
-      left: auto;
-   }
+   //   &.right-aligned {
+   //      right: 0;
+   //      left: auto;
+   //   }
 
    left: 0;
    transform: translateX(0);
@@ -133,68 +115,50 @@
    width: $tnt-sidebar-width;
    background-color: $tnt-sidebar-bg-color;
 
-   li {
-      float: none;
-
-      &.active {
-         background-color: rgba(0,0,0,.05);
-      }
-   }
-
    li > a {
       color: $tnt-sidebar-font-color;
       font-size: $tnt-sidebar-font-size;
       height: $tnt-sidebar-item-height;
       line-height: $tnt-sidebar-line-height;
       padding: 0 ($tnt-sidebar-padding * 2);
-
-
-      &.btn,
-      &.btn-large,
-      &.btn-floating {
-         color: $tnt-button-raised-color;
-      }
-
-      &.btn-flat {
-         color: $tnt-button-flat-color;
-      }
-
-      &.btn:hover,
-      &.btn-large:hover {
-         background-color: lighten($tnt-button-raised-background, 5%);
-      }
-
-      &.btn-floating:hover {
-         background-color: $tnt-button-raised-background;
-      }
+      //&.btn,
+      //&.btn-large,
+      //&.btn-floating {
+      //   color: $tnt-button-raised-color;
+      //}
+      //&.btn-flat {
+      //   color: $tnt-button-flat-color;
+      //}
+      //&.btn:hover,
+      //&.btn-large:hover {
+      //   background-color: lighten($tnt-button-raised-background, 5%);
+      //}
+      //&.btn-floating:hover {
+      //   background-color: $tnt-button-raised-background;
+      //}
 
       & > i,
-      & > [class^="mdi-"], li > a > [class*="mdi-"],
+      //& > [class^="mdi-"], li > a > [class*="mdi-"],
       & > i.material-icons {
-         height: $tnt-sidebar-item-height;
+         //height: $tnt-sidebar-item-height;
          line-height: $tnt-sidebar-line-height;
          margin: 0 ($tnt-sidebar-padding * 2) 0 0;
-         width: $tnt-sidebar-item-height / 2;
       }
    }
-
-   .divider {
-      margin: ($tnt-sidebar-padding / 2) 0 0 0;
-   }
-
-   .subheader {
-      font-size: $tnt-sidebar-font-size;
-      line-height: $tnt-sidebar-line-height;
-   }
-
-   .user-view {
-      padding: ($tnt-sidebar-padding * 2) ($tnt-sidebar-padding * 2) 0;
-      margin-bottom: $tnt-sidebar-padding / 2;
-
-      .name,
-      .email {
-         font-size: $tnt-sidebar-font-size;
-         line-height: $tnt-sidebar-line-height / 2;
-      }
-   }
+   //   .divider {
+   //      margin: ($tnt-sidebar-padding / 2) 0 0 0;
+   //   }
+   //   .subheader {
+   //      font-size: $tnt-sidebar-font-size;
+   //      line-height: $tnt-sidebar-line-height;
+   //   }
+   //   .user-view {
+   //      padding: ($tnt-sidebar-padding * 2) ($tnt-sidebar-padding * 2) 0;
+   //      margin-bottom: $tnt-sidebar-padding / 2;
+   //      .name,
+   //      .email {
+   //         font-size: $tnt-sidebar-font-size;
+   //         line-height: $tnt-sidebar-line-height / 2;
+   //      }
+   //   }
 }

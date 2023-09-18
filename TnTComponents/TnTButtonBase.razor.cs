@@ -2,9 +2,10 @@ using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components;
 
-namespace TnTComponents.Button;
+namespace TnTComponents;
 
-public abstract partial class TnTButtonBase {
+public abstract partial class TnTButtonBase
+{
     [Parameter]
     public string? Icon { get; set; }
     [Parameter]

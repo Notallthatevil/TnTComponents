@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TnTComponents.Button;
-    public class TnTFilledButton : TnTButtonBase {
+public class TnTFilledButton : TnTButtonBase {
         protected override string GetClass() {
             return "tnt-btn-filled " + Class;
         }

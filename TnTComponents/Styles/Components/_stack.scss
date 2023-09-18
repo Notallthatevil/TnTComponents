@@ -1,0 +1,22 @@
+﻿.tnt-stack-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.tnt-stack-vertical-reverse {
+    @extend .tnt-stack-vertical;
+    flex-direction: column-reverse;
+}
+
+
+.tnt-stack-horizontal {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.tnt-stack-horizontal-reverse {
+    @extend .tnt-stack-horizontal;
+    flex-direction: row-reverse;
+}
