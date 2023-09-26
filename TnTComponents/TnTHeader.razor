@@ -1,11 +1,18 @@
 ﻿@inherits TnTBaseComponent
 
+@if (_layout?.Responsive ?? false) {
+    <TnTMediaCallback Query="(max-width:768px)" OnChangedCallback="(isSmallScreen) => SideBarExpanded = !isSmallScreen"></TnTMediaCallback>
+}
+
 <div class="tnt-header @Class @(SideBarExpanded ? "expanded" : string.Empty)" theme="@Theme">
     <h1>@Title</h1>
     @ChildContent
 </div>
 
 @code {
+    [CascadingParameter]
+    private TnTLayout? _layout { get; set; }
+
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 

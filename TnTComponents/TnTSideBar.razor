@@ -2,16 +2,21 @@
 @inherits TnTIconComponent
 @attribute [RenderModeAuto]
 
-<div theme="@Theme" class="tnt-sidebar @(Fixed ? "tnt-sidebar-fixed" : string.Empty) @(Expanded ? "tnt-sidebar-expanded" : string.Empty)">
+@if (_layout?.Responsive ?? false) {
+    <TnTMediaCallback Query="(max-width:768px)" OnChangedCallback="(isSmallScreen) => Expanded = !isSmallScreen"></TnTMediaCallback>
+}
+
+
+<div theme="@Theme" class="tnt-sidebar @(Expanded ? "tnt-sidebar-expanded" : string.Empty)">
     @ChildContent
 </div>
 
 @code {
-    [Parameter]
-    public RenderFragment ChildContent { get; set; } = default!;
+    [CascadingParameter]
+    private TnTLayout? _layout{ get;set; }
 
     [Parameter]
-    public bool Fixed { get; set; } = true;
+    public RenderFragment ChildContent { get; set; } = default!;
 
     [Parameter]
     public bool Expanded { get; set; }

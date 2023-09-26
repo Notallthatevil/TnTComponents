@@ -22,7 +22,8 @@
    @extend .tnt-z-depth-1;
 
    a {
-      cursor:pointer;
+      cursor: pointer;
+
       i.material-icons {
          color: $tnt-color-on-primary;
       }

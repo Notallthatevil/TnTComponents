@@ -1,7 +1,7 @@
 ﻿@page "/"
 @attribute [RenderModeServer]
 
-<TnTLayout>
+<TnTLayout Responsive="true">
     <TnTHeader SideBarExpanded="@_sideBarExpanded">
         <TnTSideBarToggle Click="@(()=> _sideBarExpanded = !_sideBarExpanded)">
 
@@ -9,8 +9,21 @@
         <h1>
             My Title
         </h1>
+
+        <h1>
+            123
+        </h1>
+        <h1>
+            456
+        </h1>
+                <h1>
+            789
+        </h1>
+        <h1>
+            123123123
+        </h1>
     </TnTHeader>
-    <TnTSideBar Fixed="false" Expanded="@_sideBarExpanded">
+    <TnTSideBar Expanded="@_sideBarExpanded">
         <TnTSideBarList>
             <TnTSideBarListItem Icon="search" Href="/link">
                 Search

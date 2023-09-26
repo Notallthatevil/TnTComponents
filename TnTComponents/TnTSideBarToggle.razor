@@ -1,11 +1,21 @@
 ﻿@inherits TnTIconComponent
 
-<a @onclick="OnClick">
-    @GetIcon()
-</a>
+@if (_layout?.Responsive ?? false) {
+    <TnTMediaCallback Query="(max-width:768px)" OnChangedCallback="@((isSmallScreen) => _showToggle = isSmallScreen)"></TnTMediaCallback>
+}
+@if (_showToggle) {
+    <a @onclick="OnClick">
+        @GetIcon()
+    </a>
+}
 @code {
+    [CascadingParameter]
+    private TnTLayout? _layout { get; set; }
+
     [Parameter]
     public EventCallback<EventArgs> Click { get; set; }
+
+    private bool _showToggle = true;
 
     protected override void OnInitialized() {
         if (string.IsNullOrWhiteSpace(Icon)) {

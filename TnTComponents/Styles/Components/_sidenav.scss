@@ -14,7 +14,7 @@
    backface-visibility: hidden;
    transform: translateX(-105%);
    border-radius: 1rem;
-   @extend .tnt-z-depth-1;
+   @extend .tnt-z-depth-2;
    @extend .tnt-sidebar-transition;
 
    ul {
@@ -61,13 +61,6 @@
 
 .tnt-sidebar-button {
    cursor: pointer;
-}
-
-
-.tnt-sidebar.tnt-sidebar-fixed {
-   left: 0;
-   transform: translateX(0);
-   position: fixed;
 }
 
 .tnt-sidebar[theme=default] {
