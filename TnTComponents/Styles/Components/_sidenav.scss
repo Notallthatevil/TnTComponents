@@ -1,4 +1,8 @@
-﻿.tnt-sidebar {
+﻿.tnt-sidebar-transition {
+   transition: transform ease-in-out 150ms;
+}
+
+.tnt-sidebar {
    position: fixed;
    left: 0;
    top: 0;
@@ -8,10 +12,10 @@
    overflow-y: auto;
    will-change: transform;
    backface-visibility: hidden;
-   transform: translateX(-5%);
-   @extend .tnt-z-depth-1;
-   transition: transform ease-in-out 150ms;
+   transform: translateX(-105%);
    border-radius: 1rem;
+   @extend .tnt-z-depth-1;
+   @extend .tnt-sidebar-transition;
 
    ul {
       padding: 0;
@@ -51,8 +55,8 @@
    }
 }
 
-.tnt-sidebar-closed {
-   transform: translateX(-105%);
+.tnt-sidebar-expanded {
+   transform: translateX(-5%);
 }
 
 .tnt-sidebar-button {
@@ -87,12 +91,12 @@
 
 .tnt-sidebar-button[theme=default] {
    position: fixed;
-   transform: translateX($tnt-sidebar-width + 20px);
-   transition: transform ease-in-out 150ms;
+   transform: translateX(0px);
+   @extend .tnt-sidebar-transition;
    color: $tnt-sidebar-font-color;
 }
 
-.tnt-sidebar-button[theme=default].tnt-sidebar-closed {
+.tnt-sidebar-button[theme=default].tnt-sidebar-expanded {
    position: fixed;
-   transform: translateX(5px);
+   transform: translateX($tnt-sidebar-width + 5px);
 }

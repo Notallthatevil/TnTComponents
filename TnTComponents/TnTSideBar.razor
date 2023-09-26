@@ -1,0 +1,18 @@
+﻿@using Microsoft.AspNetCore.Components.Routing
+@inherits TnTIconComponent
+@attribute [RenderModeAuto]
+
+<div theme="@Theme" class="tnt-sidebar @(Fixed ? "tnt-sidebar-fixed" : string.Empty) @(Expanded ? "tnt-sidebar-expanded" : string.Empty)">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    [Parameter]
+    public bool Fixed { get; set; } = true;
+
+    [Parameter]
+    public bool Expanded { get; set; }
+}

@@ -1,0 +1,17 @@
+﻿@inherits TnTBaseComponent
+
+<div class="tnt-header @Class @(SideBarExpanded ? "expanded" : string.Empty)" theme="@Theme">
+    <h1>@Title</h1>
+    @ChildContent
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    [Parameter]
+    public string Title { get; set; } = default!;
+
+    [Parameter]
+    public bool SideBarExpanded { get; set; } = false;
+}

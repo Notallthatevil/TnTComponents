@@ -1,7 +1,12 @@
 ﻿@import 'Common/_default_theme.scss';
 @import 'Common/_common.scss';
 @import 'Common/_grid.scss';
+@import 'Components/_body.scss';
+@import 'Components/_header.scss';
 @import 'Components/_sidenav.scss';
 @import 'Components/_buttons.scss';
 @import 'Components/_stack.scss';
 
+body {
+   margin: 0px;
+}

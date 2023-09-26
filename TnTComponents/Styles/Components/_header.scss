@@ -1,0 +1,30 @@
+﻿.tnt-header {
+   min-height: 2.5rem;
+   display: flex;
+   align-items: center;
+
+   h1 {
+      font-size: 2rem;
+      padding: 0 .5rem;
+   }
+
+   transition: padding-left ease-in-out 150ms;
+}
+
+.tnt-header.expanded {
+   padding-left: $tnt-sidebar-width;
+}
+
+
+.tnt-header[theme=default] {
+   background-color: $tnt-color-primary;
+   color: $tnt-color-on-primary;
+   @extend .tnt-z-depth-1;
+
+   a {
+      cursor:pointer;
+      i.material-icons {
+         color: $tnt-color-on-primary;
+      }
+   }
+}

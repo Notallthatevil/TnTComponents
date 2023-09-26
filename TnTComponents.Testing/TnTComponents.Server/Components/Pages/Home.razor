@@ -1,21 +1,37 @@
 ﻿@page "/"
 @attribute [RenderModeServer]
 
-<SideNav Fixed="false">
-    <SideNavList>
-        <SideNavListItem Icon="search" Href="/link">
-            Search
-        </SideNavListItem>
-        <SideNavListItem Icon="home">
-            Home
-        </SideNavListItem>
-        <SideNavListItem Href="/asdf">
-            Value
-        </SideNavListItem>
-    </SideNavList>
-</SideNav>
+<TnTLayout>
+    <TnTHeader SideBarExpanded="@_sideBarExpanded">
+        <TnTSideBarToggle Click="@(()=> _sideBarExpanded = !_sideBarExpanded)">
 
-This is some content
+        </TnTSideBarToggle>
+        <h1>
+            My Title
+        </h1>
+    </TnTHeader>
+    <TnTSideBar Fixed="false" Expanded="@_sideBarExpanded">
+        <TnTSideBarList>
+            <TnTSideBarListItem Icon="search" Href="/link">
+                Search
+            </TnTSideBarListItem>
+            <TnTSideBarListItem Icon="home">
+                Home
+            </TnTSideBarListItem>
+            <TnTSideBarListItem Href="/asdf">
+                Value
+            </TnTSideBarListItem>
+        </TnTSideBarList>
+    </TnTSideBar>
+    <TnTBody SideBarExpanded="@_sideBarExpanded">
+        This is some content
+    </TnTBody>
+</TnTLayout>
 
 @code {
+    private bool _sideBarExpanded = false;
+
+    private void SideBarExpanded(bool expanded) {
+        _sideBarExpanded = expanded;
+    }
 }

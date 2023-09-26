@@ -1,0 +1,28 @@
+﻿@inherits TnTIconComponent
+
+<a @onclick="OnClick">
+    @GetIcon()
+</a>
+@code {
+    [Parameter]
+    public EventCallback<EventArgs> Click { get; set; }
+
+    protected override void OnInitialized() {
+        if (string.IsNullOrWhiteSpace(Icon)) {
+            switch (IconType) {
+                case IconType.MaterialIcons:
+                    Icon = "menu";
+                    break;
+                case IconType.FontAwesome:
+                    Icon = "fa-menu";
+                    break;
+            }
+        }
+        base.OnInitialized();
+    }
+
+    private async Task OnClick(MouseEventArgs args) {
+        await Click.InvokeAsync(args);
+    }
+
+}
