@@ -1,34 +1,21 @@
 ﻿@page "/"
-@using TnTComponents.Button
-@attribute [RenderModeAuto]
+@attribute [RenderModeServer]
 
-<Stack Direction="TnTComponents.Enum.StackDirection.Vertical">
-    <TnTButton Text="Value">
+<SideNav Fixed="false">
+    <SideNavList>
+        <SideNavListItem Icon="search" Href="/link">
+            Search
+        </SideNavListItem>
+        <SideNavListItem Icon="home">
+            Home
+        </SideNavListItem>
+        <SideNavListItem Href="/asdf">
+            Value
+        </SideNavListItem>
+    </SideNavList>
+</SideNav>
 
-    </TnTButton>
+This is some content
 
-    <TnTButton Text="Value">
-
-    </TnTButton>
-    <TnTButton Text="Value">
-
-    </TnTButton>
-
-    <Stack Direction="TnTComponents.Enum.StackDirection.Horizontal">
-        <TnTButton Text="Value">
-
-        </TnTButton>
-
-        <TnTButton Text="Value">
-
-        </TnTButton>
-        <TnTButton Text="Value">
-
-        </TnTButton>
-        <TnTButton Text="">
-
-        </TnTButton>
-    </Stack>
-
-</Stack>
-
+@code {
+}

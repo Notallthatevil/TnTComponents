@@ -1,9 +1,20 @@
 ﻿@using Microsoft.AspNetCore.Components.Routing
-@inherits TnTBaseComponent
+@inherits TnTIconComponent
+@attribute [RenderModeAuto]
 
 <div theme="@Theme" class="tnt-sidebar @(Fixed ? "tnt-sidebar-fixed" : string.Empty) @(Close ? "tnt-sidebar-closed" : string.Empty)">
     @ChildContent
 </div>
+@if (!Fixed) {
+    <a theme="@Theme" class="tnt-sidebar-button @(Close ? "tnt-sidebar-closed" : string.Empty)" @onclick="@(()=>Toggle())">
+        @if (!string.IsNullOrWhiteSpace(Icon)) {
+            @GetIcon()
+        }
+        else {
+            <text>Toggle Side Nav</text>
+        }
+    </a>
+}
 
 @code {
     [Parameter]
@@ -13,5 +24,29 @@
     public bool Fixed { get; set; } = true;
 
     [Parameter]
-    public bool Close { get; set; } = false;
+    public bool Close { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> ClosedCallback { get; set; }
+
+    protected override void OnInitialized() {
+        Close = !Fixed;
+        if(string.IsNullOrWhiteSpace(Icon)) {
+            switch(IconType) {
+                case IconType.MaterialIcons:
+                    Icon = "menu";
+                    break;
+                case IconType.FontAwesome:
+                    Icon = "fa-menu";
+                    break;
+            }
+        }
+        base.OnInitialized();
+    }
+
+    private async Task Toggle() {
+        Close = !Close;
+        await ClosedCallback.InvokeAsync(Close);
+    }
+
 }

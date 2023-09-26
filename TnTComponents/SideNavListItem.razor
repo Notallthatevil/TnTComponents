@@ -1,10 +1,17 @@
-﻿@inherits TnTBaseComponent
+﻿@inherits TnTIconComponent
 
 <li class="@Class">
-    @ChildContent
+    <NavLink href="@Href">
+        @GetIcon()
+        @ChildContent
+    </NavLink>
 </li>
 
 @code {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
+
+    [Parameter]
+    public string Href { get; set; } = default!;
+
 }
