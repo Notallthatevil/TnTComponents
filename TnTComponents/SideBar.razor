@@ -6,13 +6,8 @@
     @ChildContent
 </div>
 @if (!Fixed) {
-    <a theme="@Theme" class="tnt-sidebar-button @(Close ? "tnt-sidebar-closed" : string.Empty)" @onclick="@(()=>Toggle())">
-        @if (!string.IsNullOrWhiteSpace(Icon)) {
-            @GetIcon()
-        }
-        else {
-            <text>Toggle Side Nav</text>
-        }
+    <a theme="@Theme" class="tnt-sidebar-button @(Close ? "tnt-sidebar-closed" : string.Empty)" @onclick="Toggle">
+        @GetIcon()
     </a>
 }
 
@@ -31,8 +26,8 @@
 
     protected override void OnInitialized() {
         Close = !Fixed;
-        if(string.IsNullOrWhiteSpace(Icon)) {
-            switch(IconType) {
+        if (string.IsNullOrWhiteSpace(Icon)) {
+            switch (IconType) {
                 case IconType.MaterialIcons:
                     Icon = "menu";
                     break;
@@ -46,7 +41,9 @@
 
     private async Task Toggle() {
         Close = !Close;
-        await ClosedCallback.InvokeAsync(Close);
+        if (ClosedCallback.HasDelegate) {
+            await ClosedCallback.InvokeAsync(Close);
+        }
     }
 
 }
