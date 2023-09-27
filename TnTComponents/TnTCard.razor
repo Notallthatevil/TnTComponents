@@ -1,0 +1,33 @@
+﻿@inherits TnTBaseComponent
+
+<div class="tnt-card @GetCardType()" theme="@Theme">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+
+    [Parameter]
+    public CardType CardType { get; set; }
+
+
+    private string GetCardType() {
+        switch (CardType) {
+            default:
+            case CardType.Filled:
+                return string.Empty;
+
+            case CardType.Flat:
+                return "flat";
+
+            case CardType.Plain:
+                return "plain";
+
+            case CardType.Outline:
+                return "outline";
+        }
+    }
+
+}
