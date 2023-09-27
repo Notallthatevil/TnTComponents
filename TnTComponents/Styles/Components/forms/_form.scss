@@ -1,3 +1,5 @@
+@use "sass:color";
+
 .tnt-form {
    display: block;
    margin-top: 1rem;
@@ -27,8 +29,6 @@
       margin: 1rem 0 1rem 0;
       transition: box-shadow 150ms ease-in-out;
 
-
-
       & > .tnt-input-field-label {
          position: absolute;
          padding: 0px .5rem 0px .5rem;
@@ -40,7 +40,7 @@
          transform-origin: 0% 100%;
          transform: translateY(0.6rem);
 
-         &.active {
+         &.active, &.placeholder {
             transform: translateY(-.7rem) scale(.75);
             transform-origin: 0 0;
          }
@@ -57,7 +57,7 @@
             padding: 0 10px 0 10px;
             transform: translateY(0.5rem);
 
-            &.active {
+            &.active, &.placeholder {
                transform: translateY(-.5rem) translateX(.2rem) scale(.75);
             }
          }
@@ -72,7 +72,7 @@
          & > .tnt-input-field-label {
             transform: translateY(1rem);
 
-            &.active {
+            &.active, &.placeholder {
                transform: translateY(.2rem) translateX(.2rem) scale(.75);
             }
          }
@@ -81,6 +81,15 @@
 }
 
 .tnt-form[theme=default] {
+
+   ::placeholder {
+      color: color.adjust($tnt-color-on-surface, $lightness: 50%);
+   }
+
+   input {
+      color: $tnt-color-on-surface;
+   }
+
    & > .tnt-input-field {
       border-bottom-color: $tnt-color-outline;
 

@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using TnTComponents.Enum;
 @using TnTComponents.Forms
 @attribute [RenderModeServer]
 
@@ -38,14 +39,34 @@
         </TnTSideBarList>
     </TnTSideBar>
     <TnTBody SideBarExpanded="@_sideBarExpanded">
-        <TnTForm FormType="TnTComponents.Enum.FormType.Outlined">
-            <TnTTextBox @bind-Value="_textValue" Label="My Label" />
+        <TnTForm FormType="FormType.Outlined">
+            <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" Placeholder="My Placeholder" />
+        </TnTForm>
+
+        <TnTForm FormType="FormType.Default">
+            <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" Placeholder="My Placeholder" />
+        </TnTForm>
+
+        <TnTForm FormType="FormType.Filled">
+            <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" Placeholder="My Placeholder" />
+        </TnTForm>
+
+        <TnTForm FormType="FormType.Outlined">
+            <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label"  />
+        </TnTForm>
+
+        <TnTForm FormType="FormType.Default">
+            <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" />
+        </TnTForm>
+
+        <TnTForm FormType="FormType.Filled">
+            <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" />
         </TnTForm>
 
         @_textValue
 
-        <TnTCard CardType="TnTComponents.Enum.CardType.Outlined">
-            <TnTButton ButtonType="TnTComponents.Enum.ButtonType.Outlined" Text="Text"></TnTButton>
+        <TnTCard CardType="CardType.Outlined">
+            <TnTButton ButtonType="ButtonType.Outlined" Text="Text"></TnTButton>
         </TnTCard>
     </TnTBody>
 </TnTLayout>
