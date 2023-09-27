@@ -20,6 +20,10 @@
     }
 </div>
 
+@if (!string.IsNullOrWhiteSpace(HelperText)) {
+    <span class="helper-text">@HelperText</span>
+}
+
 
 @code {
     [CascadingParameter]
