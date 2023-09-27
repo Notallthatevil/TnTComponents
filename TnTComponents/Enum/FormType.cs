@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TnTComponents.Enum {
-    public enum CardType {
-        Default,
-        Filled = Default,
-        Flat,
+    public enum FormType {
         Plain,
+        Default = Plain,
+        Filled,
         Outlined
     }
 }

@@ -9,6 +9,6 @@ namespace TnTComponents.Enum {
         Default,
         Flat,
         Filled,
-        Outline
+        Outlined
     }
 }

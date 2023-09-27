@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using TnTComponents.Forms
 @attribute [RenderModeServer]
 
 <TnTLayout Responsive="true">
@@ -16,7 +17,7 @@
         <h1>
             456
         </h1>
-                <h1>
+        <h1>
             789
         </h1>
         <h1>
@@ -37,12 +38,24 @@
         </TnTSideBarList>
     </TnTSideBar>
     <TnTBody SideBarExpanded="@_sideBarExpanded">
-        This is some content
+        <TnTForm FormType="TnTComponents.Enum.FormType.Outlined">
+            <TnTTextBox @bind-Value="_textValue" Label="My Label" />
+        </TnTForm>
+
+        @_textValue
+
+        <TnTCard CardType="TnTComponents.Enum.CardType.Outlined">
+            <TnTButton ButtonType="TnTComponents.Enum.ButtonType.Outlined" Text="Text"></TnTButton>
+        </TnTCard>
     </TnTBody>
 </TnTLayout>
 
+
+
 @code {
     private bool _sideBarExpanded = false;
+    private string? _textValue = "asdfasdf";
+
 
     private void SideBarExpanded(bool expanded) {
         _sideBarExpanded = expanded;

@@ -12,7 +12,7 @@ namespace TnTComponents.Common {
         public string Class { get; set; } = string.Empty;
 
         [Parameter]
-        public string Theme { get; set; } = "default";
+        public virtual string Theme { get; set; } = "default";
 
     }
 }

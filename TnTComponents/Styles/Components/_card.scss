@@ -5,17 +5,17 @@
    width: -moz-fit-content;
    width: fit-content;
    margin: 1rem;
-}
 
-.tnt-card.flat, .tnt-card.plain, .tnt-card.outline {
-   @extend .tnt-z-depth-0;
+   &.flat, &.plain, &.outlined {
+      @extend .tnt-z-depth-0;
+   }
 }
 
 .tnt-card[theme=default].flat {
    background-color: $tnt-color-surface-variant;
 }
 
-.tnt-card[theme=default].outline {
+.tnt-card[theme=default].outlined {
    outline-color: $tnt-color-outline;
    outline-style: solid;
    outline-width: 1px;

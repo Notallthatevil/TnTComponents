@@ -48,7 +48,7 @@
    }
 }
 
-.tnt-btn.outline {
+.tnt-btn.outlined {
    @extend .tnt-z-depth-0;
 
    &:hover {
@@ -80,7 +80,7 @@
    }
 }
 
-.tnt-btn[theme=default].outline {
+.tnt-btn[theme=default].outlined {
    outline-color: $tnt-color-outline;
    color: $tnt-color-primary;
 

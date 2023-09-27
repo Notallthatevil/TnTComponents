@@ -1,0 +1,14 @@
+﻿@inherits TnTBaseComponent
+
+<CascadingValue IsFixed=true Value="this">
+    <form class="tnt-form @Class" theme="@Theme">
+        @ChildContent
+    </form>
+</CascadingValue>
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    [Parameter]
+    public FormType FormType { get; set; }
+}
