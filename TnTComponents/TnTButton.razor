@@ -1,0 +1,42 @@
+﻿@inherits TnTIconComponent
+
+<button class="tnt-btn @GetButtonType() @Class" theme="@Theme" @onclick="OnClick">
+    @GetIcon()
+    @if (!string.IsNullOrWhiteSpace(Text)) {
+        <span>
+            @Text
+        </span>
+    }
+    @ChildContent
+</button>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    [Parameter]
+    public string Text { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
+
+    [Parameter]
+    public ButtonType ButtonType { get; set; }
+
+    private string GetButtonType() {
+        switch (ButtonType) {
+            default:
+            case ButtonType.Default:
+                return string.Empty;
+
+            case ButtonType.Flat:
+                return "flat";
+
+            case ButtonType.Filled:
+                return "filled";
+
+            case ButtonType.Outline:
+                return "outline";
+        }
+    }
+}
