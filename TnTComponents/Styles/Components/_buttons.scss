@@ -1,5 +1,38 @@
 ﻿@use "sass:color";
 
+
+.tnt-btn[theme=default] {
+   background-color: $tnt-color-primary-container;
+   color: $tnt-color-on-primary-container;
+
+   &:hover {
+      background-color: color.adjust($tnt-color-primary-container, $lightness: -10%);
+   }
+
+   &:active {
+      background-color: color.adjust($tnt-color-primary-container, $lightness: -20%);
+   }
+}
+
+.tnt-btn[theme=default].filled {
+   background-color: $tnt-color-primary;
+   color: $tnt-color-on-primary;
+
+   &:hover {
+      background-color: color.adjust($tnt-color-primary, $lightness: -10%);
+   }
+
+   &:active {
+      background-color: color.adjust($tnt-color-primary, $lightness: -20%);
+   }
+}
+
+.tnt-btn[theme=default].outlined {
+   outline-color: $tnt-color-outline;
+   color: $tnt-color-primary;
+}
+
+
 .tnt-btn {
    border: none;
    min-width: 2.5rem;
@@ -52,41 +85,16 @@
    @extend .tnt-z-depth-0;
 
    &:hover {
+      background-color: #00000022;
       @extend .tnt-z-depth-1;
    }
 
-   background-color: #00000000 !important;
+   &:active {
+      background-color: #00000044;
+   }
+
+   background-color: transparent;
    outline-style: solid;
    outline-width: 1px;
    padding: 0.45rem 1.45rem;
-}
-
-
-.tnt-btn[theme=default] {
-   background-color: $tnt-color-primary-container;
-   color: $tnt-color-on-primary-container;
-
-   &:hover {
-      background-color: color.adjust($tnt-color-primary-container, $lightness: -10%);
-   }
-}
-
-.tnt-btn[theme=default].filled {
-   background-color: $tnt-color-primary;
-   color: $tnt-color-on-primary;
-
-   &:hover {
-      background-color: color.adjust($tnt-color-primary, $lightness: -10%);
-   }
-}
-
-.tnt-btn[theme=default].outlined {
-   outline-color: $tnt-color-outline;
-   color: $tnt-color-primary;
-
-   &:hover {
-      background-color: #00000022 !important;
-      color: color.adjust($tnt-color-primary, $lightness: -30%);
-      outline-color: color.adjust($tnt-color-primary, $lightness: -10%);
-   }
 }
