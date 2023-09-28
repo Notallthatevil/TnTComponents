@@ -39,30 +39,75 @@
         </TnTSideBarList>
     </TnTSideBar>
     <TnTBody SideBarExpanded="@_sideBarExpanded">
-        <TnTForm FormType="FormType.Outlined">
-            <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
-        </TnTForm>
+        <div class="tnt-row">
 
-        <TnTForm FormType="FormType.Default">
-            <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
-        </TnTForm>
+            <div class="tnt-col s6">
 
-        <TnTForm FormType="FormType.Filled">
-            <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
-        </TnTForm>
+                <TnTForm Model="@Model" FormType="FormType.Outlined">
+                    <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                </TnTForm>
 
-        <TnTForm FormType="FormType.Outlined">
-            <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
-        </TnTForm>
+                <TnTForm Model="@Model" FormType="FormType.Default">
+                    <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                </TnTForm>
 
-        <TnTForm FormType="FormType.Default">
-            <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
-        </TnTForm>
+                <TnTForm Model="@Model" FormType="FormType.Filled">
+                    <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                </TnTForm>
+            </div>
+            <div class="tnt-col s6">
+                <TnTForm Model="@Model" FormType="FormType.Outlined">
+                    <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                </TnTForm>
 
-        <TnTForm FormType="FormType.Filled">
-            <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
-        </TnTForm>
+                <TnTForm Model="@Model" FormType="FormType.Default">
+                    <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                </TnTForm>
 
+                <TnTForm Model="@Model" FormType="FormType.Filled">
+                    <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                </TnTForm>
+            </div>
+        </div>
+        <div class="tnt-row">
+
+            <div class="tnt-col s6">
+
+                <TnTForm Model="@Model" FormType="FormType.Outlined">
+                    <TnTTextBox @bind-Value="_textValue" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                </TnTForm>
+
+                <TnTForm Model="@Model" FormType="FormType.Default">
+                    <TnTTextBox @bind-Value="_textValue" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                </TnTForm>
+
+                <TnTForm Model="@Model" FormType="FormType.Filled">
+                    <TnTTextBox @bind-Value="_textValue" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                </TnTForm>
+            </div>
+            <div class="tnt-col s6">
+                <TnTForm Model="@Model" FormType="FormType.Outlined">
+                    <TnTTextBox @bind-Value="_textValue" Label="My Label" HelperText="My Helper Text" />
+                </TnTForm>
+
+                <TnTForm Model="@Model" FormType="FormType.Default">
+                    <TnTTextBox @bind-Value="_textValue" Label="My Label" HelperText="My Helper Text" />
+                </TnTForm>
+
+                <TnTForm Model="@Model"FormType="FormType.Filled">
+                    <TnTTextBox @bind-Value="_textValue" Label="My Label" HelperText="My Helper Text" />
+                </TnTForm>
+
+            </div>
+        </div>
+
+        <EditForm Model="@Model" OnSubmit="@Submit" AdditionalAttributes="C">
+            <InputText @bind-Value="Model!.Id" AdditionalAttributes="D" />
+            <button type="submit">Submit</button>
+        </EditForm>
+
+
+        @_numberValue
         @_textValue
 
         <TnTCard CardType="CardType.Outlined">
@@ -75,8 +120,24 @@
 
 @code {
     private bool _sideBarExpanded = false;
-    private string? _textValue = "asdfasdf";
+    private int _numberValue = 10;
+    private string _textValue = "Value";
+    public Starship? Model { get; set; }
 
+    protected override void OnInitialized() => Model ??= new();
+    public Dictionary<string, object> C = new Dictionary<string, object>() {
+        { "class", "tnt-form" }
+
+    };
+    public Dictionary<string, object> D = new Dictionary<string, object>() {
+        { "class", "tnt-input-field"}
+    };
+    private void Submit() {
+    }
+
+    public class Starship {
+        public string? Id { get; set; }
+    }
 
     private void SideBarExpanded(bool expanded) {
         _sideBarExpanded = expanded;

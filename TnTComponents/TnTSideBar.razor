@@ -7,7 +7,7 @@
 }
 
 
-<div theme="@Theme" class="tnt-sidebar @(Expanded ? "tnt-sidebar-expanded" : string.Empty)">
+<div theme="@Theme" class="@GetClass() @(Expanded ? "tnt-sidebar-expanded" : string.Empty)">
     @ChildContent
 </div>
 
@@ -20,4 +20,7 @@
 
     [Parameter]
     public bool Expanded { get; set; }
+
+    [Parameter]
+    public override string BaseCssClass { get; set; } = "tnt-sidebar";
 }

@@ -1,7 +1,7 @@
 ﻿@inherits TnTBaseComponent
 
 <CascadingValue IsFixed=true Value="this">
-    <form class="tnt-form @Class" theme="@Theme">
+    <form class="@GetClass()" theme="@Theme">
         @ChildContent
     </form>
 </CascadingValue>
@@ -11,4 +11,7 @@
 
     [Parameter]
     public FormType FormType { get; set; }
+
+    [Parameter]
+    public override string BaseCssClass { get; set; } = "tnt-form";
 }

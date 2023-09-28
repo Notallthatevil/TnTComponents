@@ -4,7 +4,7 @@
     <TnTMediaCallback Query="(max-width:768px)" OnChangedCallback="(isSmallScreen) => SideBarExpanded = !isSmallScreen"></TnTMediaCallback>
 }
 
-<div class="tnt-header @Class @(SideBarExpanded ? "expanded" : string.Empty)" theme="@Theme">
+<div class="@GetClass() @(SideBarExpanded ? "expanded" : string.Empty)" theme="@Theme">
     <h1>@Title</h1>
     @ChildContent
 </div>
@@ -21,4 +21,7 @@
 
     [Parameter]
     public bool SideBarExpanded { get; set; } = false;
+
+    [Parameter]
+    public override string BaseCssClass { get; set; } = "tnt-header";
 }
