@@ -5,14 +5,38 @@
     base.BuildRenderTree(__builder);
 }
 
-
 @code {
-
     protected override RenderFragment GetAdditionalMarkup() {
         if (!AdjustmentAmountIsZero(AdjustmentAmount)) {
-            return@<button class="tnt-numeric-input-button" @onclick="Increment">My Button</button>;
+            return
+    @<div>
+        <button type="button" class="tnt-numeric-input-button" @onclick="Increment">
+            @GetButtonIcon(true)
+        </button>
+        <button type="button" class="tnt-numeric-input-button" @onclick="Decrement">
+            @GetButtonIcon(false)
+        </button>
+    </div>;
         }
         return default!;
     }
 
+
+    private RenderFragment GetButtonIcon(bool increment) {
+        switch (IconType) {
+            case IconType.FontAwesome:
+                return@<i class="fa fa-caret-@(increment ? "up" : "down")"></i>;
+            case IconType.MaterialIcons:
+                if (increment) {
+                    return@<i class="material-icons">arrow_drop_up</i>;
+                }
+                else {
+                    return@<i class="material-icons">arrow_drop_down</i>;
+
+                }
+
+            default:
+                throw new NotImplementedException();
+        }
+    }
 }
