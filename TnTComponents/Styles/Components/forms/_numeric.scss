@@ -16,6 +16,10 @@
          background-color: #00000022;
       }
 
+      &:active {
+         background-color: #00000044;
+      }
+
       & > i {
          font-size: 1.25rem;
       }

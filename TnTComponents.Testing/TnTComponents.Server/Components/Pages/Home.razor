@@ -44,28 +44,28 @@
             <div class="tnt-col s6">
 
                 <TnTForm FormType="FormType.Outlined">
-                    <TnTNumeric @bind-Value="_numberValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTPasswordBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Default">
-                    <TnTNumeric @bind-Value="_numberValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTPasswordBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Filled">
-                    <TnTNumeric TNumberType="int" @bind-Value="_numberValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTPasswordBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
             </div>
             <div class="tnt-col s6">
                 <TnTForm FormType="FormType.Outlined">
-                    <TnTNumeric TNumberType="int" @bind-Value="_numberValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                    <TnTPasswordBox AllowPasswordReveal="false" @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Default">
-                    <TnTNumeric TNumberType="int" @bind-Value="_numberValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                    <TnTPasswordBox AllowPasswordReveal="false" @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Filled">
-                    <TnTNumeric TNumberType="int" @bind-Value="_numberValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                    <TnTPasswordBox AllowPasswordReveal="false" @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
             </div>
         </div>
@@ -74,33 +74,30 @@
             <div class="tnt-col s6">
 
                 <TnTForm FormType="FormType.Outlined">
-                    <TnTNumeric TNumberType="int" @bind-Value="_numberValue" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTPasswordBox @bind-Value="_textValue" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Default">
-                    <TnTNumeric TNumberType="int" @bind-Value="_numberValue" AdjustmentAmount="0" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTPasswordBox @bind-Value="_textValue" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Filled">
-                    <TnTNumeric TNumberType="int" @bind-Value="_numberValue" AdjustmentAmount="4" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTPasswordBox @bind-Value="_textValue" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
             </div>
             <div class="tnt-col s6">
                 <TnTForm FormType="FormType.Outlined">
-                    <TnTNumeric TNumberType="ulong" @bind-Value="_longValue" Label="My Label" HelperText="My Helper Text" />
+                    <TnTPasswordBox AllowPasswordReveal="false" @bind-Value="_textValue" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Default">
-                    <TnTNumeric TNumberType="double" @bind-Value="_doubleValue" Label="My Label" HelperText="My Helper Text" />
+                    <TnTPasswordBox AllowPasswordReveal="false" @bind-Value="_textValue" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Filled">
-                    <TnTNumeric TNumberType="decimal" @bind-Value="_decimalValue" Label="My Label" HelperText="My Helper Text" />
+                    <TnTPasswordBox AllowPasswordReveal="false" @bind-Value="_textValue" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
-                <TnTForm FormType="FormType.Filled">
-                    <TnTTextBox @bind-Value="_textValue" Label="My Label" HelperText="My Helper Text" />
-                </TnTForm>
             </div>
         </div>
 
