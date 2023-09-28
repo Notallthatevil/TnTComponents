@@ -43,29 +43,29 @@
 
             <div class="tnt-col s6">
 
-                <TnTForm Model="@Model" FormType="FormType.Outlined">
-                    <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                <TnTForm FormType="FormType.Outlined">
+                    <TnTNumeric @bind-Value="_numberValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
 
-                <TnTForm Model="@Model" FormType="FormType.Default">
-                    <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                <TnTForm FormType="FormType.Default">
+                    <TnTNumeric @bind-Value="_numberValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
 
-                <TnTForm Model="@Model" FormType="FormType.Filled">
-                    <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                <TnTForm FormType="FormType.Filled">
+                    <TnTNumeric TNumberType="int" @bind-Value="_numberValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
             </div>
             <div class="tnt-col s6">
-                <TnTForm Model="@Model" FormType="FormType.Outlined">
-                    <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                <TnTForm FormType="FormType.Outlined">
+                    <TnTNumeric TNumberType="int" @bind-Value="_numberValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
-                <TnTForm Model="@Model" FormType="FormType.Default">
-                    <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                <TnTForm FormType="FormType.Default">
+                    <TnTNumeric TNumberType="int" @bind-Value="_numberValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
-                <TnTForm Model="@Model" FormType="FormType.Filled">
-                    <TnTTextBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                <TnTForm FormType="FormType.Filled">
+                    <TnTNumeric TNumberType="int" @bind-Value="_numberValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
             </div>
         </div>
@@ -73,42 +73,42 @@
 
             <div class="tnt-col s6">
 
-                <TnTForm Model="@Model" FormType="FormType.Outlined">
-                    <TnTTextBox @bind-Value="_textValue" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                <TnTForm FormType="FormType.Outlined">
+                    <TnTNumeric TNumberType="int" @bind-Value="_numberValue" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
 
-                <TnTForm Model="@Model" FormType="FormType.Default">
-                    <TnTTextBox @bind-Value="_textValue" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                <TnTForm FormType="FormType.Default">
+                    <TnTNumeric TNumberType="int" @bind-Value="_numberValue" AdjustmentAmount="0" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
 
-                <TnTForm Model="@Model" FormType="FormType.Filled">
-                    <TnTTextBox @bind-Value="_textValue" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                <TnTForm FormType="FormType.Filled">
+                    <TnTNumeric TNumberType="int" @bind-Value="_numberValue" AdjustmentAmount="4" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
             </div>
             <div class="tnt-col s6">
-                <TnTForm Model="@Model" FormType="FormType.Outlined">
-                    <TnTTextBox @bind-Value="_textValue" Label="My Label" HelperText="My Helper Text" />
+                <TnTForm FormType="FormType.Outlined">
+                    <TnTNumeric TNumberType="ulong" @bind-Value="_longValue" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
-                <TnTForm Model="@Model" FormType="FormType.Default">
-                    <TnTTextBox @bind-Value="_textValue" Label="My Label" HelperText="My Helper Text" />
+                <TnTForm FormType="FormType.Default">
+                    <TnTNumeric TNumberType="double" @bind-Value="_doubleValue" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
-                <TnTForm Model="@Model"FormType="FormType.Filled">
-                    <TnTTextBox @bind-Value="_textValue" Label="My Label" HelperText="My Helper Text" />
+                <TnTForm FormType="FormType.Filled">
+                    <TnTNumeric TNumberType="decimal" @bind-Value="_decimalValue" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
+                <TnTForm FormType="FormType.Filled">
+                    <TnTTextBox @bind-Value="_textValue" Label="My Label" HelperText="My Helper Text" />
+                </TnTForm>
             </div>
         </div>
 
-        <EditForm Model="@Model" OnSubmit="@Submit" AdditionalAttributes="C">
-            <InputText @bind-Value="Model!.Id" AdditionalAttributes="D" />
-            <button type="submit">Submit</button>
-        </EditForm>
-
-
         @_numberValue
+        @_longValue
         @_textValue
+        @_doubleValue
+        @_decimalValue
 
         <TnTCard CardType="CardType.Outlined">
             <TnTButton ButtonType="ButtonType.Outlined" Text="Text"></TnTButton>
@@ -121,8 +121,13 @@
 @code {
     private bool _sideBarExpanded = false;
     private int _numberValue = 10;
+    private ulong _longValue = 10;
+    private double _doubleValue = 10.5;
+    private decimal _decimalValue = 9.23M;
     private string _textValue = "Value";
     public Starship? Model { get; set; }
+
+
 
     protected override void OnInitialized() => Model ??= new();
     public Dictionary<string, object> C = new Dictionary<string, object>() {

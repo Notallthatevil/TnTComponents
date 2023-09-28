@@ -12,6 +12,7 @@
            @onfocusin=@(() => Active = true)
            @onfocusout=@(() => Active = false)>
 
+    @GetAdditionalMarkup()
 
     @if (!string.IsNullOrWhiteSpace(Label)) {
         <label class="tnt-input-field-label @(!string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrWhiteSpace(Icon) ? "placeholder" : string.Empty) @(Active || !string.IsNullOrWhiteSpace(Value?.ToString()) ? "active" : string.Empty)">
@@ -24,3 +25,7 @@
     <span class="helper-text">@HelperText</span>
 }
 
+
+@code {
+
+}

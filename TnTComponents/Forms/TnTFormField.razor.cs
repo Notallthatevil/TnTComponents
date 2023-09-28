@@ -48,15 +48,19 @@ namespace TnTComponents.Forms {
             }
         }
 
-        protected string GetFromType() {
-            switch (FormType) {
-                case FormType.Outlined: return "outlined";
-                case FormType.Filled: return "filled";
-                default:
-                    return string.Empty;
-            }
-        }
+        protected string GetFromType() =>
+             FormType switch {
+                 FormType.Outlined => "outlined",
+                 FormType.Filled => "filled",
+                 _ => string.Empty,
+             };
+
+
 
         protected abstract Task OnChange(ChangeEventArgs e);
+
+        protected virtual RenderFragment GetAdditionalMarkup() {
+            return default!;
+        }
     }
 }

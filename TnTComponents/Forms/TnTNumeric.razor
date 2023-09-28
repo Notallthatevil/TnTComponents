@@ -1,0 +1,18 @@
+﻿@typeparam TNumberType
+@inherits TnTFormField<TNumberType>
+
+@{
+    base.BuildRenderTree(__builder);
+}
+
+
+@code {
+
+    protected override RenderFragment GetAdditionalMarkup() {
+        if (!AdjustmentAmountIsZero(AdjustmentAmount)) {
+            return@<button class="tnt-numeric-input-button" @onclick="Increment">My Button</button>;
+        }
+        return default!;
+    }
+
+}

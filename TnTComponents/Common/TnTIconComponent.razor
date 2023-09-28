@@ -1,0 +1,16 @@
+﻿@inherits TnTBaseComponent
+
+@code {
+    internal RenderFragment GetIcon() {
+        if (!string.IsNullOrWhiteSpace(Icon)) {
+            switch (IconType) {
+                case IconType.MaterialIcons:
+                    return@<i class="material-icons">@Icon</i>;
+
+                case IconType.FontAwesome:
+                    return@<i class="fa @Icon"></i>;
+            }
+        }
+        return default!;
+    }
+}

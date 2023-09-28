@@ -23,6 +23,9 @@
     [Parameter]
     public ButtonType ButtonType { get; set; }
 
+    [Parameter]
+    public override string BaseCssClass { get; set; } = "tnt-btn";
+
     protected override string GetClass() {
         return $"{base.GetClass()} {GetButtonType()}";
     }
