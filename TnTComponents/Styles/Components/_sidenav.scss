@@ -64,20 +64,20 @@
 }
 
 .tnt-sidebar[theme=default] {
-   width: $tnt-sidebar-width;
-   background-color: $tnt-sidebar-bg-color;
+   width: 250px;
+   background-color: $tnt-color-surface-variant;
 
    li > a {
-      color: $tnt-sidebar-font-color;
-      font-size: $tnt-sidebar-font-size;
-      height: $tnt-sidebar-item-height;
-      line-height: $tnt-sidebar-line-height;
-      padding: 0 ($tnt-sidebar-padding * 2);
+      color: $tnt-color-on-surface-variant;
+      font-size: 1.1rem;
+      height: 3.25rem;
+      line-height: 3.25rem;
+      padding: 0 (1.2rem * 2);
 
       & > i,
       & > i.material-icons {
-         line-height: $tnt-sidebar-line-height;
-         margin: 0 ($tnt-sidebar-padding * 2) 0 0;
+         line-height: 3.25rem;
+         margin: 0 (1.2rem * 2) 0 0;
       }
    }
 }
@@ -86,10 +86,10 @@
    position: fixed;
    transform: translateX(0px);
    @extend .tnt-sidebar-transition;
-   color: $tnt-sidebar-font-color;
+   color: $tnt-color-on-primary;
 }
 
 .tnt-sidebar-button[theme=default].tnt-sidebar-expanded {
    position: fixed;
-   transform: translateX($tnt-sidebar-width + 5px);
+   transform: translateX(250px + 5px);
 }

@@ -1,3 +1,5 @@
+@import '_default_colors_tokens.scss';
+@import '_default_typeography.scss';
 $tnt-color-primary: $tnt-color-primary-light;
 $tnt-color-on-primary: $tnt-color-on-primary-light;
 $tnt-color-primary-container: $tnt-color-primary-container-light;
@@ -28,3 +30,5 @@ $tnt-color-shadow: $tnt-color-shadow-light;
 $tnt-color-surface-tint: $tnt-color-surface-tint-light;
 $tnt-color-outline-variant: $tnt-color-outline-variant-light;
 $tnt-color-scrim: $tnt-color-scrim-light;
+@import '_default_colors_module.scss';
+@import '_common.scss';

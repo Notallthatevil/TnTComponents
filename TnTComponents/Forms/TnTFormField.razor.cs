@@ -37,6 +37,9 @@ namespace TnTComponents.Forms {
         [Parameter]
         public FormType FormType { get; set; }
 
+        [Parameter]
+        public override string BaseCssClass { get; set; } = "tnt-input-field";
+
         protected bool Active;
 
         protected abstract string InputType { get; }
@@ -61,6 +64,10 @@ namespace TnTComponents.Forms {
 
         protected virtual RenderFragment GetAdditionalMarkup() {
             return default!;
+        }
+
+        protected override string GetClass() {
+            return $"{base.GetClass()} {GetFromType()} {(Disable ? "disabled" : string.Empty)} {(Active ? "active" : string.Empty)}";
         }
     }
 }

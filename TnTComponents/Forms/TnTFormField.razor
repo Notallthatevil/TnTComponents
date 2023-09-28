@@ -1,7 +1,7 @@
 ﻿@inherits TnTIconComponent
 @typeparam TInputType
 
-<div class="tnt-input-field @GetFromType() @(Active ? "active" : string.Empty)" theme="@Theme">
+<div class="@GetClass()" theme="@Theme">
     @GetIcon()
     <input type="@InputType"
            disabled="@Disable"

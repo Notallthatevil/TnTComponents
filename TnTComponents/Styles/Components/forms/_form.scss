@@ -1,5 +1,62 @@
 @use "sass:color";
 
+.tnt-form[theme=default] {
+
+   ::placeholder {
+      color: color.adjust($tnt-color-on-surface, $alpha: -0.6);
+   }
+
+   input {
+      color: $tnt-color-on-surface;
+   }
+
+   & > .helper-text {
+      color: $tnt-color-on-surface;
+   }
+
+   i {
+      color: $tnt-color-on-surface;
+   }
+
+   & > .tnt-input-field {
+      border-bottom-color: $tnt-color-outline;
+
+
+      & > .tnt-input-field-label {
+         color: $tnt-color-on-surface;
+      }
+
+
+      &.active {
+         border-bottom-color: $tnt-color-primary;
+         box-shadow: 0 1px 0 0 $tnt-color-primary;
+
+         &.outlined {
+            border-color: $tnt-color-primary;
+            box-shadow: 0 0 1px 1px $tnt-color-primary;
+         }
+
+         & > .tnt-input-field-label {
+            &.active {
+               color: $tnt-color-primary;
+            }
+         }
+      }
+
+      &.outlined {
+         border-color: $tnt-color-outline;
+
+         & > .tnt-input-field-label {
+            background-color: $tnt-color-surface;
+         }
+      }
+
+      &.filled {
+         background-color: $tnt-color-surface-variant;
+      }
+   }
+}
+
 .tnt-form {
    display: block;
    margin-top: 1rem;
@@ -95,52 +152,6 @@
       transform: translateY(-1rem);
    }
 }
-
-.tnt-form[theme=default] {
-
-   ::placeholder {
-      color: color.adjust($tnt-color-on-surface, $lightness: 50%);
-   }
-
-   input {
-      color: $tnt-color-on-surface;
-   }
-
-   & > .tnt-input-field {
-      border-bottom-color: $tnt-color-outline;
-
-
-      &.active {
-         border-bottom-color: $tnt-color-primary;
-         box-shadow: 0 1px 0 0 $tnt-color-primary;
-
-         &.outlined {
-            border-color: $tnt-color-primary;
-            box-shadow: 0 0 1px 1px $tnt-color-primary;
-         }
-
-         & > .tnt-input-field-label {
-            &.active {
-               color: $tnt-color-primary;
-            }
-         }
-      }
-
-      &.outlined {
-         border-color: $tnt-color-outline;
-
-         & > .tnt-input-field-label {
-            background-color: $tnt-color-surface;
-         }
-      }
-
-      &.filled {
-         background-color: $tnt-color-surface-variant;
-      }
-   }
-}
-
-
 
 @import '_textbox.scss';
 @import '_numeric.scss';

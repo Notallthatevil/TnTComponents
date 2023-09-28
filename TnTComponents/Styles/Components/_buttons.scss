@@ -1,6 +1,5 @@
 ﻿@use "sass:color";
 
-
 .tnt-btn[theme=default] {
    background-color: $tnt-color-primary-container;
    color: $tnt-color-on-primary-container;
@@ -30,6 +29,14 @@
 .tnt-btn[theme=default].outlined {
    outline-color: $tnt-color-outline;
    color: $tnt-color-primary;
+
+   &:hover {
+      color: color.adjust($tnt-color-primary, $lightness: -10%);
+   }
+
+   &:active {
+      color: color.adjust($tnt-color-primary, $lightness: -20%);
+   }
 }
 
 

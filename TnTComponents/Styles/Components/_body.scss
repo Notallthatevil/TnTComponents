@@ -7,6 +7,6 @@
 }
 
 .tnt-body[theme=default].expanded {
-   width: calc(100% - $tnt-sidebar-width);
-   margin-left: $tnt-sidebar-width;
+   width: calc(100% - 250px);
+   margin-left: 250px;
 }
