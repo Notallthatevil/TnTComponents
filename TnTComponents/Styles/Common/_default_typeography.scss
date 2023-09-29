@@ -1,103 +1,103 @@
-﻿
-   /* display - large */
-   $tnt-typescale-display-large-font-family-name: Roboto;
-   $tnt-typescale-display-large-font-family-style: Regular;
-   $tnt-typescale-display-large-font-weight: 400px;
-   $tnt-typescale-display-large-font-size: 57px;
-   $tnt-typescale-display-large-line-height: 64px;
-   $tnt-typescale-display-large-letter-spacing: -0.25px;
-   /* display - medium */
+﻿@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+/* display - large */
+$tnt-typescale-display-large-font-family-name: Roboto;
+$tnt-typescale-display-large-font-family-style: Regular;
+$tnt-typescale-display-large-font-weight: 400px;
+$tnt-typescale-display-large-font-size: 57px;
+$tnt-typescale-display-large-line-height: 64px;
+$tnt-typescale-display-large-letter-spacing: -0.25px;
+/* display - medium */
 $tnt-typescale-display-medium-font-family-name: Roboto;
 $tnt-typescale-display-medium-font-family-style: Regular;
 $tnt-typescale-display-medium-font-weight: 400px;
 $tnt-typescale-display-medium-font-size: 45px;
 $tnt-typescale-display-medium-line-height: 52px;
 $tnt-typescale-display-medium-letter-spacing: 0px;
-   /* display - small */
+/* display - small */
 $tnt-typescale-display-small-font-family-name: Roboto;
 $tnt-typescale-display-small-font-family-style: Regular;
 $tnt-typescale-display-small-font-weight: 400px;
 $tnt-typescale-display-small-font-size: 36px;
 $tnt-typescale-display-small-line-height: 44px;
 $tnt-typescale-display-small-letter-spacing: 0px;
-   /* headline - large */
+/* headline - large */
 $tnt-typescale-headline-large-font-family-name: Roboto;
 $tnt-typescale-headline-large-font-family-style: Regular;
 $tnt-typescale-headline-large-font-weight: 400px;
 $tnt-typescale-headline-large-font-size: 32px;
 $tnt-typescale-headline-large-line-height: 40px;
 $tnt-typescale-headline-large-letter-spacing: 0px;
-   /* headline - medium */
+/* headline - medium */
 $tnt-typescale-headline-medium-font-family-name: Roboto;
 $tnt-typescale-headline-medium-font-family-style: Regular;
 $tnt-typescale-headline-medium-font-weight: 400px;
 $tnt-typescale-headline-medium-font-size: 28px;
 $tnt-typescale-headline-medium-line-height: 36px;
 $tnt-typescale-headline-medium-letter-spacing: 0px;
-   /* headline - small */
+/* headline - small */
 $tnt-typescale-headline-small-font-family-name: Roboto;
 $tnt-typescale-headline-small-font-family-style: Regular;
 $tnt-typescale-headline-small-font-weight: 400px;
 $tnt-typescale-headline-small-font-size: 24px;
 $tnt-typescale-headline-small-line-height: 32px;
 $tnt-typescale-headline-small-letter-spacing: 0px;
-   /* body - large */
+/* body - large */
 $tnt-typescale-body-large-font-family-name: Roboto;
 $tnt-typescale-body-large-font-family-style: Regular;
 $tnt-typescale-body-large-font-weight: 400px;
 $tnt-typescale-body-large-font-size: 16px;
 $tnt-typescale-body-large-line-height: 24px;
 $tnt-typescale-body-large-letter-spacing: 0.50px;
-   /* body - medium */
+/* body - medium */
 $tnt-typescale-body-medium-font-family-name: Roboto;
 $tnt-typescale-body-medium-font-family-style: Regular;
 $tnt-typescale-body-medium-font-weight: 400px;
 $tnt-typescale-body-medium-font-size: 14px;
 $tnt-typescale-body-medium-line-height: 20px;
 $tnt-typescale-body-medium-letter-spacing: 0.25px;
-   /* body - small */
+/* body - small */
 $tnt-typescale-body-small-font-family-name: Roboto;
 $tnt-typescale-body-small-font-family-style: Regular;
 $tnt-typescale-body-small-font-weight: 400px;
 $tnt-typescale-body-small-font-size: 12px;
 $tnt-typescale-body-small-line-height: 16px;
 $tnt-typescale-body-small-letter-spacing: 0.40px;
-   /* label - large */
+/* label - large */
 $tnt-typescale-label-large-font-family-name: Roboto;
 $tnt-typescale-label-large-font-family-style: Medium;
 $tnt-typescale-label-large-font-weight: 500px;
 $tnt-typescale-label-large-font-size: 14px;
 $tnt-typescale-label-large-line-height: 20px;
 $tnt-typescale-label-large-letter-spacing: 0.10px;
-   /* label - medium */
+/* label - medium */
 $tnt-typescale-label-medium-font-family-name: Roboto;
 $tnt-typescale-label-medium-font-family-style: Medium;
 $tnt-typescale-label-medium-font-weight: 500px;
 $tnt-typescale-label-medium-font-size: 12px;
 $tnt-typescale-label-medium-line-height: 16px;
 $tnt-typescale-label-medium-letter-spacing: 0.50px;
-   /* label - small */
+/* label - small */
 $tnt-typescale-label-small-font-family-name: Roboto;
 $tnt-typescale-label-small-font-family-style: Medium;
 $tnt-typescale-label-small-font-weight: 500px;
 $tnt-typescale-label-small-font-size: 11px;
 $tnt-typescale-label-small-line-height: 16px;
 $tnt-typescale-label-small-letter-spacing: 0.50px;
-   /* title - large */
+/* title - large */
 $tnt-typescale-title-large-font-family-name: Roboto;
 $tnt-typescale-title-large-font-family-style: Regular;
 $tnt-typescale-title-large-font-weight: 400px;
 $tnt-typescale-title-large-font-size: 22px;
 $tnt-typescale-title-large-line-height: 28px;
 $tnt-typescale-title-large-letter-spacing: 0px;
-   /* title - medium */
+/* title - medium */
 $tnt-typescale-title-medium-font-family-name: Roboto;
 $tnt-typescale-title-medium-font-family-style: Medium;
 $tnt-typescale-title-medium-font-weight: 500px;
 $tnt-typescale-title-medium-font-size: 16px;
 $tnt-typescale-title-medium-line-height: 24px;
 $tnt-typescale-title-medium-letter-spacing: 0.15px;
-   /* title - small */
+/* title - small */
 $tnt-typescale-title-small-font-family-name: Roboto;
 $tnt-typescale-title-small-font-family-style: Medium;
 $tnt-typescale-title-small-font-weight: 500px;

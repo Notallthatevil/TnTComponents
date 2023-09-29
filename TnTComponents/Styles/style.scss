@@ -11,6 +11,11 @@ body[theme=default] {
    background-color: $tnt-color-surface;
 }
 
-body {
+* {
+   font-family: Roboto sans-serif;
+}
+
+html, body {
    margin: 0px;
+   height: 100%;
 }
