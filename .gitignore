@@ -363,3 +363,7 @@ MigrationBackup/
 FodyWeavers.xsd
 /TnTComponents/wwwroot/style.css
 /TnTComponents/wwwroot/style.min.css
+/TnTComponents/wwwroot/style.dark.css
+/TnTComponents/wwwroot/style.dark.min.css
+/TnTComponents/wwwroot/style.light.css
+/TnTComponents/wwwroot/style.light.min.css
