@@ -1,14 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.Rendering;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TnTComponents.Forms {
     public partial class TnTNumeric<TNumberType> where TNumberType : unmanaged, IConvertible {
