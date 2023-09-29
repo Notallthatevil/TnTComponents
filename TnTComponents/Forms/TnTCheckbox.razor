@@ -12,7 +12,10 @@
            @onfocusout=@(() => Active = false)>
 
 
-    <span @onclick=@(() => {Value = !Value; OnChange(new ChangeEventArgs(){Value = Value});})>
+    <span @onclick="Toggle">
+        @if(FormType == FormType.Filled) {
+            <span></span>
+        }
         @GetIcon()
 
         @if (!string.IsNullOrWhiteSpace(Label)) {
@@ -33,6 +36,13 @@
     protected override async Task OnChange(ChangeEventArgs e) {
         if (e?.Value != null) {
             await ValueChanged.InvokeAsync((bool)e!.Value);
+        }
+    }
+
+    private async Task Toggle() {
+        if (!Disable) {
+            Value = !Value;
+            await OnChange(new ChangeEventArgs() { Value = Value });
         }
     }
 }
