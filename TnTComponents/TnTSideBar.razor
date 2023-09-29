@@ -1,6 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Components.Routing
 @inherits TnTIconComponent
-@attribute [RenderModeAuto]
 
 @if (_layout?.Responsive ?? false) {
     <TnTMediaCallback Query="(max-width:768px)" OnChangedCallback="(isSmallScreen) => Expanded = !isSmallScreen"></TnTMediaCallback>
