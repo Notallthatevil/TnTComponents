@@ -40,11 +40,32 @@
         </TnTSideBarList>
     </TnTSideBar>
     <TnTBody SideBarExpanded="@_sideBarExpanded">
+        <TnTForm FormType="FormType.Outlined">
+            <div class="tnt-row">
+
+                <div class="tnt-col s6">
+
+                    <TnTPasswordBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+
+                    <TnTPasswordBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+
+                    <TnTPasswordBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                </div>
+                <div class="tnt-col s6">
+                    <TnTPasswordBox AllowPasswordReveal="false" @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
+
+                    <TnTPasswordBox AllowPasswordReveal="false" @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
+
+                    <TnTPasswordBox AllowPasswordReveal="false" @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                </div>
+            </div>
+        </TnTForm>
+
         <div class="tnt-row">
 
             <div class="tnt-col s6">
-
                 <TnTForm FormType="FormType.Outlined">
+
                     <TnTPasswordBox @bind-Value="_textValue" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
 

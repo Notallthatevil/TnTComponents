@@ -10,7 +10,7 @@
       color: $tnt-color-on-surface;
    }
 
-   & > .helper-text {
+   .helper-text {
       color: $tnt-color-on-surface;
    }
 
@@ -18,7 +18,7 @@
       color: $tnt-color-on-surface;
    }
 
-   & > .tnt-input-field {
+   .tnt-input-field {
       border-bottom-color: $tnt-color-outline;
 
 
@@ -78,7 +78,7 @@
       }
    }
 
-   & > .tnt-input-field {
+   .tnt-input-field {
       position: relative;
       border-bottom-style: solid;
       border-bottom-width: 1px;
@@ -146,7 +146,7 @@
       }
    }
 
-   > .helper-text {
+   .helper-text {
       font-size: .8rem;
       padding-left: 1rem;
       transform: translateY(-1rem);

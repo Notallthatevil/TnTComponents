@@ -1,29 +1,30 @@
-.tnt-form > .tnt-input-field {
+.tnt-form {
+   .tnt-input-field {
+      .tnt-password-reveal {
+         background-color: transparent;
+         visibility: hidden;
+         display: flex;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+         border: none;
+         padding: 0;
 
-   .tnt-password-reveal {
-      background-color: transparent;
-      visibility: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      border: none;
-      padding: 0;
+         &:hover {
+            background-color: #00000022;
+         }
 
-      &:hover {
-         background-color: #00000022;
+         &:active {
+            background-color: #00000044;
+         }
+
+         & > i {
+            font-size: 1.5rem;
+         }
       }
 
-      &:active {
-         background-color: #00000044;
+      &:hover .tnt-password-reveal {
+         visibility: visible;
       }
-
-      & > i {
-         font-size: 1.5rem;
-      }
-   }
-
-   &:hover .tnt-password-reveal {
-      visibility: visible;
    }
 }

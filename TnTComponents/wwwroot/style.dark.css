@@ -415,7 +415,7 @@
   border-radius: 0rem;
 }
 
-.tnt-border-radius-1, .tnt-form > .tnt-input-field.filled, .tnt-form > .tnt-input-field.outlined {
+.tnt-border-radius-1, .tnt-form .tnt-input-field.filled, .tnt-form .tnt-input-field.outlined {
   border-radius: 0.25rem;
 }
 
@@ -1476,36 +1476,36 @@
 .tnt-form[theme=default] input {
   color: #E6E1E5;
 }
-.tnt-form[theme=default] > .helper-text {
+.tnt-form[theme=default] .helper-text {
   color: #E6E1E5;
 }
 .tnt-form[theme=default] i {
   color: #E6E1E5;
 }
-.tnt-form[theme=default] > .tnt-input-field {
+.tnt-form[theme=default] .tnt-input-field {
   border-bottom-color: #938F99;
 }
-.tnt-form[theme=default] > .tnt-input-field > .tnt-input-field-label {
+.tnt-form[theme=default] .tnt-input-field > .tnt-input-field-label {
   color: #E6E1E5;
 }
-.tnt-form[theme=default] > .tnt-input-field.active {
+.tnt-form[theme=default] .tnt-input-field.active {
   border-bottom-color: #D0BCFF;
   box-shadow: 0 1px 0 0 #D0BCFF;
 }
-.tnt-form[theme=default] > .tnt-input-field.active.outlined {
+.tnt-form[theme=default] .tnt-input-field.active.outlined {
   border-color: #D0BCFF;
   box-shadow: 0 0 1px 1px #D0BCFF;
 }
-.tnt-form[theme=default] > .tnt-input-field.active > .tnt-input-field-label.active {
+.tnt-form[theme=default] .tnt-input-field.active > .tnt-input-field-label.active {
   color: #D0BCFF;
 }
-.tnt-form[theme=default] > .tnt-input-field.outlined {
+.tnt-form[theme=default] .tnt-input-field.outlined {
   border-color: #938F99;
 }
-.tnt-form[theme=default] > .tnt-input-field.outlined > .tnt-input-field-label {
+.tnt-form[theme=default] .tnt-input-field.outlined > .tnt-input-field-label {
   background-color: #1C1B1F;
 }
-.tnt-form[theme=default] > .tnt-input-field.filled {
+.tnt-form[theme=default] .tnt-input-field.filled {
   background-color: #49454F;
 }
 
@@ -1526,7 +1526,7 @@
 .tnt-form input:focus {
   outline: none;
 }
-.tnt-form > .tnt-input-field {
+.tnt-form .tnt-input-field {
   position: relative;
   border-bottom-style: solid;
   border-bottom-width: 1px;
@@ -1537,10 +1537,10 @@
   flex-direction: row;
   align-items: center;
 }
-.tnt-form > .tnt-input-field:hover {
+.tnt-form .tnt-input-field:hover {
   box-shadow: 0 1px 0 0;
 }
-.tnt-form > .tnt-input-field > .tnt-input-field-label {
+.tnt-form .tnt-input-field > .tnt-input-field-label {
   position: absolute;
   padding: 0px 0.5rem 0px 0.5rem;
   top: 0;
@@ -1551,43 +1551,43 @@
   transform-origin: 0% 100%;
   transform: translateY(0.6rem);
 }
-.tnt-form > .tnt-input-field > .tnt-input-field-label.active, .tnt-form > .tnt-input-field > .tnt-input-field-label.placeholder {
+.tnt-form .tnt-input-field > .tnt-input-field-label.active, .tnt-form .tnt-input-field > .tnt-input-field-label.placeholder {
   transform: translateY(-0.7rem) scale(0.75);
   transform-origin: 0 0;
 }
-.tnt-form > .tnt-input-field.outlined {
+.tnt-form .tnt-input-field.outlined {
   border: none;
   border-style: solid;
   border-width: 1px;
 }
-.tnt-form > .tnt-input-field.outlined:hover {
+.tnt-form .tnt-input-field.outlined:hover {
   box-shadow: 0 0 1px 1px;
 }
-.tnt-form > .tnt-input-field.outlined > .tnt-input-field-label {
+.tnt-form .tnt-input-field.outlined > .tnt-input-field-label {
   padding: 0 10px 0 10px;
   transform: translateY(0.5rem);
 }
-.tnt-form > .tnt-input-field.outlined > .tnt-input-field-label.active, .tnt-form > .tnt-input-field.outlined > .tnt-input-field-label.placeholder {
+.tnt-form .tnt-input-field.outlined > .tnt-input-field-label.active, .tnt-form .tnt-input-field.outlined > .tnt-input-field-label.placeholder {
   transform: translateY(-0.5rem) translateX(0.2rem) scale(0.75);
 }
-.tnt-form > .tnt-input-field.filled {
+.tnt-form .tnt-input-field.filled {
   padding-top: 0.75rem;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
-.tnt-form > .tnt-input-field.filled > .tnt-input-field-label {
+.tnt-form .tnt-input-field.filled > .tnt-input-field-label {
   transform: translateY(1rem);
 }
-.tnt-form > .tnt-input-field.filled > .tnt-input-field-label.active, .tnt-form > .tnt-input-field.filled > .tnt-input-field-label.placeholder {
+.tnt-form .tnt-input-field.filled > .tnt-input-field-label.active, .tnt-form .tnt-input-field.filled > .tnt-input-field-label.placeholder {
   transform: translateY(0.2rem) translateX(0.2rem) scale(0.75);
 }
-.tnt-form > .helper-text {
+.tnt-form .helper-text {
   font-size: 0.8rem;
   padding-left: 1rem;
   transform: translateY(-1rem);
 }
 
-.tnt-form > .tnt-input-field .tnt-password-reveal {
+.tnt-form .tnt-input-field .tnt-password-reveal {
   background-color: transparent;
   visibility: hidden;
   display: flex;
@@ -1597,16 +1597,16 @@
   border: none;
   padding: 0;
 }
-.tnt-form > .tnt-input-field .tnt-password-reveal:hover {
+.tnt-form .tnt-input-field .tnt-password-reveal:hover {
   background-color: rgba(0, 0, 0, 0.1333333333);
 }
-.tnt-form > .tnt-input-field .tnt-password-reveal:active {
+.tnt-form .tnt-input-field .tnt-password-reveal:active {
   background-color: rgba(0, 0, 0, 0.2666666667);
 }
-.tnt-form > .tnt-input-field .tnt-password-reveal > i {
+.tnt-form .tnt-input-field .tnt-password-reveal > i {
   font-size: 1.5rem;
 }
-.tnt-form > .tnt-input-field:hover .tnt-password-reveal {
+.tnt-form .tnt-input-field:hover .tnt-password-reveal {
   visibility: visible;
 }
 
