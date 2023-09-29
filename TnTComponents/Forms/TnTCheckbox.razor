@@ -39,7 +39,7 @@
         }
     }
 
-    private async Task Toggle() {
+    protected async Task Toggle() {
         if (!Disable) {
             Value = !Value;
             await OnChange(new ChangeEventArgs() { Value = Value });

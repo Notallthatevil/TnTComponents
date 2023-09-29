@@ -1,0 +1,147 @@
+﻿@use "sass:color";
+
+.tnt-form[theme=default] {
+    .tnt-input-field-switch:not(.disabled) {
+
+        input[type=checkbox] {
+
+            + span {
+                &:before {
+                    background-color: $tnt-color-primary;
+                }
+
+                &:hover::after {
+                    background-color: #00000022;
+                }
+
+                &:active::after {
+                    background-color: #00000044;
+                }
+            }
+
+            &:not(:checked) {
+                + span {
+                    background-color: $tnt-color-surface;
+                }
+            }
+
+            &:checked {
+                + span {
+                    background-color: $tnt-color-surface-variant;
+                }
+            }
+        }
+
+        .tnt-input-field-switch-label {
+            color: $tnt-color-on-surface;
+        }
+    }
+
+    .tnt-input-field-switch.disabled {
+
+        input[type=checkbox] {
+            + span {
+                &:before {
+                    background-color: color.adjust($tnt-color-primary, $alpha: -.5);
+                }
+            }
+
+            &:not(:checked) {
+                + span {
+                    background-color: color.adjust($tnt-color-surface, $alpha: -.5);
+                }
+            }
+
+            &:checked {
+                + span {
+                    background-color: color.adjust($tnt-color-surface-variant, $alpha: -.5);
+                }
+            }
+        }
+
+        .tnt-input-field-switch-label {
+            color: color.adjust($tnt-color-on-surface, $alpha: -.5);
+        }
+    }
+}
+
+.tnt-form {
+    .tnt-input-field-switch {
+        display: flex;
+        align-items: center;
+        padding-top: 0.3rem;
+        padding-bottom: 0.3rem;
+
+        input[type=checkbox] {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+
+            + span {
+                content: "";
+                display: flex;
+                align-items: center;
+                position: absolute;
+                border-radius: 1rem;
+                width: 2.3rem;
+                height: .9rem;
+                background-color: transparent;
+                z-index: 0;
+                transition: 150ms;
+                user-select: none;
+                cursor: pointer;
+                @extend .tnt-z-depth-1;
+
+                &:before,
+                &:after {
+                    transition: ease-in-out 150ms;
+                }
+
+                &:before {
+                    content: '';
+                    position: absolute;
+                    aspect-ratio: 1/1;
+                    height: 1.3rem;
+                    left: -0.1rem;
+                    z-index: 2;
+                    background-color: blue;
+                    border-radius: 100%;
+                    @extend .tnt-z-depth-2;
+                }
+
+                &:hover::after {
+                    content: '';
+                    position: absolute;
+                    aspect-ratio: 1/1;
+                    height: 2rem;
+                    left: -.5rem;
+                    z-index: 1;
+                    border-radius: 100%;
+                }
+            }
+
+            &:checked {
+                + span {
+
+                    &:before {
+                        left: 1.2rem;
+                    }
+
+                    &:after {
+                        left: .9rem;
+                    }
+                }
+            }
+        }
+
+        .tnt-input-field-switch-label {
+            margin-left: 2.8rem;
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    .tnt-input-field-switch.disabled input[type=checkbox] + span {
+        cursor: default;
+    }
+}

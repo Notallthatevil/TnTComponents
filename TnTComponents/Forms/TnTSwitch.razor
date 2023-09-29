@@ -1,0 +1,29 @@
+﻿@inherits TnTCheckbox
+
+<div class="@GetClass()">
+    <input type="@InputType"
+           disabled="@Disable"
+           checked="@Value"
+           @bind="@Value"
+           @bind:event="oninput"
+           @onchange="OnChange"
+           @onfocusin=@(() => Active = true)
+           @onfocusout=@(() => Active = false)>
+
+    <span @onclick="Toggle">
+    </span>
+
+    <div class="tnt-input-field-switch-label">
+        @GetIcon()
+        @if (!string.IsNullOrWhiteSpace(Label)) {
+            @Label
+        }
+    </div>
+</div>
+
+@code {
+
+
+    [Parameter]
+    public override string BaseCssClass { get; set; } = "tnt-input-field-switch";
+}
