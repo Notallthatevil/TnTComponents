@@ -1,7 +1,7 @@
 ﻿@page "/"
 @using TnTComponents.Enum;
 @using TnTComponents.Forms
-@attribute [RenderModeAuto]
+@attribute [RenderModeInteractiveAuto]
 
 <TnTLayout Responsive="true">
     <TnTHeader SideBarExpanded="@_sideBarExpanded">
@@ -40,21 +40,22 @@
         </TnTSideBarList>
     </TnTSideBar>
     <TnTBody SideBarExpanded="@_sideBarExpanded">
+
         <TnTForm FormType="FormType.Outlined">
             <div class="tnt-row">
                 <div class="tnt-col s6">
-                    <TnTCheckbox @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
 
-                    <TnTCheckbox @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
 
-                    <TnTCheckbox @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </div>
                 <div class="tnt-col s6">
-                    <TnTCheckbox @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
 
-                    <TnTCheckbox @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
 
-                    <TnTCheckbox @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
                 </div>
             </div>
         </TnTForm>
@@ -62,29 +63,28 @@
         <div class="tnt-row">
 
             <div class="tnt-col s6">
-                <TnTForm FormType="FormType.Outlined">
-                    <TnTCheckbox @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
-                </TnTForm>
+                <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                <TnTCheckbox @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
 
                 <TnTForm FormType="FormType.Default">
-                    <TnTCheckbox @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Filled">
-                    <TnTCheckbox @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
             </div>
             <div class="tnt-col s6">
                 <TnTForm FormType="FormType.Outlined">
-                    <TnTCheckbox @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Default">
-                    <TnTCheckbox @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Filled">
-                    <TnTCheckbox @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
             </div>
         </div>
@@ -93,28 +93,28 @@
             <div class="tnt-col s6">
 
                 <TnTForm FormType="FormType.Outlined">
-                    <TnTCheckbox Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTSwitch Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Default">
-                    <TnTCheckbox Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTSwitch Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Filled">
-                    <TnTCheckbox Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTSwitch Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
             </div>
             <div class="tnt-col s6">
                 <TnTForm FormType="FormType.Outlined">
-                    <TnTCheckbox Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" />
+                    <TnTSwitch Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Default">
-                    <TnTCheckbox Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" />
+                    <TnTSwitch Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Filled">
-                    <TnTCheckbox Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" />
+                    <TnTSwitch Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
             </div>
@@ -151,10 +151,10 @@
     else {
         <link rel="stylesheet" href="_content/TnTComponents/style.light.min.css" />
     }
-</HeadContent>
+    </HeadContent>
 
 
-@code {
+    @code {
     private bool _dark = false;
     private bool _sideBarExpanded = false;
 

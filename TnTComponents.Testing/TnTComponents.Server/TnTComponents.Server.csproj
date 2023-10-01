@@ -9,7 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\TnTComponents\TnTComponents.csproj" />
     <ProjectReference Include="..\TnTComponents.Client\TnTComponents.Client.csproj" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0-rc.2.23455.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0-rtm.23478.18" />
   </ItemGroup>
 
 </Project>

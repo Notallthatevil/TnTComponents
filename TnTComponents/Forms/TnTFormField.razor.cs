@@ -69,5 +69,9 @@ namespace TnTComponents.Forms {
         protected override string GetClass() {
             return $"{base.GetClass()} {GetFromType()} {(Disable ? "disabled" : string.Empty)} {(Active ? "active" : string.Empty)}";
         }
+
+        protected virtual string GetTheme() {
+            return ParentForm?.Theme ?? Theme;
+        }
     }
 }

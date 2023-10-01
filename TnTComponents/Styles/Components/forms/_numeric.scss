@@ -1,31 +1,31 @@
-﻿.tnt-form > .tnt-input-field {
+﻿.tnt-input-field {
 
-   .tnt-numeric-input-button {
-      background-color: transparent;
-      visibility: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      border: none;
-      padding: 0;
-      width: 1rem;
-      height: 1rem;
+    .tnt-numeric-input-button {
+        background-color: transparent;
+        visibility: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        padding: 0;
+        width: 1rem;
+        height: 1rem;
 
-      &:hover {
-         background-color: #00000022;
-      }
+        &:hover {
+            background-color: #00000022;
+        }
 
-      &:active {
-         background-color: #00000044;
-      }
+        &:active {
+            background-color: #00000044;
+        }
 
-      & > i {
-         font-size: 1.25rem;
-      }
-   }
+        & > i {
+            font-size: 1.25rem;
+        }
+    }
 
-   &:hover .tnt-numeric-input-button {
-      visibility: visible;
-   }
+    &:hover .tnt-numeric-input-button {
+        visibility: visible;
+    }
 }

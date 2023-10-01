@@ -1,6 +1,6 @@
 ﻿@inherits TnTCheckbox
 
-<div class="@GetClass()">
+<div class="@GetClass()" theme="@Theme" @onclick="Toggle">
     <input type="@InputType"
            disabled="@Disable"
            checked="@Value"
@@ -10,7 +10,7 @@
            @onfocusin=@(() => Active = true)
            @onfocusout=@(() => Active = false)>
 
-    <span @onclick="Toggle">
+    <span>
     </span>
 
     <div class="tnt-input-field-switch-label">

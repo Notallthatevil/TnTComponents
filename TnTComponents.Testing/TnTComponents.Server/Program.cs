@@ -1,11 +1,12 @@
+using Microsoft.AspNetCore.Components.Web;
 using TnTComponents.Server.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddServerComponents()
-    .AddWebAssemblyComponents();
+    .AddInteractiveServerComponents()
+    .AddInteractiveWebAssemblyComponents();
 
 var app = builder.Build();
 
@@ -25,7 +26,7 @@ app.UseStaticFiles();
 
 app.MapRazorComponents<App>()
     .AddAdditionalAssemblies(typeof(TnTComponents.Client._Imports).Assembly)
-    .AddServerRenderMode()
-    .AddWebAssemblyRenderMode();
+    .AddInteractiveServerRenderMode()
+    .AddInteractiveWebAssemblyRenderMode();
 
 app.Run();
