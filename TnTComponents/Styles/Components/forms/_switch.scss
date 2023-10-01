@@ -4,7 +4,6 @@
     .tnt-input-field-switch:not(.disabled) {
 
         input[type=checkbox] {
-
             + span {
                 &:before {
                     background-color: $tnt-color-primary;
@@ -138,6 +137,14 @@
             margin-left: 2.8rem;
             display: flex;
             align-items: center;
+        }
+
+        .tnt-input-field-switch-off {
+            position: absolute;
+        }
+
+        .tnt-input-field-switch-on {
+            position: absolute;
         }
     }
 
