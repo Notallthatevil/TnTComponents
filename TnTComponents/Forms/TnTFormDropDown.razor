@@ -1,39 +1,40 @@
-﻿@typeparam TListItemType
+﻿@using Microsoft.JSInterop;
+@using TnTComponents.Common.Ext;
+@typeparam TListItemType
 @inherits TnTFormField<TListItemType>
 
-<div class="@GetClass()" theme="@Theme">
+<div class="@GetClass()" theme="@Theme" @ref="_dropDownReference">
     @GetIcon()
     <input type="@InputType"
            readonly="true"
            disabled="@Disable"
            placeholder="@Placeholder"
+           @ref="_inputElement"
            @bind="@Value"
            @bind:event="oninput"
            @onchange="OnChange"
-           @onfocusin=@(() => Active = true)
-           @onfocusout=@(() => Active = false)>
+           @onfocusin="OnFocusAsync">
 
-    <ul>
-        @if (!string.IsNullOrWhiteSpace(Placeholder)) {
-            <li class="disabled" @onclick="ClearSelection">
-                @Placeholder
-            </li>
-        }
+    @if (Active) {
+        <ul @onmouseleave="Deactivate" class="@(_hasSpaceBelow ? string.Empty : "dropup")">
+            @if (!string.IsNullOrWhiteSpace(Placeholder)) {
+                <li class="disabled" @onclick="ClearSelection">
+                    @Placeholder
+                </li>
+            }
 
-        @foreach (var item in ListItems) {
-            <li @onclick="@(() => SelectItem(item))">
-                @if (ListItemTemplate != null) {
-                    @ListItemTemplate(item)
-                }
-                else {
-                    @item?.ToString()
-                }
-            </li>
-
-        }
-    </ul>
-
-
+            @foreach (var item in ListItems) {
+                <li @onclick="@(() => SelectItem(item))">
+                    @if (ListItemTemplate != null) {
+                        @ListItemTemplate(item)
+                    }
+                    else {
+                        @item?.ToString()
+                    }
+                </li>
+            }
+        </ul>
+    }
     @GetAdditionalMarkup()
 
     @if (!string.IsNullOrWhiteSpace(Label)) {
@@ -60,6 +61,13 @@
     [Parameter]
     public RenderFragment<TListItemType> ListItemTemplate { get; set; } = default!;
 
+    [Inject]
+    private IJSRuntime _jsRuntime { get; set; } = default!;
+
+    private ElementReference _dropDownReference;
+    private ElementReference _inputElement;
+
+    private bool _hasSpaceBelow = true;
 
     protected override void OnInitialized() {
         if (ListItems is null) {
@@ -77,6 +85,7 @@
     }
 
     private async Task SelectItem(TListItemType selectedItem) {
+        await Deactivate();
         if (!selectedItem?.Equals(Value) ?? false) {
             Value = selectedItem;
             await OnChange(new ChangeEventArgs() { Value = Value });
@@ -84,7 +93,28 @@
     }
 
     private async Task ClearSelection() {
+        await Deactivate();
         Value = default;
         await OnChange(new ChangeEventArgs() { Value = Value });
+    }
+
+    private async Task Deactivate() {
+        await _jsRuntime.RemoveElementFocus(_inputElement);
+        Active = false;
+    }
+
+    private async Task OnFocusAsync() {
+        var rect = await _jsRuntime.GetElementBoundingRectForComponent(_dropDownReference);
+        var windowHeight = await _jsRuntime.GetWindowHeight();
+        if (rect is not null) {
+            var distanceToBottom = windowHeight - rect.Bottom;
+            if (distanceToBottom < await _jsRuntime.ConvertRemToPixels(15)) {
+                _hasSpaceBelow = false;
+            }
+            else {
+                _hasSpaceBelow = true;
+            }
+        }
+        Active = true;
     }
 }

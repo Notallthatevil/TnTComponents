@@ -20,10 +20,17 @@
 
 
 .tnt-input-field.dropdown {
-    &:focus-within {
+    cursor: pointer;
+
+    input {
+        cursor:pointer;
+    }
+
+    &.active {
         ul {
             visibility: visible;
             opacity: 1;
+            max-height: 15rem;
         }
     }
 
@@ -39,7 +46,6 @@
         padding: 0;
         visibility: hidden;
         opacity: 0;
-        max-height: 15rem;
         transition: 150ms;
         @extend .tnt-z-depth-3;
 
@@ -54,6 +60,10 @@
             line-height: 2rem;
             transition: 150ms;
             background-color: transparent;
+        }
+
+        &.dropup {
+            top: -13rem;
         }
     }
 }
