@@ -2,32 +2,31 @@
 
 .tnt-form[theme=default] {
 
-   ::placeholder {
-      color: color.adjust($tnt-color-on-surface, $alpha: -0.6);
-   }
+    ::placeholder {
+        color: color.adjust($tnt-color-on-surface, $alpha: -0.6);
+    }
 
-   .helper-text {
-      color: $tnt-color-on-surface;
-   }
-
-   
+    .helper-text {
+        color: $tnt-color-on-surface;
+    }
 }
 
 .tnt-form {
-   display: block;
-   margin-top: 1rem;
-   padding: .5rem;
+    display: block;
+    margin-top: 1rem;
+    padding: .5rem;
 
-   
 
-   .helper-text {
-      font-size: .8rem;
-      padding-left: 1rem;
-      transform: translateY(-1rem);
-   }
+
+    .helper-text {
+        font-size: .8rem;
+        padding-left: 1rem;
+        transform: translateY(-1rem);
+    }
 }
 
-@import '_textbox.scss';
-@import '_numeric.scss';
 @import '_checkbox.scss';
+@import '_dropdown.scss';
+@import '_numeric.scss';
 @import '_switch.scss';
+@import '_textbox.scss';

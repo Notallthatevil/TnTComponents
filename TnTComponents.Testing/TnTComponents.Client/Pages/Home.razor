@@ -12,7 +12,6 @@
             My Title
         </h1>
         <button @onclick="@(()=>_dark = !_dark)">Toggle</button>
-
         <h1>
             123
         </h1>
@@ -44,18 +43,18 @@
         <TnTForm FormType="FormType.Outlined">
             <div class="tnt-row">
                 <div class="tnt-col s6">
-                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTDropDown ListItems="_items" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
 
-                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTDropDown ListItems="_items" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
 
-                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTDropDown ListItems="_items" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </div>
                 <div class="tnt-col s6">
-                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                    <TnTDropDown ListItems="_items" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
 
-                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                    <TnTDropDown ListItems="_items" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
 
-                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                    <TnTDropDown ListItems="_items" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
                 </div>
             </div>
         </TnTForm>
@@ -63,28 +62,27 @@
         <div class="tnt-row">
 
             <div class="tnt-col s6">
-                <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
-                <TnTCheckbox @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                <TnTDropDown ListItems="_items" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
 
                 <TnTForm FormType="FormType.Default">
-                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTDropDown ListItems="_items" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Filled">
-                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTDropDown ListItems="_items" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
             </div>
             <div class="tnt-col s6">
                 <TnTForm FormType="FormType.Outlined">
-                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                    <TnTDropDown ListItems="_items" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Default">
-                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                    <TnTDropDown ListItems="_items" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Filled">
-                    <TnTSwitch @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                    <TnTDropDown ListItems="_items" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
             </div>
         </div>
@@ -93,36 +91,36 @@
             <div class="tnt-col s6">
 
                 <TnTForm FormType="FormType.Outlined">
-                    <TnTSwitch Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTDropDown ListItems="_items" Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Default">
-                    <TnTSwitch Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTDropDown ListItems="_items" Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Filled">
-                    <TnTSwitch Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTDropDown ListItems="_items" Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
                 </TnTForm>
             </div>
             <div class="tnt-col s6">
                 <TnTForm FormType="FormType.Outlined">
-                    <TnTSwitch Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" />
+                    <TnTDropDown ListItems="_items" Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Default">
-                    <TnTSwitch Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" />
+                    <TnTDropDown ListItems="_items" Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Filled">
-                    <TnTSwitch Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" />
+                    <TnTDropDown ListItems="_items" Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
             </div>
         </div>
         @_value
         <TnTCard CardType="CardType.Outlined">
-            <TnTButton ButtonType="ButtonType.Outlined" Text="Text" @onclick="(()=>_value = true)"></TnTButton>
-            <TnTButton ButtonType="ButtonType.Flat" Text="Text" @onclick="(()=>_value = false)"></TnTButton>
+            <TnTButton ButtonType="ButtonType.Outlined" Text="Text"></TnTButton>
+            <TnTButton ButtonType="ButtonType.Flat" Text="Text"></TnTButton>
             <TnTButton ButtonType="ButtonType.Filled" Text="Text"></TnTButton>
             <TnTButton ButtonType="ButtonType.Default" Text="Text"></TnTButton>
         </TnTCard>
@@ -151,20 +149,22 @@
     else {
         <link rel="stylesheet" href="_content/TnTComponents/style.light.min.css" />
     }
-    </HeadContent>
+</HeadContent>
 
 
-    @code {
+@code {
     private bool _dark = false;
     private bool _sideBarExpanded = false;
 
-    private bool _value = false;
+    private string _value = string.Empty;
 
-    public Starship? Model { get; set; }
+    private List<string> _items = new List<string>() {
+        "Item 1",
+        "Item 2",
+        "Item 3"
+    };
 
 
-
-    protected override void OnInitialized() => Model ??= new();
     public Dictionary<string, object> C = new Dictionary<string, object>() {
         { "class", "tnt-form" }
 
@@ -172,12 +172,7 @@
     public Dictionary<string, object> D = new Dictionary<string, object>() {
         { "class", "tnt-input-field"}
     };
-    private void Submit() {
-    }
 
-    public class Starship {
-        public string? Id { get; set; }
-    }
 
     private void SideBarExpanded(bool expanded) {
         _sideBarExpanded = expanded;
