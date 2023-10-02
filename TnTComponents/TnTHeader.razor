@@ -1,9 +1,5 @@
 ﻿@inherits TnTBaseComponent
 
-@if (_layout?.Responsive ?? false) {
-    <TnTMediaCallback Query="(max-width:768px)" OnChangedCallback="(isSmallScreen) => SideBarExpanded = !isSmallScreen"></TnTMediaCallback>
-}
-
 <div class="@GetClass() @(SideBarExpanded ? "expanded" : string.Empty)" theme="@Theme">
     <h1>@Title</h1>
     @ChildContent

@@ -1,13 +1,17 @@
 ﻿.tnt-body {
-   width: 100%;
-   min-height: calc(100% - 2.5rem);
-   margin-left: 0;
-   transition: width ease-in-out 150ms;
-   transition: margin-left ease-in-out 150ms;
-}
+    width: 100%;
+    min-height: calc(100% - 2.5rem);
+    margin-left: 0;
+    transition: width ease-in-out 150ms;
+    transition: margin-left ease-in-out 150ms;
 
-.tnt-body[theme=default].expanded {
-   width: calc(100% - 250px);
-   margin-left: 250px;
+    @media #{$medium-and-up} {
+        width: calc(100% - 250px);
+        margin-left: 250px;
+    }
 
+    @media #{$small-and-down} {
+        position: fixed;
+        transform: translateX(0%);
+    }
 }

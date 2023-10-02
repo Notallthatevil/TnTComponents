@@ -7,30 +7,38 @@
     position: sticky;
     z-index: 998;
     display: flex;
+    width: 100%;
+
+    @extend .tnt-z-depth-1;
 
     h1 {
         font-size: 2rem;
         padding: 0 .5rem;
     }
-}
 
-.tnt-header[theme=default] {
-    width: 100%;
+    a {
+        cursor: pointer;
+    }
 
-    &.expanded {
+    @media #{$medium-and-up} {
         width: calc(100% - 250px);
         padding-left: 250px;
     }
 
-    background-color: $tnt-color-primary;
-    color: $tnt-color-on-primary;
-    @extend .tnt-z-depth-1;
+    @media #{$small-and-down} {
+        padding-left: 0;
+        width: 100%;
 
-    a {
-        cursor: pointer;
-
-        i.material-icons {
-            color: $tnt-color-on-primary;
+        &.expanded {
+            width: calc(100% - 250px);
+            padding-left: 250px;
         }
     }
+}
+
+
+
+.tnt-header[theme=default] {
+    background-color: $tnt-color-primary;
+    color: $tnt-color-on-primary;
 }
