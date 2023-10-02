@@ -1,22 +1,20 @@
-﻿@using Microsoft.JSInterop;
-@using TnTComponents.Common.Ext;
-@typeparam TListItemType
-@inherits TnTFormField<TListItemType>
+﻿@typeparam TListItemType
+@inherits TnTFormDialogField<TListItemType>
 
-<div class="@GetClass()" theme="@Theme" @ref="_dropDownReference">
+<div class="@GetClass()" theme="@Theme" @ref="BoxInputReference">
     @GetIcon()
     <input type="@InputType"
            readonly="true"
            disabled="@Disable"
            placeholder="@Placeholder"
-           @ref="_inputElement"
+           @ref="InputElementReference"
            @bind="@Value"
            @bind:event="oninput"
            @onchange="OnChange"
            @onfocusin="OnFocusAsync">
 
     @if (Active) {
-        <ul @onmouseleave="Deactivate" class="@(_hasSpaceBelow ? string.Empty : "dropup")">
+        <ul @onmouseleave="Deactivate" class="@(HasSpaceBelow ? string.Empty : "dropup")">
             @if (!string.IsNullOrWhiteSpace(Placeholder)) {
                 <li class="disabled" @onclick="ClearSelection">
                     @Placeholder
@@ -35,7 +33,10 @@
             }
         </ul>
     }
-    @GetAdditionalMarkup()
+
+        <i class="material-icons">close</i>
+
+    <i class="material-icons">arrow_drop_down</i>
 
     @if (!string.IsNullOrWhiteSpace(Label)) {
         <label class="tnt-input-field-label @(!string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrWhiteSpace(Icon) ? "placeholder" : string.Empty) @(Active || !string.IsNullOrWhiteSpace(Value?.ToString()) ? "active" : string.Empty)">
@@ -53,7 +54,7 @@
     protected override string InputType => "text";
 
     [Parameter]
-    public bool AllowClear { get; set; }
+    public bool AllowClear { get; set; } // TODO Enable this
 
     [Parameter]
     public ICollection<TListItemType> ListItems { get; set; } = default!;
@@ -61,13 +62,6 @@
     [Parameter]
     public RenderFragment<TListItemType> ListItemTemplate { get; set; } = default!;
 
-    [Inject]
-    private IJSRuntime _jsRuntime { get; set; } = default!;
-
-    private ElementReference _dropDownReference;
-    private ElementReference _inputElement;
-
-    private bool _hasSpaceBelow = true;
 
     protected override void OnInitialized() {
         if (ListItems is null) {
@@ -90,31 +84,5 @@
             Value = selectedItem;
             await OnChange(new ChangeEventArgs() { Value = Value });
         }
-    }
-
-    private async Task ClearSelection() {
-        await Deactivate();
-        Value = default;
-        await OnChange(new ChangeEventArgs() { Value = Value });
-    }
-
-    private async Task Deactivate() {
-        await _jsRuntime.RemoveElementFocus(_inputElement);
-        Active = false;
-    }
-
-    private async Task OnFocusAsync() {
-        var rect = await _jsRuntime.GetElementBoundingRectForComponent(_dropDownReference);
-        var windowHeight = await _jsRuntime.GetWindowHeight();
-        if (rect is not null) {
-            var distanceToBottom = windowHeight - rect.Bottom;
-            if (distanceToBottom < await _jsRuntime.ConvertRemToPixels(15)) {
-                _hasSpaceBelow = false;
-            }
-            else {
-                _hasSpaceBelow = true;
-            }
-        }
-        Active = true;
     }
 }

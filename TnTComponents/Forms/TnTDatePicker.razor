@@ -1,0 +1,56 @@
+﻿@inherits TnTFormField<DateTime>
+@*
+<div class="@GetClass()" theme="@Theme" @ref="_dropDownReference">
+    @GetIcon()
+    <input type="@InputType"
+           readonly="true"
+           disabled="@Disable"
+           placeholder="@Placeholder"
+           @ref="_inputElement"
+           @bind="@Value"
+           @bind:event="oninput"
+           @onchange="OnChange"
+           @onfocusin="OnFocusAsync">
+
+    @if (Active) {
+        <ul @onmouseleave="Deactivate" class="@(_hasSpaceBelow ? string.Empty : "dropup")">
+            @if (!string.IsNullOrWhiteSpace(Placeholder)) {
+                <li class="disabled" @onclick="ClearSelection">
+                    @Placeholder
+                </li>
+            }
+
+            @foreach (var item in ListItems) {
+                <li @onclick="@(() => SelectItem(item))">
+                    @if (ListItemTemplate != null) {
+                        @ListItemTemplate(item)
+                    }
+                    else {
+                        @item?.ToString()
+                    }
+                </li>
+            }
+        </ul>
+    }
+    @GetAdditionalMarkup()
+
+    @if (!string.IsNullOrWhiteSpace(Label)) {
+        <label class="tnt-input-field-label @(!string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrWhiteSpace(Icon) ? "placeholder" : string.Empty) @(Active || !string.IsNullOrWhiteSpace(Value?.ToString()) ? "active" : string.Empty)">
+            @Label
+        </label>
+    }
+
+</div>*@
+
+@code {
+    protected override string InputType => "text";
+
+    protected override string GetClass() {
+        return $"{base.GetClass()} date-picker";
+    }
+
+    protected override Task OnChange(ChangeEventArgs e) {
+        throw new NotImplementedException();
+    }
+
+}
