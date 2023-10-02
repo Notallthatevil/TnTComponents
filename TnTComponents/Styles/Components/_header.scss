@@ -1,36 +1,36 @@
 ﻿.tnt-header {
-   min-height: 2.5rem;
-   display: flex;
-   align-items: center;
-   overflow: hidden;
-   white-space: nowrap;
+    min-height: 2.5rem;
+    align-items: center;
+    overflow-x: hidden;
+    white-space: nowrap;
+    transition: padding-left ease-in-out 150ms;
+    position: sticky;
+    z-index: 998;
+    display: flex;
 
-   h1 {
-      font-size: 2rem;
-      padding: 0 .5rem;
-   }
-
-   transition: padding-left ease-in-out 150ms;
-   position: fixed;
-   width: 100%;
-   z-index: 998;
+    h1 {
+        font-size: 2rem;
+        padding: 0 .5rem;
+    }
 }
 
 .tnt-header[theme=default] {
+    width: 100%;
 
-   &.expanded {
-      padding-left: 250px;
-   }
+    &.expanded {
+        width: calc(100% - 250px);
+        padding-left: 250px;
+    }
 
-   background-color: $tnt-color-primary;
-   color: $tnt-color-on-primary;
-   @extend .tnt-z-depth-1;
+    background-color: $tnt-color-primary;
+    color: $tnt-color-on-primary;
+    @extend .tnt-z-depth-1;
 
-   a {
-      cursor: pointer;
+    a {
+        cursor: pointer;
 
-      i.material-icons {
-         color: $tnt-color-on-primary;
-      }
-   }
+        i.material-icons {
+            color: $tnt-color-on-primary;
+        }
+    }
 }

@@ -2,7 +2,7 @@
 @inherits TnTIconComponent
 
 @if (_layout?.Responsive ?? false) {
-    <TnTMediaCallback Query="(max-width:768px)" OnChangedCallback="(isSmallScreen) => Expanded = !isSmallScreen"></TnTMediaCallback>
+    <TnTMediaCallback Query="(max-width:768px)" OnChangedCallback="SetIsSmallScreen"></TnTMediaCallback>
 }
 
 
@@ -22,4 +22,8 @@
 
     [Parameter]
     public override string BaseCssClass { get; set; } = "tnt-sidebar";
+
+    private void SetIsSmallScreen(bool isSmallScreen) {
+        Expanded = !isSmallScreen;
+    }
 }

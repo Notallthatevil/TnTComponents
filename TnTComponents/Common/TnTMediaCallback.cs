@@ -20,7 +20,7 @@ namespace TnTComponents.Common {
         private IJSRuntime _jsRuntime { get; set; } = default!;
 
         private DotNetObjectReference<TnTMediaCallback>? _reference;
-        private bool disposedValue;
+        private bool _disposedValue;
 
         [JSInvokable]
         public async Task OnChanged(bool queryIsTrue) {
@@ -37,7 +37,7 @@ namespace TnTComponents.Common {
         }
         
         protected virtual void Dispose(bool disposing) {
-            if (!disposedValue) {
+            if (!_disposedValue) {
                 if (disposing) {
 
                     if(_reference != null) {
@@ -46,7 +46,7 @@ namespace TnTComponents.Common {
                         _reference = null;
                     }
                 }
-                disposedValue = true;
+                _disposedValue = true;
             }
         }
 
