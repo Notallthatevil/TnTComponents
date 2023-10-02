@@ -1,0 +1,90 @@
+﻿@typeparam TListItemType
+@inherits TnTFormField<TListItemType>
+
+<div class="@GetClass()" theme="@Theme">
+    @GetIcon()
+    <input type="@InputType"
+           readonly="true"
+           disabled="@Disable"
+           placeholder="@Placeholder"
+           @bind="@Value"
+           @bind:event="oninput"
+           @onchange="OnChange"
+           @onfocusin=@(() => Active = true)
+           @onfocusout=@(() => Active = false)>
+
+    <ul>
+        @if (!string.IsNullOrWhiteSpace(Placeholder)) {
+            <li class="disabled" @onclick="ClearSelection">
+                @Placeholder
+            </li>
+        }
+
+        @foreach (var item in ListItems) {
+            <li @onclick="@(() => SelectItem(item))">
+                @if (ListItemTemplate != null) {
+                    @ListItemTemplate(item)
+                }
+                else {
+                    @item?.ToString()
+                }
+            </li>
+
+        }
+    </ul>
+
+
+    @GetAdditionalMarkup()
+
+    @if (!string.IsNullOrWhiteSpace(Label)) {
+        <label class="tnt-input-field-label @(!string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrWhiteSpace(Icon) ? "placeholder" : string.Empty) @(Active || !string.IsNullOrWhiteSpace(Value?.ToString()) ? "active" : string.Empty)">
+            @Label
+        </label>
+    }
+
+</div>
+
+@if (!string.IsNullOrWhiteSpace(HelperText)) {
+    <span class="helper-text">@HelperText</span>
+}
+
+@code {
+    protected override string InputType => "text";
+
+    [Parameter]
+    public bool AllowClear { get; set; }
+
+    [Parameter]
+    public ICollection<TListItemType> ListItems { get; set; } = default!;
+
+    [Parameter]
+    public RenderFragment<TListItemType> ListItemTemplate { get; set; } = default!;
+
+
+    protected override void OnInitialized() {
+        if (ListItems is null) {
+            throw new ArgumentNullException(nameof(ListItems), "Must provide a valid list of items, even if empty");
+        }
+        base.OnInitialized();
+    }
+
+    protected override async Task OnChange(ChangeEventArgs e) {
+        await ValueChanged.InvokeAsync((TListItemType?)e?.Value);
+    }
+
+    protected override string GetClass() {
+        return $"{base.GetClass()} dropdown";
+    }
+
+    private async Task SelectItem(TListItemType selectedItem) {
+        if (!selectedItem?.Equals(Value) ?? false) {
+            Value = selectedItem;
+            await OnChange(new ChangeEventArgs() { Value = Value });
+        }
+    }
+
+    private async Task ClearSelection() {
+        Value = default;
+        await OnChange(new ChangeEventArgs() { Value = Value });
+    }
+}

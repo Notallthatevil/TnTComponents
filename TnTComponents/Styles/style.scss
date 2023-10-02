@@ -18,4 +18,11 @@ body[theme=default] {
 html, body {
     margin: 0px;
     height: 100%;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+        background: transparent;
+        width: 0px;
+    }
 }

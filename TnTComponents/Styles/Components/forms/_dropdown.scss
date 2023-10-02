@@ -1,173 +1,59 @@
-﻿.tnt-input-field-dropdown[theme=default] {
-    border-bottom-color: $tnt-color-outline;
+﻿@use "sass:color";
 
-    i {
-        color: $tnt-color-on-surface;
-    }
-
-    input {
-        color: $tnt-color-on-surface;
-    }
-
-    & > .tnt-input-field-label {
-        color: $tnt-color-on-surface;
-    }
-
-    &.disabled {
-        border-bottom-color: color.adjust($tnt-color-outline, $alpha: -0.6);
-
-        i {
-            color: color.adjust($tnt-color-on-surface, $alpha: -0.6);
-        }
-
-        input {
-            color: color.adjust($tnt-color-on-surface, $alpha: -0.6);
-        }
-
-        & > .tnt-input-field-label {
-            color: color.adjust($tnt-color-on-surface, $alpha: -0.6);
-        }
-    }
-
-
-    &.active {
-        border-bottom-color: $tnt-color-primary;
-        box-shadow: 0 1px 0 0 $tnt-color-primary;
-
-        &.outlined {
-            border-color: $tnt-color-primary;
-            box-shadow: 0 0 1px 1px $tnt-color-primary;
-        }
-
-        & > .tnt-input-field-label {
-            &.active {
-                color: $tnt-color-primary;
-            }
-        }
-    }
-
-    &.outlined {
-        border-color: $tnt-color-outline;
-
-        & > .tnt-input-field-label {
-            background-color: $tnt-color-surface;
-        }
-
-        &.disabled {
-            border-color: color.adjust($tnt-color-outline, $alpha: -0.7);
-        }
-    }
-
-    &.filled {
+.tnt-input-field[theme=default].dropdown {
+    ul {
         background-color: $tnt-color-surface-variant;
 
-        &.disabled {
-            background-color: color.adjust($tnt-color-surface-variant, $alpha: -0.7);
+        li {
+            color: $tnt-color-on-surface-variant;
+
+            &:hover {
+                background-color: color.adjust($tnt-color-surface-variant, $saturation: 100%);
+            }
+
+            &.disabled {
+                color: color.adjust($tnt-color-on-surface-variant, $alpha: -0.5);
+            }
         }
     }
 }
 
-.tnt-input-field-dropdown {
-    position: relative;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    padding: 0px .5rem 0px .5rem;
-    margin: 1rem 0 .1rem 0;
-    transition: box-shadow 150ms ease-in-out;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
 
-    .ul {
-
+.tnt-input-field.dropdown {
+    &:focus-within {
+        ul {
+            visibility: visible;
+            opacity: 1;
+        }
     }
 
+    ul {
+        display: block;
+        position: absolute;
+        overflow-y: auto;
+        min-width: 100%;
+        margin: 0;
+        left: 0;
+        top: 0;
+        z-index: 10000;
+        padding: 0;
+        visibility: hidden;
+        opacity: 0;
+        max-height: 15rem;
+        transition: 150ms;
+        @extend .tnt-z-depth-3;
 
-    //input {
-    //    background-color: transparent;
-    //    border: none;
-    //    height: 2rem;
-    //    font-size: 1rem;
-    //    width: 100%;
-    //    box-shadow: none;
-    //    box-sizing: content-box;
-
-    //    @extend .tnt-border-radius-0;
-
-    //    &:focus {
-    //        outline: none;
-    //    }
-    //}
-
-    //&.disabled:hover {
-    //    box-shadow: none;
-    //}
-
-    //&:hover {
-    //    box-shadow: 0 1px 0 0;
-    //}
-
-    //& > .tnt-input-field-label {
-    //    position: absolute;
-    //    padding: 0px .5rem 0px .5rem;
-    //    top: 0;
-    //    left: 0;
-    //    text-align: initial;
-    //    cursor: text;
-    //    transition: transform 150ms ease-in-out, color 150ms ease-in-out;
-    //    transform-origin: 0% 100%;
-    //    transform: translateY(0.6rem);
-
-    //    &.active, &.placeholder {
-    //        transform: translateY(-.7rem) scale(.75);
-    //        transform-origin: 0 0;
-    //    }
-    //}
-
-    //&.outlined {
-    //    border: none;
-    //    border-style: solid;
-    //    border-width: 1px;
-    //    @extend .tnt-border-radius-1;
-
-    //    &.disabled:hover {
-    //        box-shadow: none;
-    //    }
-
-    //    &:hover {
-    //        box-shadow: 0 0 1px 1px;
-    //    }
-
-    //    & > .tnt-input-field-label {
-    //        padding: 0 10px 0 10px;
-    //        transform: translateY(0.5rem);
-
-    //        &.active, &.placeholder {
-    //            transform: translateY(-.5rem) translateX(.2rem) scale(.75);
-    //        }
-    //    }
-    //}
-
-    //&.filled {
-    //    padding-top: .75rem;
-    //    @extend .tnt-border-radius-1;
-    //    border-bottom-left-radius: 0;
-    //    border-bottom-right-radius: 0;
-
-    //    & > .tnt-input-field-label {
-    //        transform: translateY(1rem);
-
-    //        &.active, &.placeholder {
-    //            transform: translateY(.2rem) translateX(.2rem) scale(.75);
-    //        }
-    //    }
-    //}
-
-    //&.disabled:hover .tnt-password-reveal {
-    //    visibility: hidden;
-    //}
-
-    //&:hover .tnt-password-reveal {
-    //    visibility: visible;
-    //}
+        li {
+            clear: both;
+            cursor: pointer;
+            user-select: none;
+            min-height: 1.5rem;
+            text-align: start;
+            list-style: none;
+            padding: .3rem;
+            line-height: 2rem;
+            transition: 150ms;
+            background-color: transparent;
+        }
+    }
 }
