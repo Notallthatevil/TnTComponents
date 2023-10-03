@@ -37,4 +37,9 @@ public abstract class TnTFormDialogField<TInputType> : TnTFormField<TInputType> 
         }
         Active = true;
     }
+
+    protected async Task Focus() {
+        await JSRuntime.SetElementFocus(InputElementReference);
+        await OnFocusAsync();
+    }
 }

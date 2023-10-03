@@ -25,5 +25,7 @@
 
     removeFocus: (element) => { element.blur(); },
 
-    remToPx: (rem) => { return rem * parseFloat(getComputedStyle(document.documentElement).fontSize); }
+    remToPx: (rem) => { return rem * parseFloat(getComputedStyle(document.documentElement).fontSize); },
+
+    setFocus: (element) => { element.focus(); }
 }

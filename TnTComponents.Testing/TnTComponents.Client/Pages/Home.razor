@@ -43,8 +43,8 @@
         <TnTForm FormType="FormType.Outlined">
             <div class="tnt-row">
                 <div class="tnt-col s12 m6">
-                    <TnTFormDropDown ListItems="_items" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder">
-                        <ListItemTemplate >
+                    <TnTFormDropDown AllowClear="false" ListItems="_items" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder">
+                        <ListItemTemplate>
                             <span>
                                 @context
                             </span>
@@ -164,7 +164,7 @@
     private bool _dark = false;
     private bool _sideBarExpanded = false;
 
-    private string _value = string.Empty;
+    private string _value;
 
     private List<string> _items = default!;
 

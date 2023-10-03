@@ -23,5 +23,9 @@ internal static class JSRuntimeExt {
         await jsRuntime.InvokeVoidAsync("TnTComponents.removeFocus", element);
     }
 
+    public static async Task SetElementFocus(this IJSRuntime jsRuntime, ElementReference element) {
+        await jsRuntime.InvokeVoidAsync("TnTComponents.setFocus", element);
+    }
+
 }
 

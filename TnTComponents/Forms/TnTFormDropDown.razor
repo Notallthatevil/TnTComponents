@@ -16,9 +16,16 @@
     @if (Active) {
         <ul @onmouseleave="Deactivate" class="@(HasSpaceBelow ? string.Empty : "dropup")">
             @if (!string.IsNullOrWhiteSpace(Placeholder)) {
-                <li class="disabled" @onclick="ClearSelection">
-                    @Placeholder
-                </li>
+                @if (AllowClear) {
+                    <li class="disabled" @onclick="ClearSelection">
+                        @Placeholder
+                    </li>
+                }
+                else {
+                    <li class="disabled">
+                        @Placeholder
+                    </li>
+                }
             }
 
             @foreach (var item in ListItems) {
@@ -34,9 +41,10 @@
         </ul>
     }
 
-        <i class="material-icons">close</i>
-
-    <i class="material-icons">arrow_drop_down</i>
+    @if (AllowClear && Value != null) {
+        <i @onclick="ClearSelection" class="material-icons">close</i>
+    }
+    <i class="material-icons" @onclick="Focus">arrow_drop_down</i>
 
     @if (!string.IsNullOrWhiteSpace(Label)) {
         <label class="tnt-input-field-label @(!string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrWhiteSpace(Icon) ? "placeholder" : string.Empty) @(Active || !string.IsNullOrWhiteSpace(Value?.ToString()) ? "active" : string.Empty)">
@@ -54,7 +62,7 @@
     protected override string InputType => "text";
 
     [Parameter]
-    public bool AllowClear { get; set; } // TODO Enable this
+    public bool AllowClear { get; set; } = true;
 
     [Parameter]
     public ICollection<TListItemType> ListItems { get; set; } = default!;

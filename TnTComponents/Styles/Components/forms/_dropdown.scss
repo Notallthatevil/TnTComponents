@@ -23,7 +23,7 @@
     cursor: pointer;
 
     input {
-        cursor:pointer;
+        cursor: pointer;
     }
 
     &.active {
@@ -64,6 +64,20 @@
 
         &.dropup {
             top: -13rem;
+        }
+    }
+
+    i {
+        cursor: pointer;
+        border-radius: 100%;
+        transition: 150ms;
+
+        &:hover {
+            background-color: #00000022;
+        }
+
+        &:active {
+            background-color: #00000044;
         }
     }
 }
