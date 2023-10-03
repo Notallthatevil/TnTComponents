@@ -49,6 +49,7 @@ namespace TnTComponents.Forms {
                 FormType = ParentForm.FormType;
                 Theme = ParentForm.Theme;
             }
+            base.OnInitialized();
         }
 
         protected string GetFromType() =>

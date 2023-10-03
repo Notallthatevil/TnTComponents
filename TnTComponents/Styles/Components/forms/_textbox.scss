@@ -112,6 +112,8 @@
         transition: transform 150ms ease-in-out, color 150ms ease-in-out;
         transform-origin: 0% 100%;
         transform: translateY(0.6rem);
+        user-select: none;
+        cursor: inherit;
 
         &.active, &.placeholder {
             transform: translateY(-.7rem) scale(.75);

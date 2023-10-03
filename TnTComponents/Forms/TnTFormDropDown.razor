@@ -7,34 +7,36 @@
            readonly="true"
            disabled="@Disable"
            placeholder="@Placeholder"
+           value="@GetItemValue(Value)"
            @ref="InputElementReference"
-           @bind="@Value"
-           @bind:event="oninput"
            @onchange="OnChange"
            @onfocusin="OnFocusAsync">
+
+
+
 
     @if (Active) {
         <ul @onmouseleave="Deactivate" class="@(HasSpaceBelow ? string.Empty : "dropup")">
             @if (!string.IsNullOrWhiteSpace(Placeholder)) {
                 @if (AllowClear) {
-                    <li class="disabled" @onclick="ClearSelection">
+                    <li class="placeholder" @onclick="ClearSelection">
                         @Placeholder
                     </li>
                 }
                 else {
-                    <li class="disabled">
+                    <li class="placeholder">
                         @Placeholder
                     </li>
                 }
             }
 
             @foreach (var item in ListItems) {
-                <li @onclick="@(() => SelectItem(item))">
+                <li class="@GetItemClass(item)" @onclick="@(() => SelectItem(item))">
                     @if (ListItemTemplate != null) {
                         @ListItemTemplate(item)
                     }
                     else {
-                        @item?.ToString()
+                        @GetItemValue(item)
                     }
                 </li>
             }
@@ -87,6 +89,9 @@
     }
 
     private async Task SelectItem(TListItemType selectedItem) {
+        if (IsItemDisabled(selectedItem)) {
+            return;
+        }
         await Deactivate();
         if (!selectedItem?.Equals(Value) ?? false) {
             Value = selectedItem;

@@ -9,14 +9,16 @@
     .helper-text {
         color: $tnt-color-on-surface;
     }
+
+    div.disabled + .helper-text {
+        color: color.adjust($tnt-color-on-surface, $alpha: -0.6);
+    }
 }
 
 .tnt-form {
     display: block;
     margin-top: 1rem;
     padding: .5rem;
-
-
 
     .helper-text {
         font-size: .8rem;
