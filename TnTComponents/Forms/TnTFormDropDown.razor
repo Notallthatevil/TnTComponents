@@ -1,4 +1,5 @@
-﻿@typeparam TListItemType
+﻿@using System.Reflection;
+@typeparam TListItemType
 @inherits TnTFormDialogField<TListItemType>
 
 <div class="@GetClass()" theme="@Theme" @ref="BoxInputReference">
@@ -11,9 +12,6 @@
            @ref="InputElementReference"
            @onchange="OnChange"
            @onfocusin="OnFocusAsync">
-
-
-
 
     @if (Active) {
         <ul @onmouseleave="Deactivate" class="@(HasSpaceBelow ? string.Empty : "dropup")">
@@ -44,9 +42,9 @@
     }
 
     @if (AllowClear && Value != null) {
-        <i @onclick="ClearSelection" class="material-icons">close</i>
+        @GetClearIcon()
     }
-    <i class="material-icons" @onclick="Focus">arrow_drop_down</i>
+    @GetDropdownIcon()
 
     @if (!string.IsNullOrWhiteSpace(Label)) {
         <label class="tnt-input-field-label @(!string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrWhiteSpace(Icon) ? "placeholder" : string.Empty) @(Active || !string.IsNullOrWhiteSpace(Value?.ToString()) ? "active" : string.Empty)">
@@ -64,19 +62,43 @@
     protected override string InputType => "text";
 
     [Parameter]
-    public bool AllowClear { get; set; } = true;
-
-    [Parameter]
     public ICollection<TListItemType> ListItems { get; set; } = default!;
 
     [Parameter]
     public RenderFragment<TListItemType> ListItemTemplate { get; set; } = default!;
 
+    [Parameter]
+    public string? DisabledProperty { get; set; }
+
+    [Parameter]
+    public string? TextProperty { get; set; }
+
+    private PropertyInfo? _textProperty;
+    private PropertyInfo? _disabledProperty;
 
     protected override void OnInitialized() {
         if (ListItems is null) {
             throw new ArgumentNullException(nameof(ListItems), "Must provide a valid list of items, even if empty");
         }
+
+        if (!typeof(TListItemType).IsPrimitive && typeof(TListItemType) != typeof(string) && string.IsNullOrWhiteSpace(TextProperty)) {
+            throw new ArgumentNullException(nameof(TextProperty), $"When specifying a non-primitive type and non-string type. The {TextProperty} must be provided!");
+        }
+
+        if (!string.IsNullOrWhiteSpace(TextProperty)) {
+            _textProperty = typeof(TListItemType).GetProperty(TextProperty);
+            if (_textProperty?.PropertyType != typeof(string)) {
+                throw new InvalidOperationException($"{nameof(TextProperty)} must reflect a property of type string");
+            }
+        }
+
+        if (!string.IsNullOrWhiteSpace(DisabledProperty)) {
+            _disabledProperty = typeof(TListItemType).GetProperty(DisabledProperty);
+            if (_disabledProperty?.PropertyType != typeof(bool)) {
+                throw new InvalidOperationException($"{nameof(DisabledProperty)} must reflect a property of type bool");
+            }
+        }
+
         base.OnInitialized();
     }
 
@@ -97,5 +119,20 @@
             Value = selectedItem;
             await OnChange(new ChangeEventArgs() { Value = Value });
         }
+    }
+
+    private bool IsItemDisabled(TListItemType item) {
+        return _disabledProperty is not null && (((bool?)_disabledProperty.GetValue(item)) ?? false);
+    }
+
+    private string GetItemClass(TListItemType item) {
+        return IsItemDisabled(item) ? "disabled" : string.Empty;
+    }
+
+    private object? GetItemValue(TListItemType? item) {
+        if (_textProperty is not null && item != null) {
+            return _textProperty.GetValue(item);
+        }
+        return item?.ToString() ?? string.Empty;
     }
 }
