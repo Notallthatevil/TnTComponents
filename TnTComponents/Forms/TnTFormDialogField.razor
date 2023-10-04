@@ -1,0 +1,30 @@
+﻿@typeparam TInputType
+@inherits TnTFormField<TInputType>
+
+@code {
+    protected RenderFragment GetClearIcon() {
+        switch (IconType) {
+            case IconType.FontAwesome:
+                return@<i class="fa fa-close" @onclick="ClearSelection"></i>;
+
+            case IconType.MaterialIcons:
+                return@<i class="material-icons" @onclick="ClearSelection">close</i>;
+
+            default:
+                throw new NotImplementedException();
+        }
+    }
+
+    protected RenderFragment GetDropdownIcon() {
+        switch (IconType) {
+            case IconType.FontAwesome:
+                return@<i class="fa fa-dropdown" @onclick="Focus"></i>;
+
+            case IconType.MaterialIcons:
+                return@<i class="material-icons" @onclick="Focus">arrow_drop_down</i>;
+
+            default:
+                throw new NotImplementedException();
+        }
+    }
+}
