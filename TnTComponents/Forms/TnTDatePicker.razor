@@ -1,49 +1,74 @@
-﻿@inherits TnTFormField<DateTime>
-@*
-<div class="@GetClass()" theme="@Theme" @ref="_dropDownReference">
+﻿@using System.Globalization;
+@inherits TnTFormDialogField<DateTime>
+
+<div class="@GetClass()" theme="@Theme" @ref="BoxInputReference">
     @GetIcon()
     <input type="@InputType"
            readonly="true"
            disabled="@Disable"
            placeholder="@Placeholder"
-           @ref="_inputElement"
+           @ref="InputElementReference"
            @bind="@Value"
            @bind:event="oninput"
            @onchange="OnChange"
            @onfocusin="OnFocusAsync">
 
-    @if (Active) {
-        <ul @onmouseleave="Deactivate" class="@(_hasSpaceBelow ? string.Empty : "dropup")">
-            @if (!string.IsNullOrWhiteSpace(Placeholder)) {
-                <li class="disabled" @onclick="ClearSelection">
-                    @Placeholder
-                </li>
-            }
+    <div class="tnt-date-time-picker">
+        <span>
+            @GetArrow(true)
+            <TnTFormDropDown ListItems="_months" Theme="Theme" AllowClear=false FormType="FormType" IconType="IconType" Label="Month" @bind-Value="_selectedMonth">
+                <ListItemTemplate>
+                    @DateTimeFormatInfo.CurrentInfo.GetMonthName(_selectedMonth);
+                </ListItemTemplate>
+            </TnTFormDropDown>
+            <TnTFormDropDown ListItems="_years" Theme="Theme" AllowClear=false FormType="FormType" IconType="IconType" Label="Year" @bind-Value="_selectedYear" />
+            @GetArrow(false)
+        </span>
+    </div>
 
-            @foreach (var item in ListItems) {
-                <li @onclick="@(() => SelectItem(item))">
-                    @if (ListItemTemplate != null) {
-                        @ListItemTemplate(item)
-                    }
-                    else {
-                        @item?.ToString()
-                    }
-                </li>
-            }
-        </ul>
+    @if (AllowClear) {
+        @GetClearIcon()
     }
-    @GetAdditionalMarkup()
+    @GetCalendarIcon()
 
     @if (!string.IsNullOrWhiteSpace(Label)) {
-        <label class="tnt-input-field-label @(!string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrWhiteSpace(Icon) ? "placeholder" : string.Empty) @(Active || !string.IsNullOrWhiteSpace(Value?.ToString()) ? "active" : string.Empty)">
+        <label class="tnt-input-field-label @(!string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrWhiteSpace(Icon) ? "placeholder" : string.Empty) @(Active ? "active" : string.Empty)">
             @Label
         </label>
     }
 
-</div>*@
+</div>
+
+@if (!string.IsNullOrWhiteSpace(HelperText)) {
+    <span class="helper-text">@HelperText</span>
+}
 
 @code {
+    [Parameter]
+    public DateTime StartDate { get; set; } = DateTime.Today;
+
+    [Parameter]
+    public int MinYear { get; set; } = DateTime.Now.Year - 50;
+
+    [Parameter]
+    public int MaxYear { get; set; } = DateTime.Now.Year - 50;
+
     protected override string InputType => "text";
+
+    private int _selectedMonth;
+    private int _selectedYear;
+
+    private ICollection<int> _months = default!;
+    private ICollection<int> _years = default!;
+
+    protected override void OnInitialized() {
+        _selectedMonth = StartDate.Month;
+        _selectedMonth = StartDate.Year;
+        _months = Enumerable.Range(1, 12).ToArray();
+        _years = Enumerable.Range(MinYear, MaxYear - MinYear).ToArray();
+        base.OnInitialized();
+    }
+
 
     protected override string GetClass() {
         return $"{base.GetClass()} date-picker";
@@ -51,6 +76,52 @@
 
     protected override Task OnChange(ChangeEventArgs e) {
         throw new NotImplementedException();
+    }
+
+    private void NextPage() {
+
+    }
+
+    private void PrevPage() {
+
+    }
+
+    private RenderFragment GetCalendarIcon() {
+        switch (IconType) {
+            case IconType.FontAwesome:
+                return@<i class="fa fa-calendar" @onclick="Focus"></i>;
+
+            case IconType.MaterialIcons:
+                return@<i class="material-icons" @onclick="Focus">calendar_today</i>;
+
+            default:
+                throw new NotImplementedException();
+        }
+    }
+
+    private RenderFragment GetArrow(bool left) {
+        switch (IconType) {
+            case IconType.FontAwesome:
+                if (left) {
+                    return@<i class="fa fa-arrow-left" @onclick="PrevPage"></i>;
+                }
+                else {
+                    return@<i class="fa fa-arrow-right" @onclick="NextPage"></i>;
+
+                }
+
+            case IconType.MaterialIcons:
+                if (left) {
+                    return@<i class="material-icons" @onclick="PrevPage">chevron_left</i>;
+                }
+                else {
+                    return@<i class="material-icons" @onclick="NextPage">chevron_right</i>;
+
+                }
+
+            default:
+                throw new NotImplementedException();
+        }
     }
 
 }
