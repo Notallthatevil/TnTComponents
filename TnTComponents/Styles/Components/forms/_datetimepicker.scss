@@ -1,8 +1,130 @@
-﻿.tnt-input-field[theme=default].date-picker {
+﻿@use "sass:color";
+
+.tnt-input-field[theme=default].date-picker {
+    .tnt-date-time-picker {
+        background-color: $tnt-color-surface-variant;
+
+        span {
+
+            > * {
+            }
+
+            i {
+                color: $tnt-color-on-surface-variant;
+
+                &:hover {
+                }
+
+                &:active {
+                }
+
+                &.disabled {
+                    color: color.adjust($tnt-color-on-surface-variant, $alpha: -0.5);
+                }
+            }
+        }
+
+        table {
+
+            thead {
+                tr {
+                    th {
+                    }
+                }
+            }
+
+            tbody {
+                tr {
+                    td {
+                        color: $tnt-color-on-surface-variant;
+
+                        &.current-date {
+                            color: $tnt-color-primary;
+                            border: 2px solid $tnt-color-primary;
+                        }
+
+                        &.out-of-month {
+                            &.current-date {
+                                color: color.adjust($tnt-color-primary, $alpha: -0.5);
+                                border: 2px solid color.adjust($tnt-color-primary, $alpha: -0.5);
+                            }
+
+                            color: color.adjust($tnt-color-on-surface-variant, $alpha: -0.5);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 .tnt-input-field.date-picker {
     .tnt-date-time-picker {
-        background-color: red;
+        display: flex;
+        flex-direction: column;
+
+        span {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            user-select: none;
+
+            > * {
+                margin: 0.1rem;
+            }
+
+            i {
+                cursor: pointer;
+                border-radius: 100%;
+
+                &:hover:not(.disabled) {
+                    background-color: #00000022;
+                }
+
+                &:active:not(.disabled) {
+                    background-color: #00000044;
+                }
+
+                &.disabled {
+                    cursor: default;
+                }
+            }
+        }
+
+        table {
+            user-select: none;
+
+            thead {
+                tr {
+                    th {
+                        padding-top: 1rem;
+                        padding-bottom: 0.2rem;
+                    }
+                }
+            }
+
+            tbody {
+                tr {
+                    td {
+                        text-align: center;
+                        width: 2.5rem;
+                        height: 2.5rem;
+                        border-radius: 100%;
+                        margin: 5px;
+
+                        &.current-date {
+                        }
+
+                        &:hover {
+                            background-color: #00000022;
+                        }
+
+                        &:active {
+                            background-color: #00000044;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿@using System.Globalization;
+@using System.Text;
 @inherits TnTFormDialogField<DateTime>
 
 <div class="@GetClass()" theme="@Theme" @ref="BoxInputReference">
@@ -16,27 +17,54 @@
     <div class="tnt-date-time-picker">
         <span>
             @GetArrow(true)
-            <TnTFormDropDown ListItems="_months" Theme="Theme" AllowClear=false FormType="FormType" IconType="IconType" Label="Month" @bind-Value="_selectedMonth">
+            <TnTFormDropDown ListItems="_months" Theme="@Theme" AllowClear=false FormType="FormType" IconType="IconType" Label="Month" @bind-Value="_selectedMonth" ValueCallback="@DateTimeFormatInfo.CurrentInfo.GetMonthName">
                 <ListItemTemplate>
-                    @DateTimeFormatInfo.CurrentInfo.GetMonthName(_selectedMonth);
+                    @DateTimeFormatInfo.CurrentInfo.GetMonthName(context)
                 </ListItemTemplate>
             </TnTFormDropDown>
-            <TnTFormDropDown ListItems="_years" Theme="Theme" AllowClear=false FormType="FormType" IconType="IconType" Label="Year" @bind-Value="_selectedYear" />
+            <TnTFormDropDown ListItems="_years" Theme="@Theme" AllowClear=false FormType="FormType" IconType="IconType" Label="Year" @bind-Value="_selectedYear" />
             @GetArrow(false)
         </span>
+        <table>
+            <thead>
+                <tr>
+                    @foreach (var day in DateTimeFormatInfo.CurrentInfo.AbbreviatedDayNames) {
+                        <th>
+                            @day
+                        </th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var date = GetStartDate();
+                }
+                @for (var i = 0; i < 6; ++i) {
+                    <tr>
+                        @for (var j = 0; j < 7; ++j, date = date.AddDays(1)) {
+                            var itemDate = date;
+                            <td class="@GetDateItemClass(itemDate)">
+                                @itemDate.Day
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 
+    @*
     @if (AllowClear) {
-        @GetClearIcon()
+    @GetClearIcon()
     }
     @GetCalendarIcon()
 
     @if (!string.IsNullOrWhiteSpace(Label)) {
-        <label class="tnt-input-field-label @(!string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrWhiteSpace(Icon) ? "placeholder" : string.Empty) @(Active ? "active" : string.Empty)">
-            @Label
-        </label>
+    <label class="tnt-input-field-label @(!string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrWhiteSpace(Icon) ? "placeholder" : string.Empty) @(Active ? "active" : string.Empty)">
+    @Label
+    </label>
     }
-
+    *@
 </div>
 
 @if (!string.IsNullOrWhiteSpace(HelperText)) {
@@ -48,22 +76,25 @@
     public DateTime StartDate { get; set; } = DateTime.Today;
 
     [Parameter]
-    public int MinYear { get; set; } = DateTime.Now.Year - 50;
+    public int MinYear { get; set; } = DateTime.Now.Year - 1;
 
     [Parameter]
-    public int MaxYear { get; set; } = DateTime.Now.Year - 50;
+    public int MaxYear { get; set; } = DateTime.Now.Year + 1;
+
 
     protected override string InputType => "text";
 
-    private int _selectedMonth;
-    private int _selectedYear;
+    private DateOnly _currentMonthYear;
+
+    private int _selectedMonth { get => _currentMonthYear.Month; set => _currentMonthYear = new DateOnly(_selectedYear, value, 1); }
+    private int _selectedYear { get => _currentMonthYear.Year; set => _currentMonthYear = new DateOnly(value, _selectedMonth, 1); }
 
     private ICollection<int> _months = default!;
     private ICollection<int> _years = default!;
 
     protected override void OnInitialized() {
         _selectedMonth = StartDate.Month;
-        _selectedMonth = StartDate.Year;
+        _selectedYear = StartDate.Year;
         _months = Enumerable.Range(1, 12).ToArray();
         _years = Enumerable.Range(MinYear, MaxYear - MinYear).ToArray();
         base.OnInitialized();
@@ -78,13 +109,39 @@
         throw new NotImplementedException();
     }
 
-    private void NextPage() {
+    private DateOnly GetStartDate() {
+        var startDate = new DateTime(_currentMonthYear.Year, _currentMonthYear.Month, 1);
+        return DateOnly.FromDateTime(startDate.AddDays(-(double)startDate.DayOfWeek));
+    }
 
+    private void NextPage() {
+        var nextMonth = _currentMonthYear.AddMonths(1);
+        if (nextMonth.Year <= MaxYear) {
+            _selectedMonth = nextMonth.Month;
+            _selectedYear = nextMonth.Year;
+        }
     }
 
     private void PrevPage() {
-
+        var prevMonth = _currentMonthYear.AddMonths(-1);
+        if (prevMonth.Year >= MinYear) {
+            _selectedMonth = prevMonth.Month;
+            _selectedYear = prevMonth.Year;
+        }
     }
+
+    private string GetDateItemClass(DateOnly date) {
+        var strBuilder = new StringBuilder();
+        if(date == DateOnly.FromDateTime(DateTime.Today)) {
+            strBuilder.Append("current-date ");
+        }
+
+        if(date.Month != _currentMonthYear.Month) {
+            strBuilder.Append("out-of-month ");
+        }
+
+        return strBuilder.ToString();
+    } 
 
     private RenderFragment GetCalendarIcon() {
         switch (IconType) {
@@ -100,22 +157,29 @@
     }
 
     private RenderFragment GetArrow(bool left) {
+        var disabled = string.Empty;
+
+        if ((left && _selectedMonth == 1 && _selectedYear == MinYear) ||
+            (!left && _selectedMonth == 12 && _selectedYear == MaxYear)) {
+            disabled = "disabled";
+        }
+
         switch (IconType) {
             case IconType.FontAwesome:
                 if (left) {
-                    return@<i class="fa fa-arrow-left" @onclick="PrevPage"></i>;
+                    return@<i class="fa fa-arrow-left @disabled" @onclick="PrevPage"></i>;
                 }
                 else {
-                    return@<i class="fa fa-arrow-right" @onclick="NextPage"></i>;
+                    return@<i class="fa fa-arrow-right @disabled" @onclick="NextPage"></i>;
 
                 }
 
             case IconType.MaterialIcons:
                 if (left) {
-                    return@<i class="material-icons" @onclick="PrevPage">chevron_left</i>;
+                    return@<i class="material-icons @disabled" @onclick="PrevPage">chevron_left</i>;
                 }
                 else {
-                    return@<i class="material-icons" @onclick="NextPage">chevron_right</i>;
+                    return@<i class="material-icons @disabled" @onclick="NextPage">chevron_right</i>;
 
                 }
 

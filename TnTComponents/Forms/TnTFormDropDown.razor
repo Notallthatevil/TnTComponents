@@ -73,6 +73,9 @@
     [Parameter]
     public string? TextProperty { get; set; }
 
+    [Parameter]
+    public Func<TListItemType?, string>? ValueCallback{ get; set; }
+
     private PropertyInfo? _textProperty;
     private PropertyInfo? _disabledProperty;
 
@@ -130,7 +133,10 @@
     }
 
     private object? GetItemValue(TListItemType? item) {
-        if (_textProperty is not null && item != null) {
+        if(ValueCallback != null) {
+            return ValueCallback(item);
+        }
+        else if (_textProperty is not null && item != null) {
             return _textProperty.GetValue(item);
         }
         return item?.ToString() ?? string.Empty;
