@@ -1,23 +1,30 @@
-﻿.tnt-card {
-   @extend .tnt-z-depth-3;
-   @extend .tnt-border-radius-3;
-   padding: 1rem;
-   width: -moz-fit-content;
-   width: fit-content;
-   margin: 1rem;
+﻿.tnt-card[theme=default] {
 
-   &.flat, &.plain, &.outlined {
-      @extend .tnt-z-depth-0;
-   }
+    &.flat {
+        background-color: $tnt-color-surface-variant;
+    }
+
+    &.outlined {
+        outline-color: $tnt-color-outline;
+    }
 }
 
-.tnt-card[theme=default].flat {
-   background-color: $tnt-color-surface-variant;
-}
 
-.tnt-card[theme=default].outlined {
-   outline-color: $tnt-color-outline;
-   outline-style: solid;
-   outline-width: 1px;
-   background-color: transparent;
+.tnt-card {
+    padding: 1rem;
+    width: -moz-fit-content;
+    width: fit-content;
+    margin: 1rem;
+    @extend .tnt-border-radius-3;
+    @extend .tnt-z-depth-3;
+
+    &.flat, &.plain, &.outlined {
+        @extend .tnt-z-depth-0;
+    }
+
+    &.outline {
+        outline-style: solid;
+        outline-width: 1px;
+        background-color: transparent;
+    }
 }
