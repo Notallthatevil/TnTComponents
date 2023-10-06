@@ -2,30 +2,30 @@
     border-bottom-color: $tnt-color-outline;
 
     i {
-        color: $tnt-color-on-surface;
+        color: $tnt-color-on-primary-container;
     }
 
     input {
-        color: $tnt-color-on-surface;
+        color: $tnt-color-on-primary-container;
     }
 
     & > .tnt-input-field-label {
-        color: $tnt-color-on-surface;
+        color: $tnt-color-on-primary-container;
     }
 
     &.disabled {
         border-bottom-color: color.adjust($tnt-color-outline, $alpha: -0.6);
 
         i {
-            color: color.adjust($tnt-color-on-surface, $alpha: -0.6);
+            color: color.adjust($tnt-color-on-primary-container, $alpha: -0.6);
         }
 
         input {
-            color: color.adjust($tnt-color-on-surface, $alpha: -0.6);
+            color: color.adjust($tnt-color-on-primary-container, $alpha: -0.6);
         }
 
         & > .tnt-input-field-label {
-            color: color.adjust($tnt-color-on-surface, $alpha: -0.6);
+            color: color.adjust($tnt-color-on-primary-container, $alpha: -0.6);
         }
     }
 
@@ -59,10 +59,10 @@
     }
 
     &.filled {
-        background-color: $tnt-color-surface-variant;
+        background-color: $tnt-color-primary-container;
 
         &.disabled {
-            background-color: color.adjust($tnt-color-surface-variant, $alpha: -0.7);
+            background-color: color.adjust($tnt-color-on-primary-container, $alpha: -0.7);
         }
     }
 }

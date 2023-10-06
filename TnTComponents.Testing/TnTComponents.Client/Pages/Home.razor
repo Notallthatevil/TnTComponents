@@ -42,7 +42,7 @@
 
         <div class="tnt-row">
             <div class="tnt-col s12 m6">
-                <TnTDatePicker FormType="FormType.Filled" AllowClear="false" DisabledProperty="Disabled" TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder">
+                <TnTDatePicker FormType="FormType.Filled" AllowClear="false" DisabledProperty="Disabled" TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" MaxDate="new DateOnly(2024, 12, 15)" MinDate="new DateOnly(2022, 1, 15)">
                 </TnTDatePicker>
 
                 <TnTDatePicker FormType="FormType.Filled" DisabledProperty="Disabled" TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
@@ -176,7 +176,7 @@
     private bool _dark = false;
     private bool _sideBarExpanded = false;
 
-    private DateTime _value;
+    private DateOnly? _value;
 
     public Dictionary<string, object> C = new Dictionary<string, object>() {
         { "class", "tnt-form" }

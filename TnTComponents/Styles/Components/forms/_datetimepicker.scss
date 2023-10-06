@@ -2,7 +2,7 @@
 
 .tnt-input-field[theme=default].date-picker {
     .tnt-date-time-picker {
-        background-color: $tnt-color-surface-variant;
+        background-color: $tnt-color-primary-container;
 
         span {
 
@@ -10,7 +10,7 @@
             }
 
             i {
-                color: $tnt-color-on-surface-variant;
+                color: $tnt-color-on-primary-container;
 
                 &:hover {
                 }
@@ -19,9 +19,13 @@
                 }
 
                 &.disabled {
-                    color: color.adjust($tnt-color-on-surface-variant, $alpha: -0.5);
+                    color: color.adjust($tnt-color-on-primary-container, $alpha: -0.5);
                 }
             }
+        }
+
+        .tnt-input-field-label {
+            background-color: $tnt-color-primary-container;
         }
 
         table {
@@ -29,27 +33,41 @@
             thead {
                 tr {
                     th {
+                        color: $tnt-color-primary;
                     }
                 }
             }
 
             tbody {
                 tr {
-                    td {
-                        color: $tnt-color-on-surface-variant;
 
-                        &.current-date {
-                            color: $tnt-color-primary;
-                            border: 2px solid $tnt-color-primary;
+                    td > div.table-content {
+                        color: $tnt-color-on-primary-container;
+
+                        &:not(.disabled) {
+                            &.current-date {
+                                color: $tnt-color-primary;
+                                border: 2px solid $tnt-color-primary;
+                            }
+
+                            &.selected {
+                                color: $tnt-color-surface;
+                                background-color: $tnt-color-primary
+                            }
                         }
 
-                        &.out-of-month {
+                        &.out-of-month, &.disabled {
+                            color: color.adjust($tnt-color-on-primary-container, $alpha: -0.5);
+
                             &.current-date {
                                 color: color.adjust($tnt-color-primary, $alpha: -0.5);
                                 border: 2px solid color.adjust($tnt-color-primary, $alpha: -0.5);
                             }
 
-                            color: color.adjust($tnt-color-on-surface-variant, $alpha: -0.5);
+                            &.selected {
+                                color: color.adjust($tnt-color-surface, $alpha: -0.5);
+                                background-color: color.adjust($tnt-color-primary, $alpha: -0.5);
+                            }
                         }
                     }
                 }
@@ -62,20 +80,35 @@
     .tnt-date-time-picker {
         display: flex;
         flex-direction: column;
+        padding: 1rem;
+        position: absolute;
+        z-index: 1;
+        top: 3rem;
+        width: min-content;
+        @extend .tnt-border-radius-2;
+        @extend .tnt-z-depth-2;
 
         span {
-            display: flex;
-            flex-direction: row;
+            display: inherit;
+            justify-content: center;
             align-items: center;
-            user-select: none;
 
             > * {
                 margin: 0.1rem;
             }
 
+            .tnt-month-picker {
+                width: 40%;
+            }
+
+            .tnt-year-picker {
+                width: 20%;
+            }
+
             i {
                 cursor: pointer;
                 border-radius: 100%;
+                user-select: none;
 
                 &:hover:not(.disabled) {
                     background-color: #00000022;
@@ -93,12 +126,16 @@
 
         table {
             user-select: none;
+            table-layout: fixed;
+            width: fit-content;
 
             thead {
                 tr {
                     th {
                         padding-top: 1rem;
                         padding-bottom: 0.2rem;
+                        width: 3rem;
+                        height: 2rem;
                     }
                 }
             }
@@ -106,21 +143,30 @@
             tbody {
                 tr {
                     td {
-                        text-align: center;
-                        width: 2.5rem;
-                        height: 2.5rem;
-                        border-radius: 100%;
-                        margin: 5px;
+                        width: 1.5rem;
 
-                        &.current-date {
-                        }
+                        > div.table-content {
+                            text-align: center;
+                            border-radius: 100%;
+                            font-weight: bold;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            aspect-ratio: 1/1;
 
-                        &:hover {
-                            background-color: #00000022;
-                        }
+                            &:not(.disabled) {
+                                cursor: pointer;
 
-                        &:active {
-                            background-color: #00000044;
+                                &:hover {
+                                    transition: 150ms;
+                                    background-color: #00000022;
+                                }
+
+                                &:active {
+                                    transition: 150ms;
+                                    background-color: #00000044;
+                                }
+                            }
                         }
                     }
                 }

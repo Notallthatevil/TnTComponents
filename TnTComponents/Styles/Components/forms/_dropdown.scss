@@ -2,25 +2,22 @@
 
 .tnt-input-field[theme=default].dropdown {
     ul {
-        background-color: $tnt-color-surface-variant;
+        background-color: $tnt-color-primary-container;
 
         li {
-            color: $tnt-color-on-surface-variant;
+            color: $tnt-color-on-primary-container;
 
-            &:hover {
-                background-color: color.adjust($tnt-color-surface-variant, $saturation: 100%);
+            &:hover:not(.disabled) {
+                background-color: color.adjust($tnt-color-primary-container, $lightness: -20%);
             }
 
             &.disabled {
-                color: color.adjust($tnt-color-on-surface-variant, $alpha: -0.5);
+                color: color.adjust($tnt-color-on-primary-container, $alpha: -0.5);
 
-                &:hover {
-                    background-color: transparent;
-                }
             }
 
             &.placeholder {
-                color: color.adjust($tnt-color-on-surface-variant, $alpha: -0.5);
+                color: color.adjust($tnt-color-on-primary-container, $alpha: -0.5);
             }
         }
     }
