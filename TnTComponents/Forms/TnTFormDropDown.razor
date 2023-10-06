@@ -14,31 +14,33 @@
            @onfocusin="OnFocusAsync">
 
     @if (Active) {
-        <ul @onmouseleave="Deactivate" class="@(HasSpaceBelow ? string.Empty : "dropup")">
-            @if (!string.IsNullOrWhiteSpace(Placeholder)) {
-                @if (AllowClear) {
-                    <li class="placeholder" @onclick="ClearSelection">
-                        @Placeholder
-                    </li>
-                }
-                else {
-                    <li class="placeholder">
-                        @Placeholder
-                    </li>
-                }
-            }
-
-            @foreach (var item in ListItems) {
-                <li class="@GetItemClass(item)" @onclick="@(() => SelectItem(item))">
-                    @if (ListItemTemplate != null) {
-                        @ListItemTemplate(item)
+        <TnTExternalClickHandler Callback="Deactivate">
+            <ul class="@(HasSpaceBelow ? string.Empty : "dropup")">
+                @if (!string.IsNullOrWhiteSpace(Placeholder)) {
+                    @if (AllowClear) {
+                        <li class="placeholder" @onclick="ClearSelection">
+                            @Placeholder
+                        </li>
                     }
                     else {
-                        @GetItemValue(item)
+                        <li class="placeholder">
+                            @Placeholder
+                        </li>
                     }
-                </li>
-            }
-        </ul>
+                }
+
+                @foreach (var item in ListItems) {
+                    <li class="@GetItemClass(item)" @onclick="@(() => SelectItem(item))">
+                        @if (ListItemTemplate != null) {
+                            @ListItemTemplate(item)
+                        }
+                        else {
+                            @GetItemValue(item)
+                        }
+                    </li>
+                }
+            </ul>
+        </TnTExternalClickHandler>
     }
 
     @if (AllowClear && Value != null) {
@@ -68,13 +70,7 @@
     public RenderFragment<TListItemType> ListItemTemplate { get; set; } = default!;
 
     [Parameter]
-    public string? DisabledProperty { get; set; }
-
-    [Parameter]
-    public string? TextProperty { get; set; }
-
-    [Parameter]
-    public Func<TListItemType?, string>? ValueCallback{ get; set; }
+    public Func<TListItemType?, string>? ValueCallback { get; set; }
 
     private PropertyInfo? _textProperty;
     private PropertyInfo? _disabledProperty;
@@ -82,24 +78,6 @@
     protected override void OnInitialized() {
         if (ListItems is null) {
             throw new ArgumentNullException(nameof(ListItems), "Must provide a valid list of items, even if empty");
-        }
-
-        if (!typeof(TListItemType).IsPrimitive && typeof(TListItemType) != typeof(string) && string.IsNullOrWhiteSpace(TextProperty)) {
-            throw new ArgumentNullException(nameof(TextProperty), $"When specifying a non-primitive type and non-string type. The {TextProperty} must be provided!");
-        }
-
-        if (!string.IsNullOrWhiteSpace(TextProperty)) {
-            _textProperty = typeof(TListItemType).GetProperty(TextProperty);
-            if (_textProperty?.PropertyType != typeof(string)) {
-                throw new InvalidOperationException($"{nameof(TextProperty)} must reflect a property of type string");
-            }
-        }
-
-        if (!string.IsNullOrWhiteSpace(DisabledProperty)) {
-            _disabledProperty = typeof(TListItemType).GetProperty(DisabledProperty);
-            if (_disabledProperty?.PropertyType != typeof(bool)) {
-                throw new InvalidOperationException($"{nameof(DisabledProperty)} must reflect a property of type bool");
-            }
         }
 
         base.OnInitialized();
@@ -133,12 +111,11 @@
     }
 
     private object? GetItemValue(TListItemType? item) {
-        if(ValueCallback != null) {
+        if (ValueCallback != null) {
             return ValueCallback(item);
         }
-        else if (_textProperty is not null && item != null) {
-            return _textProperty.GetValue(item);
+        else {
+            return item?.ToString() ?? string.Empty;
         }
-        return item?.ToString() ?? string.Empty;
     }
 }
