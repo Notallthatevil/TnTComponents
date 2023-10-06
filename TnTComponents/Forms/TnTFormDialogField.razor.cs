@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using TnTComponents.Common;
 using TnTComponents.Common.Ext;
 
 namespace TnTComponents.Forms;
@@ -20,6 +22,9 @@ public abstract partial class TnTFormDialogField<TInputType> {
 
     [Inject]
     protected IJSRuntime JSRuntime { get; set; } = default!;
+
+    private DotNetObjectReference<TnTFormDialogField<TInputType>>? _reference;
+    private bool _disposedValue;
 
     protected async Task ClearSelection() {
         if (!Disable) {
@@ -50,6 +55,4 @@ public abstract partial class TnTFormDialogField<TInputType> {
             await OnFocusAsync();
         }
     }
-
-
 }

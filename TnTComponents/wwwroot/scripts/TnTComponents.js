@@ -3,22 +3,22 @@
     getWindowHeight: () => { return window.innerHeight; },
 
     MediaCallbacks: {},
-    MediaCallback: function (query, instance) {
-        if (instance) {
+    MediaCallback: function (query, dotNetObjectRef) {
+        if (dotNetObjectRef) {
             function callback(event) {
-                instance.invokeMethodAsync('OnChanged', event.matches)
+                dotNetObjectRef.invokeMethodAsync('OnChanged', event.matches)
             };
             var query = matchMedia(query);
-            this.MediaCallbacks[instance._id] = function () {
+            this.MediaCallbacks[dotNetObjectRef._id] = function () {
                 query.removeListener(callback);
             }
             query.addListener(callback);
             return query.matches;
         } else {
-            instance = query;
-            if (this.MediaCallbacks[instance._id]) {
-                this.MediaCallbacks[instance._id]();
-                delete this.MediaCallbacks[instance._id];
+            dotNetObjectRef = query;
+            if (this.MediaCallbacks[dotNetObjectRef._id]) {
+                this.MediaCallbacks[dotNetObjectRef._id]();
+                delete this.MediaCallbacks[dotNetObjectRef._id];
             }
         }
     },
@@ -27,5 +27,30 @@
 
     remToPx: (rem) => { return rem * parseFloat(getComputedStyle(document.documentElement).fontSize); },
 
-    setFocus: (element) => { element.focus(); }
+    setFocus: (element) => { element.focus(); },
+
+    WindowClickCallbacks: {},
+    WindowClickCallbackRegister: function (element, dotNetObjectRef) {
+        if (dotNetObjectRef) {
+            function callback(event) {
+                if (!element.contains(event.target)) {
+                    dotNetObjectRef.invokeMethodAsync('OnClick')
+                }
+            };
+
+            this.WindowClickCallbacks[dotNetObjectRef._id] = function () {
+                window.removeEventListener('click', callback);
+            }
+
+            window.addEventListener('click', callback);
+        }
+    },
+
+    WindowClickCallbackDeregister: function (dotNetObjectRef) {
+        if (this.WindowClickCallbacks[dotNetObjectRef._id]) {
+            this.WindowClickCallbacks[dotNetObjectRef._id]();
+            delete this.WindowClickCallbacks[dotNetObjectRef._id];
+        }
+    }
+
 }

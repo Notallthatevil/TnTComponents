@@ -77,6 +77,35 @@
 }
 
 .tnt-input-field.date-picker {
+    cursor: pointer;
+
+    &.disabled {
+        cursor: default;
+    }
+
+    input {
+        cursor: inherit;
+    }
+
+    i {
+        user-select: none;
+        cursor: inherit;
+        border-radius: 100%;
+    }
+
+    &:not(.disabled) {
+        i {
+            &:hover {
+                background-color: #00000022;
+            }
+
+            &:active {
+                background-color: #00000044;
+            }
+        }
+    }
+
+
     .tnt-date-time-picker {
         display: flex;
         flex-direction: column;
@@ -87,6 +116,7 @@
         width: min-content;
         @extend .tnt-border-radius-2;
         @extend .tnt-z-depth-2;
+
 
         span {
             display: inherit;
