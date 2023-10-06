@@ -1,107 +1,70 @@
 ﻿@use "sass:color";
 
 .tnt-btn[theme=default] {
-   background-color: $tnt-color-primary-container;
-   color: $tnt-color-on-primary-container;
+    @include colorize($tnt-color-primary-container, $property:background-color, $hover:true, $active:true);
+    @include colorize($tnt-color-on-primary-container, $property:color);
 
-   &:hover {
-      background-color: color.adjust($tnt-color-primary-container, $lightness: -10%);
-   }
+    &.outlined {
+        outline-color: $tnt-color-outline;
+        @include colorize($tnt-color-primary, $property:color, $hover:true, $active:true);
+    }
 
-   &:active {
-      background-color: color.adjust($tnt-color-primary-container, $lightness: -20%);
-   }
+    &.filled {
+        @include colorize($tnt-color-primary, $property:background-color, $hover:true, $active:true);
+        color: $tnt-color-on-primary;
+    }
 }
-
-.tnt-btn[theme=default].filled {
-   background-color: $tnt-color-primary;
-   color: $tnt-color-on-primary;
-
-   &:hover {
-      background-color: color.adjust($tnt-color-primary, $lightness: -10%);
-   }
-
-   &:active {
-      background-color: color.adjust($tnt-color-primary, $lightness: -20%);
-   }
-}
-
-.tnt-btn[theme=default].outlined {
-   outline-color: $tnt-color-outline;
-   color: $tnt-color-primary;
-
-   &:hover {
-      color: color.adjust($tnt-color-primary, $lightness: -10%);
-   }
-
-   &:active {
-      color: color.adjust($tnt-color-primary, $lightness: -20%);
-   }
-}
-
 
 .tnt-btn {
-   border: none;
-   min-width: 2.5rem;
-   border-radius: 2rem;
-   font-weight: 700;
-   font-size: 1rem;
-   padding: 0.5rem 1.5rem;
-   line-height: 1.25rem;
-   align-content: center;
-   align-items: center;
-   cursor: pointer;
-   transition: background-color 100ms ease-out;
-   margin: 0.25rem;
-   @extend .tnt-z-depth-1;
+    border: none;
+    min-width: 2.5rem;
+    border-radius: 2rem;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+    line-height: 1.25rem;
+    cursor: pointer;
+    transition: background-color 100ms ease-out;
+    margin: 0.25rem;
+    @extend .tnt-z-depth-1;
 
-   span {
-      vertical-align: middle;
-   }
+    span {
+        vertical-align: middle;
+    }
 
-   i {
-      display: inline-block;
-      text-align: center;
-      font-size: 1.3rem;
-      vertical-align: bottom;
-      margin-right: 0.3rem;
-   }
+    i {
+        display: inline-block;
+        text-align: center;
+        font-size: 1.3rem;
+        vertical-align: bottom;
+        margin-right: 0.3rem;
+    }
 
-   &:hover {
-      @extend .tnt-z-depth-2;
-   }
-}
+    &:hover {
+        @extend .tnt-z-depth-2;
+    }
 
-.tnt-btn.flat {
-   @extend .tnt-z-depth-0;
+    &.flat {
+        @extend .tnt-z-depth-0;
 
-   &:hover {
-      @extend .tnt-z-depth-1;
-   }
-}
+        &:hover {
+            @extend .tnt-z-depth-1;
+        }
+    }
 
-.tnt-btn.filled {
-   @extend .tnt-z-depth-0;
+    &.filled {
+        @extend .tnt-z-depth-0;
 
-   &:hover {
-      @extend .tnt-z-depth-1;
-   }
-}
+        &:hover {
+            @extend .tnt-z-depth-1;
+        }
+    }
 
-.tnt-btn.outlined {
-   @extend .tnt-z-depth-0;
-
-   &:hover {
-      background-color: #00000022;
-      @extend .tnt-z-depth-1;
-   }
-
-   &:active {
-      background-color: #00000044;
-   }
-
-   background-color: transparent;
-   outline-style: solid;
-   outline-width: 1px;
-   padding: 0.45rem 1.45rem;
+    &.outlined {
+        @include colorizeTransparent($tnt-color-surface, $hover:true, $active:true);
+        outline-style: solid;
+        outline-width: 1px;
+        padding: 0.45rem 1.45rem;
+        @extend .tnt-z-depth-0;
+    }
 }
