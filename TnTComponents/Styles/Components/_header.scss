@@ -1,9 +1,14 @@
-﻿.tnt-header {
+﻿.tnt-header[theme=default] {
+    background-color: $tnt-color-primary;
+    color: $tnt-color-on-primary;
+}
+
+.tnt-header {
     min-height: 2.5rem;
     align-items: center;
     overflow-x: hidden;
     white-space: nowrap;
-    transition: padding-left ease-in-out 150ms;
+    transition: ease-in-out 150ms;
     position: sticky;
     z-index: 998;
     display: flex;
@@ -34,11 +39,4 @@
             padding-left: 250px;
         }
     }
-}
-
-
-
-.tnt-header[theme=default] {
-    background-color: $tnt-color-primary;
-    color: $tnt-color-on-primary;
 }

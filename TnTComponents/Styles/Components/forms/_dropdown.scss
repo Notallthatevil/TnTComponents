@@ -7,16 +7,11 @@
         li {
             color: $tnt-color-on-primary-container;
 
-            &:hover:not(.disabled) {
-                background-color: color.adjust($tnt-color-primary-container, $lightness: -20%);
+            &:not(.disabled) {
+                @include colorize($tnt-color-primary-container, background-color, true, true);
             }
 
             &.disabled {
-                color: color.adjust($tnt-color-on-primary-container, $alpha: -0.5);
-
-            }
-
-            &.placeholder {
                 color: color.adjust($tnt-color-on-primary-container, $alpha: -0.5);
             }
         }
@@ -28,7 +23,7 @@
     cursor: pointer;
 
     input {
-        cursor: pointer;
+        cursor: inherit;
     }
 
     &.active {
@@ -64,27 +59,9 @@
             padding: .3rem;
             line-height: 2rem;
             transition: 150ms;
-            background-color: transparent;
-
-            &.disabled {
-                cursor: default;
-
-                i {
-                    cursor: default;
-                }
-            }
 
             i {
-                background-color: transparent;
-                user-select: none;
-
-                &:hover {
-                    background-color: transparent;
-                }
-
-                &:active {
-                    background-color: transparent;
-                }
+                cursor: inherit;
             }
         }
 
@@ -93,38 +70,7 @@
         }
     }
 
-    i {
-        cursor: pointer;
-        border-radius: 100%;
-        transition: 150ms;
-        user-select: none;
-
-        &:hover {
-            background-color: #00000022;
-        }
-
-        &:active {
-            background-color: #00000044;
-        }
-    }
-
     &.disabled {
         cursor: default;
-
-        input {
-            cursor: default;
-        }
-
-        i {
-            cursor: default;
-
-            &:hover {
-                background-color: transparent;
-            }
-
-            &:active {
-                background-color: transparent;
-            }
-        }
     }
 }

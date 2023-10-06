@@ -1,25 +1,6 @@
 ﻿@use "sass:color";
 
-@function getTransparentHoverColor($color) {
-    @if(color.lightness($color) > 40) {
-        @return #00000022;
-    }
-    @else {
-        @return #FFFFFF22;
-    }
-}
-
-@function getTransparentActiveColor($color) {
-    @if(color.lightness($color) > 40) {
-        @return #00000044;
-    }
-
-    @else {
-        @return #FFFFFF44;
-    }
-}
-
-@mixin colorizeTransparent($background, $hover: false, $active: false) {
+@mixin colorizeTransparent($background, $hover: false, $active: false, $additionalScope: false) {
     background-color: transparent;
     $base-color: #FFF;
 
@@ -28,18 +9,31 @@
     }
 
     @if($hover) {
-        &:hover {
-            background-color: color.adjust($base-color, $alpha: -.9);
+        @if($additionalScope) {
+            &:hover#{$additionalScope} {
+                background-color: color.adjust($base-color, $alpha: -.9);
+            }
+        }
+        @else {
+            &:hover {
+                background-color: color.adjust($base-color, $alpha: -.9);
+            }
         }
     }
 
     @if($active) {
-        &:active {
-            background-color: color.adjust($base-color, $alpha: -.8);
+        @if($additionalScope) {
+            &:active#{$additionalScope} {
+                background-color: color.adjust($base-color, $alpha: -.8);
+            }
+        }
+        @else {
+            &:active {
+                background-color: color.adjust($base-color, $alpha: -.8);
+            }
         }
     }
 }
-
 
 @mixin colorize($color, $property, $hover: false, $active: false) {
     #{$property}: $color;

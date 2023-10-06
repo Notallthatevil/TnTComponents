@@ -1,66 +1,57 @@
 ﻿@use "sass:color";
 
-.tnt-input-field-switch[theme=default]:not(.disabled) {
+.tnt-input-field-switch[theme=default] {
+    &:not(.disabled) {
 
-    input[type=checkbox] {
-        + span {
-            &:before {
-                background-color: $tnt-color-primary;
+        input[type=checkbox] {
+            + span {
+                &:before {
+                    background-color: $tnt-color-primary;
+                }
+
+                @include colorizeTransparent($tnt-color-surface, $hover:true, $active:true, $additionalScope: #{'::after'});
+                background: linear-gradient(to right, $tnt-color-tertiary 50%, $tnt-color-surface-variant 50%);
+                background-size: 200% 100%;
+                background-position: right bottom;
             }
 
-            &:hover::after {
-                background-color: #00000022;
-            }
-
-            &:active::after {
-                background-color: #00000044;
+            &:checked {
+                + span {
+                    background-position: left bottom;
+                }
             }
         }
 
-        &:not(:checked) {
-            + span {
-                background-color: $tnt-color-surface;
-            }
-        }
-
-        &:checked {
-            + span {
-                background-color: $tnt-color-surface-variant;
-            }
+        .tnt-input-field-switch-label {
+            color: $tnt-color-on-surface;
         }
     }
 
-    .tnt-input-field-switch-label {
-        color: $tnt-color-on-surface;
-    }
-}
-
-.tnt-input-field-switch[theme=default].disabled {
-
-    input[type=checkbox] {
-        + span {
-            &:before {
-                background-color: color.adjust($tnt-color-primary, $alpha: -.5);
-            }
-        }
-
-        &:not(:checked) {
-            + span {
-                background-color: color.adjust($tnt-color-surface, $alpha: -.5);
-            }
-        }
-
-        &:checked {
-            + span {
-                background-color: color.adjust($tnt-color-surface-variant, $alpha: -.5);
-            }
-        }
-    }
-
-    .tnt-input-field-switch-label {
-        color: color.adjust($tnt-color-on-surface, $alpha: -.5);
+    &.disabled {
+        //input[type=checkbox] {
+        //    + span {
+        //        &:before {
+        //            background-color: color.adjust($tnt-color-primary, $alpha: -.5);
+        //        }
+        //    }
+        //    &:not(:checked) {
+        //        + span {
+        //            background-color: color.adjust($tnt-color-surface, $alpha: -.5);
+        //        }
+        //    }
+        //    &:checked {
+        //        + span {
+        //            background-color: color.adjust($tnt-color-surface-variant, $alpha: -.5);
+        //        }
+        //    }
+        //}
+        //.tnt-input-field-switch-label {
+        //    color: color.adjust($tnt-color-on-surface, $alpha: -.5);
+        //}
     }
 }
+
+
 
 .tnt-input-field-switch {
     display: flex;
@@ -69,6 +60,11 @@
     padding-bottom: 0.3rem;
     user-select: none;
     cursor: pointer;
+
+    &.disabled {
+        cursor: default;
+    }
+
 
     input[type=checkbox] {
         position: absolute;
@@ -83,37 +79,36 @@
             border-radius: 1rem;
             width: 2.3rem;
             height: .9rem;
-            background-color: transparent;
             z-index: 0;
-            transition: 150ms;
+            transition: ease-in-out 150ms;
             @extend .tnt-z-depth-1;
 
-            &:before,
-            &:after {
-                transition: ease-in-out 150ms;
-            }
-
-            &:before {
-                content: '';
-                position: absolute;
-                aspect-ratio: 1/1;
-                height: 1.3rem;
-                left: -0.1rem;
-                z-index: 2;
-                background-color: blue;
-                border-radius: 100%;
-                @extend .tnt-z-depth-2;
-            }
-
-            &:hover::after {
-                content: '';
-                position: absolute;
-                aspect-ratio: 1/1;
-                height: 2rem;
-                left: -.5rem;
-                z-index: 1;
-                border-radius: 100%;
-            }
+           &:before,
+           &:after {
+               transition: ease-in-out 150ms;
+           }
+           
+           &:before {
+               content: '';
+               position: absolute;
+               aspect-ratio: 1/1;
+               height: 1.3rem;
+               left: -0.1rem;
+               z-index: 2;
+               border-radius: 100%;
+           
+               @extend .tnt-z-depth-2;
+           }
+           
+           &:hover::after {
+               content: '';
+               position: absolute;
+               aspect-ratio: 1/1;
+               height: 2rem;
+               left: -.5rem;
+               z-index: 1;
+               border-radius: 100%;
+           }
         }
 
         &:checked {
@@ -143,8 +138,8 @@
     .tnt-input-field-switch-on {
         position: absolute;
     }
-}
 
-.tnt-input-field-switch.disabled input[type=checkbox] + span {
-    cursor: default;
+    &.disabled input[type=checkbox] + span {
+        cursor: inherit;
+    }
 }

@@ -18,6 +18,11 @@
         }
     }
 
+    &:not(.disabled) input[type=checkbox] + span {
+        @include colorizeTransparent($tnt-color-surface, $hover:true, $active:true, $additionalScope: #{'::after'});
+    }
+
+
     &.filled input[type=checkbox] {
         &:not(:checked) + span span:after {
             border: 2px solid $tnt-color-outline;
@@ -32,34 +37,6 @@
             span:after {
                 background-color: $tnt-color-primary;
             }
-        }
-    }
-
-    &:not(.disabled) input[type=checkbox] + span {
-        &:hover::after {
-            background-color: #00000022;
-        }
-
-        &:active::after {
-            background-color: #00000044;
-        }
-    }
-
-    &.filled {
-        &:not(.disabled) input[type=checkbox] + span span {
-            //&:before {
-            //    content: '';
-            //    position: absolute;
-            //    top: 0;
-            //    left: 0;
-            //    width: 2rem;
-            //    height: 2rem;
-            //    background-color: transparent;
-            //    @extend .tnt-border-radius-1;
-            //}
-            //&:hover::before {
-            //    background-color: red;
-            //}
         }
     }
 
@@ -102,6 +79,8 @@
 .tnt-input-field-checkbox {
     display: flex;
     align-items: center;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
 
     input[type=checkbox] {
         position: absolute;

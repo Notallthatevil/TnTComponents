@@ -5,22 +5,8 @@
         background-color: $tnt-color-primary-container;
 
         span {
-
-            > * {
-            }
-
             i {
                 color: $tnt-color-on-primary-container;
-
-                &:hover {
-                }
-
-                &:active {
-                }
-
-                &.disabled {
-                    color: color.adjust($tnt-color-on-primary-container, $alpha: -0.5);
-                }
             }
         }
 
@@ -29,7 +15,6 @@
         }
 
         table {
-
             thead {
                 tr {
                     th {
@@ -40,9 +25,9 @@
 
             tbody {
                 tr {
-
                     td > div.table-content {
                         color: $tnt-color-on-primary-container;
+                        @include colorizeTransparent($tnt-color-primary-container, $active:true, $hover:true);
 
                         &:not(.disabled) {
                             &.current-date {
@@ -87,31 +72,12 @@
         cursor: inherit;
     }
 
-    i {
-        user-select: none;
-        cursor: inherit;
-        border-radius: 100%;
-    }
-
-    &:not(.disabled) {
-        i {
-            &:hover {
-                background-color: #00000022;
-            }
-
-            &:active {
-                background-color: #00000044;
-            }
-        }
-    }
-
-
     .tnt-date-time-picker {
         display: flex;
         flex-direction: column;
         padding: 1rem;
         position: absolute;
-        z-index: 1;
+        z-index: 10000;
         top: 3rem;
         width: min-content;
         @extend .tnt-border-radius-2;
@@ -136,21 +102,8 @@
             }
 
             i {
-                cursor: pointer;
                 border-radius: 100%;
                 user-select: none;
-
-                &:hover:not(.disabled) {
-                    background-color: #00000022;
-                }
-
-                &:active:not(.disabled) {
-                    background-color: #00000044;
-                }
-
-                &.disabled {
-                    cursor: default;
-                }
             }
         }
 
@@ -186,16 +139,6 @@
 
                             &:not(.disabled) {
                                 cursor: pointer;
-
-                                &:hover {
-                                    transition: 150ms;
-                                    background-color: #00000022;
-                                }
-
-                                &:active {
-                                    transition: 150ms;
-                                    background-color: #00000044;
-                                }
                             }
                         }
                     }

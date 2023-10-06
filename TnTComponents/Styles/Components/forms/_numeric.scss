@@ -1,7 +1,6 @@
 ﻿.tnt-input-field {
 
-    .tnt-numeric-input-button {
-        background-color: transparent;
+    .tnt-numeric-input-buttons {
         visibility: hidden;
         display: flex;
         flex-direction: column;
@@ -12,20 +11,15 @@
         width: 1rem;
         height: 1rem;
 
-        &:hover {
-            background-color: #00000022;
-        }
-
-        &:active {
-            background-color: #00000044;
-        }
-
         & > i {
+            border-radius: 100%;
+            cursor: pointer;
+            user-select: none;
             font-size: 1.25rem;
         }
     }
 
-    &:hover .tnt-numeric-input-button {
+    &:hover .tnt-numeric-input-buttons {
         visibility: visible;
     }
 }
