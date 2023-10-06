@@ -23,9 +23,6 @@ public abstract partial class TnTFormDialogField<TInputType> {
     [Inject]
     protected IJSRuntime JSRuntime { get; set; } = default!;
 
-    private DotNetObjectReference<TnTFormDialogField<TInputType>>? _reference;
-    private bool _disposedValue;
-
     protected async Task ClearSelection() {
         if (!Disable) {
             await Deactivate();

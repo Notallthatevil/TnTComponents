@@ -5,10 +5,10 @@
         if (!string.IsNullOrWhiteSpace(Icon)) {
             switch (IconType) {
                 case IconType.MaterialIcons:
-                    return@<i class="material-icons">@Icon</i>;
+                    return@<i class="tnt-icon-component material-icons">@Icon</i>;
 
                 case IconType.FontAwesome:
-                    return@<i class="fa @Icon"></i>;
+                    return@<i class="tnt-icon-component fa @Icon"></i>;
             }
         }
         return default!;

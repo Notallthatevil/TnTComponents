@@ -42,10 +42,17 @@
 
         <div class="tnt-row">
             <div class="tnt-col s12 m6">
-                <TnTDatePicker FormType="FormType.Filled" AllowClear="false" DisabledProperty="Disabled" TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" MaxDate="new DateOnly(2024, 12, 15)" MinDate="new DateOnly(2022, 1, 15)">
+                <TnTDatePicker FormType="FormType.Filled" DisabledDates="_disabledDates" AllowClear="false" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" MaxDate="new DateOnly(DateTime.Today.Year + 1, 12, 15)" MinDate="new DateOnly(DateTime.Today.Year - 1, 1, 15)">
                 </TnTDatePicker>
 
-                <TnTDatePicker FormType="FormType.Filled" DisabledProperty="Disabled" TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                <TnTFormDropDown ListItems="Enumerable.Range(1, 1000).ToArray()">
+                    <ListItemTemplate>
+                        <i class="material-icons">search</i>
+                        @context
+                    </ListItemTemplate>
+                </TnTFormDropDown>
+
+                <TnTDatePicker FormType="FormType.Filled" MaxDate="DateOnly.FromDateTime(DateTime.Today).AddMonths(1)" MinDate="DateOnly.FromDateTime(DateTime.Today).AddMonths(-1)" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
 
                 <TnTDatePicker FormType="FormType.Filled" TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
             </div>
@@ -55,6 +62,9 @@
                 <TnTDatePicker FormType="FormType.Filled" TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
 
                 <TnTDatePicker FormType="FormType.Filled" TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
+                <TnTCheckbox Label="My Label" HelperText="My Helper Text" />
+                <TnTSwitch Label="My Label" HelperText="My Helper Text" />
+
             </div>
         </div>
 
@@ -67,6 +77,8 @@
                     <TnTDatePicker DisabledProperty="Disabled" TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
 
                     <TnTDatePicker TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+
+                    <TnTCheckbox Label="My Label" HelperText="My Helper Text" />
                 </div>
                 <div class="tnt-col s12 m6">
                     <TnTDatePicker TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
@@ -83,13 +95,22 @@
             <div class="tnt-col s12 m6">
                 <TnTForm FormType="FormType.Outlined">
                     <TnTDatePicker TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTCheckbox Label="My Label" HelperText="My Helper Text" />
+                    <TnTSwitch Label="My Label" HelperText="My Helper Text" />
+
                 </TnTForm>
                 <TnTForm FormType="FormType.Default">
                     <TnTDatePicker TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTCheckbox Label="My Label" HelperText="My Helper Text" />
+                    <TnTSwitch Label="My Label" HelperText="My Helper Text" />
+
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Filled">
                     <TnTDatePicker TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTCheckbox Label="My Label" HelperText="My Helper Text" />
+                    <TnTSwitch Label="My Label" HelperText="My Helper Text" />
+
                 </TnTForm>
             </div>
             <div class="tnt-col s12 m6">
@@ -112,14 +133,20 @@
 
                 <TnTForm FormType="FormType.Outlined">
                     <TnTDatePicker TextProperty="Value" Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTCheckbox Disable="true" Label="My Label" HelperText="My Helper Text" />
+                    <TnTSwitch Disable="true" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Default">
                     <TnTDatePicker TextProperty="Value" Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTCheckbox Disable="true" Label="My Label" HelperText="My Helper Text" />
+                    <TnTSwitch Disable="true" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
 
                 <TnTForm FormType="FormType.Filled">
                     <TnTDatePicker TextProperty="Value" Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
+                    <TnTCheckbox Disable="true" Label="My Label" HelperText="My Helper Text" />
+                    <TnTSwitch Disable="true" Label="My Label" HelperText="My Helper Text" />
                 </TnTForm>
             </div>
             <div class="tnt-col s12 m6">
@@ -177,6 +204,22 @@
     private bool _sideBarExpanded = false;
 
     private DateOnly? _value;
+
+    private HashSet<DateOnly> _disabledDates = new HashSet<DateOnly>() {
+        DateOnly.FromDateTime(DateTime.Today),
+        DateOnly.FromDateTime(DateTime.Today.AddDays(-1)),
+        DateOnly.FromDateTime(DateTime.Today.AddDays(-3)),
+        DateOnly.FromDateTime(DateTime.Today.AddDays(-5)),
+        DateOnly.FromDateTime(DateTime.Today.AddDays(-7)),
+        DateOnly.FromDateTime(DateTime.Today.AddDays(-9)),
+        DateOnly.FromDateTime(DateTime.Today.AddDays(-11)),
+        DateOnly.FromDateTime(DateTime.Today.AddDays(1)),
+        DateOnly.FromDateTime(DateTime.Today.AddDays(3)),
+        DateOnly.FromDateTime(DateTime.Today.AddDays(5)),
+        DateOnly.FromDateTime(DateTime.Today.AddDays(7)),
+        DateOnly.FromDateTime(DateTime.Today.AddDays(9)),
+        DateOnly.FromDateTime(DateTime.Today.AddDays(11))
+    };
 
     public Dictionary<string, object> C = new Dictionary<string, object>() {
         { "class", "tnt-form" }

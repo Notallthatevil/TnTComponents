@@ -30,7 +30,7 @@
                 }
 
                 @foreach (var item in ListItems) {
-                    <li class="@GetItemClass(item)" @onclick="@(() => SelectItem(item))">
+                    <li class="@GetItemClass(item)" @onclick="@(() => SelectItem(item))" @onclick:stopPropagation="true">
                         @if (ListItemTemplate != null) {
                             @ListItemTemplate(item)
                         }
@@ -72,8 +72,8 @@
     [Parameter]
     public Func<TListItemType?, string>? ValueCallback { get; set; }
 
-    private PropertyInfo? _textProperty;
-    private PropertyInfo? _disabledProperty;
+    [Parameter]
+    public IReadOnlySet<TListItemType> DisabledItems { get; set; } = new HashSet<TListItemType>();
 
     protected override void OnInitialized() {
         if (ListItems is null) {
@@ -103,7 +103,7 @@
     }
 
     private bool IsItemDisabled(TListItemType item) {
-        return _disabledProperty is not null && (((bool?)_disabledProperty.GetValue(item)) ?? false);
+        return DisabledItems.Contains(item);
     }
 
     private string GetItemClass(TListItemType item) {

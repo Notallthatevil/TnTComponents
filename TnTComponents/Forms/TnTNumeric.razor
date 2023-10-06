@@ -9,13 +9,9 @@
     protected override RenderFragment GetAdditionalMarkup() {
         if (!AdjustmentAmountIsZero(AdjustmentAmount)) {
             return
-    @<div>
-        <button type="button" class="tnt-numeric-input-button" @onclick="Increment">
-            @GetButtonIcon(true)
-        </button>
-        <button type="button" class="tnt-numeric-input-button" @onclick="Decrement">
-            @GetButtonIcon(false)
-        </button>
+    @<div class="tnt-numeric-input-buttons">
+        @GetButtonIcon(true)
+        @GetButtonIcon(false)
     </div>;
         }
         return default!;
@@ -25,14 +21,18 @@
     private RenderFragment GetButtonIcon(bool increment) {
         switch (IconType) {
             case IconType.FontAwesome:
-                return@<i class="fa fa-caret-@(increment ? "up" : "down")"></i>;
-            case IconType.MaterialIcons:
                 if (increment) {
-                    return@<i class="material-icons">arrow_drop_up</i>;
+                    return@<i class="fa fa-caret-up" @onclick="Increment"></i>;
                 }
                 else {
-                    return@<i class="material-icons">arrow_drop_down</i>;
-
+                    return@<i class="fa fa-caret-down" @onclick="Decrement"></i>;
+                }
+            case IconType.MaterialIcons:
+                if (increment) {
+                    return@<i class="material-icons" @onclick="Increment">arrow_drop_up</i>;
+                }
+                else {
+                    return@<i class="material-icons" @onclick="Decrement">arrow_drop_down</i>;
                 }
 
             default:

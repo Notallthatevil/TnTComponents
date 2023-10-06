@@ -12,14 +12,23 @@
            @bind="@Value"
            @bind:format="@(Format ?? string.Empty)"
            @bind:event="oninput"
-           @onchange="OnChange"
            @onfocusin="OnFocusAsync">
 
     @if (Active) {
         <TnTExternalClickHandler class="tnt-date-time-picker" Callback="Deactivate">
             <span>
                 @GetArrow(true)
-                <TnTFormDropDown ListItems="_months" Theme="@Theme" AllowClear=false FormType="FormType" IconType="IconType" Label="Month" @bind-Value="_selectedMonth" ValueCallback="@DateTimeFormatInfo.CurrentInfo.GetMonthName" class="tnt-month-picker">
+                <TnTFormDropDown 
+                    ListItems="_months" 
+                    Theme="@Theme" 
+                    AllowClear=false 
+                    FormType="FormType" 
+                    IconType="IconType" 
+                    Label="Month" 
+                    @bind-Value="_selectedMonth" 
+                    ValueCallback="@DateTimeFormatInfo.CurrentInfo.GetMonthName" 
+                    DisabledItems="_disabledMonths"
+                    class="tnt-month-picker">
                     <ListItemTemplate>
                         @DateTimeFormatInfo.CurrentInfo.GetMonthName(context)
                     </ListItemTemplate>
@@ -90,10 +99,12 @@
     protected override string InputType => "text";
 
     private DateOnly _currentMonthYear;
-    private int _selectedMonth { get => _currentMonthYear.Month; set => _currentMonthYear = new DateOnly(_selectedYear, value, 1); }
-    private int _selectedYear { get => _currentMonthYear.Year; set => _currentMonthYear = new DateOnly(value, _selectedMonth, 1); }
+    private int _selectedMonth { get => _currentMonthYear.Month; set => UpdateCurrentDateView(new DateOnly(_selectedYear, value, 1)); }
+    private int _selectedYear { get => _currentMonthYear.Year; set => UpdateCurrentDateView(new DateOnly(value, _selectedMonth, 1)); }
     private ICollection<int> _months = Enumerable.Range(1, 12).ToArray();
     private ICollection<int> _years = default!;
+
+    private HashSet<int> _disabledMonths = new HashSet<int>();
 
     protected override void OnInitialized() {
         if (StartDate < MinDate) {
@@ -146,7 +157,7 @@
         var nextMonth = _currentMonthYear.AddMonths(1);
         var nextMonthPage = new DateOnly(nextMonth.Year, nextMonth.Month, 1);
         if (nextMonth <= MaxDate) {
-            _currentMonthYear = nextMonth;
+            UpdateCurrentDateView(nextMonth);
         }
     }
 
@@ -154,7 +165,7 @@
         var prevMonth = _currentMonthYear.AddMonths(-1);
         var prevPageDate = new DateOnly(prevMonth.Year, prevMonth.Month, DateTime.DaysInMonth(prevMonth.Year, prevMonth.Month));
         if (prevPageDate >= MinDate) {
-            _currentMonthYear = prevMonth;
+            UpdateCurrentDateView(prevMonth);
         }
     }
 
@@ -226,6 +237,31 @@
 
             default:
                 throw new NotImplementedException();
+        }
+    }
+
+    private void UpdateCurrentDateView(DateOnly newDate) {
+        if (newDate < MinDate) {
+            _currentMonthYear = MinDate;
+        }
+        else if (newDate > MaxDate) {
+            _currentMonthYear = MaxDate;
+        }
+        else {
+            _currentMonthYear = newDate;
+        }
+
+        _disabledMonths.Clear();
+        if (_currentMonthYear.Year == MinDate.Year) {
+            foreach (var month in Enumerable.Range(1, MinDate.Month - 1)) {
+                _disabledMonths.Add(month);
+            }
+        }
+
+        if (_currentMonthYear.Year == MaxDate.Year) {
+            foreach (var month in Enumerable.Range(MaxDate.Month + 1, 12 - MaxDate.Month)) {
+                _disabledMonths.Add(month);
+            }
         }
     }
 }
