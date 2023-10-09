@@ -28,26 +28,25 @@
     }
 
     &.disabled {
-        //input[type=checkbox] {
-        //    + span {
-        //        &:before {
-        //            background-color: color.adjust($tnt-color-primary, $alpha: -.5);
-        //        }
-        //    }
-        //    &:not(:checked) {
-        //        + span {
-        //            background-color: color.adjust($tnt-color-surface, $alpha: -.5);
-        //        }
-        //    }
-        //    &:checked {
-        //        + span {
-        //            background-color: color.adjust($tnt-color-surface-variant, $alpha: -.5);
-        //        }
-        //    }
-        //}
-        //.tnt-input-field-switch-label {
-        //    color: color.adjust($tnt-color-on-surface, $alpha: -.5);
-        //}
+        input[type=checkbox] {
+            &:not(:checked) {
+                + span {
+                    &:before {
+                        background-color: color.adjust($tnt-color-primary, $lightness: 20%);
+                    }
+                }
+            }
+
+            &:checked {
+                + span {
+                    background-color: color.adjust($tnt-color-surface-variant, $alpha: -.5);
+                }
+            }
+        }
+
+        .tnt-input-field-switch-label {
+            color: color.adjust($tnt-color-on-surface, $alpha: -.5);
+        }
     }
 }
 

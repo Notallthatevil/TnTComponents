@@ -110,6 +110,7 @@
         table {
             user-select: none;
             table-layout: fixed;
+            width: -moz-fit-content;
             width: fit-content;
 
             thead {

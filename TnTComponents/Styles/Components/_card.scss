@@ -5,13 +5,14 @@
     }
 
     &.outlined {
-        outline-color: $tnt-color-outline;
+        border-color: $tnt-color-outline;
     }
 }
 
 
 .tnt-card {
     padding: 1rem;
+    width: -moz-fit-content;
     width: -moz-fit-content;
     width: fit-content;
     margin: 1rem;
@@ -22,9 +23,9 @@
         @extend .tnt-z-depth-0;
     }
 
-    &.outline {
-        outline-style: solid;
-        outline-width: 1px;
+    &.outlined {
+        border-style: solid;
+        border-width: 1px;
         background-color: transparent;
     }
 }
