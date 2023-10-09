@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components.Routing
 @inherits TnTIconComponent
 
-<div theme="@Theme" class="@GetClass()">
+<div theme="@Theme" class="@GetCssClass()">
     @ChildContent
 </div>
 
@@ -32,7 +32,7 @@
         Expanded = !isSmallScreen;
     }
 
-    protected override string GetClass() {
-        return $"{base.GetClass()} {(Expanded ? "expanded" : string.Empty)}";
+    protected override string GetCssClass() {
+        return $"{base.GetCssClass()} {(Expanded ? "expanded" : string.Empty)}";
     }
 }

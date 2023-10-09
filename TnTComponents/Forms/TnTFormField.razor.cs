@@ -11,7 +11,7 @@ namespace TnTComponents.Forms {
     public abstract partial class TnTFormField<TInputType> : TnTIconComponent {
 
         [CascadingParameter]
-        public ITnTForm? ParentForm { get; set; }
+        public TnTForm? ParentForm { get; set; }
 
         [Parameter]
         public string Label { get; set; } = default!;
@@ -67,8 +67,8 @@ namespace TnTComponents.Forms {
             return default!;
         }
 
-        protected override string GetClass() {
-            return $"{base.GetClass()} {GetFromType()} {(Disable ? "disabled" : string.Empty)} {(Active ? "active" : string.Empty)}";
+        protected override string GetCssClass() {
+            return $"{base.GetCssClass()} {GetFromType()} {(Disable ? "disabled" : string.Empty)} {(Active ? "active" : string.Empty)}";
         }
 
         protected virtual string GetTheme() {

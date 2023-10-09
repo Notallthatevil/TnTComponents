@@ -4,7 +4,7 @@
     <TnTMediaCallback Query="(max-width:768px)" OnChangedCallback="@((isSmallScreen) => { SideBarExpanded = !isSmallScreen; _smallScreen = isSmallScreen; })"></TnTMediaCallback>
 }
 
-<div class="@GetClass() @(SideBarExpanded && !_smallScreen ? "expanded" : string.Empty) " theme="@Theme">
+<div class="@GetCssClass() @(SideBarExpanded && !_smallScreen ? "expanded" : string.Empty) " theme="@Theme">
     @ChildContent
 </div>
 

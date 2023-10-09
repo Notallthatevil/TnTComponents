@@ -1,6 +1,6 @@
 ﻿@inherits TnTIconComponent
 
-<button class="@GetClass()" theme="@Theme" @onclick="OnClick">
+<button class="@GetCssClass()" theme="@Theme" @onclick="OnClick">
     @GetIcon()
     @if (!string.IsNullOrWhiteSpace(Text)) {
         <span>
@@ -26,8 +26,8 @@
     [Parameter]
     public override string BaseCssClass { get; set; } = "tnt-btn";
 
-    protected override string GetClass() {
-        return $"{base.GetClass()} {GetButtonType()}";
+    protected override string GetCssClass() {
+        return $"{base.GetCssClass()} {GetButtonType()}";
     }
 
     private string GetButtonType() {

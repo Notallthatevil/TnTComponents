@@ -15,13 +15,13 @@ namespace TnTComponents.Common {
         public virtual string Theme { get; set; } = "default";
 
         [Parameter(CaptureUnmatchedValues = true)]
-        public IReadOnlyDictionary<string, object>? Attributes { get; set; }
+        public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
 
-        protected virtual string GetClass() {
+        protected virtual string GetCssClass() {
             var classResult = BaseCssClass;
 
-            if (Attributes?.TryGetValue("class", out var result) ?? false) {
+            if (AdditionalAttributes?.TryGetValue("class", out var result) ?? false) {
                     return classResult + " " + string.Join(' ', result);
             }
             return classResult;

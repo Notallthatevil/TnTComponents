@@ -1,0 +1,19 @@
+﻿@using System.Diagnostics.CodeAnalysis;
+@using Microsoft.AspNetCore.Components.Forms
+@inherits TnTInputField<string?>
+
+<div theme="@Theme" class="@GetCssClass()">
+    @TnTIconComponent.GetIcon(IconType, Icon)
+    <input aria-label="@Label"
+           name="@NameAttributeValue"
+           disabled="@Disabled"
+           placeholder="@Placeholder"
+           @bind="@CurrentValueAsString"
+           @onfocusin="OnFocusIn"
+           @onfocusout="OnFocusOut" />
+
+    <label class="@GetLabelCssClass()">@Label</label>
+
+
+</div>
+<ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />

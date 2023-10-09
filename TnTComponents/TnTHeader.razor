@@ -1,6 +1,6 @@
 ﻿@inherits TnTBaseComponent
 
-<div class="@GetClass() @(SideBarExpanded ? "expanded" : string.Empty)" theme="@Theme">
+<div class="@GetCssClass() @(SideBarExpanded ? "expanded" : string.Empty)" theme="@Theme">
     <h1>@Title</h1>
     @ChildContent
 </div>

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TnTComponents.Enum {
     public enum FormType {
-        Plain,
-        Default = Plain,
+        Default,
         Filled,
-        Outlined
+        Outlined,
+        Underlined = Default
     }
 }

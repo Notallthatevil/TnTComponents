@@ -2,7 +2,7 @@
 @using System.Text;
 @inherits TnTFormDialogField<DateOnly?>
 
-<div class="@GetClass()" theme="@Theme" @ref="BoxInputReference">
+<div class="@GetCssClass()" theme="@Theme" @ref="BoxInputReference">
     @GetIcon()
     <input type="@InputType"
            readonly="true"
@@ -127,8 +127,8 @@
         base.OnInitialized();
     }
 
-    protected override string GetClass() {
-        return $"{base.GetClass()} date-picker";
+    protected override string GetCssClass() {
+        return $"{base.GetCssClass()} date-picker";
     }
 
     protected override async Task OnChange(ChangeEventArgs e) {

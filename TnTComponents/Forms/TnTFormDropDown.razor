@@ -2,7 +2,7 @@
 @typeparam TListItemType
 @inherits TnTFormDialogField<TListItemType>
 
-<div class="@GetClass()" theme="@Theme" @ref="BoxInputReference">
+<div class="@GetCssClass()" theme="@Theme" @ref="BoxInputReference">
     @GetIcon()
     <input type="@InputType"
            readonly="true"
@@ -87,8 +87,8 @@
         await ValueChanged.InvokeAsync((TListItemType?)e?.Value);
     }
 
-    protected override string GetClass() {
-        return $"{base.GetClass()} dropdown";
+    protected override string GetCssClass() {
+        return $"{base.GetCssClass()} dropdown";
     }
 
     private async Task SelectItem(TListItemType selectedItem) {

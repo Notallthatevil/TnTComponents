@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using System.ComponentModel.DataAnnotations;
 @using TnTComponents.Enum;
 @using TnTComponents.Forms
 @attribute [RenderModeInteractiveAuto]
@@ -39,152 +40,28 @@
         </TnTSideBarList>
     </TnTSideBar>
     <TnTBody SideBarExpanded="@_sideBarExpanded">
-
-        <div class="tnt-row">
-            <div class="tnt-col s12 m6">
-                <TnTDatePicker FormType="FormType.Filled" DisabledDates="_disabledDates" AllowClear="false" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" MaxDate="new DateOnly(DateTime.Today.Year + 1, 12, 15)" MinDate="new DateOnly(DateTime.Today.Year - 1, 1, 15)">
-                </TnTDatePicker>
-
-                <TnTFormDropDown ListItems="Enumerable.Range(1, 1000).ToArray()">
-                    <ListItemTemplate>
-                        <i class="material-icons">search</i>
-                        @context
-                    </ListItemTemplate>
-                </TnTFormDropDown>
-
-                <TnTDatePicker FormType="FormType.Filled" MaxDate="DateOnly.FromDateTime(DateTime.Today).AddMonths(1)" MinDate="DateOnly.FromDateTime(DateTime.Today).AddMonths(-1)" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
-
-                <TnTDatePicker FormType="FormType.Filled" TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
-            </div>
-            <div class="tnt-col s12 m6">
-                <TnTDatePicker FormType="FormType.Filled" TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
-
-                <TnTDatePicker FormType="FormType.Filled" TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
-
-                <TnTDatePicker FormType="FormType.Filled" TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
-                <TnTCheckbox Label="My Label" HelperText="My Helper Text" />
-                <TnTSwitch Label="My Label" HelperText="My Helper Text" />
-
-            </div>
-        </div>
-
-        <TnTForm FormType="FormType.Outlined">
-            <div class="tnt-row">
-                <div class="tnt-col s12 m6">
-                    <TnTDatePicker AllowClear="false" DisabledProperty="Disabled" TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder">
-                    </TnTDatePicker>
-
-                    <TnTDatePicker DisabledProperty="Disabled" TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
-
-                    <TnTDatePicker TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
-
-                    <TnTCheckbox Label="My Label" HelperText="My Helper Text" />
-                </div>
-                <div class="tnt-col s12 m6">
-                    <TnTDatePicker TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
-
-                    <TnTDatePicker TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
-
-                    <TnTDatePicker TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
-                </div>
-            </div>
+        <TnTForm FormType="@_formType" TModelType="MyModel" Model="@_model" OnValidSubmit="@Submit" OnInvalidSubmit="@InvalidSubmit">
+            <DataAnnotationsValidator />
+            <TnTTextBoxV3 Icon="@_icon" @bind-Value="_model.Name" Label="My Label" Placeholder="My Placeholder" Disabled="@disabled" />
+            <TnTTextBoxV3 Icon="@_icon" @bind-Value="_model.Name" Label="My Label" Disabled="@disabled" />
+            <TnTTextBox @bind-Value="_model.Name" Label="Name" />
+            <TnTPasswordBox @bind-Value="_model.Password" AllowPasswordReveal="true" Label="Password" />
+            <TnTNumeric @bind-Value="_model.Number" Label="Number" />
+            <TnTCheckbox @bind-Value="_model.Value" Label="Value" />
+            <button type="submit">
+                Submit
+            </button>
         </TnTForm>
 
-        <div class="tnt-row">
+        <TnTButton Text="Toggle Disable" OnClick="@(() => disabled = !disabled)">
+        </TnTButton>
 
-            <div class="tnt-col s12 m6">
-                <TnTForm FormType="FormType.Outlined">
-                    <TnTDatePicker TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
-                    <TnTCheckbox Label="My Label" HelperText="My Helper Text" />
-                    <TnTSwitch Label="My Label" HelperText="My Helper Text" />
+        <TnTButton Text="Toggle Form Type" OnClick="@(() => RotateFormType())">
 
-                </TnTForm>
-                <TnTForm FormType="FormType.Default">
-                    <TnTDatePicker TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
-                    <TnTCheckbox Label="My Label" HelperText="My Helper Text" />
-                    <TnTSwitch Label="My Label" HelperText="My Helper Text" />
+        </TnTButton>
+        <TnTButton Text="Toggle Icon" OnClick="@(() => ToggleIcon())">
 
-                </TnTForm>
-
-                <TnTForm FormType="FormType.Filled">
-                    <TnTDatePicker TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
-                    <TnTCheckbox Label="My Label" HelperText="My Helper Text" />
-                    <TnTSwitch Label="My Label" HelperText="My Helper Text" />
-
-                </TnTForm>
-            </div>
-            <div class="tnt-col s12 m6">
-                <TnTForm FormType="FormType.Outlined">
-                    <TnTDatePicker TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
-                </TnTForm>
-
-                <TnTForm FormType="FormType.Default">
-                    <TnTDatePicker TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
-                </TnTForm>
-
-                <TnTForm FormType="FormType.Filled">
-                    <TnTDatePicker TextProperty="Value" @bind-Value="_value" Icon="search" Label="My Label" HelperText="My Helper Text" />
-                </TnTForm>
-            </div>
-        </div>
-        <div class="tnt-row">
-
-            <div class="tnt-col s12 m6">
-
-                <TnTForm FormType="FormType.Outlined">
-                    <TnTDatePicker TextProperty="Value" Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
-                    <TnTCheckbox Disable="true" Label="My Label" HelperText="My Helper Text" />
-                    <TnTSwitch Disable="true" Label="My Label" HelperText="My Helper Text" />
-                </TnTForm>
-
-                <TnTForm FormType="FormType.Default">
-                    <TnTDatePicker TextProperty="Value" Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
-                    <TnTCheckbox Disable="true" Label="My Label" HelperText="My Helper Text" />
-                    <TnTSwitch Disable="true" Label="My Label" HelperText="My Helper Text" />
-                </TnTForm>
-
-                <TnTForm FormType="FormType.Filled">
-                    <TnTDatePicker TextProperty="Value" Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" Placeholder="My Placeholder" />
-                    <TnTCheckbox Disable="true" Label="My Label" HelperText="My Helper Text" />
-                    <TnTSwitch Disable="true" Label="My Label" HelperText="My Helper Text" />
-                </TnTForm>
-            </div>
-            <div class="tnt-col s12 m6">
-                <TnTForm FormType="FormType.Outlined">
-                    <TnTDatePicker TextProperty="Value" Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" />
-                </TnTForm>
-
-                <TnTForm FormType="FormType.Default">
-                    <TnTDatePicker TextProperty="Value" Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" />
-                </TnTForm>
-
-                <TnTForm FormType="FormType.Filled">
-                    <TnTDatePicker TextProperty="Value" Disable="true" @bind-Value="_value" Label="My Label" HelperText="My Helper Text" />
-                </TnTForm>
-
-            </div>
-        </div>
-        @_value
-        <TnTCard CardType="CardType.Outlined">
-            <TnTButton ButtonType="ButtonType.Outlined" Text="Text"></TnTButton>
-            <TnTButton ButtonType="ButtonType.Flat" Text="Text"></TnTButton>
-            <TnTButton ButtonType="ButtonType.Filled" Text="Text"></TnTButton>
-            <TnTButton ButtonType="ButtonType.Default" Text="Text"></TnTButton>
-        </TnTCard>
-
-        <TnTCard CardType="CardType.Filled">
-            <TnTButton ButtonType="ButtonType.Outlined" Text="Text"></TnTButton>
-            <TnTButton ButtonType="ButtonType.Flat" Text="Text"></TnTButton>
-            <TnTButton ButtonType="ButtonType.Filled" Text="Text"></TnTButton>
-            <TnTButton ButtonType="ButtonType.Default" Text="Text"></TnTButton>
-        </TnTCard>
-
-        <TnTCard CardType="CardType.Flat">
-            <TnTButton ButtonType="ButtonType.Outlined" Text="Text"></TnTButton>
-            <TnTButton ButtonType="ButtonType.Flat" Text="Text"></TnTButton>
-            <TnTButton ButtonType="ButtonType.Filled" Text="Text"></TnTButton>
-            <TnTButton ButtonType="ButtonType.Default" Text="Text"></TnTButton>
-        </TnTCard>
+        </TnTButton>
     </TnTBody>
 </TnTLayout>
 
@@ -202,32 +79,57 @@
     @code {
     private bool _dark = false;
     private bool _sideBarExpanded = false;
+    private MyModel _model = new MyModel();
 
-    private DateOnly? _value;
+    private bool disabled = false;
 
-    private HashSet<DateOnly> _disabledDates = new HashSet<DateOnly>() {
-        DateOnly.FromDateTime(DateTime.Today),
-        DateOnly.FromDateTime(DateTime.Today.AddDays(-1)),
-        DateOnly.FromDateTime(DateTime.Today.AddDays(-3)),
-        DateOnly.FromDateTime(DateTime.Today.AddDays(-5)),
-        DateOnly.FromDateTime(DateTime.Today.AddDays(-7)),
-        DateOnly.FromDateTime(DateTime.Today.AddDays(-9)),
-        DateOnly.FromDateTime(DateTime.Today.AddDays(-11)),
-        DateOnly.FromDateTime(DateTime.Today.AddDays(1)),
-        DateOnly.FromDateTime(DateTime.Today.AddDays(3)),
-        DateOnly.FromDateTime(DateTime.Today.AddDays(5)),
-        DateOnly.FromDateTime(DateTime.Today.AddDays(7)),
-        DateOnly.FromDateTime(DateTime.Today.AddDays(9)),
-        DateOnly.FromDateTime(DateTime.Today.AddDays(11))
-    };
+    private FormType _formType = FormType.Underlined;
 
-    public Dictionary<string, object> C = new Dictionary<string, object>() {
-        { "class", "tnt-form" }
+    private string _icon = string.Empty;
 
-    };
-    public Dictionary<string, object> D = new Dictionary<string, object>() {
-        { "class", "tnt-input-field"}
-    };
+    private void RotateFormType() {
+        switch (_formType) {
+            case FormType.Underlined:
+                _formType = FormType.Outlined;
+                break;
+            case FormType.Outlined:
+                _formType = FormType.Filled;
+                break;
+            case FormType.Filled:
+                _formType = FormType.Underlined;
+                break;
+        }
+
+        StateHasChanged();
+    }
+
+    private void ToggleIcon() {
+        if (string.IsNullOrWhiteSpace(_icon)) {
+            _icon = "search";
+        }
+        else {
+            _icon = string.Empty;
+        }
+    }
+
+    class MyModel {
+        [Required]
+        [StringLength(10, ErrorMessage = "Id is too long.")]
+        public string Name { get; set; }
+        [Required]
+        public string Password { get; set; }
+        public int Number { get; set; }
+        public bool Value { get; set; }
+    }
+
+    private void Submit(EditContext model) {
+        int i = 0;
+    }
+
+    private void InvalidSubmit(EditContext errors) {
+        var e = errors.GetValidationMessages()?.ToArray();
+        int i = 0;
+    }
 
     private void SideBarExpanded(bool expanded) {
         _sideBarExpanded = expanded;
