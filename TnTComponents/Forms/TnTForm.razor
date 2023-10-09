@@ -1,17 +1,16 @@
-﻿@inherits TnTBaseComponent
+﻿@using Microsoft.AspNetCore.Components.Forms;
+@inherits TnTBaseComponent
+@implements ITnTForm
+@typeparam TModelType
 
-<CascadingValue IsFixed=true Value="this">
-    <form class="@GetClass()" theme="@Theme">
+<CascadingValue TValue="ITnTForm" IsFixed=true Value="this">
+    <EditForm class="@GetClass()" theme="@Theme" Model="@Model" EditContext="@EditContext" FormName="@FormName" >
+        <DataAnnotationsValidator />
+
         @ChildContent
-    </form>
+
+        <button type="submit">
+            Submit
+        </button>
+    </EditForm>
 </CascadingValue>
-@code {
-    [Parameter]
-    public RenderFragment ChildContent { get; set; } = default!;
-
-    [Parameter]
-    public FormType FormType { get; set; }
-
-    [Parameter]
-    public override string BaseCssClass { get; set; } = "tnt-form";
-}

@@ -11,7 +11,7 @@ namespace TnTComponents.Forms {
     public abstract partial class TnTFormField<TInputType> : TnTIconComponent {
 
         [CascadingParameter]
-        public TnTForm? ParentForm { get; set; }
+        public ITnTForm? ParentForm { get; set; }
 
         [Parameter]
         public string Label { get; set; } = default!;
