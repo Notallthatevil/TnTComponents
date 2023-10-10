@@ -1,10 +1,14 @@
 ﻿@use "sass:color";
 
-.tnt-input-field[theme=default].dropdown {
+.tnt-form-field[theme=default].dropdown {
     ul {
         background-color: $tnt-color-primary-container;
 
         li {
+            &.placeholder {
+                color: color.adjust($tnt-color-on-primary-container, $alpha: -0.6);
+            }
+
             color: $tnt-color-on-primary-container;
 
             &:not(.disabled) {
@@ -12,18 +16,27 @@
             }
 
             &.disabled {
-                color: color.adjust($tnt-color-on-primary-container, $alpha: -0.5);
+                color: color.adjust($tnt-color-on-primary-container, $alpha: -0.6);
+            }
+
+            &.selected {
+                background-color: getSelectedColor($tnt-color-primary-container);
             }
         }
     }
 }
 
 
-.tnt-input-field.dropdown {
+.tnt-form-field.dropdown {
     cursor: pointer;
+    margin-bottom: 1rem;
 
     input {
         cursor: inherit;
+    }
+
+    i {
+        user-select: none;
     }
 
     &.active {
@@ -38,14 +51,17 @@
         display: block;
         position: absolute;
         overflow-y: auto;
-        min-width: 100%;
         margin: 0;
         left: 0;
-        top: 0;
+        width: 100%;
+        top: 2.3rem;
+        max-height: 0rem;
         z-index: 10000;
         padding: 0;
+        visibility: hidden;
         transition: 150ms;
         @extend .tnt-z-depth-3;
+        @extend .tnt-border-radius-2;
 
         li {
             clear: both;
@@ -65,6 +81,18 @@
 
         &.dropup {
             top: -13rem;
+            max-height: 15rem;
+        }
+    }
+
+    &.filled {
+        ul {
+            top: 3rem;
+
+            &.dropup {
+                top: -12.5rem;
+                max-height: 15rem;
+            }
         }
     }
 

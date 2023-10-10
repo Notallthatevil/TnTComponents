@@ -1,5 +1,8 @@
 ﻿window.TnTComponents = {
     getBoundingRect: (element) => { return element.getBoundingClientRect(); },
+
+    getScrollPosition: (element) => { return element.scrollTop; },
+
     getWindowHeight: () => { return window.innerHeight; },
 
     MediaCallbacks: {},
@@ -27,7 +30,11 @@
 
     remToPx: (rem) => { return rem * parseFloat(getComputedStyle(document.documentElement).fontSize); },
 
+    scrollElementIntoView: (element) => { element.scrollIntoView(); },
+
     setFocus: (element) => { element.focus(); },
+
+    setScrollPosition: (element, position) => { element.scrollTop = position; },
 
     WindowClickCallbacks: {},
     WindowClickCallbackRegister: function (element, dotNetObjectRef) {

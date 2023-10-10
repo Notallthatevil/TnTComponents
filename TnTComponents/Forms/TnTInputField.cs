@@ -46,7 +46,7 @@ public abstract class TnTInputField<TInputType> : InputBase<TInputType>, ITnTFor
     protected ElementReference InputElement { get; set; }
 
     [Inject]
-    private IJSRuntime _jsRuntime { get; set; }
+    protected IJSRuntime JSRuntime { get; set; } = default!;
 
     protected override void OnParametersSet() {
         this.MatchParentFormIfExists();
@@ -55,10 +55,10 @@ public abstract class TnTInputField<TInputType> : InputBase<TInputType>, ITnTFor
 
     //protected abstract void OnChange(ChangeEventArgs e);
 
-    protected virtual void OnFocusIn(FocusEventArgs e) {
+    protected virtual async Task OnFocusInAsync(FocusEventArgs e) {
         Active = true;
     }
-    protected virtual void OnFocusOut(FocusEventArgs e) {
+    protected virtual async Task OnFocusOutAsync(FocusEventArgs e) {
         Active = false;
     }
 
@@ -119,6 +119,10 @@ public abstract class TnTInputField<TInputType> : InputBase<TInputType>, ITnTFor
     }
 
     protected async Task SetInputFocus() {
-        await _jsRuntime.SetElementFocus(InputElement);
+        await JSRuntime.SetElementFocus(InputElement);
+    }
+
+    protected async Task RemoveInputFocus() {
+        await JSRuntime.RemoveElementFocus(InputElement);
     }
 }

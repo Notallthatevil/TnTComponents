@@ -11,8 +11,8 @@
            value="@bool.TrueString"
            @bind="@CurrentValue"
            @ref="@InputElement"
-           @onfocusin="OnFocusIn"
-           @onfocusout="OnFocusOut" />
+           @onfocusin="OnFocusInAsync"
+           @onfocusout="OnFocusOutAsync" />
 
     <span @onclick="Toggle">
         @if (FormType == FormType.Filled) {

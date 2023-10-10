@@ -16,6 +16,10 @@ internal static class JSRuntimeExt {
         return await jsRuntime.InvokeAsync<ElementBoundingRect>("TnTComponents.getBoundingRect", element);
     }
 
+    public static async Task<int> GetElementScrollPosition(this IJSRuntime jsRuntime, ElementReference element) {
+        return await jsRuntime.InvokeAsync<int>("TnTComponents.getScrollPosition", element);
+    }
+
     public static async Task<double> GetWindowHeight(this IJSRuntime jsRuntime) {
         return await jsRuntime.InvokeAsync<double>("TnTComponents.getWindowHeight");
     }
@@ -23,8 +27,16 @@ internal static class JSRuntimeExt {
         await jsRuntime.InvokeVoidAsync("TnTComponents.removeFocus", element);
     }
 
+    public static async Task ScrollElementIntoView(this IJSRuntime jsRuntime, ElementReference element) {
+        await jsRuntime.InvokeVoidAsync("TnTComponents.scrollElementIntoView", element);
+    }
+
     public static async Task SetElementFocus(this IJSRuntime jsRuntime, ElementReference element) {
         await jsRuntime.InvokeVoidAsync("TnTComponents.setFocus", element);
+    }
+
+    public static async Task setElementScrollPosition(this IJSRuntime jsRuntime, ElementReference element, int position) {
+        await jsRuntime.InvokeVoidAsync("TnTComponents.setScrollPosition", element, position);
     }
 
 }

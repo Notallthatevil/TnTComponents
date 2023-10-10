@@ -42,17 +42,18 @@
     <TnTBody SideBarExpanded="@_sideBarExpanded">
         <TnTForm FormType="@_formType" TModelType="MyModel" Model="@_model" OnValidSubmit="@Submit" OnInvalidSubmit="@InvalidSubmit">
             <DataAnnotationsValidator />
-            <TnTTextBox Icon="@_icon" @bind-Value="_model.Name" Label="My Label" Placeholder="@_placeholder" Disabled="@disabled" />
-            <TnTPasswordBox Icon="@_icon" @bind-Value="_model.Password" Label="Password" Placeholder="@_placeholder" Disabled="@disabled" AllowPasswordReveal="true" />
-            <TnTNumeric Icon="@_icon" @bind-Value="_model.Number" Label="Number" Placeholder="@_placeholder" Disabled="@disabled" />
-            <TnTCheckbox Icon="@_icon" @bind-Value="_model.CheckBox" Label="Checkbox" Placeholder="@_placeholder" Disabled="@disabled" />
-            <TnTSwitch Icon="@_icon" @bind-Value="_model.Switch" Label="Switch" Placeholder="@_placeholder" Disabled="@disabled" />
+            <TnTTextBox Icon="@_icon" @bind-Value="_model.Name" Label="My Label" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTPasswordBox Icon="@_icon" @bind-Value="_model.Password" Label="Password" Placeholder="@_placeholder" Disabled="@_disabled" AllowPasswordReveal="true" />
+            <TnTNumeric Icon="@_icon" @bind-Value="_model.Number" Label="Number" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTCheckbox Icon="@_icon" @bind-Value="_model.CheckBox" Label="Checkbox" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTSwitch Icon="@_icon" @bind-Value="_model.Switch" Label="Switch" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTDropDown Icon="@_icon" ListItems="@_listItems" @bind-Value="_model.DropDownItem" Label="DropDownItem" Placeholder="@_placeholder" Disabled="@_disabled" AllowClear="@_allowClear" />
             <button type="submit">
                 Submit
             </button>
         </TnTForm>
 
-        <TnTButton Text="Toggle Disable" OnClick="@(() => disabled = !disabled)">
+        <TnTButton Text="Toggle Disable" OnClick="@(() => _disabled = !_disabled)">
         </TnTButton>
 
         <TnTButton Text="Toggle Form Type" OnClick="@(() => RotateFormType())">
@@ -64,12 +65,16 @@
         <TnTButton Text="Toggle Placeholder" OnClick="@(() => TogglePlaceholder())">
         </TnTButton>
 
+        <TnTButton Text="Toggle AllowClear" OnClick="@(() => _allowClear = !_allowClear)">
+        </TnTButton>
+
         <div>
             @_model.Name
             @_model.Password
             @_model.Number
             @_model.CheckBox
             @_model.Switch
+            @_model.DropDownItem
         </div>
     </TnTBody>
 </TnTLayout>
@@ -85,12 +90,13 @@
     </HeadContent>
 
 
-    @code {
+@code {
     private bool _dark = false;
     private bool _sideBarExpanded = false;
     private MyModel _model = new MyModel();
 
-    private bool disabled = false;
+    private bool _disabled = false;
+    private bool _allowClear = false;
 
     private FormType _formType = FormType.Underlined;
 
@@ -114,6 +120,8 @@
         StateHasChanged();
     }
 
+    private ICollection<MyListItem> _listItems = default!;
+
     private void ToggleIcon() {
         if (string.IsNullOrWhiteSpace(_icon)) {
             _icon = "search";
@@ -132,6 +140,18 @@
         }
     }
 
+    protected override void OnInitialized() {
+        base.OnInitialized();
+        _listItems = new List<MyListItem>();
+        foreach (var i in Enumerable.Range(1, 100)) {
+            _listItems.Add(new MyListItem() {
+                    Str = $"Item # {i}",
+                    Data = i
+                });
+        }
+
+    }
+
     class MyModel {
         [Required]
         [StringLength(10)]
@@ -147,8 +167,19 @@
         [Required]
         [Range(typeof(bool), "false", "false")]
         public bool Switch { get; set; }
+        [Required]
+        public MyListItem DropDownItem { get; set; }
     }
 
+
+    class MyListItem {
+        public string Str;
+        public int Data;
+
+        public override string ToString() {
+            return $"{Str} From To String";
+        }
+    }
     private void Submit(EditContext model) {
         int i = 0;
     }

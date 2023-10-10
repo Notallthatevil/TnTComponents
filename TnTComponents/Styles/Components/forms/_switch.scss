@@ -150,6 +150,11 @@
         margin-left: 2rem
     }
 
+    &:not(:has(.tnt-icon-component:first-child)) {
+        margin-bottom: 2rem;
+        margin-top: 2rem;
+    }
+
     input[type=checkbox] {
         position: absolute;
         opacity: 0;

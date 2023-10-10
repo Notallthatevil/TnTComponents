@@ -10,8 +10,8 @@
            type="number"
            @ref="@InputElement"
            @bind="@CurrentValueAsString"
-           @onfocusin="OnFocusIn"
-           @onfocusout="OnFocusOut" />
+           @onfocusin="OnFocusInAsync"
+           @onfocusout="OnFocusOutAsync" />
 
     <label class="@GetLabelCssClass()" @onclick="SetInputFocus">@Label</label>
 

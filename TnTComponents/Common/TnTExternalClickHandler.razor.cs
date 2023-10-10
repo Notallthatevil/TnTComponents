@@ -27,7 +27,6 @@ public partial class TnTExternalClickHandler
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         if (firstRender) {
             _reference = DotNetObjectReference.Create(this);
-            await Task.Delay(100);
             await _jsRuntime.InvokeVoidAsync("TnTComponents.WindowClickCallbackRegister", _externalClickElement, _reference);
         }
     }

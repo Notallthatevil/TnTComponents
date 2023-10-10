@@ -66,3 +66,13 @@
 
     @return color.adjust($baseColor, $lightness: $adjustmentPercent);
 }
+
+@function getSelectedColor($baseColor) {
+    $adjustmentPercent: 10%;
+
+    @if(color.lightness($baseColor) > 50) {
+        $adjustmentPercent: $adjustmentPercent * -1;
+    }
+
+    @return color.adjust($baseColor, $lightness: $adjustmentPercent);
+}
