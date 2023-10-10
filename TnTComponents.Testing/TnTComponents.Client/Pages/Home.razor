@@ -44,7 +44,7 @@
             <DataAnnotationsValidator />
             <TnTTextBox Icon="@_icon" @bind-Value="_model.Name" Label="My Label" Placeholder="@_placeholder" Disabled="@disabled" />
             <TnTPasswordBox Icon="@_icon" @bind-Value="_model.Password" Label="Password" Placeholder="@_placeholder" Disabled="@disabled" AllowPasswordReveal="true" />
-            <TnTNumeric @bind-Value="_model.Number" Label="Number" />
+            <TnTNumeric Icon="@_icon" @bind-Value="_model.Number" Label="Number" Placeholder="@_placeholder" Disabled="@disabled" />
             <TnTCheckbox @bind-Value="_model.Value" Label="Value" />
             <button type="submit">
                 Submit
@@ -130,6 +130,7 @@
         [Required]
         [StringLength(10)]
         public string Password { get; set; }
+        [Range(1, 15)]
         public int Number { get; set; }
         public bool Value { get; set; }
     }

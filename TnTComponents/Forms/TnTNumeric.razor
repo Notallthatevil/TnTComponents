@@ -1,42 +1,31 @@
 ﻿@typeparam TNumberType
-@inherits TnTFormField<TNumberType>
+@inherits TnTInputField<TNumberType>
 
-@{
-    base.BuildRenderTree(__builder);
-}
+<div theme="@Theme" class="@GetCssClass()">
+    @TnTIconComponent.GetIcon(IconType, Icon)
+    <input aria-label="@Label"
+           name="@NameAttributeValue"
+           disabled="@Disabled"
+           placeholder="@Placeholder"
+           @ref="@InputElement"
+           @bind="@CurrentValueAsString"
+           @onfocusin="OnFocusIn"
+           @onfocusout="OnFocusOut" />
 
-@code {
-    protected override RenderFragment GetAdditionalMarkup() {
-        if (!AdjustmentAmountIsZero(AdjustmentAmount)) {
-            return
-    @<div class="tnt-numeric-input-buttons">
-        @GetButtonIcon(true)
-        @GetButtonIcon(false)
-    </div>;
-        }
-        return default!;
-    }
+    <label class="@GetLabelCssClass()" @onclick="SetInputFocus">@Label</label>
 
-
-    private RenderFragment GetButtonIcon(bool increment) {
-        switch (IconType) {
+    <div class="tnt-numeric-input-buttons">
+        @switch (IconType) {
             case IconType.FontAwesome:
-                if (increment) {
-                    return@<i class="fa fa-caret-up" @onclick="Increment"></i>;
-                }
-                else {
-                    return@<i class="fa fa-caret-down" @onclick="Decrement"></i>;
-                }
+                <i class="fa fa-caret-up" @onmousedown="Increment" @onmouseup="@(() => _inAdjustment = false)" @onmouseout="@(() => _inAdjustment = false)"></i>
+                <i class="fa fa-caret-down" @onmousedown="Decrement" @onmouseup="@(() => _inAdjustment = false)" @onmouseout="@(() => _inAdjustment = false)"></i>
+                break;
             case IconType.MaterialIcons:
-                if (increment) {
-                    return@<i class="material-icons" @onclick="Increment">arrow_drop_up</i>;
-                }
-                else {
-                    return@<i class="material-icons" @onclick="Decrement">arrow_drop_down</i>;
-                }
-
-            default:
-                throw new NotImplementedException();
+                <i class="material-icons" @onmousedown="Increment" @onmouseup="@(() => _inAdjustment = false)" @onmouseout="@(() => _inAdjustment = false)">arrow_drop_up</i>
+                <i class="material-icons" @onmousedown="Decrement" @onmouseup="@(() => _inAdjustment = false)" @onmouseout="@(() => _inAdjustment = false)">arrow_drop_down</i>
+                break;
         }
-    }
-}
+    </div>
+
+</div>
+<ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />

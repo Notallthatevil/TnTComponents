@@ -1,88 +1,103 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq.Expressions;
-using System.Reflection;
+using System.Numerics;
 
-namespace TnTComponents.Forms {
-    public partial class TnTNumeric<TNumberType> where TNumberType : unmanaged, IConvertible {
-        [Parameter]
-        public TNumberType AdjustmentAmount { get; set; } = AdjustmentDefaultValue();
+namespace TnTComponents.Forms;
+public partial class TnTNumeric<TNumberType> where TNumberType : unmanaged,
+    IComparable<TNumberType>,
+    IMinMaxValue<TNumberType>,
+    IAdditionOperators<TNumberType, TNumberType, TNumberType>,
+    ISubtractionOperators<TNumberType, TNumberType, TNumberType> {
 
-        protected override string InputType => "text";
+    [Parameter]
+    public TNumberType AdjustmentAmount { get; set; } = DefaultAdjustmentValue();
 
-        private MethodInfo _tryParse = default!;
+    [Parameter]
+    public TNumberType MaxValue { get; set; } = TNumberType.MaxValue;
+    [Parameter]
+    public TNumberType MinValue { get; set; } = TNumberType.MinValue;
 
-        private delegate bool TryParseDelegate(string str, out TNumberType result);
-        private delegate TNumberType IncrementDelegate(TNumberType currentValue, TNumberType incrementAmount);
-        private delegate TNumberType DecrementDelegate(TNumberType currentValue, TNumberType decrementAmount);
+    private static TNumberType DefaultAdjustmentValue() {
+        TNumberType t = default;
+        return t switch {
+            byte => (TNumberType)(object)Convert.ToByte(1),
+            sbyte => (TNumberType)(object)Convert.ToSByte(1),
+            short => (TNumberType)(object)Convert.ToInt16(1),
+            ushort => (TNumberType)(object)Convert.ToUInt16(1),
+            int => (TNumberType)(object)1,
+            uint => (TNumberType)(object)1U,
+            long => (TNumberType)(object)1L,
+            ulong => (TNumberType)(object)1UL,
+            float => (TNumberType)(object)0.1F,
+            double => (TNumberType)(object)0.1,
+            decimal => (TNumberType)(object)0.1M,
+            _ => throw new InvalidOperationException($"Unsupported type {t.GetType()}"),
+        };
+    }
 
-        private TryParseDelegate _tryParseHandler = default!;
-        private IncrementDelegate _incrementHandler = default!;
-        private DecrementDelegate _decrementHandler = default!;
+    private bool _inAdjustment;
 
-        protected override void OnInitialized() {
-            var type = typeof(TNumberType);
-            _tryParse = type.GetMethod("TryParse", [typeof(string), typeof(TNumberType).MakeByRefType()]) ?? throw new InvalidOperationException($"{typeof(TNumberType).Name} does not contain a method \"TryParse\"");
+    protected override void OnChange(ChangeEventArgs e) {
+        CurrentValueAsString = e?.Value?.ToString();
+    }
 
-            _tryParseHandler = (TnTNumeric<TNumberType>.TryParseDelegate)Delegate.CreateDelegate(typeof(TryParseDelegate), _tryParse);
-
-            var param1 = Expression.Parameter(typeof(TNumberType), "lhs");
-            var param2 = Expression.Parameter(typeof(TNumberType), "rhs");
-
-            _incrementHandler = Expression.Lambda<IncrementDelegate>(Expression.AddChecked(param1, param2), param1, param2).Compile();
-            _decrementHandler = Expression.Lambda<DecrementDelegate>(Expression.SubtractChecked(param1, param2), param1, param2).Compile();
-
-            base.OnInitialized();
-        }
-
-        protected override async Task OnChange(ChangeEventArgs e) {
-            var parameters = new object?[] { e?.Value?.ToString() ?? "0", null };
-
-            if (_tryParseHandler(e?.Value?.ToString() ?? "0", out var result)) {
-                await ValueChanged.InvokeAsync(result);
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TNumberType result, [NotNullWhen(false)] out string? validationErrorMessage) {
+        if (BindConverter.TryConvertTo<TNumberType>(value, CultureInfo.InvariantCulture, out result)) {
+            if (result.CompareTo(MaxValue) > 0 || result.CompareTo(MinValue) < 0) {
+                validationErrorMessage = $"The value must be between {MinValue} and {MaxValue} inclusively.";
+                return false;
             }
+            validationErrorMessage = null;
+            return true;
         }
-
-        private async Task Increment() {
-            Value = _incrementHandler(Value, AdjustmentAmount);
-            await ValueChanged.InvokeAsync(Value);
+        else {
+            validationErrorMessage = string.Format(CultureInfo.InvariantCulture, $"The {DisplayName ?? FieldIdentifier.FieldName} field must be a number.");
+            return false;
         }
+    }
 
-        private async Task Decrement() {
-            Value = _decrementHandler(Value, AdjustmentAmount);
-            await ValueChanged.InvokeAsync(Value);
-        }
+    protected override string? FormatValueAsString(TNumberType value) {
+        // Avoiding a cast to IFormattable to avoid boxing.
+        return value switch {
 
-        private static TNumberType AdjustmentDefaultValue() => new TNumberType().GetTypeCode() switch {
-            TypeCode.Char => (TNumberType)(object)Convert.ToChar(1),
-            TypeCode.SByte => (TNumberType)(object)Convert.ToSByte(1),
-            TypeCode.Byte => (TNumberType)(object)Convert.ToByte(1),
-            TypeCode.Int16 => (TNumberType)(object)Convert.ToInt16(1),
-            TypeCode.UInt16 => (TNumberType)(object)Convert.ToUInt16(1),
-            TypeCode.Int32 => (TNumberType)(object)Convert.ToInt32(1),
-            TypeCode.UInt32 => (TNumberType)(object)Convert.ToUInt32(1),
-            TypeCode.Int64 => (TNumberType)(object)Convert.ToInt64(1),
-            TypeCode.UInt64 => (TNumberType)(object)Convert.ToUInt64(1),
-            TypeCode.Single => (TNumberType)(object)Convert.ToSingle(1),
-            TypeCode.Double => (TNumberType)(object)Convert.ToDouble(1),
-            TypeCode.Decimal => (TNumberType)(object)Convert.ToDecimal(1),
-            _ => throw new ArgumentException("The provided type is invalid.", nameof(TNumberType)),
+            byte @byte => BindConverter.FormatValue(@byte, CultureInfo.InvariantCulture)?.ToString(),
+            sbyte @sbyte => BindConverter.FormatValue(@sbyte, CultureInfo.InvariantCulture)?.ToString(),
+            short @short => BindConverter.FormatValue(@short, CultureInfo.InvariantCulture),
+            ushort @ushort => BindConverter.FormatValue(@ushort, CultureInfo.InvariantCulture)?.ToString(),
+            int @int => BindConverter.FormatValue(@int, CultureInfo.InvariantCulture),
+            uint @uint => BindConverter.FormatValue(@uint, CultureInfo.InvariantCulture)?.ToString(),
+            long @long => BindConverter.FormatValue(@long, CultureInfo.InvariantCulture),
+            ulong @ulong => BindConverter.FormatValue(@ulong, CultureInfo.InvariantCulture)?.ToString(),
+            float @float => BindConverter.FormatValue(@float, CultureInfo.InvariantCulture),
+            double @double => BindConverter.FormatValue(@double, CultureInfo.InvariantCulture),
+            decimal @decimal => BindConverter.FormatValue(@decimal, CultureInfo.InvariantCulture),
+            _ => throw new InvalidOperationException($"Unsupported type {value.GetType()}"),
         };
+    }
 
-        private static bool AdjustmentAmountIsZero(TNumberType adjustmentAmount) => new TNumberType().GetTypeCode() switch {
-            TypeCode.Char => adjustmentAmount.ToChar(CultureInfo.CurrentCulture) == Convert.ToChar(0),
-            TypeCode.SByte => adjustmentAmount.ToSByte(CultureInfo.CurrentCulture) == Convert.ToSByte(0),
-            TypeCode.Byte => adjustmentAmount.ToByte(CultureInfo.CurrentCulture) == Convert.ToByte(0),
-            TypeCode.Int16 => adjustmentAmount.ToInt16(CultureInfo.CurrentCulture) == Convert.ToInt16(0),
-            TypeCode.UInt16 =>adjustmentAmount.ToUInt16(CultureInfo.CurrentCulture) == Convert.ToUInt16(0),
-            TypeCode.Int32 => adjustmentAmount.ToInt32(CultureInfo.CurrentCulture) == Convert.ToInt32(0),
-            TypeCode.UInt32 =>adjustmentAmount.ToUInt32(CultureInfo.CurrentCulture) == Convert.ToUInt32(0),
-            TypeCode.Int64 => adjustmentAmount.ToInt64(CultureInfo.CurrentCulture) == Convert.ToInt64(0),
-            TypeCode.UInt64 =>adjustmentAmount.ToUInt64(CultureInfo.CurrentCulture) == Convert.ToUInt64(0),
-            TypeCode.Single =>adjustmentAmount.ToSingle(CultureInfo.CurrentCulture) == Convert.ToSingle(0),
-            TypeCode.Double => adjustmentAmount.ToDouble(CultureInfo.CurrentCulture) == Convert.ToDouble(0),
-            TypeCode.Decimal => adjustmentAmount.ToDecimal(CultureInfo.CurrentCulture) == Convert.ToDecimal(0),
-            _ => false
-        };
+    private async Task Increment() {
+        _inAdjustment = true;
+        while (_inAdjustment) {
+            CurrentValue += AdjustmentAmount;
+            if (CurrentValue.CompareTo(MaxValue) > 0) {
+                CurrentValue = MinValue;
+            }
+            await Task.Delay(100);
+            StateHasChanged();
+        }
+    }
+    private async Task Decrement() {
+        _inAdjustment = true;
+        while (_inAdjustment) {
+            CurrentValue -= AdjustmentAmount;
+            if (CurrentValue.CompareTo(MinValue) < 0) {
+                CurrentValue = MaxValue;
+            }
+
+            await Task.Delay(100);
+            StateHasChanged();
+        }
     }
 }

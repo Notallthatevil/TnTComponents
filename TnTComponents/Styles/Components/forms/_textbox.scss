@@ -243,9 +243,6 @@
 
         & > .tnt-form-field-label {
             color: $tnt-color-error;
-            border-top: 1px solid $tnt-color-error;
-            border-start-start-radius: .5rem;
-            border-start-end-radius: .5rem;
         }
 
         &.disabled {
@@ -253,7 +250,6 @@
 
             & > .tnt-form-field-label {
                 color: color.adjust($tnt-color-error, $alpha: -0.6);
-                border-top: 1px solid color.adjust($tnt-color-error, $alpha: -0.6);
             }
         }
 
@@ -264,6 +260,9 @@
             & > .tnt-form-field-label {
                 background-color: $tnt-color-error-container;
                 color: $tnt-color-on-error-container;
+                border-top: 1px solid $tnt-color-error;
+                border-start-start-radius: .5rem;
+                border-start-end-radius: .5rem;
             }
 
             input {
@@ -277,6 +276,7 @@
                 & > .tnt-form-field-label {
                     background-color: color.adjust($tnt-color-error-container, $lightness: -20%);
                     color: color.adjust($tnt-color-on-error-container, $alpha: -0.6);
+                    border-top: 1px solid color.adjust($tnt-color-error, $alpha: -0.6);
                 }
 
                 input {

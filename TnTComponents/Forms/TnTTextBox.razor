@@ -7,13 +7,13 @@
            name="@NameAttributeValue"
            disabled="@Disabled"
            placeholder="@Placeholder"
+           type="number"
+           step="any"
            @ref="@InputElement"
            @bind="@CurrentValueAsString"
            @onfocusin="OnFocusIn"
            @onfocusout="OnFocusOut" />
 
     <label class="@GetLabelCssClass()" @onclick="SetInputFocus">@Label</label>
-
-
 </div>
 <ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />
