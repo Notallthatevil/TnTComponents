@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 using System.Diagnostics.CodeAnalysis;
 
 namespace TnTComponents.Forms;
-public partial class TnTTextBoxV3 {
+public partial class TnTTextBox {
     protected override void OnChange(ChangeEventArgs e) {
         CurrentValueAsString = (string?)(e?.Value);
     }

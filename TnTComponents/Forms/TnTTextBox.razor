@@ -1,5 +1,4 @@
 ﻿@using System.Diagnostics.CodeAnalysis;
-@using Microsoft.AspNetCore.Components.Forms
 @inherits TnTInputField<string?>
 
 <div theme="@Theme" class="@GetCssClass()">
@@ -8,11 +7,12 @@
            name="@NameAttributeValue"
            disabled="@Disabled"
            placeholder="@Placeholder"
+           @ref="@InputElement"
            @bind="@CurrentValueAsString"
            @onfocusin="OnFocusIn"
            @onfocusout="OnFocusOut" />
 
-    <label class="@GetLabelCssClass()">@Label</label>
+    <label class="@GetLabelCssClass()" @onclick="SetInputFocus">@Label</label>
 
 
 </div>

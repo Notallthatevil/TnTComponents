@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using TnTComponents.Common;
+using TnTComponents.Common.Ext;
 using TnTComponents.Enum;
 
 namespace TnTComponents.Forms;
@@ -41,7 +43,10 @@ public abstract class TnTInputField<TInputType> : InputBase<TInputType>, ITnTFor
 
     protected bool Active { get; private set; }
 
-    protected string? InputMessage { get; private set; }
+    protected ElementReference InputElement { get; set; }
+
+    [Inject]
+    private IJSRuntime _jsRuntime { get; set; }
 
     protected override void OnParametersSet() {
         this.MatchParentFormIfExists();
@@ -106,10 +111,14 @@ public abstract class TnTInputField<TInputType> : InputBase<TInputType>, ITnTFor
     protected virtual string GetValidationMessageCssClass() {
         var strBuilder = new StringBuilder(ITnTFormField.InputFieldMessageCssClass);
 
-        if(Disabled) {
+        if (Disabled) {
             strBuilder.Append(' ').Append("disabled");
         }
 
         return strBuilder.ToString();
+    }
+
+    protected async Task SetInputFocus() {
+        await _jsRuntime.SetElementFocus(InputElement);
     }
 }
