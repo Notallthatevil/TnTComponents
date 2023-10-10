@@ -1,47 +1,30 @@
-﻿@inherits TnTFormField<bool>
+﻿@inherits TnTInputField<bool>
 
 
-<div class="@GetCssClass()" theme="@Theme">
-    <input type="@InputType"
-           disabled="@Disable"
-           checked="@Value"
-           @bind="@Value"
-           @bind:event="oninput"
-           @onchange="OnChange"
-           @onfocusin=@(() => Active = true)
-           @onfocusout=@(() => Active = false)>
-
+<div theme="@Theme" class="@GetCssClass()">
+    @TnTIconComponent.GetIcon(IconType, Icon)
+    <input aria-label="@Label"
+           name="@NameAttributeValue"
+           disabled="@Disabled"
+           placeholder="@Placeholder"
+           type="checkbox"
+           value="@bool.TrueString"
+           @bind="@CurrentValue"
+           @ref="@InputElement"
+           @onfocusin="OnFocusIn"
+           @onfocusout="OnFocusOut" />
 
     <span @onclick="Toggle">
-        @if(FormType == FormType.Filled) {
+        @if (FormType == FormType.Filled) {
             <span></span>
         }
-        @GetIcon()
 
-        @if (!string.IsNullOrWhiteSpace(Label)) {
-            @Label
-        }
+        <label class="@GetLabelCssClass()">@Label</label>
     </span>
 
 </div>
-
+<ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />
 
 @code {
-    [Parameter]
-    public override string BaseCssClass { get; set; } = "tnt-input-field-checkbox";
 
-    protected override string InputType => "checkbox";
-
-    protected override async Task OnChange(ChangeEventArgs e) {
-        if (e?.Value != null) {
-            await ValueChanged.InvokeAsync((bool)e!.Value);
-        }
-    }
-
-    protected async Task Toggle() {
-        if (!Disable) {
-            Value = !Value;
-            await OnChange(new ChangeEventArgs() { Value = Value });
-        }
-    }
 }

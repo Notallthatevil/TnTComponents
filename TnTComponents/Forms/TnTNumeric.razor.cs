@@ -39,9 +39,9 @@ public partial class TnTNumeric<TNumberType> where TNumberType : unmanaged,
 
     private bool _inAdjustment;
 
-    protected override void OnChange(ChangeEventArgs e) {
-        CurrentValueAsString = e?.Value?.ToString();
-    }
+    //protected override void OnChange(ChangeEventArgs e) {
+        //CurrentValueAsString = e?.Value?.ToString();
+    //}
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TNumberType result, [NotNullWhen(false)] out string? validationErrorMessage) {
         if (BindConverter.TryConvertTo<TNumberType>(value, CultureInfo.InvariantCulture, out result)) {

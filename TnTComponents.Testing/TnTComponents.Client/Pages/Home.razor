@@ -45,7 +45,8 @@
             <TnTTextBox Icon="@_icon" @bind-Value="_model.Name" Label="My Label" Placeholder="@_placeholder" Disabled="@disabled" />
             <TnTPasswordBox Icon="@_icon" @bind-Value="_model.Password" Label="Password" Placeholder="@_placeholder" Disabled="@disabled" AllowPasswordReveal="true" />
             <TnTNumeric Icon="@_icon" @bind-Value="_model.Number" Label="Number" Placeholder="@_placeholder" Disabled="@disabled" />
-            <TnTCheckbox @bind-Value="_model.Value" Label="Value" />
+            <TnTCheckbox Icon="@_icon" @bind-Value="_model.CheckBox" Label="Checkbox" Placeholder="@_placeholder" Disabled="@disabled" />
+            <TnTSwitch Icon="@_icon" @bind-Value="_model.Switch" Label="Checkbox" Placeholder="@_placeholder" Disabled="@disabled" />
             <button type="submit">
                 Submit
             </button>
@@ -62,6 +63,14 @@
 
         <TnTButton Text="Toggle Placeholder" OnClick="@(() => TogglePlaceholder())">
         </TnTButton>
+
+        <div>
+            @_model.Name
+            @_model.Password
+            @_model.Number
+            @_model.CheckBox
+            @_model.Switch
+        </div>
     </TnTBody>
 </TnTLayout>
 
@@ -132,7 +141,12 @@
         public string Password { get; set; }
         [Range(1, 15)]
         public int Number { get; set; }
-        public bool Value { get; set; }
+        [Required]
+        [Range(typeof(bool), "true", "true")]
+        public bool CheckBox { get; set; }
+        [Required]
+        [Range(typeof(bool), "true", "true")]
+        public bool Switch { get; set; }
     }
 
     private void Submit(EditContext model) {

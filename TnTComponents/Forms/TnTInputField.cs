@@ -53,7 +53,7 @@ public abstract class TnTInputField<TInputType> : InputBase<TInputType>, ITnTFor
         base.OnParametersSet();
     }
 
-    protected abstract void OnChange(ChangeEventArgs e);
+    //protected abstract void OnChange(ChangeEventArgs e);
 
     protected virtual void OnFocusIn(FocusEventArgs e) {
         Active = true;

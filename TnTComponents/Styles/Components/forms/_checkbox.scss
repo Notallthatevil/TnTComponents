@@ -1,6 +1,6 @@
 ﻿@use "sass:color";
 
-.tnt-input-field-checkbox[theme=default] {
+.tnt-form-field-checkbox[theme=default] {
     input[type=checkbox] {
         + span {
             color: $tnt-color-on-surface;
@@ -22,6 +22,81 @@
         @include colorizeTransparent($tnt-color-surface, $hover:true, $active:true, $additionalScope: #{'::after'});
     }
 
+    i {
+        color: $tnt-color-on-surface;
+    }
+
+    &.modified.invalid {
+        input[type=checkbox] {
+            + span {
+                color: $tnt-color-error;
+
+                &:before {
+                    border-bottom: 2px solid $tnt-color-error;
+                    border-right: 2px solid $tnt-color-error;
+                }
+            }
+
+            &:not(checked) + span::before {
+                border: 2px solid $tnt-color-error;
+            }
+        }
+
+        &.disabled {
+            input[type=checkbox] {
+                + span {
+                    color: color.adjust($tnt-color-error, $alpha: -.6);
+
+                    &:before {
+                        border-bottom: 2px solid color.adjust($tnt-color-error, $alpha: -.6);
+                        border-right: 2px solid color.adjust($tnt-color-error, $alpha: -.6);
+                    }
+                }
+
+                &:not(checked) + span::before {
+                    border: 2px solid color.adjust($tnt-color-error, $alpha: -.6);
+                }
+            }
+        }
+    }
+
+    &.modified.invalid.filled {
+        input[type=checkbox] {
+            &:not(:checked) + span span:after {
+                border: 2px solid $tnt-color-error;
+            }
+
+            &:checked + span {
+                &:before {
+                    border-right: 2px solid $tnt-color-on-error;
+                    border-bottom: 2px solid $tnt-color-on-error;
+                }
+
+                span:after {
+                    background-color: $tnt-color-error;
+                }
+            }
+        }
+
+        &.disabled {
+            input[type=checkbox] {
+                &:not(:checked) + span span:after {
+                    border: 2px solid color.adjust($tnt-color-error, $alpha: -.6);
+                }
+
+                &:checked + span {
+                    &:before {
+                        border-right: 2px solid color.adjust($tnt-color-on-error, $alpha: -.6);
+                        border-bottom: 2px solid color.adjust($tnt-color-on-error, $alpha: -.6);
+                    }
+
+                    span:after {
+                        background-color: color.adjust($tnt-color-error, $alpha: -.6);
+                    }
+                }
+            }
+        }
+    }
 
     &.filled input[type=checkbox] {
         &:not(:checked) + span span:after {
@@ -40,47 +115,62 @@
         }
     }
 
-    &.disabled input[type=checkbox] {
-        + span {
-            cursor: default;
-            color: color.adjust($tnt-color-on-surface, $alpha: -.5);
-
-            &:before {
-                border: 2px solid color.adjust($tnt-color-outline, $alpha: -.5);
-            }
+    &.disabled {
+        i {
+            color: color.adjust($tnt-color-on-surface, $alpha: -.6);
         }
 
-        &:checked {
-            + span:before {
-                border-bottom: 2px solid color.adjust($tnt-color-primary, $alpha: -.5);
-                border-right: 2px solid color.adjust($tnt-color-primary, $alpha: -.5);
+        input[type=checkbox] {
+            + span {
+                cursor: default;
+                color: color.adjust($tnt-color-on-surface, $alpha: -.6);
+
+                &:before {
+                    border: 2px solid color.adjust($tnt-color-outline, $alpha: -.6);
+                }
+            }
+
+            &:checked {
+                + span:before {
+                    border-bottom: 2px solid color.adjust($tnt-color-primary, $alpha: -.6);
+                    border-right: 2px solid color.adjust($tnt-color-primary, $alpha: -.6);
+                }
             }
         }
     }
 
     &.disabled.filled input[type=checkbox] {
         &:not(:checked) + span span:after {
-            border: 2px solid color.adjust($tnt-color-outline, $alpha: -.5);
+            border: 2px solid color.adjust($tnt-color-outline, $alpha: -.6);
         }
 
         &:checked + span {
             &:before {
-                border-right: 2px solid color.adjust($tnt-color-on-primary, $alpha: -.5);
-                border-bottom: 2px solid color.adjust($tnt-color-on-primary, $alpha: -.5);
+                border-right: 2px solid color.adjust($tnt-color-on-primary, $alpha: -.6);
+                border-bottom: 2px solid color.adjust($tnt-color-on-primary, $alpha: -.6);
             }
 
             span:after {
-                background-color: color.adjust($tnt-color-primary, $alpha: -.5);
+                background-color: color.adjust($tnt-color-primary, $alpha: -.6);
             }
         }
     }
 }
 
-.tnt-input-field-checkbox {
+.tnt-form-field-checkbox {
     display: flex;
     align-items: center;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
+
+    i {
+        user-select: none;
+        margin-right: 1rem;
+    }
+
+    &:not(.disabled) .tnt-form-field-label {
+        cursor: pointer;
+    }
 
     input[type=checkbox] {
         position: absolute;
