@@ -46,7 +46,7 @@
             <TnTPasswordBox Icon="@_icon" @bind-Value="_model.Password" Label="Password" Placeholder="@_placeholder" Disabled="@disabled" AllowPasswordReveal="true" />
             <TnTNumeric Icon="@_icon" @bind-Value="_model.Number" Label="Number" Placeholder="@_placeholder" Disabled="@disabled" />
             <TnTCheckbox Icon="@_icon" @bind-Value="_model.CheckBox" Label="Checkbox" Placeholder="@_placeholder" Disabled="@disabled" />
-            <TnTSwitch Icon="@_icon" @bind-Value="_model.Switch" Label="Checkbox" Placeholder="@_placeholder" Disabled="@disabled" />
+            <TnTSwitch Icon="@_icon" @bind-Value="_model.Switch" Label="Switch" Placeholder="@_placeholder" Disabled="@disabled" />
             <button type="submit">
                 Submit
             </button>
@@ -145,7 +145,7 @@
         [Range(typeof(bool), "true", "true")]
         public bool CheckBox { get; set; }
         [Required]
-        [Range(typeof(bool), "true", "true")]
+        [Range(typeof(bool), "false", "false")]
         public bool Switch { get; set; }
     }
 

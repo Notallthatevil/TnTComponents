@@ -360,13 +360,7 @@
     }
 }
 
-.tnt-form-field-message[theme=default] {
-    color: $tnt-color-error;
 
-    &.disabled {
-        color: color.adjust($tnt-color-error, $alpha: -0.6);
-    }
-}
 
 .tnt-form-field {
     position: relative;
@@ -491,10 +485,3 @@
     }
 }
 
-.tnt-form-field-message {
-    font-size: 0.8rem;
-    font-weight: bold;
-    margin-top: 0.2rem;
-    margin-left: 0.5rem;
-    transition: 150ms;
-}

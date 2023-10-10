@@ -66,14 +66,18 @@
                 border: 2px solid $tnt-color-error;
             }
 
+            &:not(checked) + span::before {
+                border: none;
+            }
+
             &:checked + span {
                 &:before {
-                    border-right: 2px solid $tnt-color-on-error;
-                    border-bottom: 2px solid $tnt-color-on-error;
+                    //border-right: 2px solid $tnt-color-on-error;
+                    //border-bottom: 2px solid $tnt-color-on-error;
                 }
 
                 span:after {
-                    background-color: $tnt-color-error;
+                    //background-color: $tnt-color-error;
                 }
             }
         }
@@ -101,6 +105,10 @@
     &.filled input[type=checkbox] {
         &:not(:checked) + span span:after {
             border: 2px solid $tnt-color-outline;
+        }
+
+        &:not(checked) + span::before {
+            border: none;
         }
 
         &:checked + span {
@@ -160,8 +168,8 @@
 .tnt-form-field-checkbox {
     display: flex;
     align-items: center;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 
     i {
         user-select: none;

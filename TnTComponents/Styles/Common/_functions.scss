@@ -56,3 +56,13 @@
         }
     }
 }
+
+@function getDisableColor($baseColor) {
+    $adjustmentPercent: 20%;
+
+    @if(color.lightness($baseColor) > 50) {
+        $adjustmentPercent: $adjustmentPercent * -1;
+    }
+
+    @return color.adjust($baseColor, $lightness: $adjustmentPercent);
+}

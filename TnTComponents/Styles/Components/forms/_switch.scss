@@ -1,7 +1,10 @@
 ﻿@use "sass:color";
 
-.tnt-input-field-switch[theme=default] {
+.tnt-form-field-switch[theme=default] {
     &:not(.disabled) {
+        i {
+            color: $tnt-color-on-surface;
+        }
 
         input[type=checkbox] {
             + span {
@@ -22,48 +25,130 @@
             }
         }
 
-        .tnt-input-field-switch-label {
+        .tnt-form-field-label {
             color: $tnt-color-on-surface;
+        }
+
+        &.modified.invalid {
+            i {
+                color: $tnt-color-error;
+            }
+
+            input[type=checkbox] {
+                + span {
+                    &:before {
+                        background-color: $tnt-color-error;
+                    }
+
+                    @include colorizeTransparent($tnt-color-surface, $hover:true, $active:true, $additionalScope: #{'::after'});
+                    background: linear-gradient(to right, $tnt-color-on-error 50%, $tnt-color-error-container 50%);
+                    background-size: 200% 100%;
+                    background-position: right bottom;
+                }
+
+                &:checked {
+                    + span {
+                        background-position: left bottom;
+                    }
+                }
+            }
+
+            .tnt-form-field-label {
+                color: $tnt-color-error;
+            }
         }
     }
 
     &.disabled {
+        i {
+            color: color.adjust($tnt-color-on-surface, $alpha: -.6);
+        }
+
+        .tnt-form-field-label {
+            color: color.adjust($tnt-color-on-surface, $alpha: -.6);
+        }
+
         input[type=checkbox] {
+            + span {
+                background: linear-gradient(to right, color.adjust($tnt-color-tertiary, $alpha: -.6) 50%, color.adjust($tnt-color-surface-variant, $alpha: -.6) 50%);
+                background-size: 200% 100%;
+            }
+
             &:not(:checked) {
                 + span {
+                    background-position: right bottom;
+
                     &:before {
-                        background-color: color.adjust($tnt-color-primary, $lightness: 20%);
+                        background-color: getDisableColor($tnt-color-primary);
                     }
                 }
             }
 
             &:checked {
                 + span {
-                    background-color: color.adjust($tnt-color-surface-variant, $alpha: -.5);
+                    background-position: left bottom;
+
+                    &:before {
+                        background-color: getDisableColor($tnt-color-primary);
+                    }
                 }
             }
         }
 
-        .tnt-input-field-switch-label {
-            color: color.adjust($tnt-color-on-surface, $alpha: -.5);
+        &.modified.invalid {
+            i {
+                color: color.adjust($tnt-color-error, $alpha: -.6);
+            }
+
+            .tnt-form-field-label {
+                color: color.adjust($tnt-color-error, $alpha: -.6);
+            }
+
+            input[type=checkbox] {
+                + span {
+                    background: linear-gradient(to right, color.adjust($tnt-color-on-error, $alpha: -.6) 50%, color.adjust($tnt-color-error-container, $alpha: -.6) 50%);
+                    background-size: 200% 100%;
+                }
+
+                &:not(:checked) {
+                    + span {
+                        background-position: right bottom;
+
+                        &:before {
+                            background-color: getDisableColor($tnt-color-error);
+                        }
+                    }
+                }
+
+                &:checked {
+                    + span {
+                        background-position: left bottom;
+
+                        &:before {
+                            background-color: getDisableColor($tnt-color-error);
+                        }
+                    }
+                }
+            }
         }
     }
 }
 
 
-
-.tnt-input-field-switch {
+.tnt-form-field-switch {
     display: flex;
     align-items: center;
-    padding-top: 0.3rem;
-    padding-bottom: 0.3rem;
     user-select: none;
-    cursor: pointer;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 
     &.disabled {
         cursor: default;
     }
 
+    &:has(.tnt-icon-component:first-child) input[type=checkbox] + span {
+        margin-left: 2rem
+    }
 
     input[type=checkbox] {
         position: absolute;
@@ -80,34 +165,40 @@
             height: .9rem;
             z-index: 0;
             transition: ease-in-out 150ms;
+            cursor: pointer;
             @extend .tnt-z-depth-1;
 
-           &:before,
-           &:after {
-               transition: ease-in-out 150ms;
-           }
-           
-           &:before {
-               content: '';
-               position: absolute;
-               aspect-ratio: 1/1;
-               height: 1.3rem;
-               left: -0.1rem;
-               z-index: 2;
-               border-radius: 100%;
-           
-               @extend .tnt-z-depth-2;
-           }
-           
-           &:hover::after {
-               content: '';
-               position: absolute;
-               aspect-ratio: 1/1;
-               height: 2rem;
-               left: -.5rem;
-               z-index: 1;
-               border-radius: 100%;
-           }
+            .tnt-form-field-label {
+                margin-left: 3rem;
+                cursor: inherit;
+            }
+
+            &:before,
+            &:after {
+                transition: ease-in-out 150ms;
+            }
+
+            &:before {
+                content: '';
+                position: absolute;
+                aspect-ratio: 1/1;
+                height: 1.3rem;
+                left: -0.1rem;
+                z-index: 2;
+                border-radius: 100%;
+
+                @extend .tnt-z-depth-2;
+            }
+
+            &:hover::after {
+                content: '';
+                position: absolute;
+                aspect-ratio: 1/1;
+                height: 2rem;
+                left: -.6rem;
+                z-index: 1;
+                border-radius: 100%;
+            }
         }
 
         &:checked {
@@ -124,17 +215,17 @@
         }
     }
 
-    .tnt-input-field-switch-label {
+    .tnt-form-field-switch-label {
         margin-left: 2.8rem;
         display: flex;
         align-items: center;
     }
 
-    .tnt-input-field-switch-off {
+    .tnt-form-field-switch-off {
         position: absolute;
     }
 
-    .tnt-input-field-switch-on {
+    .tnt-form-field-switch-on {
         position: absolute;
     }
 
