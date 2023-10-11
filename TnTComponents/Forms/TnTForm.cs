@@ -31,8 +31,6 @@ public abstract class TnTForm : EditForm {
         AdditionalAttributes = _additionalAttributes;
     }
 
-
-
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenRegion(0);
 

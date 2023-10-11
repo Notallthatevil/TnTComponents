@@ -1,0 +1,154 @@
+﻿@using System.Text
+@using System.Reflection
+@using System.ComponentModel.DataAnnotations
+@inherits TnTBaseComponent
+
+
+
+
+@code {
+    [CascadingParameter]
+    private TnTRow _parentRow { get; set; } = default!;
+
+    [Parameter, ColSize(SizeClass = "s", PropertyName = nameof(ColSize.Size))]
+    public int S { get; set; }
+
+    [Parameter, ColSize(SizeClass = "s", PropertyName = nameof(ColSize.Offset))]
+    public int SOffset { get; set; }
+
+    [Parameter, ColSize(SizeClass = "s", PropertyName = nameof(ColSize.Push))]
+    public int SPush { get; set; }
+
+    [Parameter, ColSize(SizeClass = "s", PropertyName = nameof(ColSize.Pull))]
+    public int SPull { get; set; }
+
+    [Parameter, ColSize(SizeClass = "m", PropertyName = nameof(ColSize.Size))]
+    public int M { get; set; }
+
+    [Parameter, ColSize(SizeClass = "m", PropertyName = nameof(ColSize.Offset))]
+    public int MOffset { get; set; }
+
+    [Parameter, ColSize(SizeClass = "m", PropertyName = nameof(ColSize.Push))]
+    public int MPush { get; set; }
+
+    [Parameter, ColSize(SizeClass = "m", PropertyName = nameof(ColSize.Pull))]
+    public int MPull { get; set; }
+
+    [Parameter, ColSize(SizeClass = "l", PropertyName = nameof(ColSize.Size))]
+    public int L { get; set; }
+
+    [Parameter, ColSize(SizeClass = "l", PropertyName = nameof(ColSize.Offset))]
+    public int LOffset { get; set; }
+
+    [Parameter, ColSize(SizeClass = "l", PropertyName = nameof(ColSize.Push))]
+    public int LPush { get; set; }
+
+    [Parameter, ColSize(SizeClass = "l", PropertyName = nameof(ColSize.Pull))]
+    public int LPull { get; set; }
+
+    [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Size))]
+    public int XL { get; set; }
+
+    [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Offset))]
+    public int XLOffset { get; set; }
+
+    [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Push))]
+    public int XLPush { get; set; }
+
+    [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Pull))]
+    public int XLPull { get; set; }
+
+    private Dictionary<string, ColSize> _sizes = new Dictionary<string, ColSize>();
+
+    private readonly static IReadOnlyDictionary<PropertyInfo, ColSizeAttribute> _sizeValues = GetSizeProperties();
+
+
+    private static IReadOnlyDictionary<PropertyInfo, ColSizeAttribute> GetSizeProperties() {
+        var sizeValues = new Dictionary<PropertyInfo, ColSizeAttribute>();
+        foreach (var prop in typeof(TnTColumn).GetProperties()) {
+            var colSize = prop.GetCustomAttribute<ColSizeAttribute>();
+            if (colSize is not null) {
+                sizeValues.Add(prop, colSize);
+            }
+        }
+        return sizeValues;
+    }
+
+
+    protected override void OnInitialized() {
+        if (_parentRow is null) {
+            throw new ArgumentNullException(nameof(_parentRow), $"A {nameof(TnTColumn)} must be a child of a {nameof(TnTRow)}");
+        }
+
+        foreach (var sizeValuePair in _sizeValues) {
+            var prop = sizeValuePair.Key;
+            var colSizeAttr = sizeValuePair.Value;
+            var value = (int)(prop.GetValue(this) ?? 0);
+
+            if (value < 0 || value > 12) {
+                throw new ArgumentOutOfRangeException(prop.Name, "Value must be within 0 and 12 inclusively.");
+            }
+            if (value > 0) {
+                if (_sizes.TryGetValue(colSizeAttr.SizeClass, out var colSize)) {
+                }
+                else {
+                    colSize = new ColSize();
+                    _sizes.Add(colSizeAttr.SizeClass, colSize);
+                }
+                typeof(ColSize).GetProperty(colSizeAttr.PropertyName)!.SetValue(colSize, value);
+            }
+        }
+
+        base.OnInitialized();
+    }
+
+    protected override string GetCssClass() {
+        var strBuilder = new StringBuilder(base.GetCssClass());
+
+        foreach (var sizePair in _sizes) {
+            var sizeClass = sizePair.Key;
+            var value = sizePair.Value;
+
+            if(value.Size > 0) {
+                strBuilder.Append(' ').Append($"{sizeClass}{value.Size}");
+
+                if(value.Offset > 0) {
+                    strBuilder.Append(' ').Append($"{sizeClass}{value.Offset}-offset");
+                }
+
+                if(value.Push > 0) {
+                    strBuilder.Append(' ').Append($"{sizeClass}{value.Push}-push");
+                }
+
+                if(value.Pull > 0) {
+                    strBuilder.Append(' ').Append($"{sizeClass}{value.Pull}-pull");
+                }
+            }
+        }
+
+        return strBuilder.ToString();
+    }
+
+    private ColSize GetColSize(string sizeClass) {
+        if (_sizes.TryGetValue(sizeClass, out var colSize)) {
+            return colSize;
+        }
+        else {
+            _sizes.Add(sizeClass, new ColSize());
+            return _sizes[sizeClass];
+        }
+
+    }
+
+    private class ColSizeAttribute : Attribute {
+        public required string SizeClass { get; set; }
+        public required string PropertyName { get; set; }
+    }
+
+    private class ColSize {
+        public int Size;
+        public int Offset;
+        public int Pull;
+        public int Push;
+    }
+}

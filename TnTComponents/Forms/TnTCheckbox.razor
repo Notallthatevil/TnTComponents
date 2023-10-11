@@ -23,8 +23,6 @@
     </span>
 
 </div>
-<ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />
-
-@code {
-
+@if (ShowValidation) {
+    <ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />
 }

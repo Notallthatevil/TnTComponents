@@ -70,5 +70,6 @@
         <label class="@GetLabelCssClass()" @onclick="SetInputFocus">@Label</label>
     </div>
 </TnTExternalClickHandler>
-
-<ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />
+@if (ShowValidation) {
+    <ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />
+}

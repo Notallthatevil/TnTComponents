@@ -29,13 +29,6 @@ public partial class TnTDropDown<TListItemType> {
         return base.GetCssClass() + " dropdown";
     }
 
-    protected async Task ClearSelection() {
-        if (!Disabled) {
-            CurrentValue = default;
-        }
-        await OnFocusOutAsync(new FocusEventArgs());
-    }
-
     private bool IsItemDisabled(TListItemType? item) {
         return item is not null && (DisabledItems?.Contains(item) ?? false);
     }

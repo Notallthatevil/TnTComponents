@@ -1,6 +1,6 @@
 ﻿@use "sass:color";
 
-.tnt-input-field[theme=default].date-picker {
+.tnt-form-field[theme=default].date-picker {
     .tnt-date-time-picker {
         background-color: $tnt-color-primary-container;
 
@@ -61,7 +61,7 @@
     }
 }
 
-.tnt-input-field.date-picker {
+.tnt-form-field.date-picker {
     cursor: pointer;
 
     &.disabled {
@@ -72,14 +72,18 @@
         cursor: inherit;
     }
 
+    &.active {
+        .tnt-date-time-picker {
+            visibility: visible;
+        }
+    }
+
     .tnt-date-time-picker {
         display: flex;
         flex-direction: column;
-        padding: 1rem;
         position: absolute;
         z-index: 10000;
-        top: 3rem;
-        width: min-content;
+        visibility: hidden;
         @extend .tnt-border-radius-2;
         @extend .tnt-z-depth-2;
 

@@ -1,0 +1,12 @@
+﻿@inherits TnTBaseComponent
+
+<CascadingValue IsFixed="true" Value="this">
+    <div class="tnt-row">
+        @ChildContent
+    </div>
+</CascadingValue>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+}

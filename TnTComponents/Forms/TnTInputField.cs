@@ -16,8 +16,10 @@ namespace TnTComponents.Forms;
 public abstract class TnTInputField<TInputType> : InputBase<TInputType>, ITnTFormField {
     [Parameter]
     public virtual string BaseCssClass { get; set; } = ITnTFormField.DefaultBaseCssClass;
+
     [Parameter]
     public bool Disabled { get; set; }
+
     [Parameter]
     public FormType FormType { get; set; }
 
@@ -27,20 +29,20 @@ public abstract class TnTInputField<TInputType> : InputBase<TInputType>, ITnTFor
     [Parameter]
     public string? Icon { get; set; }
 
-
     [Parameter, EditorRequired]
     public required string Label { get; set; }
 
     [CascadingParameter]
     public TnTForm? ParentForm { get; set; }
+
     [Parameter]
     public string? Placeholder { get; set; }
+
     [Parameter]
     public string Theme { get; set; } = TnTConstants.DefaultTheme;
 
     [Parameter]
-    public Func<TInputType>? ValidationExpression { get; set; }
-
+    public bool ShowValidation { get; set; } = true;
     protected bool Active { get; private set; }
 
     protected ElementReference InputElement { get; set; }

@@ -68,15 +68,15 @@ $element-bottom-margin: ($gutter-width*2)/3 !default;
 }
 
 @mixin grid-classes($size, $i, $perc) {
-    &.offset-#{$size}#{$i} {
+    &.#{$size}#{$i}-offset {
         margin-left: $perc;
     }
 
-    &.pull-#{$size}#{$i} {
+    &.#{$size}#{$i}-pull {
         right: $perc;
     }
 
-    &.push-#{$size}#{$i} {
+    &.#{$size}#{$i}-push {
         left: $perc;
     }
 }

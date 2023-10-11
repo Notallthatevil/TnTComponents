@@ -29,4 +29,6 @@
     </div>
 
 </div>
-<ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />
+@if (ShowValidation) {
+    <ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />
+}
