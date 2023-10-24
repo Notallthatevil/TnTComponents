@@ -15,8 +15,8 @@
 
 
         <div class="tnt-date-time-picker">
-            <TnTRow>
-                <TnTColumn S="12">
+            <TnTRow FlexAlignItems="FlexAlignItems.Center">
+                <TnTColumn S="1" FlexAlignItems="FlexAlignItems.Center">
 
                     @switch (IconType) {
                         case IconType.FontAwesome:
@@ -30,26 +30,22 @@
                         default:
                             throw new NotImplementedException();
                     }
+                </TnTColumn>
+
+                <TnTColumn S="6" FlexAlignItems="FlexAlignItems.Center">
 
                     <TnTDropDown ListItems="_months" AllowClear="false" Label="Month" DisabledItems="_disabledMonths" @bind-Value="_selectedMonth" class="tnt-month-picker">
 
 
                     </TnTDropDown>
+                </TnTColumn>
 
-                    @* <TnTDropDown ListItems="_months"
-                    Theme="@Theme"
-                    AllowClear=false
-                    FormType="FormType"
-                    IconType="IconType"
-                    Label="Month"
-                    @bind-Value="_selectedMonth"
-                    DisabledItems="_disabledMonths"
-                    class="tnt-month-picker">
-                    <ListItemTemplate>
-                    @DateTimeFormatInfo.CurrentInfo.GetMonthName(context)
-                    </ListItemTemplate>
-                    </TnTDropDown>
-                    <TnTDropDown ListItems="_years" Theme="@Theme" AllowClear=false FormType="FormType" IconType="IconType" Label="Year" @bind-Value="_selectedYear" class="tnt-year-picker" />*@
+                <TnTColumn S="4" FlexAlignItems="FlexAlignItems.Center">
+                    <TnTDropDown ListItems="_years" AllowClear="false" Label="Year" @bind-Value="_selectedYear" class="tnt-year-picker" />
+                </TnTColumn>
+
+                <TnTColumn S="1" FlexAlignItems="FlexAlignItems.Center">
+
                     @switch (IconType) {
                         case IconType.FontAwesome:
                             <i class="fa fa-arrow-right @(Disabled ? "disabled" : string.Empty)" @onclick="NextMonth"></i>
@@ -64,35 +60,36 @@
                     }
                 </TnTColumn>
             </TnTRow>
-            @*
-            <table>
-            <thead>
-            <tr>
-            @foreach (var day in DateTimeFormatInfo.CurrentInfo.AbbreviatedDayNames) {
-            <th>
-            @day.First()
-            </th>
-            }
-            </tr>
-            </thead>
-            <tbody>
-            @{
-            var date = GetStartDate();
-            }
-            @for (var i = 0; i < 6; ++i) {
-            <tr>
-            @for (var j = 0; j < 7; ++j, date = date.AddDays(1)) {
-            var itemDate = date;
-            <td @onclick="@(() => SelectDate(itemDate))" @onclick:stopPropagation="true">
-            <div class="@GetDateItemClass(itemDate)">
-            @itemDate.Day
-            </div>
-            </td>
-            }
-            </tr>
-            }
-            </tbody>
-            </table>*@
+            <TnTRow FlexAlignItems="FlexAlignItems.Center">
+                <table>
+                    <thead>
+                        <tr>
+                            @foreach (var day in DateTimeFormatInfo.CurrentInfo.AbbreviatedDayNames) {
+                                <th>
+                                    @day.First()
+                                </th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var date = GetStartDate();
+                        }
+                        @for (var i = 0; i < 6; ++i) {
+                            <tr>
+                                @for (var j = 0; j < 7; ++j, date = date.AddDays(1)) {
+                                    var itemDate = date;
+                                    <td @onclick="@(() => SelectDate(itemDate))" @onclick:stopPropagation="true">
+                                        <div class="@GetDateItemClass(itemDate)">
+                                            @itemDate.Day
+                                        </div>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </TnTRow>
         </div>
         @*
         @if (AllowClear && !string.IsNullOrWhiteSpace(CurrentValueAsString)) {

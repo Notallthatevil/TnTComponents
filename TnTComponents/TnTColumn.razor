@@ -3,12 +3,21 @@
 @using System.ComponentModel.DataAnnotations
 @inherits TnTBaseComponent
 
+<div class="@GetCssClass()" style="@GetCustomStyle()">
+    @ChildContent
+</div>
 
 
 
 @code {
     [CascadingParameter]
     private TnTRow _parentRow { get; set; } = default!;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    [Parameter]
+    public override string BaseCssClass { get; set; } = "tnt-col";
 
     [Parameter, ColSize(SizeClass = "s", PropertyName = nameof(ColSize.Size))]
     public int S { get; set; }
@@ -57,6 +66,18 @@
 
     [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Pull))]
     public int XLPull { get; set; }
+
+    [Parameter]
+    public FlexWrap FlexWrap { get; set; }
+
+    [Parameter]
+    public FlexAlignContent FlexAlignContent { get; set; }
+
+    [Parameter]
+    public FlexJustifyContent FlexJustifyContent { get; set; }
+
+    [Parameter]
+    public FlexAlignItems FlexAlignItems { get; set; }
 
     private Dictionary<string, ColSize> _sizes = new Dictionary<string, ColSize>();
 
@@ -129,6 +150,18 @@
         return strBuilder.ToString();
     }
 
+    protected override string GetCustomStyle() {
+        var strBuilder = new StringBuilder(FlexWrap.Wrap.ToStyle())
+        .Append(' ').Append(FlexAlignContent.ToStyle())
+        .Append(' ').Append(FlexJustifyContent.ToStyle())
+        .Append(' ').Append(FlexAlignItems.ToStyle());
+
+        if (AdditionalAttributes?.TryGetValue("style", out var result) ?? false) {
+            strBuilder.Append(' ').Append(result);
+        }
+        return strBuilder.ToString();
+    }
+
     private ColSize GetColSize(string sizeClass) {
         if (_sizes.TryGetValue(sizeClass, out var colSize)) {
             return colSize;
@@ -146,9 +179,9 @@
     }
 
     private class ColSize {
-        public int Size;
-        public int Offset;
-        public int Pull;
-        public int Push;
+        public int Size { get; set; }
+        public int Offset { get; set; }
+        public int Pull { get; set; }
+        public int Push { get; set; }
     }
 }

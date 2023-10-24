@@ -84,31 +84,20 @@
         position: absolute;
         z-index: 10000;
         visibility: hidden;
+        transition: 150ms;
+        padding: 1rem 0.1rem 1rem 0.1rem;
         @extend .tnt-border-radius-2;
         @extend .tnt-z-depth-2;
 
+        i {
+            border-radius: 100%;
+            user-select: none;
+            width: -moz-fit-content;
+            width: fit-content;
+        }
 
-        span {
-            display: inherit;
-            justify-content: center;
-            align-items: center;
-
-            > * {
-                margin: 0.1rem;
-            }
-
-            .tnt-month-picker {
-                width: 40%;
-            }
-
-            .tnt-year-picker {
-                width: 20%;
-            }
-
-            i {
-                border-radius: 100%;
-                user-select: none;
-            }
+        .tnt-month-picker, .tnt-year-picker, i {
+            margin: 0 0.1rem 0 0.1rem;
         }
 
         table {

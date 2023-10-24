@@ -22,11 +22,16 @@ namespace TnTComponents.Common {
             var classResult = BaseCssClass;
 
             if (AdditionalAttributes?.TryGetValue("class", out var result) ?? false) {
-                    return classResult + " " + string.Join(' ', result);
+                return classResult + " " + string.Join(' ', result);
             }
             return classResult;
         }
 
-        
+        protected virtual string GetCustomStyle() {
+            if (AdditionalAttributes?.TryGetValue("style", out var result) ?? false) {
+                return string.Join(' ', result);
+            }
+            return string.Empty;
+        }
     }
 }

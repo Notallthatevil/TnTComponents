@@ -14,6 +14,8 @@ public partial class TnTDatePicker {
     private int _selectedMonth { get; set; }
 
 
+    private readonly ICollection<int> _years = Enumerable.Range(2000, 2050).ToList();
+    private int _selectedYear { get; set; }
 
     /// <inheritdoc/>
     protected override string? FormatValueAsString(DateOnly value) {
