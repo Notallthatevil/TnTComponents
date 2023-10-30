@@ -1,10 +1,14 @@
 ﻿[
-  {
-    "outputFile": "wwwroot/style.dark.css",
-    "inputFile": "Styles/style.dark.scss"
-  },
-  {
-    "outputFile": "wwwroot/style.light.css",
-    "inputFile": "Styles/style.light.scss"
-  }
+    {
+        "outputFile": "wwwroot/style.css",
+        "inputFile": "Styles/style.scss"
+    },
+    {
+        "outputFile": "wwwroot/style.dark.css",
+        "inputFile": "Styles/style.dark.scss"
+    },
+    {
+        "outputFile": "wwwroot/style.light.css",
+        "inputFile": "Styles/style.light.scss"
+    }
 ]

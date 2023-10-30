@@ -1,0 +1,16 @@
+﻿.tnt-sidebar[theme=default] {
+    background-color: $tnt-color-secondary-container;
+
+
+    li {
+        background-color: colorizeTransparent($tnt-color-secondary-container, $hover:true, $active:true);
+
+        > a {
+            color: $tnt-color-on-secondary-container;
+        }
+    }
+}
+
+.tnt-sidebar-button[theme=default] {
+    color: $tnt-color-on-primary;
+}

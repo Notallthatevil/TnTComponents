@@ -83,22 +83,12 @@
             @_model.CheckBox
             @_model.Switch
             @_model.DropDownItem
+            @_model.DateValue
         </div>
     </TnTBody>
 </TnTLayout>
 
-
-<HeadContent>
-    @if (_dark) {
-        <link rel="stylesheet" href="_content/TnTComponents/style.dark.min.css" />
-    }
-    else {
-        <link rel="stylesheet" href="_content/TnTComponents/style.light.min.css" />
-    }
-    </HeadContent>
-
-
-    @code {
+@code {
     private bool _dark = false;
     private bool _sideBarExpanded = false;
     private MyModel _model = new MyModel();

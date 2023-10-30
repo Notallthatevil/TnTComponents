@@ -1,0 +1,10 @@
+﻿.tnt-card[theme=default] {
+
+    &.flat {
+        background-color: $tnt-color-surface-variant;
+    }
+
+    &.outlined {
+        border-color: $tnt-color-outline;
+    }
+}

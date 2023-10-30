@@ -1,0 +1,166 @@
+﻿@use "sass:color";
+
+.tnt-form-field-checkbox[theme=default] {
+    input[type=checkbox] {
+        + span {
+            color: $tnt-color-on-surface;
+
+            &:before {
+                border: 2px solid $tnt-color-outline;
+            }
+        }
+
+        &:checked {
+            + span:before {
+                border-bottom: 2px solid $tnt-color-primary;
+                border-right: 2px solid $tnt-color-primary;
+            }
+        }
+    }
+
+    &:not(.disabled) input[type=checkbox] + span {
+        @include colorizeTransparent($tnt-color-surface, $hover:true, $active:true, $additionalScope: #{'::after'});
+    }
+
+    i {
+        color: $tnt-color-on-surface;
+    }
+
+    &.modified.invalid {
+        input[type=checkbox] {
+            + span {
+                color: $tnt-color-error;
+
+                &:before {
+                    border-bottom: 2px solid $tnt-color-error;
+                    border-right: 2px solid $tnt-color-error;
+                }
+            }
+
+            &:not(checked) + span::before {
+                border: 2px solid $tnt-color-error;
+            }
+        }
+
+        &.disabled {
+            input[type=checkbox] {
+                + span {
+                    color: color.adjust($tnt-color-error, $alpha: -.6);
+
+                    &:before {
+                        border-bottom: 2px solid color.adjust($tnt-color-error, $alpha: -.6);
+                        border-right: 2px solid color.adjust($tnt-color-error, $alpha: -.6);
+                    }
+                }
+
+                &:not(checked) + span::before {
+                    border: 2px solid color.adjust($tnt-color-error, $alpha: -.6);
+                }
+            }
+        }
+    }
+
+    &.modified.invalid.filled {
+        input[type=checkbox] {
+            &:not(:checked) + span span:after {
+                border: 2px solid $tnt-color-error;
+            }
+
+            &:not(checked) + span::before {
+                border: none;
+            }
+
+            &:checked + span {
+                &:before {
+                    //border-right: 2px solid $tnt-color-on-error;
+                    //border-bottom: 2px solid $tnt-color-on-error;
+                }
+
+                span:after {
+                    //background-color: $tnt-color-error;
+                }
+            }
+        }
+
+        &.disabled {
+            input[type=checkbox] {
+                &:not(:checked) + span span:after {
+                    border: 2px solid color.adjust($tnt-color-error, $alpha: -.6);
+                }
+
+                &:checked + span {
+                    &:before {
+                        border-right: 2px solid color.adjust($tnt-color-on-error, $alpha: -.6);
+                        border-bottom: 2px solid color.adjust($tnt-color-on-error, $alpha: -.6);
+                    }
+
+                    span:after {
+                        background-color: color.adjust($tnt-color-error, $alpha: -.6);
+                    }
+                }
+            }
+        }
+    }
+
+    &.filled input[type=checkbox] {
+        &:not(:checked) + span span:after {
+            border: 2px solid $tnt-color-outline;
+        }
+
+        &:not(checked) + span::before {
+            border: none;
+        }
+
+        &:checked + span {
+            &:before {
+                border-right: 2px solid $tnt-color-on-primary;
+                border-bottom: 2px solid $tnt-color-on-primary;
+            }
+
+            span:after {
+                background-color: $tnt-color-primary;
+            }
+        }
+    }
+
+    &.disabled {
+        i {
+            color: color.adjust($tnt-color-on-surface, $alpha: -.6);
+        }
+
+        input[type=checkbox] {
+            + span {
+                cursor: default;
+                color: color.adjust($tnt-color-on-surface, $alpha: -.6);
+
+                &:before {
+                    border: 2px solid color.adjust($tnt-color-outline, $alpha: -.6);
+                }
+            }
+
+            &:checked {
+                + span:before {
+                    border-bottom: 2px solid color.adjust($tnt-color-primary, $alpha: -.6);
+                    border-right: 2px solid color.adjust($tnt-color-primary, $alpha: -.6);
+                }
+            }
+        }
+    }
+
+    &.disabled.filled input[type=checkbox] {
+        &:not(:checked) + span span:after {
+            border: 2px solid color.adjust($tnt-color-outline, $alpha: -.6);
+        }
+
+        &:checked + span {
+            &:before {
+                border-right: 2px solid color.adjust($tnt-color-on-primary, $alpha: -.6);
+                border-bottom: 2px solid color.adjust($tnt-color-on-primary, $alpha: -.6);
+            }
+
+            span:after {
+                background-color: color.adjust($tnt-color-primary, $alpha: -.6);
+            }
+        }
+    }
+}

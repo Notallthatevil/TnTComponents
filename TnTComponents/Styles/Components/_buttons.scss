@@ -1,21 +1,4 @@
-﻿@use "sass:color";
-
-.tnt-btn[theme=default] {
-    @include colorize($tnt-color-primary-container, $property:background-color, $hover:true, $active:true);
-    @include colorize($tnt-color-on-primary-container, $property:color);
-
-    &.outlined {
-        outline-color: $tnt-color-outline;
-        @include colorize($tnt-color-primary, $property:color, $hover:true, $active:true);
-    }
-
-    &.filled {
-        @include colorize($tnt-color-primary, $property:background-color, $hover:true, $active:true);
-        color: $tnt-color-on-primary;
-    }
-}
-
-.tnt-btn {
+﻿.tnt-btn {
     border: none;
     min-width: 2.5rem;
     border-radius: 2rem;
@@ -61,7 +44,6 @@
     }
 
     &.outlined {
-        @include colorizeTransparent($tnt-color-surface, $hover:true, $active:true);
         outline-style: solid;
         outline-width: 1px;
         padding: 0.45rem 1.45rem;

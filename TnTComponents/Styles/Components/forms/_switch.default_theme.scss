@@ -1,0 +1,135 @@
+﻿@use "sass:color";
+
+.tnt-form-field-switch[theme=default] {
+    &:not(.disabled) {
+        i {
+            color: $tnt-color-on-surface;
+        }
+
+        input[type=checkbox] {
+            + span {
+                &:before {
+                    background-color: $tnt-color-primary;
+                }
+
+                @include colorizeTransparent($tnt-color-surface, $hover:true, $active:true, $additionalScope: #{'::after'});
+                background: linear-gradient(to right, $tnt-color-tertiary 50%, $tnt-color-surface-variant 50%);
+                background-size: 200% 100%;
+                background-position: right bottom;
+            }
+
+            &:checked {
+                + span {
+                    background-position: left bottom;
+                }
+            }
+        }
+
+        .tnt-form-field-label {
+            color: $tnt-color-on-surface;
+        }
+
+        &.modified.invalid {
+            i {
+                color: $tnt-color-error;
+            }
+
+            input[type=checkbox] {
+                + span {
+                    &:before {
+                        background-color: $tnt-color-error;
+                    }
+
+                    @include colorizeTransparent($tnt-color-surface, $hover:true, $active:true, $additionalScope: #{'::after'});
+                    background: linear-gradient(to right, $tnt-color-on-error 50%, $tnt-color-error-container 50%);
+                    background-size: 200% 100%;
+                    background-position: right bottom;
+                }
+
+                &:checked {
+                    + span {
+                        background-position: left bottom;
+                    }
+                }
+            }
+
+            .tnt-form-field-label {
+                color: $tnt-color-error;
+            }
+        }
+    }
+
+    &.disabled {
+        i {
+            color: color.adjust($tnt-color-on-surface, $alpha: -.6);
+        }
+
+        .tnt-form-field-label {
+            color: color.adjust($tnt-color-on-surface, $alpha: -.6);
+        }
+
+        input[type=checkbox] {
+            + span {
+                background: linear-gradient(to right, color.adjust($tnt-color-tertiary, $alpha: -.6) 50%, color.adjust($tnt-color-surface-variant, $alpha: -.6) 50%);
+                background-size: 200% 100%;
+            }
+
+            &:not(:checked) {
+                + span {
+                    background-position: right bottom;
+
+                    &:before {
+                        background-color: getDisableColor($tnt-color-primary);
+                    }
+                }
+            }
+
+            &:checked {
+                + span {
+                    background-position: left bottom;
+
+                    &:before {
+                        background-color: getDisableColor($tnt-color-primary);
+                    }
+                }
+            }
+        }
+
+        &.modified.invalid {
+            i {
+                color: color.adjust($tnt-color-error, $alpha: -.6);
+            }
+
+            .tnt-form-field-label {
+                color: color.adjust($tnt-color-error, $alpha: -.6);
+            }
+
+            input[type=checkbox] {
+                + span {
+                    background: linear-gradient(to right, color.adjust($tnt-color-on-error, $alpha: -.6) 50%, color.adjust($tnt-color-error-container, $alpha: -.6) 50%);
+                    background-size: 200% 100%;
+                }
+
+                &:not(:checked) {
+                    + span {
+                        background-position: right bottom;
+
+                        &:before {
+                            background-color: getDisableColor($tnt-color-error);
+                        }
+                    }
+                }
+
+                &:checked {
+                    + span {
+                        background-position: left bottom;
+
+                        &:before {
+                            background-color: getDisableColor($tnt-color-error);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

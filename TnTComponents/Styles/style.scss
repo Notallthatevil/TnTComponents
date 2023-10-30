@@ -1,4 +1,5 @@
-﻿@import 'Common/_grid.scss';
+﻿@import 'Common/_common.scss';
+@import 'Common/_grid.scss';
 @import 'Components/_body.scss';
 @import 'Components/_header.scss';
 @import 'Components/_card.scss';
@@ -6,10 +7,6 @@
 @import 'Components/_buttons.scss';
 @import 'Components/_stack.scss';
 @import 'Components/forms/_form.scss';
-
-body[theme=default] {
-    background-color: $tnt-color-surface;
-}
 
 * {
     font-family: 'Roboto', sans-serif;

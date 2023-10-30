@@ -1,33 +1,4 @@
-﻿@use "sass:color";
-
-.tnt-form-field[theme=default].dropdown {
-    ul {
-        background-color: $tnt-color-primary-container;
-
-        li {
-            &.placeholder {
-                color: color.adjust($tnt-color-on-primary-container, $alpha: -0.6);
-            }
-
-            color: $tnt-color-on-primary-container;
-
-            &:not(.disabled) {
-                @include colorize($tnt-color-primary-container, background-color, true, true);
-            }
-
-            &.disabled {
-                color: color.adjust($tnt-color-on-primary-container, $alpha: -0.6);
-            }
-
-            &.selected {
-                background-color: getSelectedColor($tnt-color-primary-container);
-            }
-        }
-    }
-}
-
-
-.tnt-form-field.dropdown {
+﻿.tnt-form-field.dropdown {
     cursor: pointer;
     margin-bottom: 1rem;
 

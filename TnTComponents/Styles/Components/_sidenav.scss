@@ -1,17 +1,4 @@
-﻿.tnt-sidebar[theme=default] {
-    background-color: $tnt-color-secondary-container;
-
-    li > a {
-        color: $tnt-color-on-secondary-container;
-        
-    }
-}
-
-.tnt-sidebar-button[theme=default] {
-    color: $tnt-color-on-primary;
-}
-
-.tnt-sidebar-transition {
+﻿.tnt-sidebar-transition {
     transition: transform ease-in-out 150ms;
 }
 

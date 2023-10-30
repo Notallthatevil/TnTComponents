@@ -11,7 +11,9 @@
     <link rel="stylesheet" href="TnTComponents.Client.styles.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
     <link rel="stylesheet" href="_content/TnTComponents/style.css" />
-    <HeadOutlet @rendermode="@RenderMode.InteractiveAuto" />
+    <link rel="stylesheet" href="_content/TnTComponents/style.dark.min.css" media="(prefers-color-scheme: dark)" />
+    <link rel="stylesheet" href="_content/TnTComponents/style.light.min.css" media="not (prefers-color-scheme: dark)" />
+    <HeadOutlet />
 </head>
 
 <body theme="default">
