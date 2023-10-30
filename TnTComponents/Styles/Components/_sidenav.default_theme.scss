@@ -3,7 +3,7 @@
 
 
     li {
-        background-color: colorizeTransparent($tnt-color-secondary-container, $hover:true, $active:true);
+        background-color: colorizeTransparent($tnt-color-secondary-container, true, true);
 
         > a {
             color: $tnt-color-on-secondary-container;

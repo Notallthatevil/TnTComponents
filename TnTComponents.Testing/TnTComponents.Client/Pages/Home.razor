@@ -52,6 +52,17 @@
                     <TnTSwitch Icon="@_icon" @bind-Value="_model.Switch" Label="Switch" Placeholder="@_placeholder" Disabled="@_disabled" />
                     <TnTDropDown Icon="@_icon" ListItems="@_listItems" @bind-Value="_model.DropDownItem" Label="DropDownItem" Placeholder="@_placeholder" Disabled="@_disabled" AllowClear="@_allowClear" />
                     <TnTDatePicker Icon="@_icon" @bind-Value="_model.DateValue" Label="DatePicker" Placeholder="@_placeholder" Disabled="@_disabled" AllowClear="@_allowClear" />
+                    <TnTRadioGroup Icon="@_icon" @bind-Value="_model.RadioItem" Label="RadioButtons" Disabled="@_disabled" AllowClear="@_allowClear">
+                        <RadioButtons>
+                            <TnTRadioButton TInputType="MyRadioItem" Value="_radioItems.ElementAt(0)" Icon="@_icon" Label="Button1" Disabled="@_disabled" />
+                            <TnTRadioButton TInputType="MyRadioItem" Value="_radioItems.ElementAt(1)" Icon="@_icon" Label="Button2" Disabled="@_disabled" />
+                            <TnTRadioButton TInputType="MyRadioItem" Value="_radioItems.ElementAt(2)" Icon="@_icon" Label="Button3" Disabled="@_disabled" />
+                            <TnTRadioButton TInputType="MyRadioItem" Value="_radioItems.ElementAt(3)" Icon="@_icon" Label="Button4" Disabled="@_disabled" />
+                            <TnTRadioButton TInputType="MyRadioItem" Value="_radioItems.ElementAt(4)" Icon="@_icon" Label="Button5" Disabled="@_disabled" />
+                        </RadioButtons>
+                    </TnTRadioGroup>
+
+
                     <button type="submit">
                         Submit
                     </button>
@@ -84,6 +95,7 @@
             @_model.Switch
             @_model.DropDownItem
             @_model.DateValue
+            @_model.RadioItem
         </div>
     </TnTBody>
 </TnTLayout>
@@ -119,6 +131,7 @@
     }
 
     private ICollection<MyListItem> _listItems = default!;
+    private ICollection<MyRadioItem> _radioItems = default!;
 
     private void ToggleIcon() {
         if (string.IsNullOrWhiteSpace(_icon)) {
@@ -148,6 +161,12 @@
                 });
         }
 
+        _radioItems = new List<MyRadioItem>();
+        foreach(var i in Enumerable.Range(1, 5)) {
+            _radioItems.Add(new MyRadioItem() {
+                    Value = $"Item # {i}"
+                });
+        }
     }
 
     class MyModel {
@@ -169,6 +188,8 @@
         public MyListItem DropDownItem { get; set; }
         [Required]
         public DateOnly? DateValue { get; set; }
+        [Required]
+        public MyRadioItem? RadioItem { get; set; }
 
     }
 
@@ -181,6 +202,14 @@
             return $"{Str} From To String";
         }
     }
+
+    class MyRadioItem {
+        public string Value;
+        public override string ToString() {
+            return $"{Value} From To String";
+        }
+    }
+
     private void Submit(EditContext model) {
         int i = 0;
     }

@@ -1,0 +1,21 @@
+﻿@typeparam TInputType
+@inherits TnTBaseComponent
+
+<div class="@GetCssClass()">
+    @TnTIconComponent.GetIcon(IconType, Icon)
+    <input aria-label="@Label"
+           type="radio"
+           name="@Context.GroupName"
+           disabled="@Disabled"
+           value="@BindConverter.FormatValue(Value?.ToString())"
+           checked="@(Context.CurrentValue?.Equals(Value) == true ? "a" : null)"
+           @onchange="@Context.EventCallback" />
+
+    <span>
+
+        <label class="@Context.LabelCss">@Label</label>
+    </span>
+
+</div>
+
+

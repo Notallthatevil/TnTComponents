@@ -1,0 +1,39 @@
+﻿.tnt-radio-group {
+    position: relative;
+    padding: 0px .5rem 0px .5rem;
+    margin: 1rem 0 .5rem 0;
+    display: flex;
+    flex-direction: row;
+
+    @media #{$small-and-down} {
+        flex-direction: column;
+    }
+
+    &:not(.outlined) {
+        border: none;
+    }
+
+    .tnt-radio-btn {
+        margin: 1.5rem 0.75rem 0 0.75rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        & > .tnt-form-field-label {
+            padding: 0.5rem;
+        }
+
+        input[type=radio] {
+            opacity: 0;
+        }
+    }
+
+    & > .tnt-form-field-label {
+        position: absolute;
+        padding: 0px .5rem 0px .5rem;
+        top: 0;
+        left: 0;
+        text-align: initial;
+        user-select: none;
+    }
+}

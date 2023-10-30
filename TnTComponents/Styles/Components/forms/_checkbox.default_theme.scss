@@ -3,7 +3,7 @@
 .tnt-form-field-checkbox[theme=default] {
     input[type=checkbox] {
         + span {
-            color: $tnt-color-on-surface;
+            color: $tnt-color-on-primary-container;
 
             &:before {
                 border: 2px solid $tnt-color-outline;

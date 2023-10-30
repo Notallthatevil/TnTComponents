@@ -1,0 +1,33 @@
+﻿.tnt-radio-group[theme=default] {
+
+    &:not(.outlined) {
+    }
+
+    i {
+        color: $tnt-color-on-surface;
+    }
+
+    .tnt-radio-btn {
+        & > .tnt-form-field-label {
+            color: $tnt-color-on-surface;
+
+            &.disabled {
+                color: color.adjust($tnt-color-on-surface, $alpha: -0.6);
+            }
+        }
+    }
+
+    & > .tnt-form-field-label {
+        color: $tnt-color-on-primary-container;
+    }
+
+    &.disabled {
+        i {
+            color: color.adjust($tnt-color-on-surface, $alpha: -0.6);
+        }
+
+        & > .tnt-form-field-label {
+            color: color.adjust($tnt-color-on-primary-container, $alpha: -0.6);
+        }
+    }
+}
