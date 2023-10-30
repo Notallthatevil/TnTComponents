@@ -8,14 +8,22 @@ public partial class TnTDatePicker {
     [Parameter]
     public string Format { get; set; } = "yyyy-MM-dd";
 
+    [Parameter]
+    public DateOnly DefaultDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
     private readonly ICollection<int> _months = Enumerable.Range(1, 12).ToList();
     private readonly IReadOnlySet<int> _disabledMonths = new HashSet<int>();
-    private int _selectedMonth { get; set; }
-
-
     private readonly ICollection<int> _years = Enumerable.Range(2000, 2050).ToList();
-    private int _selectedYear { get; set; }
+
+    private int _dropdownMonths;
+    private int _dropdownYears;
+
+
+    public TnTDatePicker() {
+        _dropdownMonths = DefaultDate.Month;
+        _dropdownYears = DefaultDate.Year;
+    }
+
 
     /// <inheritdoc/>
     protected override string? FormatValueAsString(DateOnly value) {
@@ -116,31 +124,31 @@ public partial class TnTDatePicker {
     //    }
     //}
 
-    //private DateOnly GetStartDate() {
-    //    var startDate = new DateTime(_currentMonthYear.Year, _currentMonthYear.Month, 1);
-    //    return DateOnly.FromDateTime(startDate.AddDays(-(double)startDate.DayOfWeek));
-    //}
+    private DateOnly GetStartDate() {
+        var startDate = new DateTime(_dropdownYears, _dropdownMonths, 1);
+        return DateOnly.FromDateTime(startDate.AddDays(-(double)startDate.DayOfWeek));
+    }
 
-    //private string GetDateItemClass(DateOnly date) {
-    //    var strBuilder = new StringBuilder("table-content ");
-    //    if (date == DateOnly.FromDateTime(DateTime.Today)) {
-    //        strBuilder.Append("current-date ");
-    //    }
+    private string GetDateItemClass(DateOnly date) {
+        var strBuilder = new StringBuilder("table-content ");
+        if (date == DateOnly.FromDateTime(DateTime.Today)) {
+            strBuilder.Append("current-date ");
+        }
 
-    //    if (date.Month != _currentMonthYear.Month) {
-    //        strBuilder.Append("out-of-month ");
-    //    }
+        if (date.Month != _dropdownMonths) {
+            strBuilder.Append("out-of-month ");
+        }
 
-    //    if (Value.HasValue && date == Value.Value) {
-    //        strBuilder.Append("selected ");
-    //    }
+        if (date == Value) {
+            strBuilder.Append("selected ");
+        }
 
-    //    if (date > MaxDate || date < MinDate || DisabledDates.Contains(date)) {
-    //        strBuilder.Append("disabled ");
-    //    }
+        //if (date > MaxDate || date < MinDate || DisabledDates.Contains(date)) {
+        //    strBuilder.Append("disabled ");
+        //}
 
-    //    return strBuilder.ToString();
-    //}
+        return strBuilder.ToString();
+    }
 
     //private void UpdateCurrentDateView(DateOnly newDate) {
     //    if (newDate < MinDate) {

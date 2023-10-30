@@ -3,15 +3,21 @@
 .tnt-form-field[theme=default].date-picker {
     .tnt-date-time-picker {
         background-color: $tnt-color-primary-container;
-
-        span {
-            i {
-                color: $tnt-color-on-primary-container;
-            }
-        }
-
+        //
+        //    span {
+        //        i {
+        //            color: $tnt-color-on-primary-container;
+        //        }
+        //    }
+        //
         .tnt-input-field-label {
             background-color: $tnt-color-primary-container;
+        }
+
+        .tnt-year-picker.outlined, .tnt-month-picker.outlined {
+            .tnt-form-field-label {
+                background-color: $tnt-color-primary-container;
+            }
         }
 
         table {
@@ -75,14 +81,17 @@
     &.active {
         .tnt-date-time-picker {
             visibility: visible;
+            opacity: 1;
         }
     }
 
+
+
     .tnt-date-time-picker {
-        display: flex;
-        flex-direction: column;
+        width: 20rem;
         position: absolute;
         z-index: 10000;
+        opacity: 0;
         visibility: hidden;
         transition: 150ms;
         padding: 1rem 0.1rem 1rem 0.1rem;
@@ -92,26 +101,21 @@
         i {
             border-radius: 100%;
             user-select: none;
-            width: -moz-fit-content;
-            width: fit-content;
         }
 
-        .tnt-month-picker, .tnt-year-picker, i {
+        .tnt-month-picker, .tnt-year-picker {
             margin: 0 0.1rem 0 0.1rem;
         }
 
         table {
             user-select: none;
-            table-layout: fixed;
-            width: -moz-fit-content;
-            width: fit-content;
 
             thead {
                 tr {
                     th {
                         padding-top: 1rem;
                         padding-bottom: 0.2rem;
-                        width: 3rem;
+                        width: 2.2rem;
                         height: 2rem;
                     }
                 }
@@ -120,10 +124,8 @@
             tbody {
                 tr {
                     td {
-                        width: 1.5rem;
-
                         > div.table-content {
-                            text-align: center;
+                            transition: 150ms;
                             border-radius: 100%;
                             font-weight: bold;
                             display: flex;
@@ -138,6 +140,22 @@
                     }
                 }
             }
+        }
+    }
+
+    .tnt-date-time-picker.dropup {
+        top: -22rem;
+    }
+
+    &:not(.filled ) {
+        .tnt-date-time-picker {
+            top: 2.25rem;
+        }
+    }
+
+    &.filled {
+        .tnt-date-time-picker {
+            top: 3rem;
         }
     }
 }
