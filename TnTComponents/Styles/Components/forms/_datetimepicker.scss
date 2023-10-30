@@ -80,10 +80,6 @@
         }
     }
 
-    .tnt-date-time-picker.dropup {
-        top: -22rem;
-    }
-
     &:not(.filled ) {
         .tnt-date-time-picker {
             top: 2.25rem;
@@ -94,5 +90,9 @@
         .tnt-date-time-picker {
             top: 3rem;
         }
+    }
+
+    .tnt-date-time-picker.dropup {
+        top: -22rem;
     }
 }
