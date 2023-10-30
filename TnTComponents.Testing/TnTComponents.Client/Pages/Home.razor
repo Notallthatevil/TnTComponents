@@ -51,7 +51,7 @@
                     <TnTCheckbox Icon="@_icon" @bind-Value="_model.CheckBox" Label="Checkbox" Placeholder="@_placeholder" Disabled="@_disabled" />
                     <TnTSwitch Icon="@_icon" @bind-Value="_model.Switch" Label="Switch" Placeholder="@_placeholder" Disabled="@_disabled" />
                     <TnTDropDown Icon="@_icon" ListItems="@_listItems" @bind-Value="_model.DropDownItem" Label="DropDownItem" Placeholder="@_placeholder" Disabled="@_disabled" AllowClear="@_allowClear" />
-                    <TnTDatePicker Icon="@_icon" @bind-Value="_model.DateValue" Label="DropDownItem" Placeholder="@_placeholder" Disabled="@_disabled" AllowClear="@_allowClear" />
+                    <TnTDatePicker Icon="@_icon" @bind-Value="_model.DateValue" Label="DatePicker" Placeholder="@_placeholder" Disabled="@_disabled" AllowClear="@_allowClear" />
                     <button type="submit">
                         Submit
                     </button>
@@ -178,7 +178,7 @@
         [Required]
         public MyListItem DropDownItem { get; set; }
         [Required]
-        public DateOnly DateValue { get; set; }
+        public DateOnly? DateValue { get; set; }
 
     }
 
