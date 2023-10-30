@@ -83,7 +83,7 @@ public partial class TnTDatePicker {
     private void SelectDate(DateOnly selectedDate) {
         if (selectedDate >= MinDate && selectedDate <= MaxDate && !DisabledDates.Contains(selectedDate)) {
             if (selectedDate.Month == _dropdownMonth && selectedDate.Year == _dropdownYear) {
-                Value = selectedDate;
+                CurrentValue = selectedDate;
                 //_currentMonthYear = new DateOnly(selectedDate.Year, selectedDate.Month, 1);
                 //await OnChange(new ChangeEventArgs { Value = Value });
             }
@@ -135,7 +135,7 @@ public partial class TnTDatePicker {
             strBuilder.Append("out-of-month ");
         }
 
-        if (date == Value) {
+        if (date == CurrentValue) {
             strBuilder.Append("selected ");
         }
 
