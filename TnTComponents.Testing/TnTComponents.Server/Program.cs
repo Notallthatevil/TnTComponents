@@ -23,6 +23,7 @@ else {
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddAdditionalAssemblies(typeof(TnTComponents.Client._Imports).Assembly)
