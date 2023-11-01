@@ -21,7 +21,11 @@ public partial class TnTRadioGroup<TInputType> {
     [Parameter]
     public override string BaseCssClass { get; set; } = "tnt-radio-group";
 
+    [Parameter]
+    public override bool Disabled { get => _disabled; set { _disabled = value; if (_radioGroupContext is not null) { _radioGroupContext.Disabled = _disabled; } } }
+
     private RadioGroupContext _radioGroupContext = default!;
+    private bool _disabled;
 
     protected override void OnParametersSet() {
         if (RadioButtons is null && (RadioButtonItems is null || RadioButtonItems.Count != 0)) {
@@ -42,7 +46,8 @@ public partial class TnTRadioGroup<TInputType> {
 
         var changeEventCallback = EventCallback.Factory.CreateBinder<string?>(this, value => CurrentValueAsString = value, CurrentValueAsString);
         _radioGroupContext = new RadioGroupContext(groupName, GetLabelCssClass(), changeEventCallback) {
-            CurrentValue = CurrentValue
+            CurrentValue = CurrentValue,
+            Disabled = Disabled
         };
 
         base.OnParametersSet();
@@ -102,7 +107,7 @@ internal class RadioGroupContext(string groupName, string labelCss, EventCallbac
     public string GroupName { get; } = groupName;
     public string LabelCss { get; } = labelCss;
 
-
     public EventCallback<ChangeEventArgs> EventCallback { get; } = eventCallback;
     public object? CurrentValue { get; set; }
+    public bool Disabled { get; set; }
 }

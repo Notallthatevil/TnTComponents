@@ -4,14 +4,15 @@
 <div class="@GetCssClass()">
     @TnTIconComponent.GetIcon(IconType, Icon)
     <input aria-label="@Label"
+           id="@_id"
            type="radio"
            name="@Context.GroupName"
            disabled="@Disabled"
            value="@BindConverter.FormatValue(Value?.ToString())"
-           checked="@(Context.CurrentValue?.Equals(Value) == true ? "a" : null)"
+           checked="@(Context.CurrentValue?.Equals(Value) == true ? GetToggledTrueValue() : null)"
            @onchange="@Context.EventCallback" />
 
-        <label class="@Context.LabelCss">@Label</label>
+    <label for="@_id" class="@Context.LabelCss">@Label</label>
 </div>
 
 

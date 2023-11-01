@@ -41,7 +41,7 @@
     </TnTSideBar>
     <TnTBody SideBarExpanded="@_sideBarExpanded">
         <TnTRow>
-            <TnTColumn S="12" M="6">
+            <TnTColumn S="12" L="6" >
 
                 <TnTForm FormType="@_formType" TModelType="MyModel" Model="@_model" OnValidSubmit="@Submit" OnInvalidSubmit="@InvalidSubmit">
                     <DataAnnotationsValidator />
@@ -49,19 +49,20 @@
                     <TnTPasswordBox Icon="@_icon" @bind-Value="_model.Password" Label="Password" Placeholder="@_placeholder" Disabled="@_disabled" AllowPasswordReveal="true" />
                     <TnTNumeric Icon="@_icon" @bind-Value="_model.Number" Label="Number" Placeholder="@_placeholder" Disabled="@_disabled" />
                     <TnTCheckbox Icon="@_icon" @bind-Value="_model.CheckBox" Label="Checkbox" Placeholder="@_placeholder" Disabled="@_disabled" />
+                    <TnTCheckbox Icon="@_icon" @bind-Value="_model.CheckBox" Label="CheckboxWithLongLabel" Placeholder="@_placeholder" Disabled="@_disabled" />
                     <TnTSwitch Icon="@_icon" @bind-Value="_model.Switch" Label="Switch" Placeholder="@_placeholder" Disabled="@_disabled" />
+                    <TnTSwitch Icon="@_icon" @bind-Value="_model.Switch" Label="SwitchWithLongLabel" Placeholder="@_placeholder" Disabled="@_disabled" />
                     <TnTDropDown Icon="@_icon" ListItems="@_listItems" @bind-Value="_model.DropDownItem" Label="DropDownItem" Placeholder="@_placeholder" Disabled="@_disabled" AllowClear="@_allowClear" />
                     <TnTDatePicker Icon="@_icon" @bind-Value="_model.DateValue" Label="DatePicker" Placeholder="@_placeholder" Disabled="@_disabled" AllowClear="@_allowClear" />
                     <TnTRadioGroup Icon="@_icon" @bind-Value="_model.RadioItem" Label="RadioButtons" Disabled="@_disabled" AllowClear="@_allowClear">
                         <RadioButtons>
-                            <TnTRadioButton TInputType="MyRadioItem" Value="_radioItems.ElementAt(0)" Icon="@_icon" Label="Button1" Disabled="@_disabled" />
-                            <TnTRadioButton TInputType="MyRadioItem" Value="_radioItems.ElementAt(1)" Icon="@_icon" Label="Button2" Disabled="@_disabled" />
-                            <TnTRadioButton TInputType="MyRadioItem" Value="_radioItems.ElementAt(2)" Icon="@_icon" Label="Button3" Disabled="@_disabled" />
-                            <TnTRadioButton TInputType="MyRadioItem" Value="_radioItems.ElementAt(3)" Icon="@_icon" Label="Button4" Disabled="@_disabled" />
-                            <TnTRadioButton TInputType="MyRadioItem" Value="_radioItems.ElementAt(4)" Icon="@_icon" Label="Button5" Disabled="@_disabled" />
+                            <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(0)" Icon="@_icon" Label="Button1" Disabled="true" />
+                            <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(1)" Icon="@_icon" Label="Button2" Disabled="false" />
+                            <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(2)" Icon="@_icon" Label="Button3ReallyReallyReallyLongLabel" Disabled="@_disabled" />
+                            <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(3)" Icon="@_icon" Label="Button4" Disabled="@_disabled" />
+                            <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(4)" Icon="@_icon" Label="Button5" Disabled="@_disabled" />
                         </RadioButtons>
                     </TnTRadioGroup>
-
 
                     <button type="submit">
                         Submit
@@ -69,7 +70,7 @@
                 </TnTForm>
             </TnTColumn>
 
-            <TnTColumn S="12" M="6">
+            <TnTColumn S="12" L="6">
                 <TnTButton Text="Toggle Disable" OnClick="@(() => _disabled = !_disabled)">
                 </TnTButton>
 
@@ -131,7 +132,7 @@
     }
 
     private ICollection<MyListItem> _listItems = default!;
-    private ICollection<MyRadioItem> _radioItems = default!;
+    private ICollection<int> _radioItems = default!;
 
     private void ToggleIcon() {
         if (string.IsNullOrWhiteSpace(_icon)) {
@@ -161,12 +162,7 @@
                 });
         }
 
-        _radioItems = new List<MyRadioItem>();
-        foreach(var i in Enumerable.Range(1, 5)) {
-            _radioItems.Add(new MyRadioItem() {
-                    Value = $"Item # {i}"
-                });
-        }
+        _radioItems = Enumerable.Range(1, 5).ToList();
     }
 
     class MyModel {
@@ -189,10 +185,8 @@
         [Required]
         public DateOnly? DateValue { get; set; }
         [Required]
-        public MyRadioItem? RadioItem { get; set; }
-
+        public int? RadioItem { get; set; }
     }
-
 
     class MyListItem {
         public string Str;
@@ -200,13 +194,6 @@
 
         public override string ToString() {
             return $"{Str} From To String";
-        }
-    }
-
-    class MyRadioItem {
-        public string Value;
-        public override string ToString() {
-            return $"{Value} From To String";
         }
     }
 

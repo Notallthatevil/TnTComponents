@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using System.Reflection.Metadata;
+using System.Text;
 using TnTComponents.Enum;
 
 namespace TnTComponents.Forms;
@@ -23,8 +25,12 @@ public partial class TnTRadioButton<TInputType> {
 
     [Parameter]
     public TInputType? Value { get; set; }
-    
+
+    private string _id;
+    private bool _trueValueToggle;
+
     protected override void OnParametersSet() {
+        _id = Guid.NewGuid().ToString();
         if (Context is null) {
             throw new InvalidOperationException($"{GetType().Name} must have a parent of {typeof(TnTRadioGroup<TInputType>)}");
         }
@@ -37,6 +43,19 @@ public partial class TnTRadioButton<TInputType> {
     }
 
     protected override string GetCssClass() {
-        return base.GetCssClass() + " tnt-radio-btn";
+        var strBuilder = new StringBuilder(base.GetCssClass());
+        strBuilder.Append(" tnt-radio-btn");
+
+        if (Disabled) {
+            strBuilder.Append(" disabled");
+        }
+
+        return strBuilder.ToString();
     }
+
+    private char GetToggledTrueValue() {
+        _trueValueToggle = !_trueValueToggle;
+        return _trueValueToggle ? 'a' : 'b';
+    }
+
 }

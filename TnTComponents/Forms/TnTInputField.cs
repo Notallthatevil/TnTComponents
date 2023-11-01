@@ -18,7 +18,7 @@ public abstract class TnTInputField<TInputType> : InputBase<TInputType>, ITnTFor
     public virtual string BaseCssClass { get; set; } = ITnTFormField.DefaultBaseCssClass;
 
     [Parameter]
-    public bool Disabled { get; set; }
+    public virtual bool Disabled { get; set; }
 
     [Parameter]
     public FormType FormType { get; set; }

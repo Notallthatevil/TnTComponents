@@ -13,6 +13,7 @@ public enum FlexDirection {
 }
 
 public enum FlexWrap {
+    Unspecified,
     NoWrap,
     Wrap
 }
@@ -58,6 +59,9 @@ internal static class FlexEnumExt {
     }
 
     public static string ToStyle(this FlexWrap flexWrap) {
+        if(flexWrap == FlexWrap.Unspecified) {
+            return string.Empty;
+        }
         return "flex-wrap: " + flexWrap switch {
             FlexWrap.NoWrap => "nowrap;",
             FlexWrap.Wrap => "wrap;",

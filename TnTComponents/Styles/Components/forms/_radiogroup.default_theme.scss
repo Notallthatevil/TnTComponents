@@ -1,8 +1,5 @@
 ﻿.tnt-radio-group[theme=default] {
 
-    &:not(.outlined) {
-    }
-
     i {
         color: $tnt-color-on-surface;
     }
@@ -10,15 +7,47 @@
     .tnt-radio-btn {
         & > .tnt-form-field-label {
             color: $tnt-color-on-surface;
+        }
 
-            &.disabled {
-                color: color.adjust($tnt-color-on-surface, $alpha: -0.6);
+        input[type=radio] {
+            border-color: $tnt-color-outline;
+
+            &:checked {
+                border-color: $tnt-color-primary;
+            }
+
+            &:before {
+                background-color: $tnt-color-primary;
             }
         }
     }
 
     & > .tnt-form-field-label {
         color: $tnt-color-on-primary-container;
+    }
+
+    &.outlined {
+        border-color: $tnt-color-outline;
+
+        & > .tnt-form-field-label {
+            background-color: $tnt-color-surface;
+        }
+    }
+
+    &.filled {
+        background-color: $tnt-color-primary-container;
+
+        i, .tnt-form-field-label {
+            color: $tnt-color-on-primary-container;
+        }
+
+        &:checked {
+            border-color: $tnt-color-on-primary-container;
+        }
+
+        &:before {
+            background-color: $tnt-color-on-primary-container;
+        }
     }
 
     &.disabled {
@@ -28,6 +57,54 @@
 
         & > .tnt-form-field-label {
             color: color.adjust($tnt-color-on-primary-container, $alpha: -0.6);
+        }
+
+        .tnt-radio-btn {
+            & > .tnt-form-field-label {
+                color: color.adjust($tnt-color-on-surface, $alpha: -0.6);
+            }
+
+            input[type=radio] {
+                border-color: getDisableColor($tnt-color-outline);
+
+                &:checked {
+                    border-color: color.adjust($tnt-color-primary, $alpha: -0.6);
+                }
+
+                &:before {
+                    background-color: color.adjust($tnt-color-primary, $alpha: -0.6);
+                }
+            }
+        }
+
+        &.outlined {
+            border-color: color.adjust($tnt-color-outline, $alpha: -0.6);
+        }
+
+        &.filled {
+            background-color: color.adjust($tnt-color-primary-container, $alpha: -0.6);
+
+            i, .tnt-form-field-label {
+                color: color.adjust($tnt-color-on-primary-container, $alpha: -0.6);
+            }
+        }
+    }
+
+    .tnt-radio-btn.disabled {
+        & > .tnt-form-field-label {
+            color: color.adjust($tnt-color-on-surface, $alpha: -0.6);
+        }
+
+        input[type=radio] {
+            border-color: getDisableColor($tnt-color-outline);
+
+            &:checked {
+                border-color: color.adjust($tnt-color-primary, $alpha: -0.6);
+            }
+
+            &:before {
+                background-color: color.adjust($tnt-color-primary, $alpha: -0.6);
+            }
         }
     }
 }

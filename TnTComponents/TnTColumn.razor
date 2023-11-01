@@ -130,18 +130,18 @@
             var sizeClass = sizePair.Key;
             var value = sizePair.Value;
 
-            if(value.Size > 0) {
+            if (value.Size > 0) {
                 strBuilder.Append(' ').Append($"{sizeClass}{value.Size}");
 
-                if(value.Offset > 0) {
+                if (value.Offset > 0) {
                     strBuilder.Append(' ').Append($"{sizeClass}{value.Offset}-offset");
                 }
 
-                if(value.Push > 0) {
+                if (value.Push > 0) {
                     strBuilder.Append(' ').Append($"{sizeClass}{value.Push}-push");
                 }
 
-                if(value.Pull > 0) {
+                if (value.Pull > 0) {
                     strBuilder.Append(' ').Append($"{sizeClass}{value.Pull}-pull");
                 }
             }
@@ -151,7 +151,7 @@
     }
 
     protected override string GetCustomStyle() {
-        var strBuilder = new StringBuilder(FlexWrap.Wrap.ToStyle())
+        var strBuilder = new StringBuilder(FlexWrap.ToStyle())
         .Append(' ').Append(FlexAlignContent.ToStyle())
         .Append(' ').Append(FlexJustifyContent.ToStyle())
         .Append(' ').Append(FlexAlignItems.ToStyle());
@@ -159,7 +159,7 @@
         if (AdditionalAttributes?.TryGetValue("style", out var result) ?? false) {
             strBuilder.Append(' ').Append(result);
         }
-        return strBuilder.ToString();
+        return strBuilder.ToString().Trim();
     }
 
     private ColSize GetColSize(string sizeClass) {

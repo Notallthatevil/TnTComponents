@@ -4,12 +4,14 @@
 
 
 <div theme="@Theme" class="@GetCssClass()">
-    <CascadingValue Value="_radioGroupContext" IsFixed="true" >
-        @RadioButtons
-    </CascadingValue>
-    
-
     <label class="@GetLabelCssClass()" @onclick="SetInputFocus">@Label</label>
+    <div class="tnt-radio-btn-items">
+        <CascadingValue Value="_radioGroupContext" IsFixed="true">
+            @RadioButtons
+        </CascadingValue>
+    </div>
+
+
 </div>
 @if (ShowValidation) {
     <ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />
