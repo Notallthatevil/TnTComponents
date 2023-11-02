@@ -1,0 +1,7 @@
+﻿@using global::TnTComponents.Dialogs
+@implements IDisposable
+@inject TnTDialogService DialogService
+
+@foreach (var dialog in _dialogs) {
+    <TnTDialogContainer Dialog="@dialog" />
+}

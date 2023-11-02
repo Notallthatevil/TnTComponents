@@ -1,8 +1,10 @@
 ﻿@page "/"
 @using System.ComponentModel.DataAnnotations;
-@using TnTComponents.Enum;
-@using TnTComponents.Forms
+@using global::TnTComponents.Services
+@using global::TnTComponents.Forms
+@using global::TnTComponents.Enum
 @rendermode RenderMode.InteractiveAuto
+@inject TnTDialogService DialogService
 
 <TnTLayout Responsive="true">
     <TnTHeader SideBarExpanded="@_sideBarExpanded">
@@ -41,7 +43,7 @@
     </TnTSideBar>
     <TnTBody SideBarExpanded="@_sideBarExpanded">
         <TnTRow>
-            <TnTColumn S="12" L="6" >
+            <TnTColumn S="12" L="6">
 
                 <TnTForm FormType="@_formType" TModelType="MyModel" Model="@_model" OnValidSubmit="@Submit" OnInvalidSubmit="@InvalidSubmit">
                     <DataAnnotationsValidator />
@@ -98,10 +100,17 @@
             @_model.DateValue
             @_model.RadioItem
         </div>
+
+        <TnTButton Text="Click" OnClick="OpenDialog"/>
+
     </TnTBody>
 </TnTLayout>
 
 @code {
+    private void OpenDialog() {
+        DialogService.OpenAsync<Home>("Title").Wait();
+    }
+
     private bool _dark = false;
     private bool _sideBarExpanded = false;
     private MyModel _model = new MyModel();

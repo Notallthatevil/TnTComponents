@@ -1,0 +1,15 @@
+﻿@inherits TnTBaseComponent
+@inject TnTDialogService DialogService;
+
+<div class="@GetCssClass()">
+    @if(Dialog.Options.CloseOnExternalClick) {
+        <TnTExternalClickHandler Callback="Close">
+            @_content
+        </TnTExternalClickHandler>
+    }
+    else {
+        @_content
+    }
+
+</div>
+

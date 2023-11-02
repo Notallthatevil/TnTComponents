@@ -1,0 +1,13 @@
+﻿.tnt-dialog-container {
+
+    .tnt-card {
+
+        & > span {
+
+            i {
+                color: $tnt-color-on-surface-variant;
+                @include colorizeTransparent($tnt-color-surface-variant, $hover:true, $active:true);
+            }
+        }
+    }
+}
