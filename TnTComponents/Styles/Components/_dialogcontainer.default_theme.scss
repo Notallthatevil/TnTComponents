@@ -2,6 +2,10 @@
 
     .tnt-card {
 
+        &.outlined {
+            background-color: $tnt-color-surface;
+        }
+
         & > span {
 
             i {
