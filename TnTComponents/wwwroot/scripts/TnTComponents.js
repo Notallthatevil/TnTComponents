@@ -1,5 +1,12 @@
 ﻿window.TnTComponents = {
     getBoundingRect: (element) => { return element.getBoundingClientRect(); },
+    getOffsetPosition: function (element) {
+        var x = {
+             offsetLeft: element.offsetLeft,
+             offsetTop: element.offsetTop
+        };
+        return x;
+    },
 
     getScrollPosition: (element) => { return element.scrollTop; },
 
@@ -31,6 +38,41 @@
     remToPx: (rem) => { return rem * parseFloat(getComputedStyle(document.documentElement).fontSize); },
 
     scrollElementIntoView: (element) => { element.scrollIntoView(); },
+
+    setBoundingRect: function (element, boundingRect) {
+        if (boundingRect.x != null) {
+            element.style.x = boundingRect.x + "px";
+        }
+
+        if (boundingRect.y) {
+            element.style.y = boundingRect.y + "px";
+        }
+
+        if (boundingRect.width) {
+            element.style.width = boundingRect.width + "px";
+        }
+
+        if (boundingRect.height) {
+            element.style.height = boundingRect.height + "px";
+        }
+
+        if (boundingRect.top) {
+            element.style.top = boundingRect.top + "px";
+        }
+
+        if (boundingRect.right) {
+            element.style.right = boundingRect.right + "px";
+        }
+
+        if (boundingRect.bottom) {
+            element.style.bottom = boundingRect.bottom + "px";
+        }
+
+        if (boundingRect.left) {
+            element.style.left = boundingRect.left + "px";
+        }
+    },
+
 
     setFocus: (element) => { element.focus(); },
 

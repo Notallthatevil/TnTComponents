@@ -101,14 +101,38 @@
             @_model.RadioItem
         </div>
 
-        <TnTButton Text="Click" OnClick="OpenDialog"/>
+        <TnTButton Text="Click" OnClick="OpenDialog" />
+
+        <TnTTabView UseGlider="false">
+            <TnTTabChild TabTitle="One" Icon="search">
+                I am some content 1
+            </TnTTabChild>
+            <TnTTabChild TabTitle="I am a medium title" Icon="close" Disabled="true">
+                I am some content 2
+            </TnTTabChild>
+            <TnTTabChild TabTitle="I am very long tab title that will probably never occur" Icon="phone" Disabled="@_disabled">
+                I am some content 3
+            </TnTTabChild>
+        </TnTTabView>
+
+        <TnTTabView Disabled="@_disabled">
+            <TnTTabChild TabTitle="One" Icon="search">
+                I am some content 1
+            </TnTTabChild>
+            <TnTTabChild TabTitle="I am a medium title" Icon="close" Disabled="true">
+                I am some content 2
+            </TnTTabChild>
+            <TnTTabChild TabTitle="I am very long tab title that will probably never occur" Icon="phone" >
+                I am some content 3
+            </TnTTabChild>
+        </TnTTabView>
 
     </TnTBody>
 </TnTLayout>
 
 @code {
     private void OpenDialog() {
-        DialogService.OpenAsync<Home>("Title").Wait();
+        DialogService.OpenAsync<Counter>("Title").Wait();
     }
 
     private bool _dark = false;

@@ -57,18 +57,20 @@ public abstract class TnTInputField<TInputType> : InputBase<TInputType>, ITnTFor
 
     //protected abstract void OnChange(ChangeEventArgs e);
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
     protected virtual async Task OnFocusInAsync(FocusEventArgs e) {
         Active = true;
     }
     protected virtual async Task OnFocusOutAsync(FocusEventArgs e) {
         Active = false;
     }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
     protected virtual string GetCssClass() {
         var strBuilder = new StringBuilder(BaseCssClass)
             .Append(' ').Append(CssClass);
 
-        if (Active) {
+        if (Active && !Disabled) {
             strBuilder.Append(' ').Append("active");
         }
 

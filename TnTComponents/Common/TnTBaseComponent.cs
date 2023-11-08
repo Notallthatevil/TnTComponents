@@ -14,17 +14,32 @@ namespace TnTComponents.Common {
         [Parameter]
         public virtual string Theme { get; set; } = "default";
 
+        [Parameter]
+        public virtual bool Disabled { get; set; } = false;
+
+        [Parameter]
+        public bool Active { get; set; } = false;
+
         [Parameter(CaptureUnmatchedValues = true)]
         public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
 
         protected virtual string GetCssClass() {
-            var classResult = BaseCssClass;
+            var strBuilder = new StringBuilder(BaseCssClass);
 
             if (AdditionalAttributes?.TryGetValue("class", out var result) ?? false) {
-                return classResult + " " + string.Join(' ', result);
+                strBuilder.Append(' ').Append(string.Join(' ', result));
             }
-            return classResult;
+
+            if(Disabled) {
+                strBuilder.Append(' ').Append("disabled");
+            }
+
+            if(Active && !Disabled) {
+                strBuilder.Append(' ').Append("active");
+            }
+
+            return strBuilder.ToString();
         }
 
         protected virtual string GetCustomStyle() {

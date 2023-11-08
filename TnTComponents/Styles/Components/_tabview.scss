@@ -1,0 +1,61 @@
+﻿.tnt-tab-view {
+    margin: 1rem;
+    position: relative;
+
+    .tnt-tab-view-header-items {
+        position: unset;
+        display: flex;
+        justify-content: center;
+
+        div {
+            padding: 0 1.5rem;
+            @extend .tnt-border-radius-7;
+            @extend .tnt-z-depth-2;
+
+            .tnt-tab-view-header {
+                background-color: transparent;
+                border: none;
+                display: inline;
+                padding: 0.5rem 2rem;
+                z-index: 3;
+                user-select: none;
+                position: relative;
+                transition: 150ms;
+                font-weight: bolder;
+                font-size: 1.1rem;
+                min-width: 5rem;
+
+                i {
+                    vertical-align: middle;
+                }
+            }
+        }
+    }
+
+    &:not(.disabled) .tnt-tab-view-header-items div .tnt-tab-view-header:not(.disabled) {
+        cursor: pointer;
+    }
+
+    &:has(.tnt-glider) .tnt-tab-view-header-items .tnt-tab-view-header {
+        transition-delay: 100ms;
+    }
+
+    &:has(.tnt-glider) .tnt-glider {
+        position: absolute;
+        top: 0;
+        z-index: 2;
+        transition-property: left, width;
+        transition-timing-function: ease-in-out;
+        transition-duration: 150ms;
+        @extend .tnt-border-radius-7;
+    }
+
+    &:not(.tnt-glider) .tnt-glider {
+        position: absolute;
+        z-index: 2;
+        transition-property: left, width;
+        transition-timing-function: ease-in-out;
+        transition-duration: 150ms;
+        @extend .tnt-border-radius-7;
+    }
+}

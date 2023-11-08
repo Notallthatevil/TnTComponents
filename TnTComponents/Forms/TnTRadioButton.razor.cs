@@ -21,12 +21,9 @@ public partial class TnTRadioButton<TInputType> {
     public IconType IconType { get; set; }
 
     [Parameter]
-    public bool Disabled { get; set; }
-
-    [Parameter]
     public TInputType? Value { get; set; }
 
-    private string _id;
+    private string _id = default!;
     private bool _trueValueToggle;
 
     protected override void OnParametersSet() {

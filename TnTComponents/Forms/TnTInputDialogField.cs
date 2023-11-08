@@ -20,7 +20,7 @@ public abstract class TnTInputDialogField<TInputType> : TnTInputField<TInputType
                => throw new NotSupportedException($"This component does not parse string inputs. Bind to the '{nameof(CurrentValue)}' property, not '{nameof(CurrentValueAsString)}'.");
 
     protected override async Task OnFocusInAsync(FocusEventArgs e) {
-        var rect = await JSRuntime.GetElementBoundingRectForComponent(ContainerElementReference);
+        var rect = await JSRuntime.GetElementBoundingRect(ContainerElementReference);
         var windowHeight = await JSRuntime.GetWindowHeight();
         if (rect is not null) {
             var distanceToBottom = windowHeight - rect.Bottom;

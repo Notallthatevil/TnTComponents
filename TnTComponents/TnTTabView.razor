@@ -1,0 +1,24 @@
+﻿@inherits TnTBaseComponent
+
+<div class="@GetCssClass()" theme="@Theme">
+    <CascadingValue Value="_tabViewContext" IsFixed="true">
+        <div class="tnt-tab-view-header-items">
+            <div>
+                @for (var i = 0; i < _tabViewContext.TabChildren.Count; ++i) {
+                    var tabView = _tabViewContext.TabChildren[i];
+                    var disabled = tabView.Disabled ? " disabled" : string.Empty;
+                    var active = _tabViewContext.ActiveTab == tabView ? " active" : string.Empty;
+
+                    <button class="tnt-tab-view-header @active @disabled" type="button" @onclick="@(() => _tabViewContext.SetActiveTab(tabView))" @ref="@tabView.TabReference">
+                        @tabView.GetIcon()
+                        @tabView.TabTitle
+                    </button>
+                }
+            </div>
+        </div>
+        @ChildContent
+    </CascadingValue>
+    @if (!Disabled) {
+        <span class="tnt-glider" @ref="@_gliderRef"></span>
+    }
+</div>
