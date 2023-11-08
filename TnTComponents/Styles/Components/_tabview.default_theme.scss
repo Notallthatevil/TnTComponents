@@ -22,12 +22,8 @@
     }
 
     &:not(.tnt-glider) .tnt-tab-view-header-items .tnt-tab-view-header {
-        &:after {
-            background-color: $tnt-color-on-primary-container;
-        }
-
         &.active {
-            color: $tnt-color-on-primary-container;
+            color: $tnt-color-primary;
         }
     }
 
