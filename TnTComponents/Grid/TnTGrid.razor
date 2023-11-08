@@ -1,3 +1,16 @@
-﻿@inherits TnTBaseComponent
+﻿@using global::TnTComponents.Infrastructure
+@inherits TnTBaseComponent
 @typeparam TGridItem
+@implements ITnTGrid
 
+<CascadingValue Value="_gridContext" IsFixed="true">
+    <table class="@GetCssClass()" theme="@Theme">
+        <thead>
+            @foreach (var col in _gridContext.Columns) {
+            <th class="@GetColumnHeaderClass(col)">
+                <div class="tnt-column-header-content">@col.HeaderContent</div>
+            </th>
+            }
+        </thead>
+    </table>
+</CascadingValue>
