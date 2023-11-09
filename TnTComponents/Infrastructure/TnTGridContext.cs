@@ -1,19 +1,21 @@
-﻿namespace TnTComponents.Infrastructure;
-internal class TnTGridContext(ITnTGrid tntGrid) {
+﻿using TnTComponents.Grid;
 
-    internal ITnTGrid Grid { get; } = tntGrid;
+namespace TnTComponents.Infrastructure;
+internal class TnTGridContext<TGridItem>(TnTGrid<TGridItem> tntGrid) {
 
-    internal IEnumerable<ITnTGridColumn> Columns => _columns;
+    internal TnTGrid<TGridItem> Grid { get; } = tntGrid;
 
-    private List<ITnTGridColumn> _columns = [];
+    internal IEnumerable<TnTColumnBase<TGridItem>> Columns => _columns;
+
+    private List<TnTColumnBase<TGridItem>> _columns = [];
 
 
-    public void AddColumn(ITnTGridColumn column) {
+    public void AddColumn(TnTColumnBase<TGridItem> column) {
         _columns.Add(column);
         Grid.Refresh();
     }
 
-    public void RemoveColumn(ITnTGridColumn column) {
+    public void RemoveColumn(TnTColumnBase<TGridItem> column) {
         _columns.Remove(column);
         Grid.Refresh();
     }

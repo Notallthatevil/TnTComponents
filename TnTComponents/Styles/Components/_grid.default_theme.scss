@@ -1,0 +1,21 @@
+﻿.tnt-grid {
+    border: 1px solid $tnt-color-outline;
+
+    thead tr th {
+        background-color: $tnt-color-surface-variant;
+    }
+
+    tbody tr:not(:last-child) td {
+        border-bottom: 1px solid $tnt-color-outline;
+    }
+
+    thead .tnt-grid-column-index-header, thead .tnt-grid-column-header {
+        .tnt-grid-resizer {
+            border-right: 2px solid $tnt-color-secondary;
+        }
+    }
+
+    td, th {
+        color: $tnt-color-on-surface;
+    }
+}

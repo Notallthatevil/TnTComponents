@@ -1,5 +1,21 @@
-﻿@using global::TnTComponents.Infrastructure
+﻿@using Microsoft.AspNetCore.Components.Rendering
+@using global::TnTComponents.Infrastructure
 @inherits TnTIconComponent
-@implements ITnTGridColumn
 @implements IDisposable
 @typeparam TGridItem
+
+
+@code {
+    private void RenderHeaderContent(RenderTreeBuilder __builder) {
+        @if (HeaderTemplate is not null) {
+            @HeaderTemplate(this)
+        }
+        else {
+            <div class="tnt-column-title">
+                <span class="tnt-column-title-text">
+                    @Title
+                </span>
+            </div>
+        }
+    }
+}

@@ -1,0 +1,67 @@
+﻿.tnt-grid {
+    border-collapse: separate;
+    table-layout: fixed;
+    overflow-x: scroll;
+    @extend .tnt-border-radius-4;
+
+    thead .tnt-grid-column-index-header, thead .tnt-grid-column-header {
+        position: relative;
+        padding: 1rem 0.5rem 1rem 0.5rem;
+
+        &:first-child {
+            @extend .tnt-border-radius-4;
+            border-start-end-radius: 0;
+            border-end-start-radius: 0;
+            border-end-end-radius: 0;
+        }
+
+        &:last-child {
+            @extend .tnt-border-radius-4;
+            border-start-start-radius: 0;
+            border-end-start-radius: 0;
+            border-end-end-radius: 0;
+        }
+
+        .tnt-grid-resizer {
+            position: absolute;
+            top: 0;
+            right: -1px;
+            width: 0.2rem;
+            cursor: col-resize;
+            user-select: none;
+            opacity: 0;
+            transition: opacity linear 150ms;
+
+            &:hover, &.tnt-grid-resizing {
+                opacity: 1;
+            }
+        }
+    }
+
+    tbody > tr:last-child .tnt-grid-index-column-content:first-child, tbody > tr:last-child .tnt-grid-column-content:first-child {
+        @extend .tnt-border-radius-4;
+        border-start-start-radius: 0;
+        border-start-end-radius: 0;
+        border-end-end-radius: 0;
+    }
+
+    tbody > tr:last-child .tnt-grid-index-column-content:last-child, tbody > tr:last-child .tnt-grid-column-content:last-child {
+        @extend .tnt-border-radius-4;
+        border-start-start-radius: 0;
+        border-start-end-radius: 0;
+        border-end-start-radius: 0;
+    }
+
+    tbody tr td.tnt-grid-column-content, tbody tr td.tnt-grid-index-column-content {
+        overflow-x: clip;
+        text-overflow: ellipsis;
+    }
+
+    tbody tr td.tnt-grid-column-content {
+        padding: 1rem;
+    }
+
+    tbody tr td.tnt-grid-index-column-content {
+        text-align: right;
+    }
+}

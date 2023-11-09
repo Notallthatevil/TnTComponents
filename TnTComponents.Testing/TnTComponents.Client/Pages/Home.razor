@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using System.ComponentModel.DataAnnotations;
+@using global::TnTComponents.Grid
 @using global::TnTComponents.Services
 @using global::TnTComponents.Forms
 @using global::TnTComponents.Enum
@@ -111,7 +112,25 @@
                 I am some content 2
             </TnTTabChild>
             <TnTTabChild TabTitle="I am very long tab title that will probably never occur" Icon="phone" Disabled="@_disabled">
-                I am some content 3
+                <TnTGrid Items="@_people" IncludeIndexColumn="true" Resizable="true">
+                    <TnTPropertyColumn Property="@(item => item.One)">
+                        <HeaderTemplate>
+                            This is my header
+                        </HeaderTemplate>
+                    </TnTPropertyColumn>
+                    <TnTPropertyColumn Property="@(item => item.Two)" />
+                    <TnTPropertyColumn Property="@(item => item.Three)" />
+                    <TnTPropertyColumn Property="@(item => item.Four)" />
+                    <TnTPropertyColumn Property="@(item => item.FiveFive)" />
+                    <TnTPropertyColumn Property="@(item => item.SixSix)" />
+                    <TnTPropertyColumn Property="@(item => item.SevenSeven)" />
+                    <TnTPropertyColumn Property="@(item => item.EightEight)" />
+                    <TnTPropertyColumn Property="@(item => item.NINENINE)" Format="MM-dd-yyyy" />
+                    <TnTPropertyColumn Property="@(item => item.Ten)" />
+                    <TnTPropertyColumn Property="@(item => item.Eleven)" />
+                    <TnTPropertyColumn Property="@(item => item.Twelve)" />
+                </TnTGrid>
+
             </TnTTabChild>
         </TnTTabView>
 
@@ -122,7 +141,7 @@
             <TnTTabChild TabTitle="I am a medium title" Icon="close" Disabled="true">
                 I am some content 2
             </TnTTabChild>
-            <TnTTabChild TabTitle="I am very long tab title that will probably never occur" Icon="phone" >
+            <TnTTabChild TabTitle="I am very long tab title that will probably never occur" Icon="phone">
                 I am some content 3
             </TnTTabChild>
         </TnTTabView>
@@ -167,6 +186,21 @@
     private ICollection<MyListItem> _listItems = default!;
     private ICollection<int> _radioItems = default!;
 
+    record Person(int One,
+        int Two,
+        int Three,
+        string Four,
+        string FiveFive,
+        string SixSix,
+        DateOnly SevenSeven,
+        DateOnly EightEight,
+        DateOnly NINENINE,
+        bool Ten,
+        bool Eleven,
+        bool Twelve);
+
+    private IEnumerable<Person> _people = default!;
+
     private void ToggleIcon() {
         if (string.IsNullOrWhiteSpace(_icon)) {
             _icon = "search";
@@ -195,7 +229,31 @@
                 });
         }
 
+        var people = new List<Person>();
+        foreach (var i in Enumerable.Range(1, 250)) {
+            people.Add(new Person(
+                Random.Shared.Next(int.MinValue, int.MaxValue),
+                Random.Shared.Next(int.MinValue, int.MaxValue),
+                Random.Shared.Next(int.MinValue, int.MaxValue),
+                Guid.NewGuid().ToString(),
+                Guid.NewGuid().ToString(),
+                Guid.NewGuid().ToString(),
+                RandomDate(),
+                RandomDate(),
+                RandomDate(),
+                Random.Shared.Next(0, 2) == 1,
+                Random.Shared.Next(0, 2) == 1,
+                Random.Shared.Next(0, 2) == 1
+            ));
+        }
+
+        _people = people;
         _radioItems = Enumerable.Range(1, 5).ToList();
+    }
+
+    private static int _range = (DateTime.MaxValue - DateTime.MinValue).Days;
+    private static DateOnly RandomDate() {
+        return DateOnly.FromDateTime(DateTime.MinValue.AddDays(Random.Shared.Next(_range)));
     }
 
     class MyModel {
