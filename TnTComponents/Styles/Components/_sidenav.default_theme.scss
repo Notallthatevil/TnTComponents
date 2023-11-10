@@ -1,16 +1,25 @@
-﻿.tnt-sidebar[theme=default] {
-    background-color: $tnt-color-surface-variant;
+﻿@use "sass:color";
+
+.tnt-sidebar[theme=default] {
+    background-color: $tnt-color-surface;
 
 
     li {
-        background-color: colorizeTransparent($tnt-color-surface-variant, true, true);
 
         > a {
-            color: $tnt-color-on-surface-variant;
+            color: $tnt-color-on-surface;
+        }
+
+        &:hover, &:has(a.active) {
+            background-color: color.adjust($tnt-color-secondary-container, $alpha: -0.5);
+
+            > a {
+                color: $tnt-color-on-secondary-container;
+            }
         }
     }
 }
 
 .tnt-sidebar-button[theme=default] {
-    color: $tnt-color-on-primary;
+    color: $tnt-color-on-surface;
 }

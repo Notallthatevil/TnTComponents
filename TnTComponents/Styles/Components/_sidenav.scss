@@ -6,15 +6,15 @@
     position: fixed;
     left: 0;
     top: 0;
-    margin: 0;
+    margin: 0.2rem 0 0.2rem 0;
     width: 250px;
-    height: 100%;
+    height: calc(100% - 0.4rem);
     z-index: 999;
     overflow-y: auto;
     will-change: transform;
     backface-visibility: hidden;
     transform: translateX(-105%);
-    border-radius: 1rem;
+    border-radius: 16px;
     @extend .tnt-z-depth-2;
     @extend .tnt-sidebar-transition;
 
@@ -25,8 +25,10 @@
     li {
         float: none;
         list-style-type: none;
-        line-height: 3rem;
+        line-height: 16px;
         vertical-align: middle;
+        margin: 0 12px;
+        @extend .tnt-border-radius-9;
 
         &:hover {
             background-color: rgba(0,0,0,.05);
@@ -44,14 +46,13 @@
             font-size: 1.1rem;
             height: 3.25rem;
             line-height: 3.25rem;
-            padding: 0 (1.2rem * 2);
+            margin:0 24px;
 
             > i,
             > i.material-icons {
                 float: left;
                 padding-right: 1rem;
                 line-height: 3.25rem;
-                margin: 0 (1.2rem * 2) 0 0;
             }
 
             > i.material-icons {
@@ -62,13 +63,13 @@
 
     @media #{$medium-and-up} {
         position: fixed;
-        transform: translateX(-5%);
+        transform: translateX(5%);
     }
 
     @media #{$small-and-down} {
         &.expanded {
             position: fixed;
-            transform: translateX(-5%);
+            transform: translateX(5%);
         }
     }
 }
