@@ -1,12 +1,10 @@
 ﻿.tnt-dialog-container[theme=default] {
 
     .tnt-card {
-
-        &.outlined {
-            background-color: $tnt-color-surface;
-        }
+        background-color: $tnt-color-surface-variant;
 
         & > span {
+            color: $tnt-color-on-surface-variant;
 
             i {
                 color: $tnt-color-on-surface-variant;
