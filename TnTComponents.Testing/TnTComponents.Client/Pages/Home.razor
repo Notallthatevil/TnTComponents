@@ -93,9 +93,17 @@
         </TnTRow>
 
         <div>
-            @_model.Name
-            @_model.Password
-            @_model.Number
+            <TnTCard CardType="CardType.Elevated">
+                @_model.Name
+            </TnTCard>
+
+            <TnTCard CardType="CardType.Filled">
+                @_model.Password
+            </TnTCard>
+
+            <TnTCard CardType="CardType.Outlined">
+                @_model.Number
+            </TnTCard>
             @_model.CheckBox
             @_model.Switch
             @_model.DropDownItem

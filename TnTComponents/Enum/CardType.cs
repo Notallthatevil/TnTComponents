@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace TnTComponents.Enum {
     public enum CardType {
-        Default,
-        Filled = Default,
-        Flat,
-        Plain,
+        Elevated,
+        Filled,
         Outlined
     }
 }

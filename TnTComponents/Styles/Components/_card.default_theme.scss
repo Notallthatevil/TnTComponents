@@ -1,7 +1,9 @@
 ﻿.tnt-card[theme=default] {
-    background-color: $tnt-color-surface-variant;
+    &.elevated {
+        background-color: $tnt-color-surface-container-low;
+    }
 
-    &.flat {
+    &.filled {
         background-color: $tnt-color-surface-variant;
     }
 

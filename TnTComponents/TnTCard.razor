@@ -4,37 +4,3 @@
     @ChildContent
 </div>
 
-@code {
-    [Parameter]
-    public RenderFragment ChildContent { get; set; } = default!;
-
-
-    [Parameter]
-    public CardType CardType { get; set; }
-
-    [Parameter]
-    public override string BaseCssClass { get; set; } = "tnt-card";
-
-
-    protected override string GetCssClass() {
-        return $"{base.GetCssClass()} {GetCardType()}";
-    }
-
-    private string GetCardType() {
-        switch (CardType) {
-            default:
-            case CardType.Filled:
-                return string.Empty;
-
-            case CardType.Flat:
-                return "flat";
-
-            case CardType.Plain:
-                return "plain";
-
-            case CardType.Outlined:
-                return "outlined";
-        }
-    }
-
-}
