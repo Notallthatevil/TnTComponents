@@ -63,7 +63,8 @@
 
     @media #{$medium-and-up} {
         position: fixed;
-        transform: translateX(5%);
+        transform: translateX(-5%);
+        padding-left: 0.1rem;
     }
 
     @media #{$small-and-down} {

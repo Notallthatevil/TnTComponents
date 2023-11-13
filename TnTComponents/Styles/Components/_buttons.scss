@@ -1,15 +1,32 @@
 ﻿.tnt-btn {
-    border: none;
-    min-width: 2.5rem;
-    border-radius: 2rem;
-    font-weight: 700;
-    font-size: 1rem;
-    padding: 0.5rem 1.5rem;
-    line-height: 1.25rem;
-    cursor: pointer;
-    transition: background-color 100ms ease-out;
-    margin: 0.25rem;
-    @extend .tnt-z-depth-1;
+    @extend .tnt-border-radius-9;
+    padding: 0 16px;
+    min-height: 40px;
+    font-weight: bolder;
+    margin: 0.5rem;
+    line-height: 24px;
+    font-size: 14px;
+
+    &:not(.disabled) {
+        cursor: pointer;
+    }
+
+    &:not(.outlined):not(.filled):not(.flat) {
+        @extend .tnt-z-depth-1;
+    }
+
+    &:not(.outlined) {
+        border: none;
+    }
+
+    &.outlined {
+        border-style: solid;
+        border-width: 1px;
+    }
+
+    &.flat, &.outlined {
+        background-color: transparent;
+    }
 
     span {
         vertical-align: middle;
@@ -22,31 +39,29 @@
         vertical-align: bottom;
         margin-right: 0.3rem;
     }
-
-    &:hover {
-        @extend .tnt-z-depth-2;
-    }
-
-    &.flat {
-        @extend .tnt-z-depth-0;
-
-        &:hover {
-            @extend .tnt-z-depth-1;
-        }
-    }
-
-    &.filled {
-        @extend .tnt-z-depth-0;
-
-        &:hover {
-            @extend .tnt-z-depth-1;
-        }
-    }
-
-    &.outlined {
-        outline-style: solid;
-        outline-width: 1px;
-        padding: 0.45rem 1.45rem;
-        @extend .tnt-z-depth-0;
-    }
+    //&:hover {
+    //    @extend .tnt-z-depth-2;
+    //}
+    //
+    //&.flat {
+    //    @extend .tnt-z-depth-0;
+    //
+    //    &:hover {
+    //        @extend .tnt-z-depth-1;
+    //    }
+    //}
+    //
+    //&.filled {
+    //    @extend .tnt-z-depth-0;
+    //
+    //    &:hover {
+    //        @extend .tnt-z-depth-1;
+    //    }
+    //}
+    //&.outlined {
+    //    outline-style: solid;
+    //    outline-width: 1px;
+    //    padding: 0.45rem 1.45rem;
+    //    @extend .tnt-z-depth-0;
+    //}
 }

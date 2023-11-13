@@ -74,16 +74,17 @@
             </TnTColumn>
 
             <TnTColumn S="12" L="6">
-                <TnTButton Text="Toggle Disable" OnClick="@(() => _disabled = !_disabled)">
+                <div>
+                    <TnTButton ButtonType="ButtonType.Default" Text="Toggle Disable" OnClick="@(() => _disabled = !_disabled)">
+                    </TnTButton>
+                </div>
+                <TnTButton ButtonType="ButtonType.Outlined" Text="Toggle Form Type" OnClick="@(() => RotateFormType())" Disabled="@_disabled">
+
+                </TnTButton>
+                <TnTButton ButtonType="ButtonType.Filled" Text="Toggle Icon" OnClick="@(() => ToggleIcon())">
                 </TnTButton>
 
-                <TnTButton Text="Toggle Form Type" OnClick="@(() => RotateFormType())">
-
-                </TnTButton>
-                <TnTButton Text="Toggle Icon" OnClick="@(() => ToggleIcon())">
-                </TnTButton>
-
-                <TnTButton Text="Toggle Placeholder" OnClick="@(() => TogglePlaceholder())">
+                <TnTButton ButtonType="ButtonType.Flat" Text="Toggle Placeholder" OnClick="@(() => TogglePlaceholder())">
                 </TnTButton>
 
                 <TnTButton Text="Toggle AllowClear" OnClick="@(() => _allowClear = !_allowClear)">
