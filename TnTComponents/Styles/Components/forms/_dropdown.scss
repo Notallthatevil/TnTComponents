@@ -30,7 +30,7 @@
         z-index: 10000;
         padding: 0;
         visibility: hidden;
-        transition: 150ms;
+        transition: max-height linear 150ms;
         @extend .tnt-z-depth-3;
         @extend .tnt-border-radius-2;
 

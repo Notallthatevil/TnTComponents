@@ -16,20 +16,17 @@
         }
     }
 
-
-
     .tnt-date-time-picker {
         width: 20rem;
         position: absolute;
         z-index: 10000;
         opacity: 0;
         visibility: hidden;
-        transition: 150ms;
+        transition: opacity linear 150ms;
         padding: 1rem 0.1rem 1rem 0.1rem;
         cursor: default;
         @extend .tnt-border-radius-2;
         @extend .tnt-z-depth-2;
-
 
         i {
             border-radius: 100%;

@@ -2,13 +2,13 @@
 
 .tnt-form-field[theme=default].date-picker {
     .tnt-date-time-picker {
-        background-color: $tnt-color-primary-container;
+        background-color: $tnt-color-surface-variant;
 
         i {
-            color: $tnt-color-on-primary-container;
+            color: $tnt-color-on-surface-variant;
 
             &.disabled {
-                color: getDisableColor($tnt-color-on-primary-container);
+                color: getDisableColor($tnt-color-on-surface-variant);
 
                 &:hover {
                     background-color: transparent;
@@ -21,12 +21,12 @@
         }
 
         .tnt-input-field-label {
-            background-color: $tnt-color-primary-container;
+            background-color: $tnt-color-on-surface-variant;
         }
 
         .tnt-year-picker.outlined, .tnt-month-picker.outlined {
             .tnt-form-field-label {
-                background-color: $tnt-color-primary-container;
+                background-color: $tnt-color-on-surface-variant;
             }
         }
 
@@ -42,8 +42,8 @@
             tbody {
                 tr {
                     td > div.table-content {
-                        color: $tnt-color-on-primary-container;
-                        @include colorizeTransparent($tnt-color-primary-container, $active:true, $hover:true);
+                        color: $tnt-color-on-surface-variant;
+                        @include colorizeTransparent($tnt-color-surface-variant, $active:true, $hover:true);
 
                         &:not(.disabled) {
                             &.current-date {
@@ -58,7 +58,7 @@
                         }
 
                         &.out-of-month, &.disabled {
-                            color: getDisableColor($tnt-color-on-primary-container);
+                            color: getDisableColor($tnt-color-on-surface-variant);
 
                             &.current-date {
                                 color: getDisableColor($tnt-color-primary);
