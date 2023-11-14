@@ -20,7 +20,7 @@
                 document.removeEventListener('mouseup', mouseUpHandler);
             };
 
-            const mouseDownHandler = function(e) {
+            const mouseDownHandler = function (e) {
                 x = e.clientX;
 
                 const styles = window.getComputedStyle(column);
@@ -111,10 +111,25 @@
         }
     },
 
-
     setFocus: (element) => { element.focus(); },
 
     setScrollPosition: (element, position) => { element.scrollTop = position; },
+
+    sideNavCallbacks: [],
+    sideNavCallback: function (element, sideNavElement) {
+        if (element && sideNavElement) {
+            function expandAdded() {
+                element.classList.add('expand');
+            };
+
+            function expandRemove() {
+                element.classList.remove('expand');
+            }
+
+
+            this.sideNavCallbacks[element.id] = new TnTClassWatcher(sideNavElement, 'expand', expandAdded, expandRemove);
+        }
+    },
 
     WindowClickCallbacks: {},
     WindowClickCallbackRegister: function (element, dotNetObjectRef) {
@@ -139,5 +154,46 @@
             delete this.WindowClickCallbacks[dotNetObjectRef._id];
         }
     }
+}
+class TnTClassWatcher {
+    constructor(targetNode, classToWatch, classAddedCallback, classRemovedCallback) {
+        this.targetNode = targetNode
+        this.classToWatch = classToWatch
+        this.classAddedCallback = classAddedCallback
+        this.classRemovedCallback = classRemovedCallback
+        this.observer = null
+        this.lastClassState = targetNode.classList.contains(this.classToWatch)
 
+        this.init()
+    }
+
+    init() {
+        this.observer = new MutationObserver(this.mutationCallback)
+        this.observe()
+    }
+
+    observe() {
+        this.observer.observe(this.targetNode, { attributes: true })
+    }
+
+    disconnect() {
+        this.observer.disconnect()
+    }
+
+    mutationCallback = mutationsList => {
+        for (let mutation of mutationsList) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                let currentClassState = mutation.target.classList.contains(this.classToWatch)
+                if (this.lastClassState !== currentClassState) {
+                    this.lastClassState = currentClassState
+                    if (currentClassState) {
+                        this.classAddedCallback()
+                    }
+                    else {
+                        this.classRemovedCallback()
+                    }
+                }
+            }
+        }
+    }
 }

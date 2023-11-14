@@ -1,0 +1,26 @@
+﻿
+<CascadingValue IsFixed="true" Value="_context">
+    @if (_context.SideNav is not null) {
+        @_context.SideNav
+    }
+    @if (_context.Header is not null) {
+        @_context.Header
+    }
+
+    @_context.Body
+
+    @ChildContent
+</CascadingValue>
+@*@if (TnTSideNav is not null && TnTHeader is not null) {
+    var functionName = "func_" + Guid.NewGuid().ToString().Replace("-", string.Empty);
+    <script type="text/javascript">
+        
+        function @(functionName!)(headerId, sideNavId) {
+            TnTComponents.sideNavCallback(document.getElementById(headerId), document.getElementById(sideNavId));
+        }
+        window.onload = @(functionName)(
+            "@(_tntHeaderId)",
+            "@(_tntSideNavId)"
+            );
+    </script>
+}*@

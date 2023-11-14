@@ -1,0 +1,18 @@
+﻿@inherits TnTBaseLayoutComponent
+
+<div class="@GetCssClass()" theme="@Theme" id="@Id">
+    @ChildContent
+</div>
+
+@if (Context.SideNav is not null) {
+    var functionName = "func_" + Guid.NewGuid().ToString().Replace("-", string.Empty);
+    <script type="text/javascript">
+        function @(functionName!)(bodyId, sideNavId) {
+            TnTComponents.sideNavCallback(document.getElementById(bodyId), document.getElementById(sideNavId));
+        }
+        window.onload = @(functionName)(
+            "@(Id)",
+            "@(Context.SideNav.Id)"
+        );
+    </script>
+}

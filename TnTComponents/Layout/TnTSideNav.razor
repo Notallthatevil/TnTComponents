@@ -1,0 +1,22 @@
+﻿@using global::TnTComponents.Infrastructure
+
+<div id="@Id" @ref="@Element">
+    @ChildContent
+</div>
+
+@code {
+    public string Id = Guid.NewGuid().ToString();
+
+    [Parameter]
+    public RenderFragment ChildContent{ get; set; }
+
+    [CascadingParameter]
+    internal TnTLayoutContext Context { get; set; }
+
+    public ElementReference Element { get; set; }
+
+    protected override void OnInitialized() {
+        Context.SideNav = this;
+    }
+
+}
