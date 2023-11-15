@@ -1,6 +1,6 @@
 ﻿@inherits TnTIconComponent
 
-<button type="button" class="@GetCssClass()" theme="@Theme" @onclick="ButtonClicked">
+<button class="@GetCssClass()" theme="@Theme" @onclick="ButtonClicked" @attributes="AdditionalAttributes">
     @GetIcon()
     @if (!string.IsNullOrWhiteSpace(Text)) {
         <span>

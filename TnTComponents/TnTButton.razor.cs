@@ -19,6 +19,21 @@ public partial class TnTButton {
     [Parameter]
     public override string BaseCssClass { get; set; } = "tnt-btn";
 
+    protected override void OnInitialized() {
+        if(AdditionalAttributes is null) {
+            AdditionalAttributes = new Dictionary<string, object>() {
+                { "type", "button" }
+            };
+        }
+
+        if(!AdditionalAttributes.ContainsKey("type")) {
+            AdditionalAttributes = new Dictionary<string, object>(AdditionalAttributes) {
+                { "type", "button" }
+            };
+        }
+        base.OnInitialized();
+    }
+
     protected override string GetCssClass() {
         return $"{base.GetCssClass()} {GetButtonType()}";
     }
