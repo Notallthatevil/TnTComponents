@@ -1,0 +1,20 @@
+﻿@inherits LayoutComponentBase
+
+<TnTLayout>
+    <Header>
+        This is my header
+        <TnTSideNavToggle Icon="menu"></TnTSideNavToggle>
+    </Header>
+
+    <SideNav>
+        <TnTSideNavList>
+            <TnTSideNavListItem Icon="home" Label="Home" Href="/" Match="NavLinkMatch.All" />
+            <TnTSideNavListItem Icon="add_circle" Label="Counter" Href="counter" />
+            <TnTSideNavListItem Label="Weather" Href="weather" />
+        </TnTSideNavList>
+    </SideNav>
+
+    <Body>
+        @Body
+    </Body>
+</TnTLayout>
