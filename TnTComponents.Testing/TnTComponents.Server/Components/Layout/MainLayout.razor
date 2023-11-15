@@ -1,6 +1,5 @@
 ﻿@using global::TnTComponents.Layout
 @inherits LayoutComponentBase
-This is before
 <TnTLayout>
     <Header>
         This is my header
@@ -8,7 +7,12 @@ This is before
     </Header>
 
     <SideNav>
-        This is my side nav
+        <TnTSideNavList>
+            <TnTSideNavListItem Href="/" Match="NavLinkMatch.All" Icon="home" Label="Home" >
+                Home has some child content    
+            </TnTSideNavListItem>
+            <TnTSideNavListItem Href="/counter" Match="NavLinkMatch.All"  Label="Counter" />
+        </TnTSideNavList>
     </SideNav>
 
     <Body>
@@ -20,4 +24,3 @@ This is before
     </Footer>
 
 </TnTLayout>
-This is after

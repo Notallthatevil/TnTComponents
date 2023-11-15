@@ -24,7 +24,7 @@ public partial class TnTTabView {
     [Inject]
     private IJSRuntime _jsRuntime { get; set; } = default!;
 
-    protected override string GetCssClass() {
+    public override string GetCssClass() {
         return base.GetCssClass() + (UseGlider ? " tnt-glider" : string.Empty);
     }
 

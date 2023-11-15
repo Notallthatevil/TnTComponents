@@ -2,7 +2,7 @@
     transition: transform ease-in-out 150ms;
 }
 
-.tnt-sidebar {
+.tnt-side-nav {
     position: fixed;
     left: 0;
     top: 0;
@@ -18,48 +18,53 @@
     @extend .tnt-z-depth-2;
     @extend .tnt-sidebar-transition;
 
-    ul {
+    .tnt-side-nav-list {
         padding: 0;
-    }
 
-    li {
-        float: none;
-        list-style-type: none;
-        line-height: 16px;
-        vertical-align: middle;
-        margin: 0 12px;
-        @extend .tnt-border-radius-9;
+        .tnt-side-nav-list-item {
+            float: none;
+            list-style-type: none;
+            line-height: 16px;
+            vertical-align: middle;
+            margin: 0 12px;
+            @extend .tnt-border-radius-9;
 
-        &:hover {
-            background-color: rgba(0,0,0,.05);
-        }
+            &:hover {
+                background-color: rgba(0,0,0,.05);
+            }
 
-        &:active {
-            background-color: rgba(0,0,0,.05);
-        }
+            &:active {
+                background-color: rgba(0,0,0,.05);
+            }
 
-        > a {
-            display: block;
-            font-weight: bold;
-            text-decoration: none;
-            vertical-align: top;
-            font-size: 1.1rem;
-            height: 3.25rem;
-            line-height: 3.25rem;
-            margin:0 24px;
-
-            > i,
-            > i.material-icons {
-                float: left;
-                padding-right: 1rem;
+            > a {
+                display: block;
+                font-weight: bold;
+                text-decoration: none;
+                vertical-align: top;
+                font-size: 1.1rem;
+                height: 3.25rem;
                 line-height: 3.25rem;
-            }
+                margin: 8px 24px;
 
-            > i.material-icons {
-                vertical-align: middle;
+                > i,
+                > i.material-icons {
+                    float: left;
+                    padding-right: 1rem;
+                    line-height: 3.25rem;
+                }
+
+                > i.material-icons {
+                    vertical-align: middle;
+                }
+
+                &:not(:has(i)) {
+                    margin-left: 65px;
+                }
             }
         }
     }
+
 
     @media #{$medium-and-up} {
         position: fixed;
@@ -68,7 +73,7 @@
     }
 
     @media #{$small-and-down} {
-        &.expanded {
+        &.expand {
             position: fixed;
             transform: translateX(5%);
         }

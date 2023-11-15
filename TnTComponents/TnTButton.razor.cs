@@ -34,7 +34,7 @@ public partial class TnTButton {
         base.OnInitialized();
     }
 
-    protected override string GetCssClass() {
+    public override string GetCssClass() {
         return $"{base.GetCssClass()} {GetButtonType()}";
     }
 

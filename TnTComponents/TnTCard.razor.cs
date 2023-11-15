@@ -14,7 +14,7 @@ public partial class TnTCard {
     public override string BaseCssClass { get; set; } = "tnt-card";
 
 
-    protected override string GetCssClass() {
+    public override string GetCssClass() {
         return $"{base.GetCssClass()} {CardType switch {
             CardType.Filled => "filled",
             CardType.Elevated => "elevated",

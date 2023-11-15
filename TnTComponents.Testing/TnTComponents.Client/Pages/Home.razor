@@ -1,4 +1,5 @@
-﻿@using System.ComponentModel.DataAnnotations;
+﻿@page "/"
+@using System.ComponentModel.DataAnnotations;
 @using global::TnTComponents.Grid
 @using global::TnTComponents.Services
 @using global::TnTComponents.Forms
@@ -6,156 +7,118 @@
 @rendermode RenderMode.InteractiveAuto
 @inject TnTDialogService DialogService
 
-<TnTLayout Responsive="true">
-    <TnTHeader SideBarExpanded="@_sideBarExpanded">
-        <TnTSideBarToggle Click="@(()=> _sideBarExpanded = !_sideBarExpanded)">
 
-        </TnTSideBarToggle>
-        <h1>
-            My Title
-        </h1>
-        <button @onclick="@(()=>_dark = !_dark)">Toggle</button>
-        <h1>
-            123
-        </h1>
-        <h1>
-            456
-        </h1>
-        <h1>
-            789
-        </h1>
-        <h1>
-            123123123
-        </h1>
-    </TnTHeader>
-    <TnTSideBar Expanded="@_sideBarExpanded">
-        <TnTSideBarList>
-            <TnTSideBarListItem Icon="search" Href="/link">
-                Search
-            </TnTSideBarListItem>
-            <TnTSideBarListItem Icon="home">
-                Home
-            </TnTSideBarListItem>
-            <TnTSideBarListItem Href="/asdf">
-                Value
-            </TnTSideBarListItem>
-        </TnTSideBarList>
-    </TnTSideBar>
-    <TnTBody SideBarExpanded="@_sideBarExpanded">
-        <TnTRow>
-            <TnTColumn S="12" L="6">
+<TnTRow>
+    <TnTColumn S="12" L="6">
 
-                <TnTForm FormType="@_formType" TModelType="MyModel" Model="@_model" OnValidSubmit="@Submit" OnInvalidSubmit="@InvalidSubmit">
-                    <DataAnnotationsValidator />
-                    <TnTTextBox Icon="@_icon" @bind-Value="_model.Name" Label="My Label" Placeholder="@_placeholder" Disabled="@_disabled" />
-                    <TnTPasswordBox Icon="@_icon" @bind-Value="_model.Password" Label="Password" Placeholder="@_placeholder" Disabled="@_disabled" AllowPasswordReveal="true" />
-                    <TnTNumeric Icon="@_icon" @bind-Value="_model.Number" Label="Number" Placeholder="@_placeholder" Disabled="@_disabled" />
-                    <TnTCheckbox Icon="@_icon" @bind-Value="_model.CheckBox" Label="Checkbox" Placeholder="@_placeholder" Disabled="@_disabled" />
-                    <TnTCheckbox Icon="@_icon" @bind-Value="_model.CheckBox" Label="CheckboxWithLongLabel" Placeholder="@_placeholder" Disabled="@_disabled" />
-                    <TnTSwitch Icon="@_icon" @bind-Value="_model.Switch" Label="Switch" Placeholder="@_placeholder" Disabled="@_disabled" />
-                    <TnTSwitch Icon="@_icon" @bind-Value="_model.Switch" Label="SwitchWithLongLabel" Placeholder="@_placeholder" Disabled="@_disabled" />
-                    <TnTDropDown Icon="@_icon" ListItems="@_listItems" @bind-Value="_model.DropDownItem" Label="DropDownItem" Placeholder="@_placeholder" Disabled="@_disabled" AllowClear="@_allowClear" />
-                    <TnTDatePicker Icon="@_icon" @bind-Value="_model.DateValue" Label="DatePicker" Placeholder="@_placeholder" Disabled="@_disabled" AllowClear="@_allowClear" />
-                    <TnTRadioGroup Icon="@_icon" @bind-Value="_model.RadioItem" Label="RadioButtons" Disabled="@_disabled" AllowClear="@_allowClear">
-                        <RadioButtons>
-                            <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(0)" Icon="@_icon" Label="Button1" Disabled="true" />
-                            <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(1)" Icon="@_icon" Label="Button2" Disabled="false" />
-                            <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(2)" Icon="@_icon" Label="Button3ReallyReallyReallyLongLabel" Disabled="@_disabled" />
-                            <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(3)" Icon="@_icon" Label="Button4" Disabled="@_disabled" />
-                            <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(4)" Icon="@_icon" Label="Button5" Disabled="@_disabled" />
-                        </RadioButtons>
-                    </TnTRadioGroup>
+        <TnTForm FormType="@_formType" TModelType="MyModel" Model="@_model" OnValidSubmit="@Submit" OnInvalidSubmit="@InvalidSubmit">
+            <DataAnnotationsValidator />
+            <TnTTextBox Icon="@_icon" @bind-Value="_model.Name" Label="My Label" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTPasswordBox Icon="@_icon" @bind-Value="_model.Password" Label="Password" Placeholder="@_placeholder" Disabled="@_disabled" AllowPasswordReveal="true" />
+            <TnTNumeric Icon="@_icon" @bind-Value="_model.Number" Label="Number" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTCheckbox Icon="@_icon" @bind-Value="_model.CheckBox" Label="Checkbox" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTCheckbox Icon="@_icon" @bind-Value="_model.CheckBox" Label="CheckboxWithLongLabel" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTSwitch Icon="@_icon" @bind-Value="_model.Switch" Label="Switch" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTSwitch Icon="@_icon" @bind-Value="_model.Switch" Label="SwitchWithLongLabel" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTDropDown Icon="@_icon" ListItems="@_listItems" @bind-Value="_model.DropDownItem" Label="DropDownItem" Placeholder="@_placeholder" Disabled="@_disabled" AllowClear="@_allowClear" />
+            <TnTDatePicker Icon="@_icon" @bind-Value="_model.DateValue" Label="DatePicker" Placeholder="@_placeholder" Disabled="@_disabled" AllowClear="@_allowClear" />
+            <TnTRadioGroup Icon="@_icon" @bind-Value="_model.RadioItem" Label="RadioButtons" Disabled="@_disabled" AllowClear="@_allowClear">
+                <RadioButtons>
+                    <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(0)" Icon="@_icon" Label="Button1" Disabled="true" />
+                    <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(1)" Icon="@_icon" Label="Button2" Disabled="false" />
+                    <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(2)" Icon="@_icon" Label="Button3ReallyReallyReallyLongLabel" Disabled="@_disabled" />
+                    <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(3)" Icon="@_icon" Label="Button4" Disabled="@_disabled" />
+                    <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(4)" Icon="@_icon" Label="Button5" Disabled="@_disabled" />
+                </RadioButtons>
+            </TnTRadioGroup>
 
-                    <button type="submit">
-                        Submit
-                    </button>
-                </TnTForm>
-            </TnTColumn>
+            <button type="submit">
+                Submit
+            </button>
+        </TnTForm>
+    </TnTColumn>
 
-            <TnTColumn S="12" L="6">
-                <div>
-                    <TnTButton ButtonType="ButtonType.Default" Text="Toggle Disable" OnClick="@(() => _disabled = !_disabled)">
-                    </TnTButton>
-                </div>
-                <TnTButton ButtonType="ButtonType.Outlined" Text="Toggle Form Type" OnClick="@(() => RotateFormType())" Disabled="@_disabled">
-
-                </TnTButton>
-                <TnTButton ButtonType="ButtonType.Filled" Text="Toggle Icon" OnClick="@(() => ToggleIcon())">
-                </TnTButton>
-
-                <TnTButton ButtonType="ButtonType.Flat" Text="Toggle Placeholder" OnClick="@(() => TogglePlaceholder())">
-                </TnTButton>
-
-                <TnTButton Text="Toggle AllowClear" OnClick="@(() => _allowClear = !_allowClear)">
-                </TnTButton>
-            </TnTColumn>
-        </TnTRow>
-
+    <TnTColumn S="12" L="6">
         <div>
-            <TnTCard CardType="CardType.Elevated">
-                @_model.Name
-            </TnTCard>
-
-            <TnTCard CardType="CardType.Filled">
-                @_model.Password
-            </TnTCard>
-
-            <TnTCard CardType="CardType.Outlined">
-                @_model.Number
-            </TnTCard>
-            @_model.CheckBox
-            @_model.Switch
-            @_model.DropDownItem
-            @_model.DateValue
-            @_model.RadioItem
+            <TnTButton ButtonType="ButtonType.Default" Text="Toggle Disable" OnClick="@(() => _disabled = !_disabled)">
+            </TnTButton>
         </div>
+        <TnTButton ButtonType="ButtonType.Outlined" Text="Toggle Form Type" OnClick="@(() => RotateFormType())" Disabled="@_disabled">
 
-        <TnTButton Text="Click" OnClick="OpenDialog" />
+        </TnTButton>
+        <TnTButton ButtonType="ButtonType.Filled" Text="Toggle Icon" OnClick="@(() => ToggleIcon())">
+        </TnTButton>
 
-        <TnTTabView UseGlider="false">
-            <TnTTabChild TabTitle="One" Icon="search">
-                I am some content 1
-            </TnTTabChild>
-            <TnTTabChild TabTitle="I am a medium title" Icon="close" Disabled="true">
-                I am some content 2
-            </TnTTabChild>
-            <TnTTabChild TabTitle="I am very long tab title that will probably never occur" Icon="phone" Disabled="@_disabled">
-                <TnTGrid Items="@_people" IncludeIndexColumn="true" Resizable="true">
-                    <TnTPropertyColumn Property="@(item => item.One)">
-                        <HeaderTemplate>
-                            This is my header
-                        </HeaderTemplate>
-                    </TnTPropertyColumn>
-                    <TnTPropertyColumn Property="@(item => item.Two)" />
-                    <TnTPropertyColumn Property="@(item => item.Three)" />
-                    <TnTPropertyColumn Property="@(item => item.Four)" />
-                    <TnTPropertyColumn Property="@(item => item.FiveFive)" />
-                    <TnTPropertyColumn Property="@(item => item.SixSix)" />
-                    <TnTPropertyColumn Property="@(item => item.SevenSeven)" />
-                    <TnTPropertyColumn Property="@(item => item.EightEight)" />
-                    <TnTPropertyColumn Property="@(item => item.NINENINE)" Format="MM-dd-yyyy" />
-                    <TnTPropertyColumn Property="@(item => item.Ten)" />
-                    <TnTPropertyColumn Property="@(item => item.Eleven)" />
-                    <TnTPropertyColumn Property="@(item => item.Twelve)" />
-                </TnTGrid>
+        <TnTButton ButtonType="ButtonType.Flat" Text="Toggle Placeholder" OnClick="@(() => TogglePlaceholder())">
+        </TnTButton>
 
-            </TnTTabChild>
-        </TnTTabView>
+        <TnTButton Text="Toggle AllowClear" OnClick="@(() => _allowClear = !_allowClear)">
+        </TnTButton>
+    </TnTColumn>
+</TnTRow>
 
-        <TnTTabView Disabled="@_disabled">
-            <TnTTabChild TabTitle="One" Icon="search">
-                I am some content 1
-            </TnTTabChild>
-            <TnTTabChild TabTitle="I am a medium title" Icon="close" Disabled="true">
-                I am some content 2
-            </TnTTabChild>
-            <TnTTabChild TabTitle="I am very long tab title that will probably never occur" Icon="phone">
-                I am some content 3
-            </TnTTabChild>
-        </TnTTabView>
+<div>
+    <TnTCard CardType="CardType.Elevated">
+        @_model.Name
+    </TnTCard>
 
-    </TnTBody>
-</TnTLayout>
+    <TnTCard CardType="CardType.Filled">
+        @_model.Password
+    </TnTCard>
+
+    <TnTCard CardType="CardType.Outlined">
+        @_model.Number
+    </TnTCard>
+    @_model.CheckBox
+    @_model.Switch
+    @_model.DropDownItem
+    @_model.DateValue
+    @_model.RadioItem
+</div>
+
+<TnTButton Text="Click" OnClick="OpenDialog" />
+
+<TnTTabView UseGlider="false">
+    <TnTTabChild TabTitle="One" Icon="search">
+        I am some content 1
+    </TnTTabChild>
+    <TnTTabChild TabTitle="I am a medium title" Icon="close" Disabled="true">
+        I am some content 2
+    </TnTTabChild>
+    <TnTTabChild TabTitle="I am very long tab title that will probably never occur" Icon="phone" Disabled="@_disabled">
+        <TnTGrid Items="@_people" IncludeIndexColumn="true" Resizable="true">
+            <TnTPropertyColumn Property="@(item => item.One)">
+                <HeaderTemplate>
+                    This is my header
+                </HeaderTemplate>
+            </TnTPropertyColumn>
+            <TnTPropertyColumn Property="@(item => item.Two)" />
+            <TnTPropertyColumn Property="@(item => item.Three)" />
+            <TnTPropertyColumn Property="@(item => item.Four)" />
+            <TnTPropertyColumn Property="@(item => item.FiveFive)" />
+            <TnTPropertyColumn Property="@(item => item.SixSix)" />
+            <TnTPropertyColumn Property="@(item => item.SevenSeven)" />
+            <TnTPropertyColumn Property="@(item => item.EightEight)" />
+            <TnTPropertyColumn Property="@(item => item.NINENINE)" Format="MM-dd-yyyy" />
+            <TnTPropertyColumn Property="@(item => item.Ten)" />
+            <TnTPropertyColumn Property="@(item => item.Eleven)" />
+            <TnTPropertyColumn Property="@(item => item.Twelve)" />
+        </TnTGrid>
+
+    </TnTTabChild>
+</TnTTabView>
+
+<TnTTabView Disabled="@_disabled">
+    <TnTTabChild TabTitle="One" Icon="search">
+        I am some content 1
+    </TnTTabChild>
+    <TnTTabChild TabTitle="I am a medium title" Icon="close" Disabled="true">
+        I am some content 2
+    </TnTTabChild>
+    <TnTTabChild TabTitle="I am very long tab title that will probably never occur" Icon="phone">
+        I am some content 3
+    </TnTTabChild>
+</TnTTabView>
 
 @code {
     private void OpenDialog() {

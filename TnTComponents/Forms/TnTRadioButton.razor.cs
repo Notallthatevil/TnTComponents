@@ -39,7 +39,7 @@ public partial class TnTRadioButton<TInputType> {
         base.OnParametersSet();
     }
 
-    protected override string GetCssClass() {
+    public override string GetCssClass() {
         var strBuilder = new StringBuilder(base.GetCssClass());
         strBuilder.Append(" tnt-radio-btn");
 

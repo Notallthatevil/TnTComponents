@@ -1,10 +1,10 @@
 ﻿@use "sass:color";
 
-.tnt-sidebar[theme=default] {
+.tnt-side-nav[theme=default] {
     background-color: $tnt-color-surface;
 
 
-    li {
+    .tnt-side-nav-list-item {
 
         > a {
             color: $tnt-color-on-surface;

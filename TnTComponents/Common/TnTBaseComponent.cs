@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TnTComponents.Common {
-    public abstract class TnTBaseComponent : ComponentBase {
+    public abstract class TnTBaseComponent : ComponentBase, ITnTComponent {
 
         public virtual string BaseCssClass { get; set; } = string.Empty;
 
@@ -24,7 +24,7 @@ namespace TnTComponents.Common {
         public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
 
-        protected virtual string GetCssClass() {
+        public virtual string GetCssClass() {
             var strBuilder = new StringBuilder(BaseCssClass);
 
             if (AdditionalAttributes?.TryGetValue("class", out var result) ?? false) {

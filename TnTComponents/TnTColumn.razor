@@ -123,7 +123,7 @@
         base.OnInitialized();
     }
 
-    protected override string GetCssClass() {
+    public override string GetCssClass() {
         var strBuilder = new StringBuilder(base.GetCssClass());
 
         foreach (var sizePair in _sizes) {
