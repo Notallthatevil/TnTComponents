@@ -52,6 +52,8 @@ public partial class TnTLayout {
     protected override void OnAfterRender(bool firstRender) {
         if (firstRender) {
             Interactive = true;
+            Console.WriteLine("Rendering");
+            StateHasChanged();
         }
         base.OnAfterRender(firstRender);
     }

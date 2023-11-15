@@ -19,6 +19,14 @@ public partial class TnTSideNavToggle {
         base.OnInitialized();
     }
 
+    protected override void OnAfterRender(bool firstRender) {
+        if (firstRender) {
+            Console.WriteLine("SideNav");
+            StateHasChanged();
+        }
+        base.OnAfterRender(firstRender);
+    }
+
     private void Toggle() {
         if (_tntLayout is not null) {
             _tntLayout.Expand = !_tntLayout.Expand;

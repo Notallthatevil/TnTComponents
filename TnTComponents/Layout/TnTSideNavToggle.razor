@@ -2,18 +2,8 @@
 
 
 @if (_tntLayout?.SideNav is not null) {
-    @if (_tntLayout?.Interactive == false && false) {
-        <button class="@GetCssClass()" theme="@Theme" onclick="(function() {
-    var sideNav = document.getElementById(
-        '@(_tntLayout.TnTSideNavId)'
-    );
-    if(!sideNav.classList.contains('@(TnTLayout.ExpandClass)')) {
-        sideNav.classList.add('@(TnTLayout.ExpandClass)');
-    }
-    else {
-        sideNav.classList.remove('@(TnTLayout.ExpandClass)');
-    }
-    })();">
+    @if (_tntLayout?.Interactive == false) {
+        <button class="@GetCssClass()" theme="@Theme" onclick="TnTLayout.toggle()">
             @GetIcon()
             @Label
         </button>
