@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 namespace TnTComponents.Common {
     public  class TnTMediaCallback : ComponentBase, IDisposable {
 
-
         [Parameter]
         public string Query { get; set; } = default!;
 
