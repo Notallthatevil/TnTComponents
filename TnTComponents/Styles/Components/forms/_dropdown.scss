@@ -10,7 +10,7 @@
         user-select: none;
     }
 
-    &.active {
+    &:focus, &:active, &:focus-within {
         ul {
             visibility: visible;
             opacity: 1;
