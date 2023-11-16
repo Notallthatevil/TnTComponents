@@ -1,5 +1,7 @@
 using LiveTest.Client.Pages;
 using LiveTest.Components;
+using Microsoft.AspNetCore.Mvc;
+using static LiveTest.Client.Pages.TestScreen;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,5 +31,9 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Counter).Assembly);
+
+app.MapPost("/submit", ([FromForm] MyModel m) => {
+    Console.WriteLine(m?.Name);
+});
 
 app.Run();

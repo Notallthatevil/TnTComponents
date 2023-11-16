@@ -3,7 +3,8 @@
 
 <div theme="@Theme" class="@GetCssClass()">
     @TnTIconComponent.GetIcon(IconType, Icon)
-    <input aria-label="@Label"
+    <input @attributes="AdditionalAttributes"
+           aria-label="@Label"
            name="@NameAttributeValue"
            disabled="@Disabled"
            placeholder="@Placeholder"
@@ -12,7 +13,7 @@
            @onfocusin="OnFocusInAsync"
            @onfocusout="OnFocusOutAsync" />
 
-    <label class="@GetLabelCssClass()" @onclick="SetInputFocus">@Label</label>
+    <label class="@GetLabelCssClass()" for="@NameAttributeValue">@Label</label>
 </div>
 @if (ShowValidation) {
     <ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />

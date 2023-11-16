@@ -1,0 +1,220 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using TnTComponents
+@using TnTComponents.Enum
+@using TnTComponents.Forms
+<TnTRow>
+    <TnTColumn S="12" L="6">
+
+        <TnTForm FormType="FormType.Underlined" TModelType="MyModel" Model="@_model" action="/submit" method="post"  >
+            <DataAnnotationsValidator />
+            <TnTTextBox Icon="@_icon" @bind-Value="_model.Name" Label="My Label" Placeholder="@_placeholder" Disabled="@_disabled" name="Name"/>
+            <TnTPasswordBox Icon="@_icon" @bind-Value="_model.Password" Label="Password" Placeholder="@_placeholder" Disabled="@_disabled" AllowPasswordReveal="true" />
+            <TnTNumeric Icon="@_icon" @bind-Value="_model.Number" Label="Number" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTCheckbox Icon="@_icon" @bind-Value="_model.CheckBox" Label="Checkbox" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTCheckbox Icon="@_icon" @bind-Value="_model.CheckBox" Label="CheckboxWithLongLabel" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTSwitch Icon="@_icon" @bind-Value="_model.Switch" Label="Switch" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTSwitch Icon="@_icon" @bind-Value="_model.Switch" Label="SwitchWithLongLabel" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTDropDown Icon="@_icon" ListItems="@_listItems" @bind-Value="_model.DropDownItem" Label="DropDownItem" Placeholder="@_placeholder" Disabled="@_disabled" AllowClear="@_allowClear" />
+            <TnTDatePicker Icon="@_icon" @bind-Value="_model.DateValue" Label="DatePicker" Placeholder="@_placeholder" Disabled="@_disabled" AllowClear="@_allowClear" />
+            <TnTRadioGroup Icon="@_icon" @bind-Value="_model.RadioItem" Label="RadioButtons" Disabled="@_disabled" AllowClear="@_allowClear">
+                <RadioButtons>
+                    <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(0)" Icon="@_icon" Label="Button1" Disabled="true" />
+                    <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(1)" Icon="@_icon" Label="Button2" Disabled="false" />
+                    <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(2)" Icon="@_icon" Label="Button3ReallyReallyReallyLongLabel" Disabled="@_disabled" />
+                    <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(3)" Icon="@_icon" Label="Button4" Disabled="@_disabled" />
+                    <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(4)" Icon="@_icon" Label="Button5" Disabled="@_disabled" />
+                </RadioButtons>
+            </TnTRadioGroup>
+
+            <button type="submit">
+                Submit
+            </button>
+        </TnTForm>
+    </TnTColumn>
+
+    <TnTColumn S="12" L="6">
+
+        <TnTForm FormName="MainForm" FormType="FormType.Outlined" TModelType="MyModel" Model="@_model">
+            <DataAnnotationsValidator />
+            <TnTTextBox Icon="@_icon" @bind-Value="_model.Name" Label="My Label" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTPasswordBox Icon="@_icon" @bind-Value="_model.Password" Label="Password" Placeholder="@_placeholder" Disabled="@_disabled" AllowPasswordReveal="true" />
+            <TnTNumeric Icon="@_icon" @bind-Value="_model.Number" Label="Number" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTCheckbox Icon="@_icon" @bind-Value="_model.CheckBox" Label="Checkbox" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTCheckbox Icon="@_icon" @bind-Value="_model.CheckBox" Label="CheckboxWithLongLabel" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTSwitch Icon="@_icon" @bind-Value="_model.Switch" Label="Switch" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTSwitch Icon="@_icon" @bind-Value="_model.Switch" Label="SwitchWithLongLabel" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTDropDown Icon="@_icon" ListItems="@_listItems" @bind-Value="_model.DropDownItem" Label="DropDownItem" Placeholder="@_placeholder" Disabled="@_disabled" AllowClear="@_allowClear" />
+            <TnTDatePicker Icon="@_icon" @bind-Value="_model.DateValue" Label="DatePicker" Placeholder="@_placeholder" Disabled="@_disabled" AllowClear="@_allowClear" />
+            <TnTRadioGroup Icon="@_icon" @bind-Value="_model.RadioItem" Label="RadioButtons" Disabled="@_disabled" AllowClear="@_allowClear">
+                <RadioButtons>
+                    <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(0)" Icon="@_icon" Label="Button1" Disabled="true" />
+                    <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(1)" Icon="@_icon" Label="Button2" Disabled="false" />
+                    <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(2)" Icon="@_icon" Label="Button3ReallyReallyReallyLongLabel" Disabled="@_disabled" />
+                    <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(3)" Icon="@_icon" Label="Button4" Disabled="@_disabled" />
+                    <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(4)" Icon="@_icon" Label="Button5" Disabled="@_disabled" />
+                </RadioButtons>
+            </TnTRadioGroup>
+
+            <button type="submit" form="MainForm">
+                Submit
+            </button>
+        </TnTForm>
+    </TnTColumn>
+
+    <TnTColumn S="12" L="6">
+
+        <TnTForm FormName="MainForm" FormType="FormType.Filled" TModelType="MyModel" Model="@_model">
+            <DataAnnotationsValidator />
+            <TnTTextBox Icon="@_icon" @bind-Value="_model.Name" Label="My Label" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTPasswordBox Icon="@_icon" @bind-Value="_model.Password" Label="Password" Placeholder="@_placeholder" Disabled="@_disabled" AllowPasswordReveal="true" />
+            <TnTNumeric Icon="@_icon" @bind-Value="_model.Number" Label="Number" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTCheckbox Icon="@_icon" @bind-Value="_model.CheckBox" Label="Checkbox" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTCheckbox Icon="@_icon" @bind-Value="_model.CheckBox" Label="CheckboxWithLongLabel" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTSwitch Icon="@_icon" @bind-Value="_model.Switch" Label="Switch" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTSwitch Icon="@_icon" @bind-Value="_model.Switch" Label="SwitchWithLongLabel" Placeholder="@_placeholder" Disabled="@_disabled" />
+            <TnTDropDown Icon="@_icon" ListItems="@_listItems" @bind-Value="_model.DropDownItem" Label="DropDownItem" Placeholder="@_placeholder" Disabled="@_disabled" AllowClear="@_allowClear" />
+            <TnTDatePicker Icon="@_icon" @bind-Value="_model.DateValue" Label="DatePicker" Placeholder="@_placeholder" Disabled="@_disabled" AllowClear="@_allowClear" />
+            <TnTRadioGroup Icon="@_icon" @bind-Value="_model.RadioItem" Label="RadioButtons" Disabled="@_disabled" AllowClear="@_allowClear">
+                <RadioButtons>
+                    <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(0)" Icon="@_icon" Label="Button1" Disabled="true" />
+                    <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(1)" Icon="@_icon" Label="Button2" Disabled="false" />
+                    <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(2)" Icon="@_icon" Label="Button3ReallyReallyReallyLongLabel" Disabled="@_disabled" />
+                    <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(3)" Icon="@_icon" Label="Button4" Disabled="@_disabled" />
+                    <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(4)" Icon="@_icon" Label="Button5" Disabled="@_disabled" />
+                </RadioButtons>
+            </TnTRadioGroup>
+
+            <button type="submit" form="MainForm">
+                Submit
+            </button>
+        </TnTForm>
+    </TnTColumn>
+
+    <TnTColumn S="12" L="6">
+        <div>
+            <TnTButton ButtonType="ButtonType.Default" Text="Toggle Disable" OnClick="@(() => _disabled = !_disabled)">
+            </TnTButton>
+        </div>
+        <TnTButton ButtonType="ButtonType.Outlined" Text="Toggle Form Type" OnClick="@(() => RotateFormType())" Disabled="@_disabled">
+
+        </TnTButton>
+        <TnTButton ButtonType="ButtonType.Filled" Text="Toggle Icon" OnClick="@(() => ToggleIcon())">
+        </TnTButton>
+
+        <TnTButton ButtonType="ButtonType.Flat" Text="Toggle Placeholder" OnClick="@(() => TogglePlaceholder())">
+        </TnTButton>
+
+        <TnTButton Text="Toggle AllowClear" OnClick="@(() => _allowClear = !_allowClear)">
+        </TnTButton>
+    </TnTColumn>
+</TnTRow>
+
+@code {
+    private FormType _formType = FormType.Underlined;
+    private bool _disabled = false;
+    private bool _allowClear = false;
+    [SupplyParameterFromForm]
+    private MyModel _model{ get; set; } = new MyModel();
+    private string _icon = string.Empty;
+    private string _placeholder = string.Empty;
+    private ICollection<MyListItem> _listItems = default!;
+    private ICollection<int> _radioItems = default!;
+
+    private void RotateFormType() {
+        switch (_formType) {
+            case FormType.Underlined:
+                _formType = FormType.Outlined;
+                break;
+            case FormType.Outlined:
+                _formType = FormType.Filled;
+                break;
+            case FormType.Filled:
+                _formType = FormType.Underlined;
+                break;
+        }
+
+        StateHasChanged();
+    }
+
+    private void ToggleIcon() {
+        if (string.IsNullOrWhiteSpace(_icon)) {
+            _icon = "search";
+        }
+        else {
+            _icon = string.Empty;
+        }
+    }
+
+    private void TogglePlaceholder() {
+        if (string.IsNullOrWhiteSpace(_placeholder)) {
+            _placeholder = "My Placeholder";
+        }
+        else {
+            _placeholder = string.Empty;
+        }
+    }
+
+    public class MyModel {
+        [Required]
+        [StringLength(10)]
+        public string Name { get; set; }
+        [Required]
+        [StringLength(10)]
+        public string Password { get; set; }
+        [Range(1, 15)]
+        public int Number { get; set; }
+        [Required]
+        [Range(typeof(bool), "true", "true")]
+        public bool CheckBox { get; set; }
+        [Required]
+        [Range(typeof(bool), "false", "false")]
+        public bool Switch { get; set; }
+        [Required]
+        public MyListItem DropDownItem { get; set; }
+        [Required]
+        public DateOnly? DateValue { get; set; }
+        [Required]
+        public int? RadioItem { get; set; }
+    }
+
+    public class MyListItem {
+        public string Str;
+        public int Data;
+
+        public override string ToString() {
+            return $"{Str} From To String";
+        }
+    }
+
+    protected override void OnInitialized() {
+        base.OnInitialized();
+        _listItems = new List<MyListItem>();
+        foreach (var i in Enumerable.Range(1, 100)) {
+            _listItems.Add(new MyListItem() {
+                    Str = $"Item # {i}",
+                    Data = i
+                });
+        }
+
+        //var people = new List<Person>();
+        //foreach (var i in Enumerable.Range(1, 250)) {
+        //    people.Add(new Person(
+        //        Random.Shared.Next(int.MinValue, int.MaxValue),
+        //        Random.Shared.Next(int.MinValue, int.MaxValue),
+        //        Random.Shared.Next(int.MinValue, int.MaxValue),
+        //        Guid.NewGuid().ToString(),
+        //        Guid.NewGuid().ToString(),
+        //        Guid.NewGuid().ToString(),
+        //        RandomDate(),
+        //        RandomDate(),
+        //        RandomDate(),
+        //        Random.Shared.Next(0, 2) == 1,
+        //        Random.Shared.Next(0, 2) == 1,
+        //        Random.Shared.Next(0, 2) == 1
+        //    ));
+        //}
+        //
+        //_people = people;
+        _radioItems = Enumerable.Range(1, 5).ToList();
+    }
+}

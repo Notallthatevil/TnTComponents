@@ -14,9 +14,9 @@ public abstract class TnTForm : EditForm {
     [Parameter]
     public virtual string BaseCssClass { get; set; } = "tnt-form";
 
-    private readonly Dictionary<string, object> _additionalAttributes;
+    private Dictionary<string, object> _additionalAttributes = default!;
 
-    protected TnTForm() {
+    protected override void OnInitialized() {
         _additionalAttributes = AdditionalAttributes is not null ? new Dictionary<string, object>(AdditionalAttributes) : new Dictionary<string, object>();
 
         if (!_additionalAttributes.TryGetValue("class", out var result)) {
@@ -29,6 +29,7 @@ public abstract class TnTForm : EditForm {
         }
 
         AdditionalAttributes = _additionalAttributes;
+        base.OnInitialized();
     }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {

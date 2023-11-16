@@ -1,6 +1,13 @@
 ﻿@use "sass:color";
 
 .tnt-form-field-checkbox[theme=default] {
+    .tnt-form-field-label {
+        color: $tnt-color-primary;
+    }
+
+
+
+
     input[type=checkbox] {
         + span {
             color: $tnt-color-on-primary-container;

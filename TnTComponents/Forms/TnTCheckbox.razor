@@ -3,25 +3,25 @@
 
 <div theme="@Theme" class="@GetCssClass()">
     @TnTIconComponent.GetIcon(IconType, Icon)
-    <input aria-label="@Label"
-           name="@NameAttributeValue"
-           disabled="@Disabled"
-           placeholder="@Placeholder"
-           type="checkbox"
-           value="@bool.TrueString"
-           @bind="@CurrentValue"
-           @ref="@InputElement"
-           @onfocusin="OnFocusInAsync"
-           @onfocusout="OnFocusOutAsync" />
+    <label class="@GetLabelCssClass()">
+        <input @attributes="AdditionalAttributes"
+               aria-label="@Label"
+               name="@NameAttributeValue"
+               disabled="@Disabled"
+               type="checkbox"
+               value="@bool.TrueString"
+               @bind="@CurrentValue"
+               @ref="@InputElement"
+               @onfocusin="OnFocusInAsync"
+               @onfocusout="OnFocusOutAsync" />
 
-    <span @onclick="Toggle">
-        @if (FormType == FormType.Filled) {
-            <span></span>
-        }
-
-        <label class="@GetLabelCssClass()">@Label</label>
-    </span>
-
+        <span @onclick="Toggle">
+            @if (FormType == FormType.Filled) {
+                <span></span>
+            }
+        </span>
+        @Label
+    </label>
 </div>
 @if (ShowValidation) {
     <ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />

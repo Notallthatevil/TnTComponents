@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using Microsoft.AspNetCore.Components.Rendering
 @inherits TnTInputDialogField<DateOnly?>
 
 <TnTExternalClickHandler Callback="@(() => OnFocusOutAsync(new FocusEventArgs()))">
@@ -12,7 +13,7 @@
                @bind="@Value"
                @ref="@InputElement"
                @onfocusin="OnFocusInAsync" />
-
+        <label class="@GetLabelCssClass()" @onclick="SetInputFocus">@Label</label>
 
         <div class="tnt-date-time-picker @(HasSpaceBelow ? string.Empty : "dropup")">
             <TnTRow FlexAlignItems="FlexAlignItems.Center">
@@ -119,7 +120,6 @@
             default:
                 throw new NotImplementedException();
         }
-        <label class="@GetLabelCssClass()" @onclick="SetInputFocus">@Label</label>
     </div>
 </TnTExternalClickHandler>
 @if (ShowValidation) {

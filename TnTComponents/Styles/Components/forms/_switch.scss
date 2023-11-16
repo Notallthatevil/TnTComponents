@@ -19,66 +19,69 @@
         margin-top: 2rem;
     }
 
-    input[type=checkbox] {
-        position: absolute;
-        opacity: 0;
-        pointer-events: none;
+    .tnt-form-field-label {
+        margin-left: 48px;
+        cursor: inherit;
 
-        + span {
-            content: "";
-            display: flex;
-            align-items: center;
+        input[type=checkbox] {
             position: absolute;
-            border-radius: 1rem;
-            width: 2.3rem;
-            height: .9rem;
-            z-index: 0;
-            transition: ease-in-out 150ms;
-            cursor: pointer;
-            @extend .tnt-z-depth-1;
+            opacity: 0;
+            pointer-events: none;
 
-            .tnt-form-field-label {
-                margin-left: 3rem;
-                cursor: inherit;
-            }
-
-            &:before,
-            &:after {
-                transition: ease-in-out 150ms;
-            }
-
-            &:before {
-                content: '';
-                position: absolute;
-                aspect-ratio: 1/1;
-                height: 1.3rem;
-                left: -0.1rem;
-                z-index: 2;
-                border-radius: 100%;
-
-                @extend .tnt-z-depth-2;
-            }
-
-            &:hover::after {
-                content: '';
-                position: absolute;
-                aspect-ratio: 1/1;
-                height: 2rem;
-                left: -.6rem;
-                z-index: 1;
-                border-radius: 100%;
-            }
-        }
-
-        &:checked {
             + span {
+                content: "";
+                display: flex;
+                align-items: center;
+                position: absolute;
+                border-radius: 1rem;
+                width: 2.3rem;
+                height: .9rem;
+                z-index: 0;
+                left: 2px;
+                transition: ease-in-out 150ms;
+                cursor: pointer;
+                @extend .tnt-z-depth-1;
 
-                &:before {
-                    left: 1.2rem;
+
+
+                &:before,
+                &:after {
+                    transition: ease-in-out 150ms;
                 }
 
-                &:after {
-                    left: .9rem;
+                &:before {
+                    content: '';
+                    position: absolute;
+                    aspect-ratio: 1/1;
+                    height: 1.3rem;
+                    left: -4px;
+                    z-index: 2;
+                    border-radius: 100%;
+
+                    @extend .tnt-z-depth-2;
+                }
+
+                &:hover::after {
+                    content: '';
+                    position: absolute;
+                    aspect-ratio: 1/1;
+                    height: 2rem;
+                    left: -.6rem;
+                    z-index: 1;
+                    border-radius: 100%;
+                }
+            }
+
+            &:checked {
+                + span {
+
+                    &:before {
+                        left: 1.2rem;
+                    }
+
+                    &:after {
+                        left: .9rem;
+                    }
                 }
             }
         }

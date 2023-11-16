@@ -50,6 +50,8 @@ public abstract class TnTInputField<TInputType> : InputBase<TInputType>, ITnTFor
     [Inject]
     protected IJSRuntime JSRuntime { get; set; } = default!;
 
+    protected bool Interactive { get; private set; }
+
     protected override void OnParametersSet() {
         this.MatchParentFormIfExists();
         base.OnParametersSet();
@@ -65,6 +67,16 @@ public abstract class TnTInputField<TInputType> : InputBase<TInputType>, ITnTFor
         Active = false;
     }
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+
+    protected override void OnAfterRender(bool firstRender) {
+        if (firstRender) {
+            Interactive = true;
+            StateHasChanged();
+        }
+
+        base.OnAfterRender(firstRender);
+    }
+
 
     protected virtual string GetCssClass() {
         var strBuilder = new StringBuilder(BaseCssClass)
@@ -105,7 +117,7 @@ public abstract class TnTInputField<TInputType> : InputBase<TInputType>, ITnTFor
             strBuilder.Append(' ').Append("disabled");
         }
 
-        if (!string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrWhiteSpace(Icon) || !string.IsNullOrWhiteSpace(CurrentValueAsString)) {
+        if (!Interactive || !string.IsNullOrWhiteSpace(Placeholder) || !string.IsNullOrWhiteSpace(Icon) || !string.IsNullOrWhiteSpace(CurrentValueAsString)) {
             strBuilder.Append(' ').Append("dont-inline");
         }
 

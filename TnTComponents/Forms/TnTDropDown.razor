@@ -12,6 +12,7 @@
                readonly="true"
                @ref="@InputElement"
                @onfocusin="OnFocusInAsync" />
+        <label class="@GetLabelCssClass()" @onclick="SetInputFocus">@Label</label>
 
         <ul role="listbox" class="@(HasSpaceBelow ? string.Empty : "dropup")">
 
@@ -67,7 +68,6 @@
                 throw new NotImplementedException();
         }
 
-        <label class="@GetLabelCssClass()" @onclick="SetInputFocus">@Label</label>
     </div>
 </TnTExternalClickHandler>
 @if (ShowValidation) {
