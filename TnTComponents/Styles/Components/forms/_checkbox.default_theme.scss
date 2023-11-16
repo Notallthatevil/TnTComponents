@@ -5,9 +5,6 @@
         color: $tnt-color-primary;
     }
 
-
-
-
     input[type=checkbox] {
         + span {
             color: $tnt-color-on-primary-container;
@@ -88,25 +85,6 @@
                 }
             }
         }
-
-        &.disabled {
-            input[type=checkbox] {
-                &:not(:checked) + span span:after {
-                    border: 2px solid color.adjust($tnt-color-error, $alpha: -.6);
-                }
-
-                &:checked + span {
-                    &:before {
-                        border-right: 2px solid color.adjust($tnt-color-on-error, $alpha: -.6);
-                        border-bottom: 2px solid color.adjust($tnt-color-on-error, $alpha: -.6);
-                    }
-
-                    span:after {
-                        background-color: color.adjust($tnt-color-error, $alpha: -.6);
-                    }
-                }
-            }
-        }
     }
 
     &.filled input[type=checkbox] {
@@ -131,43 +109,6 @@
     }
 
     &.disabled {
-        i {
-            color: color.adjust($tnt-color-on-surface, $alpha: -.6);
-        }
-
-        input[type=checkbox] {
-            + span {
-                cursor: default;
-                color: color.adjust($tnt-color-on-surface, $alpha: -.6);
-
-                &:before {
-                    border: 2px solid color.adjust($tnt-color-outline, $alpha: -.6);
-                }
-            }
-
-            &:checked {
-                + span:before {
-                    border-bottom: 2px solid color.adjust($tnt-color-primary, $alpha: -.6);
-                    border-right: 2px solid color.adjust($tnt-color-primary, $alpha: -.6);
-                }
-            }
-        }
-    }
-
-    &.disabled.filled input[type=checkbox] {
-        &:not(:checked) + span span:after {
-            border: 2px solid color.adjust($tnt-color-outline, $alpha: -.6);
-        }
-
-        &:checked + span {
-            &:before {
-                border-right: 2px solid color.adjust($tnt-color-on-primary, $alpha: -.6);
-                border-bottom: 2px solid color.adjust($tnt-color-on-primary, $alpha: -.6);
-            }
-
-            span:after {
-                background-color: color.adjust($tnt-color-primary, $alpha: -.6);
-            }
-        }
+        opacity: 0.5;
     }
 }
