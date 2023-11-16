@@ -14,7 +14,6 @@
         ul {
             visibility: visible;
             opacity: 1;
-            max-height: 15rem;
         }
     }
 
@@ -26,11 +25,11 @@
         left: 0;
         width: 100%;
         top: 2.3rem;
-        max-height: 0rem;
+        max-height: 15rem;
         z-index: 10000;
         padding: 0;
         visibility: hidden;
-        transition: max-height linear 150ms;
+        transition: opacity linear 150ms;
         @extend .tnt-z-depth-3;
         @extend .tnt-border-radius-2;
 

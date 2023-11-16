@@ -2,126 +2,150 @@
 @using Microsoft.AspNetCore.Components.Rendering
 @inherits TnTInputDialogField<DateOnly?>
 
-<TnTExternalClickHandler Callback="@(() => OnFocusOutAsync(new FocusEventArgs()))">
-    <div theme="@Theme" class="@GetCssClass()" @ref="@ContainerElementReference">
-        @TnTIconComponent.GetIcon(IconType, Icon)
-        <input aria-label="@Label"
-               name="@NameAttributeValue"
-               disabled="@Disabled"
-               placeholder="@Placeholder"
-               readonly="true"
-               @bind="@Value"
-               @ref="@InputElement"
-               @onfocusin="OnFocusInAsync" />
-        <label class="@GetLabelCssClass()" @onclick="SetInputFocus">@Label</label>
+@if (Interactive) {
+    <TnTExternalClickHandler Callback="@(() => OnFocusOutAsync(new FocusEventArgs()))">
+        <div theme="@Theme" class="@GetCssClass()" @ref="@ContainerElementReference">
+            @TnTIconComponent.GetIcon(IconType, Icon)
+            <input aria-label="@Label"
+                   name="@NameAttributeValue"
+                   disabled="@Disabled"
+                   placeholder="@Placeholder"
+                   readonly="true"
+                   @bind="@Value"
+                   @ref="@InputElement"
+                   @onfocusin="OnFocusInAsync" />
+            <label class="@GetLabelCssClass()" @onclick="SetInputFocus">@Label</label>
 
-        <div class="tnt-date-time-picker @(HasSpaceBelow ? string.Empty : "dropup")">
-            <TnTRow FlexAlignItems="FlexAlignItems.Center">
-                <TnTColumn S="1" FlexAlignItems="FlexAlignItems.Center">
-                    @switch (IconType) {
-                        case IconType.FontAwesome:
-                            <i class="fa fa-arrow-left @(CanShowPrevMonth() ? string.Empty : "disabled")" @onclick="PrevPage"></i>
-                            break;
+            <div class="tnt-date-time-picker @(HasSpaceBelow ? string.Empty : "dropup")">
+                <TnTRow FlexAlignItems="FlexAlignItems.Center">
+                    <TnTColumn S="1" FlexAlignItems="FlexAlignItems.Center">
+                        @switch (IconType) {
+                            case IconType.FontAwesome:
+                                <i class="fa fa-arrow-left @(CanShowPrevMonth() ? string.Empty : "disabled")" @onclick="PrevPage"></i>
+                                break;
 
-                        case IconType.MaterialIcons:
-                            <i class="material-icons  @(CanShowPrevMonth() ? string.Empty: "disabled")" @onclick="PrevPage">chevron_left</i>
-                            break;
+                            case IconType.MaterialIcons:
+                                <i class="material-icons  @(CanShowPrevMonth() ? string.Empty: "disabled")" @onclick="PrevPage">chevron_left</i>
+                                break;
 
-                        default:
-                            throw new NotImplementedException();
-                    }
-                </TnTColumn>
-
-                <TnTColumn S="6" FlexAlignItems="FlexAlignItems.Center">
-
-                    <TnTDropDown ListItems="_months"
-                                 AllowClear="false"
-                                 Label="Month"
-                                 DisabledItems="_disabledMonths"
-                                 ItemValueCallback="@DateTimeFormatInfo.CurrentInfo.GetMonthName"
-                                 @bind-Value="_dropdownMonth"
-                                 class="tnt-month-picker">
-                        <ListItemTemplate>
-                            @DateTimeFormatInfo.CurrentInfo.GetMonthName(context)
-                        </ListItemTemplate>
-                    </TnTDropDown>
-                </TnTColumn>
-
-                <TnTColumn S="4" FlexAlignItems="FlexAlignItems.Center">
-                    <TnTDropDown ListItems="_years" AllowClear="false" Label="Year" @bind-Value="_dropdownYear" class="tnt-year-picker" />
-                </TnTColumn>
-
-                <TnTColumn S="1" FlexAlignItems="FlexAlignItems.Center">
-
-                    @switch (IconType) {
-                        case IconType.FontAwesome:
-                            <i class="fa fa-arrow-right @(CanShowNextMonth() ? string.Empty: "disabled")" @onclick="NextPage"></i>
-                            break;
-
-                        case IconType.MaterialIcons:
-                            <i class="material-icons  @(CanShowNextMonth() ? string.Empty: "disabled")" @onclick="NextPage">chevron_right</i>
-                            break;
-
-                        default:
-                            throw new NotImplementedException();
-                    }
-                </TnTColumn>
-            </TnTRow>
-            <TnTRow FlexJustifyContent="FlexJustifyContent.Center">
-                <table>
-                    <thead>
-                        <tr>
-                            @foreach (var day in DateTimeFormatInfo.CurrentInfo.AbbreviatedDayNames) {
-                                <th>
-                                    @day.First()
-                                </th>
-                            }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @{
-                            var date = GetStartDate();
+                            default:
+                                throw new NotImplementedException();
                         }
-                        @for (var i = 0; i < 6; ++i) {
+                    </TnTColumn>
+
+                    <TnTColumn S="6" FlexAlignItems="FlexAlignItems.Center">
+
+                        <TnTDropDown ListItems="_months"
+                                     AllowClear="false"
+                                     Label="Month"
+                                     DisabledItems="_disabledMonths"
+                                     ItemValueCallback="@DateTimeFormatInfo.CurrentInfo.GetMonthName"
+                                     @bind-Value="_dropdownMonth"
+                                     class="tnt-month-picker">
+                            <ListItemTemplate>
+                                @DateTimeFormatInfo.CurrentInfo.GetMonthName(context)
+                            </ListItemTemplate>
+                        </TnTDropDown>
+                    </TnTColumn>
+
+                    <TnTColumn S="4" FlexAlignItems="FlexAlignItems.Center">
+                        <TnTDropDown ListItems="_years" AllowClear="false" Label="Year" @bind-Value="_dropdownYear" class="tnt-year-picker" />
+                    </TnTColumn>
+
+                    <TnTColumn S="1" FlexAlignItems="FlexAlignItems.Center">
+
+                        @switch (IconType) {
+                            case IconType.FontAwesome:
+                                <i class="fa fa-arrow-right @(CanShowNextMonth() ? string.Empty: "disabled")" @onclick="NextPage"></i>
+                                break;
+
+                            case IconType.MaterialIcons:
+                                <i class="material-icons  @(CanShowNextMonth() ? string.Empty: "disabled")" @onclick="NextPage">chevron_right</i>
+                                break;
+
+                            default:
+                                throw new NotImplementedException();
+                        }
+                    </TnTColumn>
+                </TnTRow>
+                <TnTRow FlexJustifyContent="FlexJustifyContent.Center">
+                    <table>
+                        <thead>
                             <tr>
-                                @for (var j = 0; j < 7; ++j, date = date.AddDays(1)) {
-                                    var itemDate = date;
-                                    <td @onclick="@(() => SelectDate(itemDate))" @onclick:stopPropagation="true">
-                                        <div class="@GetDateItemClass(itemDate)">
-                                            @itemDate.Day
-                                        </div>
-                                    </td>
+                                @foreach (var day in DateTimeFormatInfo.CurrentInfo.AbbreviatedDayNames) {
+                                    <th>
+                                        @day.First()
+                                    </th>
                                 }
                             </tr>
-                        }
-                    </tbody>
-                </table>
-            </TnTRow>
-        </div>
-        @if (AllowClear && !string.IsNullOrWhiteSpace(CurrentValueAsString)) {
-            switch (IconType) {
+                        </thead>
+                        <tbody>
+                            @{
+                                var date = GetStartDate();
+                            }
+                            @for (var i = 0; i < 6; ++i) {
+                                <tr>
+                                    @for (var j = 0; j < 7; ++j, date = date.AddDays(1)) {
+                                        var itemDate = date;
+                                        <td @onclick="@(() => SelectDate(itemDate))" @onclick:stopPropagation="true">
+                                            <div class="@GetDateItemClass(itemDate)">
+                                                @itemDate.Day
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </TnTRow>
+            </div>
+            @if (AllowClear && !string.IsNullOrWhiteSpace(CurrentValueAsString)) {
+                switch (IconType) {
+                    case IconType.FontAwesome:
+                        <i class="fa fa-close" @onclick="ClearSelection"></i>
+                        break;
+                    case IconType.MaterialIcons:
+                        <i class="material-icons" @onclick="ClearSelection">close</i>
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+            @switch (IconType) {
                 case IconType.FontAwesome:
-                    <i class="fa fa-close" @onclick="ClearSelection"></i>
+                    <i class="fa fa-dropdown" @onclick="@(() => OnFocusInAsync(new FocusEventArgs()))"></i>
                     break;
                 case IconType.MaterialIcons:
-                    <i class="material-icons" @onclick="ClearSelection">close</i>
+                    <i class="material-icons" @onclick="@(() => OnFocusInAsync(new FocusEventArgs()))">arrow_drop_down</i>
                     break;
                 default:
                     throw new NotImplementedException();
             }
-        }
-        @switch (IconType) {
-            case IconType.FontAwesome:
-                <i class="fa fa-dropdown" @onclick="@(() => OnFocusInAsync(new FocusEventArgs()))"></i>
-                break;
-            case IconType.MaterialIcons:
-                <i class="material-icons" @onclick="@(() => OnFocusInAsync(new FocusEventArgs()))">arrow_drop_down</i>
-                break;
-            default:
-                throw new NotImplementedException();
-        }
-    </div>
-</TnTExternalClickHandler>
-@if (ShowValidation) {
-    <ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />
+        </div>
+    </TnTExternalClickHandler>
+    @if (ShowValidation) {
+        <ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />
+    }
 }
+else {
+
+    <div theme="@Theme" class="@GetCssClass()">
+        @TnTIconComponent.GetIcon(IconType, Icon)
+        <input @attributes="AdditionalAttributes"
+               aria-label="@Label"
+               name="@NameAttributeValue"
+               disabled="@Disabled"
+               placeholder="@Placeholder"
+               type="date"
+               @ref="@InputElement"
+               @bind="@CurrentValue"
+               @onfocusin="OnFocusInAsync"
+               @onfocusout="OnFocusOutAsync" />
+
+        <label class="@GetLabelCssClass()" for="@NameAttributeValue">@Label</label>
+    </div>
+    @if (ShowValidation) {
+        <ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />
+    }
+}
+
