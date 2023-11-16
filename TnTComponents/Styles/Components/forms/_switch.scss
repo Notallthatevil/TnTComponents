@@ -6,8 +6,8 @@
     margin-bottom: 1rem;
     position: relative;
 
-    &.disabled {
-        cursor: default;
+    &:not(.disabled) {
+        cursor: pointer;
     }
 
     &:has(.tnt-icon-component:first-child) input[type=checkbox] + span {
@@ -39,10 +39,8 @@
                 z-index: 0;
                 left: 2px;
                 transition: ease-in-out 150ms;
-                cursor: pointer;
+                cursor: inherit;
                 @extend .tnt-z-depth-1;
-
-
 
                 &:before,
                 &:after {

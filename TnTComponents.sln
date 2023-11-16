@@ -5,9 +5,9 @@ VisualStudioVersion = 17.8.34004.107
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TnTComponents", "TnTComponents\TnTComponents.csproj", "{9EC60911-4687-4068-AED4-23CDDDBC77A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveTest", "LiveTest\LiveTest\LiveTest.csproj", "{4A917DE1-12C0-4A34-B955-3D04E0A82473}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LiveTest", "LiveTest\LiveTest\LiveTest.csproj", "{4A917DE1-12C0-4A34-B955-3D04E0A82473}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveTest.Client", "LiveTest\LiveTest.Client\LiveTest.Client.csproj", "{23EBCC71-792A-45FD-90AA-67F9CFE2C90D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LiveTest.Client", "LiveTest\LiveTest.Client\LiveTest.Client.csproj", "{23EBCC71-792A-45FD-90AA-67F9CFE2C90D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

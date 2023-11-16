@@ -4,7 +4,8 @@
 <TnTExternalClickHandler Callback="@(() => OnFocusOutAsync(new FocusEventArgs()))">
     <div theme="@Theme" class="@GetCssClass()" @ref="@ContainerElementReference">
         @TnTIconComponent.GetIcon(IconType, Icon)
-        <input aria-label="@Label"
+        <input @attributes="AdditionalAttributes"
+               aria-label="@Label"
                name="@NameAttributeValue"
                disabled="@Disabled"
                placeholder="@Placeholder"
@@ -73,3 +74,4 @@
 @if (ShowValidation) {
     <ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />
 }
+
