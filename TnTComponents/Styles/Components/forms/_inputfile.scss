@@ -1,4 +1,4 @@
-﻿.tnt-btn {
+﻿input[type=file]::file-selector-button {
     @extend .tnt-border-radius-9;
     padding: 0 16px;
     min-height: 40px;
@@ -6,6 +6,7 @@
     margin: 0.5rem;
     line-height: 24px;
     font-size: 14px;
+    border-style: none;
 
     &:not(.disabled) {
         cursor: pointer;

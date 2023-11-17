@@ -5,9 +5,9 @@
 <TnTRow>
     <TnTColumn S="12" L="6">
 
-        <TnTForm FormType="FormType.Underlined" TModelType="MyModel" Model="@_model" action="/submit" method="post"  >
+        <TnTForm FormType="FormType.Underlined" TModelType="MyModel" Model="@_model" action="/submit" method="post">
             <DataAnnotationsValidator />
-            <TnTTextBox Icon="@_icon" @bind-Value="_model.Name" Label="My Label" Placeholder="@_placeholder" Disabled="@_disabled" name="Name"/>
+            <TnTTextBox Icon="@_icon" @bind-Value="_model.Name" Label="My Label" Placeholder="@_placeholder" Disabled="@_disabled" name="Name" />
             <TnTPasswordBox Icon="@_icon" @bind-Value="_model.Password" Label="Password" Placeholder="@_placeholder" Disabled="@_disabled" AllowPasswordReveal="true" />
             <TnTNumeric Icon="@_icon" @bind-Value="_model.Number" Label="Number" Placeholder="@_placeholder" Disabled="@_disabled" />
             <TnTCheckbox Icon="@_icon" @bind-Value="_model.CheckBox" Label="Checkbox" Placeholder="@_placeholder" Disabled="@_disabled" />
@@ -25,7 +25,7 @@
                     <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(4)" Icon="@_icon" Label="Button5" Disabled="@_disabled" />
                 </RadioButtons>
             </TnTRadioGroup>
-
+            <TnTInputFile name="file" Label="File upload"  Disabled="@_disabled" ButtonType="ButtonType.Flat"/>
             <button type="submit">
                 Submit
             </button>
@@ -54,6 +54,7 @@
                     <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(4)" Icon="@_icon" Label="Button5" Disabled="@_disabled" />
                 </RadioButtons>
             </TnTRadioGroup>
+            <TnTInputFile name="file" Label="File upload" Disabled="@_disabled" ButtonType="ButtonType.Outlined" />
 
             <button type="submit" form="MainForm">
                 Submit
@@ -83,6 +84,7 @@
                     <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(4)" Icon="@_icon" Label="Button5" Disabled="@_disabled" />
                 </RadioButtons>
             </TnTRadioGroup>
+            <TnTInputFile name="file" Label="File upload" Disabled="@_disabled"/>
 
             <button type="submit" form="MainForm">
                 Submit
@@ -114,7 +116,7 @@
     private bool _disabled = false;
     private bool _allowClear = false;
     [SupplyParameterFromForm]
-    private MyModel _model{ get; set; } = new MyModel();
+    private MyModel _model { get; set; } = new MyModel();
     private string _icon = string.Empty;
     private string _placeholder = string.Empty;
     private ICollection<MyListItem> _listItems = default!;
@@ -175,6 +177,7 @@
         public DateOnly? DateValue { get; set; }
         [Required]
         public int? RadioItem { get; set; }
+        public string? File { get; set; }
     }
 
     public class MyListItem {

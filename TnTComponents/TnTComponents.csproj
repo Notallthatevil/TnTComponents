@@ -11,6 +11,14 @@
         <Content Remove="compilerconfig.json" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Styles\Components\forms\_inputfile.default_theme.scss" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="Styles\Components\forms\_inputfile.default_theme.scss" />
+    </ItemGroup>
+
 
     <ItemGroup>
         <SupportedPlatform Include="browser" />
