@@ -2,8 +2,9 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
 namespace TnTComponents.Common;
-public partial class TnTExternalClickHandler
-{
+
+public partial class TnTExternalClickHandler {
+
     [Parameter, EditorRequired]
     public EventCallback Callback { get; set; }
 
@@ -17,7 +18,6 @@ public partial class TnTExternalClickHandler
 
     private DotNetObjectReference<TnTExternalClickHandler>? _reference;
     private bool _disposedValue;
-
 
     [JSInvokable]
     public async Task OnClick() {

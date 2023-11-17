@@ -4,7 +4,6 @@
     margin: 1rem 0 .5rem 0;
     transition: 150ms;
 
-
     &:not(.outlined) {
         border: none;
     }
@@ -15,7 +14,6 @@
         flex-wrap: wrap;
         transition: inherit;
         padding-top: 1rem;
-
 
         @media #{$small-and-down} {
             flex-direction: column;
@@ -76,7 +74,6 @@
         }
     }
 
-
     & > .tnt-form-field-label {
         position: absolute;
         user-select: none;
@@ -105,7 +102,6 @@
         }
     }
 }
-
 
 @keyframes tnt-check-radio-button-anim {
     0% {

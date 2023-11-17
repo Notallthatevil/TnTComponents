@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components;
-using TnTComponents.Enum;
+﻿using TnTComponents.Enum;
 
 namespace TnTComponents.Forms;
+
 internal interface ITnTForm {
     FormType FormType { get; set; }
     string Theme { get; set; }
@@ -11,6 +10,7 @@ internal interface ITnTForm {
 }
 
 internal static class ITnTFormExt {
+
     public static void InitializeAdditionalAttributes(this ITnTForm form) {
         if (!form.AdditionalAttributes.TryGetValue("class", out var result)) {
             result = string.Empty;

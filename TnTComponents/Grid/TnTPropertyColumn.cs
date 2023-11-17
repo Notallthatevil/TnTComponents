@@ -1,22 +1,15 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace TnTComponents.Grid;
-public partial class TnTPropertyColumn<TGridItem, TProperty> : TnTColumnBase<TGridItem> {
 
+public partial class TnTPropertyColumn<TGridItem, TProperty> : TnTColumnBase<TGridItem> {
     private Expression<Func<TGridItem, TProperty>>? _lastUsedProperty;
     private Func<TGridItem, string?>? _cellContentFunc;
 
     [Parameter, EditorRequired]
     public Expression<Func<TGridItem, TProperty>> Property { get; set; } = default!;
-
 
     [Parameter]
     public string? Format { get; set; }
@@ -32,7 +25,6 @@ public partial class TnTPropertyColumn<TGridItem, TProperty> : TnTColumnBase<TGr
                 }
 
                 _cellContentFunc = gridItem => (propFunc(gridItem) as IFormattable)?.ToString(Format, null);
-
             }
             else {
                 _cellContentFunc = gridItem => propFunc(gridItem)?.ToString();
@@ -42,7 +34,6 @@ public partial class TnTPropertyColumn<TGridItem, TProperty> : TnTColumnBase<TGr
                 Title = SplitOnCapitalLetters().Replace(expression.Member.Name, " $1");
             }
         }
-
 
         base.OnParametersSet();
     }

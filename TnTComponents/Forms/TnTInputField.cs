@@ -2,18 +2,15 @@
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
 using System.Text;
-using System.Threading.Tasks;
 using TnTComponents.Common;
 using TnTComponents.Common.Ext;
 using TnTComponents.Enum;
 
 namespace TnTComponents.Forms;
+
 public abstract class TnTInputField<TInputType> : InputBase<TInputType>, ITnTFormField {
+
     [Parameter]
     public virtual string BaseCssClass { get; set; } = ITnTFormField.DefaultBaseCssClass;
 
@@ -30,7 +27,7 @@ public abstract class TnTInputField<TInputType> : InputBase<TInputType>, ITnTFor
     public string? Icon { get; set; }
 
     [Parameter, EditorRequired]
-    public required string Label { get; set; }
+    public string Label { get; set; }
 
     [CascadingParameter]
     public TnTForm? ParentForm { get; set; }
@@ -43,6 +40,7 @@ public abstract class TnTInputField<TInputType> : InputBase<TInputType>, ITnTFor
 
     [Parameter]
     public bool ShowValidation { get; set; } = true;
+
     protected bool Active { get; private set; }
 
     protected ElementReference InputElement { get; set; }
@@ -60,12 +58,15 @@ public abstract class TnTInputField<TInputType> : InputBase<TInputType>, ITnTFor
     //protected abstract void OnChange(ChangeEventArgs e);
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+
     protected virtual async Task OnFocusInAsync(FocusEventArgs e) {
         Active = true;
     }
+
     protected virtual async Task OnFocusOutAsync(FocusEventArgs e) {
         Active = false;
     }
+
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
     protected override void OnAfterRender(bool firstRender) {
@@ -76,7 +77,6 @@ public abstract class TnTInputField<TInputType> : InputBase<TInputType>, ITnTFor
 
         base.OnAfterRender(firstRender);
     }
-
 
     protected virtual string GetCssClass() {
         var strBuilder = new StringBuilder(BaseCssClass)
@@ -93,12 +93,15 @@ public abstract class TnTInputField<TInputType> : InputBase<TInputType>, ITnTFor
         switch (FormType) {
             case FormType.Underlined:
                 break;
+
             case FormType.Filled:
                 strBuilder.Append(' ').Append("filled");
                 break;
+
             case FormType.Outlined:
                 strBuilder.Append(' ').Append("outlined");
                 break;
+
             default:
                 throw new NotImplementedException();
         }

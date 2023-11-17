@@ -1,14 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace TnTComponents.Common {
-    public abstract class TnTBaseComponent : ComponentBase, ITnTComponent {
 
+    public abstract class TnTBaseComponent : ComponentBase, ITnTComponent {
         public virtual string BaseCssClass { get; set; } = string.Empty;
 
         [Parameter]
@@ -23,7 +18,6 @@ namespace TnTComponents.Common {
         [Parameter(CaptureUnmatchedValues = true)]
         public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
-
         public virtual string GetCssClass() {
             var strBuilder = new StringBuilder(BaseCssClass);
 
@@ -31,11 +25,11 @@ namespace TnTComponents.Common {
                 strBuilder.Append(' ').Append(string.Join(' ', result));
             }
 
-            if(Disabled) {
+            if (Disabled) {
                 strBuilder.Append(' ').Append("disabled");
             }
 
-            if(Active && !Disabled) {
+            if (Active && !Disabled) {
                 strBuilder.Append(' ').Append("active");
             }
 

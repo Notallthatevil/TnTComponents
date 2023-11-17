@@ -1,9 +1,8 @@
-using Microsoft.AspNetCore.Components;
 using TnTComponents.Dialogs;
 
 namespace TnTComponents;
-public partial class TnTDialog {
 
+public partial class TnTDialog {
     private readonly List<Dialog> _dialogs = [];
 
     protected override void OnInitialized() {
@@ -25,5 +24,4 @@ public partial class TnTDialog {
         DialogService.OnOpen -= OnOpen;
         DialogService.OnClose -= OnClose;
     }
-
 }

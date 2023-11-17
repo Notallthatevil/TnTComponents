@@ -1,4 +1,5 @@
 ﻿namespace TnTComponents.Common;
+
 internal class ElementBoundingRect {
     public double? X { get; set; }
     public double? Y { get; set; }

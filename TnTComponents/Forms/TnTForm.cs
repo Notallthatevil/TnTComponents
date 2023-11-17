@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Components.Rendering;
 using TnTComponents.Enum;
 
 namespace TnTComponents.Forms;
+
 public abstract class TnTForm : EditForm {
+
     [Parameter]
     public FormType FormType { get; set; }
 
@@ -46,5 +48,4 @@ public abstract class TnTForm : EditForm {
 }
 
 public class TnTForm<TModelType> : TnTForm {
-
 }

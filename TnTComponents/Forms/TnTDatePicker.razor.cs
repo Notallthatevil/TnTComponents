@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
-using TnTComponents.Enum;
 
 namespace TnTComponents.Forms;
+
 public partial class TnTDatePicker {
+
     [Parameter]
     public string Format { get; set; } = "yyyy-MM-dd";
 
@@ -27,6 +27,7 @@ public partial class TnTDatePicker {
 
     private int _dropdownMonth;
     private int _dropdownYearValue;
+
     private int _dropdownYear {
         get => _dropdownYearValue;
         set {
@@ -46,8 +47,6 @@ public partial class TnTDatePicker {
         }
     }
 
-
-
     protected override void OnInitialized() {
         _dropdownMonth = DefaultDate.Month;
         _dropdownYear = DefaultDate.Year;
@@ -65,8 +64,7 @@ public partial class TnTDatePicker {
         base.OnInitialized();
     }
 
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override string? FormatValueAsString(DateOnly? value) {
         return value?.ToString(Format);
     }
@@ -146,11 +144,10 @@ public partial class TnTDatePicker {
         return strBuilder.ToString();
     }
 
-
     private bool CanShowPrevMonth() {
         return new DateOnly(_dropdownYear, _dropdownMonth, 1).AddDays(-1) >= MinDate;
-
     }
+
     private bool CanShowNextMonth() {
         return new DateOnly(_dropdownYear, _dropdownMonth, 1).AddMonths(1) <= MaxDate;
     }

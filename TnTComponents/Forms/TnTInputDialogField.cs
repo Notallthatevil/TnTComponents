@@ -1,18 +1,15 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TnTComponents.Common.Ext;
 
 namespace TnTComponents.Forms;
+
 public abstract class TnTInputDialogField<TInputType> : TnTInputField<TInputType> {
+
     [Parameter]
     public bool AllowClear { get; set; } = true;
+
     protected ElementReference ContainerElementReference { get; set; }
     protected bool HasSpaceBelow { get; private set; } = true;
 

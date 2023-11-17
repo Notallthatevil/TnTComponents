@@ -1,20 +1,8 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
-using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TnTComponents.Common;
-using TnTComponents.Dialogs;
+﻿using TnTComponents.Dialogs;
 
 namespace TnTComponents.Services;
 
-
 public class TnTDialogService : IDisposable {
-
     internal delegate Task OnOpenCallback(Dialog dialog);
     internal delegate Task OnCloseCallback(Dialog dialog);
 
@@ -22,7 +10,6 @@ public class TnTDialogService : IDisposable {
     internal event OnCloseCallback? OnClose;
 
     public TnTDialogService() {
-
     }
 
     public void Dispose() {
@@ -46,7 +33,6 @@ public class TnTDialogService : IDisposable {
         return Task.CompletedTask;
     }
 
-
     //private DotNetObjectReference<DialogService> reference;
     //internal DotNetObjectReference<DialogService> Reference {
     //    get {
@@ -66,7 +52,7 @@ public class TnTDialogService : IDisposable {
     //IJSRuntime JSRuntime { get; set; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="DialogService"/> class.
+    /// Initializes a new instance of the <see cref="DialogService" /> class.
     /// </summary>
     /// <param name="uriHelper">The URI helper.</param>
     /// <param name="jsRuntime">IJSRuntime instance.</param>
@@ -79,15 +65,9 @@ public class TnTDialogService : IDisposable {
     //    }
     //}
 
-    // private void UriHelper_OnLocationChanged(object sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e) {
-    //     while (dialogs.Any()) {
-    //         Close();
-    //     }
-    //
-    //     if (_sideDialogTask?.Task.IsCompleted == false) {
-    //         CloseSide();
-    //     }
-    // }
+    // private void UriHelper_OnLocationChanged(object sender,
+    // Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e) { while (dialogs.Any()) {
+    // Close(); } // if (_sideDialogTask?.Task.IsCompleted == false) { CloseSide(); } }
 
     /// <summary>
     /// Raises the Close event.
@@ -118,9 +98,11 @@ public class TnTDialogService : IDisposable {
     /// Opens a dialog with the specified arguments.
     /// </summary>
     /// <typeparam name="T">The type of the Blazor component which will be displayed in a dialog.</typeparam>
-    /// <param name="title">The text displayed in the title bar of the dialog.</param>
-    /// <param name="parameters">The dialog parameters. Passed as property values of <typeparamref name="T" />.</param>
-    /// <param name="options">The dialog options.</param>
+    /// <param name="title">     The text displayed in the title bar of the dialog.</param>
+    /// <param name="parameters">
+    /// The dialog parameters. Passed as property values of <typeparamref name="T" />.
+    /// </param>
+    /// <param name="options">   The dialog options.</param>
     //public virtual void Open<T>(string title, Dictionary<string, object> parameters = null, DialogOptions options = null) where T : ComponentBase {
     //OpenDialog<T>(title, parameters, options);
     //}
@@ -142,9 +124,11 @@ public class TnTDialogService : IDisposable {
     /// Opens a dialog with the specified arguments.
     /// </summary>
     /// <typeparam name="T">The type of the Blazor component which will be displayed in a dialog.</typeparam>
-    /// <param name="title">The text displayed in the title bar of the dialog.</param>
-    /// <param name="parameters">The dialog parameters. Passed as property values of <typeparamref name="T" />.</param>
-    /// <param name="options">The dialog options.</param>
+    /// <param name="title">     The text displayed in the title bar of the dialog.</param>
+    /// <param name="parameters">
+    /// The dialog parameters. Passed as property values of <typeparamref name="T" />.
+    /// </param>
+    /// <param name="options">   The dialog options.</param>
     /// <returns>The value passed as argument to <see cref="Close" />.</returns>
     //public virtual Task<dynamic> OpenAsync<T>(string title, Dictionary<string, object> parameters = null, DialogOptions options = null) where T : ComponentBase {
     //var task = new TaskCompletionSource<dynamic>();
@@ -158,10 +142,14 @@ public class TnTDialogService : IDisposable {
     /// <summary>
     /// Opens a side dialog with the specified arguments
     /// </summary>
-    /// <typeparam name="T">The type of Blazor component which will be displayed in the side dialog.</typeparam>
-    /// <param name="title">The text displayed in the title bar of the side dialog.</param>
-    /// <param name="parameters">The dialog parameters. Passed as property values of <typeparamref name="T"/></param>
-    /// <param name="options">The side dialog options.</param>
+    /// <typeparam name="T">
+    /// The type of Blazor component which will be displayed in the side dialog.
+    /// </typeparam>
+    /// <param name="title">     The text displayed in the title bar of the side dialog.</param>
+    /// <param name="parameters">
+    /// The dialog parameters. Passed as property values of <typeparamref name="T" />
+    /// </param>
+    /// <param name="options">   The side dialog options.</param>
     /// <returns>A task that completes when the dialog is closed or a new one opened</returns>
     //public Task<dynamic> OpenSideAsync<T>(string title, Dictionary<string, object> parameters = null, SideDialogOptions options = null)
     //where T : ComponentBase {
@@ -190,19 +178,19 @@ public class TnTDialogService : IDisposable {
     /// <summary>
     /// Opens a dialog with the specified content.
     /// </summary>
-    /// <param name="title">The text displayed in the title bar of the dialog.</param>
+    /// <param name="title">       The text displayed in the title bar of the dialog.</param>
     /// <param name="childContent">The content displayed in the dialog.</param>
-    /// <param name="options">The dialog options.</param>
+    /// <param name="options">     The dialog options.</param>
     /// <returns>The value passed as argument to <see cref="Close" />.</returns>
     //public virtual Task<dynamic> OpenAsync(string title, RenderFragment<DialogService> childContent, DialogOptions options = null) {
     //    var task = new TaskCompletionSource<dynamic>();
     //    tasks.Add(task);
 
-    //    options = options ?? new DialogOptions();
+    // options = options ?? new DialogOptions();
 
-    //    options.ChildContent = childContent;
+    // options.ChildContent = childContent;
 
-    //    OpenDialog<object>(title, null, options);
+    // OpenDialog<object>(title, null, options);
 
     //    return task.Task;
     //}
@@ -210,13 +198,13 @@ public class TnTDialogService : IDisposable {
     /// <summary>
     /// Opens a dialog with the specified content.
     /// </summary>
-    /// <param name="title">The text displayed in the title bar of the dialog.</param>
+    /// <param name="title">       The text displayed in the title bar of the dialog.</param>
     /// <param name="childContent">The content displayed in the dialog.</param>
-    /// <param name="options">The dialog options.</param>
+    /// <param name="options">     The dialog options.</param>
     //public virtual void Open(string title, RenderFragment<DialogService> childContent, DialogOptions options = null) {
     //    options = options ?? new DialogOptions();
 
-    //    options.ChildContent = childContent;
+    // options.ChildContent = childContent;
 
     //    OpenDialog<object>(title, null, options);
     //}
@@ -257,10 +245,7 @@ public class TnTDialogService : IDisposable {
     //public virtual void Close(dynamic result = null) {
     //    var dialog = dialogs.LastOrDefault();
 
-    //    if (dialog != null) {
-    //        OnClose?.Invoke(result);
-    //        dialogs.Remove(dialog);
-    //    }
+    // if (dialog != null) { OnClose?.Invoke(result); dialogs.Remove(dialog); }
 
     //    var task = tasks.LastOrDefault();
     //    if (task != null && task.Task != null && !task.Task.IsCompleted) {
@@ -281,7 +266,7 @@ public class TnTDialogService : IDisposable {
     /// Displays a confirmation dialog.
     /// </summary>
     /// <param name="message">The message displayed to the user.</param>
-    /// <param name="title">The text displayed in the title bar of the dialog.</param>
+    /// <param name="title">  The text displayed in the title bar of the dialog.</param>
     /// <param name="options">The options.</param>
     /// <returns><c>true</c> if the user clicked the OK button, <c>false</c> otherwise.</returns>
     //public virtual async Task<bool?> Confirm(string message = "Confirm?", string title = "Confirm", ConfirmOptions options = null) {
@@ -305,27 +290,22 @@ public class TnTDialogService : IDisposable {
     //        CloseTabIndex = options != null ? options.CloseTabIndex : 0,
     //    };
 
-    //    return await OpenAsync(title, ds => {
-    //        RenderFragment content = b => {
-    //            var i = 0;
-    //            b.OpenElement(i++, "p");
-    //            b.AddAttribute(i++, "class", "rz-dialog-confirm-message");
-    //            b.AddContent(i++, (MarkupString)message);
-    //            b.CloseElement();
+    // return await OpenAsync(title, ds => { RenderFragment content = b => { var i = 0;
+    // b.OpenElement(i++, "p"); b.AddAttribute(i++, "class", "rz-dialog-confirm-message");
+    // b.AddContent(i++, (MarkupString)message); b.CloseElement();
 
-    //            b.OpenElement(i++, "div");
-    //            b.AddAttribute(i++, "class", "rz-dialog-confirm-buttons");
+    // b.OpenElement(i++, "div"); b.AddAttribute(i++, "class", "rz-dialog-confirm-buttons");
 
-    //            b.OpenComponent<Blazor.RadzenButton>(i++);
-    //            b.AddAttribute(i++, "Text", options != null ? options.OkButtonText : "Ok");
-    //            b.AddAttribute(i++, "Click", EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => ds.Close(true)));
-    //            b.CloseComponent();
+    // b.OpenComponent<Blazor.RadzenButton>(i++); b.AddAttribute(i++, "Text", options != null ?
+    // options.OkButtonText : "Ok"); b.AddAttribute(i++, "Click",
+    // EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () =>
+    // ds.Close(true))); b.CloseComponent();
 
-    //            b.OpenComponent<Blazor.RadzenButton>(i++);
-    //            b.AddAttribute(i++, "Text", options != null ? options.CancelButtonText : "Cancel");
-    //            b.AddAttribute(i++, "ButtonStyle", ButtonStyle.Secondary);
-    //            b.AddAttribute(i++, "Click", EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => ds.Close(false)));
-    //            b.CloseComponent();
+    // b.OpenComponent<Blazor.RadzenButton>(i++); b.AddAttribute(i++, "Text", options != null ?
+    // options.CancelButtonText : "Cancel"); b.AddAttribute(i++, "ButtonStyle",
+    // ButtonStyle.Secondary); b.AddAttribute(i++, "Click",
+    // EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () =>
+    // ds.Close(false))); b.CloseComponent();
 
     //            b.CloseElement();
     //        };
@@ -337,7 +317,7 @@ public class TnTDialogService : IDisposable {
     /// Displays a alert dialog.
     /// </summary>
     /// <param name="message">The message displayed to the user.</param>
-    /// <param name="title">The text displayed in the title bar of the dialog.</param>
+    /// <param name="title">  The text displayed in the title bar of the dialog.</param>
     /// <param name="options">The options.</param>
     /// <returns><c>true</c> if the user clicked the OK button, <c>false</c> otherwise.</returns>
     //public virtual async Task<bool?> Alert(string message = "", string title = "Message", AlertOptions options = null) {
@@ -361,28 +341,22 @@ public class TnTDialogService : IDisposable {
     //        CloseTabIndex = options != null ? options.CloseTabIndex : 0,
     //    };
 
-    //    return await OpenAsync(title, ds => {
-    //        RenderFragment content = b => {
-    //            var i = 0;
-    //            b.OpenElement(i++, "p");
-    //            b.AddAttribute(i++, "class", "rz-dialog-alert-message");
-    //            b.AddContent(i++, (MarkupString)message);
-    //            b.CloseElement();
+    // return await OpenAsync(title, ds => { RenderFragment content = b => { var i = 0;
+    // b.OpenElement(i++, "p"); b.AddAttribute(i++, "class", "rz-dialog-alert-message");
+    // b.AddContent(i++, (MarkupString)message); b.CloseElement();
 
-    //            b.OpenElement(i++, "div");
-    //            b.AddAttribute(i++, "class", "rz-dialog-alert-buttons");
+    // b.OpenElement(i++, "div"); b.AddAttribute(i++, "class", "rz-dialog-alert-buttons");
 
-    //            b.OpenComponent<Blazor.RadzenButton>(i++);
-    //            b.AddAttribute(i++, "Text", options != null ? options.OkButtonText : "Ok");
-    //            b.AddAttribute(i++, "Click", EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => ds.Close(true)));
-    //            b.CloseComponent();
+    // b.OpenComponent<Blazor.RadzenButton>(i++); b.AddAttribute(i++, "Text", options != null ?
+    // options.OkButtonText : "Ok"); b.AddAttribute(i++, "Click",
+    // EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () =>
+    // ds.Close(true))); b.CloseComponent();
 
     //            b.CloseElement();
     //        };
     //        return content;
     //    }, dialogOptions);
     //}
-
 }
 
 ///// <summary>
@@ -395,42 +369,52 @@ public class TnTDialogService : IDisposable {
 //    /// <value><c>true</c> if title bar is shown; otherwise, <c>false</c>.</value>
 //    public bool ShowTitle { get; set; } = true;
 
-//    /// <summary>
-//    /// Gets or sets a value indicating whether to show the close button. Set to <c>true</c> by default.
-//    /// </summary>
-//    /// <value><c>true</c> if the close button is shown; otherwise, <c>false</c>.</value>
-//    public bool ShowClose { get; set; } = true;
-//    /// <summary>
-//    /// Gets or sets the width of the dialog.
-//    /// </summary>
-//    /// <value>The width.</value>
-//    public string Width { get; set; }
-//    /// <summary>
-//    /// Gets or sets the height of the dialog.
-//    /// </summary>
-//    /// <value>The height.</value>
-//    public string Height { get; set; }
-//    /// <summary>
-//    /// Gets or sets the CSS style of the dialog
-//    /// </summary>
-//    /// <value>The style.</value>
-//    public string Style { get; set; }
+// ///
+// <summary>
+// /// Gets or sets a value indicating whether to show the close button. Set to <c>true</c> by
+// default. ///
+// </summary>
+// ///
+// <value><c>true</c> if the close button is shown; otherwise, <c>false</c>.</value>
+// public bool ShowClose { get; set; } = true; ///
+// <summary>
+// /// Gets or sets the width of the dialog. ///
+// </summary>
+// ///
+// <value>The width.</value>
+// public string Width { get; set; } ///
+// <summary>
+// /// Gets or sets the height of the dialog. ///
+// </summary>
+// ///
+// <value>The height.</value>
+// public string Height { get; set; } ///
+// <summary>
+// /// Gets or sets the CSS style of the dialog ///
+// </summary>
+// ///
+// <value>The style.</value>
+// public string Style { get; set; }
 
-//    /// <summary>
-//    /// Gets or sets a value indicating whether the dialog should be closed by clicking the overlay.
-//    /// </summary>
-//    /// <value><c>true</c> if closeable; otherwise, <c>false</c>.</value>
-//    public bool CloseDialogOnOverlayClick { get; set; } = false;
+// ///
+// <summary>
+// /// Gets or sets a value indicating whether the dialog should be closed by clicking the overlay. ///
+// </summary>
+// ///
+// <value><c>true</c> if closeable; otherwise, <c>false</c>.</value>
+// public bool CloseDialogOnOverlayClick { get; set; } = false;
 
-//    /// <summary>
-//    /// Gets or sets dialog box custom class
-//    /// </summary>
-//    public string CssClass { get; set; }
+// ///
+// <summary>
+// /// Gets or sets dialog box custom class ///
+// </summary>
+// public string CssClass { get; set; }
 
-//    /// <summary>
-//    /// Gets or sets the CSS classes added to the dialog's wrapper element.
-//    /// </summary>
-//    public string WrapperCssClass { get; set; }
+// ///
+// <summary>
+// /// Gets or sets the CSS classes added to the dialog's wrapper element. ///
+// </summary>
+// public string WrapperCssClass { get; set; }
 
 //    /// <summary>
 //    /// Gets or sets a value the dialog escape tabindex. Set to <c>0</c> by default.
@@ -447,10 +431,11 @@ public class TnTDialogService : IDisposable {
 //    /// </summary>
 //    public string Title { get; set; }
 
-//    /// <summary>
-//    /// The Position on which the dialog will be positioned
-//    /// </summary>
-//    public DialogPosition Position { get; set; } = DialogPosition.Right;
+// ///
+// <summary>
+// /// The Position on which the dialog will be positioned ///
+// </summary>
+// public DialogPosition Position { get; set; } = DialogPosition.Right;
 
 //    /// <summary>
 //    /// Whether to show a mask on the background or not

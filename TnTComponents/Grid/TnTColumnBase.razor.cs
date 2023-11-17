@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
-using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using TnTComponents.Infrastructure;
 
 namespace TnTComponents.Grid;
+
 public abstract partial class TnTColumnBase<TGridItem> {
 
     [Parameter]
@@ -25,6 +24,7 @@ public abstract partial class TnTColumnBase<TGridItem> {
     protected internal string ColumnContentClass => GetCssClass();
 
     protected internal virtual RenderFragment HeaderContent { get; } = default!;
+
     protected internal string ColumnHeaderClass {
         get {
             var strBuilder = new StringBuilder(HeaderClass);
@@ -60,6 +60,6 @@ public abstract partial class TnTColumnBase<TGridItem> {
         Grid.AddColumn(this);
         base.OnInitialized();
     }
-    protected internal abstract RenderFragment CellContent(TGridItem item);
 
+    protected internal abstract RenderFragment CellContent(TGridItem item);
 }

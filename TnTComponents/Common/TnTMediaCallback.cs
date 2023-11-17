@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TnTComponents.Common {
-    public  class TnTMediaCallback : ComponentBase, IDisposable {
+
+    public class TnTMediaCallback : ComponentBase, IDisposable {
 
         [Parameter]
         public string Query { get; set; } = default!;
@@ -25,8 +21,9 @@ namespace TnTComponents.Common {
         public async Task OnChanged(bool queryIsTrue) {
             await OnChangedCallback.InvokeAsync(queryIsTrue);
         }
+
         protected override async Task OnAfterRenderAsync(bool firstRender) {
-            if(firstRender) {
+            if (firstRender) {
                 _reference = DotNetObjectReference.Create(this);
 
                 var result = await _jsRuntime.InvokeAsync<bool>("TnTComponents.MediaCallback", Query, _reference);
@@ -34,12 +31,11 @@ namespace TnTComponents.Common {
                 await OnChangedCallback.InvokeAsync(result);
             }
         }
-        
+
         protected virtual void Dispose(bool disposing) {
             if (!_disposedValue) {
                 if (disposing) {
-
-                    if(_reference != null) {
+                    if (_reference != null) {
                         _jsRuntime.InvokeVoidAsync("TnTComponents.MediaCallback", _reference);
                         _reference.Dispose();
                         _reference = null;

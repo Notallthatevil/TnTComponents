@@ -1,13 +1,10 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
 using System.Text;
-using TnTComponents.Common;
-using TnTComponents.Infrastructure;
 
 namespace TnTComponents.Layout;
-public partial class TnTLayout : ComponentBase {
 
+public partial class TnTLayout : ComponentBase {
     internal const string ExpandClass = "expand";
 
     [Parameter]
@@ -21,7 +18,6 @@ public partial class TnTLayout : ComponentBase {
 
     [Parameter]
     public RenderFragment? SideNav { get; set; }
-
 
     [Parameter]
     public string HeaderCssClass { get; set; } = "tnt-header";
@@ -116,7 +112,6 @@ public partial class TnTLayout : ComponentBase {
         __builder.CloseComponent();
     }
 
-
     private string BuildCssClassList(string baseClass) {
         var strBuilder = new StringBuilder(baseClass);
 
@@ -125,5 +120,4 @@ public partial class TnTLayout : ComponentBase {
         }
         return strBuilder.ToString();
     }
-
 }

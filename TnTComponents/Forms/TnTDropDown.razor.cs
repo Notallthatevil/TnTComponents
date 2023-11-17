@@ -1,11 +1,9 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using TnTComponents.Common.Ext;
 
 namespace TnTComponents.Forms;
+
 public partial class TnTDropDown<TListItemType> {
 
     [Parameter, EditorRequired]
@@ -62,5 +60,4 @@ public partial class TnTDropDown<TListItemType> {
             await OnFocusOutAsync(new FocusEventArgs());
         }
     }
-
 }

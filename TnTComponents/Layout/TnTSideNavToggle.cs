@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
-using Microsoft.JSInterop;
 using TnTComponents.Common;
 
 namespace TnTComponents.Layout;
+
 public class TnTSideNavToggle : TnTIconComponent {
+
     [Parameter]
     public string? Label { get; set; }
 
@@ -50,7 +50,6 @@ public class TnTSideNavToggle : TnTIconComponent {
             __builder.CloseElement();
         }
     }
-
 
     private MarkupString CreateToggleForId(string? id, bool expand) {
         if (!string.IsNullOrWhiteSpace(id)) {

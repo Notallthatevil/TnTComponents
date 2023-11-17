@@ -1,9 +1,11 @@
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using TnTComponents.Enum;
 
 namespace TnTComponents;
+
 public partial class TnTButton {
+
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
@@ -20,13 +22,13 @@ public partial class TnTButton {
     public override string BaseCssClass { get; set; } = "tnt-btn";
 
     protected override void OnInitialized() {
-        if(AdditionalAttributes is null) {
+        if (AdditionalAttributes is null) {
             AdditionalAttributes = new Dictionary<string, object>() {
                 { "type", "button" }
             };
         }
 
-        if(!AdditionalAttributes.ContainsKey("type")) {
+        if (!AdditionalAttributes.ContainsKey("type")) {
             AdditionalAttributes = new Dictionary<string, object>(AdditionalAttributes) {
                 { "type", "button" }
             };
@@ -39,7 +41,7 @@ public partial class TnTButton {
     }
 
     private void ButtonClicked(MouseEventArgs args) {
-        if(!Disabled) {
+        if (!Disabled) {
             OnClick.InvokeAsync(args);
         }
     }

@@ -1,18 +1,18 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using TnTComponents.Common;
 using TnTComponents.Common.Ext;
 using TnTComponents.Infrastructure;
 
 namespace TnTComponents;
+
 public partial class TnTTabChild {
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
     [Parameter, EditorRequired]
-    public required string TabTitle { get; set; }
+    public string TabTitle { get; set; }
 
     internal ElementReference TabReference { get; set; }
 
@@ -28,7 +28,6 @@ public partial class TnTTabChild {
 
     private ElementReference _reference;
 
-
     protected override void OnInitialized() {
         if (_tabViewContext is null) {
             throw new InvalidOperationException($"{nameof(TnTTabChild)} must be a descendant of {nameof(TnTTabView)}!");
@@ -39,7 +38,7 @@ public partial class TnTTabChild {
     }
 
     protected override void OnParametersSet() {
-        if(_disabled != Disabled) {
+        if (_disabled != Disabled) {
             _disabled = Disabled;
             _tabViewContext?.ParentView.Refresh();
         }

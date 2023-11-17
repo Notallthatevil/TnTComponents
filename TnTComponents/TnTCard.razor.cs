@@ -2,17 +2,17 @@ using Microsoft.AspNetCore.Components;
 using TnTComponents.Enum;
 
 namespace TnTComponents;
+
 public partial class TnTCard {
+
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
-
 
     [Parameter]
     public CardType CardType { get; set; }
 
     [Parameter]
     public override string BaseCssClass { get; set; } = "tnt-card";
-
 
     public override string GetCssClass() {
         return $"{base.GetCssClass()} {CardType switch {

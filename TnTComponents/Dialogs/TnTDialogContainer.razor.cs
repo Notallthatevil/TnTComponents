@@ -1,17 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TnTComponents.Common;
-using TnTComponents.Services;
 
 namespace TnTComponents.Dialogs;
+
 public partial class TnTDialogContainer {
+
     [Parameter, EditorRequired]
     public Dialog Dialog { get; set; } = default!;
 
@@ -44,9 +37,7 @@ public partial class TnTDialogContainer {
         });
     }
 
-
     private void Close() {
         DialogService.CloseAsync(Dialog);
     }
 }
-

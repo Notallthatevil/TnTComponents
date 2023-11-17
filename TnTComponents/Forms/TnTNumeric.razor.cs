@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Components;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Linq.Expressions;
 using System.Numerics;
 
 namespace TnTComponents.Forms;
+
 public partial class TnTNumeric<TNumberType> where TNumberType : unmanaged,
     IComparable<TNumberType>,
     IMinMaxValue<TNumberType>,
@@ -16,6 +16,7 @@ public partial class TnTNumeric<TNumberType> where TNumberType : unmanaged,
 
     [Parameter]
     public TNumberType MaxValue { get; set; } = TNumberType.MaxValue;
+
     [Parameter]
     public TNumberType MinValue { get; set; } = TNumberType.MinValue;
 
@@ -40,7 +41,7 @@ public partial class TnTNumeric<TNumberType> where TNumberType : unmanaged,
     private bool _inAdjustment;
 
     //protected override void OnChange(ChangeEventArgs e) {
-        //CurrentValueAsString = e?.Value?.ToString();
+    //CurrentValueAsString = e?.Value?.ToString();
     //}
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TNumberType result, [NotNullWhen(false)] out string? validationErrorMessage) {
@@ -61,7 +62,6 @@ public partial class TnTNumeric<TNumberType> where TNumberType : unmanaged,
     protected override string? FormatValueAsString(TNumberType value) {
         // Avoiding a cast to IFormattable to avoid boxing.
         return value switch {
-
             byte @byte => BindConverter.FormatValue(@byte, CultureInfo.InvariantCulture)?.ToString(),
             sbyte @sbyte => BindConverter.FormatValue(@sbyte, CultureInfo.InvariantCulture)?.ToString(),
             short @short => BindConverter.FormatValue(@short, CultureInfo.InvariantCulture),
@@ -88,6 +88,7 @@ public partial class TnTNumeric<TNumberType> where TNumberType : unmanaged,
             StateHasChanged();
         }
     }
+
     private async Task Decrement() {
         _inAdjustment = true;
         while (_inAdjustment) {

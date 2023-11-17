@@ -53,8 +53,6 @@
         }
     }
 
-
-
     &:not(.filled) input[type=checkbox] {
         &:checked {
             + span:before {
@@ -91,7 +89,6 @@
 
     &.filled {
         input[type=checkbox] {
-
             + span {
                 &:before {
                     clip-path: circle(100%);

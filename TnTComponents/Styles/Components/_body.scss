@@ -8,7 +8,6 @@
     flex-direction: column;
     align-items: stretch;
 
-
     @media #{$medium-and-up} {
         width: calc(100% - calc(260px + 10px));
         margin-left: 260px;

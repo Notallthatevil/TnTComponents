@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using TnTComponents.Common;
-using TnTComponents.Common.Ext;
 using TnTComponents.Infrastructure;
 
 namespace TnTComponents.Grid;

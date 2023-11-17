@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using System.Reflection.Metadata;
 using System.Text;
 using TnTComponents.Enum;
 
 namespace TnTComponents.Forms;
-public partial class TnTRadioButton<TInputType> {
 
+public partial class TnTRadioButton<TInputType> {
 
     [CascadingParameter]
     private RadioGroupContext Context { get; set; } = default!;
@@ -54,5 +53,4 @@ public partial class TnTRadioButton<TInputType> {
         _trueValueToggle = !_trueValueToggle;
         return _trueValueToggle ? 'a' : 'b';
     }
-
 }

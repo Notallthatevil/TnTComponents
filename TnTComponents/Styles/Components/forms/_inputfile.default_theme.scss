@@ -3,7 +3,6 @@
         color: $tnt-color-on-surface;
 
         & > input[type=file] {
-
             &::file-selector-button {
                 background-color: $tnt-color-surface-container-low;
                 color: $tnt-color-primary;
@@ -80,6 +79,7 @@
             }
         }
     }
+
     &.disabled {
         opacity: 0.5;
     }

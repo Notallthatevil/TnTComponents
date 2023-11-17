@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace TnTComponents.Enum;
 
-namespace TnTComponents.Enum;
 public enum FlexDirection {
     Row,
     Column,
@@ -48,6 +43,7 @@ public enum FlexAlignItems {
 }
 
 internal static class FlexEnumExt {
+
     public static string ToStyle(this FlexDirection flexDirection) {
         return "flex-direction: " + flexDirection switch {
             FlexDirection.Row => "row;",
@@ -59,7 +55,7 @@ internal static class FlexEnumExt {
     }
 
     public static string ToStyle(this FlexWrap flexWrap) {
-        if(flexWrap == FlexWrap.Unspecified) {
+        if (flexWrap == FlexWrap.Unspecified) {
             return string.Empty;
         }
         return "flex-wrap: " + flexWrap switch {

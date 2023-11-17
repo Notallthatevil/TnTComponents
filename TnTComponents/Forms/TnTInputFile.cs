@@ -1,27 +1,28 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
-using System.Reflection.Emit;
 using System.Text;
-using TnTComponents.Common;
 using TnTComponents.Enum;
-using TnTComponents.Forms;
 
 namespace TnTComponents.Forms;
 
-
 public partial class TnTInputFile : InputFile, ITnTFormField {
+
     [Parameter]
     public string BaseCssClass { get; set; } = "tnt-form-field-input";
+
     [Parameter]
     public FormType FormType { get; set; }
+
     [CascadingParameter]
     public TnTForm? ParentForm { get; set; }
+
     [Parameter]
     public string? Placeholder { get; set; }
 
     [Parameter]
     public string Theme { get; set; } = "default";
+
     [Parameter]
     public bool Disabled { get; set; }
 
@@ -55,7 +56,6 @@ public partial class TnTInputFile : InputFile, ITnTFormField {
 
             AdditionalAttributes = dict;
         }
-
 
         base.OnParametersSet();
     }
@@ -95,12 +95,15 @@ public partial class TnTInputFile : InputFile, ITnTFormField {
             case ButtonType.Default:
             default:
                 break;
+
             case ButtonType.Flat:
                 strBuilder.Append(' ').Append("flat");
                 break;
+
             case ButtonType.Filled:
                 strBuilder.Append(' ').Append("filled");
                 break;
+
             case ButtonType.Outlined:
                 strBuilder.Append(' ').Append("outlined");
                 break;
