@@ -5,8 +5,9 @@
 <TnTRow>
     <TnTColumn S="12" L="6">
 
-        <TnTForm FormType="FormType.Underlined" TModelType="MyModel" Model="@_model" action="/submit" method="post">
+        <TnTForm FormType="FormType.Underlined" TModelType="MyModel" Model="@_model" OnSubmit="Submit" method="post" FormName="submitForm">
             <DataAnnotationsValidator />
+            <ValidationSummary />
             <TnTTextBox Icon="@_icon" @bind-Value="_model.Name" Label="My Label" Placeholder="@_placeholder" Disabled="@_disabled" name="Name" />
             <TnTPasswordBox Icon="@_icon" @bind-Value="_model.Password" Label="Password" Placeholder="@_placeholder" Disabled="@_disabled" AllowPasswordReveal="true" />
             <TnTNumeric Icon="@_icon" @bind-Value="_model.Number" Label="Number" Placeholder="@_placeholder" Disabled="@_disabled" />
@@ -25,7 +26,7 @@
                     <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(4)" Icon="@_icon" Label="Button5" Disabled="@_disabled" />
                 </RadioButtons>
             </TnTRadioGroup>
-            <TnTInputFile name="file" Label="File upload"  Disabled="@_disabled" ButtonType="ButtonType.Flat"/>
+            <TnTInputFile name="file" Label="File upload" Disabled="@_disabled" ButtonType="ButtonType.Flat" />
             <button type="submit">
                 Submit
             </button>
@@ -84,7 +85,7 @@
                     <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(4)" Icon="@_icon" Label="Button5" Disabled="@_disabled" />
                 </RadioButtons>
             </TnTRadioGroup>
-            <TnTInputFile name="file" Label="File upload" Disabled="@_disabled"/>
+            <TnTInputFile name="file" Label="File upload" Disabled="@_disabled" />
 
             <button type="submit" form="MainForm">
                 Submit
@@ -111,6 +112,12 @@
     </TnTColumn>
 </TnTRow>
 
+@if(_submitted) {
+    <text>
+        Form submitted
+    </text>
+}
+
 @code {
     private FormType _formType = FormType.Underlined;
     private bool _disabled = false;
@@ -121,6 +128,8 @@
     private string _placeholder = string.Empty;
     private ICollection<MyListItem> _listItems = default!;
     private ICollection<int> _radioItems = default!;
+
+    private bool _submitted;
 
     private void RotateFormType() {
         switch (_formType) {
@@ -219,5 +228,9 @@
         //
         //_people = people;
         _radioItems = Enumerable.Range(1, 5).ToList();
+    }
+
+    private void Submit() {
+        _submitted = true;
     }
 }
