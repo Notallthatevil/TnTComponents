@@ -6,52 +6,50 @@ namespace TnTComponents;
 
 public partial class TnTButton {
 
-    [Parameter]
-    public RenderFragment ChildContent { get; set; } = default!;
 
     [Parameter]
-    public string Text { get; set; } = default!;
+    public RenderFragment? ChildContent { get; set; }
 
     [Parameter]
     public EventCallback<MouseEventArgs> OnClick { get; set; }
 
-    [Parameter]
-    public ButtonType ButtonType { get; set; }
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = default!;
 
     [Parameter]
-    public override string BaseCssClass { get; set; } = "tnt-btn";
+    public bool? AutoFocus { get; set; }
 
-    protected override void OnInitialized() {
-        if (AdditionalAttributes is null) {
-            AdditionalAttributes = new Dictionary<string, object>() {
-                { "type", "button" }
-            };
-        }
+    [Parameter]
+    public string? FormId { get; set; }
 
-        if (!AdditionalAttributes.ContainsKey("type")) {
-            AdditionalAttributes = new Dictionary<string, object>(AdditionalAttributes) {
-                { "type", "button" }
-            };
-        }
-        base.OnInitialized();
+    [Parameter]
+    public ButtonType Type { get; set; }
+
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    [Parameter]
+    public override string? Class { get; set; } = "tnt-button";
+
+    [Parameter]
+    public IconType IconType { get; set; }
+
+    [Parameter]
+    public string? StartIcon { get; set; }
+    [Parameter]
+    public string? EndIcon { get; set; }
+
+    [Parameter]
+    public ButtonAppearance Appearance { get; set; }
+
+    protected override string GetClass() {
+        return base.GetClass() + " " + Appearance.ToString().ToLower();
     }
 
-    public override string GetCssClass() {
-        return $"{base.GetCssClass()} {GetButtonType()}";
-    }
-
-    private void ButtonClicked(MouseEventArgs args) {
-        if (!Disabled) {
-            OnClick.InvokeAsync(args);
+    private Task OnClickHandler(MouseEventArgs args) {
+        if (!Disabled && OnClick.HasDelegate) {
+            return OnClick.InvokeAsync(args);
         }
-    }
-
-    private string GetButtonType() {
-        return ButtonType switch {
-            ButtonType.Flat => "flat",
-            ButtonType.Filled => "filled",
-            ButtonType.Outlined => "outlined",
-            _ => string.Empty,
-        };
+        return Task.CompletedTask;
     }
 }

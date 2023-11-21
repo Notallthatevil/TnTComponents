@@ -1,28 +1,29 @@
 ﻿@import 'Common/_common.scss';
-@import 'Common/_grid.scss';
-@import 'Components/_body.scss';
+@import 'Common/_default_typeography.scss';
+//@import 'Common/_grid.scss';
+//@import 'Components/_body.scss';
 @import 'Components/_buttons.scss';
-@import 'Components/_card.scss';
-@import 'Components/_dialogcontainer.scss';
-@import 'Components/_grid.scss';
-@import 'Components/_header.scss';
-@import 'Components/_sidenav.scss';
-@import 'Components/_stack.scss';
-@import 'Components/_tabview.scss';
-@import 'Components/forms/_form.scss';
+//@import 'Components/_card.scss';
+//@import 'Components/_dialogcontainer.scss';
+//@import 'Components/_grid.scss';
+//@import 'Components/_header.scss';
+//@import 'Components/_sidenav.scss';
+//@import 'Components/_stack.scss';
+//@import 'Components/_tabview.scss';
+//@import 'Components/forms/_form.scss';
 
-* {
-    font-family: 'Roboto', sans-serif;
-}
+//* {
+//    font-family: 'Roboto', sans-serif;
+//}
 
-html, body {
-    margin: 0px;
-    height: 100%;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+//html, body {
+//    margin: 0px;
+//    height: 100%;
+//    scrollbar-width: none;
+//    -ms-overflow-style: none;
 
-    &::-webkit-scrollbar {
-        background: transparent;
-        width: 0px;
-    }
-}
+//    &::-webkit-scrollbar {
+//        background: transparent;
+//        width: 0px;
+//    }
+//}

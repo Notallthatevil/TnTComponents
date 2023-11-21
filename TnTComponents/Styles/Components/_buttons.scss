@@ -1,42 +1,92 @@
-﻿.tnt-btn {
-    @extend .tnt-border-radius-9;
-    padding: 0 16px;
+﻿
+.tnt-button {
     min-height: 40px;
-    font-weight: bolder;
-    margin: 0.5rem;
-    line-height: 24px;
-    font-size: 14px;
+    padding: 0 24px 0 24px;
+    margin: 8px;
+    @extend .label-large;
+    @extend .tnt-state-layers;
+    @include tnt-border-radius(10);
 
-    &:not(.disabled) {
+    &:not(:disabled) {
         cursor: pointer;
-    }
-
-    &:not(.outlined):not(.filled):not(.flat) {
-        @extend .tnt-z-depth-1;
     }
 
     &:not(.outlined) {
         border: none;
     }
 
-    &.outlined {
-        border-style: solid;
-        border-width: 1px;
+
+    &:has(i.tnt-button-start-icon) {
+        padding-left: 16px;
+
+        i.tnt-button-start-icon {
+            padding-right: 8px;
+        }
     }
 
-    &.flat, &.outlined {
-        background-color: transparent;
-    }
+    &:has(i.tnt-button-end-icon) {
+        padding-right: 16px;
 
-    span {
-        vertical-align: middle;
+        i.tnt-button-end-icon {
+            padding-left: 8px;
+        }
     }
 
     i {
-        display: inline-block;
-        text-align: center;
-        font-size: 1.3rem;
-        vertical-align: bottom;
-        margin-right: 0.3rem;
+        vertical-align: middle;
+        font-size: 18px;
+    }
+
+    &.elevated {
+        background-color: $tnt-color-surface-container-low;
+        color: $tnt-color-primary;
+        @include enable-ripple($tnt-color-primary);
+
+        &:not(:disabled) {
+            @include tnt-z-depth(1);
+
+            &:hover {
+                @include tnt-z-depth(2);
+            }
+
+            &:active {
+                @include tnt-z-depth(1, true);
+            }
+        }
+    }
+
+    &:not(.elevated) {
+        &:not(:disabled) {
+
+            &:hover {
+                @include tnt-z-depth(1);
+            }
+
+            &:active {
+                @include tnt-z-depth(0, true);
+            }
+        }
+    }
+
+    &.filled {
+        background-color: $tnt-color-primary;
+        color: $tnt-color-on-primary;
+        @include enable-ripple($tnt-color-on-primary);
+    }
+
+    &.filledalternative {
+        background-color: $tnt-color-secondary-container;
+        color: $tnt-color-on-secondary-container;
+        @include enable-ripple($tnt-color-on-secondary-container);
+    }
+
+    &.outlined, &.text {
+        background-color: transparent;
+        color: $tnt-color-primary;
+        @include enable-ripple($tnt-color-primary);
+    }
+
+    &.outlined {
+        border: 1px solid $tnt-color-outline;
     }
 }

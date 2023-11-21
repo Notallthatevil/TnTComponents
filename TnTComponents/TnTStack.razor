@@ -1,5 +1,6 @@
-﻿
-<div class="@GetDirectionClass()">
+﻿@using System.Text
+
+<div style="@GetStyle()">
     @ChildContent
 </div>
 
@@ -14,23 +15,15 @@
     [Parameter]
     public bool Reverse { get; set; } = false;
 
-    private string GetDirectionClass() {
-        var stackClass = string.Empty;
-        if (Direction == StackDirection.Vertical) {
-            stackClass = "tnt-stack-vertical";
-        }
-        else {
-            stackClass = "tnt-stack-horizontal";
-        }
+    [Parameter]
+    public int Gap { get; set; } = 10;
 
-        if (Reverse) {
-            stackClass += "-reverse";
-        }
+    private string GetStyle() {
+        var strBuilder = new StringBuilder($"display: flex;gap: {Gap}px;");
 
-        return stackClass;
+        strBuilder.Append($"flex-direction: {(Direction == StackDirection.Vertical ? "column" : "row")}{(Reverse ? "-reverse" : string.Empty)};");
 
+        return strBuilder.ToString();
     }
-
-
 }
 

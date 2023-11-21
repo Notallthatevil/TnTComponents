@@ -2,18 +2,18 @@
 
 @code {
     internal RenderFragment GetIcon() {
-        return GetIcon(IconType, Icon);
+        return RenderIcon(IconType, Icon);
     }
 
 
-    internal static RenderFragment GetIcon(IconType iconType, string? icon) {
+    public static RenderFragment RenderIcon(IconType iconType, string? icon, string? @class = null) {
         if (!string.IsNullOrWhiteSpace(icon)) {
             switch (iconType) {
                 case IconType.MaterialIcons:
-                    return@<i class="tnt-icon-component material-icons">@icon</i>;
+                    return@<i class="@(@class) material-icons">@icon</i>;
 
                 case IconType.FontAwesome:
-                    return@<i class="tnt-icon-component fa @icon"></i>;
+                    return@<i class="@(@class) fa @icon"></i>;
             }
         }
         return default!;

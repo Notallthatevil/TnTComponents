@@ -1,11 +1,26 @@
-﻿@inherits TnTIconComponent
+﻿@inherits TnTComponentBase
 
-<button class="@GetCssClass()" theme="@Theme" @onclick="ButtonClicked" @attributes="AdditionalAttributes">
-    @GetIcon()
-    @if (!string.IsNullOrWhiteSpace(Text)) {
-        <span>
-            @Text
-        </span>
+<button @attributes="AdditionalAttributes"
+        class="@GetClass()"
+        style="@Style"
+        autofocus="@AutoFocus"
+        form="@FormId"
+        id="@Id"
+        disabled="@Disabled"
+        title="@Title"
+        type="@Type.ToString().ToLower()"
+        aria-label="@Title"
+        @onclick="OnClickHandler">
+    @if (!string.IsNullOrWhiteSpace(StartIcon)) {
+        @TnTIconComponent.RenderIcon(IconType, StartIcon, "tnt-button-start-icon");
     }
     @ChildContent
+    @if(!string.IsNullOrWhiteSpace(EndIcon)) {
+        @TnTIconComponent.RenderIcon(IconType, EndIcon, "tnt-button-end-icon");
+    }
 </button>
+<script type="text/javascript">
+    window.addEventListener('load', (e) => {
+        document.getElementById('@(Id)').addEventListener('click', TnTComponents.ripple);
+    });
+</script>

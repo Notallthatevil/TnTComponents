@@ -5,7 +5,7 @@
 @if (Interactive) {
     <TnTExternalClickHandler Callback="@(() => OnFocusOutAsync(new FocusEventArgs()))">
         <div theme="@Theme" class="@GetCssClass()" @ref="@ContainerElementReference">
-            @TnTIconComponent.GetIcon(IconType, Icon)
+            @TnTIconComponent.RenderIcon(IconType, Icon)
             <input aria-label="@Label"
                    name="@NameAttributeValue"
                    disabled="@Disabled"
@@ -130,7 +130,7 @@
 else {
 
     <div theme="@Theme" class="@GetCssClass()">
-        @TnTIconComponent.GetIcon(IconType, Icon)
+        @TnTIconComponent.RenderIcon(IconType, Icon)
         <input @attributes="AdditionalAttributes"
                aria-label="@Label"
                name="@NameAttributeValue"

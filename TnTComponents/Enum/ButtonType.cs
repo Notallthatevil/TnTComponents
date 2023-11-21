@@ -1,10 +1,7 @@
-﻿namespace TnTComponents.Enum {
+﻿namespace TnTComponents.Enum;
 
-    public enum ButtonType {
-        Default,
-        Elevated = Default,
-        Flat,
-        Filled,
-        Outlined
-    }
+public enum ButtonType {
+    Button,
+    Submit,
+    Reset
 }

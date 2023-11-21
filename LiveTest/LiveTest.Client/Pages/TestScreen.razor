@@ -26,7 +26,6 @@
                     <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(4)" Icon="@_icon" Label="Button5" Disabled="@_disabled" />
                 </RadioButtons>
             </TnTRadioGroup>
-            <TnTInputFile name="file" Label="File upload" Disabled="@_disabled" ButtonType="ButtonType.Flat" />
             <button type="submit">
                 Submit
             </button>
@@ -55,7 +54,6 @@
                     <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(4)" Icon="@_icon" Label="Button5" Disabled="@_disabled" />
                 </RadioButtons>
             </TnTRadioGroup>
-            <TnTInputFile name="file" Label="File upload" Disabled="@_disabled" ButtonType="ButtonType.Outlined" />
 
             <button type="submit" form="MainForm">
                 Submit
@@ -85,7 +83,6 @@
                     <TnTRadioButton TInputType="int" Value="_radioItems.ElementAt(4)" Icon="@_icon" Label="Button5" Disabled="@_disabled" />
                 </RadioButtons>
             </TnTRadioGroup>
-            <TnTInputFile name="file" Label="File upload" Disabled="@_disabled" />
 
             <button type="submit" form="MainForm">
                 Submit
@@ -93,23 +90,7 @@
         </TnTForm>
     </TnTColumn>
 
-    <TnTColumn S="12" L="6">
-        <div>
-            <TnTButton ButtonType="ButtonType.Default" Text="Toggle Disable" OnClick="@(() => _disabled = !_disabled)">
-            </TnTButton>
-        </div>
-        <TnTButton ButtonType="ButtonType.Outlined" Text="Toggle Form Type" OnClick="@(() => RotateFormType())" Disabled="@_disabled">
-
-        </TnTButton>
-        <TnTButton ButtonType="ButtonType.Filled" Text="Toggle Icon" OnClick="@(() => ToggleIcon())">
-        </TnTButton>
-
-        <TnTButton ButtonType="ButtonType.Flat" Text="Toggle Placeholder" OnClick="@(() => TogglePlaceholder())">
-        </TnTButton>
-
-        <TnTButton Text="Toggle AllowClear" OnClick="@(() => _allowClear = !_allowClear)">
-        </TnTButton>
-    </TnTColumn>
+    
 </TnTRow>
 
 @if(_submitted) {

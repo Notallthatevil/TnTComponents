@@ -22,7 +22,7 @@ public partial class TnTDialogContainer {
                 if (Dialog.Options.ShowClose) {
                     cardBuilder.OpenElement(3, "span");
                     cardBuilder.AddAttribute(4, "onclick", EventCallback.Factory.Create(this, Close));
-                    cardBuilder.AddContent(5, TnTIconComponent.GetIcon(Dialog.Options.IconType, Dialog.Options.CloseIcon));
+                    cardBuilder.AddContent(5, TnTIconComponent.RenderIcon(Dialog.Options.IconType, Dialog.Options.CloseIcon));
                     cardBuilder.CloseElement();
                 }
 

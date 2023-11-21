@@ -2,7 +2,7 @@
 @inherits TnTInputField<string?>
 
 <div theme="@Theme" class="@GetCssClass()">
-    @TnTIconComponent.GetIcon(IconType, Icon)
+    @TnTIconComponent.RenderIcon(IconType, Icon)
     <input @attributes="AdditionalAttributes"
            aria-label="@Label"
            name="@NameAttributeValue"

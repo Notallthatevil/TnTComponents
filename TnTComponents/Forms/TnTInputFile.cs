@@ -91,23 +91,23 @@ public partial class TnTInputFile : InputFile, ITnTFormField {
     private string GetButtonClass() {
         var strBuilder = new StringBuilder();
 
-        switch (ButtonType) {
-            case ButtonType.Default:
-            default:
-                break;
+        //switch (ButtonType) {
+        //    case ButtonType.Default:
+        //    default:
+        //        break;
 
-            case ButtonType.Flat:
-                strBuilder.Append(' ').Append("flat");
-                break;
+        //    case ButtonType.Flat:
+        //        strBuilder.Append(' ').Append("flat");
+        //        break;
 
-            case ButtonType.Filled:
-                strBuilder.Append(' ').Append("filled");
-                break;
+        //    case ButtonType.Filled:
+        //        strBuilder.Append(' ').Append("filled");
+        //        break;
 
-            case ButtonType.Outlined:
-                strBuilder.Append(' ').Append("outlined");
-                break;
-        }
+        //    case ButtonType.Outlined:
+        //        strBuilder.Append(' ').Append("outlined");
+        //        break;
+        //}
 
         if (Disabled) {
             strBuilder.Append(' ').Append("disabled");

@@ -5,7 +5,7 @@
     @{
         var id = Guid.NewGuid().ToString();
         <div theme="@Theme" class="@GetCssClass()" id="@id" @ref="@ContainerElementReference">
-            @TnTIconComponent.GetIcon(IconType, Icon)
+            @TnTIconComponent.RenderIcon(IconType, Icon)
             <input @attributes="AdditionalAttributes"
                    aria-label="@Label"
                    name="@NameAttributeValue"
