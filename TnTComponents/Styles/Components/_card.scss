@@ -1,16 +1,20 @@
 ﻿.tnt-card {
-    padding: 1rem;
-    margin: 1rem;
-
-    @extend .tnt-border-radius-3;
+    margin: 8px;
+    padding: 16px;
+    color: $tnt-color-on-surface;
+    @include tnt-border-radius(3);
 
     &.elevated {
-        @extend .tnt-z-depth-1;
+        background-color: $tnt-color-surface-container-low;
+        @include tnt-z-depth(1);
+    }
+
+    &.filled {
+        background-color: $tnt-color-surface-container-highest;
     }
 
     &.outlined {
-        background-color: transparent;
-        border-style: solid;
-        border-width: 1px;
+        background-color: $tnt-color-surface;
+        border: 1px solid $tnt-color-outline;
     }
 }

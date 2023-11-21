@@ -16,7 +16,7 @@ public partial class TnTDialogContainer {
     protected override void OnInitialized() {
         _content = new RenderFragment(builder => {
             builder.OpenComponent<TnTCard>(0);
-            builder.AddComponentParameter(1, nameof(TnTCard.CardType), Dialog.Options.CardType);
+            builder.AddComponentParameter(1, nameof(TnTCard.Type), Dialog.Options.CardType);
 
             builder.AddComponentParameter(2, nameof(TnTCard.ChildContent), new RenderFragment(cardBuilder => {
                 if (Dialog.Options.ShowClose) {

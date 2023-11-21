@@ -1,6 +1,6 @@
-﻿@inherits TnTBaseComponent
+﻿@inherits TnTComponentBase
 
-<div class="@GetCssClass()" theme="@Theme">
+<div @attributes="AdditionalAttributes" class="@GetClass()" theme="@Theme" style="@Style">
     @ChildContent
 </div>
 

@@ -9,17 +9,12 @@ public partial class TnTCard {
     public RenderFragment ChildContent { get; set; } = default!;
 
     [Parameter]
-    public CardType CardType { get; set; }
+    public CardType Type { get; set; }
 
     [Parameter]
-    public override string BaseCssClass { get; set; } = "tnt-card";
+    public override string? Class { get; set; } = "tnt-card";
 
-    public override string GetCssClass() {
-        return $"{base.GetCssClass()} {CardType switch {
-            CardType.Filled => "filled",
-            CardType.Elevated => "elevated",
-            CardType.Outlined => "outlined",
-            _ => string.Empty,
-        }}";
+    protected override string GetClass() {
+        return base.GetClass() + " " + Type.ToString().ToLower();
     }
 }
