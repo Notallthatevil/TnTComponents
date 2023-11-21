@@ -6,7 +6,6 @@ namespace TnTComponents;
 
 public partial class TnTButton {
 
-
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 

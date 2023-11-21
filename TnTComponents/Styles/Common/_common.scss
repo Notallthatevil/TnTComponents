@@ -248,12 +248,12 @@ $tnt-color-info-container: var(--tnt-color-info-container);
 $tnt-color-on-info-container: var(--tnt-color-on-info-container);
 
 .tnt-state-layers {
-    &:disabled {
+    &:disabled, &[disabled] {
         opacity: 0.4;
         cursor: not-allowed;
     }
 
-    &:not(:disabled) {
+    &:not(:disabled) &:not([disabled]) {
         &:hover {
             opacity: 0.92;
         }

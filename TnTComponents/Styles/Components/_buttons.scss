@@ -1,5 +1,4 @@
-﻿
-.tnt-button {
+﻿.tnt-button:not(.tnt-segmented-button .tnt-button) {
     min-height: 40px;
     padding: 0 24px 0 24px;
     margin: 8px;
@@ -88,5 +87,55 @@
 
     &.outlined {
         border: 1px solid $tnt-color-outline;
+    }
+}
+
+.tnt-segmented-button {
+    background-color: transparent;
+    border: solid 1px $tnt-color-outline;
+    display: flex;
+    text-align: center;
+    width: -moz-fit-content;
+    width: fit-content;
+    overflow: hidden;
+    min-height: 40px;
+    margin: 8px auto 8px auto;
+    @include tnt-border-radius(10);
+
+    .tnt-button, a {
+        text-decoration: none;
+        background-color: transparent;
+        color: $tnt-color-on-surface;
+        min-width: 48px;
+        padding: 0 12px 0 12px;
+        height: 100%;
+        min-height: inherit;
+        margin: 0;
+        border: none;
+        cursor: pointer;
+        @extend .label-large;
+        @extend .tnt-state-layers;
+
+
+        &:not(:first-child) {
+            border-left: 1px solid $tnt-color-outline;
+        }
+
+        i {
+            vertical-align: middle;
+            font-size: 18px;
+            padding: 4px;
+        }
+
+        &:focus, &.active {
+            background-color: $tnt-color-secondary-container;
+            color: $tnt-color-on-secondary-container;
+        }
+    }
+
+    a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }

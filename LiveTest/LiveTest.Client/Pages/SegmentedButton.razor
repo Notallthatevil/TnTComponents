@@ -1,0 +1,124 @@
+﻿@page "/segmentedButton"
+@using TnTComponents
+@using TnTComponents.Common
+@using TnTComponents.Enum
+
+<TnTRow>
+    <TnTColumn>
+        <TnTSegmentedButton>
+            <TnTButton StartIcon="home" EndIcon="search" Title="First">
+                First
+            </TnTButton>
+            <TnTButton StartIcon="home" EndIcon="search" Title="First" Disabled="true">
+                Second
+            </TnTButton>
+            <TnTButton StartIcon="home" EndIcon="search" Title="First">
+                Third
+            </TnTButton>
+        </TnTSegmentedButton>
+    </TnTColumn>
+    <TnTColumn>
+        <TnTSegmentedButton>
+            <TnTButton EndIcon="search" Title="First">
+                First
+            </TnTButton>
+            <TnTButton EndIcon="search" Title="First">
+                Second
+            </TnTButton>
+            <TnTButton EndIcon="search" Title="First" Disabled="true">
+                Third
+            </TnTButton>
+        </TnTSegmentedButton>
+    </TnTColumn>
+    <TnTColumn>
+        <TnTSegmentedButton>
+            <TnTButton StartIcon="home" Title="First">
+                First
+            </TnTButton>
+            <TnTButton StartIcon="home" Title="First">
+                Second
+            </TnTButton>
+            <TnTButton StartIcon="home" Title="First" Disabled="true">
+                Third
+            </TnTButton>
+        </TnTSegmentedButton>
+    </TnTColumn>
+    <TnTColumn>
+        <TnTSegmentedButton>
+            <TnTButton Title="First">
+                First
+            </TnTButton>
+            <TnTButton Title="First">
+                Second
+            </TnTButton>
+            <TnTButton Title="First" Disabled="true">
+                Third
+            </TnTButton>
+        </TnTSegmentedButton>
+    </TnTColumn>
+
+    <TnTColumn>
+        <TnTSegmentedButton>
+            <NavLink href="segmentedButton">
+                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "home")
+                First
+                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "search")
+            </NavLink>
+            <NavLink>
+                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "home")
+                First
+                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "search")
+            </NavLink>
+            <NavLink disabled>
+                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "home")
+                Second
+                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "search")
+            </NavLink>
+        </TnTSegmentedButton>
+    </TnTColumn>
+    <TnTColumn>
+        <TnTSegmentedButton>
+            <NavLink href="segmentedButton">
+                First
+                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "search")
+            </NavLink>
+            <NavLink>
+                First
+                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "search")
+            </NavLink>
+            <NavLink disabled>
+                Second
+                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "search")
+            </NavLink>
+        </TnTSegmentedButton>
+    </TnTColumn>
+    <TnTColumn>
+        <TnTSegmentedButton>
+            <NavLink href="segmentedButton">
+                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "home")
+                First
+            </NavLink>
+            <NavLink>
+                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "home")
+                First
+            </NavLink>
+            <NavLink disabled>
+                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "home")
+                Second
+            </NavLink>
+        </TnTSegmentedButton>
+    </TnTColumn>
+    <TnTColumn>
+        <TnTSegmentedButton>
+            <NavLink href="segmentedButton">
+                First
+            </NavLink>
+            <NavLink>
+                First
+            </NavLink>
+            <NavLink disabled>
+                Second
+            </NavLink>
+        </TnTSegmentedButton>
+    </TnTColumn>
+</TnTRow>
