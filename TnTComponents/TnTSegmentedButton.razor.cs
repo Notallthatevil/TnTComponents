@@ -6,4 +6,6 @@ public partial class TnTSegmentedButton {
     public RenderFragment? ChildContent { get; set; }
 
     public override string? Class { get; set; } = "tnt-segmented-button";
+
+    public object? ActiveObject { get; set; }
 }

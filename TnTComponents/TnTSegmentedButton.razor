@@ -1,5 +1,7 @@
 ﻿@inherits TnTComponentBase
 
-<div @attributes="AdditionalAttributes" class="@GetClass()" theme="@Theme" style="@Style">
-    @ChildContent
-</div>
+<CascadingValue IsFixed="true" Value="this">
+    <div @attributes="AdditionalAttributes" class="@GetClass()" theme="@Theme" style="@Style">
+        @ChildContent
+    </div>
+</CascadingValue>

@@ -41,13 +41,22 @@ public partial class TnTButton {
     [Parameter]
     public ButtonAppearance Appearance { get; set; }
 
+    [CascadingParameter]
+    private TnTSegmentedButton? _segmentedButton { get; set; }
+
     protected override string GetClass() {
         return base.GetClass() + " " + Appearance.ToString().ToLower();
     }
 
     private Task OnClickHandler(MouseEventArgs args) {
-        if (!Disabled && OnClick.HasDelegate) {
-            return OnClick.InvokeAsync(args);
+        if (!Disabled) {
+            if (_segmentedButton is not null) {
+                _segmentedButton.ActiveObject = this;
+            }
+
+            if (OnClick.HasDelegate) {
+                return OnClick.InvokeAsync(args);
+            }
         }
         return Task.CompletedTask;
     }
