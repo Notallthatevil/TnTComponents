@@ -44,7 +44,7 @@ public partial class TnTButton {
     [CascadingParameter]
     private TnTSegmentedButton? _segmentedButton { get; set; }
 
-    protected override string GetClass() {
+    public override string GetClass() {
         return base.GetClass() + " " + Appearance.ToString().ToLower();
     }
 
@@ -59,5 +59,15 @@ public partial class TnTButton {
             }
         }
         return Task.CompletedTask;
+    }
+
+    private RenderFragment RenderScript() {
+        var scriptContent = new MarkupString($"window.addEventListener('load', (e) => {{document.getElementById('{Id}').addEventListener('click', TnTComponents.ripple); }});");
+        return new RenderFragment(b => {
+            b.OpenElement(0, "script");
+            b.AddAttribute(10, "type", "text/javascript");
+            b.AddContent(20, scriptContent);
+            b.CloseElement();
+        });
     }
 }

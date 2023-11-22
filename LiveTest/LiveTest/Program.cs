@@ -1,9 +1,9 @@
 using LiveTest.Client.Pages;
 using LiveTest.Components;
 using Microsoft.AspNetCore.Mvc;
-using static LiveTest.Client.Pages.TestScreen;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddLogging();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -30,10 +30,6 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(Counter).Assembly);
-
-app.MapPost("/submit", ([FromForm] MyModel m) => {
-    Console.WriteLine(m?.Name);
-});
+    .AddAdditionalAssemblies(typeof(LiveTest.Client._Imports).Assembly);
 
 app.Run();

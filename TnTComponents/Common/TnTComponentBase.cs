@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TnTComponents.Common;
-public abstract class TnTComponentBase : ComponentBase {
+public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
 
     public ElementReference Element { get; protected set; }
 
@@ -30,22 +30,23 @@ public abstract class TnTComponentBase : ComponentBase {
     [Parameter(CaptureUnmatchedValues = true)]
     public virtual IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
+    protected bool Interactive { get; set; }
+
+    public virtual string GetClass() => this.GetClassDefault();
+
     protected override void OnParametersSet() {
-        if(string.IsNullOrWhiteSpace(Id)) {
+        if (string.IsNullOrWhiteSpace(Id)) {
             Id = Guid.NewGuid().ToString();
         }
         base.OnParametersSet();
     }
 
-
-    protected virtual string GetClass() {
-        var strBuilder = new StringBuilder(Class ?? string.Empty);
-
-        if (AdditionalAttributes?.TryGetValue("class", out var @class) == true) {
-            strBuilder.Append(' ').AppendJoin(' ', @class);
+    protected override void OnAfterRender(bool firstRender) {
+        base.OnAfterRender(firstRender);
+        if (firstRender) {
+            Interactive = true;
         }
-
-        return strBuilder.ToString();
     }
+
 }
 

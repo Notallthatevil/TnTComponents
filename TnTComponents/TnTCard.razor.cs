@@ -14,7 +14,7 @@ public partial class TnTCard {
     [Parameter]
     public override string? Class { get; set; } = "tnt-card";
 
-    protected override string GetClass() {
+    public override string GetClass() {
         return base.GetClass() + " " + Type.ToString().ToLower();
     }
 }

@@ -8,7 +8,6 @@ public class TnTSwitch : TnTCheckbox {
     public override string BaseCssClass { get; set; } = "tnt-form-field-switch";
 
     protected override void OnInitialized() {
-        FormType = Enum.FormType.Underlined;
         base.OnInitialized();
     }
 }

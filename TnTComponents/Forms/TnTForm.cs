@@ -5,47 +5,21 @@ using TnTComponents.Enum;
 
 namespace TnTComponents.Forms;
 
-public abstract class TnTForm : EditForm {
+public class TnTForm : EditForm {
+    internal const string ParentFormTypeName = "ParentFormType";
 
     [Parameter]
     public FormType FormType { get; set; }
 
-    [Parameter]
-    public string Theme { get; set; } = "default";
-
-    [Parameter]
-    public virtual string BaseCssClass { get; set; } = "tnt-form";
-
-    private Dictionary<string, object> _additionalAttributes = default!;
-
-    protected override void OnInitialized() {
-        _additionalAttributes = AdditionalAttributes is not null ? new Dictionary<string, object>(AdditionalAttributes) : new Dictionary<string, object>();
-
-        if (!_additionalAttributes.TryGetValue("class", out var result)) {
-            result = string.Empty;
-        }
-        _additionalAttributes["class"] = $"{BaseCssClass} {string.Join(' ', result)}";
-
-        if (!_additionalAttributes.ContainsKey("theme")) {
-            _additionalAttributes["theme"] = Theme;
-        }
-
-        AdditionalAttributes = _additionalAttributes;
-        base.OnInitialized();
-    }
-
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        builder.OpenRegion(0);
+        builder.OpenComponent<CascadingValue<FormType>>(0);
+        builder.AddComponentParameter(1, nameof(CascadingValue<FormType>.IsFixed), true);
+        builder.AddComponentParameter(2, nameof(CascadingValue<FormType>.Value), FormType);
+        builder.AddComponentParameter(3, nameof(CascadingValue<FormType>.Name), ParentFormTypeName);
 
-        builder.OpenComponent<CascadingValue<TnTForm>>(1);
-        builder.AddAttribute(2, "Value", this);
-        builder.AddAttribute(3, "IsFixed", true);
-        builder.AddAttribute(4, "ChildContent", new RenderFragment(base.BuildRenderTree));
+        builder.AddComponentParameter(4, nameof(CascadingValue<FormType>.ChildContent), new RenderFragment(base.BuildRenderTree));
 
         builder.CloseComponent();
-        builder.CloseRegion();
     }
 }
 
-public class TnTForm<TModelType> : TnTForm {
-}

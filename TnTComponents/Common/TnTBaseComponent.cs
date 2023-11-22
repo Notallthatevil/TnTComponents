@@ -3,7 +3,7 @@ using System.Text;
 
 namespace TnTComponents.Common {
 
-    public abstract class TnTBaseComponent : ComponentBase, ITnTComponent {
+    public abstract class TnTBaseComponent : ComponentBase {
         public virtual string BaseCssClass { get; set; } = string.Empty;
 
         [Parameter]

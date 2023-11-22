@@ -28,7 +28,6 @@ internal static class ITnTFormFieldExt {
     public static void MatchParentFormIfExists(this ITnTFormField formField) {
         if (formField.ParentForm is not null) {
             formField.FormType = formField.ParentForm.FormType;
-            formField.Theme = formField.ParentForm.Theme;
         }
     }
 

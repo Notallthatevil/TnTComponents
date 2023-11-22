@@ -1,7 +1,6 @@
 ﻿@inherits TnTComponentBase
 
-<button @attributes="AdditionalAttributes"
-        class="@GetClass()"
+<button class="@GetClass()"
         style="@Style"
         autofocus="@AutoFocus"
         form="@FormId"
@@ -10,17 +9,14 @@
         title="@Title"
         type="@Type.ToString().ToLower()"
         aria-label="@Title"
-        @onclick="OnClickHandler">
+        @onclick="OnClickHandler"
+        @attributes="AdditionalAttributes">
     @if (!string.IsNullOrWhiteSpace(StartIcon)) {
-        @TnTIconComponent.RenderIcon(IconType, StartIcon, "tnt-button-start-icon");
+        @TnTIconComponent.RenderIcon(IconType, StartIcon, "tnt-button-start-icon")
     }
     @ChildContent
-    @if(!string.IsNullOrWhiteSpace(EndIcon)) {
-        @TnTIconComponent.RenderIcon(IconType, EndIcon, "tnt-button-end-icon");
+    @if (!string.IsNullOrWhiteSpace(EndIcon)) {
+        @TnTIconComponent.RenderIcon(IconType, EndIcon, "tnt-button-end-icon")
     }
 </button>
-<script type="text/javascript">
-    window.addEventListener('load', (e) => {
-        document.getElementById('@(Id)').addEventListener('click', TnTComponents.ripple);
-    });
-</script>
+@RenderScript()

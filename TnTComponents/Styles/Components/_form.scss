@@ -1,0 +1,218 @@
+//@import '_checkbox.scss';
+//@import '_datetimepicker.scss';
+//@import '_dropdown.scss';
+//@import '_inputfile.scss';
+//@import '_numeric.scss';
+//@import '_radiogroup.scss';
+//@import '_switch.scss';
+//@import '_textbox.scss';
+
+.tnt-input-label {
+    cursor: text;
+
+    &:has(input:disabled) {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    .tnt-input-label-text {
+        position: absolute;
+        left: 16px;
+        transition: 150ms;
+        @extend .body-large;
+    }
+
+    &:has(.start-icon) .tnt-input-label-text {
+        left: 52px;
+    }
+
+    .tnt-input-supporting-text, .tnt-input-validation {
+        margin: 0 16px 0 16px;
+        @extend .body-small;
+    }
+
+    .tnt-input-supporting-text {
+        color: $tnt-color-on-surface-variant;
+    }
+
+    .tnt-input-validation {
+        color: $tnt-color-error;
+    }
+
+    &.invalid .tnt-input-supporting-text {
+        display: none;
+        visibility: hidden;
+    }
+
+    .tnt-input-container {
+        position: relative;
+        padding: 0;
+        user-select: none;
+        height: 56px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 8px 16px 8px 16px;
+        margin: 16px 0 16px 0;
+
+        &:has(+ .tnt-input-supporting-text), &:has(.invalid) {
+            margin-bottom: 4px;
+        }
+
+        &:has(.start-icon) {
+            padding-left: 12px;
+
+            .start-icon {
+                padding: 0 16px 0 0;
+            }
+        }
+
+        &:has(.end-icon) {
+            padding-right: 12px;
+
+            .end-icon {
+                padding: 0 0 0 16px;
+            }
+        }
+
+        &:has(input[type=text]), &:has(input[type=email]), &:has(input[type=password]), &:has(input[type=tel]), &:has(input[type=url]) {
+            & > i {
+                font-size: 24px;
+            }
+
+            & > i, .tnt-input-label-text {
+                color: $tnt-color-on-surface-variant;
+            }
+
+            &:has(input:user-invalid), &:has(input.invalid) {
+                .end-icon, .tnt-input-label-text {
+                    color: $tnt-color-error;
+                }
+            }
+
+            &:has(input[formtype="filled"]) {
+                background-color: $tnt-color-surface-container-highest;
+                border-bottom: solid 1px $tnt-color-on-surface-variant;
+
+                &:hover {
+                    background-color: $tnt-color-surface-container-high;
+                }
+
+                &:after {
+                    content: '';
+                    position: absolute;
+                    width: 100%;
+                    height: 2px;
+                    bottom: -1px;
+                    left: 0;
+                    background-color: $tnt-color-primary;
+                    transform: rotateY(90deg);
+                    transition: 250ms;
+                }
+
+                &:has(input:focus):not(input:disabled) {
+                    &:after {
+                        transform: rotateY(0deg);
+                    }
+
+                    .tnt-input-label-text {
+                        color: $tnt-color-primary;
+                    }
+                }
+
+                &:has(input:user-invalid), &:has(input.invalid) {
+                    &:after {
+                        background-color: $tnt-color-error;
+                        transform: rotateY(0deg);
+                    }
+                }
+            }
+
+            &:has(input[formtype="outlined"]) {
+                background-color: transparent;
+                border: solid 1px $tnt-color-outline;
+                @include tnt-border-radius(1);
+
+                &:after {
+                    content: '';
+                    position: absolute;
+                    width: 100%;
+                    height: calc(100% + 2px);
+                    left: -2px;
+                    top: -1px;
+                    background-color: transparent;
+                    border-radius: inherit;
+                    border-style: solid;
+                    border-width: 2px;
+                    border-color: $tnt-color-primary;
+                    border-top: none;
+                    border-bottom: none;
+                    transition: transform 250ms linear;
+                    transform: rotateX(90deg);
+                }
+
+                &:before {
+                    content: '';
+                    position: absolute;
+                    width: calc(100% + 2px);
+                    height: 100%;
+                    left: -1px;
+                    top: -2px;
+                    background-color: transparent;
+                    border-radius: inherit;
+                    border-style: solid;
+                    border-width: 2px;
+                    border-color: $tnt-color-primary;
+                    border-left: none;
+                    border-right: none;
+                    transition: 250ms linear;
+                    transform: rotateY(90deg);
+                }
+
+                &:has(input:focus):not(input:disabled) {
+                    &:before, &:after {
+                        transform: rotateY(0);
+                        transform: rotateX(0);
+                    }
+                }
+
+                &:has(input:user-invalid), &:has(input.invalid) {
+                    &:before, &:after {
+                        transform: rotateY(0);
+                        transform: rotateX(0);
+                        border-color: $tnt-color-error;
+                    }
+                }
+            }
+
+            input {
+                cursor: inherit;
+                padding: 0;
+                background: none;
+                border: none;
+                box-shadow: none;
+                width: 100%;
+                transition: transform linear 150ms;
+                color: $tnt-color-on-surface;
+                caret-color: $tnt-color-primary;
+
+                @extend .body-large;
+
+
+                &:active, &:focus {
+                    outline: none;
+                }
+            }
+
+            &:has(input:focus), &:has(input:placeholder-shown):not(:has(input[has-empty-placeholder])), &:not(:has(input:placeholder-shown)) {
+                .tnt-input-label-text {
+                    transform: translateY(-16px) scale(0.8) translateX(-11px);
+                }
+
+                input:has(+ .tnt-input-label-text) {
+                    transform: translateY(4px);
+                }
+            }
+        }
+    }
+}
