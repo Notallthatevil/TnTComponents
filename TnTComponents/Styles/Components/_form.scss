@@ -216,7 +216,7 @@
             }
         }
 
-        &:has(input[type=checkbox]) {
+        &:has(input[type=checkbox]):not(:has(input[formtype="switch"])) {
             margin: 0 24px 0 24px;
             transition: 250ms;
 
@@ -296,7 +296,7 @@
                 display: none;
             }
 
-            &:has(input:invalid), &:has(input.invalid) {
+            &:has(input:user-invalid), &:has(input.invalid) {
 
                 &:after {
                     border-color: $tnt-color-error;
@@ -309,7 +309,7 @@
                 }
 
                 .end-icon {
-                   color: $tnt-color-error;
+                    color: $tnt-color-error;
                 }
             }
         }
