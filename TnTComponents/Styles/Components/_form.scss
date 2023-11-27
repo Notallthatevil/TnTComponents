@@ -10,6 +10,7 @@
 .tnt-input-label {
     cursor: text;
 
+
     &:has(input:disabled) {
         opacity: 0.4;
         cursor: not-allowed;
@@ -211,6 +212,104 @@
 
                 input:has(+ .tnt-input-label-text) {
                     transform: translateY(4px);
+                }
+            }
+        }
+
+        &:has(input[type=checkbox]) {
+            margin: 0 24px 0 24px;
+            transition: 250ms;
+
+
+            &:not(:has(input:disabled)) {
+                cursor: pointer;
+            }
+
+            & > i, .tnt-input-label-text {
+                color: $tnt-color-on-surface-variant;
+            }
+
+            .tnt-input-label-text {
+                position: revert;
+                margin-left: 16px;
+            }
+
+
+            &:after {
+                content: '';
+                position: absolute;
+                width: 18px;
+                height: 18px;
+                left: 0;
+                background-color: transparent;
+                border: solid 2px $tnt-color-on-surface-variant;
+                transition: 250ms;
+                @include tnt-border-radius(1);
+            }
+
+            &:before {
+                content: '';
+                position: absolute;
+                width: 6px;
+                height: 14px;
+                left: 7px;
+                top: 26px;
+                border-right: solid 2px $tnt-color-surface;
+                border-bottom: solid 2px $tnt-color-surface;
+                transform: rotateX(90deg) rotateY(90deg) rotateZ(40deg);
+                z-index: 1;
+                transition: 250ms;
+            }
+
+            &:has(.start-icon) {
+                &:before, &:after {
+                    margin-left: 32px;
+                }
+
+                .start-icon {
+                    position: absolute;
+                    left: 0;
+                }
+
+                .tnt-input-label-text {
+                    margin-left: 48px;
+                }
+
+                &:not(:has(.tnt-input-label-text)) {
+                    .end-icon {
+                        margin-left: 36px;
+                    }
+                }
+            }
+
+            &:has(input:checked) {
+                &:before {
+                    transform: rotateX(0) rotateY(0) rotateZ(40deg);
+                }
+
+                &:after {
+                    background-color: $tnt-color-primary;
+                }
+            }
+
+            input[type=checkbox] {
+                display: none;
+            }
+
+            &:has(input:invalid), &:has(input.invalid) {
+
+                &:after {
+                    border-color: $tnt-color-error;
+                }
+
+                &:has(input:checked) {
+                    &:after {
+                        background-color: $tnt-color-error;
+                    }
+                }
+
+                .end-icon {
+                   color: $tnt-color-error;
                 }
             }
         }

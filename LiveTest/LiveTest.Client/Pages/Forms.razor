@@ -9,7 +9,7 @@
     <TnTColumn>
         <TnTForm Model="@Model" FormType="FormType.Outlined" FormName="Form2">
             <DataAnnotationsValidator />
-            @_renderFormFields
+            @_renderCheckboxFields
             <TnTButton Title="Submit" Type="ButtonType.Submit">
                 Submit
             </TnTButton>
@@ -18,7 +18,7 @@
     <TnTColumn>
         <TnTForm Model="@Model" FormType="FormType.Filled" FormName="Form3">
             <DataAnnotationsValidator />
-            @_renderFormFields
+            @_renderCheckboxFields
             <TnTButton Title="Submit" Type="ButtonType.Submit">
                 Submit
             </TnTButton>
@@ -29,7 +29,8 @@
 
 
 @code {
-    private RenderFragment _renderFormFields;
+    private RenderFragment _renderTextFields;
+    private RenderFragment _renderCheckboxFields;
 
     [SupplyParameterFromForm]
     public InputClass Model { get; set; } = new();
@@ -54,14 +55,20 @@
         [Required]
         [StringLength(50, MinimumLength = 8)]
         public string? UrlValue { get; set; }
+
+        [Required]
+        public bool Checkbox { get; set; }
+
+        public bool NonRequired { get; set; }
     }
 
 
     public Forms() {
-        _renderFormFields = RenderFormFields;
+        _renderTextFields = RenderTextFields;
+        _renderCheckboxFields = RenderCheckboxFields;
     }
 
-    private void RenderFormFields(RenderTreeBuilder __builder) {
+    private void RenderTextFields(RenderTreeBuilder __builder) {
 
         <TnTTextInput @bind-Value="@Model.StringValue" Type="TextInputType.Text" />
         <TnTTextInput @bind-Value="@Model.StringValue" Type="TextInputType.Text" EndIcon="search" />
@@ -388,5 +395,33 @@
         <TnTTextInput @bind-Value="@Model.UrlValue" Type="TextInputType.Url" SupportingText="Supporting Text" StartIcon="home" Placeholder="Placeholder" Disabled="true" Label="@nameof(Model.UrlValue)" />
         <TnTTextInput @bind-Value="@Model.UrlValue" Type="TextInputType.Url" EndIcon="search" SupportingText="Supporting Text" StartIcon="home" Placeholder="Placeholder" Disabled="true" Label="@nameof(Model.UrlValue)" />
 
+    }
+
+    private void RenderCheckboxFields(RenderTreeBuilder __builder) {
+        <TnTCheckbox @bind-Value="@Model.Checkbox" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" Label="@nameof(Model.Checkbox)" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" StartIcon="home" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" EndIcon="search" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" SupportingText="Supporting Text" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" Disabled="true" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" Label="@nameof(Model.Checkbox)" StartIcon="home" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" Label="@nameof(Model.Checkbox)" EndIcon="search" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" Label="@nameof(Model.Checkbox)" SupportingText="Supporting Text" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" Label="@nameof(Model.Checkbox)" Disabled="true" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" StartIcon="home" EndIcon="search" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" StartIcon="home" SupportingText="Supporting Text" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" StartIcon="home" Disabled="true" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" EndIcon="search" SupportingText="Supporting Text" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" EndIcon="search" Disabled="true" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" SupportingText="Supporting Text" Disabled="true" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" Label="@nameof(Model.Checkbox)" StartIcon="home" EndIcon="search" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" Label="@nameof(Model.Checkbox)" StartIcon="home" SupportingText="Supporting Text" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" Label="@nameof(Model.Checkbox)" StartIcon="home" Disabled="true" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" Label="@nameof(Model.Checkbox)" EndIcon="search" SupportingText="Supporting Text" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" Label="@nameof(Model.Checkbox)" EndIcon="search" Disabled="true" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" Label="@nameof(Model.Checkbox)" SupportingText="Supporting Text" Disabled="true" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" Label="@nameof(Model.Checkbox)" StartIcon="home" EndIcon="search" SupportingText="Supporting Text" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" Label="@nameof(Model.Checkbox)" StartIcon="home" EndIcon="search" Disabled="true" />
+        <TnTCheckbox @bind-Value="@Model.Checkbox" Label="@nameof(Model.Checkbox)" StartIcon="home" EndIcon="search" SupportingText="Supporting Text" Disabled="true" />
     }
 }

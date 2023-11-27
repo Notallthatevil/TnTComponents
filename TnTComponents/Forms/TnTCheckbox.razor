@@ -1,5 +1,5 @@
-﻿@inherits TnTInputField<bool>
-
+﻿@inherits TnTInputBase<bool>
+@*
 
 <div theme="@Theme" class="@GetCssClass()">
     @TnTIconComponent.RenderIcon(IconType, Icon)
@@ -26,3 +26,40 @@
 @if (ShowValidation) {
     <ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />
 }
+*@
+
+<label class="@LabelClass @CssClass">
+    <span class="@ContainerClass">
+        @TnTIconComponent.RenderIcon(IconType, StartIcon, "start-icon")
+        @{
+            var @class = GetClass();
+            <input @attributes="AdditionalAttributes"
+                   @ref="Element"
+                   aria-label="@AriaLabel"
+                   type="checkbox"
+                   class="@(string.IsNullOrWhiteSpace(@class) ? null : @class)"
+                   name="@NameAttributeValue"
+                   style="@Style"
+                   readonly="@ReadOnly"
+                   autofocus="@AutoFocus"
+                   title="@Title"
+                   disabled="@Disabled"
+                   formtype="@FormType.ToString().ToLower()"
+                   required="@Required"
+                   value="@bool.TrueString"
+                   @bind="@CurrentValue">
+        }
+        @if (!string.IsNullOrWhiteSpace(Label)) {
+            <span class="@LabelTextClass">
+                @Label
+            </span>
+        }
+        @TnTIconComponent.RenderIcon(IconType, EndIcon, "end-icon")
+    </span>
+    @if (!string.IsNullOrWhiteSpace(SupportingText)) {
+        <span class="@SupportingTextClass">@SupportingText</span>
+    }
+    @if (ShowValidation) {
+        <ValidationMessage class="@ValidationClass" For="ValueExpression" />
+    }
+</label>
