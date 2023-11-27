@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using System.Diagnostics.CodeAnalysis;
 using TnTComponents.Enum;
 
 namespace TnTComponents.Forms;
+
 public partial class TnTTextInput {
+
     [Parameter]
     public TextInputType Type { get; set; }
 

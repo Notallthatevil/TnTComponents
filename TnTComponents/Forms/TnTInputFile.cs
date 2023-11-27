@@ -96,13 +96,9 @@ public partial class TnTInputFile : InputFile, ITnTFormField {
         //    default:
         //        break;
 
-        //    case ButtonType.Flat:
-        //        strBuilder.Append(' ').Append("flat");
-        //        break;
+        // case ButtonType.Flat: strBuilder.Append(' ').Append("flat"); break;
 
-        //    case ButtonType.Filled:
-        //        strBuilder.Append(' ').Append("filled");
-        //        break;
+        // case ButtonType.Filled: strBuilder.Append(' ').Append("filled"); break;
 
         //    case ButtonType.Outlined:
         //        strBuilder.Append(' ').Append("outlined");

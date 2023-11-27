@@ -91,7 +91,6 @@ public abstract class TnTInputField<TInputType> : InputBase<TInputType>, ITnTFor
         }
 
         switch (FormType) {
-
             case FormType.Filled:
                 strBuilder.Append(' ').Append("filled");
                 break;

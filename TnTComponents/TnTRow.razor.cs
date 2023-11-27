@@ -4,7 +4,9 @@ using TnTComponents.Common;
 using TnTComponents.Enum;
 
 namespace TnTComponents;
+
 public partial class TnTRow {
+
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
@@ -22,12 +24,16 @@ public partial class TnTRow {
 
     [Parameter]
     public string? Id { get; set; }
+
     [Parameter]
     public string? Class { get; set; } = "tnt-row";
+
     [Parameter]
     public string? Theme { get; set; }
+
     [Parameter]
     public string? Style { get; set; }
+
     [Parameter]
     public object? Data { get; set; }
 
@@ -35,6 +41,7 @@ public partial class TnTRow {
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
     public ElementReference Element { get; protected set; }
+
     public string GetClass() => this.GetClassDefault();
 
     private string? GetStyle() {

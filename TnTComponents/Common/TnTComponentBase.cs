@@ -1,15 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq;
-using System.Runtime.InteropServices.Marshalling;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TnTComponents.Common;
-public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
 
+public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
     public ElementReference Element { get; protected set; }
 
     [Parameter]
@@ -47,6 +40,4 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
             Interactive = true;
         }
     }
-
 }
-

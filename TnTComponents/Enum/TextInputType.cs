@@ -1,5 +1,5 @@
-﻿
-namespace TnTComponents.Enum;
+﻿namespace TnTComponents.Enum;
+
 public enum TextInputType {
     Text,
     Email,

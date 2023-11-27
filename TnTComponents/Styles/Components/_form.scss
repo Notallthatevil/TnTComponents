@@ -10,7 +10,6 @@
 .tnt-input-label {
     cursor: text;
 
-
     &:has(input:disabled) {
         opacity: 0.4;
         cursor: not-allowed;
@@ -76,13 +75,13 @@
             }
         }
 
-        &:has(input[type=text]), 
-        &:has(input[type=email]), 
-        &:has(input[type=password]), 
-        &:has(input[type=tel]), 
-        &:has(input[type=url]), 
-        &:has(input[type=date]), 
-        &:has(input[type=time]), 
+        &:has(input[type=text]),
+        &:has(input[type=email]),
+        &:has(input[type=password]),
+        &:has(input[type=tel]),
+        &:has(input[type=url]),
+        &:has(input[type=date]),
+        &:has(input[type=time]),
         &:has(input[type=datetime-local]) {
             & > i {
                 font-size: 24px;
@@ -206,7 +205,6 @@
 
                 @extend .body-large;
 
-
                 &:active, &:focus {
                     outline: none;
                 }
@@ -227,7 +225,6 @@
             margin: 0 24px 0 24px;
             transition: 250ms;
 
-
             &:not(:has(input:disabled)) {
                 cursor: pointer;
             }
@@ -240,7 +237,6 @@
                 position: revert;
                 margin-left: 16px;
             }
-
 
             &:after {
                 content: '';
@@ -304,7 +300,6 @@
             }
 
             &:has(input:user-invalid), &:has(input.invalid) {
-
                 &:after {
                     border-color: $tnt-color-error;
                 }
@@ -320,7 +315,6 @@
                 }
             }
         }
-
 
         &:has(input[type=checkbox][formtype="switch"]) {
             margin: 0 24px 0 24px;
@@ -369,7 +363,6 @@
                     box-shadow: 0 0 0 8px #00000022;
                 }
             }
-
 
             &:focus-within:not(:has(input:disabled)), &:has(input:active):not(:has(input:disabled)), &:has(input:focus):not(:has(input:disabled)) {
                 &:before {

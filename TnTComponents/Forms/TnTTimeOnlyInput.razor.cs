@@ -2,11 +2,15 @@ using Microsoft.AspNetCore.Components;
 using System.Diagnostics.CodeAnalysis;
 
 namespace TnTComponents.Forms;
+
 public partial class TnTTimeOnlyInput {
+
     [Parameter]
     public TimeOnly? MinTime { get; set; }
+
     [Parameter]
     public TimeOnly? MaxTime { get; set; }
+
     [Parameter]
     public int? StepRate { get; set; }
 

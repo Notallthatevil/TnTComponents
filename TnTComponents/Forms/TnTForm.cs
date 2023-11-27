@@ -22,4 +22,3 @@ public class TnTForm : EditForm {
         builder.CloseComponent();
     }
 }
-

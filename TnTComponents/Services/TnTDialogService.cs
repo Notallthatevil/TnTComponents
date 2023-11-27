@@ -3,10 +3,13 @@
 namespace TnTComponents.Services;
 
 public class TnTDialogService : IDisposable {
+
     internal delegate Task OnOpenCallback(Dialog dialog);
+
     internal delegate Task OnCloseCallback(Dialog dialog);
 
     internal event OnOpenCallback? OnOpen;
+
     internal event OnCloseCallback? OnClose;
 
     public TnTDialogService() {

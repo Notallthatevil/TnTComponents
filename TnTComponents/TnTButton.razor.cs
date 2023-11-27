@@ -35,6 +35,7 @@ public partial class TnTButton {
 
     [Parameter]
     public string? StartIcon { get; set; }
+
     [Parameter]
     public string? EndIcon { get; set; }
 

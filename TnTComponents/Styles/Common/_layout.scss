@@ -19,7 +19,6 @@ $gutter-width: 1.5rem !default;
 $element-top-margin: $gutter-width/3 !default;
 $element-bottom-margin: ($gutter-width*2)/3 !default;
 
-
 // Mixins to eliminate code repitition
 @mixin grid-classes($size, $i, $perc) {
     &.#{$size}#{$i}-offset {

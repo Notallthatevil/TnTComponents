@@ -14,7 +14,6 @@
         border: none;
     }
 
-
     &:has(i.tnt-button-start-icon) {
         padding-left: 16px;
 
@@ -56,7 +55,6 @@
 
     &:not(.elevated) {
         &:not(:disabled) {
-
             &:hover {
                 @include tnt-z-depth(1);
             }
@@ -115,7 +113,6 @@
         cursor: pointer;
         @extend .label-large;
         @extend .tnt-state-layers;
-
 
         &:not(:first-child) {
             border-left: 1px solid $tnt-color-outline;

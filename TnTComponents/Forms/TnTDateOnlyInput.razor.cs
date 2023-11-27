@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Components;
 using System.Diagnostics.CodeAnalysis;
 
 namespace TnTComponents.Forms;
+
 public partial class TnTDateOnlyInput {
 
     [Parameter]
     public DateOnly? MinDate { get; set; }
+
     [Parameter]
     public DateOnly? MaxDate { get; set; }
 

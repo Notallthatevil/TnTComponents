@@ -1,20 +1,15 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using TnTComponents.Common;
 using TnTComponents.Enum;
 
 namespace TnTComponents.Forms;
+
 public abstract class TnTInputBase<TInputType> : InputBase<TInputType>, ITnTComponentBase {
+
     [CascadingParameter(Name = TnTForm.ParentFormTypeName)]
     private FormType? _parentFormType { get; set; }
 
@@ -73,6 +68,7 @@ public abstract class TnTInputBase<TInputType> : InputBase<TInputType>, ITnTComp
 
     [Parameter]
     public string? Label { get; set; }
+
     [Parameter]
     public string? Title { get; set; }
 
@@ -100,9 +96,7 @@ public abstract class TnTInputBase<TInputType> : InputBase<TInputType>, ITnTComp
 
     public string GetClass() => string.Join(' ', this.GetClassDefault(), CssClass);
 
-
     protected override void OnParametersSet() {
-
         var modelType = EditContext.Model.GetType();
         var fieldName = FieldIdentifier.FieldName;
 
@@ -164,6 +158,3 @@ public abstract class TnTInputBase<TInputType> : InputBase<TInputType>, ITnTComp
         base.OnParametersSet();
     }
 }
-
-
-

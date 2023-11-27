@@ -1,6 +1,4 @@
-using LiveTest.Client.Pages;
 using LiveTest.Components;
-using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddLogging();

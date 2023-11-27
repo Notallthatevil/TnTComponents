@@ -42,13 +42,13 @@ public enum AlignItems {
     Baseline
 }
 
-
 public enum JustifySelf {
     Start,
     End,
     Center,
     Stretch
 }
+
 internal static class EnumExt {
 
     public static string ToStyle(this Direction Direction) {
