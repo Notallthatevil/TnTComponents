@@ -6,19 +6,19 @@
 @using TnTComponents.Forms
 
 <TnTRow>
-    <TnTColumn>
+    <TnTColumn S="6">
         <TnTForm Model="@Model" FormType="FormType.Outlined" FormName="Form2">
             <DataAnnotationsValidator />
-            @_renderSwitchFields
+            @_renderDateFields
             <TnTButton Title="Submit" Type="ButtonType.Submit">
                 Submit
             </TnTButton>
         </TnTForm>
     </TnTColumn>
-    <TnTColumn>
+    <TnTColumn S="6">
         <TnTForm Model="@Model" FormType="FormType.Filled" FormName="Form3">
             <DataAnnotationsValidator />
-            @_renderSwitchFields
+            @_renderDateFields
             <TnTButton Title="Submit" Type="ButtonType.Submit">
                 Submit
             </TnTButton>
@@ -32,6 +32,7 @@
     private RenderFragment _renderTextFields;
     private RenderFragment _renderCheckboxFields;
     private RenderFragment _renderSwitchFields;
+    private RenderFragment _renderDateFields;
 
     [SupplyParameterFromForm]
     public InputClass Model { get; set; } = new();
@@ -62,6 +63,9 @@
 
         [Required]
         public bool Switch { get; set; }
+
+        [Required]
+        public DateTime? DateValue { get; set; }
     }
 
 
@@ -69,6 +73,7 @@
         _renderTextFields = RenderTextFields;
         _renderCheckboxFields = RenderCheckboxFields;
         _renderSwitchFields = RenderSwitchFields;
+        _renderDateFields = RenderDateFields;
     }
 
     private void RenderTextFields(RenderTreeBuilder __builder) {
@@ -454,5 +459,73 @@
         <TnTSwitch @bind-Value="@Model.Switch" Label="@nameof(Model.Switch)" StartIcon="home" EndIcon="search" SupportingText="Supporting Text" />
         <TnTSwitch @bind-Value="@Model.Switch" Label="@nameof(Model.Switch)" StartIcon="home" EndIcon="search" Disabled="true" />
         <TnTSwitch @bind-Value="@Model.Switch" Label="@nameof(Model.Switch)" StartIcon="home" EndIcon="search" SupportingText="Supporting Text" Disabled="true" />
+    }
+
+    private void RenderDateFields(RenderTreeBuilder __builder) {
+        <TnTDateInput @bind-Value="@Model.DateValue" MaxDate="@(DateTime.Now.AddMonths(1))" MinDate="@(DateTime.Now.AddMonths(-1))" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" />
+        <TnTDateInput @bind-Value="@Model.DateValue" SupportingText="Supporting Text" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" SupportingText="Supporting Text" />
+        <TnTDateInput @bind-Value="@Model.DateValue" StartIcon="home" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" StartIcon="home" />
+        <TnTDateInput @bind-Value="@Model.DateValue" SupportingText="Supporting Text" StartIcon="home" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" SupportingText="Supporting Text" StartIcon="home" />
+        <TnTDateInput @bind-Value="@Model.DateValue" Placeholder="Placeholder" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" Placeholder="Placeholder" />
+        <TnTDateInput @bind-Value="@Model.DateValue" SupportingText="Supporting Text" Placeholder="Placeholder" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" SupportingText="Supporting Text" Placeholder="Placeholder" />
+        <TnTDateInput @bind-Value="@Model.DateValue" Disabled="true" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" Disabled="true" />
+        <TnTDateInput @bind-Value="@Model.DateValue" SupportingText="Supporting Text" Disabled="true" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" SupportingText="Supporting Text" Disabled="true" />
+        <TnTDateInput @bind-Value="@Model.DateValue" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" SupportingText="Supporting Text" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" SupportingText="Supporting Text" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" StartIcon="home" Placeholder="Placeholder" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" StartIcon="home" Placeholder="Placeholder" />
+        <TnTDateInput @bind-Value="@Model.DateValue" SupportingText="Supporting Text" StartIcon="home" Placeholder="Placeholder" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" SupportingText="Supporting Text" StartIcon="home" Placeholder="Placeholder" />
+        <TnTDateInput @bind-Value="@Model.DateValue" StartIcon="home" Disabled="true" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" StartIcon="home" Disabled="true" />
+        <TnTDateInput @bind-Value="@Model.DateValue" SupportingText="Supporting Text" StartIcon="home" Disabled="true" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" SupportingText="Supporting Text" StartIcon="home" Disabled="true" />
+        <TnTDateInput @bind-Value="@Model.DateValue" StartIcon="home" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" StartIcon="home" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" SupportingText="Supporting Text" StartIcon="home" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" SupportingText="Supporting Text" StartIcon="home" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" Placeholder="Placeholder" Disabled="true" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" Placeholder="Placeholder" Disabled="true" />
+        <TnTDateInput @bind-Value="@Model.DateValue" SupportingText="Supporting Text" Placeholder="Placeholder" Disabled="true" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" SupportingText="Supporting Text" Placeholder="Placeholder" Disabled="true" />
+        <TnTDateInput @bind-Value="@Model.DateValue" Placeholder="Placeholder" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" Placeholder="Placeholder" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" SupportingText="Supporting Text" Placeholder="Placeholder" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" SupportingText="Supporting Text" Placeholder="Placeholder" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" Label="@nameof(Model.DateValue)" Disabled="true" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" Label="@nameof(Model.DateValue)" Disabled="true" />
+        <TnTDateInput @bind-Value="@Model.DateValue" SupportingText="Supporting Text" Label="@nameof(Model.DateValue)" Disabled="true" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" SupportingText="Supporting Text" Label="@nameof(Model.DateValue)" Disabled="true" />
+        <TnTDateInput @bind-Value="@Model.DateValue" StartIcon="home" Placeholder="Placeholder" Disabled="true" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" StartIcon="home" Placeholder="Placeholder" Disabled="true" />
+        <TnTDateInput @bind-Value="@Model.DateValue" SupportingText="Supporting Text" StartIcon="home" Placeholder="Placeholder" Disabled="true" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" SupportingText="Supporting Text" StartIcon="home" Placeholder="Placeholder" Disabled="true" />
+        <TnTDateInput @bind-Value="@Model.DateValue" StartIcon="home" Placeholder="Placeholder" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" StartIcon="home" Placeholder="Placeholder" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" SupportingText="Supporting Text" StartIcon="home" Placeholder="Placeholder" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" SupportingText="Supporting Text" StartIcon="home" Placeholder="Placeholder" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" StartIcon="home" Disabled="true" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" StartIcon="home" Disabled="true" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" SupportingText="Supporting Text" StartIcon="home" Disabled="true" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" SupportingText="Supporting Text" StartIcon="home" Disabled="true" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" Placeholder="Placeholder" Disabled="true" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" Placeholder="Placeholder" Disabled="true" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" SupportingText="Supporting Text" Placeholder="Placeholder" Disabled="true" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" SupportingText="Supporting Text" Placeholder="Placeholder" Disabled="true" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" StartIcon="home" Placeholder="Placeholder" Disabled="true" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" StartIcon="home" Placeholder="Placeholder" Disabled="true" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" SupportingText="Supporting Text" StartIcon="home" Placeholder="Placeholder" Disabled="true" Label="@nameof(Model.DateValue)" />
+        <TnTDateInput @bind-Value="@Model.DateValue" EndIcon="search" SupportingText="Supporting Text" StartIcon="home" Placeholder="Placeholder" Disabled="true" Label="@nameof(Model.DateValue)" />
+
     }
 }

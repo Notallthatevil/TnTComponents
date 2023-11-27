@@ -76,7 +76,7 @@
             }
         }
 
-        &:has(input[type=text]), &:has(input[type=email]), &:has(input[type=password]), &:has(input[type=tel]), &:has(input[type=url]) {
+        &:has(input[type=text]), &:has(input[type=email]), &:has(input[type=password]), &:has(input[type=tel]), &:has(input[type=url]), &:has(input[type=date]) {
             & > i {
                 font-size: 24px;
             }

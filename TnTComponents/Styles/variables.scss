@@ -258,6 +258,10 @@
     --tnt-color-info-container: var(--tnt-color-info-container-light);
     --tnt-color-on-info-container: var(--tnt-color-on-info-container-light);
 
+    ::-webkit-calendar-picker-indicator {
+        filter: invert(7%) sepia(11%) saturate(758%) hue-rotate(222deg) brightness(100%) contrast(92%);
+    }
+
     @media (prefers-color-scheme: dark) {
         --tnt-color-primary: var(--tnt-color-primary-dark);
         --tnt-color-on-primary: var(--tnt-color-on-primary-dark);
@@ -306,5 +310,9 @@
         --tnt-color-on-info: var(--tnt-color-on-info-dark);
         --tnt-color-info-container: var(--tnt-color-info-container-dark);
         --tnt-color-on-info-container: var(--tnt-color-on-info-container-dark);
+
+        ::-webkit-calendar-picker-indicator {
+            filter: invert(79%) sepia(64%) saturate(31%) hue-rotate(239deg) brightness(90%) contrast(90%);
+        }
     }
 }
