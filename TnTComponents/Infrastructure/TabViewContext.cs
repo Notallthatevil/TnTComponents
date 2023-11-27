@@ -3,9 +3,7 @@
 namespace TnTComponents.Infrastructure;
 
 internal class TabViewContext(TnTTabView tabView) {
-    internal TnTTabView ParentView { get; set; } = tabView;
-
-    internal List<TnTTabChild> TabChildren { get; set; } = [];
+    private TnTTabChild? _activeTab;
 
     internal TnTTabChild? ActiveTab {
         get {
@@ -34,17 +32,19 @@ internal class TabViewContext(TnTTabView tabView) {
         }
     }
 
-    private TnTTabChild? _activeTab;
+    internal TnTTabView ParentView { get; set; } = tabView;
 
-    internal void NotifyStateChanged() {
-        ParentView.Refresh();
-    }
+    internal List<TnTTabChild> TabChildren { get; set; } = [];
 
     internal void AddChild(TnTTabChild tabChild) {
         TabChildren.Add(tabChild);
         if (TabChildren.Count == 1) {
             ActiveTab = TabChildren[0];
         }
+        ParentView.Refresh();
+    }
+
+    internal void NotifyStateChanged() {
         ParentView.Refresh();
     }
 

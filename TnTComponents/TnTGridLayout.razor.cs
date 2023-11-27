@@ -6,21 +6,6 @@ namespace TnTComponents;
 
 public partial class TnTGridLayout {
 
-    [Parameter]
-    public string? Id { get; set; }
-
-    [Parameter]
-    public string? Class { get; set; } = "tnt-grid-layout";
-
-    [Parameter]
-    public string? Theme { get; set; }
-
-    [Parameter]
-    public string? Style { get; set; }
-
-    [Parameter]
-    public object? Data { get; set; }
-
     [Parameter(CaptureUnmatchedValues = true)]
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
@@ -28,12 +13,27 @@ public partial class TnTGridLayout {
     public RenderFragment ChildContent { get; set; } = default!;
 
     [Parameter]
+    public string? Class { get; set; } = "tnt-grid-layout";
+
+    [Parameter]
     public int? ColumnCount { get; set; }
+
+    [Parameter]
+    public object? Data { get; set; }
+
+    public ElementReference Element { get; protected set; }
+
+    [Parameter]
+    public string? Id { get; set; }
 
     [Parameter]
     public int? RowCount { get; set; }
 
-    public ElementReference Element { get; protected set; }
+    [Parameter]
+    public string? Style { get; set; }
+
+    [Parameter]
+    public string? Theme { get; set; }
 
     public string GetClass() => this.GetClassDefault();
 

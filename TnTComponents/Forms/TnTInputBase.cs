@@ -10,16 +10,40 @@ namespace TnTComponents.Forms;
 
 public abstract class TnTInputBase<TInputType> : InputBase<TInputType>, ITnTComponentBase {
 
-    [CascadingParameter(Name = TnTForm.ParentFormTypeName)]
-    private FormType? _parentFormType { get; set; }
+    [Parameter]
+    public string? AriaLabel { get; set; }
 
     [Parameter]
-    public FormType FormType { get; set; }
+    public bool AutoFocus { get; set; }
+
+    [Parameter]
+    public virtual string? Class { get; set; }
+
+    [Parameter]
+    public string ContainerClass { get; set; } = "tnt-input-container";
+
+    [Parameter]
+    public virtual object? Data { get; set; }
+
+    [Parameter]
+    public bool Disabled { get; set; }
 
     public ElementReference Element { get; protected set; }
 
     [Parameter]
-    public string ContainerClass { get; set; } = "tnt-input-container";
+    public string? EndIcon { get; set; }
+
+    [Parameter]
+    public FormType FormType { get; set; }
+
+    [Parameter]
+    public IconType IconType { get; set; }
+
+    [Parameter]
+    public virtual string? Id { get; set; }
+
+    [Parameter]
+    public string? Label { get; set; }
 
     [Parameter]
     public string LabelClass { get; set; } = "tnt-input-label";
@@ -28,71 +52,52 @@ public abstract class TnTInputBase<TInputType> : InputBase<TInputType>, ITnTComp
     public string LabelTextClass { get; set; } = "tnt-input-label-text";
 
     [Parameter]
-    public string SupportingTextClass { get; set; } = "tnt-input-supporting-text";
-
-    [Parameter]
-    public string ValidationClass { get; set; } = "tnt-input-validation";
-
-    [Parameter]
-    public virtual string? Id { get; set; }
-
-    [Parameter]
-    public virtual string? Class { get; set; }
-
-    [Parameter]
-    public virtual string? Theme { get; set; }
-
-    [Parameter]
-    public virtual string? Style { get; set; }
-
-    [Parameter]
-    public virtual object? Data { get; set; }
+    public string? Placeholder { get; set; }
 
     [Parameter]
     public bool ReadOnly { get; set; }
 
     [Parameter]
-    public bool AutoFocus { get; set; }
-
-    [Parameter]
-    public string? Placeholder { get; set; }
-
-    [Parameter]
-    public bool Disabled { get; set; }
-
-    [Parameter]
     public bool ShowValidation { get; set; } = true;
-
-    [Parameter]
-    public string? AriaLabel { get; set; }
-
-    [Parameter]
-    public string? Label { get; set; }
-
-    [Parameter]
-    public string? Title { get; set; }
 
     [Parameter]
     public string? StartIcon { get; set; }
 
     [Parameter]
-    public string? EndIcon { get; set; }
-
-    [Parameter]
-    public IconType IconType { get; set; }
+    public virtual string? Style { get; set; }
 
     [Parameter]
     public string? SupportingText { get; set; }
 
+    [Parameter]
+    public string SupportingTextClass { get; set; } = "tnt-input-supporting-text";
+
+    [Parameter]
+    public virtual string? Theme { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public string ValidationClass { get; set; } = "tnt-input-validation";
+
     protected int? MaxLength { get; private set; }
-    protected int? MinLength { get; private set; }
-    protected TInputType? MinValue { get; private set; }
+
     protected TInputType? MaxValue { get; private set; }
+
+    protected int? MinLength { get; private set; }
+
+    protected TInputType? MinValue { get; private set; }
+
     protected string? Pattern { get; private set; }
+
     protected bool Required { get; private set; }
 
     [Inject]
     private ILogger<TnTInputBase<TInputType>>? _logger { get; set; }
+
+    [CascadingParameter(Name = TnTForm.ParentFormTypeName)]
+    private FormType? _parentFormType { get; set; }
 
     public string GetClass() => string.Join(' ', this.GetClassDefault(), CssClass);
 

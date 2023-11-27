@@ -6,10 +6,10 @@ namespace TnTComponents.Forms;
 public partial class TnTTimeOnlyInput {
 
     [Parameter]
-    public TimeOnly? MinTime { get; set; }
+    public TimeOnly? MaxTime { get; set; }
 
     [Parameter]
-    public TimeOnly? MaxTime { get; set; }
+    public TimeOnly? MinTime { get; set; }
 
     [Parameter]
     public int? StepRate { get; set; }

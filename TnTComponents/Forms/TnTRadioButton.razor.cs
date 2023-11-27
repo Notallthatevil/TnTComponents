@@ -6,12 +6,9 @@ using TnTComponents.Enum;
 namespace TnTComponents.Forms;
 
 public partial class TnTRadioButton<TInputType> {
+    private string _id = default!;
 
-    [CascadingParameter]
-    private RadioGroupContext Context { get; set; } = default!;
-
-    [Parameter, EditorRequired]
-    public string Label { get; set; } = default!;
+    private bool _trueValueToggle;
 
     [Parameter]
     public string? Icon { get; set; }
@@ -19,11 +16,25 @@ public partial class TnTRadioButton<TInputType> {
     [Parameter]
     public IconType IconType { get; set; }
 
+    [Parameter, EditorRequired]
+    public string Label { get; set; } = default!;
+
     [Parameter]
     public TInputType? Value { get; set; }
 
-    private string _id = default!;
-    private bool _trueValueToggle;
+    [CascadingParameter]
+    private RadioGroupContext Context { get; set; } = default!;
+
+    public override string GetCssClass() {
+        var strBuilder = new StringBuilder(base.GetCssClass());
+        strBuilder.Append(" tnt-radio-btn");
+
+        if (Disabled) {
+            strBuilder.Append(" disabled");
+        }
+
+        return strBuilder.ToString();
+    }
 
     protected override void OnParametersSet() {
         _id = Guid.NewGuid().ToString();
@@ -36,17 +47,6 @@ public partial class TnTRadioButton<TInputType> {
         }
 
         base.OnParametersSet();
-    }
-
-    public override string GetCssClass() {
-        var strBuilder = new StringBuilder(base.GetCssClass());
-        strBuilder.Append(" tnt-radio-btn");
-
-        if (Disabled) {
-            strBuilder.Append(" disabled");
-        }
-
-        return strBuilder.ToString();
     }
 
     private char GetToggledTrueValue() {

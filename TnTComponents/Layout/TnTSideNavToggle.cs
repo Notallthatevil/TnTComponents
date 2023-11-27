@@ -8,28 +8,13 @@ namespace TnTComponents.Layout;
 public class TnTSideNavToggle : TnTIconComponent {
 
     [Parameter]
-    public string? Label { get; set; }
+    public override string Icon { get; set; } = "menu";
 
     [Parameter]
-    public override string Icon { get; set; } = "menu";
+    public string? Label { get; set; }
 
     [CascadingParameter]
     private TnTLayout _tntLayout { get; set; } = default!;
-
-    protected override void OnInitialized() {
-        if (_tntLayout is null) {
-            throw new InvalidOperationException($"{nameof(TnTSideNavToggle)} must be a child of {nameof(TnTLayout)}");
-        }
-        base.OnInitialized();
-    }
-
-    protected override void OnAfterRender(bool firstRender) {
-        if (firstRender) {
-            Console.WriteLine("SideNav");
-            StateHasChanged();
-        }
-        base.OnAfterRender(firstRender);
-    }
 
     protected override void BuildRenderTree(RenderTreeBuilder __builder) {
         if (_tntLayout?.SideNav is not null) {
@@ -49,6 +34,21 @@ public class TnTSideNavToggle : TnTIconComponent {
             __builder.AddContent(70, Label);
             __builder.CloseElement();
         }
+    }
+
+    protected override void OnAfterRender(bool firstRender) {
+        if (firstRender) {
+            Console.WriteLine("SideNav");
+            StateHasChanged();
+        }
+        base.OnAfterRender(firstRender);
+    }
+
+    protected override void OnInitialized() {
+        if (_tntLayout is null) {
+            throw new InvalidOperationException($"{nameof(TnTSideNavToggle)} must be a child of {nameof(TnTLayout)}");
+        }
+        base.OnInitialized();
     }
 
     private MarkupString CreateToggleForId(string? id, bool expand) {

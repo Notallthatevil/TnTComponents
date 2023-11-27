@@ -12,7 +12,16 @@ public partial class TnTInputFile : InputFile, ITnTFormField {
     public string BaseCssClass { get; set; } = "tnt-form-field-input";
 
     [Parameter]
+    public ButtonType ButtonType { get; set; }
+
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    [Parameter]
     public FormType FormType { get; set; }
+
+    [Parameter, EditorRequired]
+    public string Label { get; set; } = default!;
 
     [CascadingParameter]
     public TnTForm? ParentForm { get; set; }
@@ -22,43 +31,6 @@ public partial class TnTInputFile : InputFile, ITnTFormField {
 
     [Parameter]
     public string Theme { get; set; } = "default";
-
-    [Parameter]
-    public bool Disabled { get; set; }
-
-    [Parameter]
-    public ButtonType ButtonType { get; set; }
-
-    [Parameter, EditorRequired]
-    public string Label { get; set; } = default!;
-
-    protected override void OnParametersSet() {
-        this.MatchParentFormIfExists();
-        if (AdditionalAttributes == null) {
-            AdditionalAttributes = new Dictionary<string, object>() {
-                { "name", Label },
-                { "theme", Theme },
-                { "class",  GetButtonClass() }
-            };
-        }
-        else {
-            var dict = new Dictionary<string, object>(AdditionalAttributes);
-            if (!dict.ContainsKey("name")) {
-                dict.Add("name", Label);
-            }
-
-            dict.TryGetValue("class", out var result);
-            dict["class"] = string.Join(' ', GetButtonClass(), result);
-
-            if (!dict.ContainsKey("theme")) {
-                dict.Add("theme", Theme);
-            }
-
-            AdditionalAttributes = dict;
-        }
-
-        base.OnParametersSet();
-    }
 
     public string GetCssClass() {
         var strBuilder = new StringBuilder(BaseCssClass);
@@ -86,6 +58,34 @@ public partial class TnTInputFile : InputFile, ITnTFormField {
         builder.CloseElement();
 
         builder.CloseElement();
+    }
+
+    protected override void OnParametersSet() {
+        this.MatchParentFormIfExists();
+        if (AdditionalAttributes == null) {
+            AdditionalAttributes = new Dictionary<string, object>() {
+                { "name", Label },
+                { "theme", Theme },
+                { "class",  GetButtonClass() }
+            };
+        }
+        else {
+            var dict = new Dictionary<string, object>(AdditionalAttributes);
+            if (!dict.ContainsKey("name")) {
+                dict.Add("name", Label);
+            }
+
+            dict.TryGetValue("class", out var result);
+            dict["class"] = string.Join(' ', GetButtonClass(), result);
+
+            if (!dict.ContainsKey("theme")) {
+                dict.Add("theme", Theme);
+            }
+
+            AdditionalAttributes = dict;
+        }
+
+        base.OnParametersSet();
     }
 
     private string GetButtonClass() {

@@ -7,6 +7,11 @@ using TnTComponents.Infrastructure;
 namespace TnTComponents;
 
 public partial class TnTTabChild {
+    private bool _canGetSize;
+
+    private bool _disabled;
+
+    private ElementReference _reference;
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
@@ -16,17 +21,27 @@ public partial class TnTTabChild {
 
     internal ElementReference TabReference { get; set; }
 
-    [CascadingParameter]
-    private TabViewContext _tabViewContext { get; set; } = default!;
-
     [Inject]
     private IJSRuntime _jsRuntime { get; set; } = default!;
 
-    private bool _disabled;
+    [CascadingParameter]
+    private TabViewContext _tabViewContext { get; set; } = default!;
 
-    private bool _canGetSize;
+    public void Dispose() {
+        _tabViewContext.RemoveChild(this);
+    }
 
-    private ElementReference _reference;
+    internal async Task<ElementOffset?> GetElementOffset() {
+        if (_canGetSize) {
+            return await _jsRuntime.GetElementOffset(_reference);
+        }
+        return default;
+    }
+
+    protected override void OnAfterRender(bool firstRender) {
+        _canGetSize = true;
+        base.OnAfterRender(firstRender);
+    }
 
     protected override void OnInitialized() {
         if (_tabViewContext is null) {
@@ -43,21 +58,5 @@ public partial class TnTTabChild {
             _tabViewContext?.ParentView.Refresh();
         }
         base.OnParametersSet();
-    }
-
-    protected override void OnAfterRender(bool firstRender) {
-        _canGetSize = true;
-        base.OnAfterRender(firstRender);
-    }
-
-    public void Dispose() {
-        _tabViewContext.RemoveChild(this);
-    }
-
-    internal async Task<ElementOffset?> GetElementOffset() {
-        if (_canGetSize) {
-            return await _jsRuntime.GetElementOffset(_reference);
-        }
-        return default;
     }
 }

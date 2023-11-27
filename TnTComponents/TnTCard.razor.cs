@@ -9,10 +9,10 @@ public partial class TnTCard {
     public RenderFragment ChildContent { get; set; } = default!;
 
     [Parameter]
-    public CardType Type { get; set; }
+    public override string? Class { get; set; } = "tnt-card";
 
     [Parameter]
-    public override string? Class { get; set; } = "tnt-card";
+    public CardType Type { get; set; }
 
     public override string GetClass() {
         return base.GetClass() + " " + Type.ToString().ToLower();

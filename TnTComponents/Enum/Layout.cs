@@ -1,18 +1,5 @@
 ﻿namespace TnTComponents.Enum;
 
-public enum Direction {
-    Row,
-    Column,
-    RowReverse,
-    ColumnReverse
-}
-
-public enum WrapStyle {
-    Unspecified,
-    NoWrap,
-    Wrap
-}
-
 public enum AlignContent {
     Normal,
     Center,
@@ -21,6 +8,22 @@ public enum AlignContent {
     SpaceAround,
     SpaceBetween,
     Stretch
+}
+
+public enum AlignItems {
+    Normal,
+    Center,
+    Start,
+    End,
+    Stretch,
+    Baseline
+}
+
+public enum Direction {
+    Row,
+    Column,
+    RowReverse,
+    ColumnReverse
 }
 
 public enum JustifyContent {
@@ -33,20 +36,17 @@ public enum JustifyContent {
     SpaceEvenly
 }
 
-public enum AlignItems {
-    Normal,
-    Center,
-    Start,
-    End,
-    Stretch,
-    Baseline
-}
-
 public enum JustifySelf {
     Start,
     End,
     Center,
     Stretch
+}
+
+public enum WrapStyle {
+    Unspecified,
+    NoWrap,
+    Wrap
 }
 
 internal static class EnumExt {

@@ -6,12 +6,9 @@ using System.Globalization;
 namespace TnTComponents.Forms;
 
 public partial class TnTRadioGroup<TInputType> {
+    private bool _disabled;
 
-    [Parameter]
-    public RenderFragment RadioButtons { get; set; } = default!;
-
-    [Parameter]
-    public ICollection<TInputType>? RadioButtonItems { get; set; }
+    private RadioGroupContext _radioGroupContext = default!;
 
     [Parameter]
     public bool AllowClear { get; set; }
@@ -22,8 +19,11 @@ public partial class TnTRadioGroup<TInputType> {
     [Parameter]
     public override bool Disabled { get => _disabled; set { _disabled = value; if (_radioGroupContext is not null) { _radioGroupContext.Disabled = _disabled; } } }
 
-    private RadioGroupContext _radioGroupContext = default!;
-    private bool _disabled;
+    [Parameter]
+    public ICollection<TInputType>? RadioButtonItems { get; set; }
+
+    [Parameter]
+    public RenderFragment RadioButtons { get; set; } = default!;
 
     protected override void OnParametersSet() {
         if (RadioButtons is null && (RadioButtonItems is null || RadioButtonItems.Count != 0)) {
@@ -102,10 +102,9 @@ public partial class TnTRadioGroup<TInputType> {
 }
 
 internal class RadioGroupContext(string groupName, string labelCss, EventCallback<ChangeEventArgs> eventCallback) {
-    public string GroupName { get; } = groupName;
-    public string LabelCss { get; } = labelCss;
-
-    public EventCallback<ChangeEventArgs> EventCallback { get; } = eventCallback;
     public object? CurrentValue { get; set; }
     public bool Disabled { get; set; }
+    public EventCallback<ChangeEventArgs> EventCallback { get; } = eventCallback;
+    public string GroupName { get; } = groupName;
+    public string LabelCss { get; } = labelCss;
 }

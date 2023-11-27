@@ -6,29 +6,25 @@ namespace TnTComponents.Forms;
 
 public partial class TnTDropDown<TListItemType> {
 
-    [Parameter, EditorRequired]
-    public ICollection<TListItemType> ListItems { get; set; } = default!;
-
     [Parameter]
     public IReadOnlySet<TListItemType>? DisabledItems { get; set; }
 
     [Parameter]
-    public RenderFragment<TListItemType>? ListItemTemplate { get; set; }
-
-    [Parameter]
     public Func<TListItemType?, string>? ItemValueCallback { get; set; }
 
-    protected override async Task OnFocusOutAsync(FocusEventArgs e) {
-        await RemoveInputFocus();
-        await base.OnFocusOutAsync(e);
-    }
+    [Parameter, EditorRequired]
+    public ICollection<TListItemType> ListItems { get; set; } = default!;
+
+    [Parameter]
+    public RenderFragment<TListItemType>? ListItemTemplate { get; set; }
 
     protected override string GetCssClass() {
         return base.GetCssClass() + " dropdown";
     }
 
-    private bool IsItemDisabled(TListItemType? item) {
-        return item is not null && (DisabledItems?.Contains(item) ?? false);
+    protected override async Task OnFocusOutAsync(FocusEventArgs e) {
+        await RemoveInputFocus();
+        await base.OnFocusOutAsync(e);
     }
 
     private string GetItemClass(TListItemType? item) {
@@ -52,6 +48,10 @@ public partial class TnTDropDown<TListItemType> {
         else {
             return item?.ToString() ?? string.Empty;
         }
+    }
+
+    private bool IsItemDisabled(TListItemType? item) {
+        return item is not null && (DisabledItems?.Contains(item) ?? false);
     }
 
     private async Task SelectItem(TListItemType? item) {

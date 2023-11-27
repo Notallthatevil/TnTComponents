@@ -4,19 +4,20 @@ using System.Text;
 namespace TnTComponents.Common {
 
     public abstract class TnTBaseComponent : ComponentBase {
-        public virtual string BaseCssClass { get; set; } = string.Empty;
-
-        [Parameter]
-        public virtual string Theme { get; set; } = "default";
-
-        [Parameter]
-        public virtual bool Disabled { get; set; } = false;
 
         [Parameter]
         public bool Active { get; set; } = false;
 
         [Parameter(CaptureUnmatchedValues = true)]
         public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+        public virtual string BaseCssClass { get; set; } = string.Empty;
+
+        [Parameter]
+        public virtual bool Disabled { get; set; } = false;
+
+        [Parameter]
+        public virtual string Theme { get; set; } = "default";
 
         public virtual string GetCssClass() {
             var strBuilder = new StringBuilder(BaseCssClass);

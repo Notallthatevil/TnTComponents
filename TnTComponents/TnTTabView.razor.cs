@@ -7,19 +7,18 @@ using TnTComponents.Infrastructure;
 namespace TnTComponents;
 
 public partial class TnTTabView {
+    private ElementReference _gliderRef;
 
-    [Parameter]
-    public RenderFragment ChildContent { get; set; } = default!;
+    private TabViewContext _tabViewContext = default!;
 
     [Parameter]
     public override string BaseCssClass { get; set; } = "tnt-tab-view";
 
     [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    [Parameter]
     public bool UseGlider { get; set; } = true;
-
-    private TabViewContext _tabViewContext = default!;
-
-    private ElementReference _gliderRef;
 
     [Inject]
     private IJSRuntime _jsRuntime { get; set; } = default!;
@@ -28,9 +27,8 @@ public partial class TnTTabView {
         return base.GetCssClass() + (UseGlider ? " tnt-glider" : string.Empty);
     }
 
-    protected override void OnInitialized() {
-        _tabViewContext = new TabViewContext(this);
-        base.OnInitialized();
+    public void Refresh() {
+        StateHasChanged();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
@@ -58,7 +56,8 @@ public partial class TnTTabView {
         await base.OnAfterRenderAsync(firstRender);
     }
 
-    public void Refresh() {
-        StateHasChanged();
+    protected override void OnInitialized() {
+        _tabViewContext = new TabViewContext(this);
+        base.OnInitialized();
     }
 }

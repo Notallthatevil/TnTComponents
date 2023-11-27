@@ -4,6 +4,11 @@ using Microsoft.JSInterop;
 namespace TnTComponents.Common;
 
 public partial class TnTExternalClickHandler {
+    private bool _disposedValue;
+
+    private ElementReference _externalClickElement;
+
+    private DotNetObjectReference<TnTExternalClickHandler>? _reference;
 
     [Parameter, EditorRequired]
     public EventCallback Callback { get; set; }
@@ -14,21 +19,14 @@ public partial class TnTExternalClickHandler {
     [Inject]
     private IJSRuntime _jsRuntime { get; set; } = default!;
 
-    private ElementReference _externalClickElement;
-
-    private DotNetObjectReference<TnTExternalClickHandler>? _reference;
-    private bool _disposedValue;
+    public void Dispose() {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
 
     [JSInvokable]
     public async Task OnClick() {
         await Callback.InvokeAsync();
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender) {
-        if (firstRender) {
-            _reference = DotNetObjectReference.Create(this);
-            await _jsRuntime.InvokeVoidAsync("TnTComponents.WindowClickCallbackRegister", _externalClickElement, _reference);
-        }
     }
 
     protected virtual void Dispose(bool disposing) {
@@ -42,8 +40,10 @@ public partial class TnTExternalClickHandler {
         }
     }
 
-    public void Dispose() {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if (firstRender) {
+            _reference = DotNetObjectReference.Create(this);
+            await _jsRuntime.InvokeVoidAsync("TnTComponents.WindowClickCallbackRegister", _externalClickElement, _reference);
+        }
     }
 }

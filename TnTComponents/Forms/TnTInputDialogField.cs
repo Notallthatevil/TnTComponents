@@ -13,8 +13,12 @@ public abstract class TnTInputDialogField<TInputType> : TnTInputField<TInputType
     protected ElementReference ContainerElementReference { get; set; }
     protected bool HasSpaceBelow { get; private set; } = true;
 
-    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TInputType result, [NotNullWhen(false)] out string? validationErrorMessage)
-               => throw new NotSupportedException($"This component does not parse string inputs. Bind to the '{nameof(CurrentValue)}' property, not '{nameof(CurrentValueAsString)}'.");
+    protected async Task ClearSelection() {
+        if (!Disabled) {
+            CurrentValue = default;
+        }
+        await OnFocusOutAsync(new FocusEventArgs());
+    }
 
     protected override async Task OnFocusInAsync(FocusEventArgs e) {
         var rect = await JSRuntime.GetElementBoundingRect(ContainerElementReference);
@@ -26,10 +30,6 @@ public abstract class TnTInputDialogField<TInputType> : TnTInputField<TInputType
         await base.OnFocusInAsync(e);
     }
 
-    protected async Task ClearSelection() {
-        if (!Disabled) {
-            CurrentValue = default;
-        }
-        await OnFocusOutAsync(new FocusEventArgs());
-    }
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TInputType result, [NotNullWhen(false)] out string? validationErrorMessage)
+                       => throw new NotSupportedException($"This component does not parse string inputs. Bind to the '{nameof(CurrentValue)}' property, not '{nameof(CurrentValueAsString)}'.");
 }

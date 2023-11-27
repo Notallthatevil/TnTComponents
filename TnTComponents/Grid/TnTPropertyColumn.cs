@@ -5,14 +5,18 @@ using System.Text.RegularExpressions;
 namespace TnTComponents.Grid;
 
 public partial class TnTPropertyColumn<TGridItem, TProperty> : TnTColumnBase<TGridItem> {
-    private Expression<Func<TGridItem, TProperty>>? _lastUsedProperty;
     private Func<TGridItem, string?>? _cellContentFunc;
+    private Expression<Func<TGridItem, TProperty>>? _lastUsedProperty;
+
+    [Parameter]
+    public string? Format { get; set; }
 
     [Parameter, EditorRequired]
     public Expression<Func<TGridItem, TProperty>> Property { get; set; } = default!;
 
-    [Parameter]
-    public string? Format { get; set; }
+    protected internal override RenderFragment CellContent(TGridItem item) {
+        return new RenderFragment(builder => builder.AddContent(0, _cellContentFunc!(item)));
+    }
 
     protected override void OnParametersSet() {
         if (_lastUsedProperty != Property) {
@@ -36,10 +40,6 @@ public partial class TnTPropertyColumn<TGridItem, TProperty> : TnTColumnBase<TGr
         }
 
         base.OnParametersSet();
-    }
-
-    protected internal override RenderFragment CellContent(TGridItem item) {
-        return new RenderFragment(builder => builder.AddContent(0, _cellContentFunc!(item)));
     }
 
     [GeneratedRegex(@"((?<=\p{Ll})\p{Lu}|\p{Lu}(?=\p{Ll}))")]

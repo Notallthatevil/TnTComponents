@@ -10,6 +10,7 @@ public partial class TnTNumeric<TNumberType> where TNumberType : unmanaged,
     IMinMaxValue<TNumberType>,
     IAdditionOperators<TNumberType, TNumberType, TNumberType>,
     ISubtractionOperators<TNumberType, TNumberType, TNumberType> {
+    private bool _inAdjustment;
 
     [Parameter]
     public TNumberType AdjustmentAmount { get; set; } = DefaultAdjustmentValue();
@@ -19,45 +20,6 @@ public partial class TnTNumeric<TNumberType> where TNumberType : unmanaged,
 
     [Parameter]
     public TNumberType MinValue { get; set; } = TNumberType.MinValue;
-
-    private static TNumberType DefaultAdjustmentValue() {
-        TNumberType t = default;
-        return t switch {
-            byte => (TNumberType)(object)Convert.ToByte(1),
-            sbyte => (TNumberType)(object)Convert.ToSByte(1),
-            short => (TNumberType)(object)Convert.ToInt16(1),
-            ushort => (TNumberType)(object)Convert.ToUInt16(1),
-            int => (TNumberType)(object)1,
-            uint => (TNumberType)(object)1U,
-            long => (TNumberType)(object)1L,
-            ulong => (TNumberType)(object)1UL,
-            float => (TNumberType)(object)0.1F,
-            double => (TNumberType)(object)0.1,
-            decimal => (TNumberType)(object)0.1M,
-            _ => throw new InvalidOperationException($"Unsupported type {t.GetType()}"),
-        };
-    }
-
-    private bool _inAdjustment;
-
-    //protected override void OnChange(ChangeEventArgs e) {
-    //CurrentValueAsString = e?.Value?.ToString();
-    //}
-
-    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TNumberType result, [NotNullWhen(false)] out string? validationErrorMessage) {
-        if (BindConverter.TryConvertTo<TNumberType>(value, CultureInfo.InvariantCulture, out result)) {
-            if (result.CompareTo(MaxValue) > 0 || result.CompareTo(MinValue) < 0) {
-                validationErrorMessage = $"The value must be between {MinValue} and {MaxValue} inclusively.";
-                return false;
-            }
-            validationErrorMessage = null;
-            return true;
-        }
-        else {
-            validationErrorMessage = string.Format(CultureInfo.InvariantCulture, $"The {DisplayName ?? FieldIdentifier.FieldName} field must be a number.");
-            return false;
-        }
-    }
 
     protected override string? FormatValueAsString(TNumberType value) {
         // Avoiding a cast to IFormattable to avoid boxing.
@@ -77,16 +39,37 @@ public partial class TnTNumeric<TNumberType> where TNumberType : unmanaged,
         };
     }
 
-    private async Task Increment() {
-        _inAdjustment = true;
-        while (_inAdjustment) {
-            CurrentValue += AdjustmentAmount;
-            if (CurrentValue.CompareTo(MaxValue) > 0) {
-                CurrentValue = MinValue;
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TNumberType result, [NotNullWhen(false)] out string? validationErrorMessage) {
+        if (BindConverter.TryConvertTo<TNumberType>(value, CultureInfo.InvariantCulture, out result)) {
+            if (result.CompareTo(MaxValue) > 0 || result.CompareTo(MinValue) < 0) {
+                validationErrorMessage = $"The value must be between {MinValue} and {MaxValue} inclusively.";
+                return false;
             }
-            await Task.Delay(100);
-            StateHasChanged();
+            validationErrorMessage = null;
+            return true;
         }
+        else {
+            validationErrorMessage = string.Format(CultureInfo.InvariantCulture, $"The {DisplayName ?? FieldIdentifier.FieldName} field must be a number.");
+            return false;
+        }
+    }
+
+    private static TNumberType DefaultAdjustmentValue() {
+        TNumberType t = default;
+        return t switch {
+            byte => (TNumberType)(object)Convert.ToByte(1),
+            sbyte => (TNumberType)(object)Convert.ToSByte(1),
+            short => (TNumberType)(object)Convert.ToInt16(1),
+            ushort => (TNumberType)(object)Convert.ToUInt16(1),
+            int => (TNumberType)(object)1,
+            uint => (TNumberType)(object)1U,
+            long => (TNumberType)(object)1L,
+            ulong => (TNumberType)(object)1UL,
+            float => (TNumberType)(object)0.1F,
+            double => (TNumberType)(object)0.1,
+            decimal => (TNumberType)(object)0.1M,
+            _ => throw new InvalidOperationException($"Unsupported type {t.GetType()}"),
+        };
     }
 
     private async Task Decrement() {
@@ -97,6 +80,21 @@ public partial class TnTNumeric<TNumberType> where TNumberType : unmanaged,
                 CurrentValue = MaxValue;
             }
 
+            await Task.Delay(100);
+            StateHasChanged();
+        }
+    }
+
+    //protected override void OnChange(ChangeEventArgs e) {
+    //CurrentValueAsString = e?.Value?.ToString();
+    //}
+    private async Task Increment() {
+        _inAdjustment = true;
+        while (_inAdjustment) {
+            CurrentValue += AdjustmentAmount;
+            if (CurrentValue.CompareTo(MaxValue) > 0) {
+                CurrentValue = MinValue;
+            }
             await Task.Delay(100);
             StateHasChanged();
         }

@@ -3,10 +3,10 @@
 namespace TnTComponents.Forms;
 
 internal interface ITnTForm {
+    Dictionary<string, object> AdditionalAttributes { get; }
+    string BaseCssClass { get; set; }
     FormType FormType { get; set; }
     string Theme { get; set; }
-    string BaseCssClass { get; set; }
-    Dictionary<string, object> AdditionalAttributes { get; }
 }
 
 internal static class ITnTFormExt {

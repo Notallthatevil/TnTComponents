@@ -7,40 +7,40 @@ namespace TnTComponents;
 public partial class TnTButton {
 
     [Parameter]
-    public RenderFragment? ChildContent { get; set; }
-
-    [Parameter]
-    public EventCallback<MouseEventArgs> OnClick { get; set; }
-
-    [Parameter, EditorRequired]
-    public string Title { get; set; } = default!;
+    public ButtonAppearance Appearance { get; set; }
 
     [Parameter]
     public bool? AutoFocus { get; set; }
 
     [Parameter]
-    public string? FormId { get; set; }
-
-    [Parameter]
-    public ButtonType Type { get; set; }
-
-    [Parameter]
-    public bool Disabled { get; set; }
+    public RenderFragment? ChildContent { get; set; }
 
     [Parameter]
     public override string? Class { get; set; } = "tnt-button";
 
     [Parameter]
-    public IconType IconType { get; set; }
-
-    [Parameter]
-    public string? StartIcon { get; set; }
+    public bool Disabled { get; set; }
 
     [Parameter]
     public string? EndIcon { get; set; }
 
     [Parameter]
-    public ButtonAppearance Appearance { get; set; }
+    public string? FormId { get; set; }
+
+    [Parameter]
+    public IconType IconType { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
+
+    [Parameter]
+    public string? StartIcon { get; set; }
+
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = default!;
+
+    [Parameter]
+    public ButtonType Type { get; set; }
 
     [CascadingParameter]
     private TnTSegmentedButton? _segmentedButton { get; set; }

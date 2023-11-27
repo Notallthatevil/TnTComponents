@@ -6,14 +6,9 @@ namespace TnTComponents.Grid;
 
 public abstract partial class TnTColumnBase<TGridItem> {
 
-    [Parameter]
-    public bool Sortable { get; set; }
-
-    [Parameter]
-    public string? Title { get; set; }
-
-    [Parameter]
-    public RenderFragment<TnTColumnBase<TGridItem>>? HeaderTemplate { get; set; }
+    public TnTColumnBase() {
+        HeaderContent = RenderHeaderContent;
+    }
 
     [Parameter]
     public override string BaseCssClass { get; set; } = "tnt-grid-column-content";
@@ -21,9 +16,19 @@ public abstract partial class TnTColumnBase<TGridItem> {
     [Parameter]
     public virtual string HeaderClass { get; set; } = "tnt-grid-column-header";
 
-    protected internal string ColumnContentClass => GetCssClass();
+    [Parameter]
+    public RenderFragment<TnTColumnBase<TGridItem>>? HeaderTemplate { get; set; }
 
-    protected internal virtual RenderFragment HeaderContent { get; } = default!;
+    [Parameter]
+    public bool Sortable { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [CascadingParameter]
+    internal TnTGridContext<TGridItem> Grid { get; set; } = default!;
+
+    protected internal string ColumnContentClass => GetCssClass();
 
     protected internal string ColumnHeaderClass {
         get {
@@ -40,17 +45,14 @@ public abstract partial class TnTColumnBase<TGridItem> {
         }
     }
 
-    [CascadingParameter]
-    internal TnTGridContext<TGridItem> Grid { get; set; } = default!;
-
-    public TnTColumnBase() {
-        HeaderContent = RenderHeaderContent;
-    }
+    protected internal virtual RenderFragment HeaderContent { get; } = default!;
 
     public void Dispose() {
         Grid.RemoveColumn(this);
         GC.SuppressFinalize(this);
     }
+
+    protected internal abstract RenderFragment CellContent(TGridItem item);
 
     protected override void OnInitialized() {
         if (Grid is null) {
@@ -60,6 +62,4 @@ public abstract partial class TnTColumnBase<TGridItem> {
         Grid.AddColumn(this);
         base.OnInitialized();
     }
-
-    protected internal abstract RenderFragment CellContent(TGridItem item);
 }

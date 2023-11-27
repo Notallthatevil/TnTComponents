@@ -7,33 +7,38 @@ using TnTComponents.Enum;
 namespace TnTComponents;
 
 public partial class TnTColumn {
+    private static readonly IReadOnlyDictionary<PropertyInfo, ColSizeAttribute> _sizeValues = GetSizeProperties();
+
+    private Dictionary<string, ColSize> _sizes = new Dictionary<string, ColSize>();
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    [Parameter, ColSize(SizeClass = "s", PropertyName = nameof(ColSize.Size))]
-    public int S { get; set; }
+    [Parameter]
+    public string? Class { get; set; } = "tnt-col";
 
-    [Parameter, ColSize(SizeClass = "s", PropertyName = nameof(ColSize.Offset))]
-    public int SOffset { get; set; }
+    [Parameter]
+    public object? Data { get; set; }
 
-    [Parameter, ColSize(SizeClass = "s", PropertyName = nameof(ColSize.Push))]
-    public int SPush { get; set; }
+    public ElementReference Element { get; protected set; }
 
-    [Parameter, ColSize(SizeClass = "s", PropertyName = nameof(ColSize.Pull))]
-    public int SPull { get; set; }
+    [Parameter]
+    public AlignContent FlexAlignContent { get; set; }
 
-    [Parameter, ColSize(SizeClass = "m", PropertyName = nameof(ColSize.Size))]
-    public int M { get; set; }
+    [Parameter]
+    public AlignItems FlexAlignItems { get; set; }
 
-    [Parameter, ColSize(SizeClass = "m", PropertyName = nameof(ColSize.Offset))]
-    public int MOffset { get; set; }
+    [Parameter]
+    public JustifyContent FlexJustifyContent { get; set; }
 
-    [Parameter, ColSize(SizeClass = "m", PropertyName = nameof(ColSize.Push))]
-    public int MPush { get; set; }
+    [Parameter]
+    public WrapStyle FlexWrap { get; set; }
 
-    [Parameter, ColSize(SizeClass = "m", PropertyName = nameof(ColSize.Pull))]
-    public int MPull { get; set; }
+    [Parameter]
+    public string? Id { get; set; }
 
     [Parameter, ColSize(SizeClass = "l", PropertyName = nameof(ColSize.Size))]
     public int L { get; set; }
@@ -41,11 +46,41 @@ public partial class TnTColumn {
     [Parameter, ColSize(SizeClass = "l", PropertyName = nameof(ColSize.Offset))]
     public int LOffset { get; set; }
 
+    [Parameter, ColSize(SizeClass = "l", PropertyName = nameof(ColSize.Pull))]
+    public int LPull { get; set; }
+
     [Parameter, ColSize(SizeClass = "l", PropertyName = nameof(ColSize.Push))]
     public int LPush { get; set; }
 
-    [Parameter, ColSize(SizeClass = "l", PropertyName = nameof(ColSize.Pull))]
-    public int LPull { get; set; }
+    [Parameter, ColSize(SizeClass = "m", PropertyName = nameof(ColSize.Size))]
+    public int M { get; set; }
+
+    [Parameter, ColSize(SizeClass = "m", PropertyName = nameof(ColSize.Offset))]
+    public int MOffset { get; set; }
+
+    [Parameter, ColSize(SizeClass = "m", PropertyName = nameof(ColSize.Pull))]
+    public int MPull { get; set; }
+
+    [Parameter, ColSize(SizeClass = "m", PropertyName = nameof(ColSize.Push))]
+    public int MPush { get; set; }
+
+    [Parameter, ColSize(SizeClass = "s", PropertyName = nameof(ColSize.Size))]
+    public int S { get; set; }
+
+    [Parameter, ColSize(SizeClass = "s", PropertyName = nameof(ColSize.Offset))]
+    public int SOffset { get; set; }
+
+    [Parameter, ColSize(SizeClass = "s", PropertyName = nameof(ColSize.Pull))]
+    public int SPull { get; set; }
+
+    [Parameter, ColSize(SizeClass = "s", PropertyName = nameof(ColSize.Push))]
+    public int SPush { get; set; }
+
+    [Parameter]
+    public string? Style { get; set; }
+
+    [Parameter]
+    public string? Theme { get; set; }
 
     [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Size))]
     public int XL { get; set; }
@@ -53,47 +88,11 @@ public partial class TnTColumn {
     [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Offset))]
     public int XLOffset { get; set; }
 
-    [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Push))]
-    public int XLPush { get; set; }
-
     [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Pull))]
     public int XLPull { get; set; }
 
-    [Parameter]
-    public WrapStyle FlexWrap { get; set; }
-
-    [Parameter]
-    public AlignContent FlexAlignContent { get; set; }
-
-    [Parameter]
-    public JustifyContent FlexJustifyContent { get; set; }
-
-    [Parameter]
-    public AlignItems FlexAlignItems { get; set; }
-
-    [Parameter]
-    public string? Id { get; set; }
-
-    [Parameter]
-    public string? Class { get; set; } = "tnt-col";
-
-    [Parameter]
-    public string? Theme { get; set; }
-
-    [Parameter]
-    public string? Style { get; set; }
-
-    [Parameter]
-    public object? Data { get; set; }
-
-    [Parameter(CaptureUnmatchedValues = true)]
-    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
-
-    public ElementReference Element { get; protected set; }
-
-    private Dictionary<string, ColSize> _sizes = new Dictionary<string, ColSize>();
-
-    private static readonly IReadOnlyDictionary<PropertyInfo, ColSizeAttribute> _sizeValues = GetSizeProperties();
+    [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Push))]
+    public int XLPush { get; set; }
 
     public string GetClass() {
         var strBuilder = new StringBuilder(this.GetClassDefault());
@@ -122,15 +121,17 @@ public partial class TnTColumn {
         return strBuilder.ToString();
     }
 
-    private static IReadOnlyDictionary<PropertyInfo, ColSizeAttribute> GetSizeProperties() {
-        var sizeValues = new Dictionary<PropertyInfo, ColSizeAttribute>();
-        foreach (var prop in typeof(TnTColumn).GetProperties()) {
-            var colSize = prop.GetCustomAttribute<ColSizeAttribute>();
-            if (colSize is not null) {
-                sizeValues.Add(prop, colSize);
-            }
+    protected string? GetStyle() {
+        var strBuilder = new StringBuilder(FlexWrap.ToStyle())
+            .Append(' ').Append(FlexAlignContent.ToStyle())
+            .Append(' ').Append(FlexJustifyContent.ToStyle())
+            .Append(' ').Append(FlexAlignItems.ToStyle());
+
+        if (AdditionalAttributes?.TryGetValue("style", out var style) ?? false) {
+            strBuilder.AppendJoin(' ', style);
         }
-        return sizeValues;
+        var result = strBuilder.ToString();
+        return !string.IsNullOrWhiteSpace(result) ? result : null;
     }
 
     protected override void OnInitialized() {
@@ -154,29 +155,27 @@ public partial class TnTColumn {
         base.OnInitialized();
     }
 
-    protected string? GetStyle() {
-        var strBuilder = new StringBuilder(FlexWrap.ToStyle())
-            .Append(' ').Append(FlexAlignContent.ToStyle())
-            .Append(' ').Append(FlexJustifyContent.ToStyle())
-            .Append(' ').Append(FlexAlignItems.ToStyle());
-
-        if (AdditionalAttributes?.TryGetValue("style", out var style) ?? false) {
-            strBuilder.AppendJoin(' ', style);
+    private static IReadOnlyDictionary<PropertyInfo, ColSizeAttribute> GetSizeProperties() {
+        var sizeValues = new Dictionary<PropertyInfo, ColSizeAttribute>();
+        foreach (var prop in typeof(TnTColumn).GetProperties()) {
+            var colSize = prop.GetCustomAttribute<ColSizeAttribute>();
+            if (colSize is not null) {
+                sizeValues.Add(prop, colSize);
+            }
         }
-        var result = strBuilder.ToString();
-        return !string.IsNullOrWhiteSpace(result) ? result : null;
+        return sizeValues;
+    }
+
+    private class ColSize {
+        public int Offset { get; set; }
+        public int Pull { get; set; }
+        public int Push { get; set; }
+        public int Size { get; set; }
     }
 
     [AttributeUsage(AttributeTargets.Property)]
     private class ColSizeAttribute : Attribute {
-        public string SizeClass { get; set; } = default!;
         public string PropertyName { get; set; } = default!;
-    }
-
-    private class ColSize {
-        public int Size { get; set; }
-        public int Offset { get; set; }
-        public int Pull { get; set; }
-        public int Push { get; set; }
+        public string SizeClass { get; set; } = default!;
     }
 }

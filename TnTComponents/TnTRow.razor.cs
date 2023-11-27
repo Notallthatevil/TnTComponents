@@ -7,40 +7,40 @@ namespace TnTComponents;
 
 public partial class TnTRow {
 
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
-
-    [Parameter]
-    public WrapStyle FlexWrap { get; set; }
-
-    [Parameter]
-    public AlignContent FlexAlignContent { get; set; }
-
-    [Parameter]
-    public JustifyContent FlexJustifyContent { get; set; }
-
-    [Parameter]
-    public AlignItems FlexAlignItems { get; set; }
-
-    [Parameter]
-    public string? Id { get; set; }
 
     [Parameter]
     public string? Class { get; set; } = "tnt-row";
 
     [Parameter]
-    public string? Theme { get; set; }
+    public object? Data { get; set; }
+
+    public ElementReference Element { get; protected set; }
+
+    [Parameter]
+    public AlignContent FlexAlignContent { get; set; }
+
+    [Parameter]
+    public AlignItems FlexAlignItems { get; set; }
+
+    [Parameter]
+    public JustifyContent FlexJustifyContent { get; set; }
+
+    [Parameter]
+    public WrapStyle FlexWrap { get; set; }
+
+    [Parameter]
+    public string? Id { get; set; }
 
     [Parameter]
     public string? Style { get; set; }
 
     [Parameter]
-    public object? Data { get; set; }
-
-    [Parameter(CaptureUnmatchedValues = true)]
-    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
-
-    public ElementReference Element { get; protected set; }
+    public string? Theme { get; set; }
 
     public string GetClass() => this.GetClassDefault();
 

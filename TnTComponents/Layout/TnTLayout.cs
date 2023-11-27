@@ -11,22 +11,24 @@ public partial class TnTLayout : ComponentBase {
     public RenderFragment Body { get; set; } = default!;
 
     [Parameter]
-    public RenderFragment? Header { get; set; }
+    public string BodyCssClass { get; set; } = "tnt-body";
 
     [Parameter]
     public RenderFragment? Footer { get; set; }
 
     [Parameter]
-    public RenderFragment? SideNav { get; set; }
+    public string FooterCssClass { get; set; } = "tnt-footer";
+
+    [Parameter]
+    public RenderFragment? Header { get; set; }
 
     [Parameter]
     public string HeaderCssClass { get; set; } = "tnt-header";
 
-    [Parameter]
-    public string FooterCssClass { get; set; } = "tnt-footer";
+    public bool Interactive { get; private set; }
 
     [Parameter]
-    public string BodyCssClass { get; set; } = "tnt-body";
+    public RenderFragment? SideNav { get; set; }
 
     [Parameter]
     public string SideNavCssClass { get; set; } = "tnt-side-nav";
@@ -34,26 +36,14 @@ public partial class TnTLayout : ComponentBase {
     [Parameter]
     public string Theme { get; set; } = "default";
 
-    public string? TnTSideNavId { get; private set; }
-
-    public string? TntHeaderId { get; private set; }
-    public string? TntFooterId { get; private set; }
     public string? TntBodyId { get; private set; }
-
-    public bool Interactive { get; private set; }
-
+    public string? TntFooterId { get; private set; }
+    public string? TntHeaderId { get; private set; }
+    public string? TnTSideNavId { get; private set; }
     internal bool Expand { get; set; }
 
     public void Refresh() {
         StateHasChanged();
-    }
-
-    protected override void OnAfterRender(bool firstRender) {
-        if (firstRender) {
-            Interactive = true;
-            StateHasChanged();
-        }
-        base.OnAfterRender(firstRender);
     }
 
     protected override void BuildRenderTree(RenderTreeBuilder __builder) {
@@ -110,6 +100,14 @@ public partial class TnTLayout : ComponentBase {
         }));
 
         __builder.CloseComponent();
+    }
+
+    protected override void OnAfterRender(bool firstRender) {
+        if (firstRender) {
+            Interactive = true;
+            StateHasChanged();
+        }
+        base.OnAfterRender(firstRender);
     }
 
     private string BuildCssClassList(string baseClass) {

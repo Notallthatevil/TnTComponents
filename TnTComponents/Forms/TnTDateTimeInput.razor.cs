@@ -6,10 +6,10 @@ namespace TnTComponents.Forms;
 public partial class TnTDateTimeInput {
 
     [Parameter]
-    public DateTime? MinDate { get; set; }
+    public DateTime? MaxDate { get; set; }
 
     [Parameter]
-    public DateTime? MaxDate { get; set; }
+    public DateTime? MinDate { get; set; }
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out DateTime? result, [NotNullWhen(false)] out string? validationErrorMessage)
         => throw new NotSupportedException($"This component does not parse string inputs. Bind to the '{nameof(CurrentValue)}' property, not '{nameof(CurrentValueAsString)}'.");
