@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Components.Rendering
+@inherits TnTInputBase<DateTime?>
+
+<label class="@LabelClass @CssClass">
+    <span class="@ContainerClass">
+        @TnTIconComponent.RenderIcon(IconType, StartIcon, "start-icon")
+        @{
+            var @class = GetClass();
+            bool placeholderEmpty = string.IsNullOrWhiteSpace(Placeholder);
+            if (placeholderEmpty) {
+                Placeholder = " ";
+            }
+            <input @attributes="AdditionalAttributes"
+                   @ref="Element"
+                   aria-label="@AriaLabel"
+                   type="datetime-local"
+                   class="@(string.IsNullOrWhiteSpace(@class) ? null : @class)"
+                   name="@NameAttributeValue"
+                   style="@Style"
+                   readonly="@ReadOnly"
+                   autofocus="@AutoFocus"
+                   placeholder="@Placeholder"
+                   title="@Title"
+                   disabled="@Disabled"
+                   formtype="@FormType.ToString().ToLower()"
+                   has-empty-placeholder="@(placeholderEmpty ? true : null)"
+                   min="@MinDate?.ToString("O")"
+                   max="@MaxDate?.ToString("O")"
+                   required="@Required"
+                   @bind="@CurrentValue">
+        }
+        @if (!string.IsNullOrWhiteSpace(Label)) {
+            <span class="@LabelTextClass">
+                @Label
+            </span>
+        }
+        @TnTIconComponent.RenderIcon(IconType, EndIcon, "end-icon")
+    </span>
+    @if (!string.IsNullOrWhiteSpace(SupportingText)) {
+        <span class="@SupportingTextClass">@SupportingText</span>
+    }
+    @if (ShowValidation) {
+        <ValidationMessage class="@ValidationClass" For="ValueExpression" />
+    }
+</label>

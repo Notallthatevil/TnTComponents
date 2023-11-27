@@ -76,7 +76,14 @@
             }
         }
 
-        &:has(input[type=text]), &:has(input[type=email]), &:has(input[type=password]), &:has(input[type=tel]), &:has(input[type=url]), &:has(input[type=date]) {
+        &:has(input[type=text]), 
+        &:has(input[type=email]), 
+        &:has(input[type=password]), 
+        &:has(input[type=tel]), 
+        &:has(input[type=url]), 
+        &:has(input[type=date]), 
+        &:has(input[type=time]), 
+        &:has(input[type=datetime-local]) {
             & > i {
                 font-size: 24px;
             }

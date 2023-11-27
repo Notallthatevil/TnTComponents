@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Rendering
-@inherits TnTInputBase<DateTime?>
+@using System.Globalization
+@inherits TnTInputBase<TimeOnly?>
 
 <label class="@LabelClass @CssClass">
     <span class="@ContainerClass">
@@ -13,7 +14,7 @@
             <input @attributes="AdditionalAttributes"
                    @ref="Element"
                    aria-label="@AriaLabel"
-                   type="date"
+                   type="time"
                    class="@(string.IsNullOrWhiteSpace(@class) ? null : @class)"
                    name="@NameAttributeValue"
                    style="@Style"
@@ -24,8 +25,9 @@
                    disabled="@Disabled"
                    formtype="@FormType.ToString().ToLower()"
                    has-empty-placeholder="@(placeholderEmpty ? true : null)"
-                   min="@MinDate?.ToString("yyyy-MM-dd")"
-                   max="@MaxDate?.ToString("yyyy-MM-dd")"
+                   min="@MinTime?.ToString("t", CultureInfo.InvariantCulture)"
+                   max="@MaxTime?.ToString("t", CultureInfo.InvariantCulture)"
+                   step="@StepRate"
                    required="@Required"
                    @bind="@CurrentValue">
         }
