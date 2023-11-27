@@ -1,20 +1,138 @@
 ﻿@page "/card"
+@using TnTComponents
+@using TnTComponents.Enum
 
+@for (var i = 0; i < 12; ++i) {
+    var j = i + 1;
+    var k = 0;
+    var cardType = _cardType;
+    <TnTRow>
+        @for (; k < 12; k += j) {
+            @if (k + j <= 12) {
+                <TnTColumn S="@j">
+                    <TnTCard Type="@cardType">
+                        @j
+                    </TnTCard>
+                </TnTColumn>
+            }
+            else {
+                var l = 12 - k;
+                <TnTColumn S="@l">
+                    <TnTCard Type="@cardType">
+                        @l
+                    </TnTCard>
+                </TnTColumn>
+            }
+        }
+        </TnTRow>
+    UpdateCardType();
+}
+<br />
+<br />
+@for (var i = 0; i < 12; ++i) {
+    var j = i + 1;
+    var k = 0;
+    var cardType = _cardType;
+    <TnTRow>
+        @for (; k < 11; k += j) {
+            @if (k + j <= 11) {
+                <TnTColumn S="@j" SPull="1">
+                    <TnTCard Type="@cardType">
+                        @j
+                    </TnTCard>
+                </TnTColumn>
+            }
+        }
+        </TnTRow>
+    UpdateCardType();
+}
+<br />
+<br />
+@for (var i = 0; i < 12; ++i) {
+    var j = i + 1;
+    var k = 0;
+    var cardType = _cardType;
+    <TnTRow>
+        @for (; k < 11; k += j) {
+            @if (k + j <= 11) {
+                <TnTColumn S="@j" SPush="1">
+                    <TnTCard Type="@cardType">
+                        @j
+                    </TnTCard>
+                </TnTColumn>
+            }
+        }
+        </TnTRow>
+    UpdateCardType();
+}
+<br />
+<br />
+@for (var i = 0; i < 12; ++i) {
+    var j = i + 1;
+    var k = 0;
+    var cardType = _cardType;
+    <TnTRow>
+        @for (; k < 11; k += j) {
+            @if (k + j <= 11) {
+                <TnTColumn S="@j" SOffset="1">
+                    <TnTCard Type="@cardType">
+                        @j
+                    </TnTCard>
+                </TnTColumn>
+            }
+        }
+        </TnTRow>
+    UpdateCardType();
+}
+<br />
+<br />
+@for (var i = 0; i < 12; ++i) {
+    var j = i + 1;
+    var k = 0;
+    var cardType = _cardType;
+    <TnTRow>
+        @for (; k < 12; k += j) {
+            @if (k + j <= 12) {
+                <TnTColumn S="@j">
+                    <TnTRow>
+                        <TnTCard Type="@cardType">
+                            @j
+                        </TnTCard>
+                    </TnTRow>
+                </TnTColumn>
+            }
+            else {
+                var l = 12 - k;
+                <TnTColumn S="@l">
+                    <TnTRow>
+                        <TnTCard Type="@cardType">
+                            @l
+                        </TnTCard>
+                    </TnTRow>
+                </TnTColumn>
+            }
+        }
+        </TnTRow>
+    UpdateCardType();
+}
 
-<TnTComponents.TnTRow>
-    <TnTComponents.TnTColumn>
-        <TnTComponents.TnTCard Type="TnTComponents.Enum.CardType.Elevated">
-            I am card content
-        </TnTComponents.TnTCard>
-    </TnTComponents.TnTColumn>
-    <TnTComponents.TnTColumn>
-        <TnTComponents.TnTCard Type="TnTComponents.Enum.CardType.Filled">
-            I am card content
-        </TnTComponents.TnTCard>
-    </TnTComponents.TnTColumn>
-    <TnTComponents.TnTColumn>
-        <TnTComponents.TnTCard Type="TnTComponents.Enum.CardType.Outlined">
-            I am card content
-        </TnTComponents.TnTCard>
-    </TnTComponents.TnTColumn>
-</TnTComponents.TnTRow>
+@code {
+    private CardType _cardType = CardType.Elevated;
+
+    private void UpdateCardType() {
+        switch (_cardType) {
+            case CardType.Elevated:
+                _cardType = CardType.Filled;
+                break;
+            case CardType.Filled:
+                _cardType = CardType.Outlined;
+                break;
+            case CardType.Outlined:
+                _cardType = CardType.Elevated;
+                break;
+            default:
+                _cardType = CardType.Elevated;
+                break;
+        }
+    }
+}

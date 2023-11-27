@@ -8,20 +8,13 @@ using System.Threading.Tasks;
 
 namespace TnTComponents.Common;
 public interface ITnTComponentBase {
-    ElementReference Element { get; }
-
     string? Id { get; set; }
-
     string? Class { get; set; }
-
     string? Theme { get; set; }
-
     string? Style { get; set; }
-
     object? Data { get; set; }
-
     IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
-
+    ElementReference Element { get; }
     string GetClass();
 }
 
