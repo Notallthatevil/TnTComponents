@@ -1,33 +1,4 @@
 ﻿@inherits TnTInputBase<bool>
-@*
-
-<div theme="@Theme" class="@GetCssClass()">
-    @TnTIconComponent.RenderIcon(IconType, Icon)
-    <label class="@GetLabelCssClass()">
-        <input @attributes="AdditionalAttributes"
-               aria-label="@Label"
-               name="@NameAttributeValue"
-               disabled="@Disabled"
-               type="checkbox"
-               value="@bool.TrueString"
-               @bind="@CurrentValue"
-               @ref="@InputElement"
-               @onfocusin="OnFocusInAsync"
-               @onfocusout="OnFocusOutAsync" />
-
-        <span>
-            @if (FormType == FormType.Filled) {
-                <span></span>
-            }
-        </span>
-        @Label
-    </label>
-</div>
-@if (ShowValidation) {
-    <ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />
-}
-*@
-
 <label class="@LabelClass @CssClass">
     <span class="@ContainerClass">
         @TnTIconComponent.RenderIcon(IconType, StartIcon, "start-icon")
@@ -44,7 +15,7 @@
                    autofocus="@AutoFocus"
                    title="@Title"
                    disabled="@Disabled"
-                   formtype="@FormType.ToString().ToLower()"
+                   formtype="@(Switch ? "switch" : null)"
                    required="@Required"
                    value="@bool.TrueString"
                    @bind="@CurrentValue">

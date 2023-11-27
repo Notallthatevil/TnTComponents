@@ -313,5 +313,155 @@
                 }
             }
         }
+
+
+        &:has(input[type=checkbox][formtype="switch"]) {
+            margin: 0 24px 0 24px;
+            transition: 250ms;
+
+            &:not(:has(input:disabled)) {
+                cursor: pointer;
+            }
+
+            & > i, .tnt-input-label-text {
+                color: $tnt-color-on-surface-variant;
+            }
+
+            .tnt-input-label-text {
+                position: revert;
+                margin-left: 48px;
+            }
+
+            &:after {
+                content: '';
+                position: absolute;
+                width: 52px;
+                height: 28px;
+                left: 0;
+                transition: 250ms;
+                border: 2px solid $tnt-color-outline;
+                background-color: $tnt-color-surface-container-highest;
+                @include tnt-border-radius(10);
+            }
+
+            &:before {
+                content: '';
+                position: absolute;
+                width: 16px;
+                height: 16px;
+                left: 8px;
+                top: 28px;
+                background-color: $tnt-color-outline;
+                z-index: 1;
+                transition: 250ms;
+                @include tnt-border-radius(10);
+            }
+
+            &:hover:not(:has(input:disabled)) {
+                &:before {
+                    box-shadow: 0 0 0 8px #00000022;
+                }
+            }
+
+
+            &:focus-within:not(:has(input:disabled)), &:has(input:active):not(:has(input:disabled)), &:has(input:focus):not(:has(input:disabled)) {
+                &:before {
+                    width: 28px;
+                    height: 28px;
+                    top: 22px;
+                    left: 0px;
+                    box-shadow: 0 0 0 8px #00000044;
+                }
+            }
+
+            &:has(input:checked) {
+                &:before {
+                    background-color: $tnt-color-on-primary;
+                    width: 26px;
+                    height: 26px;
+                    left: 26px;
+                    top: 23px;
+                }
+
+                &:after {
+                    background-color: $tnt-color-primary;
+                    border-color: $tnt-color-primary;
+                }
+
+                &:focus-within:not(:has(input:disabled)), &:has(input:active):not(:has(input:disabled)), &:has(input:focus):not(:has(input:disabled)) {
+                    &:before {
+                        width: 32px;
+                        height: 32px;
+                        left: 24px;
+                        top: 20px;
+                    }
+                }
+
+                &:has(input:disabled) {
+                    &:before {
+                        background-color: $tnt-color-surface-variant;
+                        width: 26px;
+                        height: 26px;
+                        left: 26px;
+                        top: 23px;
+                    }
+
+                    &:after {
+                        background-color: $tnt-color-surface-container-highest;
+                        border-color: $tnt-color-surface-container-highest;
+                    }
+                }
+            }
+
+            &:has(.start-icon) {
+                &:before, &:after {
+                    margin-left: 32px;
+                }
+
+                .start-icon {
+                    position: absolute;
+                    left: 0;
+                }
+
+                .tnt-input-label-text {
+                    margin-left: 86px;
+                }
+
+                &:not(:has(.tnt-input-label-text)) {
+                    .end-icon {
+                        margin-left: 68px;
+                    }
+                }
+            }
+
+            input[type=checkbox] {
+                display: none;
+            }
+
+            &:has(input:user-invalid), &:has(input.invalid) {
+                &:after {
+                    border-color: $tnt-color-error;
+                    background-color: $tnt-color-error-container;
+                }
+
+                &:before {
+                    background-color: $tnt-color-error;
+                }
+
+                &:has(input:checked) {
+                    &:after {
+                        background-color: $tnt-color-error;
+                    }
+
+                    &:before {
+                        background-color: $tnt-color-error-container;
+                    }
+                }
+
+                .end-icon {
+                    color: $tnt-color-error;
+                }
+            }
+        }
     }
 }

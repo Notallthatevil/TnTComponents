@@ -9,7 +9,7 @@
     <TnTColumn>
         <TnTForm Model="@Model" FormType="FormType.Outlined" FormName="Form2">
             <DataAnnotationsValidator />
-            @_renderCheckboxFields
+            @_renderSwitchFields
             <TnTButton Title="Submit" Type="ButtonType.Submit">
                 Submit
             </TnTButton>
@@ -18,7 +18,7 @@
     <TnTColumn>
         <TnTForm Model="@Model" FormType="FormType.Filled" FormName="Form3">
             <DataAnnotationsValidator />
-            @_renderCheckboxFields
+            @_renderSwitchFields
             <TnTButton Title="Submit" Type="ButtonType.Submit">
                 Submit
             </TnTButton>
@@ -31,6 +31,7 @@
 @code {
     private RenderFragment _renderTextFields;
     private RenderFragment _renderCheckboxFields;
+    private RenderFragment _renderSwitchFields;
 
     [SupplyParameterFromForm]
     public InputClass Model { get; set; } = new();
@@ -59,13 +60,15 @@
         [Required]
         public bool Checkbox { get; set; }
 
-        public bool NonRequired { get; set; }
+        [Required]
+        public bool Switch { get; set; }
     }
 
 
     public Forms() {
         _renderTextFields = RenderTextFields;
         _renderCheckboxFields = RenderCheckboxFields;
+        _renderSwitchFields = RenderSwitchFields;
     }
 
     private void RenderTextFields(RenderTreeBuilder __builder) {
@@ -423,5 +426,33 @@
         <TnTCheckbox @bind-Value="@Model.Checkbox" Label="@nameof(Model.Checkbox)" StartIcon="home" EndIcon="search" SupportingText="Supporting Text" />
         <TnTCheckbox @bind-Value="@Model.Checkbox" Label="@nameof(Model.Checkbox)" StartIcon="home" EndIcon="search" Disabled="true" />
         <TnTCheckbox @bind-Value="@Model.Checkbox" Label="@nameof(Model.Checkbox)" StartIcon="home" EndIcon="search" SupportingText="Supporting Text" Disabled="true" />
+    }
+
+    private void RenderSwitchFields(RenderTreeBuilder __builder) {
+        <TnTSwitch @bind-Value="@Model.Switch" />
+        <TnTSwitch @bind-Value="@Model.Switch" Label="@nameof(Model.Checkbox)" />
+        <TnTSwitch @bind-Value="@Model.Switch" StartIcon="home" />
+        <TnTSwitch @bind-Value="@Model.Switch" EndIcon="search" />
+        <TnTSwitch @bind-Value="@Model.Switch" SupportingText="Supporting Text" />
+        <TnTSwitch @bind-Value="@Model.Switch" Disabled="true" />
+        <TnTSwitch @bind-Value="@Model.Switch" Label="@nameof(Model.Switch)" StartIcon="home" />
+        <TnTSwitch @bind-Value="@Model.Switch" Label="@nameof(Model.Switch)" EndIcon="search" />
+        <TnTSwitch @bind-Value="@Model.Switch" Label="@nameof(Model.Switch)" SupportingText="Supporting Text" />
+        <TnTSwitch @bind-Value="@Model.Switch" Label="@nameof(Model.Switch)" Disabled="true" />
+        <TnTSwitch @bind-Value="@Model.Switch" StartIcon="home" EndIcon="search" />
+        <TnTSwitch @bind-Value="@Model.Switch" StartIcon="home" SupportingText="Supporting Text" />
+        <TnTSwitch @bind-Value="@Model.Switch" StartIcon="home" Disabled="true" />
+        <TnTSwitch @bind-Value="@Model.Switch" EndIcon="search" SupportingText="Supporting Text" />
+        <TnTSwitch @bind-Value="@Model.Switch" EndIcon="search" Disabled="true" />
+        <TnTSwitch @bind-Value="@Model.Switch" SupportingText="Supporting Text" Disabled="true" />
+        <TnTSwitch @bind-Value="@Model.Switch" Label="@nameof(Model.Switch)" StartIcon="home" EndIcon="search" />
+        <TnTSwitch @bind-Value="@Model.Switch" Label="@nameof(Model.Switch)" StartIcon="home" SupportingText="Supporting Text" />
+        <TnTSwitch @bind-Value="@Model.Switch" Label="@nameof(Model.Switch)" StartIcon="home" Disabled="true" />
+        <TnTSwitch @bind-Value="@Model.Switch" Label="@nameof(Model.Switch)" EndIcon="search" SupportingText="Supporting Text" />
+        <TnTSwitch @bind-Value="@Model.Switch" Label="@nameof(Model.Switch)" EndIcon="search" Disabled="true" />
+        <TnTSwitch @bind-Value="@Model.Switch" Label="@nameof(Model.Switch)" SupportingText="Supporting Text" Disabled="true" />
+        <TnTSwitch @bind-Value="@Model.Switch" Label="@nameof(Model.Switch)" StartIcon="home" EndIcon="search" SupportingText="Supporting Text" />
+        <TnTSwitch @bind-Value="@Model.Switch" Label="@nameof(Model.Switch)" StartIcon="home" EndIcon="search" Disabled="true" />
+        <TnTSwitch @bind-Value="@Model.Switch" Label="@nameof(Model.Switch)" StartIcon="home" EndIcon="search" SupportingText="Supporting Text" Disabled="true" />
     }
 }
