@@ -1,6 +1,7 @@
 ﻿@inherits TnTComponentBase
 
-<button class="@GetClass()"
+<button @attributes="AdditionalAttributes"
+        class="@GetClass()"
         style="@Style"
         autofocus="@AutoFocus"
         form="@FormId"
@@ -9,8 +10,7 @@
         title="@Title"
         type="@Type.ToString().ToLower()"
         aria-label="@Title"
-        @onclick="OnClickHandler"
-        @attributes="AdditionalAttributes">
+        @onclick="OnClickHandler">
     @if (!string.IsNullOrWhiteSpace(StartIcon)) {
         @TnTIconComponent.RenderIcon(IconType, StartIcon, "tnt-button-start-icon")
     }
