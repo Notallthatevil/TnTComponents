@@ -97,23 +97,28 @@ public partial class TnTColumn {
     public string GetClass() {
         var strBuilder = new StringBuilder(this.GetClassDefault());
 
-        foreach (var sizePair in _sizes) {
-            var sizeClass = sizePair.Key;
-            var value = sizePair.Value;
+        if (_sizes.Count == 0) {
+            strBuilder.Append(' ').Append("s12");
+        }
+        else {
+            foreach (var sizePair in _sizes) {
+                var sizeClass = sizePair.Key;
+                var value = sizePair.Value;
 
-            if (value.Size > 0) {
-                strBuilder.Append(' ').Append($"{sizeClass}{value.Size}");
+                if (value.Size > 0) {
+                    strBuilder.Append(' ').Append($"{sizeClass}{value.Size}");
 
-                if (value.Offset > 0) {
-                    strBuilder.Append(' ').Append($"{sizeClass}{value.Offset}-offset");
-                }
+                    if (value.Offset > 0) {
+                        strBuilder.Append(' ').Append($"{sizeClass}{value.Offset}-offset");
+                    }
 
-                if (value.Push > 0) {
-                    strBuilder.Append(' ').Append($"{sizeClass}{value.Push}-push");
-                }
+                    if (value.Push > 0) {
+                        strBuilder.Append(' ').Append($"{sizeClass}{value.Push}-push");
+                    }
 
-                if (value.Pull > 0) {
-                    strBuilder.Append(' ').Append($"{sizeClass}{value.Pull}-pull");
+                    if (value.Pull > 0) {
+                        strBuilder.Append(' ').Append($"{sizeClass}{value.Pull}-pull");
+                    }
                 }
             }
         }
