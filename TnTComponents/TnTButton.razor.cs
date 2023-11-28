@@ -63,7 +63,7 @@ public partial class TnTButton {
     }
 
     private RenderFragment RenderScript() {
-        var scriptContent = new MarkupString($"window.addEventListener('load', (e) => {{document.getElementById('{Id}').addEventListener('click', TnTComponents.ripple); }});");
+        var scriptContent = new MarkupString($"alert();window.addEventListener('load', (e) => {{document.getElementById('{Id}').addEventListener('click', TnTComponents.ripple); }});");
         return new RenderFragment(b => {
             b.OpenElement(0, "script");
             b.AddAttribute(10, "type", "text/javascript");

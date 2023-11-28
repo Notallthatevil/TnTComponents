@@ -36,9 +36,9 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
     }
 
     protected override void OnParametersSet() {
-        if (string.IsNullOrWhiteSpace(Id)) {
-            Id = Guid.NewGuid().ToString();
-        }
+        //if (string.IsNullOrWhiteSpace(Id)) {
+        //    Id = Guid.NewGuid().ToString();
+        //}
         base.OnParametersSet();
     }
 }
