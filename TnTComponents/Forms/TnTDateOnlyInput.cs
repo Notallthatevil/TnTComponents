@@ -13,11 +13,10 @@ public class TnTDateOnlyInput : TnTInputBase<DateOnly?> {
 
     protected override DateOnly? BindValue { get => CurrentValue; set => CurrentValue = value; }
 
-    protected override string GetInputType() => "date";
+    protected override string InputType => "date";
 
-    protected override string? MaxString() => MaxDate?.ToString("yyyy-MM-dd");
-
-    protected override string? MinString() => MinDate?.ToString("yyyy-MM-dd");
+    protected override string? Max => MaxDate?.ToString("yyyy-MM-dd");
+    protected override string? Min => MinDate?.ToString("yyyy-MM-dd");
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out DateOnly? result, [NotNullWhen(false)] out string? validationErrorMessage)
                 => throw new NotSupportedException($"This component does not parse string inputs. Bind to the '{nameof(CurrentValue)}' property, not '{nameof(CurrentValueAsString)}'.");

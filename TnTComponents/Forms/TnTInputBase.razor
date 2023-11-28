@@ -14,7 +14,7 @@
             <input @attributes="AdditionalAttributes"
                    @ref="Element"
                    aria-label="@AriaLabel"
-                   type="@GetInputType()"
+                   type="@InputType"
                    class="@(string.IsNullOrWhiteSpace(@class) ? null : @class)"
                    name="@NameAttributeValue"
                    style="@Style"
@@ -27,10 +27,11 @@
                    has-empty-placeholder="@(placeholderEmpty ? true : null)"
                    minlength="@MinLength"
                    maxlength="@MaxLength"
-                   min="@MinString()"
-                   max="@MaxString()"
+                   min="@Min"
+                   max="@Max"
                    pattern="@Pattern"
                    required="@Required"
+                   step="@StepRate"
                    @bind="@BindValue">
         }
         @if (!string.IsNullOrWhiteSpace(Label)) {

@@ -64,6 +64,9 @@ public abstract partial class TnTInputBase<TInputType> {
     public string? StartIcon { get; set; }
 
     [Parameter]
+    public double? StepRate { get; set; }
+
+    [Parameter]
     public virtual string? Style { get; set; }
 
     [Parameter]
@@ -82,11 +85,14 @@ public abstract partial class TnTInputBase<TInputType> {
     public string ValidationClass { get; set; } = "tnt-input-validation";
 
     protected abstract TInputType BindValue { get; set; }
+    protected abstract string InputType { get; }
     protected virtual object? InputValue { get; set; }
+    protected virtual string? Max => MaxValue?.ToString();
     protected int? MaxLength { get; private set; }
 
     protected TInputType? MaxValue { get; private set; }
 
+    protected virtual string? Min => MinValue?.ToString();
     protected int? MinLength { get; private set; }
 
     protected TInputType? MinValue { get; private set; }
@@ -103,19 +109,7 @@ public abstract partial class TnTInputBase<TInputType> {
 
     public string GetClass() => string.Join(' ', this.GetClassDefault(), CssClass);
 
-    protected void CheckMaxLengthAttribute() {
-    }
-
-    protected void CheckMinLengthAttribute() {
-    }
-
     protected virtual string GetFormType() => FormType.ToString().ToLower();
-
-    protected abstract string GetInputType();
-
-    protected virtual string? MaxString() => null;
-
-    protected virtual string? MinString() => null;
 
     protected override void OnParametersSet() {
         var modelType = EditContext.Model.GetType();

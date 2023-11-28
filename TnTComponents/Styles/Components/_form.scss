@@ -73,7 +73,8 @@
         &:has(input[type=url]),
         &:has(input[type=date]),
         &:has(input[type=time]),
-        &:has(input[type=datetime-local]) {
+        &:has(input[type=datetime-local]),
+        &:has(input[type=number]) {
             & > i {
                 font-size: 24px;
             }
