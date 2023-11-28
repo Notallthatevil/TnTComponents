@@ -31,7 +31,7 @@ public partial class TnTRow {
     public JustifyContent FlexJustifyContent { get; set; }
 
     [Parameter]
-    public WrapStyle FlexWrap { get; set; } = WrapStyle.Wrap;
+    public WrapStyle FlexWrap { get; set; }
 
     [Parameter]
     public string? Id { get; set; }

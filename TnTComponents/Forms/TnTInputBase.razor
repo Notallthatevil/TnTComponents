@@ -1,6 +1,6 @@
-﻿@using Microsoft.AspNetCore.Components.Rendering
-@using System.Globalization
-@inherits TnTInputBase<TimeOnly?>
+﻿@typeparam TInputType
+@inherits InputBase<TInputType>
+@implements ITnTComponentBase
 
 <label class="@LabelClass @CssClass">
     <span class="@ContainerClass">
@@ -14,7 +14,7 @@
             <input @attributes="AdditionalAttributes"
                    @ref="Element"
                    aria-label="@AriaLabel"
-                   type="time"
+                   type="@GetInputType()"
                    class="@(string.IsNullOrWhiteSpace(@class) ? null : @class)"
                    name="@NameAttributeValue"
                    style="@Style"
@@ -23,13 +23,15 @@
                    placeholder="@Placeholder"
                    title="@Title"
                    disabled="@Disabled"
-                   formtype="@FormType.ToString().ToLower()"
+                   formtype="@GetFormType()"
                    has-empty-placeholder="@(placeholderEmpty ? true : null)"
-                   min="@MinTime?.ToString("t", CultureInfo.InvariantCulture)"
-                   max="@MaxTime?.ToString("t", CultureInfo.InvariantCulture)"
-                   step="@StepRate"
+                   minlength="@MinLength"
+                   maxlength="@MaxLength"
+                   min="@MinString()"
+                   max="@MaxString()"
+                   pattern="@Pattern"
                    required="@Required"
-                   @bind="@CurrentValue">
+                   @bind="@BindValue">
         }
         @if (!string.IsNullOrWhiteSpace(Label)) {
             <span class="@LabelTextClass">

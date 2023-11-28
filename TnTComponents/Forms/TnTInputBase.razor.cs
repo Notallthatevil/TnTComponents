@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
@@ -8,7 +8,7 @@ using TnTComponents.Enum;
 
 namespace TnTComponents.Forms;
 
-public abstract class TnTInputBase<TInputType> : InputBase<TInputType>, ITnTComponentBase {
+public abstract partial class TnTInputBase<TInputType> {
 
     [Parameter]
     public string? AriaLabel { get; set; }
@@ -20,7 +20,7 @@ public abstract class TnTInputBase<TInputType> : InputBase<TInputType>, ITnTComp
     public virtual string? Class { get; set; }
 
     [Parameter]
-    public string ContainerClass { get; set; } = "tnt-input-container"; 
+    public string ContainerClass { get; set; } = "tnt-input-container";
 
     [Parameter]
     public virtual object? Data { get; set; }
@@ -81,6 +81,8 @@ public abstract class TnTInputBase<TInputType> : InputBase<TInputType>, ITnTComp
     [Parameter]
     public string ValidationClass { get; set; } = "tnt-input-validation";
 
+    protected abstract TInputType BindValue { get; set; }
+    protected virtual object? InputValue { get; set; }
     protected int? MaxLength { get; private set; }
 
     protected TInputType? MaxValue { get; private set; }
@@ -100,6 +102,20 @@ public abstract class TnTInputBase<TInputType> : InputBase<TInputType>, ITnTComp
     private FormType? _parentFormType { get; set; }
 
     public string GetClass() => string.Join(' ', this.GetClassDefault(), CssClass);
+
+    protected void CheckMaxLengthAttribute() {
+    }
+
+    protected void CheckMinLengthAttribute() {
+    }
+
+    protected virtual string GetFormType() => FormType.ToString().ToLower();
+
+    protected abstract string GetInputType();
+
+    protected virtual string? MaxString() => null;
+
+    protected virtual string? MinString() => null;
 
     protected override void OnParametersSet() {
         var modelType = EditContext.Model.GetType();

@@ -89,7 +89,6 @@ export function afterWebStarted(blazor) {
     blazor.addEventListener('enhancedload', onEnhancedLoad);
 }
 
-
 window.TnTComponents = {
     createResizableColumns: (tableElement) => {
         const cols = tableElement.querySelectorAll('th');
@@ -169,7 +168,6 @@ window.TnTComponents = {
     remToPx: (rem) => { return rem * parseFloat(getComputedStyle(document.documentElement).fontSize); },
 
     ripple: (element, event) => {
-
         const circle = document.createElement("span");
         const diameter = Math.max(element.clientWidth, element.clientHeight);
         const radius = diameter / 2;
