@@ -1,4 +1,4 @@
-﻿@typeparam TListItemType
+﻿@*@typeparam TListItemType
 @inherits TnTInputDialogField<TListItemType>
 
 <TnTExternalClickHandler Callback="@(() => OnFocusOutAsync(new FocusEventArgs()))">
@@ -100,3 +100,4 @@
     <ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />
 }
 
+*@

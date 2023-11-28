@@ -20,7 +20,7 @@ public abstract class TnTInputBase<TInputType> : InputBase<TInputType>, ITnTComp
     public virtual string? Class { get; set; }
 
     [Parameter]
-    public string ContainerClass { get; set; } = "tnt-input-container";
+    public string ContainerClass { get; set; } = "tnt-input-container"; 
 
     [Parameter]
     public virtual object? Data { get; set; }
