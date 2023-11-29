@@ -74,7 +74,8 @@
         &:has(input[type=date]),
         &:has(input[type=time]),
         &:has(input[type=datetime-local]),
-        &:has(input[type=number]) {
+        &:has(input[type=number]),
+        &:has(select) {
             & > i {
                 font-size: 24px;
             }
@@ -83,29 +84,31 @@
                 color: $tnt-color-on-surface-variant;
             }
 
-            &:has(input:user-invalid), &:has(input.invalid) {
+            &:has(input:user-invalid), &:has(input.invalid), &:has(select:user-invalid) {
                 .end-icon, .tnt-input-label-text {
                     color: $tnt-color-error;
                 }
             }
 
-            &:has(input:focus), &:has(input:placeholder-shown):not(:has(input[has-empty-placeholder])), &:not(:has(input:placeholder-shown)) {
+            &:has(input:focus), &:has(select:focus), &:has(input:placeholder-shown):not(:has(input[has-empty-placeholder])), &:not(:has(input:placeholder-shown)) {
                 .tnt-input-label-text {
                     transform: translateY(-16px) scale(0.8) translateX(-11px);
                 }
 
-                &:has(input[formtype="outlined"]) {
+                &:has(input[formtype="outlined"]), &:has(select[formtype="outlined"]) {
                     .tnt-input-label-text {
                         transform: translateY(-28px) scale(0.8) translateX(-12px);
                     }
                 }
 
-                input:has(+ .tnt-input-label-text) {
+                input:has(+ .tnt-input-label-text), select:has(+ .tnt-input-label-text) {
                     transform: translateY(4px);
                 }
             }
 
-            &:has(input[formtype="filled"]) {
+
+
+            &:has(input[formtype="filled"]), &:has(select[formtype="filled"]) {
                 background-color: $tnt-color-surface-container-highest;
                 border-bottom: solid 1px $tnt-color-on-surface-variant;
 
@@ -125,7 +128,7 @@
                     transition: 250ms;
                 }
 
-                &:has(input:focus):not(input:disabled) {
+                &:has(input:focus):not(input:disabled), &:has(select:focus):not(select:disabled) {
                     &:after {
                         transform: rotateY(0deg);
                     }
@@ -135,7 +138,7 @@
                     }
                 }
 
-                &:has(input:user-invalid), &:has(input.invalid) {
+                &:has(input:user-invalid), &:has(input.invalid), &:has(select:user-invalid) {
                     &:after {
                         background-color: $tnt-color-error;
                         transform: rotateY(0deg);
@@ -143,12 +146,12 @@
                 }
             }
 
-            &:has(input[formtype="outlined"]) {
+            &:has(input[formtype="outlined"]), &:has(select[formtype="outlined"]) {
                 background-color: transparent;
                 border: solid 1px $tnt-color-outline;
                 @include tnt-border-radius(1);
 
-                &:has(input:user-invalid), &:has(input.invalid) {
+                &:has(input:user-invalid), &:has(input.invalid), &:has(select:user-invalid) {
                     &:before, &:after {
                         transform: rotateY(0);
                         transform: rotateX(0);
@@ -172,6 +175,7 @@
                     border-bottom: none;
                     transition: transform 250ms linear;
                     transform: rotateX(90deg);
+                    pointer-events: none;
                 }
 
                 &:before {
@@ -190,6 +194,7 @@
                     border-right: none;
                     transition: 250ms linear;
                     transform: rotateY(90deg);
+                    pointer-events: none;
                 }
 
                 .tnt-input-label-text {
@@ -197,7 +202,7 @@
                     padding: 0 4px 0 4px;
                 }
 
-                &:has(input:focus):not(input:disabled) {
+                &:has(input:focus):not(input:disabled), &:has(select:focus):not(select:disabled) {
                     &:before, &:after {
                         transform: rotateY(0);
                         transform: rotateX(0);
@@ -205,7 +210,7 @@
                 }
             }
 
-            input {
+            input, select {
                 cursor: inherit;
                 padding: 0;
                 background: none;
@@ -221,6 +226,14 @@
                 &:active, &:focus {
                     outline: none;
                 }
+            }
+
+            select[formtype="filled"] {
+                background-color: inherit;
+            }
+
+            select[formtype="outlined"] {
+                background-color: $tnt-color-surface;
             }
         }
 

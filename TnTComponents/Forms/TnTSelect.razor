@@ -1,0 +1,45 @@
+﻿@typeparam TOptionType
+@inherits TnTInputBase<TOptionType>
+
+<label class="@LabelClass @CssClass">
+    <span class="@ContainerClass">
+        @TnTIconComponent.RenderIcon(IconType, StartIcon, "start-icon")
+        @{
+            bool placeholderEmpty = string.IsNullOrWhiteSpace(Placeholder);
+            if (placeholderEmpty) {
+                Placeholder = " ";
+            }
+            <select @attributes=AdditionalAttributes
+                    aria-label="@AriaLabel"
+                    name="@NameAttributeValue"
+                    class="@Class @CssClass"
+                    theme="@Theme"
+                    formtype="@FormType.ToString().ToLower()"
+                    required="@Required"
+                    has-empty-placeholder="@(placeholderEmpty ? true : null)"
+                    placeholder="@Placeholder"
+                    @bind="@CurrentValue"
+                    @ref="Element">
+                @if (!placeholderEmpty) {
+                    <option value disabled selected>@Placeholder</option>
+                }
+                else {
+                    <option value disabled selected></option>
+                }
+                @ChildContent
+            </select>
+        }
+        @if (!string.IsNullOrWhiteSpace(Label)) {
+            <span class="@LabelTextClass">
+                @Label
+            </span>
+        }
+        @TnTIconComponent.RenderIcon(IconType, EndIcon, "end-icon")
+    </span>
+    @if (!string.IsNullOrWhiteSpace(SupportingText)) {
+        <span class="@SupportingTextClass">@SupportingText</span>
+    }
+    @if (ShowValidation) {
+        <ValidationMessage class="@ValidationClass" For="ValueExpression" />
+    }
+</label>

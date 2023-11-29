@@ -1,4 +1,5 @@
 ﻿const pageScriptInfoBySrc = new Map();
+const tntElementScriptInfoByElement = new Map();
 
 function registerPageScriptElement(src) {
     if (!src) {
@@ -64,7 +65,7 @@ function onEnhancedLoad() {
     }
 }
 
-export function afterWebStarted(blazor) {
+function setupPageScriptElement() {
     customElements.define('page-script', class extends HTMLElement {
         static observedAttributes = ['src'];
 
@@ -85,7 +86,42 @@ export function afterWebStarted(blazor) {
             unregisterPageScriptElement(this.src);
         }
     });
+}
 
+function setupTnTElementScriptElement() {
+    customElements.define('tnt-element-script', class extends HTMLElement {
+        static observedAttributes = ['src'];
+
+        connectCallback() {
+            var parent = this.closest('select');
+
+            this.addEventListener('click', (e) => { console.log('clicked') });
+        }
+
+        // We use attributeChangedCallback instead of connectedCallback
+        // because a page-script element might get reused between enhanced
+        // navigations.
+        attributeChangedCallback(name, oldValue, newValue) {
+            if (name !== 'src') {
+                return;
+            }
+
+            this.src = newValue;
+            this.addEventListener('click', (e) => { console.log('clicked') });
+
+            //unregisterPageScriptElement(oldValue);
+            //registerPageScriptElement(newValue);
+        }
+
+        //disconnectedCallback() {
+        //    unregisterPageScriptElement(this.src);
+        //}
+    });
+}
+
+export function afterWebStarted(blazor) {
+    setupPageScriptElement();
+    setupTnTElementScriptElement();
     blazor.addEventListener('enhancedload', onEnhancedLoad);
 }
 
