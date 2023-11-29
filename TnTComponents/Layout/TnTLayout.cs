@@ -5,7 +5,6 @@ using System.Text;
 namespace TnTComponents.Layout;
 
 public partial class TnTLayout : ComponentBase {
-    internal const string ExpandClass = "expand";
 
     [Parameter]
     public RenderFragment Body { get; set; } = default!;
@@ -41,6 +40,7 @@ public partial class TnTLayout : ComponentBase {
     public string? TntHeaderId { get; private set; }
     public string? TnTSideNavId { get; private set; }
     internal bool Expand { get; set; }
+    internal const string ExpandClass = "expand";
 
     public void Refresh() {
         StateHasChanged();

@@ -7,11 +7,12 @@ namespace TnTComponents.Forms;
 
 [CascadingTypeParameter(nameof(TOptionType))]
 public partial class TnTSelect<TOptionType> {
-    protected override TOptionType? BindValue { get => CurrentValue; set => CurrentValue = value; }
-    protected override string InputType => throw new NotImplementedException();
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
+
+    protected override TOptionType? BindValue { get => CurrentValue; set => CurrentValue = value; }
+    protected override string InputType => throw new NotImplementedException();
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TOptionType? result, [NotNullWhen(false)] out string? validationErrorMessage) {
         try {

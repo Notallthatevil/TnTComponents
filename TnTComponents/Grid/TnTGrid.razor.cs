@@ -7,19 +7,6 @@ namespace TnTComponents.Grid;
 
 [CascadingTypeParameter(nameof(TGridItem))]
 public partial class TnTGrid<TGridItem> {
-    private readonly TnTGridContext<TGridItem> _gridContext = default!;
-
-    private readonly RenderFragment _renderTableRows = default!;
-
-    private ElementOffset _tableOffset;
-
-    private ElementReference _tableReference;
-
-    public TnTGrid() {
-        _gridContext = new TnTGridContext<TGridItem>(this);
-        _renderTableRows = RenderTableRows;
-        _tableOffset.OffsetHeight = 0.0;
-    }
 
     [Parameter]
     public override string BaseCssClass { get; set; } = "tnt-grid";
@@ -41,6 +28,20 @@ public partial class TnTGrid<TGridItem> {
 
     [Inject]
     private IJSRuntime _jsRuntime { get; set; } = default!;
+
+    private readonly TnTGridContext<TGridItem> _gridContext = default!;
+
+    private readonly RenderFragment _renderTableRows = default!;
+
+    private ElementOffset _tableOffset;
+
+    private ElementReference _tableReference;
+
+    public TnTGrid() {
+        _gridContext = new TnTGridContext<TGridItem>(this);
+        _renderTableRows = RenderTableRows;
+        _tableOffset.OffsetHeight = 0.0;
+    }
 
     public void Refresh() {
         StateHasChanged();

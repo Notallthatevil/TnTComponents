@@ -106,8 +106,6 @@
                 }
             }
 
-
-
             &:has(input[formtype="filled"]), &:has(select[formtype="filled"]) {
                 background-color: $tnt-color-surface-container-highest;
                 border-bottom: solid 1px $tnt-color-on-surface-variant;

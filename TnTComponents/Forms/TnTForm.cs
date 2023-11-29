@@ -6,10 +6,11 @@ using TnTComponents.Enum;
 namespace TnTComponents.Forms;
 
 public class TnTForm : EditForm {
-    internal const string ParentFormTypeName = "ParentFormType";
 
     [Parameter]
     public FormType FormType { get; set; }
+
+    internal const string ParentFormTypeName = "ParentFormType";
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenComponent<CascadingValue<FormType>>(0);

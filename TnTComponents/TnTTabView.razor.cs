@@ -7,9 +7,6 @@ using TnTComponents.Infrastructure;
 namespace TnTComponents;
 
 public partial class TnTTabView {
-    private ElementReference _gliderRef;
-
-    private TabViewContext _tabViewContext = default!;
 
     [Parameter]
     public override string BaseCssClass { get; set; } = "tnt-tab-view";
@@ -22,6 +19,10 @@ public partial class TnTTabView {
 
     [Inject]
     private IJSRuntime _jsRuntime { get; set; } = default!;
+
+    private ElementReference _gliderRef;
+
+    private TabViewContext _tabViewContext = default!;
 
     public override string GetCssClass() {
         return base.GetCssClass() + (UseGlider ? " tnt-glider" : string.Empty);

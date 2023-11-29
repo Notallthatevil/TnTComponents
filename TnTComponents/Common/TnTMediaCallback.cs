@@ -4,9 +4,6 @@ using Microsoft.JSInterop;
 namespace TnTComponents.Common {
 
     public class TnTMediaCallback : ComponentBase, IDisposable {
-        private bool _disposedValue;
-
-        private DotNetObjectReference<TnTMediaCallback>? _reference;
 
         [Parameter]
         public EventCallback<bool> OnChangedCallback { get; set; }
@@ -16,6 +13,10 @@ namespace TnTComponents.Common {
 
         [Inject]
         private IJSRuntime _jsRuntime { get; set; } = default!;
+
+        private bool _disposedValue;
+
+        private DotNetObjectReference<TnTMediaCallback>? _reference;
 
         public void Dispose() {
             Dispose(disposing: true);

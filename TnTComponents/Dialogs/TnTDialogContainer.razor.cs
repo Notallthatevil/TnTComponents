@@ -4,13 +4,14 @@ using TnTComponents.Common;
 namespace TnTComponents.Dialogs;
 
 public partial class TnTDialogContainer {
-    private RenderFragment _content = default!;
 
     [Parameter]
     public override string BaseCssClass { get; set; } = "tnt-dialog-container";
 
     [Parameter, EditorRequired]
     public Dialog Dialog { get; set; } = default!;
+
+    private RenderFragment _content = default!;
 
     protected override void OnInitialized() {
         _content = new RenderFragment(builder => {

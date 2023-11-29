@@ -4,11 +4,6 @@ using Microsoft.JSInterop;
 namespace TnTComponents.Common;
 
 public partial class TnTExternalClickHandler {
-    private bool _disposedValue;
-
-    private ElementReference _externalClickElement;
-
-    private DotNetObjectReference<TnTExternalClickHandler>? _reference;
 
     [Parameter, EditorRequired]
     public EventCallback Callback { get; set; }
@@ -18,6 +13,12 @@ public partial class TnTExternalClickHandler {
 
     [Inject]
     private IJSRuntime _jsRuntime { get; set; } = default!;
+
+    private bool _disposedValue;
+
+    private ElementReference _externalClickElement;
+
+    private DotNetObjectReference<TnTExternalClickHandler>? _reference;
 
     public void Dispose() {
         Dispose(disposing: true);

@@ -6,10 +6,6 @@ namespace TnTComponents.Grid;
 
 public abstract partial class TnTColumnBase<TGridItem> {
 
-    public TnTColumnBase() {
-        HeaderContent = RenderHeaderContent;
-    }
-
     [Parameter]
     public override string BaseCssClass { get; set; } = "tnt-grid-column-content";
 
@@ -46,6 +42,10 @@ public abstract partial class TnTColumnBase<TGridItem> {
     }
 
     protected internal virtual RenderFragment HeaderContent { get; } = default!;
+
+    public TnTColumnBase() {
+        HeaderContent = RenderHeaderContent;
+    }
 
     public void Dispose() {
         Grid.RemoveColumn(this);

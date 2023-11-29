@@ -7,11 +7,6 @@ using TnTComponents.Infrastructure;
 namespace TnTComponents;
 
 public partial class TnTTabChild {
-    private bool _canGetSize;
-
-    private bool _disabled;
-
-    private ElementReference _reference;
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
@@ -26,6 +21,12 @@ public partial class TnTTabChild {
 
     [CascadingParameter]
     private TabViewContext _tabViewContext { get; set; } = default!;
+
+    private bool _canGetSize;
+
+    private bool _disabled;
+
+    private ElementReference _reference;
 
     public void Dispose() {
         _tabViewContext.RemoveChild(this);

@@ -4,9 +4,6 @@ namespace TnTComponents.Services;
 
 public class TnTDialogService : IDisposable {
 
-    public TnTDialogService() {
-    }
-
     internal delegate Task OnCloseCallback(Dialog dialog);
 
     internal delegate Task OnOpenCallback(Dialog dialog);
@@ -14,6 +11,9 @@ public class TnTDialogService : IDisposable {
     internal event OnCloseCallback? OnClose;
 
     internal event OnOpenCallback? OnOpen;
+
+    public TnTDialogService() {
+    }
 
     public Task CloseAsync(Dialog dialog) {
         OnClose?.Invoke(dialog);

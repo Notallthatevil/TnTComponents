@@ -5,14 +5,15 @@ using System.Text.RegularExpressions;
 namespace TnTComponents.Grid;
 
 public partial class TnTPropertyColumn<TGridItem, TProperty> : TnTColumnBase<TGridItem> {
-    private Func<TGridItem, string?>? _cellContentFunc;
-    private Expression<Func<TGridItem, TProperty>>? _lastUsedProperty;
 
     [Parameter]
     public string? Format { get; set; }
 
     [Parameter, EditorRequired]
     public Expression<Func<TGridItem, TProperty>> Property { get; set; } = default!;
+
+    private Func<TGridItem, string?>? _cellContentFunc;
+    private Expression<Func<TGridItem, TProperty>>? _lastUsedProperty;
 
     protected internal override RenderFragment CellContent(TGridItem item) {
         return new RenderFragment(builder => builder.AddContent(0, _cellContentFunc!(item)));

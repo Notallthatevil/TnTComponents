@@ -7,9 +7,6 @@ using TnTComponents.Enum;
 namespace TnTComponents;
 
 public partial class TnTColumn {
-    private static readonly IReadOnlyDictionary<PropertyInfo, ColSizeAttribute> _sizeValues = GetSizeProperties();
-
-    private Dictionary<string, ColSize> _sizes = new Dictionary<string, ColSize>();
 
     [Parameter(CaptureUnmatchedValues = true)]
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
@@ -93,6 +90,10 @@ public partial class TnTColumn {
 
     [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Push))]
     public int XLPush { get; set; }
+
+    private static readonly IReadOnlyDictionary<PropertyInfo, ColSizeAttribute> _sizeValues = GetSizeProperties();
+
+    private Dictionary<string, ColSize> _sizes = new Dictionary<string, ColSize>();
 
     public string GetClass() {
         var strBuilder = new StringBuilder(this.GetClassDefault());

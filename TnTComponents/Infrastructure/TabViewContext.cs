@@ -3,7 +3,6 @@
 namespace TnTComponents.Infrastructure;
 
 internal class TabViewContext(TnTTabView tabView) {
-    private TnTTabChild? _activeTab;
 
     internal TnTTabChild? ActiveTab {
         get {
@@ -33,8 +32,8 @@ internal class TabViewContext(TnTTabView tabView) {
     }
 
     internal TnTTabView ParentView { get; set; } = tabView;
-
     internal List<TnTTabChild> TabChildren { get; set; } = [];
+    private TnTTabChild? _activeTab;
 
     internal void AddChild(TnTTabChild tabChild) {
         TabChildren.Add(tabChild);

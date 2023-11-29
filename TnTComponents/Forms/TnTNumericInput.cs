@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TnTComponents.Forms;
+
 public class TnTNumericInput<TInputType> : TnTInputBase<TInputType> where TInputType : struct,
     IComparable,
     IConvertible,
@@ -24,7 +25,6 @@ public class TnTNumericInput<TInputType> : TnTInputBase<TInputType> where TInput
     ISubtractionOperators<TInputType, TInputType, TInputType>,
     IMultiplyOperators<TInputType, TInputType, TInputType>,
     IDivisionOperators<TInputType, TInputType, TInputType> {
-
     protected override TInputType BindValue { get => CurrentValue; set => CurrentValue = value; }
 
     protected override string InputType => "number";
