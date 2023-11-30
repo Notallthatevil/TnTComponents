@@ -26,7 +26,11 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
 
     protected bool Interactive { get; set; }
 
+    [Parameter]
+    public string ComponentIdentifier { get; set; } = TnTComponentIdentifier.NewId();
+
     public virtual string GetClass() => this.GetClassDefault();
+
 
     protected override void OnAfterRender(bool firstRender) {
         base.OnAfterRender(firstRender);
@@ -36,9 +40,10 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
     }
 
     protected override void OnParametersSet() {
-        //if (string.IsNullOrWhiteSpace(Id)) {
-        //    Id = Guid.NewGuid().ToString();
-        //}
         base.OnParametersSet();
+
+        var dict = AdditionalAttributes is not null ? AdditionalAttributes.ToDictionary() : new Dictionary<string, object>();
+        dict.TryAdd(ComponentIdentifier, string.Empty);
+        AdditionalAttributes = dict;
     }
 }

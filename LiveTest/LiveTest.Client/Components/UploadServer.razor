@@ -1,0 +1,22 @@
+﻿@using System.ComponentModel.DataAnnotations
+@rendermode InteractiveServer
+
+
+
+
+<TnTComponents.TnTButton OnClick="@(() => _count++)" Title="Click me">
+    @_count;
+</TnTComponents.TnTButton>
+
+
+
+@code {
+    private class Model {
+        [Required]
+        public string? Files { get; set; }
+    }
+    private int _count = 0;
+    private Model _model = new();
+
+    private int _progress = 0;
+}

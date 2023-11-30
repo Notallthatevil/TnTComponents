@@ -30,4 +30,14 @@ app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(LiveTest.Client._Imports).Assembly);
 
+app.MapPost("/submitStaticForm", async (IFormFileCollection myFiles) => {
+    foreach (var file in myFiles) {
+        var tempFile = Path.GetTempFileName();
+        app.Logger.LogInformation(tempFile);
+        using var stream = File.OpenWrite(tempFile);
+        await file.CopyToAsync(stream);
+    }
+});
+
+
 app.Run();

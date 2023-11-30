@@ -10,6 +10,13 @@ namespace TnTComponents.Forms;
 
 public abstract partial class TnTInputBase<TInputType> {
 
+    internal const string DefaultLabelClass = "tnt-input-label";
+    internal const string DefaultContainerClass = "tnt-input-container";
+    internal const string DefaultLabelTextClass = "tnt-input-label-text";
+    internal const string DefaultValidationClass = "tnt-input-validation";
+    internal const string DefaultSupportingTextClass = "tnt-input-supporting-text";
+
+
     [Parameter]
     public string? AriaLabel { get; set; }
 
@@ -20,7 +27,7 @@ public abstract partial class TnTInputBase<TInputType> {
     public virtual string? Class { get; set; }
 
     [Parameter]
-    public string ContainerClass { get; set; } = "tnt-input-container";
+    public string ContainerClass { get; set; } = DefaultContainerClass;
 
     [Parameter]
     public virtual object? Data { get; set; }
@@ -46,10 +53,10 @@ public abstract partial class TnTInputBase<TInputType> {
     public string? Label { get; set; }
 
     [Parameter]
-    public string LabelClass { get; set; } = "tnt-input-label";
+    public string LabelClass { get; set; } = DefaultLabelClass;
 
     [Parameter]
-    public string LabelTextClass { get; set; } = "tnt-input-label-text";
+    public string LabelTextClass { get; set; } = DefaultLabelTextClass;
 
     [Parameter]
     public string? Placeholder { get; set; }
@@ -73,7 +80,7 @@ public abstract partial class TnTInputBase<TInputType> {
     public string? SupportingText { get; set; }
 
     [Parameter]
-    public string SupportingTextClass { get; set; } = "tnt-input-supporting-text";
+    public string SupportingTextClass { get; set; } = DefaultSupportingTextClass;
 
     [Parameter]
     public virtual string? Theme { get; set; }
@@ -82,7 +89,7 @@ public abstract partial class TnTInputBase<TInputType> {
     public string? Title { get; set; }
 
     [Parameter]
-    public string ValidationClass { get; set; } = "tnt-input-validation";
+    public string ValidationClass { get; set; } = DefaultValidationClass;
 
     protected abstract TInputType BindValue { get; set; }
     protected abstract string InputType { get; }

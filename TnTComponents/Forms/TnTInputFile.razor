@@ -1,0 +1,34 @@
+﻿@using System.Text
+@inherits TnTComponentBase
+
+<label class="@LabelClass">
+    <span class="@ContainerClass">
+        @TnTIconComponent.RenderIcon(IconType, StartIcon, "start-icon")
+        <InputFile @attributes="AdditionalAttributes"
+                   OnChange="OnUploadAsync"
+                   disabled="@Disabled"
+                   readonly="@ReadOnly"
+                   title="@Title"
+                   multiple="@Multiple"
+                   required="@Required"
+                   name="@Name"/>
+        @if (!string.IsNullOrWhiteSpace(Label)) {
+            <span class="@LabelTextClass">
+                @Label
+            </span>
+        }
+        @TnTIconComponent.RenderIcon(IconType, EndIcon, "end-icon")
+    </span>
+    @if (!string.IsNullOrWhiteSpace(SupportingText)) {
+        <span class="@SupportingTextClass">@SupportingText</span>
+    }
+</label>
+
+@{
+    var strBuilder = new StringBuilder($"tnt-input-identifier={ComponentIdentifier}");
+    if (!string.IsNullOrWhiteSpace(CustomInputId)) {
+        strBuilder.Append("&tnt-button-identifier=").Append(CustomInputId);
+    }
+
+    <TnTPageScript Src="@($"./_content/TnTComponents/Forms/TnTInputFile.razor.js?{strBuilder.ToString()}")" />
+}
