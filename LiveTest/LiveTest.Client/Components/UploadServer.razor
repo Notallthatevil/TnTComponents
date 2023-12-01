@@ -1,7 +1,16 @@
 ﻿@using System.ComponentModel.DataAnnotations
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(prerender:false))
 
+<TnTComponents.Forms.TnTForm Model="@_model" FormName="Form">
+    <TnTComponents.Forms.TnTInputFile Title="InputFile" Multiple="true" Required="true" Name="File" OnProgressChange="@((args) => _progress = args.ProgressPercent)" />
 
+    <TnTComponents.TnTButton Title="Submit" Type="TnTComponents.Enum.ButtonType.Submit">
+        Submit
+    </TnTComponents.TnTButton>
+</TnTComponents.Forms.TnTForm>
+<h3>
+    @_progress
+</h3>
 
 
 <TnTComponents.TnTButton OnClick="@(() => _count++)" Title="Click me">
