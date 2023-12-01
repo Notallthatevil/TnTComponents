@@ -1,28 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace TnTComponents.Common;
 
-namespace TnTComponents.Common;
 public static class TnTComponentIdentifier {
-
     private const string _identifierPrefix = "tnt_";
     private static readonly Random _rnd = new();
 
     /// <summary>
-    /// Returns a new <see cref="TnTComponentIdentifierContext"/> where ID are sequential: "tnt_00000000", "tnt_00000001", "tnt_00000002", ...
-    /// </summary>
-    /// <returns></returns>
-    public static TnTComponentIdentifierContext SequentialContext() => new((n) => $"{_identifierPrefix}{n:00000000}");
-
-    /// <summary>
-    /// Returns a new small Id.
-    /// HTML id must start with a letter.
+    /// Returns a new small Id. HTML id must start with a letter.
     /// Example: f127d9edf14385adb
     /// </summary>
     /// <remarks>
-    /// You can use a <see cref="IdentifierContext"/> instance to customize the Generation process,
+    /// You can use a <see cref="IdentifierContext" /> instance to customize the Generation process,
     /// for example in Unit Tests.
     /// </remarks>
     /// <returns></returns>
@@ -40,5 +27,11 @@ public static class TnTComponentIdentifier {
 
         return TnTComponentIdentifierContext.Current.GenerateId();
     }
-}
 
+    /// <summary>
+    /// Returns a new <see cref="TnTComponentIdentifierContext" /> where ID are sequential:
+    /// "tnt_00000000", "tnt_00000001", "tnt_00000002", ...
+    /// </summary>
+    /// <returns></returns>
+    public static TnTComponentIdentifierContext SequentialContext() => new((n) => $"{_identifierPrefix}{n:00000000}");
+}

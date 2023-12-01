@@ -39,5 +39,4 @@ app.MapPost("/submitStaticForm", async (IFormFileCollection myFiles) => {
     }
 });
 
-
 app.Run();

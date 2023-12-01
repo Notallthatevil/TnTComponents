@@ -11,6 +11,9 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
     public virtual string? Class { get; set; }
 
     [Parameter]
+    public string ComponentIdentifier { get; set; } = TnTComponentIdentifier.NewId();
+
+    [Parameter]
     public virtual object? Data { get; set; }
 
     public ElementReference Element { get; protected set; }
@@ -26,11 +29,7 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
 
     protected bool Interactive { get; set; }
 
-    [Parameter]
-    public string ComponentIdentifier { get; set; } = TnTComponentIdentifier.NewId();
-
     public virtual string GetClass() => this.GetClassDefault();
-
 
     protected override void OnAfterRender(bool firstRender) {
         base.OnAfterRender(firstRender);

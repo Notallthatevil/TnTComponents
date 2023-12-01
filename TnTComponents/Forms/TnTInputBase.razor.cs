@@ -10,13 +10,6 @@ namespace TnTComponents.Forms;
 
 public abstract partial class TnTInputBase<TInputType> {
 
-    internal const string DefaultLabelClass = "tnt-input-label";
-    internal const string DefaultContainerClass = "tnt-input-container";
-    internal const string DefaultLabelTextClass = "tnt-input-label-text";
-    internal const string DefaultValidationClass = "tnt-input-validation";
-    internal const string DefaultSupportingTextClass = "tnt-input-supporting-text";
-
-
     [Parameter]
     public string? AriaLabel { get; set; }
 
@@ -96,16 +89,11 @@ public abstract partial class TnTInputBase<TInputType> {
     protected virtual object? InputValue { get; set; }
     protected virtual string? Max => MaxValue?.ToString();
     protected int? MaxLength { get; private set; }
-
     protected TInputType? MaxValue { get; private set; }
-
     protected virtual string? Min => MinValue?.ToString();
     protected int? MinLength { get; private set; }
-
     protected TInputType? MinValue { get; private set; }
-
     protected string? Pattern { get; private set; }
-
     protected bool Required { get; private set; }
 
     [Inject]
@@ -113,6 +101,12 @@ public abstract partial class TnTInputBase<TInputType> {
 
     [CascadingParameter(Name = TnTForm.ParentFormTypeName)]
     private FormType? _parentFormType { get; set; }
+
+    internal const string DefaultContainerClass = "tnt-input-container";
+    internal const string DefaultLabelClass = "tnt-input-label";
+    internal const string DefaultLabelTextClass = "tnt-input-label-text";
+    internal const string DefaultSupportingTextClass = "tnt-input-supporting-text";
+    internal const string DefaultValidationClass = "tnt-input-validation";
 
     public string GetClass() => string.Join(' ', this.GetClassDefault(), CssClass);
 

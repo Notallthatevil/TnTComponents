@@ -1,100 +1,90 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.JSInterop;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using TnTComponents.Common;
 using TnTComponents.Enum;
 
 namespace TnTComponents.Forms;
+
 public partial class TnTInputFile {
 
+    /// <summary>
+    /// Gets or sets the sze of buffer to read bytes from uploaded file (in bytes). Default value is
+    /// 10 KB.
+    /// </summary>
     [Parameter]
-    public string? Name { get; set; }
+    public uint BufferSize { get; set; } = 10 * 1024;
 
-    [Parameter]
-    public string LabelClass { get; set; } = TnTInputBase<int>.DefaultLabelClass;
-    [Parameter]
-    public string LabelTextClass { get; set; } = TnTInputBase<int>.DefaultLabelTextClass;
     [Parameter]
     public string ContainerClass { get; set; } = TnTInputBase<int>.DefaultContainerClass;
-    [Parameter]
-    public string SupportingTextClass { get; set; } = TnTInputBase<int>.DefaultSupportingTextClass;
-
-    [Parameter]
-    public string Title { get; set; } = default!;
-
-    [Parameter]
-    public string? SupportingText { get; set; }
-
-    [Parameter]
-    public bool Multiple { get; set; }
-    [Parameter]
-    public bool Required { get; set; }
-
-    [Parameter]
-    public string? Label { get; set; }
-
-    [Parameter]
-    public string? StartIcon { get; set; }
-    [Parameter]
-    public string? EndIcon { get; set; }
-    [Parameter]
-    public IconType IconType { get; set; }
-
-    [Parameter]
-    public bool ReadOnly { get; set; }
-    [Parameter]
-    public bool Disabled { get; set; }
 
     [Parameter]
     public string? CustomInputId { get; set; }
 
     [Parameter]
+    public bool Disabled { get; set; }
+
+    [Parameter]
+    public string? EndIcon { get; set; }
+
+    [Parameter]
+    public IconType IconType { get; set; }
+
+    [Parameter]
+    public string? Label { get; set; }
+
+    [Parameter]
+    public string LabelClass { get; set; } = TnTInputBase<int>.DefaultLabelClass;
+
+    [Parameter]
+    public string LabelTextClass { get; set; } = TnTInputBase<int>.DefaultLabelTextClass;
+
+    [Parameter]
     public int MaximumFileCount { get; set; } = 10;
+
+    /// <summary>
+    /// Gets or sets the maximum size of a file to be uploaded (in bytes). Default value is 10 MB.
+    /// </summary>
+    [Parameter]
+    public long MaximumFileSize { get; set; } = 10 * 1024 * 1024;
 
     [Parameter]
     public InputFileMode Mode { get; set; }
 
     [Parameter]
-    public EventCallback<InputFileChangeEventArgs> OnInputFileChange { get; set; }
+    public bool Multiple { get; set; }
 
     [Parameter]
-    public EventCallback<TnTInputFileEventArgs> OnFileUploaded { get; set; }
+    public string? Name { get; set; }
 
-    /// <summary>
-    /// Gets or sets the maximum size of a file to be uploaded (in bytes).
-    /// Default value is 10 MB.
-    /// </summary>
-    [Parameter]
-    public long MaximumFileSize { get; set; } = 10 * 1024 * 1024;
-    /// <summary>
-    /// Gets or sets the sze of buffer to read bytes from uploaded file (in bytes).
-    /// Default value is 10 KB.
-    /// </summary>
-    [Parameter]
-    public uint BufferSize { get; set; } = 10 * 1024;
     /// <summary>
     /// Raise when all files are completely uploaded.
     /// </summary>
     [Parameter]
     public EventCallback<IEnumerable<TnTInputFileEventArgs>> OnCompleted { get; set; }
-    [Parameter]
-    public int ProgressPercent { get; set; } = 0;
-    /// <summary>
-    /// Raise when a progression step is updated.
-    /// You can use <see cref="ProgressPercent"/> and <see cref="ProgressTitle"/> to have more detail on the progression.
-    /// </summary>
-    [Parameter]
-    public EventCallback<TnTInputFileEventArgs> OnProgressChange { get; set; }
 
     /// <summary>
     /// Raise when a file raised an error. Not yet used.
     /// </summary>
     [Parameter]
     public EventCallback<TnTInputFileEventArgs> OnFileError { get; set; }
+
+    [Parameter]
+    public EventCallback<TnTInputFileEventArgs> OnFileUploaded { get; set; }
+
+    [Parameter]
+    public EventCallback<InputFileChangeEventArgs> OnInputFileChange { get; set; }
+
     /// <summary>
-    /// Gets or sets a callback that updates the <see cref="ProgressPercent"/>.
+    /// Raise when a progression step is updated. You can use <see cref="ProgressPercent" /> and
+    /// <see cref="ProgressTitle" /> to have more detail on the progression.
+    /// </summary>
+    [Parameter]
+    public EventCallback<TnTInputFileEventArgs> OnProgressChange { get; set; }
+
+    [Parameter]
+    public int ProgressPercent { get; set; } = 0;
+
+    /// <summary>
+    /// Gets or sets a callback that updates the <see cref="ProgressPercent" />.
     /// </summary>
     [Parameter]
     public EventCallback<int> ProgressPercentChanged { get; set; }
@@ -104,9 +94,26 @@ public partial class TnTInputFile {
     /// </summary>
     public string ProgressTitle { get; private set; } = string.Empty;
 
+    [Parameter]
+    public bool ReadOnly { get; set; }
+
+    [Parameter]
+    public bool Required { get; set; }
+
+    [Parameter]
+    public string? StartIcon { get; set; }
+
+    [Parameter]
+    public string? SupportingText { get; set; }
+
+    [Parameter]
+    public string SupportingTextClass { get; set; } = TnTInputBase<int>.DefaultSupportingTextClass;
+
+    [Parameter]
+    public string Title { get; set; } = default!;
+
     private ProgressFileDetails _progressFileDetails { get; set; }
     private bool _dropOver = false;
-
 
     protected async Task OnUploadAsync(InputFileChangeEventArgs e) {
         if (e.FileCount > MaximumFileCount) {
@@ -154,7 +161,6 @@ public partial class TnTInputFile {
             // Progress
             var title = $"Loading {fileNumber + 1}/{allFiles.Count} - {file.Name}";
             fileDetails.ProgressTitle = title;
-
 
             switch (Mode) {
                 case InputFileMode.Buffer:
@@ -232,9 +238,7 @@ public partial class TnTInputFile {
             await UpdateProgressAsync(100, "Completed");
         }
 
-        if (OnCompleted.HasDelegate) {
-            await OnCompleted.InvokeAsync(uploadedFiles.ToArray());
-        }
+        await OnCompleted.InvokeAsync(uploadedFiles.ToArray());
     }
 
     private async Task ReadFileToBufferAndRaiseProgressEventAsync(IBrowserFile file, TnTInputFileEventArgs fileDetails, Func<byte[], int, Task> action) {
@@ -277,95 +281,26 @@ public partial class TnTInputFile {
         if (ProgressPercent != percent) {
             ProgressPercent = percent;
 
-            if (ProgressPercentChanged.HasDelegate) {
-                await ProgressPercentChanged.InvokeAsync(percent);
-            }
+            await ProgressPercentChanged.InvokeAsync(percent);
         }
 
         if (ProgressTitle != title) {
             ProgressTitle = title;
         }
     }
-
-}
-
-public class TnTInputFileEventArgs : EventArgs {
-    /// <summary>
-    /// Gets the index of the current file in an upload process.
-    /// </summary>
-    public int Index { get; internal set; } = 0;
-
-    /// <summary>
-    /// Gets the local file of the current file in an upload process.
-    /// Only if Mode = SaveToTemporaryFolder (otherwise, this value is null).
-    /// </summary>
-    public FileInfo? LocalFile { get; internal set; }
-
-    /// <summary>
-    /// Gets a small buffer data of the current file in an upload process.
-    /// Only if Mode = Buffer.
-    /// </summary>
-    public TnTInputFileBuffer Buffer { get; internal set; } = default!;
-
-    /// <summary>
-    /// Gets a reference to the current stream in an upload process.
-    /// Only if Mode = Stream (otherwise, this value is null).
-    /// The OnProgressChange event will not be triggered.
-    /// </summary>
-    public Stream? Stream { get; internal set; }
-
-    /// <summary>
-    /// Gets the name of the current file in an upload process.
-    /// </summary>
-    public string Name { get; internal set; } = string.Empty;
-
-    /// <summary>
-    /// Gets the size (in bytes) of the current file in an upload process.
-    /// </summary>
-    public long Size { get; internal set; } = 0;
-
-    /// <summary>
-    /// Gets the content type of the current file in an upload process.
-    /// </summary>
-    public string ContentType { get; internal set; } = string.Empty;
-
-    /// <summary>
-    /// Gets the label to display in an upload process.
-    /// </summary>
-    public string ProgressTitle { get; internal set; } = string.Empty;
-
-    /// <summary>
-    /// Gets the global percent value in an upload process.
-    /// </summary>
-    public int ProgressPercent { get; internal set; } = 0;
-
-    /// <summary>
-    /// Gets the error message (or null if no error occurred).
-    /// </summary>
-    public string? ErrorMessage { get; internal set; }
-
-    /// <summary>
-    /// Gets a list of all files currently in an upload process.
-    /// </summary>
-    public IEnumerable<UploadedFileDetails> AllFiles { get; internal set; } = default!;
-
-    /// <summary>
-    /// Set this property to True to cancel the current upload file.
-    /// </summary>
-    public bool IsCancelled { get; set; } = false;
 }
 
 public class TnTInputFileBuffer(byte[] data, int bytesRead) {
 
     /// <summary>
-    /// Buffer data read.
-    /// </summary>
-    public byte[] Data { get; } = data;
-
-    /// <summary>
     /// Number of bytes read.
     /// </summary>
     public int BytesRead { get; } = bytesRead;
+
+    /// <summary>
+    /// Buffer data read.
+    /// </summary>
+    public byte[] Data { get; } = data;
 
     /// <summary>
     /// Append the current buffer (Data) to this file.
@@ -385,6 +320,71 @@ public class TnTInputFileBuffer(byte[] data, int bytesRead) {
     public Task AppendToFileAsync(FileInfo file) {
         return AppendToFileAsync(file.FullName);
     }
+}
+
+public class TnTInputFileEventArgs : EventArgs {
+
+    /// <summary>
+    /// Gets a list of all files currently in an upload process.
+    /// </summary>
+    public IEnumerable<UploadedFileDetails> AllFiles { get; internal set; } = default!;
+
+    /// <summary>
+    /// Gets a small buffer data of the current file in an upload process. Only if Mode = Buffer.
+    /// </summary>
+    public TnTInputFileBuffer Buffer { get; internal set; } = default!;
+
+    /// <summary>
+    /// Gets the content type of the current file in an upload process.
+    /// </summary>
+    public string ContentType { get; internal set; } = string.Empty;
+
+    /// <summary>
+    /// Gets the error message (or null if no error occurred).
+    /// </summary>
+    public string? ErrorMessage { get; internal set; }
+
+    /// <summary>
+    /// Gets the index of the current file in an upload process.
+    /// </summary>
+    public int Index { get; internal set; } = 0;
+
+    /// <summary>
+    /// Set this property to True to cancel the current upload file.
+    /// </summary>
+    public bool IsCancelled { get; set; } = false;
+
+    /// <summary>
+    /// Gets the local file of the current file in an upload process. Only if Mode =
+    /// SaveToTemporaryFolder (otherwise, this value is null).
+    /// </summary>
+    public FileInfo? LocalFile { get; internal set; }
+
+    /// <summary>
+    /// Gets the name of the current file in an upload process.
+    /// </summary>
+    public string Name { get; internal set; } = string.Empty;
+
+    /// <summary>
+    /// Gets the global percent value in an upload process.
+    /// </summary>
+    public int ProgressPercent { get; internal set; } = 0;
+
+    /// <summary>
+    /// Gets the label to display in an upload process.
+    /// </summary>
+    public string ProgressTitle { get; internal set; } = string.Empty;
+
+    /// <summary>
+    /// Gets the size (in bytes) of the current file in an upload process.
+    /// </summary>
+    public long Size { get; internal set; } = 0;
+
+    /// <summary>
+    /// Gets a reference to the current stream in an upload process. Only if Mode = Stream
+    /// (otherwise, this value is null). The OnProgressChange event will not be triggered.
+    /// </summary>
+    public Stream? Stream { get; internal set; }
 }
 
 public record struct ProgressFileDetails(int Index, string Name, int Percentage);

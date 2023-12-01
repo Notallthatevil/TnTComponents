@@ -17,10 +17,8 @@ export function onLoad() {
 // Called when an enhanced page update occurs, plus once immediately after
 // the initial load.
 export function onUpdate() {
-
 }
 
 // Called when an enhanced page update removes the script from the page.
 export function onDispose() {
-
 }
