@@ -1,29 +1,3 @@
-﻿@using System.Text
-
-<div style="@GetStyle()">
+﻿<div style="@GetStyle()">
     @ChildContent
 </div>
-
-
-@code {
-    [Parameter]
-    public RenderFragment ChildContent { get; set; } = default!;
-
-    [Parameter]
-    public StackDirection Direction { get; set; } = StackDirection.Vertical;
-
-    [Parameter]
-    public bool Reverse { get; set; } = false;
-
-    [Parameter]
-    public int Gap { get; set; } = 10;
-
-    private string GetStyle() {
-        var strBuilder = new StringBuilder($"display: flex;gap: {Gap}px;");
-
-        strBuilder.Append($"flex-direction: {(Direction == StackDirection.Vertical ? "column" : "row")}{(Reverse ? "-reverse" : string.Empty)};");
-
-        return strBuilder.ToString();
-    }
-}
-
