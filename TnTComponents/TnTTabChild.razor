@@ -1,8 +1,16 @@
-﻿@inherits TnTIconComponent
-@implements IDisposable
+﻿@inherits TnTComponentBase
 
-@if (_tabViewContext.ActiveTab == this) {
-    <div class="@GetCssClass()" theme="@Theme" @ref="@_reference">
+<template @attributes="ComponentIdentifierAttribute" id="tnt-tab-header">
+    <button class="@TabButtonClass @(Active ? "active" : string.Empty)" disabled="@Disabled" type="button">
+        @TnTIconComponent.RenderIcon(IconType, Icon)
+        @Title
+    </button>
+</template>
+
+<template @attributes="ComponentIdentifierAttribute" id="tnt-tab-content">
+    <div @attributes="AdditionalAttributes" class="@GetClass()" style="@Style" theme="@Theme">
         @ChildContent
     </div>
-}
+</template>
+
+<TnTPageScript Src="@($"./_content/TnTComponents/TnTButton.razor.js?class={TabButtonClass}")" />

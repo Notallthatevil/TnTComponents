@@ -1,63 +1,33 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using TnTComponents.Common;
-using TnTComponents.Common.Ext;
-using TnTComponents.Infrastructure;
+using TnTComponents.Enum;
 
 namespace TnTComponents;
-
 public partial class TnTTabChild {
-
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
     [Parameter, EditorRequired]
-    public string TabTitle { get; set; }
+    public string Title { get; set; } = default!;
 
-    internal ElementReference TabReference { get; set; }
+    [Parameter]
+    public string TabButtonClass { get; set; } = "tnt-tab-view-button";
 
-    [Inject]
-    private IJSRuntime _jsRuntime { get; set; } = default!;
+    [Parameter]
+    public override string? Class { get; set; } = "tnt-tab-view-content";
 
-    [CascadingParameter]
-    private TabViewContext _tabViewContext { get; set; } = default!;
+    [Parameter]
+    public string? Icon { get; set; }
 
-    private bool _canGetSize;
+    [Parameter]
+    public IconType IconType { get; set; }
 
-    private bool _disabled;
+    [Parameter]
+    public bool Active { get; set; } = false;
 
-    private ElementReference _reference;
+    [Parameter]
+    public bool Disabled { get; set; }
 
-    public void Dispose() {
-        _tabViewContext.RemoveChild(this);
-    }
-
-    internal async Task<ElementOffset?> GetElementOffset() {
-        if (_canGetSize) {
-            return await _jsRuntime.GetElementOffset(_reference);
-        }
-        return default;
-    }
-
-    protected override void OnAfterRender(bool firstRender) {
-        _canGetSize = true;
-        base.OnAfterRender(firstRender);
-    }
-
-    protected override void OnInitialized() {
-        if (_tabViewContext is null) {
-            throw new InvalidOperationException($"{nameof(TnTTabChild)} must be a descendant of {nameof(TnTTabView)}!");
-        }
-
-        _tabViewContext.AddChild(this);
-        base.OnInitialized();
-    }
-
-    protected override void OnParametersSet() {
-        if (_disabled != Disabled) {
-            _disabled = Disabled;
-            _tabViewContext?.ParentView.Refresh();
-        }
-        base.OnParametersSet();
-    }
+    private IReadOnlyDictionary<string, object> ComponentIdentifierAttribute => new Dictionary<string, object>() {
+            { TnTCustomIdentifier, ComponentIdentifier }
+        };
 }

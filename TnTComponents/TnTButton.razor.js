@@ -1,16 +1,10 @@
-//export function onLoad() {
-//  console.log('Loaded');
-//}
-
 export function onUpdate() {
+    const url = new URL(import.meta.url);
+    const className = url.searchParams.get("class");
     document.addEventListener('click', function (e) {
-        const btn = e.target.closest('button');
-        if (btn) {
-            TnTComponents.ripple(btn, e);
+        const elem = e.target.closest(`.${className}`);
+        if (elem) {
+            TnTComponents.ripple(elem, e);
         }
     });
 }
-
-//export function onDispose() {
-//  console.log('Disposed');
-//}

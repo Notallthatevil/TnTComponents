@@ -1,22 +1,17 @@
-﻿@inherits TnTBaseComponent
+﻿@using Microsoft.AspNetCore.Components.Sections
+@inherits TnTComponentBase
 
-<div class="@GetCssClass()" theme="@Theme">
-    <CascadingValue Value="_tabViewContext" IsFixed="true">
-        <div class="tnt-tab-view-header-items">
-            @for (var i = 0; i < _tabViewContext.TabChildren.Count; ++i) {
-                var tabView = _tabViewContext.TabChildren[i];
-                var disabled = tabView.Disabled ? " disabled" : string.Empty;
-                var active = _tabViewContext.ActiveTab == tabView ? " active" : string.Empty;
 
-                <button class="tnt-tab-view-header @active @disabled" type="button" @onclick="@(() => _tabViewContext.SetActiveTab(tabView))" @ref="@tabView.TabReference">
-                    @tabView.GetIcon()
-                    @tabView.TabTitle
-                </button>
-            }
+<tnt-tab-view @attributes="AdditionalAttributes" class="@GetClass()" style="@Style" theme="@Theme">
+    <div>
+        <div class="@TabHeaderClass">
         </div>
-        @ChildContent
-    </CascadingValue>
-    @if (!Disabled) {
-        <span class="tnt-glider" @ref="@_gliderRef"></span>
-    }
-</div>
+    </div>
+    <span id="tnt-tab-active-indicator" class="@TabActiveIndicatorClass"></span>
+    <div class="@TabContentClass">
+    </div>
+    @ChildContent
+</tnt-tab-view>
+
+
+<TnTPageScript Src="@($"./_content/TnTComponents/TnTTabView.razor.js?tabviewidentifier={ComponentIdentifier}")" />

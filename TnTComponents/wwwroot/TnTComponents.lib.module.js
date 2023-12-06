@@ -65,7 +65,7 @@ function onEnhancedLoad() {
 }
 
 function setupPageScriptElement() {
-    customElements.define('page-script', class extends HTMLElement {
+    customElements.define('tnt-page-script', class extends HTMLElement {
         static observedAttributes = ['src'];
 
         // We use attributeChangedCallback instead of connectedCallback
@@ -87,8 +87,14 @@ function setupPageScriptElement() {
     });
 }
 
+function setupTabViewElement() {
+    customElements.define('tnt-tab-view', class extends HTMLElement {
+    });
+}
+
 export function afterWebStarted(blazor) {
     setupPageScriptElement();
+    setupTabViewElement();
     blazor.addEventListener('enhancedload', onEnhancedLoad);
 }
 
@@ -166,6 +172,115 @@ window.TnTComponents = {
         }
     },
 
+    registeredTnTTabViews: {},
+
+    registerTnTTabView: function (viewIdentifier, children) {
+        if (viewIdentifier && children) {
+            const tabView = document.querySelector(`[${viewIdentifier}]`);
+
+            let headerArea = tabView.querySelector('.tnt-tab-header');
+            let contentArea = tabView.querySelector('.tnt-tab-content');
+            let activeIndicator = tabView.querySelector(":scope > #tnt-tab-active-indicator");
+
+            function updateActiveIndicator(headerElement = null) {
+                if (!headerElement) {
+                    for (const e of headerArea.children) {
+                        if (e.classList.contains('active')) {
+                            headerElement = e;
+                            break;
+                        }
+                    }
+                }
+
+                const boundingRect = headerElement.getBoundingClientRect();
+
+                if (tabView.classList.contains('primary')) {
+                    let headerElementWidth = headerElement.clientWidth / 2;
+                    activeIndicator.style.left = `${(boundingRect.left + headerElementWidth) - (activeIndicator.clientWidth / 2)}px`;
+                }
+                else if (tabView.classList.contains('secondary')) {
+                    activeIndicator.style.left = `${boundingRect.left}px`;
+                    activeIndicator.style.width = `${headerElement.clientWidth}px`;
+
+                }
+            }
+
+            const resizeObserver = new ResizeObserver((_) => {
+                updateActiveIndicator();
+            });
+
+            resizeObserver.observe(tabView);
+            this.registeredTnTTabViews[viewIdentifier] = resizeObserver;
+            headerArea.addEventListener('scroll', (_) => updateActiveIndicator());
+
+            function setContent(contentTemplate, headerElement, forceSet = false) {
+                if ((headerElement.classList.contains('active') && forceSet === false) || headerElement.disabled) {
+                    return false;
+                }
+
+                for (const e of headerArea.children) {
+                    e.classList.remove('active');
+                }
+
+                const contentClone = contentTemplate.content.cloneNode(true);
+                contentArea.innerHTML = '';
+                contentArea.appendChild(contentClone);
+                headerElement.classList.add('active');
+
+                updateActiveIndicator(headerElement);
+                return true;
+            }
+
+            let width = 100 / children.length;
+            if (width < 8) {
+                width = 8;
+            }
+
+            let activeSet = false;
+
+            children.forEach((pair, index) => {
+                const clone = pair.headerTemplate.content.cloneNode(true);
+
+                let headerItem = Array.prototype.slice.call(clone.childNodes)[0];
+                headerArea.appendChild(clone);
+
+                headerItem.style.width = `${width}%`;
+                headerItem.addEventListener('click', (e) => {
+                    setContent(pair.contentTemplate, headerItem);
+                    this.ripple(headerItem, e);
+                });
+
+
+                if (headerItem.classList.contains('active') || index === 0) {
+                    if (setContent(pair.contentTemplate, headerItem, true)) {
+                        activeSet = true;
+                    }
+                }
+            });
+
+            if (!activeSet) {
+                for (const e of headerArea.children) {
+                    if (!e.disabled) {
+                        e.click();
+                        activeSet = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!activeSet) {
+                activeIndicator.style.display = "none";
+            }
+        }
+    },
+
+    registerTnTTabViewDispose: function (tabViewIdentifier) {
+        if (this.registeredTnTTabViews[viewIdentifier]) {
+            this.registeredTnTTabViews[viewIdentifier].disconnect();
+            delete this.registeredTnTTabViews[viewIdentifier];
+        }
+    },
+
     removeFocus: (element) => { element.blur(); },
 
     remToPx: (rem) => { return rem * parseFloat(getComputedStyle(document.documentElement).fontSize); },
@@ -175,9 +290,11 @@ window.TnTComponents = {
         const diameter = Math.max(element.clientWidth, element.clientHeight);
         const radius = diameter / 2;
 
+        const boundingRect = element.getBoundingClientRect();
+
         circle.style.width = circle.style.height = `${diameter}px`;
-        circle.style.left = `${event.clientX - element.offsetLeft - radius}px`;
-        circle.style.top = `${event.clientY - element.offsetTop - radius}px`;
+        circle.style.left = `${event.clientX - boundingRect.left - radius}px`;
+        circle.style.top = `${event.clientY - boundingRect.top - radius}px`;
         circle.classList.add("tnt-ripple");
 
         const ripple = element.getElementsByClassName("tnt-ripple")[0];

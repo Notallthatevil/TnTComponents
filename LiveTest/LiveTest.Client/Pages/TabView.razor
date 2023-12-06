@@ -1,0 +1,82 @@
+﻿@page "/tabview"
+@using TnTComponents
+@using TnTComponents.Enum
+
+
+<TnTTabView Appearance="TabViewAppearance.Primary">
+    @for (var i = 0; i < TabCount; ++i) {
+        var j = i;
+        var header = $"Header{j + 1}";
+        <TnTTabChild Title="@header" Icon="apps" Disabled="@((j % 5) == 0)">
+            Content@(j + 1)
+        </TnTTabChild>
+
+    }
+    @{
+        var lastHeader = $"Header{TabCount + 1}";
+        <TnTTabChild Title="@lastHeader">
+            Content@(TabCount + 1)
+        </TnTTabChild>
+    }
+</TnTTabView>
+
+
+
+<TnTTabView Appearance="TabViewAppearance.Primary">
+    @for (var i = 0; i < TabCount; ++i) {
+        var j = i;
+        var header = $"Header{j + 1}";
+        <TnTTabChild Title="@header" Icon="apps" Disabled="true">
+            Content@(j + 1)
+        </TnTTabChild>
+
+    }
+    @{
+        var lastHeader = $"Header{TabCount + 1}";
+        <TnTTabChild Title="@lastHeader" Disabled="true">
+            Content@(TabCount + 1)
+        </TnTTabChild>
+    }
+</TnTTabView>
+
+<TnTTabView Appearance="TabViewAppearance.Secondary">
+    @for (var i = 0; i < TabCount; ++i) {
+        var j = i;
+        var header = $"Header{j + 1}";
+        <TnTTabChild Title="@header" Icon="apps" Disabled="@((j % 5) == 0)">
+            Content@(j + 1)
+        </TnTTabChild>
+
+    }
+    @{
+        var lastHeader = $"Header{TabCount + 1}";
+        <TnTTabChild Title="@lastHeader">
+            Content@(TabCount + 1)
+        </TnTTabChild>
+    }
+</TnTTabView>
+
+
+
+<TnTTabView Appearance="TabViewAppearance.Secondary">
+    @for (var i = 0; i < TabCount; ++i) {
+        var j = i;
+        var header = $"Header{j + 1}";
+        <TnTTabChild Title="@header" Icon="apps" Disabled="true">
+            Content@(j + 1)
+        </TnTTabChild>
+
+    }
+    @{
+        var lastHeader = $"Header{TabCount + 1}" ;
+        <TnTTabChild Title="@lastHeader" Disabled="true">
+            Content@(TabCount + 1)
+        </TnTTabChild>
+    }
+</TnTTabView>
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public int TabCount { get; set; } = 3;
+}

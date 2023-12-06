@@ -30,7 +30,11 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
 
     protected bool Interactive { get; set; }
 
+    protected const string TnTCustomIdentifier = "tnt-custom-identifier";
+
     public virtual string GetClass() => this.GetClassDefault();
+
+
 
     protected override void OnAfterRender(bool firstRender) {
         base.OnAfterRender(firstRender);

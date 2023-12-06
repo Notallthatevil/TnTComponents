@@ -1,62 +1,164 @@
 ﻿.tnt-tab-view {
-    margin: 1rem;
-    position: relative;
+    display: block;
+    margin: 8px;
 
-    .tnt-tab-view-header-items {
-        position: unset;
+    div:has(.tnt-tab-header) {
+        text-align: center;
+        background-color: $tnt-color-surface;
         display: flex;
         justify-content: center;
-        margin-bottom: 1rem;
+        border-bottom: solid 1px $tnt-color-surface-variant;
+        margin: 0;
+        position: relative;
 
-        div {
-            padding: 0 1.5rem;
-            @extend .tnt-border-radius-7;
-            @extend .tnt-z-depth-2;
+        .tnt-tab-header {
+            display: flex;
+            overflow-x: auto;
+            max-width: 100%;
+            position: unset;
 
-            .tnt-tab-view-header {
-                background-color: transparent;
+            .tnt-tab-view-button {
+                display: flex;
+                align-items: center;
+                outline: none;
                 border: none;
-                display: inline;
-                padding: 0.5rem 2rem;
-                z-index: 3;
-                user-select: none;
-                position: relative;
-                transition: 150ms;
-                font-weight: bolder;
-                font-size: 1.1rem;
-                min-width: 5rem;
+                background-color: transparent;
+                color: $tnt-color-on-surface-variant;
+                padding-bottom: 8px;
+                cursor: pointer;
+                padding: 0;
+                margin: 0;
+
+                @extend .title-small;
+
+                &:not(.disabled) {
+                    @include enable-ripple($tnt-color-primary);
+                }
+
+                &.active {
+                    color: $tnt-color-primary;
+                }
 
                 i {
-                    vertical-align: middle;
+                    font-size: 24px;
+                }
+
+                &:disabled {
+                    opacity: 0.3;
+                    cursor: not-allowed;
                 }
             }
         }
     }
 
-    &:not(.disabled) .tnt-tab-view-header-items div .tnt-tab-view-header:not(.disabled) {
-        cursor: pointer;
+    .tnt-tab-active-indicator {
+        position: relative;
+        display: block;
+        top: -3px;
+        border-radius: 3px 3px 0 0;
+        background-color: $tnt-color-primary;
+        transition: left ease-in-out 200ms;
     }
 
-    &:has(.tnt-glider) .tnt-tab-view-header-items .tnt-tab-view-header {
-        transition-delay: 100ms;
+    &.primary {
+        .tnt-tab-active-indicator {
+            height: 3px;
+            width: 32px;
+        }
+
+
+        div .tnt-tab-header .tnt-tab-view-button {
+            flex-direction: column;
+            justify-content: center;
+            height: 64px;
+            min-width: 100px;
+
+            i {
+                padding-bottom: 8px;
+            }
+        }
     }
 
-    &:has(.tnt-glider) .tnt-glider {
-        position: absolute;
-        top: 0;
-        z-index: 2;
-        transition-property: left, width;
-        transition-timing-function: ease-in-out;
-        transition-duration: 150ms;
-        @extend .tnt-border-radius-7;
-    }
+    &.secondary {
+        .tnt-tab-active-indicator {
+            height: 2px;
+        }
 
-    &:not(.tnt-glider) .tnt-glider {
-        position: absolute;
-        z-index: 2;
-        transition-property: left, width;
-        transition-timing-function: ease-in-out;
-        transition-duration: 150ms;
-        @extend .tnt-border-radius-7;
+        div .tnt-tab-header .tnt-tab-view-button {
+            flex-direction: row;
+            justify-content: center;
+            min-width: 150px;
+            height: 48px;
+
+
+            i {
+                padding-right: 8px;
+            }
+        }
     }
 }
+
+
+
+//.tnt-tab-view {
+//    margin: 1rem;
+//    position: relative;
+
+//    .tnt-tab-view-header-items {
+//        position: unset;
+//        display: flex;
+//        justify-content: center;
+//        margin-bottom: 1rem;
+
+//        div {
+//            padding: 0 1.5rem;
+//            @extend .tnt-border-radius-7;
+//            @extend .tnt-z-depth-2;
+
+//            .tnt-tab-view-header {
+//                background-color: transparent;
+//                border: none;
+//                display: inline;
+//                padding: 0.5rem 2rem;
+//                z-index: 3;
+//                user-select: none;
+//                position: relative;
+//                transition: 150ms;
+//                font-weight: bolder;
+//                font-size: 1.1rem;
+//                min-width: 5rem;
+
+//                i {
+//                    vertical-align: middle;
+//                }
+//            }
+//        }
+//    }
+
+//    &:not(.disabled) .tnt-tab-view-header-items div .tnt-tab-view-header:not(.disabled) {
+//        cursor: pointer;
+//    }
+
+//    &:has(.tnt-glider) .tnt-tab-view-header-items .tnt-tab-view-header {
+//        transition-delay: 100ms;
+//    }
+
+//    &:has(.tnt-glider) .tnt-glider {
+//        position: absolute;
+//        top: 0;
+//        z-index: 2;
+//        transition-property: left, width;
+//        transition-timing-function: ease-in-out;
+//        transition-duration: 150ms;
+//        @extend .tnt-border-radius-7;
+//    }
+
+//    &:not(.tnt-glider) .tnt-glider {
+//        position: absolute;
+//        z-index: 2;
+//        transition-property: left, width;
+//        transition-timing-function: ease-in-out;
+//        transition-duration: 150ms;
+//        @extend .tnt-border-radius-7;
+//    }
+//}
