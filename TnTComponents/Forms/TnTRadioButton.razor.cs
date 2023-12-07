@@ -1,43 +1,54 @@
-//using Microsoft.AspNetCore.Components;
-//using System.Reflection.Metadata;
-//using System.Text;
-//using TnTComponents.Enum;
+using Microsoft.AspNetCore.Components;
+using TnTComponents.Enum;
 
-//namespace TnTComponents.Forms;
+namespace TnTComponents.Forms;
+public partial class TnTRadioButton<TInputType> {
+    [CascadingParameter]
+    private TnTRadioGroup<TInputType> _radioGroup { get; set; } = default!;
 
-//public partial class TnTRadioButton<TInputType> {
-//    private string _id = default!;
+    [Parameter]
+    public string LabelClass { get; set; } = TnTInputBase<TInputType>.DefaultLabelClass;
 
-// private bool _trueValueToggle;
+    [Parameter]
+    public string ContainerClass { get; set; } = TnTInputBase<TInputType>.DefaultContainerClass;
 
-// [Parameter] public string? Icon { get; set; }
+    [Parameter]
+    public IconType IconType { get; set; }
 
-// [Parameter] public IconType IconType { get; set; }
+    [Parameter]
+    public bool Disabled { get; set; }
 
-// [Parameter, EditorRequired] public string Label { get; set; } = default!;
+    [Parameter]
+    public string? AriaLabel { get; set; }
 
-// [Parameter] public TInputType? Value { get; set; }
+    [Parameter]
+    public string? Label { get; set; }
 
-// [CascadingParameter] private RadioGroupContext Context { get; set; } = default!;
+    [Parameter]
+    public string? Title { get; set; }
 
-// public override string GetCssClass() { var strBuilder = new StringBuilder(base.GetCssClass());
-// strBuilder.Append(" tnt-radio-btn");
+    [Parameter]
+    public string? StartIcon { get; set; }
 
-// if (Disabled) { strBuilder.Append(" disabled"); }
+    [Parameter]
+    public string? EndIcon { get; set; }
+    [Parameter]
+    public bool Required { get; set; }
 
-// return strBuilder.ToString(); }
+    [Parameter]
+    public string LabelTextClass { get; set; } = TnTInputBase<TInputType>.DefaultLabelTextClass;
 
-// protected override void OnParametersSet() { _id = Guid.NewGuid().ToString(); if (Context is null)
-// { throw new InvalidOperationException($"{GetType().Name} must have a parent of
-// {typeof(TnTRadioGroup<TInputType>)}"); }
+    [Parameter]
+    public string SupportingTextClass { get; set; } = TnTInputBase<TInputType>.DefaultSupportingTextClass;
 
-// if (string.IsNullOrWhiteSpace(Label)) { throw new ArgumentNullException($"Must provide a valid
-// label for each {GetType().Name}"); }
+    [Parameter]
+    public string? SupportingText { get; set; }
 
-// base.OnParametersSet(); }
+    protected override void OnParametersSet() {
+        base.OnParametersSet();
 
-//    private char GetToggledTrueValue() {
-//        _trueValueToggle = !_trueValueToggle;
-//        return _trueValueToggle ? 'a' : 'b';
-//    }
-//}
+        if (_radioGroup is null) {
+            throw new InvalidOperationException($"{nameof(TnTRadioButton<TInputType>)} must be a child of {nameof(TnTRadioGroup<TInputType>)}");
+        }
+    }
+}

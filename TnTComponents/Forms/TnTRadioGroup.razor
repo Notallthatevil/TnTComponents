@@ -1,19 +1,19 @@
-﻿@*@typeparam TInputType
-@inherits TnTInputField<TInputType>
+﻿@typeparam TInputType
+@inherits TnTInputBase<TInputType>
 
-
-
-<div theme="@Theme" class="@GetCssClass()">
-    <label class="@GetLabelCssClass()" @onclick="SetInputFocus">@Label</label>
-    <div class="tnt-radio-btn-items">
-        <CascadingValue Value="_radioGroupContext" IsFixed="true">
-            @RadioButtons
-        </CascadingValue>
+<CascadingValue Value="this" IsFixed="true">
+    <div @attributes="AdditionalAttributes" class="@GetClass()" style="@Style" theme="@Theme">
+        @if (!string.IsNullOrWhiteSpace(Label)) {
+            <span class="@LabelTextClass">
+                @Label
+            </span>
+        }
+        @ChildContent
+        @if (!string.IsNullOrWhiteSpace(SupportingText)) {
+            <span class="@SupportingTextClass">@SupportingText</span>
+        }
+        @if (ShowValidation) {
+            <ValidationMessage class="@ValidationClass" For="ValueExpression" />
+        }
     </div>
-
-
-</div>
-@if (ShowValidation) {
-    <ValidationMessage class="@GetValidationMessageCssClass()" theme="@Theme" For="ValueExpression" />
-}
-*@
+</CascadingValue>
