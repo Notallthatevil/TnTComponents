@@ -1,0 +1,15 @@
+﻿@inherits TnTComponentBase
+
+<div @attributes="AdditionalAttributes" class="@Class" theme="@Theme" style="@Style">
+    <h3 @attributes="_headerAttribute" class="@TnTAccordionHeaderClass">
+        @Title
+        @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "expand_more")
+    </h3>
+    <div @attributes="_contentAttribute" class="@TnTAccordionContentClass">
+        <div>
+            @ChildContent
+        </div>
+    </div>
+</div>
+
+<TnTPageScript Src="@($"./_content/TnTComponents/TnTAccordion.razor.js?tntheaderidentifier={_headerIdentifier}&tntcontentidentifier={_contentIdentifier}")" />

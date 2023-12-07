@@ -1,0 +1,33 @@
+﻿.tnt-accordion {
+    background-color: $tnt-color-surface-variant;
+    margin: 8px;
+    overflow: hidden;
+    @include tnt-border-radius(2);
+
+    .tnt-accordion-header {
+        margin: 0;
+        padding: 8px;
+        @include tnt-z-depth(1);
+
+        i {
+            font-size: 24px;
+            float: right;
+            transition: 200ms;
+        }
+    }
+
+    &:has(.tnt-accordion-content.visible) {
+        .tnt-accordion-header i {
+            transform: rotateZ(180deg);
+        }
+    }
+
+    .tnt-accordion-content {
+        transition: ease-in-out 200ms;
+        height: 0;
+
+        div {
+            padding: 8px;
+        }
+    }
+}
