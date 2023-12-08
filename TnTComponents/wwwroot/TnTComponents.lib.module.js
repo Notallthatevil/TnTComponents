@@ -192,14 +192,18 @@ window.TnTComponents = {
                     }
                 }
 
+                if (!headerElement) {
+                    return;
+                }
                 const boundingRect = headerElement.getBoundingClientRect();
-
+                const parentScrollLeft = headerElement.parentElement.scrollLeft;
+                const diff = boundingRect.left + parentScrollLeft - headerElement.offsetLeft;
                 if (tabView.classList.contains('primary')) {
                     let headerElementWidth = headerElement.clientWidth / 2;
-                    activeIndicator.style.left = `${(boundingRect.left + headerElementWidth) - (activeIndicator.clientWidth / 2)}px`;
+                    activeIndicator.style.left = `${(boundingRect.left + headerElementWidth) - (activeIndicator.clientWidth / 2) - diff}px`;
                 }
                 else if (tabView.classList.contains('secondary')) {
-                    activeIndicator.style.left = `${boundingRect.left}px`;
+                    activeIndicator.style.left = `${boundingRect.left - diff}px`;
                     activeIndicator.style.width = `${headerElement.clientWidth}px`;
 
                 }
