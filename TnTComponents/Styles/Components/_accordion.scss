@@ -1,0 +1,54 @@
+﻿.tnt-accordion {
+    background-color: $tnt-color-surface-variant;
+    color: $tnt-color-on-surface-variant;
+    margin: 8px;
+    transition: ease-in-out 200ms;
+    @include tnt-border-radius(2);
+
+    .tnt-accordion-header {
+        margin: 0;
+        padding: 8px;
+        border-radius: inherit;
+        background-color: inherit;
+        cursor: pointer;
+        @include tnt-z-depth(1);
+
+        i {
+            font-size: 24px;
+            float: right;
+            user-select: none;
+            border-radius: 100%;
+        }
+
+        &:hover {
+            i {
+                background-color: #00000022;
+            }
+        }
+
+        &:active {
+            i {
+                background-color: #00000044;
+            }
+        }
+    }
+
+    &:has(.tnt-accordion-content.visible) {
+        border-end-end-radius: 0;
+        border-end-start-radius: 0;
+
+        .tnt-accordion-header i {
+            transform: rotateZ(180deg);
+        }
+    }
+
+    .tnt-accordion-content {
+        height: 0;
+        overflow: hidden;
+        transition: ease-in-out 200ms;
+
+        div {
+            padding: 8px;
+        }
+    }
+}

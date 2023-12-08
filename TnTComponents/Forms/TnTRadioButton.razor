@@ -1,19 +1,29 @@
-﻿@*@typeparam TInputType
-@inherits TnTBaseComponent
+﻿@inherits TnTComponentBase
+@typeparam TInputType
 
-<div class="@GetCssClass()">
-    @TnTIconComponent.RenderIcon(IconType, Icon)
-    <input aria-label="@Label"
-           id="@_id"
-           type="radio"
-           name="@Context.GroupName"
-           disabled="@Disabled"
-           value="@BindConverter.FormatValue(Value?.ToString())"
-           checked="@(Context.CurrentValue?.Equals(Value) == true ? GetToggledTrueValue() : null)"
-           @onchange="@Context.EventCallback" />
-
-    <label for="@_id" class="@Context.LabelCss">@Label</label>
-</div>
-
-
-*@
+<label class="@LabelClass">
+    <span class="@ContainerClass">
+        @TnTIconComponent.RenderIcon(IconType, StartIcon, "start-icon")
+            <input @attributes="AdditionalAttributes"
+                   @ref="Element"
+                   aria-label="@AriaLabel"
+                   type="radio"
+                   class="@GetClass()"
+                   name="@_radioGroup.GroupName"
+                   style="@Style"
+                   title="@Title"
+                   disabled="@Disabled"
+                   formtype="@_radioGroup.FormType.ToString().ToLower()"
+                   required="@Required">
+        }
+        @if (!string.IsNullOrWhiteSpace(Label)) {
+            <span class="@LabelTextClass">
+                @Label
+            </span>
+        }
+        @TnTIconComponent.RenderIcon(IconType, EndIcon, "end-icon")
+    </span>
+    @if (!string.IsNullOrWhiteSpace(SupportingText)) {
+        <span class="@SupportingTextClass">@SupportingText</span>
+    }
+</label>
