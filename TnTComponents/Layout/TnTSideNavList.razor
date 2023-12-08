@@ -1,4 +1,12 @@
 ﻿
-<ul @attributes="AdditionalAttributes" class="@GetCssClass()" theme="@Theme">
+<ul >
     @ChildContent
 </ul>
+
+@code{
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public string Icon{get;set;}
+}

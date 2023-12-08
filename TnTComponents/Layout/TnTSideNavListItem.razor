@@ -1,9 +1,26 @@
 ﻿@inherits TnTIconComponent
 
-<li @attributes="AdditionalAttributes" class="@GetCssClass()" theme="@Theme">
-    <NavLink class="tnt-side-nav-list-item-label" href="@Href" Match="@Match">
-        @GetIcon()
+<li >
+    <NavLink class="tnt-side-nav-list-item-label" href="@Href">
         @Label
     </NavLink>
     @ChildContent
 </li>
+
+@code {
+    [Parameter]
+    public string Href{ get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent{ get; set; }
+
+    [Parameter]
+    public string Icon { get; set; }
+
+
+    [Parameter]
+    public string Label{ get; set; }
+
+    [Parameter]
+    public NavLinkMatch Match{ get; set; }
+}

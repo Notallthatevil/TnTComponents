@@ -1,43 +1,43 @@
-﻿using Microsoft.AspNetCore.Components;
-using TnTComponents.Common;
+﻿//using Microsoft.AspNetCore.Components;
+//using TnTComponents.Common;
 
-namespace TnTComponents.Dialogs;
+//namespace TnTComponents.Dialogs;
 
-public partial class TnTDialogContainer {
+//public partial class TnTDialogContainer {
 
-    [Parameter]
-    public override string BaseCssClass { get; set; } = "tnt-dialog-container";
+//    [Parameter]
+//    public override string BaseCssClass { get; set; } = "tnt-dialog-container";
 
-    [Parameter, EditorRequired]
-    public Dialog Dialog { get; set; } = default!;
+//    [Parameter, EditorRequired]
+//    public Dialog Dialog { get; set; } = default!;
 
-    private RenderFragment _content = default!;
+//    private RenderFragment _content = default!;
 
-    protected override void OnInitialized() {
-        _content = new RenderFragment(builder => {
-            builder.OpenComponent<TnTCard>(0);
-            builder.AddComponentParameter(1, nameof(TnTCard.Type), Dialog.Options.CardType);
+//    protected override void OnInitialized() {
+//        _content = new RenderFragment(builder => {
+//            builder.OpenComponent<TnTCard>(0);
+//            builder.AddComponentParameter(1, nameof(TnTCard.Type), Dialog.Options.CardType);
 
-            builder.AddComponentParameter(2, nameof(TnTCard.ChildContent), new RenderFragment(cardBuilder => {
-                if (Dialog.Options.ShowClose) {
-                    cardBuilder.OpenElement(3, "span");
-                    cardBuilder.AddAttribute(4, "onclick", EventCallback.Factory.Create(this, Close));
-                    cardBuilder.AddContent(5, TnTIconComponent.RenderIcon(Dialog.Options.IconType, Dialog.Options.CloseIcon));
-                    cardBuilder.CloseElement();
-                }
+//            builder.AddComponentParameter(2, nameof(TnTCard.ChildContent), new RenderFragment(cardBuilder => {
+//                if (Dialog.Options.ShowClose) {
+//                    cardBuilder.OpenElement(3, "span");
+//                    cardBuilder.AddAttribute(4, "onclick", EventCallback.Factory.Create(this, Close));
+//                    cardBuilder.AddContent(5, TnTIconComponent.RenderIcon(Dialog.Options.IconType, Dialog.Options.CloseIcon));
+//                    cardBuilder.CloseElement();
+//                }
 
-                cardBuilder.OpenComponent(6, Dialog.Type);
-                if (Dialog.Parameters is not null && Dialog.Parameters.Any()) {
-                    cardBuilder.AddMultipleAttributes(7, Dialog.Parameters);
-                }
-                cardBuilder.CloseComponent();
-            }));
+//                cardBuilder.OpenComponent(6, Dialog.Type);
+//                if (Dialog.Parameters is not null && Dialog.Parameters.Any()) {
+//                    cardBuilder.AddMultipleAttributes(7, Dialog.Parameters);
+//                }
+//                cardBuilder.CloseComponent();
+//            }));
 
-            builder.CloseComponent();
-        });
-    }
+//            builder.CloseComponent();
+//        });
+//    }
 
-    private void Close() {
-        DialogService.CloseAsync(Dialog);
-    }
-}
+//    private void Close() {
+//        DialogService.CloseAsync(Dialog);
+//    }
+//}

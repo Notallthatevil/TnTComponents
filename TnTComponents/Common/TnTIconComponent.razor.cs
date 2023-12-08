@@ -1,13 +1,13 @@
-using Microsoft.AspNetCore.Components;
-using TnTComponents.Enum;
+//using Microsoft.AspNetCore.Components;
+//using TnTComponents.Enum;
 
-namespace TnTComponents.Common;
+//namespace TnTComponents.Common;
 
-public abstract partial class TnTIconComponent {
+//public abstract partial class TnTIconComponent {
 
-    [Parameter]
-    public virtual string Icon { get; set; } = default!;
+//    [Parameter]
+//    public virtual string Icon { get; set; } = default!;
 
-    [Parameter]
-    public IconType IconType { get; set; }
-}
+//    [Parameter]
+//    public IconType IconType { get; set; }
+//}

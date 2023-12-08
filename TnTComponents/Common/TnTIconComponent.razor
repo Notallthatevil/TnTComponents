@@ -1,10 +1,5 @@
-﻿@inherits TnTBaseComponent
-
+﻿
 @code {
-    internal RenderFragment GetIcon() {
-        return RenderIcon(IconType, Icon);
-    }
-
 
     public static RenderFragment RenderIcon(IconType iconType, string? icon, string? @class = null) {
         if (!string.IsNullOrWhiteSpace(icon)) {
