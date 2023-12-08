@@ -1,4 +1,4 @@
-﻿@*@inherits TnTComponentBase
+﻿@inherits TnTComponentBase
 @typeparam TInputType
 
 <label class="@LabelClass">
@@ -9,13 +9,14 @@
                    aria-label="@AriaLabel"
                    type="radio"
                    class="@GetClass()"
-                   name="@_radioGroup.GroupName"
+                   name="@_context?.GroupName"
                    style="@Style"
+                   readonly="@ReadOnly"
                    title="@Title"
                    disabled="@Disabled"
-                   formtype="@_radioGroup.FormType.ToString().ToLower()"
-                   required="@Required">
-        }
+                   checked="@_context?.CurrentValue?.Equals(Value)"
+                   required="@Required"
+                   value="@Value">
         @if (!string.IsNullOrWhiteSpace(Label)) {
             <span class="@LabelTextClass">
                 @Label
@@ -23,7 +24,5 @@
         }
         @TnTIconComponent.RenderIcon(IconType, EndIcon, "end-icon")
     </span>
-    @if (!string.IsNullOrWhiteSpace(SupportingText)) {
-        <span class="@SupportingTextClass">@SupportingText</span>
-    }
-</label>*@
+
+</label>

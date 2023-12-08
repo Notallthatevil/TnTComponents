@@ -13,6 +13,13 @@
         @extend .body-large;
     }
 
+    &:has(input[type=radio]) {
+        .tnt-input-label-text {
+            position: revert;
+            margin-left: 32px;
+        }
+    }
+
     &:has(.start-icon) .tnt-input-label-text {
         left: 52px;
     }
@@ -477,5 +484,142 @@
                 }
             }
         }
+
+        &:has(input[type=radio]) {
+            cursor: pointer;
+
+            &:has(input:disabled) {
+                cursor: not-allowed;
+            }
+
+            &:before {
+                content: '';
+                background-color: transparent;
+                width: 20px;
+                height: 20px;
+                position: absolute;
+                border-radius: 50%;
+                box-sizing: border-box;
+                border: 2px solid $tnt-color-on-surface-variant;
+                transition: 150ms;
+            }
+
+            &:after {
+                content: '';
+                background-color: $tnt-color-primary;
+                width: 20px;
+                height: 20px;
+                position: absolute;
+                border-radius: 50%;
+                box-sizing: border-box;
+                transform: scale(0);
+            }
+
+            &:has(.start-icon) {
+                &:before, &:after {
+                    left: 48px;
+                }
+            }
+
+            &:not(:has(.tnt-input-label-text)) .end-icon {
+                margin-left: 16px;
+            }
+
+            &:has(input:checked) {
+                &:after {
+                    animation: tntRadioButtonAnimation 150ms forwards;
+                }
+
+                &:before {
+                    border-color: $tnt-color-primary;
+                }
+            }
+
+            input[type=radio] {
+                cursor: inherit;
+                display: none;
+            }
+        }
+    }
+}
+
+.tnt-radio-group {
+    margin: 16px;
+
+    .tnt-input-supporting-text {
+        color: $tnt-color-on-surface-variant;
+    }
+
+    .tnt-input-validation {
+        color: $tnt-color-error;
+    }
+
+    .tnt-input-supporting-text, .tnt-input-validation {
+        margin: 0 16px 0 16px;
+        @extend .body-small;
+    }
+
+    & > .tnt-input-label > .tnt-input-container {
+        margin: 4px;
+    }
+
+    &.invalid {
+        .tnt-input-supporting-text {
+            display: none;
+        }
+
+        .end-icon, .tnt-input-label-text {
+            color: $tnt-color-error;
+        }
+    }
+
+    @include tnt-border-radius(2);
+
+    &.outlined {
+        border: 1px solid $tnt-color-outline;
+
+        & > .tnt-input-label-text {
+            background-color: $tnt-color-surface;
+            padding: 0 4px;
+            position: relative;
+            top: -10px;
+            left: 12px;
+        }
+
+        &.invalid {
+            border-color: $tnt-color-error;
+        }
+    }
+
+    &.filled {
+        background-color: $tnt-color-surface-container-highest;
+        border-bottom: solid 1px $tnt-color-on-surface-variant;
+
+        & > .tnt-input-label-text {
+            position: relative;
+            left: 16px;
+            top: 8px;
+        }
+
+        &.invalid {
+            border-color: $tnt-color-error;
+        }
+    }
+}
+
+@keyframes tntRadioButtonAnimation {
+    0% {
+        transform: scale(0);
+        animation-timing-function: ease-in;
+    }
+
+    80% {
+        transform: scale(0.7);
+        animation-timing-function: linear;
+    }
+
+    100% {
+        transform: scale(0.5);
+        animation-timing-function: ease-out;
     }
 }

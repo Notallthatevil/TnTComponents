@@ -108,7 +108,7 @@ public abstract partial class TnTInputBase<TInputType> {
     internal const string DefaultSupportingTextClass = "tnt-input-supporting-text";
     internal const string DefaultValidationClass = "tnt-input-validation";
 
-    public string GetClass() => string.Join(' ', this.GetClassDefault(), CssClass);
+    public virtual string GetClass() => string.Join(' ', this.GetClassDefault(), CssClass);
 
     protected virtual string GetFormType() => FormType.ToString().ToLower();
 
