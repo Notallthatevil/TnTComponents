@@ -1,0 +1,14 @@
+﻿@page "/datagrid"
+@using LiveTest.Client.Components
+@using TnTComponents.Enum
+@using TnTComponents.Grid
+@using TnTComponents.Grid.Columns
+<h3>
+    Static
+</h3>
+<DataGridComponent />
+
+<h3>
+    Interactive
+</h3>
+<DataGridComponent @rendermode="@RenderMode.InteractiveAuto" />

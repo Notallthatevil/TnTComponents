@@ -1,0 +1,94 @@
+﻿@using TnTComponents.Enum
+@using TnTComponents.Events
+@using TnTComponents.Grid
+@using TnTComponents.Grid.Columns
+
+
+<TnTDataGrid Items="Items" ShowRowIndex="true" Appearance="DataGridAppearance.Default" MaxHeight="500" RowClickedCallback="@RowClicked">
+    <TnTPropertyColumn Property="@((item) => item.Column1)" />
+    <TnTPropertyColumn Property="@((item) => item.Column2)" />
+    <TnTPropertyColumn Property="@((item) => item.Column3)" />
+    <TnTPropertyColumn Property="@((item) => item.Column4)" Format="Formatted {0}" />
+    <TnTPropertyColumn Property="@((item) => item.Column5)" Format="D6" />
+    <TnTPropertyColumn Property="@((item) => item.Column6)" Format="MMMM/dd/yyyy" />
+    <TnTPropertyColumn Property="@((item) => item.Column7)" />
+    <TnTPropertyColumn Property="@((item) => item.Column8)" />
+    <TnTPropertyColumn Property="@((item) => item.Column9)" />
+</TnTDataGrid>
+
+<TnTDataGrid Items="Items" Appearance="DataGridAppearance.Stripped" MaxHeight="500" RowClickedCallback="@RowClicked">
+    <TnTPropertyColumn Property="@((item) => item.Column1)" />
+    <TnTPropertyColumn Property="@((item) => item.Column2)" />
+    <TnTPropertyColumn Property="@((item) => item.Column3)" />
+    <TnTPropertyColumn Property="@((item) => item.Column4)" Format="" />
+    <TnTPropertyColumn Property="@((item) => item.Column5)" Format="D6" />
+    <TnTPropertyColumn Property="@((item) => item.Column6)" Format="MMMM/dd/yyyy" />
+    <TnTPropertyColumn Property="@((item) => item.Column7)" />
+    <TnTPropertyColumn Property="@((item) => item.Column8)" />
+    <TnTPropertyColumn Property="@((item) => item.Column9)" />
+</TnTDataGrid>
+
+<TnTDataGrid Items="Items" ShowRowIndex="true" Appearance="DataGridAppearance.Compat" MaxHeight="500" RowClickedCallback="@RowClicked">
+    <TnTPropertyColumn Property="@((item) => item.Column1)" />
+    <TnTPropertyColumn Property="@((item) => item.Column2)" />
+    <TnTPropertyColumn Property="@((item) => item.Column3)" />
+    <TnTPropertyColumn Property="@((item) => item.Column4)" Format="Formatted {0}" />
+    <TnTPropertyColumn Property="@((item) => item.Column5)" Format="D6" />
+    <TnTPropertyColumn Property="@((item) => item.Column6)" Format="MMMM/dd/yyyy" />
+    <TnTPropertyColumn Property="@((item) => item.Column7)" />
+    <TnTPropertyColumn Property="@((item) => item.Column8)" />
+    <TnTPropertyColumn Property="@((item) => item.Column9)" />
+</TnTDataGrid>
+
+<TnTDataGrid Items="Items" Appearance="DataGridAppearance.Stripped | DataGridAppearance.Compat" MaxHeight="500" RowClickedCallback="@RowClicked">
+    <TnTPropertyColumn Property="@((item) => item.Column1)" />
+    <TnTPropertyColumn Property="@((item) => item.Column2)" />
+    <TnTPropertyColumn Property="@((item) => item.Column3)" />
+    <TnTPropertyColumn Property="@((item) => item.Column4)" Format="" />
+    <TnTPropertyColumn Property="@((item) => item.Column5)" Format="D6" />
+    <TnTPropertyColumn Property="@((item) => item.Column6)" Format="MMMM/dd/yyyy" />
+    <TnTPropertyColumn Property="@((item) => item.Column7)" />
+    <TnTPropertyColumn Property="@((item) => item.Column8)" />
+    <TnTPropertyColumn Property="@((item) => item.Column9)" />
+</TnTDataGrid>
+
+@code {
+    private class DataGridItem {
+        public string Column1 { get; set; } = default!;
+        public int Column2 { get; set; }
+        public DateTime Column3 { get; set; }
+        public string Column4 { get; set; } = default!;
+        public int Column5 { get; set; }
+        public DateTime Column6 { get; set; }
+        public string Column7 { get; set; } = default!;
+        public int Column8 { get; set; }
+        public DateTime Column9 { get; set; }
+    }
+
+    private IQueryable<DataGridItem>? Items;
+
+    protected override void OnInitialized() {
+        base.OnInitialized();
+
+        var list = new List<DataGridItem>();
+        for (var i = 0; i < 100; ++i) {
+            list.Add(new() {
+                    Column1 = Guid.NewGuid().ToString(),
+                    Column2 = Random.Shared.Next(100),
+                    Column3 = new DateTime(Random.Shared.Next(1, 10000), Random.Shared.Next(1, 13), Random.Shared.Next(1, 29)),
+                    Column4 = Guid.NewGuid().ToString(),
+                    Column5 = Random.Shared.Next(100),
+                    Column6 = new DateTime(Random.Shared.Next(1, 10000), Random.Shared.Next(1, 13), Random.Shared.Next(1, 29)),
+                    Column7 = Guid.NewGuid().ToString(),
+                    Column8 = Random.Shared.Next(100),
+                    Column9 = new DateTime(Random.Shared.Next(1, 10000), Random.Shared.Next(1, 13), Random.Shared.Next(1, 29))
+                });
+        }
+
+        Items = list.AsQueryable();
+    }
+
+    private void RowClicked(DataGridRowClickEventArgs arg) {
+        Console.WriteLine($"Clicked row {arg.RowIndex}");
+    }
+}

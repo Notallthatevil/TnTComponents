@@ -1,0 +1,83 @@
+﻿.tnt-data-grid-container {
+    overflow-x: auto;
+    margin: 8px;
+
+    @include tnt-border-radius(2);
+
+    .tnt-data-grid {
+        background-color: $tnt-color-surface;
+        border-collapse: collapse;
+        min-width: 100%;
+        table-layout: fixed;
+
+        thead {
+            background-color: $tnt-color-surface-container-highest;
+            position: sticky;
+            top: 0;
+            box-shadow: 0px 1px $tnt-color-outline;
+
+            tr {
+                th {
+                    padding: 8px;
+                    margin: 0;
+                    position: relative;
+                    user-select: none;
+                    min-width: 16px;
+
+                    @extend .title-large;
+
+
+                    .tnt-resizeable {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        width: 5px;
+                        background-color: transparent;
+                        cursor: col-resize;
+                        border-right: 1px solid $tnt-color-outline;
+                    }
+
+                    .tnt-resizing {
+                        border-right: 2px solid $tnt-color-primary;
+                    }
+                }
+            }
+        }
+
+        tbody {
+            tr {
+                td {
+                    padding: 8px;
+                    min-width: 16px;
+                    white-space: nowrap;
+                }
+            }
+        }
+
+        &.stripped {
+            tr:nth-child(even) {
+                background-color: $tnt-color-surface-container-high;
+            }
+        }
+
+        &.compact {
+            width: 100%;
+
+            tr {
+                td {
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: clip;
+                }
+
+
+                &:hover {
+                    td {
+                        white-space: revert;
+                        text-overflow: revert;
+                    }
+                }
+            }
+        }
+    }
+}
