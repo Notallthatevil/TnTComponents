@@ -12,10 +12,10 @@
     <TnTPropertyColumn Property="@((item) => item.Column5)" Format="D6" />
     <TnTPropertyColumn Property="@((item) => item.Column6)" Format="MMMM/dd/yyyy" />
     <TnTPropertyColumn Property="@((item) => item.Column7)" />
-    <TnTPropertyColumn Property="@((item) => item.Column8)" />
+    <TnTPropertyColumn Property="@((item) => item.Column8)"  DefaultSort="true"/>
     <TnTPropertyColumn Property="@((item) => item.Column9)" />
 </TnTDataGrid>
-
+@*
 <TnTDataGrid Items="Items" Appearance="DataGridAppearance.Stripped" MaxHeight="500" RowClickedCallback="@RowClicked">
     <TnTPropertyColumn Property="@((item) => item.Column1)" />
     <TnTPropertyColumn Property="@((item) => item.Column2)" />
@@ -24,7 +24,7 @@
     <TnTPropertyColumn Property="@((item) => item.Column5)" Format="D6" />
     <TnTPropertyColumn Property="@((item) => item.Column6)" Format="MMMM/dd/yyyy" />
     <TnTPropertyColumn Property="@((item) => item.Column7)" />
-    <TnTPropertyColumn Property="@((item) => item.Column8)" />
+    <TnTPropertyColumn Property="@((item) => item.Column8)" DefaultSort="true" />
     <TnTPropertyColumn Property="@((item) => item.Column9)" />
 </TnTDataGrid>
 
@@ -36,7 +36,7 @@
     <TnTPropertyColumn Property="@((item) => item.Column5)" Format="D6" />
     <TnTPropertyColumn Property="@((item) => item.Column6)" Format="MMMM/dd/yyyy" />
     <TnTPropertyColumn Property="@((item) => item.Column7)" />
-    <TnTPropertyColumn Property="@((item) => item.Column8)" />
+    <TnTPropertyColumn Property="@((item) => item.Column8)" DefaultSort="true" />
     <TnTPropertyColumn Property="@((item) => item.Column9)" />
 </TnTDataGrid>
 
@@ -48,10 +48,10 @@
     <TnTPropertyColumn Property="@((item) => item.Column5)" Format="D6" />
     <TnTPropertyColumn Property="@((item) => item.Column6)" Format="MMMM/dd/yyyy" />
     <TnTPropertyColumn Property="@((item) => item.Column7)" />
-    <TnTPropertyColumn Property="@((item) => item.Column8)" />
+    <TnTPropertyColumn Property="@((item) => item.Column8)" DefaultSort="true" />
     <TnTPropertyColumn Property="@((item) => item.Column9)" />
 </TnTDataGrid>
-
+*@
 @code {
     private class DataGridItem {
         public string Column1 { get; set; } = default!;

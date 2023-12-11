@@ -18,12 +18,18 @@ public class TnTPropertyColumn<TGridItem, TProperty> : TnTColumnBase<TGridItem> 
     [Parameter]
     public string? Format { get; set; }
 
+    [Parameter]
+    public override bool Sortable { get; set; } = true;
+
+    [Parameter]
+    public override Expression<Func<TGridItem, object>>? SortFunction { get; set; }
+
+
     private Expression<Func<TGridItem, TProperty>>? _lastUsedExpression;
     private Func<TGridItem, string?>? _cellValueFunc;
 
 
     protected override void OnParametersSet() {
-        base.OnParametersSet();
 
         if (_lastUsedExpression != Property) {
             _lastUsedExpression = Property;
@@ -41,6 +47,10 @@ public class TnTPropertyColumn<TGridItem, TProperty> : TnTColumnBase<TGridItem> 
         if (ColumnHeader is null && Property.Body is MemberExpression member) {
             ColumnHeader = member.Member.Name.SplitPascalCase();
         }
+
+        SortFunction ??= gridItem => Property.Compile().Invoke(gridItem);
+
+        base.OnParametersSet();
     }
 
     internal override void RenderCellContent(RenderTreeBuilder __builder, TGridItem item) {

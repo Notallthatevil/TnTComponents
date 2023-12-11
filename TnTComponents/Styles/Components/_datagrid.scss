@@ -18,7 +18,7 @@
 
             tr {
                 th {
-                    padding: 8px;
+                    padding: 8px 36px;
                     margin: 0;
                     position: relative;
                     user-select: none;
@@ -39,6 +39,21 @@
 
                     .tnt-resizing {
                         border-right: 2px solid $tnt-color-primary;
+                    }
+
+                    &.tnt-sortable {
+                        &:hover {
+                            color: $tnt-color-primary;
+                        }
+
+                        @include enable-ripple($tnt-color-primary);
+
+                        i {
+                            position: absolute;
+                            right: 8px;
+                            user-select: none;
+                            pointer-events: none;
+                        }
                     }
                 }
             }

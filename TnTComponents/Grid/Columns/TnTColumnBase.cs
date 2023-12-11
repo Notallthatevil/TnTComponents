@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Web.Virtualization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using TnTComponents.Common;
@@ -21,15 +22,29 @@ public abstract class TnTColumnBase<TGridItem> : TnTComponentBase {
     [Parameter]
     public RenderFragment<TnTColumnBase<TGridItem>>? HeaderTemplate { get; set; }
 
+    [Parameter]
+    public virtual bool Sortable { get; set; }
+
+    [Parameter]
+    public virtual Expression<Func<TGridItem, object>>? SortFunction { get; set; }
+
+    [Parameter]
+    public bool DefaultSort { get; set; }
 
 
     [Parameter]
     public string? ColumnHeader { get; set; }
 
-    private string id = TnTComponentIdentifier.NewId();
 
+    protected override void OnParametersSet() {
+        if (Sortable && SortFunction is null) {
+            throw new InvalidOperationException($"When setting {nameof(Sortable)} to {bool.TrueString}, a {nameof(SortFunction)} must be provided!");
+        }
+        base.OnParametersSet();
+
+    }
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        Context.Grid.AddColumn(this);
+        Context.AddColumn(this);
     }
 
     internal void RenderHeaderContent(RenderTreeBuilder __builder) {

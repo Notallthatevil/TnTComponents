@@ -4,72 +4,16 @@
 @using TnTComponents.Grid.Infrastructure
 @inherits TnTComponentBase
 @typeparam TGridItem
+@implements ITnTDataGridSettings<TGridItem>
 
 
 <CascadingValue Value="_context" IsFixed="true">
-    @{
-        _columns.Clear();
-    }
-    @ChildContent
-    <DeferRendering>
-        <div class="@ContainerClass" style="@GetContainerStyle()">
-            <table @attributes=@AdditionalAttributes class="@GetClass()" style="@Style" theme="@Theme" @ref="@Element">
-                <thead>
-                    <tr>
-                        @_renderHeaderContent
-                    </tr>
-                </thead>
-                <tbody>
-                    @_renderRowContent
-                </tbody>
-            </table>
-        </div>
-    </DeferRendering>
+    <CascadingValue Value="this" IsFixed="false" TValue="ITnTDataGridSettings<TGridItem>">
+        @{
+            _context.Columns.Clear();
+        }
+        @ChildContent
+        <TnTDataGridCore TGridItem="TGridItem" @attributes="AdditionalAttributes" />
+    </CascadingValue>
 </CascadingValue>
-@if (!Appearance.HasFlag(DataGridAppearance.Compat)) {
-    <TnTPageScript Src="@($"./_content/TnTComponents/Grid/TnTDataGrid.razor.js?tntdatagrididentifier={ComponentIdentifier}")" />
-}
-@code {
 
-    private void RenderHeaderContent(RenderTreeBuilder __builder) {
-        @if (ShowRowIndex) {
-            <th></th>
-        }
-
-        foreach (var column in _columns) {
-            <th @key="@column" scope="col" nowrap="true">
-
-                @{
-                    column.RenderHeaderContent(__builder);
-                }
-            </th>
-        }
-    }
-
-    private void RenderRowContent(RenderTreeBuilder __builder) {
-        if (Items is not null) {
-            foreach (var item in Items.Select((Item, Index) => new { Item, Index = Index + 1 })) {
-                var i = item.Index;
-                var j = item.Item;
-                <tr aria-rowindex="@i"
-                    style="@(RowClickedCallback.HasDelegate ? "cursor: pointer;" : null)"
-                    @key="@j"
-                    @onclick="@((args) => RowClicked(args, j, i))">
-                    @if (ShowRowIndex) {
-                        <td>
-                            @i
-                        </td>
-                    }
-
-                    @foreach (var column in _columns) {
-                        <td @key="@column">
-                            @{
-                                column.RenderCellContent(__builder, j);
-                            }
-                        </td>
-                    }
-                </tr>
-            }
-        }
-    }
-}

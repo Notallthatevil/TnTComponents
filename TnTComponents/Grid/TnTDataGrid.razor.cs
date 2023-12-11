@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using System.Linq.Expressions;
 using System.Text;
 using System.Text.Json.Serialization;
 using TnTComponents.Enum;
@@ -41,72 +42,18 @@ public partial class TnTDataGrid<TGridItem> {
 
     [Parameter]
     public DataGridAppearance Appearance { get; set; }
+    [Parameter]
+    public IconType IconType { get; set; }
 
-    private readonly List<TnTColumnBase<TGridItem>> _columns = [];
+    [Parameter]
+    public Expression<Func<TGridItem, object>>? DefaultSort { get; set; }
+
+
     private readonly TnTDataGridContext<TGridItem> _context;
 
-    private RenderFragment _renderHeaderContent;
-    private RenderFragment _renderRowContent;
+    private TnTColumnBase<TGridItem>? _sortedOn;
 
     public TnTDataGrid() {
         _context = new(this);
-        _renderHeaderContent = RenderHeaderContent;
-        _renderRowContent = RenderRowContent;
     }
-
-    public override string GetClass() {
-        var strBuilder = new StringBuilder(base.GetClass());
-
-        if (Appearance == DataGridAppearance.Default) {
-            return strBuilder.ToString();
-        }
-
-        if ((Appearance & DataGridAppearance.Stripped) != DataGridAppearance.Default) {
-            strBuilder.Append(' ').Append("stripped");
-        }
-
-        if ((Appearance & DataGridAppearance.Compat) != DataGridAppearance.Default) {
-            strBuilder.Append(' ').Append("compact");
-        }
-        return strBuilder.ToString();
-    }
-
-    protected override void OnParametersSet() {
-        base.OnParametersSet();
-    }
-
-    internal void AddColumn(TnTColumnBase<TGridItem> column) {
-        _columns.Add(column);
-    }
-
-    private string? GetContainerStyle() {
-        var strBuilder = new StringBuilder();
-        if (MaxHeight.HasValue) {
-            strBuilder.Append("max-height:");
-            if (MaxHeight.Value <= 1) {
-                strBuilder.Append(MaxHeight * 100).Append('%');
-            }
-            else {
-                strBuilder.Append(MaxHeight).Append("px");
-            }
-            strBuilder.Append(';');
-        }
-        if (Height.HasValue) {
-            strBuilder.Append("height:");
-            if (Height.Value <= 1) {
-                strBuilder.Append(Height * 100).Append('%');
-            }
-            else {
-                strBuilder.Append(Height).Append("px");
-            }
-            strBuilder.Append(';');
-        }
-        return strBuilder.Length > 0 ? strBuilder.ToString() : null;
-    }
-
-    private async Task RowClicked(MouseEventArgs args, object? item, int rowIndex) {
-        await RowClickedCallback.InvokeAsync(new DataGridRowClickEventArgs(args, item, rowIndex));
-        StateHasChanged();
-    }
-
 }
