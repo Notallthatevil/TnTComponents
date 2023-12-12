@@ -1,27 +1,20 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TnTComponents.Events;
 using TnTComponents.Grid.Columns;
 
 namespace TnTComponents.Grid.Infrastructure;
+
 internal sealed class TnTDataGridContext<TGridItem>(TnTDataGrid<TGridItem> grid) {
 
     internal delegate void ColumnsCollected();
 
+    public string DataGridName { get; set; } = default!;
     public TnTDataGrid<TGridItem> Grid { get; } = grid;
 
+    public EventCallback<DataGridRowClickEventArgs> RowClicked { get; set; }
     public Dictionary<string, TnTDataGridRow<TGridItem>> Rows { get; set; } = [];
 
     public List<TnTColumnBase<TGridItem>> Columns = [];
-
-    public EventCallback<DataGridRowClickEventArgs> RowClicked { get; set; }
-
-    public string DataGridName { get; set; } = default!;
-
     private int _rowIndex = 0;
 
     public void RegisterRow(TnTDataGridRow<TGridItem> row) {
@@ -39,4 +32,3 @@ internal sealed class TnTDataGridContext<TGridItem>(TnTDataGrid<TGridItem> grid)
         Columns.Add(column);
     }
 }
-

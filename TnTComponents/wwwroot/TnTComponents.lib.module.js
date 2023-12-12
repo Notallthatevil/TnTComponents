@@ -222,7 +222,6 @@ window.TnTComponents = {
                 else if (tabView.classList.contains('secondary')) {
                     activeIndicator.style.left = `${boundingRect.left - diff}px`;
                     activeIndicator.style.width = `${headerElement.clientWidth}px`;
-
                 }
             }
 
@@ -270,7 +269,6 @@ window.TnTComponents = {
                     setContent(pair.contentTemplate, headerItem);
                     this.ripple(headerItem, e);
                 });
-
 
                 if (headerItem.classList.contains('active') || index === 0) {
                     if (setContent(pair.contentTemplate, headerItem, true)) {
