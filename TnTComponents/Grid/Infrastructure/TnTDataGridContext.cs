@@ -5,9 +5,6 @@ using TnTComponents.Grid.Columns;
 namespace TnTComponents.Grid.Infrastructure;
 
 internal sealed class TnTDataGridContext<TGridItem>(TnTDataGrid<TGridItem> grid) {
-
-    internal delegate void ColumnsCollected();
-
     public string DataGridName { get; set; } = default!;
     public TnTDataGrid<TGridItem> Grid { get; } = grid;
 

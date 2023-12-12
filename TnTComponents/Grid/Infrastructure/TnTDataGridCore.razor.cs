@@ -54,7 +54,6 @@ public partial class TnTDataGridCore<TGridItem> {
         _navMan.LocationChanged += Navigated!;
     }
 
-
     protected override void OnParametersSet() {
         base.OnParametersSet();
         Navigated(this, EventArgs.Empty);
