@@ -15,7 +15,7 @@
     <TnTPropertyColumn Property="@((item) => item.Column8)"  DefaultSort="true"/>
     <TnTPropertyColumn Property="@((item) => item.Column9)" />
 </TnTDataGrid>
-
+@*
 <TnTDataGrid Name="@(Name + 2)" Items="Items" Appearance="DataGridAppearance.Stripped" MaxHeight="500" RowClickedCallback="@RowClicked">
     <TnTPropertyColumn Property="@((item) => item.Column1)" />
     <TnTPropertyColumn Property="@((item) => item.Column2)" />
@@ -51,7 +51,7 @@
     <TnTPropertyColumn Property="@((item) => item.Column8)" DefaultSort="true" />
     <TnTPropertyColumn Property="@((item) => item.Column9)" />
 </TnTDataGrid>
-
+*@
 @code {
     [Parameter, EditorRequired]
     public string Name { get; set; } = default!;
@@ -66,6 +66,11 @@
         public string Column7 { get; set; } = default!;
         public int Column8 { get; set; }
         public DateTime Column9 { get; set; }
+
+        public override string ToString() {
+            return $"{Column1}\t{Column2}\t{Column3}";
+        }
+
     }
 
     private IQueryable<DataGridItem>? Items;
@@ -75,16 +80,19 @@
 
         var list = new List<DataGridItem>();
         for (var i = 0; i < 100; ++i) {
+            var guid = Guid.NewGuid().ToString();
+            var number = Random.Shared.Next(100);
+            var date = new DateTime(Random.Shared.Next(1, 10000), Random.Shared.Next(1, 13), Random.Shared.Next(1, 29));
             list.Add(new() {
-                    Column1 = Guid.NewGuid().ToString(),
-                    Column2 = Random.Shared.Next(100),
-                    Column3 = new DateTime(Random.Shared.Next(1, 10000), Random.Shared.Next(1, 13), Random.Shared.Next(1, 29)),
-                    Column4 = Guid.NewGuid().ToString(),
-                    Column5 = Random.Shared.Next(100),
-                    Column6 = new DateTime(Random.Shared.Next(1, 10000), Random.Shared.Next(1, 13), Random.Shared.Next(1, 29)),
-                    Column7 = Guid.NewGuid().ToString(),
-                    Column8 = Random.Shared.Next(100),
-                    Column9 = new DateTime(Random.Shared.Next(1, 10000), Random.Shared.Next(1, 13), Random.Shared.Next(1, 29))
+                    Column1 = guid,
+                    Column2 = number,
+                    Column3 = date,
+                    Column4 = guid,
+                    Column5 = number,
+                    Column6 = date,
+                    Column7 = guid,
+                    Column8 = number,
+                    Column9 = date
                 });
         }
 
@@ -92,6 +100,7 @@
     }
 
     private void RowClicked(DataGridRowClickEventArgs arg) {
-        Console.WriteLine($"Clicked row {arg.RowIndex}");
+        var item = arg.Item as DataGridItem;
+        Console.WriteLine($"Clicked row {item.Column2}");
     }
 }

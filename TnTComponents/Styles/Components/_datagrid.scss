@@ -83,16 +83,6 @@
             }
         }
 
-        tbody {
-            tr {
-                td {
-                    padding: 8px;
-                    min-width: 16px;
-                    white-space: nowrap;
-                    @extend .body-medium;
-                }
-            }
-        }
 
         &.stripped {
             tr:nth-child(even) {
@@ -115,6 +105,23 @@
                         white-space: revert;
                         text-overflow: revert;
                     }
+                }
+            }
+        }
+
+        tbody {
+            tr {
+                transition: 150ms;
+
+                td {
+                    padding: 8px;
+                    min-width: 16px;
+                    white-space: nowrap;
+                    @extend .body-medium;
+                }
+
+                &:hover, &:nth-child(even):hover {
+                    background-color: color-mix(in srgb, $tnt-color-secondary-container 40%, $tnt-color-surface);
                 }
             }
         }

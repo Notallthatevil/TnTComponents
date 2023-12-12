@@ -60,6 +60,10 @@ public partial class TnTDataGrid<TGridItem> {
         _context = new(this);
     }
 
+    public void Refresh() {
+        StateHasChanged();
+    }
+
     protected override void OnParametersSet() {
         base.OnParametersSet();
         if (string.IsNullOrWhiteSpace(Name)) {

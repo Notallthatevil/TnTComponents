@@ -52,14 +52,15 @@ public partial class TnTDataGridCore<TGridItem> {
     protected override void OnInitialized() {
         base.OnInitialized();
         _navMan.LocationChanged += Navigated!;
-        Navigated(null!, null!);
+    }
+
+
+    protected override void OnParametersSet() {
+        base.OnParametersSet();
+        Navigated(this, EventArgs.Empty);
     }
 
     private string BuildHref(bool sortable, int index) {
-        if (index == 0) {
-            Console.WriteLine(_sortByParam);
-        }
-
         if (sortable) {
             var queryParams = HttpUtility.ParseQueryString(new Uri(_navMan.Uri).Query);
 
