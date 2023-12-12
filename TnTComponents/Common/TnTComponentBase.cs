@@ -34,8 +34,6 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
 
     public virtual string GetClass() => this.GetClassDefault();
 
-
-
     protected override void OnAfterRender(bool firstRender) {
         base.OnAfterRender(firstRender);
         if (firstRender) {

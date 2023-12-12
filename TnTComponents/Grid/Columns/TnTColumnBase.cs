@@ -47,12 +47,14 @@ public abstract class TnTColumnBase<TGridItem> : TnTComponentBase {
         Context.AddColumn(this);
     }
 
-    internal void RenderHeaderContent(RenderTreeBuilder __builder) {
-        if (HeaderTemplate is not null) {
-            __builder.AddContent(0, HeaderTemplate(this));
+    internal RenderFragment RenderHeaderContent() {
+        if(HeaderTemplate is not null) {
+            return HeaderTemplate(this);
         }
         else {
-            __builder.AddContent(0, ColumnHeader);
+            return new RenderFragment(builder => {
+                builder.AddContent(0, ColumnHeader);
+            });
         }
     }
 

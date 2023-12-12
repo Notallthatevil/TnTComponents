@@ -99,43 +99,6 @@ export function afterWebStarted(blazor) {
 }
 
 window.TnTComponents = {
-    createResizableColumns: (tableElement) => {
-        const cols = tableElement.querySelectorAll('th');
-        [].forEach.call(cols, function (column) {
-            const resizer = column.lastChild;
-
-            resizer.style.height = `${column.offsetHeight}px`;
-
-            let x = 0;
-            let w = 0;
-
-            const mouseMoveHandler = function (e) {
-                const dx = e.clientX - x;
-                column.style.width = `${w + dx}px`;
-            };
-
-            const mouseUpHandler = function (e) {
-                resizer.classList.remove('tnt-grid-resizing');
-                document.removeEventListener('mousemove', mouseMoveHandler);
-                document.removeEventListener('mouseup', mouseUpHandler);
-            };
-
-            const mouseDownHandler = function (e) {
-                x = e.clientX;
-
-                const styles = window.getComputedStyle(column);
-                w = parseInt(styles.width, 10);
-
-                document.addEventListener('mousemove', mouseMoveHandler);
-                document.addEventListener('mouseup', mouseUpHandler);
-
-                resizer.classList.add('tnt-grid-resizing');
-            };
-
-            resizer.addEventListener('mousedown', mouseDownHandler);
-        });
-    },
-
     getBoundingRect: (element) => { return element.getBoundingClientRect(); },
     getOffsetPosition: function (element) {
         var x = {
@@ -177,15 +140,19 @@ window.TnTComponents = {
             const cols = table.querySelectorAll('th');
             [].forEach.call(cols, function (col) {
                 // Add a resizer element to the column
-                const resizer = document.createElement('div');
-                resizer.classList.add('tnt-resizeable');
+                let resizer = col.querySelector('.tnt-resizeable');
+                if (!resizer) {
+                    const resizer = document.createElement('div');
+                    resizer.classList.add('tnt-resizeable');
+                    resizer.setAttribute('data-permanent', '');
 
-                // Set the height
-                resizer.style.height = '100%';
+                    // Set the height
+                    resizer.style.height = '100%';
 
-                col.appendChild(resizer);
+                    col.appendChild(resizer);
 
-                createResizableColumn(col, resizer);
+                    createResizableColumn(col, resizer);
+                }
             });
         };
 

@@ -22,5 +22,6 @@ internal interface ITnTDataGridSettings<TGridItem> : ITnTComponentBase {
     DataGridAppearance Appearance { get; }
     IconType IconType { get; }
     Expression<Func<TGridItem, object>>? DefaultSort { get; }
+    string Name { get; }
 }
 

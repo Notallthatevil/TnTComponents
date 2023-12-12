@@ -1,2 +1,21 @@
 ﻿@inherits TnTComponentBase
 @typeparam TGridItem
+
+<tr aria-rowindex="@RowIndex"
+    style="@(_context.RowClicked.HasDelegate ? "cursor: pointer;" : null)"
+    @key="@RowIndex"
+    @onclick="@RowClicked">
+    @if (ShowRowIndex) {
+        <td>
+            @RowIndex
+        </td>
+    }
+
+    @foreach (var column in _context.Columns) {
+        <td @key="@column">
+            @{
+                column.RenderCellContent(__builder, Item);
+            }
+        </td>
+    }
+</tr>

@@ -4,7 +4,7 @@
 @using TnTComponents.Grid.Columns
 
 
-<TnTDataGrid Items="Items" ShowRowIndex="true" Appearance="DataGridAppearance.Default" MaxHeight="500" RowClickedCallback="@RowClicked">
+<TnTDataGrid Name="@(Name + 1)" Items="Items" ShowRowIndex="true" Appearance="DataGridAppearance.Default" MaxHeight="500" RowClickedCallback="@RowClicked">
     <TnTPropertyColumn Property="@((item) => item.Column1)" />
     <TnTPropertyColumn Property="@((item) => item.Column2)" />
     <TnTPropertyColumn Property="@((item) => item.Column3)" />
@@ -15,8 +15,8 @@
     <TnTPropertyColumn Property="@((item) => item.Column8)"  DefaultSort="true"/>
     <TnTPropertyColumn Property="@((item) => item.Column9)" />
 </TnTDataGrid>
-@*
-<TnTDataGrid Items="Items" Appearance="DataGridAppearance.Stripped" MaxHeight="500" RowClickedCallback="@RowClicked">
+
+<TnTDataGrid Name="@(Name + 2)" Items="Items" Appearance="DataGridAppearance.Stripped" MaxHeight="500" RowClickedCallback="@RowClicked">
     <TnTPropertyColumn Property="@((item) => item.Column1)" />
     <TnTPropertyColumn Property="@((item) => item.Column2)" />
     <TnTPropertyColumn Property="@((item) => item.Column3)" />
@@ -28,7 +28,7 @@
     <TnTPropertyColumn Property="@((item) => item.Column9)" />
 </TnTDataGrid>
 
-<TnTDataGrid Items="Items" ShowRowIndex="true" Appearance="DataGridAppearance.Compat" MaxHeight="500" RowClickedCallback="@RowClicked">
+<TnTDataGrid Name="@(Name + 3)" Items="Items" ShowRowIndex="true" Appearance="DataGridAppearance.Compat" MaxHeight="500" RowClickedCallback="@RowClicked">
     <TnTPropertyColumn Property="@((item) => item.Column1)" />
     <TnTPropertyColumn Property="@((item) => item.Column2)" />
     <TnTPropertyColumn Property="@((item) => item.Column3)" />
@@ -40,7 +40,7 @@
     <TnTPropertyColumn Property="@((item) => item.Column9)" />
 </TnTDataGrid>
 
-<TnTDataGrid Items="Items" Appearance="DataGridAppearance.Stripped | DataGridAppearance.Compat" MaxHeight="500" RowClickedCallback="@RowClicked">
+<TnTDataGrid Name="@(Name + 4)" Items="Items" Appearance="DataGridAppearance.Stripped | DataGridAppearance.Compat" MaxHeight="500" RowClickedCallback="@RowClicked">
     <TnTPropertyColumn Property="@((item) => item.Column1)" />
     <TnTPropertyColumn Property="@((item) => item.Column2)" />
     <TnTPropertyColumn Property="@((item) => item.Column3)" />
@@ -51,8 +51,11 @@
     <TnTPropertyColumn Property="@((item) => item.Column8)" DefaultSort="true" />
     <TnTPropertyColumn Property="@((item) => item.Column9)" />
 </TnTDataGrid>
-*@
+
 @code {
+    [Parameter, EditorRequired]
+    public string Name { get; set; } = default!;
+
     private class DataGridItem {
         public string Column1 { get; set; } = default!;
         public int Column2 { get; set; }

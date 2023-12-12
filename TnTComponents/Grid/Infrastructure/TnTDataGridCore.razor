@@ -1,11 +1,37 @@
 ﻿@using Microsoft.AspNetCore.Components.Rendering
 @typeparam TGridItem
 @inherits TnTComponentBase
+@implements IDisposable
+
 <div class="@_gridSettings.ContainerClass" style="@GetContainerStyle()">
     <table @attributes=@AdditionalAttributes class="@GetClass()" style="@Style" theme="@Theme" @ref="@Element">
         <thead>
             <tr>
-                @_renderHeaderContent
+                @if (_gridSettings.ShowRowIndex) {
+                    <th></th>
+                }
+
+                @foreach (var item in _context.Columns.Select((Column, Index) => new { Column, Index })) {
+                    var column = item.Column;
+                    var index = item.Index;
+                    var defaultSorted = false;
+                    if (_sortedOn == null && column.DefaultSort) {
+                        DefaultSort(column);
+                    }
+                    <th @key="@column"
+                        class="@(column.Sortable ? "tnt-sortable" : string.Empty)"
+                        scope="col"
+                        nowrap="nowrap">
+
+                        <a href="@BuildHref(column.Sortable, index)" class="@GetAnchorClass(index) @(_sortedOn == column ? "active" : string.Empty)">
+                            @column.RenderHeaderContent()
+
+                            @if (_sortedOn == column) {
+                                @TnTIconComponent.RenderIcon(_gridSettings.IconType, "keyboard_arrow_down")
+                            }
+                        </a>
+                    </th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -15,69 +41,23 @@
 </div>
 
 @if (!_gridSettings.Appearance.HasFlag(DataGridAppearance.Compat)) {
-    <TnTPageScript Src="@($"./_content/TnTComponents/Grid/TnTDataGrid.razor.js?tntdatagrididentifier={ComponentIdentifier}")" />
+    <TnTPageScript Src="@($"./_content/TnTComponents/Grid/Infrastructure/TnTDataGridCore.razor.js?tntdatagrididentifier={ComponentIdentifier}")" />
 }
 <TnTPageScript Src="./_content/TnTComponents/TnTButton.razor.js?class=tnt-sortable" />
 
 @code {
 
     private void RenderHeaderContent(RenderTreeBuilder __builder) {
-        @if (_gridSettings.ShowRowIndex) {
-            <th></th>
-        }
 
-        foreach (var column in _context.Columns) {
-            if (_sortedOn == null && column.DefaultSort) {
-                SortOn(column);
-            }
-            if (column.Sortable && Interactive) {
-                <th @key="@column" class="tnt-sortable" scope="col" nowrap="nowrap" style="cursor: pointer;" @onclick="@(() => SortOn(column))">
-                    @{
-                        column.RenderHeaderContent(__builder);
-                    }
-                    @if (_sortedOn == column) {
-                        if (_ascending) {
-                            @TnTIconComponent.RenderIcon(_gridSettings.IconType, "keyboard_arrow_up")
-                        }
-                        else {
-                            @TnTIconComponent.RenderIcon(_gridSettings.IconType, "keyboard_arrow_down")
-                        }
-                    }
-                </th>
-            }
-            else {
-                <th @key="@column" scope="col" nowrap="nowrap">
-                    @{
-                        column.RenderHeaderContent(__builder);
-                    }
-                </th>
-            }
-        }
     }
 
     private void RenderRowContent(RenderTreeBuilder __builder) {
         if (_gridSettings.Items is not null) {
             foreach (var item in _gridSettings.Items.Select((Item, Index) => new { Item, Index = Index + 1 })) {
-                var i = item.Index;
-                var j = item.Item;
-                <tr aria-rowindex="@i"
-                    style="@(_gridSettings.RowClickedCallback.HasDelegate && Interactive ? "cursor: pointer;" : null)"
-                    @key="@j"
-                    @onclick="@((args) => RowClicked(args, j, i))">
-                    @if (_gridSettings.ShowRowIndex) {
-                        <td>
-                            @i
-                        </td>
-                    }
+                var index = item.Index;
+                var rowItem = item.Item;
 
-                    @foreach (var column in _context.Columns) {
-                        <td @key="@column">
-                            @{
-                                column.RenderCellContent(__builder, j);
-                            }
-                        </td>
-                    }
-                </tr>
+                <TnTDataGridRow Item="rowItem" ShowRowIndex="@_gridSettings.ShowRowIndex" />
             }
         }
     }

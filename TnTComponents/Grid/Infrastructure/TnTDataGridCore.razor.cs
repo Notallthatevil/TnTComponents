@@ -1,27 +1,39 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using System;
+using System.Collections.Specialized;
 using System.Text;
+using System.Web;
 using TnTComponents.Enum;
 using TnTComponents.Events;
 using TnTComponents.Grid.Columns;
 
 namespace TnTComponents.Grid.Infrastructure;
 public partial class TnTDataGridCore<TGridItem> {
+
     [CascadingParameter]
     private TnTDataGridContext<TGridItem> _context { get; set; } = default!;
 
     [CascadingParameter]
     private ITnTDataGridSettings<TGridItem> _gridSettings { get; set; } = default!;
 
-    private RenderFragment _renderHeaderContent;
     private RenderFragment _renderRowContent;
 
     private TnTColumnBase<TGridItem>? _sortedOn;
-    private bool _ascending = true;
+
+    [Inject]
+    private NavigationManager _navMan { get; set; } = default!;
+
+    private string _sortByParam => Uri.EscapeDataString(_context.DataGridName) + "sortonindex";
+    private string _sortAscParam => Uri.EscapeDataString(_context.DataGridName) + "asc";
 
     public TnTDataGridCore() {
-        _renderHeaderContent = RenderHeaderContent;
         _renderRowContent = RenderRowContent;
+    }
+
+    public void Dispose() {
+        GC.SuppressFinalize(this);
+        _navMan.LocationChanged -= Navigated;
     }
 
     public override string GetClass() {
@@ -43,41 +55,28 @@ public partial class TnTDataGridCore<TGridItem> {
 
     protected override void OnInitialized() {
         base.OnInitialized();
-        Console.WriteLine($"Init {_context.Columns.Count}");
-
+        _navMan.LocationChanged += Navigated!;
+        Navigated(null!, null!);
     }
 
-    protected override void OnParametersSet() {
-        base.OnParametersSet();
-        Console.WriteLine($"Parameters {_context.Columns.Count}");
-    }
+    private void Navigated(object sender, EventArgs e) {
+        var queryParams = HttpUtility.ParseQueryString(new Uri(_navMan.Uri).Query);
+        var sortBy = queryParams![_sortByParam];
+        var ascending = queryParams[_sortAscParam];
 
-    protected override void OnAfterRender(bool firstRender) {
-        base.OnAfterRender(firstRender);
+        if (sortBy is not null && int.TryParse(sortBy, out var index)) {
+            var column = _context.Columns[index];
 
-        if (firstRender) {
-            StateHasChanged();
-        }
-        Console.WriteLine($"Render {_context.Columns.Count}");
-
-    }
-
-    private async Task RowClicked(MouseEventArgs args, object? item, int rowIndex) {
-        await _gridSettings.RowClickedCallback.InvokeAsync(new DataGridRowClickEventArgs(args, item, rowIndex));
-    }
-
-    private void SortOn(TnTColumnBase<TGridItem> column) {
-        if (_gridSettings.Items is not null) {
-            if (_sortedOn == column && _ascending) {
-                _gridSettings.Items = _gridSettings.Items.OrderByDescending(column.SortFunction!);
-                _ascending = false;
+            if (column is not null) {
+                if (ascending is not null) {
+                    _gridSettings.Items = _gridSettings.Items!.OrderBy(column.SortFunction!);
+                }
+                else {
+                    _gridSettings.Items = _gridSettings.Items!.OrderByDescending(column.SortFunction!);
+                }
+                _sortedOn = column;
+                StateHasChanged();
             }
-            else {
-                _gridSettings.Items = _gridSettings.Items?.OrderBy(column.SortFunction!);
-                _ascending = true;
-            }
-            StateHasChanged();
-            _sortedOn = column;
         }
     }
 
@@ -106,4 +105,60 @@ public partial class TnTDataGridCore<TGridItem> {
         return strBuilder.Length > 0 ? strBuilder.ToString() : null;
     }
 
+    private void DefaultSort(TnTColumnBase<TGridItem> column) {
+        if (column.Sortable) {
+            _gridSettings.Items = _gridSettings.Items!.OrderByDescending(column.SortFunction!);
+            _sortedOn = column;
+            StateHasChanged();
+        }
+    }
+
+    private string BuildHref(bool sortable, int index) {
+        if (index == 0) {
+            Console.WriteLine(_sortByParam);
+        }
+
+        if (sortable) {
+            var queryParams = HttpUtility.ParseQueryString(new Uri(_navMan.Uri).Query);
+
+            var sortBy = queryParams![_sortByParam];
+            var asc = queryParams![_sortAscParam];
+
+            if (sortBy is not null && sortBy == index.ToString()) {
+                if (asc is null) {
+                    queryParams[_sortAscParam] = bool.TrueString;
+                }
+                else {
+                    queryParams.Remove(_sortAscParam);
+                }
+            }
+            else {
+                queryParams[_sortByParam] = index.ToString();
+                queryParams.Remove(_sortAscParam);
+            }
+
+            return new UriBuilder(_navMan.Uri) {
+                Query = queryParams.ToString()
+            }.ToString();
+        }
+        else {
+            return string.Empty;
+        }
+    }
+    private string GetAnchorClass(int index) {
+        var queryParams = HttpUtility.ParseQueryString(new Uri(_navMan.Uri).Query);
+
+        var sortBy = queryParams![_sortByParam];
+        var asc = queryParams![_sortAscParam];
+
+        var stringBuilder = new StringBuilder();
+        if (sortBy == index.ToString()) {
+            stringBuilder.Append("active");
+
+            if (asc is not null) {
+                stringBuilder.Append(' ').Append("ascending");
+            }
+        }
+        return stringBuilder.ToString();
+    }
 }

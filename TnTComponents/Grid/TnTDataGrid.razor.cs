@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 using System.Linq.Expressions;
 using System.Text;
 using System.Text.Json.Serialization;
+using TnTComponents.Common;
 using TnTComponents.Enum;
 using TnTComponents.Events;
 using TnTComponents.Grid.Columns;
@@ -46,6 +47,9 @@ public partial class TnTDataGrid<TGridItem> {
     public IconType IconType { get; set; }
 
     [Parameter]
+    public string Name { get; set; } = default!;
+
+    [Parameter]
     public Expression<Func<TGridItem, object>>? DefaultSort { get; set; }
 
 
@@ -55,5 +59,16 @@ public partial class TnTDataGrid<TGridItem> {
 
     public TnTDataGrid() {
         _context = new(this);
+    }
+
+    protected override void OnParametersSet() {
+        base.OnParametersSet();
+        if (string.IsNullOrWhiteSpace(Name)) {
+            throw new InvalidOperationException($"{nameof(Name)} must be provided!");
+        }
+
+
+        _context.RowClicked = RowClickedCallback;
+        _context.DataGridName = Name;
     }
 }

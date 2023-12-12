@@ -13,7 +13,9 @@
             _context.Columns.Clear();
         }
         @ChildContent
-        <TnTDataGridCore TGridItem="TGridItem" @attributes="AdditionalAttributes" />
+        <DeferRendering>
+            <TnTDataGridCore TGridItem="TGridItem" @attributes="AdditionalAttributes" />
+        </DeferRendering>
     </CascadingValue>
 </CascadingValue>
 
