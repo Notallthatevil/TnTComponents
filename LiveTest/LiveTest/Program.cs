@@ -1,4 +1,10 @@
+using LiveTest.Client.Repositories;
 using LiveTest.Components;
+using LiveTest.Client.Data;
+using LiveTest.Internal;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddLogging();
@@ -7,6 +13,8 @@ builder.Services.AddLogging();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+
+builder.Services.AddScoped<IDataGridRepository, DataGridRepository>();
 
 var app = builder.Build();
 
@@ -38,5 +46,10 @@ app.MapPost("/submitStaticForm", async (IFormFileCollection myFiles) => {
         await file.CopyToAsync(stream);
     }
 });
+
+app.MapGet("/getDataGridItems", async ([FromServices] IDataGridRepository repo) => {
+    return await repo.Get(null);
+});
+
 
 app.Run();
