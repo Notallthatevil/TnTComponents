@@ -44,8 +44,8 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
     protected override void OnParametersSet() {
         base.OnParametersSet();
 
-        var dict = AdditionalAttributes is not null ? AdditionalAttributes.ToDictionary() : new Dictionary<string, object>();
-        dict.TryAdd(ComponentIdentifier, string.Empty);
+        var dict = AdditionalAttributes is not null ? AdditionalAttributes.ToDictionary() : [];
+        dict.TryAdd(TnTCustomIdentifier, ComponentIdentifier);
         AdditionalAttributes = dict;
     }
 }

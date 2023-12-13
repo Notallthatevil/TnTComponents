@@ -92,6 +92,8 @@ export function afterWebStarted(blazor) {
 }
 
 window.TnTComponents = {
+    customAttribute: "tnt-custom-identifier",
+
     getBoundingRect: (element) => { return element.getBoundingClientRect(); },
     getOffsetPosition: function (element) {
         var x = {

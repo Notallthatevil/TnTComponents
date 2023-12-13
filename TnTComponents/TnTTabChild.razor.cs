@@ -36,7 +36,7 @@ public partial class TnTTabChild : IDisposable {
     [Inject]
     private NavigationManager _navMan { get; set; } = default!;
 
-    private string tabChildParam => $"{Uri.EscapeDataString(_context.Name)}";
+    //private string tabChildParam => $"{Uri.EscapeDataString(_context.Name)}";
 
     public void Dispose() {
         GC.SuppressFinalize(this);

@@ -11,8 +11,6 @@ internal class TabViewContext(TnTTabView parentView) {
 
     public readonly TnTTabView ParentView = parentView;
 
-    public string Name { get; set; } = default!;
-
     private Dictionary<string, TnTTabChild> _tabChildren = [];
 
     public void AddChild(TnTTabChild child) {

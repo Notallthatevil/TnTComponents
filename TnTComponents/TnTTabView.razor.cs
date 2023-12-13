@@ -38,12 +38,6 @@ public partial class TnTTabView {
 
     protected override void OnParametersSet() {
         base.OnParametersSet();
-
-        if (string.IsNullOrWhiteSpace(Name)) {
-            throw new InvalidOperationException($"{nameof(Name)} must be provided to {nameof(TnTTabView)}");
-        }
-
-        _context.Name = Name;
     }
 
     public override string GetClass() => $"{base.GetClass()} {Appearance.ToString().ToLower()}";
