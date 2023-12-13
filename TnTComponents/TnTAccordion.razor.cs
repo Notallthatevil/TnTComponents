@@ -16,10 +16,4 @@ public partial class TnTAccordion {
 
     [Parameter]
     public override string? Class { get; set; } = "tnt-accordion";
-
-    private string _headerIdentifier = TnTComponentIdentifier.NewId();
-    private string _contentIdentifier = TnTComponentIdentifier.NewId();
-
-    private IReadOnlyDictionary<string, object> _headerAttribute => new Dictionary<string, object>() { { _headerIdentifier, string.Empty } };
-    private IReadOnlyDictionary<string, object> _contentAttribute => new Dictionary<string, object>() { { _contentIdentifier, string.Empty } };
 }

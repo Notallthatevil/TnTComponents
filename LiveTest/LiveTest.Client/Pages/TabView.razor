@@ -3,7 +3,7 @@
 @using TnTComponents.Enum
 
 
-<TnTTabView Appearance="TabViewAppearance.Primary">
+<TnTTabView Name="TabView1" Appearance="TabViewAppearance.Primary">
     @for (var i = 0; i < TabCount; ++i) {
         var j = i;
         var header = $"Header{j + 1}";
@@ -22,7 +22,7 @@
 
 
 
-<TnTTabView Appearance="TabViewAppearance.Primary">
+<TnTTabView Name="TabView2" Appearance="TabViewAppearance.Primary">
     @for (var i = 0; i < TabCount; ++i) {
         var j = i;
         var header = $"Header{j + 1}";
@@ -39,7 +39,7 @@
     }
 </TnTTabView>
 
-<TnTTabView Appearance="TabViewAppearance.Secondary">
+<TnTTabView Name="TabView3" Appearance="TabViewAppearance.Secondary">
     @for (var i = 0; i < TabCount; ++i) {
         var j = i;
         var header = $"Header{j + 1}";
@@ -58,7 +58,7 @@
 
 
 
-<TnTTabView Appearance="TabViewAppearance.Secondary">
+<TnTTabView Name="TabView4" Appearance="TabViewAppearance.Secondary">
     @for (var i = 0; i < TabCount; ++i) {
         var j = i;
         var header = $"Header{j + 1}";
@@ -79,4 +79,12 @@
     [Parameter]
     [SupplyParameterFromQuery]
     public int TabCount { get; set; } = 3;
+
+
+    protected override void OnParametersSet() {
+        base.OnParametersSet();
+        if(TabCount < 3) {
+            TabCount = 3;
+        }
+    }
 }

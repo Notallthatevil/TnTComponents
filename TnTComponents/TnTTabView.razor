@@ -1,17 +1,26 @@
 ﻿@using Microsoft.AspNetCore.Components.Sections
 @inherits TnTComponentBase
 
-
-<tnt-tab-view @attributes="AdditionalAttributes" class="@GetClass()" style="@Style" theme="@Theme">
-    <div>
-        <div class="@TabHeaderClass">
-        </div>
-    </div>
-    <span id="tnt-tab-active-indicator" class="@TabActiveIndicatorClass"></span>
-    <div class="@TabContentClass">
-    </div>
+<CascadingValue Value="_context">
+    <tnt-tab-view @attributes="AdditionalAttributes" class="@GetClass()" style="@Style" theme="@Theme">
+        <DeferRendering>
+            <div>
+                <div id="tnt-tab-header-area" class="@TabHeaderClass">
+                    @foreach(var child in _context.TabChildren.Values) {
+                        @child?.RenderTabHeader()
+                    }
+                </div>
+            </div>
+            <span id="tnt-tab-active-indicator" class="@TabActiveIndicatorClass"></span>
+            <div id="tnt-tab-content-area" class="@TabContentClass">
+                @foreach(var child in _context.TabChildren.Values) {
+                    @child?.RenderTabContent()
+                }
+            </div>
+        </DeferRendering>
+    </tnt-tab-view>
     @ChildContent
-</tnt-tab-view>
+</CascadingValue>
 
 
-<TnTPageScript Src="@($"./_content/TnTComponents/TnTTabView.razor.js?tabviewidentifier={ComponentIdentifier}")" />
+<TnTPageScript Src="@($"./_content/TnTComponents/TnTTabView.razor.js")" />

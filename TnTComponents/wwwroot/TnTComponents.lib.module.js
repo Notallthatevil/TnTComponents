@@ -86,15 +86,8 @@ function setupPageScriptElement() {
         }
     });
 }
-
-function setupTabViewElement() {
-    customElements.define('tnt-tab-view', class extends HTMLElement {
-    });
-}
-
 export function afterWebStarted(blazor) {
     setupPageScriptElement();
-    setupTabViewElement();
     blazor.addEventListener('enhancedload', onEnhancedLoad);
 }
 

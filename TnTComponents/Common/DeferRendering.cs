@@ -6,12 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TnTComponents.Grid.Infrastructure;
-public sealed class DeferRendering : ComponentBase {
+namespace TnTComponents.Common;
+public sealed class DeferRendering : ComponentBase
+{
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
 
-    protected override void BuildRenderTree(RenderTreeBuilder builder) {
+    protected override void BuildRenderTree(RenderTreeBuilder builder)
+    {
         builder.AddContent(0, ChildContent);
     }
 }

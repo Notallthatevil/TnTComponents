@@ -1,23 +1,37 @@
-export function onUpdate() {
-    const url = new URL(import.meta.url);
-    const headerIdentifier = url.searchParams.get('tntheaderidentifier');
-    const contentIdentifier = url.searchParams.get('tntcontentidentifier');
+class TnTAccordion extends HTMLElement {
+    constructor() {
+        super();
+    }
 
-    if (headerIdentifier && contentIdentifier) {
-        let header = document.querySelector(`[${headerIdentifier}]`);
-        let content = document.querySelector(`[${contentIdentifier}]`);
+    connectedCallback() {
+        this.header = this.firstChild;
+        this.content = this.lastChild;
 
-        if (header && content) {
-            header.addEventListener('click', (e) => {
-                if (content.clientHeight) {
-                    content.style.height = 0;
-                    content.classList.remove('visible');
+        if (this.header && this.content) {
+            this.header.addEventListener('click', (e) => {
+                if (this.content.clientHeight) {
+                    this.content.style.height = 0;
+                    this.content.classList.remove('visible');
                 }
                 else {
-                    content.style.height = `${content.firstChild.clientHeight}px`;
-                    content.classList.add('visible');
+                    this.content.style.height = `${this.content.firstChild.clientHeight}px`;
+                    this.content.classList.add('visible');
                 }
-            })
+            });
         }
     }
+
+    disconnectedCallback() {
+    }
+
+    adoptedCallback() {
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+    }
 }
+
+export function onLoad() {
+    customElements.define('tnt-accordion', TnTAccordion);
+}
+
