@@ -48,6 +48,8 @@ internal interface ITnTDataGridSettings<TGridItem> : ITnTComponentBase {
     /// </summary>
     IQueryable<TGridItem>? Items { get; set; }
 
+    TnTItemsProvider<TGridItem>? ItemsProvider { get; }
+
     /// <summary>
     /// Gets the maximum height of the table.
     /// </summary>

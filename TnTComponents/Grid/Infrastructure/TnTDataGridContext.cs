@@ -12,6 +12,7 @@ internal sealed class TnTDataGridContext<TGridItem>(TnTDataGrid<TGridItem> grid)
     public Dictionary<string, TnTDataGridRow<TGridItem>> Rows { get; set; } = [];
 
     public List<TnTColumnBase<TGridItem>> Columns = [];
+
     private int _rowIndex = 0;
 
     public void RegisterRow(TnTDataGridRow<TGridItem> row) {

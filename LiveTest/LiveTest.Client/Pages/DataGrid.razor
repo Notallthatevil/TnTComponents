@@ -1,18 +1,27 @@
 ﻿@page "/datagrid"
 @using LiveTest.Client.Components
+@using TnTComponents
 @using TnTComponents.Enum
 @using TnTComponents.Grid
 @using TnTComponents.Grid.Columns
-<h3>
-    Static
-</h3>
-<DataGridComponent Name="Static" />
-<h3>
-    Interactive Server
-</h3>
-<DataGridComponent Name="Server" @rendermode="@RenderMode.InteractiveServer" />
 
-<h3>
-    Interactive Web Assembly
-</h3>
-<DataGridComponent Name="Webassembly" @rendermode="@RenderMode.InteractiveWebAssembly" />
+<TnTTabView>
+    <TnTTabChild Title="All Items">
+        <h3>
+            Static
+        </h3>
+        <DataGridComponent Name="Static" />
+        <h3>
+            Interactive Server
+        </h3>
+        <DataGridComponent Name="Server" @rendermode="@RenderMode.InteractiveServer" />
+
+        <h3>
+            Interactive Web Assembly
+        </h3>
+        <DataGridComponent Name="Webassembly" @rendermode="@RenderMode.InteractiveWebAssembly" />
+    </TnTTabChild>
+    <TnTTabChild Title="Paginated">
+
+    </TnTTabChild>
+</TnTTabView>

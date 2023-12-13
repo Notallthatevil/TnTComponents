@@ -3,21 +3,19 @@
 @inherits TnTComponentBase
 @implements IDisposable
 
-<CascadingValue Value="this" IsFixed="true">
-    <div class="@_gridSettings.ContainerClass" style="@GetContainerStyle()">
-        <table @attributes=@AdditionalAttributes class="@GetClass()" style="@Style" theme="@Theme" @ref="@Element">
-            <thead>
-                <tr>
-                    @if (_gridSettings.ShowRowIndex) {
+<div class="@_gridSettings.ContainerClass" style="@GetContainerStyle()">
+    <table @attributes=@AdditionalAttributes class="@GetClass()" style="@Style" theme="@Theme" @ref="@Element">
+        <thead>
+            <tr>
+                @if (_gridSettings.ShowRowIndex) {
                     <th></th>
-                    }
+                }
 
-                    @foreach (var item in _context.Columns.Select((Column, Index) => new { Column, Index })) {
+                @foreach (var item in _context.Columns.Select((Column, Index) => new { Column, Index })) {
                     var column = item.Column;
                     var index = item.Index;
-                    var defaultSorted = false;
                     if (_sortedOn == null && column.DefaultSort) {
-                    DefaultSort(column);
+                        DefaultSort(column);
                     }
                     <th @key="@column"
                         class="@(column.Sortable ? "tnt-sortable" : string.Empty)"
@@ -28,26 +26,25 @@
                             @column.RenderHeaderContent()
 
                             @if (_sortedOn == column) {
-                            @TnTIconComponent.RenderIcon(_gridSettings.IconType, "keyboard_arrow_down")
+                                @TnTIconComponent.RenderIcon(_gridSettings.IconType, "keyboard_arrow_down")
                             }
                         </a>
                     </th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                @if (_gridSettings.Items is not null) {
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (_gridSettings.Items is not null) {
                 foreach (var item in _gridSettings.Items.Select((Item, Index) => new { Item, Index = Index + 1 })) {
-                var index = item.Index;
-                var rowItem = item.Item;
+                    var index = item.Index;
+                    var rowItem = item.Item;
 
-                <TnTDataGridRow Item="rowItem" ShowRowIndex="@_gridSettings.ShowRowIndex" />
+                    <TnTDataGridRow Item="rowItem" ShowRowIndex="@_gridSettings.ShowRowIndex" />
                 }
-                }
-            </tbody>
-        </table>
-    </div>
-</CascadingValue>
+            }
+        </tbody>
+    </table>
+</div>
 
 @if (!_gridSettings.Appearance.HasFlag(DataGridAppearance.Compat)) {
     <TnTPageScript Src="@($"./_content/TnTComponents/Grid/Infrastructure/TnTDataGridCore.razor.js?tntdatagrididentifier={ComponentIdentifier}")" />

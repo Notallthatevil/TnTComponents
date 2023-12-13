@@ -18,9 +18,6 @@ public partial class TnTDataGridRow<TGridItem> : IDisposable {
     [CascadingParameter]
     private TnTDataGridContext<TGridItem> _context { get; set; } = default!;
 
-    [CascadingParameter]
-    private TnTDataGridCore<TGridItem> _gridCore { get; set; } = default!;
-
     public void Dispose() {
         GC.SuppressFinalize(this);
         _context.RemoveRow(this);

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using System.Linq.Expressions;
 using TnTComponents.Enum;
 using TnTComponents.Events;
+using TnTComponents.Grid;
 using TnTComponents.Grid.Columns;
 using TnTComponents.Grid.Infrastructure;
 
@@ -38,6 +39,10 @@ public partial class TnTDataGrid<TGridItem> {
     public IQueryable<TGridItem>? Items { get; set; }
 
     [Parameter]
+    public TnTItemsProvider<TGridItem>? ItemsProvider { get; set; }
+
+
+    [Parameter]
     public double? MaxHeight { get; set; }
 
     [Parameter]
@@ -69,8 +74,18 @@ public partial class TnTDataGrid<TGridItem> {
         if (string.IsNullOrWhiteSpace(Name)) {
             throw new InvalidOperationException($"{nameof(Name)} must be provided!");
         }
+            
+        if(Items is null && ItemsProvider is null) {
+            throw new InvalidOperationException($"A {nameof(TnTDataGrid<TGridItem>)} must be provided with either {nameof(Items)} or {nameof(ItemsProvider)}");
+        }
+
+        if(Items is not null && ItemsProvider is not null) {
+            throw new InvalidOperationException($"A {nameof(TnTDataGrid<TGridItem>)} must be provided with either {nameof(Items)} OR {nameof(ItemsProvider)}, but not both");
+        }
 
         _context.RowClicked = RowClickedCallback;
         _context.DataGridName = Name;
     }
 }
+
+public delegate Task<TnTItemsProviderResult<TGridItem>> TnTItemsProvider<TGridItem>(TnTItemsProviderRequest request);
