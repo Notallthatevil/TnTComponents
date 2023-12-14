@@ -1,7 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Rendering
 @typeparam TGridItem
 @inherits TnTComponentBase
-@implements IDisposable
 
 <div class="@_gridSettings.ContainerClass" style="@GetContainerStyle()">
     <DeferRendering>
@@ -48,7 +47,7 @@
 </div>
 
 @if (!_gridSettings.Appearance.HasFlag(DataGridAppearance.Compat)) {
-    <TnTPageScript Src="@($"./_content/TnTComponents/Grid/Infrastructure/TnTDataGridCore.razor.js")" />
+    <TnTPageScript Src="./_content/TnTComponents/Grid/Infrastructure/TnTDataGridCore.razor.js" />
 }
 <TnTPageScript Src="./_content/TnTComponents/TnTButton.razor.js?class=tnt-sortable" />
 

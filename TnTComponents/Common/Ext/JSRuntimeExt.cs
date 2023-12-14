@@ -1,9 +1,24 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System.Runtime.CompilerServices;
 
 namespace TnTComponents.Common.Ext;
 
 internal static class JSRuntimeExt {
+
+    public static async Task<IJSObjectReference> Import(this IJSRuntime jsRuntime, string path) {
+        return await jsRuntime.InvokeAsync<IJSObjectReference>("import", path);
+    }
+
+    public static async Task<IJSObjectReference> ImportIsolatedJs<T>(this IJSRuntime jsRuntime) {
+        var @namespace = typeof(T).Namespace?.Split('.') ?? [];
+        var name = typeof(T).Name;
+        if(name.Contains('`')) {
+            name = name.Substring(0, name.IndexOf('`'));
+        }
+        var jsPath = $"./_content/{string.Join('/', @namespace)}/{name}.razor.js";
+        return await jsRuntime.Import(jsPath);
+    }
 
     public static async Task<double> ConvertRemToPixels(this IJSRuntime jsRuntime, double rem) {
         return await jsRuntime.InvokeAsync<double>("TnTComponents.remToPx", rem);

@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System.Text;
 using System.Web;
+using TnTComponents.Common.Ext;
 using TnTComponents.Enum;
 using TnTComponents.Grid.Columns;
 
 namespace TnTComponents.Grid.Infrastructure;
 
-public partial class TnTDataGridCore<TGridItem> {
+public partial class TnTDataGridCore<TGridItem> : IAsyncDisposable {
 
     [CascadingParameter]
     private TnTDataGridContext<TGridItem> _context { get; set; } = default!;
@@ -17,6 +19,11 @@ public partial class TnTDataGridCore<TGridItem> {
     [Inject]
     private NavigationManager _navMan { get; set; } = default!;
 
+    [Inject]
+    private IJSRuntime _jsRuntime { get; set; } = default!;
+
+    private IJSObjectReference? _module;
+
     private string _sortAscParam => Uri.EscapeDataString(_context.DataGridName) + "asc";
     private string _sortByParam => Uri.EscapeDataString(_context.DataGridName) + "sortonindex";
     private RenderFragment _renderRowContent;
@@ -25,11 +32,6 @@ public partial class TnTDataGridCore<TGridItem> {
 
     public TnTDataGridCore() {
         _renderRowContent = RenderRowContent;
-    }
-
-    public void Dispose() {
-        GC.SuppressFinalize(this);
-        _navMan.LocationChanged -= Navigated;
     }
 
     public override string GetClass() {
@@ -57,6 +59,12 @@ public partial class TnTDataGridCore<TGridItem> {
     protected override void OnParametersSet() {
         base.OnParametersSet();
         Navigated(this, EventArgs.Empty);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        await base.OnAfterRenderAsync(firstRender);
+        _module ??= await _jsRuntime.ImportIsolatedJs<TnTDataGridCore<TGridItem>>();
+        await _module.InvokeVoidAsync("tntInitResizable", Element);
     }
 
     private string BuildHref(bool sortable, int index) {
@@ -157,5 +165,16 @@ public partial class TnTDataGridCore<TGridItem> {
                 StateHasChanged();
             }
         }
+    }
+
+    public async ValueTask DisposeAsync() {
+        try {
+
+            _navMan.LocationChanged -= Navigated;
+            if (_module is not null) {
+                await _module.DisposeAsync();
+            }
+        }
+        catch (JSDisconnectedException) { }
     }
 }
