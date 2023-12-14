@@ -5,7 +5,7 @@
 
 <div class="@_gridSettings.ContainerClass" style="@GetContainerStyle()">
     <DeferRendering>
-        <table @attributes=@AdditionalAttributes class="@GetClass()" style="@Style" theme="@Theme" @ref="@Element">
+        <table is="tnt-table" @attributes=@AdditionalAttributes class="@GetClass()" style="@Style" theme="@Theme" @ref="@Element">
             <thead>
                 <tr>
                     @if (_gridSettings.ShowRowIndex) {
@@ -48,7 +48,7 @@
 </div>
 
 @if (!_gridSettings.Appearance.HasFlag(DataGridAppearance.Compat)) {
-    <TnTPageScript Src="@($"./_content/TnTComponents/Grid/Infrastructure/TnTDataGridCore.razor.js?tntdatagrididentifier={ComponentIdentifier}")" />
+    <TnTPageScript Src="@($"./_content/TnTComponents/Grid/Infrastructure/TnTDataGridCore.razor.js")" />
 }
 <TnTPageScript Src="./_content/TnTComponents/TnTButton.razor.js?class=tnt-sortable" />
 

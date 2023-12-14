@@ -74,14 +74,6 @@ public partial class TnTDataGrid<TGridItem> {
         if (string.IsNullOrWhiteSpace(Name)) {
             throw new InvalidOperationException($"{nameof(Name)} must be provided!");
         }
-            
-        if(Items is null && ItemsProvider is null) {
-            throw new InvalidOperationException($"A {nameof(TnTDataGrid<TGridItem>)} must be provided with either {nameof(Items)} or {nameof(ItemsProvider)}");
-        }
-
-        if(Items is not null && ItemsProvider is not null) {
-            throw new InvalidOperationException($"A {nameof(TnTDataGrid<TGridItem>)} must be provided with either {nameof(Items)} OR {nameof(ItemsProvider)}, but not both");
-        }
 
         _context.RowClicked = RowClickedCallback;
         _context.DataGridName = Name;
