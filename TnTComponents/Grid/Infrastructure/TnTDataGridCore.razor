@@ -4,46 +4,47 @@
 @implements IDisposable
 
 <div class="@_gridSettings.ContainerClass" style="@GetContainerStyle()">
-    <table @attributes=@AdditionalAttributes class="@GetClass()" style="@Style" theme="@Theme" @ref="@Element">
-        <thead>
-            <tr>
-                @if (_gridSettings.ShowRowIndex) {
-                    <th></th>
-                }
-
-                @foreach (var item in _context.Columns.Select((Column, Index) => new { Column, Index })) {
-                    var column = item.Column;
-                    var index = item.Index;
-                    if (_sortedOn == null && column.DefaultSort) {
-                        DefaultSort(column);
+    <DeferRendering>
+        <table @attributes=@AdditionalAttributes class="@GetClass()" style="@Style" theme="@Theme" @ref="@Element">
+            <thead>
+                <tr>
+                    @if (_gridSettings.ShowRowIndex) {
+                        <th></th>
                     }
-                    <th @key="@column"
-                        class="@(column.Sortable ? "tnt-sortable" : string.Empty)"
-                        scope="col"
-                        nowrap="nowrap">
+                    @foreach (var item in _context.Columns.Select((Column, Index) => new { Column, Index })) {
+                        var column = item.Column;
+                        var index = item.Index;
+                        if (_sortedOn == null && column.DefaultSort) {
+                            DefaultSort(column);
+                        }
+                        <th @key="@column"
+                            class="@(column.Sortable ? "tnt-sortable" : string.Empty)"
+                            scope="col"
+                            nowrap="nowrap">
 
-                        <a href="@BuildHref(column.Sortable, index)" class="@GetAnchorClass(index) @(_sortedOn == column ? "active" : string.Empty)">
-                            @column.RenderHeaderContent()
+                            <a href="@BuildHref(column.Sortable, index)" class="@GetAnchorClass(index) @(_sortedOn == column ? "active" : string.Empty)">
+                                @column.RenderHeaderContent()
 
-                            @if (_sortedOn == column) {
-                                @TnTIconComponent.RenderIcon(_gridSettings.IconType, "keyboard_arrow_down")
-                            }
-                        </a>
-                    </th>
+                                @if (_sortedOn == column) {
+                                    @TnTIconComponent.RenderIcon(_gridSettings.IconType, "keyboard_arrow_down")
+                                }
+                            </a>
+                        </th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @if (_gridSettings.Items is not null) {
+                    foreach (var item in _gridSettings.Items.Select((Item, Index) => new { Item, Index = Index + 1 })) {
+                        var index = item.Index;
+                        var rowItem = item.Item;
+
+                        <TnTDataGridRow Item="rowItem" ShowRowIndex="@_gridSettings.ShowRowIndex" />
+                    }
                 }
-            </tr>
-        </thead>
-        <tbody>
-            @if (_gridSettings.Items is not null) {
-                foreach (var item in _gridSettings.Items.Select((Item, Index) => new { Item, Index = Index + 1 })) {
-                    var index = item.Index;
-                    var rowItem = item.Item;
-
-                    <TnTDataGridRow Item="rowItem" ShowRowIndex="@_gridSettings.ShowRowIndex" />
-                }
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </DeferRendering>
 </div>
 
 @if (!_gridSettings.Appearance.HasFlag(DataGridAppearance.Compat)) {
