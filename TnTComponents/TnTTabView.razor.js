@@ -5,9 +5,12 @@ class TnTTabView extends HTMLElement {
     constructor() {
         super();
         this.activeIndex = -1;
+        this.resizeObserver = null;
+        this.interactive = false;
     }
 
     connectedCallback() {
+        this.update();
     }
 
     disconnectedCallback() {
@@ -27,85 +30,138 @@ class TnTTabView extends HTMLElement {
             }
             tabViewsByIdentifier.set(newValue, this);
         }
+        this.update();
     }
 
-    initTabView() {
-        let headerArea = this.querySelector(':scope > div > #tnt-tab-header-area');
-        let contentArea = this.querySelector(':scope > #tnt-tab-content-area');
-        let activeIndicator = this.querySelector(":scope > #tnt-tab-active-indicator");
+    getActiveHeader() {
+        let activeHeader = null;
+        let headerArea = this.querySelector(':scope > div > #tnt-tab-header-group');
+        if (headerArea) {
+            let headers = [...headerArea.children];
 
-
-        let headers = [...headerArea.children];
-        let contentTemplates = [...this.querySelectorAll("#tnt-tab-child-template")];
-
-        const self = this;
-
-        function updateActiveIndicator() {
-            if (self.activeIndex === -1) {
-                return;
-            }
-            activeIndicator.style.display = 'block';
-            const headerElement = headers[self.activeIndex];
-
-            const boundingRect = headerElement.getBoundingClientRect();
-            const parentScrollLeft = headerElement.parentElement.scrollLeft;
-            const diff = boundingRect.left + parentScrollLeft - headerElement.offsetLeft;
-            if (self.classList.contains('primary')) {
-                let headerElementWidth = headerElement.clientWidth / 2;
-                activeIndicator.style.left = `${(boundingRect.left + headerElementWidth) - (activeIndicator.clientWidth / 2) - diff}px`;
-            }
-            else if (self.classList.contains('secondary')) {
-                activeIndicator.style.left = `${boundingRect.left - diff}px`;
-                activeIndicator.style.width = `${headerElement.clientWidth}px`;
-            }
-        }
-
-        function reset() {
-            if (activeIndicator && activeIndicator.style) {
-                activeIndicator.style.display = 'none';
-            }
-            self.activeIndex = -1;
-            if (contentArea) {
-                contentArea.innerHTML = '';
-            }
-            headers.forEach((head) => {
-                if (head && head.classList) {
-                    head.classList.remove('active');
+            headers.forEach((head, index) => {
+                if (this.activeIndex == index) {
+                    activeHeader = head;
                 }
-            })
-        }
-
-        function setContent(index) {
-            reset();
-            self.activeIndex = index;
-            headers[self.activeIndex]?.classList.add('active');
-
-            let template = contentTemplates[self.activeIndex]?.content;
-            if (template) {
-                contentArea?.appendChild(template.cloneNode(true));
-            }
-            updateActiveIndicator();
-        }
-
-        reset();
-
-        const resizeObserver = new ResizeObserver((_) => {
-            updateActiveIndicator();
-        });
-        resizeObserver.observe(this);
-
-        headerArea.addEventListener('scroll', (_) => updateActiveIndicator());
-
-        headers.forEach((head, index) => {
-            if ((this.activeIndex === -1 || head.classList.contains('active')) && !head.disabled) {
-                this.activeIndex = index;
-                setContent(index);
-            }
-            head.addEventListener('click', (e) => {
-                setContent(index);
-                TnTComponents.ripple(head, e);
             });
+
+        }
+
+        return activeHeader;
+    }
+
+    update() {
+        const self = this;
+        let templates = [...this.querySelectorAll(':scope > #tnt-tab-child-template')];
+        let headerArea = this.querySelector(':scope > div > #tnt-tab-header-group');
+
+        if (this.resizeObserver) {
+            this.resizeObserver.disconnect();
+        }
+        
+        this.resizeObserver = new ResizeObserver((_) => {
+            updateActiveIndicator(this, this.getActiveHeader());
         });
+        this.resizeObserver.observe(this);
+
+        if (headerArea) {
+            headerArea.addEventListener('scroll', (_) => updateActiveIndicator(self, self.getActiveHeader()));
+
+            let headers = [...headerArea.children];
+            if (headers.length === templates.length && !this.interactive) {
+
+                function setHeaderActive() {
+                    let activeHead = null;
+                    headers.forEach((head, index) => {
+                        if (index === self.activeIndex) {
+                            if (!head.classList.contains('active')) {
+                                head.classList.add('active');
+                            }
+                            activeHead = head;
+                        }
+                        else {
+                            head.classList.remove('active');
+                        }
+                    })
+
+                    updateActiveIndicator(self, activeHead);
+                }
+
+                function setNewTabContent() {
+                    if (self.activeIndex > -1 && self.activeIndex < templates.length) {
+                        let content = templates[self.activeIndex].content;
+                        if (content) {
+                            let currentContent = self.querySelector(':scope > #tnt-tab-child-content');
+                            if (currentContent) {
+                                self.removeChild(currentContent);
+                            }
+                            self.appendChild(content.cloneNode(true));
+                        }
+                    }
+                }
+
+                function selectActiveTab() {
+                    setHeaderActive();
+                    setNewTabContent();
+                }
+
+                function headClicked(e) {
+                    let index = e.currentTarget.selectIndex;
+                    if (index !== self.activeIndex) {
+                        self.activeIndex = index;
+                        selectActiveTab();
+                    }
+                }
+
+
+
+                self.activeIndex = -1;
+
+                headers.forEach((head, index) => {
+                    if ((self.activeIndex === -1 || head.classList.contains('active')) && !head.disabled) {
+                        self.activeIndex = index;
+                        selectActiveTab();
+                    }
+
+                    head.removeEventListener('click', headClicked);
+                    head.addEventListener('click', headClicked);
+                    head.selectIndex = index;
+                });
+            }
+
+        }
+    }
+}
+
+export function ensureInteractive(tabViewElement) {
+    tabViewElement.interactive = true;
+}
+export function updateActiveIndex(tabViewElement, newIndex) {
+    if (tabViewElement) {
+        tabViewElement.activeIndex = newIndex;
+    }
+}
+
+export function updateActiveIndicator(tabViewElement, headerElement) {
+    let activeIndicator = tabViewElement.querySelector(":scope > #tnt-tab-active-indicator");
+    if (!headerElement || !activeIndicator) {
+        if (activeIndicator) {
+            activeIndicator.style.display = 'none';
+        }
+        return;
+    }
+    activeIndicator.style.display = 'block';
+
+    const boundingRect = headerElement.getBoundingClientRect();
+    const parentScrollLeft = headerElement.parentElement.scrollLeft;
+    const diff = boundingRect.left + parentScrollLeft - headerElement.offsetLeft;
+    if (tabViewElement.classList.contains('primary')) {
+        let headerElementWidth = headerElement.clientWidth / 2;
+        activeIndicator.style.left = `${(boundingRect.left + headerElementWidth) - (activeIndicator.clientWidth / 2) - diff}px`;
+    }
+    else if (tabViewElement.classList.contains('secondary')) {
+        activeIndicator.style.left = `${boundingRect.left - diff}px`;
+        activeIndicator.style.width = `${headerElement.clientWidth}px`;
     }
 }
 
@@ -116,8 +172,8 @@ export function onLoad() {
 }
 
 export function onUpdate() {
-    for (const [_, tntTabView] of tabViewsByIdentifier) {
-        tntTabView.initTabView();
-    }
+    //for (const [_, tntTabView] of tabViewsByIdentifier) {
+    //    tntTabView.initTabView();
+    //}
 }
 

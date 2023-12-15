@@ -41,7 +41,7 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyn
     [Inject]
     protected IJSRuntime JSRuntime { get; set; } = default!;
 
-    private IJSObjectReference? _isolatedJsModule;
+    protected IJSObjectReference? IsolatedJsModule;
 
     protected override void OnAfterRender(bool firstRender) {
         base.OnAfterRender(firstRender);
@@ -53,9 +53,8 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyn
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         await base.OnAfterRenderAsync(firstRender);
         if (HasIsolatedJs) {
-            _isolatedJsModule ??= await JSRuntime.ImportIsolatedJs(this);
-            await (_isolatedJsModule?.InvokeVoidAsync("onUpdate") ?? ValueTask.CompletedTask);
-            int i = 0;
+            IsolatedJsModule ??= await JSRuntime.ImportIsolatedJs(this);
+            await (IsolatedJsModule?.InvokeVoidAsync("onUpdate") ?? ValueTask.CompletedTask);
         }
     }
 
@@ -69,8 +68,8 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyn
 
     public async ValueTask DisposeAsync() {
         try {
-            if (_isolatedJsModule is not null) {
-                await _isolatedJsModule.DisposeAsync();
+            if (IsolatedJsModule is not null) {
+                await IsolatedJsModule.DisposeAsync();
             }
         }
         catch (JSDisconnectedException) { }

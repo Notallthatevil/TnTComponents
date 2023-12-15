@@ -1,5 +1,17 @@
 ﻿@inherits TnTComponentBase
+@if (_context.ActiveTab == this && Interactive) {
+    @Content()
+}
+else {
+    <template id="tnt-tab-child-template" data-permanent="@TnTComponentIdentifier.NewId()">
+        @Content()
+    </template>
+}
 
-<template id="tnt-tab-child-template" data-permanent="@TnTComponentIdentifier.NewId()">
-    @RenderTabContent()
-</template>
+@code {
+    private RenderFragment Content() {
+        return@<div @attributes="AdditionalAttributes" id="tnt-tab-child-content" class="@GetClass()" theme="@Theme" style="@Style" @ref="Element">
+        @ChildContent
+    </div>;
+    }
+}

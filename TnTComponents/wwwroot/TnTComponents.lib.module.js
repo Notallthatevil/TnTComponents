@@ -326,5 +326,33 @@ window.TnTComponents = {
             this.WindowClickCallbacks[dotNetObjectRef._id]();
             delete this.WindowClickCallbacks[dotNetObjectRef._id];
         }
+    },
+
+    updateElementReferenceMap: function (attributeName, oldValue, newValue, map) {
+        if (attributeName === TnTComponents.customAttribute && oldValue != newValue) {
+            let old = map.get(oldValue);
+            let oldDotNetRef = null;
+            if (old) {
+                oldDotNetRef = old.dotNetObjRef;
+                map.delete(oldValue);
+            }
+            map.set(newValue, { element: this, dotNetObjRef: oldDotNetRef });
+        }
+    },
+
+    disconnectElement: function (element, map) {
+        if (element && map) {
+            let identifier = element.getAttribute(TnTComponents.customAttribute);
+            if (elementRefenceMap.get(identifier)) {
+                elementRefenceMap.delete(identifier);
+            }
+        }
+    },
+
+    onUpdate: function (identifier, dotNetObjRef, map) {
+        let obj = map.get(identifier);
+        if (obj) {
+            obj.dotNetObjRef = dotNetObjRef;
+        }
     }
 }

@@ -2,7 +2,7 @@
     display: block;
     margin: 8px;
 
-    div:has(.tnt-tab-header) {
+    .tnt-tab-header {
         text-align: center;
         background-color: $tnt-color-surface;
         display: flex;
@@ -11,7 +11,7 @@
         margin: 0;
         position: relative;
 
-        .tnt-tab-header {
+        .tnt-tab-header-group {
             display: flex;
             overflow-x: auto;
             max-width: 100%;
@@ -65,10 +65,11 @@
         .tnt-tab-active-indicator {
             height: 3px;
             width: 32px;
+            display: block;
         }
 
 
-        div .tnt-tab-header .tnt-tab-view-button {
+        .tnt-tab-header .tnt-tab-header-group .tnt-tab-view-button {
             flex-direction: column;
             justify-content: center;
             height: 64px;
@@ -85,7 +86,7 @@
             height: 2px;
         }
 
-        div .tnt-tab-header .tnt-tab-view-button {
+        .tnt-tab-header .tnt-tab-header-group .tnt-tab-view-button {
             flex-direction: row;
             justify-content: center;
             min-width: 150px;

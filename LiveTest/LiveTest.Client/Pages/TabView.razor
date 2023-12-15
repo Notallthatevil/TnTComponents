@@ -5,10 +5,22 @@
 
 
 <TabViewComponent TabCount="@TabCount" Name="TabView1" Appearance="TabViewAppearance.Primary" />
-@*<TabViewComponent TabCount="@TabCount" Name="TabView2" Disabled="true" Appearance="TabViewAppearance.Primary" />
+<TabViewComponent TabCount="@TabCount" Name="TabView1Interactive" Appearance="TabViewAppearance.Primary" @rendermode="@(new InteractiveServerRenderMode(prerender:false))" />
+<TabViewComponent TabCount="@TabCount" Name="TabView2Interactive" Appearance="TabViewAppearance.Primary" @rendermode="@(new InteractiveWebAssemblyRenderMode(prerender:false))" />
+<TabViewComponent TabCount="@TabCount" Name="TabView3Interactive" Appearance="TabViewAppearance.Primary" @rendermode="@(new InteractiveAutoRenderMode(prerender:false))" />
+<TabViewComponent TabCount="@TabCount" Name="TabView4Interactive" Appearance="TabViewAppearance.Primary" @rendermode="InteractiveServer" />
+<TabViewComponent TabCount="@TabCount" Name="TabView5Interactive" Appearance="TabViewAppearance.Primary" @rendermode="InteractiveWebAssembly" />
+<TabViewComponent TabCount="@TabCount" Name="TabView6Interactive" Appearance="TabViewAppearance.Primary" @rendermode="InteractiveAuto" />
+<TabViewComponent TabCount="@TabCount" Name="TabView2" Disabled="true" Appearance="TabViewAppearance.Primary" />
 <TabViewComponent TabCount="@TabCount" Name="TabView3" Appearance="TabViewAppearance.Secondary" />
+<TabViewComponent TabCount="@TabCount" Name="TabView1Interactive" Appearance="TabViewAppearance.Secondary" @rendermode="@(new InteractiveServerRenderMode(prerender:false))" />
+<TabViewComponent TabCount="@TabCount" Name="TabView2Interactive" Appearance="TabViewAppearance.Secondary" @rendermode="@(new InteractiveWebAssemblyRenderMode(prerender:false))" />
+<TabViewComponent TabCount="@TabCount" Name="TabView3Interactive" Appearance="TabViewAppearance.Secondary" @rendermode="@(new InteractiveAutoRenderMode(prerender:false))" />
+<TabViewComponent TabCount="@TabCount" Name="TabView4Interactive" Appearance="TabViewAppearance.Secondary" @rendermode="InteractiveServer" />
+<TabViewComponent TabCount="@TabCount" Name="TabView5Interactive" Appearance="TabViewAppearance.Secondary" @rendermode="InteractiveWebAssembly" />
+<TabViewComponent TabCount="@TabCount" Name="TabView6Interactive" Appearance="TabViewAppearance.Secondary" @rendermode="InteractiveAuto" />
 <TabViewComponent TabCount="@TabCount" Name="TabView4" Disabled="true" Appearance="TabViewAppearance.Secondary" />
-*@
+
 @code {
     [Parameter]
     [SupplyParameterFromQuery]

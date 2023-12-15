@@ -1,20 +1,16 @@
 ﻿@using Microsoft.AspNetCore.Components.Sections
 @inherits TnTComponentBase
 
-<CascadingValue Value="_context">
-    <tnt-tab-view @attributes="AdditionalAttributes" class="@GetClass()" style="@Style" theme="@Theme" @ref="Element">
+<CascadingValue Value="this" IsFixed="true">
+    <tnt-tab-view @attributes=AdditionalAttributes class="@GetClass()" style="@Style" theme="@Theme" @ref="Element">
         <DeferRendering>
             @{
                 var set = new HashSet<string>();
-                <div>
-                    <div id="tnt-tab-header-area" class="@TabHeaderClass">
-                        @foreach (var child in _context.TabChildren.Values) {
-                            if (child is not null) {
-                                if (!set.Contains(child.TabButtonClass)) {
-                                    set.Add(child.TabButtonClass);
-                                }
-                                @child?.RenderTabHeader()
-                            }
+                <div class="@TabHeaderClass">
+                    <div class="tnt-tab-header-group" id="tnt-tab-header-group" role="group" @onscroll="ButtonScrollListener">
+                        @foreach (var tab in _tabChildren) {
+                            set.Add(tab.TabButtonClass);
+                            @tab.RenderTabHeader()
                         }
                     </div>
                 </div>
@@ -22,14 +18,45 @@
                     <TnTPageScript Src="@($"./_content/TnTComponents/TnTButton.razor.js?class={str}")" />
                 }
             }
-
-            <span id="tnt-tab-active-indicator" class="@TabActiveIndicatorClass"></span>
-            <div id="tnt-tab-content-area" class="@TabContentClass" data-permanant="tnt-tab-content-area">
-            </div>
         </DeferRendering>
+        <span id="tnt-tab-active-indicator" class="@TabActiveIndicatorClass"></span>
         @ChildContent
     </tnt-tab-view>
+    <TnTPageScript Src="@($"./_content/TnTComponents/TnTTabView.razor.js")" />
+    @*
+    <tnt-tab-view @attributes="AdditionalAttributes" class="@GetClass()" style="@Style" theme="@Theme" @ref="Element">
+    <DeferRendering>
+    @{
+    var set = new HashSet<string>();
+    <div>
+    <div id="tnt-tab-header-area" class="@TabHeaderClass">
+    @foreach (var child in _context.TabChildren.Values) {
+    if (child is not null) {
+    if (!set.Contains(child.TabButtonClass)) {
+    set.Add(child.TabButtonClass);
+    }
+    }
+    @child?.RenderTabHeader()
+    }
+    </div>
+    </div>
+    foreach (var str in set) {
+    <TnTPageScript Src="@($"./_content/TnTComponents/TnTButton.razor.js?class={str}")" />
+    }
+    }
+
+    <span id="tnt-tab-active-indicator" class="@TabActiveIndicatorClass"></span>
+    <div id="tnt-tab-content-area" class="@TabContentClass">
+    @{
+    Console.WriteLine($"Rendering active tab {ActiveTab?.Title}");
+    }
+    Active tab title @ActiveTab?.Title
+    </div>
+    </DeferRendering>
+    @ChildContent
+    </tnt-tab-view>
+
+    *@
 </CascadingValue>
 
 
-<TnTPageScript Src="@($"./_content/TnTComponents/TnTTabView.razor.js")" />

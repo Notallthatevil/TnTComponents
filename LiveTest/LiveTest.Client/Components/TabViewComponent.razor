@@ -1,6 +1,6 @@
 @using TnTComponents
 @using TnTComponents.Enum
-<TnTTabView Name="@Name" Appearance="@Appearance">
+<TnTTabView Name="@Name" Appearance="@Appearance" class="@($"{Name} tnt-tab-view")">
     @for (var i = 0; i < TabCount; ++i) {
         var j = i;
         var header = $"Header{j + 1}";
