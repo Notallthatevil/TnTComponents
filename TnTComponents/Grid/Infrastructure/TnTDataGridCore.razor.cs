@@ -8,7 +8,7 @@ using TnTComponents.Grid.Columns;
 
 namespace TnTComponents.Grid.Infrastructure;
 
-public partial class TnTDataGridCore<TGridItem> : IAsyncDisposable {
+public partial class TnTDataGridCore<TGridItem> {
 
     [CascadingParameter]
     private TnTDataGridContext<TGridItem> _context { get; set; } = default!;
@@ -59,12 +59,6 @@ public partial class TnTDataGridCore<TGridItem> : IAsyncDisposable {
     protected override void OnParametersSet() {
         base.OnParametersSet();
         Navigated(this, EventArgs.Empty);
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender) {
-        await base.OnAfterRenderAsync(firstRender);
-        _module ??= await _jsRuntime.ImportIsolatedJs<TnTDataGridCore<TGridItem>>();
-        await _module.InvokeVoidAsync("tntInitResizable", Element);
     }
 
     private string BuildHref(bool sortable, int index) {
@@ -165,16 +159,5 @@ public partial class TnTDataGridCore<TGridItem> : IAsyncDisposable {
                 StateHasChanged();
             }
         }
-    }
-
-    public async ValueTask DisposeAsync() {
-        try {
-
-            _navMan.LocationChanged -= Navigated;
-            if (_module is not null) {
-                await _module.DisposeAsync();
-            }
-        }
-        catch (JSDisconnectedException) { }
     }
 }

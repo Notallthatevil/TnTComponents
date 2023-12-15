@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using System.Globalization;
 using System.Web;
 using TnTComponents.Common;
 using TnTComponents.Enum;
@@ -33,10 +35,8 @@ public partial class TnTTabChild : IDisposable {
     [CascadingParameter]
     private TabViewContext _context { get; set; } = default!;
 
-    [Inject]
-    private NavigationManager _navMan { get; set; } = default!;
-
-    //private string tabChildParam => $"{Uri.EscapeDataString(_context.Name)}";
+    [Parameter]
+    public EventCallback<TnTTabChild> TabClickedCallback { get; set; }
 
     public void Dispose() {
         GC.SuppressFinalize(this);
@@ -52,33 +52,18 @@ public partial class TnTTabChild : IDisposable {
         }
 
         _context.AddChild(this);
-
-        //var url = new Uri(_navMan.Uri);
-
-        //var queryParams = HttpUtility.ParseQueryString(url.Query);
-
-        //if (queryParams[tabChildParam] == Uri.EscapeDataString(Title)) {
-        //    Active = true;
-        //}
-
     }
 
     public RenderFragment RenderTabHeader() {
-        //    var url = new Uri(_navMan.Uri);
-
-        //    var queryParams = HttpUtility.ParseQueryString(url.Query);
-
-        //    queryParams[tabChildParam] = Uri.EscapeDataString(Title);
-
-        //    url = new UriBuilder(_navMan.Uri) {
-        //        Query = queryParams.ToString()
-        //    }.Uri;
-
         return new RenderFragment(builder => {
             builder.OpenElement(0, "button");
+            builder.AddAttribute(5, "onclick", EventCallback.Factory.Create<MouseEventArgs>(this, async (args) => {
+                await TabClickedCallback.InvokeAsync(this);
+            }));
             builder.AddAttribute(10, "class", $"{TabButtonClass} {(Active ? "active" : string.Empty)}");
             builder.AddAttribute(20, "disabled", Disabled);
             builder.AddAttribute(30, "type", "button");
+            builder.AddAttribute(35, TnTCustomIdentifier, ComponentIdentifier);
 
             builder.AddContent(40, TnTIconComponent.RenderIcon(IconType, Icon));
             builder.AddContent(50, Title);
@@ -92,8 +77,10 @@ public partial class TnTTabChild : IDisposable {
             builder.AddMultipleAttributes(10, AdditionalAttributes);
             builder.AddAttribute(20, "class", GetClass());
             builder.AddAttribute(30, "style", Style);
+            builder.AddAttribute(35, TnTCustomIdentifier, ComponentIdentifier);
             builder.AddAttribute(40, "theme", Theme);
-            builder.AddContent(50, ChildContent);
+            builder.AddContent(45, ChildContent);
+            builder.AddElementReferenceCapture(50, (e) => Element = e);
             builder.CloseElement();
         });
     }

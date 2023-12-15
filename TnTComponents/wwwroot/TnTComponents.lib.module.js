@@ -131,7 +131,6 @@ window.TnTComponents = {
     },
 
     registeredTnTTabViews: {},
-
     registerTnTTabView: function (viewIdentifier, children) {
         if (viewIdentifier && children) {
             const tabView = document.querySelector(`[${viewIdentifier}]`);

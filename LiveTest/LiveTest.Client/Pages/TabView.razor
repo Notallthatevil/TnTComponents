@@ -1,80 +1,14 @@
 ﻿@page "/tabview"
+@using LiveTest.Client.Components
 @using TnTComponents
 @using TnTComponents.Enum
 
 
-<TnTTabView Name="TabView1" Appearance="TabViewAppearance.Primary">
-    @for (var i = 0; i < TabCount; ++i) {
-        var j = i;
-        var header = $"Header{j + 1}";
-        <TnTTabChild Title="@header" Icon="apps" Disabled="@((j % 5) == 0)">
-            Content@(j + 1)
-        </TnTTabChild>
-
-    }
-    @{
-        var lastHeader = $"Header{TabCount + 1}";
-        <TnTTabChild Title="@lastHeader">
-            Content@(TabCount + 1)
-        </TnTTabChild>
-    }
-</TnTTabView>
-
-
-
-<TnTTabView Name="TabView2" Appearance="TabViewAppearance.Primary">
-    @for (var i = 0; i < TabCount; ++i) {
-        var j = i;
-        var header = $"Header{j + 1}";
-        <TnTTabChild Title="@header" Icon="apps" Disabled="true">
-            Content@(j + 1)
-        </TnTTabChild>
-
-    }
-    @{
-        var lastHeader = $"Header{TabCount + 1}";
-        <TnTTabChild Title="@lastHeader" Disabled="true">
-            Content@(TabCount + 1)
-        </TnTTabChild>
-    }
-</TnTTabView>
-
-<TnTTabView Name="TabView3" Appearance="TabViewAppearance.Secondary">
-    @for (var i = 0; i < TabCount; ++i) {
-        var j = i;
-        var header = $"Header{j + 1}";
-        <TnTTabChild Title="@header" Icon="apps" Disabled="@((j % 5) == 0)">
-            Content@(j + 1)
-        </TnTTabChild>
-
-    }
-    @{
-        var lastHeader = $"Header{TabCount + 1}";
-        <TnTTabChild Title="@lastHeader">
-            Content@(TabCount + 1)
-        </TnTTabChild>
-    }
-</TnTTabView>
-
-
-
-<TnTTabView Name="TabView4" Appearance="TabViewAppearance.Secondary">
-    @for (var i = 0; i < TabCount; ++i) {
-        var j = i;
-        var header = $"Header{j + 1}";
-        <TnTTabChild Title="@header" Icon="apps" Disabled="true">
-            Content@(j + 1)
-        </TnTTabChild>
-
-    }
-    @{
-        var lastHeader = $"Header{TabCount + 1}" ;
-        <TnTTabChild Title="@lastHeader" Disabled="true">
-            Content@(TabCount + 1)
-        </TnTTabChild>
-    }
-</TnTTabView>
-
+<TabViewComponent TabCount="@TabCount" Name="TabView1" Appearance="TabViewAppearance.Primary" />
+@*<TabViewComponent TabCount="@TabCount" Name="TabView2" Disabled="true" Appearance="TabViewAppearance.Primary" />
+<TabViewComponent TabCount="@TabCount" Name="TabView3" Appearance="TabViewAppearance.Secondary" />
+<TabViewComponent TabCount="@TabCount" Name="TabView4" Disabled="true" Appearance="TabViewAppearance.Secondary" />
+*@
 @code {
     [Parameter]
     [SupplyParameterFromQuery]
@@ -83,7 +17,7 @@
 
     protected override void OnParametersSet() {
         base.OnParametersSet();
-        if(TabCount < 3) {
+        if (TabCount < 3) {
             TabCount = 3;
         }
     }

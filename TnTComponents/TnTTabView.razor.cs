@@ -8,7 +8,7 @@ using TnTComponents.Infrastructure;
 
 namespace TnTComponents;
 
-public partial class TnTTabView {
+public partial class TnTTabView : IAsyncDisposable {
 
     [Parameter, EditorRequired]
     public string Name { get; set; } = default!;
@@ -32,12 +32,10 @@ public partial class TnTTabView {
 
     private readonly TabViewContext _context;
 
+    protected override bool HasIsolatedJs { get; set; } = true;
+
     public TnTTabView() {
         _context = new(this);
-    }
-
-    protected override void OnParametersSet() {
-        base.OnParametersSet();
     }
 
     public override string GetClass() => $"{base.GetClass()} {Appearance.ToString().ToLower()}";

@@ -1,3 +1,5 @@
 ﻿@inherits TnTComponentBase
 
-<TnTPageScript Src="@($"./_content/TnTComponents/TnTButton.razor.js?class={TabButtonClass}")" />
+<template id="tnt-tab-child-template" data-permanent="@TnTComponentIdentifier.NewId()">
+    @RenderTabContent()
+</template>

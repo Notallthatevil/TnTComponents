@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System.Text;
+using TnTComponents.Common.Ext;
 
 namespace TnTComponents.Common;
 
-public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
+public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyncDisposable {
 
     [Parameter(CaptureUnmatchedValues = true)]
     public virtual IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
@@ -34,10 +36,26 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
 
     public virtual string GetClass() => this.GetClassDefault();
 
+    protected virtual bool HasIsolatedJs { get; set; } = false;
+
+    [Inject]
+    protected IJSRuntime JSRuntime { get; set; } = default!;
+
+    private IJSObjectReference? _isolatedJsModule;
+
     protected override void OnAfterRender(bool firstRender) {
         base.OnAfterRender(firstRender);
         if (firstRender) {
             Interactive = true;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        await base.OnAfterRenderAsync(firstRender);
+        if (HasIsolatedJs) {
+            _isolatedJsModule ??= await JSRuntime.ImportIsolatedJs(this);
+            await (_isolatedJsModule?.InvokeVoidAsync("onUpdate") ?? ValueTask.CompletedTask);
+            int i = 0;
         }
     }
 
@@ -47,5 +65,14 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
         var dict = AdditionalAttributes is not null ? AdditionalAttributes.ToDictionary() : [];
         dict.TryAdd(TnTCustomIdentifier, ComponentIdentifier);
         AdditionalAttributes = dict;
+    }
+
+    public async ValueTask DisposeAsync() {
+        try {
+            if (_isolatedJsModule is not null) {
+                await _isolatedJsModule.DisposeAsync();
+            }
+        }
+        catch (JSDisconnectedException) { }
     }
 }

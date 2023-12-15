@@ -34,10 +34,10 @@ class TnTTabView extends HTMLElement {
         let contentArea = this.querySelector(':scope > #tnt-tab-content-area');
         let activeIndicator = this.querySelector(":scope > #tnt-tab-active-indicator");
 
-        let headers = [...headerArea.children];
-        let content = [...contentArea.children];
 
-        const count = headers.length;
+        let headers = [...headerArea.children];
+        let contentTemplates = [...this.querySelectorAll("#tnt-tab-child-template")];
+
         const self = this;
 
         function updateActiveIndicator() {
@@ -60,36 +60,31 @@ class TnTTabView extends HTMLElement {
             }
         }
 
-        function setActive(element, active) {
-            if (active) {
-                if (!element.classList.contains('active')) {
-                    element.classList.add('active')
+        function reset() {
+            if (activeIndicator && activeIndicator.style) {
+                activeIndicator.style.display = 'none';
+            }
+            self.activeIndex = -1;
+            if (contentArea) {
+                contentArea.innerHTML = '';
+            }
+            headers.forEach((head) => {
+                if (head && head.classList) {
+                    head.classList.remove('active');
                 }
-            }
-            else {
-                element.classList.remove('active');
-            }
+            })
         }
 
         function setContent(index) {
+            reset();
             self.activeIndex = index;
-            for (let i = 0; i < count; ++i) {
-                setActive(headers[i], i === index);
-                setActive(content[i], i === index);
+            headers[self.activeIndex]?.classList.add('active');
 
-                if (i === index) {
-                    updateActiveIndicator();
-                }
+            let template = contentTemplates[self.activeIndex]?.content;
+            if (template) {
+                contentArea?.appendChild(template.cloneNode(true));
             }
-        }
-
-        function reset() {
-            self.activeIndex = -1;
-            activeIndicator.style.display = 'none';
-            for (let i = 0; i < count; ++i) {
-                setActive(headers[i], false);
-                setActive(content[i], false);
-            }
+            updateActiveIndicator();
         }
 
         reset();
@@ -121,10 +116,8 @@ export function onLoad() {
 }
 
 export function onUpdate() {
-    for (const [identifier, tntTabView] of tabViewsByIdentifier) {
+    for (const [_, tntTabView] of tabViewsByIdentifier) {
         tntTabView.initTabView();
     }
 }
 
-export function onDispose() {
-}

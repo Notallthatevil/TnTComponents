@@ -97,14 +97,4 @@
             }
         }
     }
-
-    .tnt-tab-content {
-        & > * {
-            display: none;
-        }
-
-        & > .active {
-            display: revert;
-        }
-    }
 }

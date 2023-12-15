@@ -10,12 +10,13 @@ internal static class JSRuntimeExt {
         return await jsRuntime.InvokeAsync<IJSObjectReference>("import", path);
     }
 
-    public static async Task<IJSObjectReference> ImportIsolatedJs<T>(this IJSRuntime jsRuntime) {
-        var @namespace = typeof(T).Namespace?.Split('.') ?? [];
-        var name = typeof(T).Name;
+    public static async Task<IJSObjectReference> ImportIsolatedJs(this IJSRuntime jsRuntime, object obj) {
+        var @namespace = obj.GetType().Namespace?.Split('.') ?? [];
+        var name = obj.GetType().Name;
         if(name.Contains('`')) {
-            name = name.Substring(0, name.IndexOf('`'));
+            name = name[..name.IndexOf('`')];
         }
+        var root = Directory.GetCurrentDirectory();
         var jsPath = $"./_content/{string.Join('/', @namespace)}/{name}.razor.js";
         return await jsRuntime.Import(jsPath);
     }
