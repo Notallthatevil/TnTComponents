@@ -79,6 +79,8 @@ public partial class TnTTabChild : IDisposable {
             builder.AddAttribute(10, "class", $"{TabButtonClass} {(_context.ActiveTab == this ? "active" : string.Empty)}");
             builder.AddAttribute(20, "disabled", Disabled);
             builder.AddAttribute(30, "type", "button");
+            builder.AddAttribute(32, "name", Title.Replace(" ", string.Empty));
+
             if (TabHeaderTemplate is not null) {
                 builder.AddContent(35, TabHeaderTemplate);
             }

@@ -3,7 +3,6 @@
 @using TnTComponents
 @using TnTComponents.Enum
 
-
 <TabViewComponent TabCount="@TabCount" Name="TabView1" Appearance="TabViewAppearance.Primary" />
 <TabViewComponent TabCount="@TabCount" Name="TabView1Interactive" Appearance="TabViewAppearance.Primary" @rendermode="@(new InteractiveServerRenderMode(prerender:false))" />
 <TabViewComponent TabCount="@TabCount" Name="TabView2Interactive" Appearance="TabViewAppearance.Primary" @rendermode="@(new InteractiveWebAssemblyRenderMode(prerender:false))" />
@@ -20,7 +19,6 @@
 <TabViewComponent TabCount="@TabCount" Name="TabView5Interactive" Appearance="TabViewAppearance.Secondary" @rendermode="InteractiveWebAssembly" />
 <TabViewComponent TabCount="@TabCount" Name="TabView6Interactive" Appearance="TabViewAppearance.Secondary" @rendermode="InteractiveAuto" />
 <TabViewComponent TabCount="@TabCount" Name="TabView4" Disabled="true" Appearance="TabViewAppearance.Secondary" />
-
 @code {
     [Parameter]
     [SupplyParameterFromQuery]

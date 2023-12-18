@@ -6,9 +6,6 @@ namespace TnTComponents;
 
 public partial class TnTTabView {
 
-    [Parameter, EditorRequired]
-    public string Name { get; set; } = default!;
-
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 

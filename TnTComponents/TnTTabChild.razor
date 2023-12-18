@@ -2,10 +2,10 @@
 @if (_context.ActiveTab == this && Interactive) {
     @Content()
 }
-else {
-    <template id="tnt-tab-child-template" data-permanent="@TnTComponentIdentifier.NewId()">
+else if (!Interactive) {
+    <div id="tnt-tab-child">
         @Content()
-    </template>
+    </div>
 }
 
 @code {

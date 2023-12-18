@@ -7,10 +7,7 @@ class TnTTabView extends HTMLElement {
         this.activeIndex = -1;
         this.resizeObserver = null;
         this.interactive = false;
-    }
 
-    connectedCallback() {
-        this.update();
     }
 
     disconnectedCallback() {
@@ -18,9 +15,7 @@ class TnTTabView extends HTMLElement {
         if (tabViewsByIdentifier.get(identifier)) {
             tabViewsByIdentifier.delete(identifier);
         }
-    }
-
-    adoptedCallback() {
+        this.mutationObserver.disconnect();
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -30,7 +25,6 @@ class TnTTabView extends HTMLElement {
             }
             tabViewsByIdentifier.set(newValue, this);
         }
-        this.update();
     }
 
     getActiveHeader() {
@@ -52,23 +46,49 @@ class TnTTabView extends HTMLElement {
 
     update() {
         const self = this;
-        let templates = [...this.querySelectorAll(':scope > #tnt-tab-child-template')];
+        let tabChildren = [...this.querySelectorAll(':scope > #tnt-tab-child')];
         let headerArea = this.querySelector(':scope > div > #tnt-tab-header-group');
+
+        if (!this.mutationObserver) {
+            this.mutationObserver = new MutationObserver((mutationList, observer) => {
+                self.activeIndex = -1;
+                for (const mutation of mutationList) {
+                    if (mutation.type === 'childList' || mutation.type === 'attributes') {
+                        let headers = [...headerArea.children];
+                        headers.some((head, index) => {
+                            if (head.classList.contains('active') && !head.disabled) {
+                                self.activeIndex = index;
+                                return true;
+                            }
+                            else if (!head.disabled && self.activeIndex === -1) {
+                                self.activeIndex = index;
+                            }
+                        });
+
+                        break;
+                    }
+                }
+                observer.disconnect();
+                self.update();
+            });
+        }
+
 
         if (this.resizeObserver) {
             this.resizeObserver.disconnect();
         }
-        
+
         this.resizeObserver = new ResizeObserver((_) => {
             updateActiveIndicator(this, this.getActiveHeader());
         });
         this.resizeObserver.observe(this);
 
         if (headerArea) {
+            this.mutationObserver.observe(headerArea, { childList: true, attributes: true, attributeFilter: ['name'] });
             headerArea.addEventListener('scroll', (_) => updateActiveIndicator(self, self.getActiveHeader()));
 
             let headers = [...headerArea.children];
-            if (headers.length === templates.length && !this.interactive) {
+            if (headers.length === tabChildren.length && !this.interactive) {
 
                 function setHeaderActive() {
                     let activeHead = null;
@@ -88,16 +108,14 @@ class TnTTabView extends HTMLElement {
                 }
 
                 function setNewTabContent() {
-                    if (self.activeIndex > -1 && self.activeIndex < templates.length) {
-                        let content = templates[self.activeIndex].content;
-                        if (content) {
-                            let currentContent = self.querySelector(':scope > #tnt-tab-child-content');
-                            if (currentContent) {
-                                self.removeChild(currentContent);
-                            }
-                            self.appendChild(content.cloneNode(true));
+                    tabChildren.forEach((child, index) => {
+                        if (index === self.activeIndex) {
+                            child.hidden = false;
                         }
-                    }
+                        else {
+                            child.hidden = true;
+                        }
+                    });
                 }
 
                 function selectActiveTab() {
@@ -113,22 +131,20 @@ class TnTTabView extends HTMLElement {
                     }
                 }
 
-
-
-                self.activeIndex = -1;
-
                 headers.forEach((head, index) => {
-                    if ((self.activeIndex === -1 || head.classList.contains('active')) && !head.disabled) {
-                        self.activeIndex = index;
-                        selectActiveTab();
-                    }
-
                     head.removeEventListener('click', headClicked);
                     head.addEventListener('click', headClicked);
                     head.selectIndex = index;
-                });
-            }
 
+                    if (self.activeIndex === -1 && head.classList.contains('active') && !head.disabled) {
+                        self.activeIndex = index;
+                    }
+                });
+                selectActiveTab();
+
+
+
+            }
         }
     }
 }
@@ -172,8 +188,8 @@ export function onLoad() {
 }
 
 export function onUpdate() {
-    //for (const [_, tntTabView] of tabViewsByIdentifier) {
-    //    tntTabView.initTabView();
-    //}
+    for (const [_, tntTabView] of tabViewsByIdentifier) {
+        tntTabView.update();
+    }
 }
 

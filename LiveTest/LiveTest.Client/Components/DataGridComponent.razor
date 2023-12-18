@@ -17,7 +17,7 @@
     <TnTPropertyColumn Property="@((item) => item.Column2)" ColumnHeader="Column 8" DefaultSort="true" />
     <TnTPropertyColumn Property="@((item) => item.Column3)" ColumnHeader="Column 9" />
 </TnTDataGrid>
-
+@*
 <TnTDataGrid Name="@(Name + 2)" Items="Items" Appearance="DataGridAppearance.Stripped" MaxHeight="500" RowClickedCallback="@RowClicked">
     <TnTPropertyColumn Property="@((item) => item.Column1)" />
     <TnTPropertyColumn Property="@((item) => item.Column2)" />
@@ -53,7 +53,7 @@
     <TnTPropertyColumn Property="@((item) => item.Column2)" ColumnHeader="Column 8" DefaultSort="true" />
     <TnTPropertyColumn Property="@((item) => item.Column3)" ColumnHeader="Column 9" />
 </TnTDataGrid>
-
+*@
 @code {
     [Parameter, EditorRequired]
     public string Name { get; set; } = default!;
