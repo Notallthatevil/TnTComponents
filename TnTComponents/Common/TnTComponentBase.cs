@@ -16,9 +16,6 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyn
     [Parameter]
     public string ComponentIdentifier { get; set; } = TnTComponentIdentifier.NewId();
 
-    [Parameter]
-    public virtual object? Data { get; set; }
-
     public ElementReference Element { get; protected set; }
 
     [Parameter]
