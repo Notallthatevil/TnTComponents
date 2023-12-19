@@ -1,4 +1,5 @@
-﻿@using TnTComponents.Enum
+﻿@using Microsoft.AspNetCore.Components.QuickGrid
+@using TnTComponents.Enum
 @using TnTComponents.Events
 @using TnTComponents.Grid
 @using TnTComponents.Grid.Columns
@@ -6,58 +7,58 @@
 @using LiveTest.Client.Repositories
 @inject IDataGridRepository _repo
 
-<TnTDataGrid Name="@(Name + 1)" Items="Items" ShowRowIndex="true" Appearance="DataGridAppearance.Default" MaxHeight="500" RowClickedCallback="@RowClicked">
-    <TnTPropertyColumn Property="@((item) => item.Column1)" />
-    <TnTPropertyColumn Property="@((item) => item.Column2)" />
-    <TnTPropertyColumn Property="@((item) => item.Column3)" />
-    <TnTPropertyColumn Property="@((item) => item.Column1)" ColumnHeader="Column 4" Format="D6" />
-    <TnTPropertyColumn Property="@((item) => item.Column2)" ColumnHeader="Column 5" Format="Formatted {0}" />
-    <TnTPropertyColumn Property="@((item) => item.Column3)" ColumnHeader="Column 6" Format="MMMM/dd/yyyy" />
-    <TnTPropertyColumn Property="@((item) => item.Column1)" ColumnHeader="Column 7" />
-    <TnTPropertyColumn Property="@((item) => item.Column2)" ColumnHeader="Column 8" DefaultSort="true" />
-    <TnTPropertyColumn Property="@((item) => item.Column3)" ColumnHeader="Column 9" />
-</TnTDataGrid>
-@*
-<TnTDataGrid Name="@(Name + 2)" Items="Items" Appearance="DataGridAppearance.Stripped" MaxHeight="500" RowClickedCallback="@RowClicked">
-    <TnTPropertyColumn Property="@((item) => item.Column1)" />
-    <TnTPropertyColumn Property="@((item) => item.Column2)" />
-    <TnTPropertyColumn Property="@((item) => item.Column3)" />
-    <TnTPropertyColumn Property="@((item) => item.Column1)" ColumnHeader="Column 4" Format="D6" />
-    <TnTPropertyColumn Property="@((item) => item.Column2)" ColumnHeader="Column 5" Format="Formatted {0}" />
-    <TnTPropertyColumn Property="@((item) => item.Column3)" ColumnHeader="Column 6" Format="MMMM/dd/yyyy" />
-    <TnTPropertyColumn Property="@((item) => item.Column1)" ColumnHeader="Column 7" />
-    <TnTPropertyColumn Property="@((item) => item.Column2)" ColumnHeader="Column 8" DefaultSort="true" />
-    <TnTPropertyColumn Property="@((item) => item.Column3)" ColumnHeader="Column 9" />
-</TnTDataGrid>
 
-<TnTDataGrid Name="@(Name + 3)" Items="Items" ShowRowIndex="true" Appearance="DataGridAppearance.Compat" MaxHeight="500" RowClickedCallback="@RowClicked">
-    <TnTPropertyColumn Property="@((item) => item.Column1)" />
-    <TnTPropertyColumn Property="@((item) => item.Column2)" />
-    <TnTPropertyColumn Property="@((item) => item.Column3)" />
-    <TnTPropertyColumn Property="@((item) => item.Column1)" ColumnHeader="Column 4" Format="D6" />
-    <TnTPropertyColumn Property="@((item) => item.Column2)" ColumnHeader="Column 5" Format="Formatted {0}" />
-    <TnTPropertyColumn Property="@((item) => item.Column3)" ColumnHeader="Column 6" Format="MMMM/dd/yyyy" />
-    <TnTPropertyColumn Property="@((item) => item.Column1)" ColumnHeader="Column 7" />
-    <TnTPropertyColumn Property="@((item) => item.Column2)" ColumnHeader="Column 8" DefaultSort="true" />
-    <TnTPropertyColumn Property="@((item) => item.Column3)" ColumnHeader="Column 9" />
-</TnTDataGrid>
+<TnTQuickGrid Items="@Items" Appearance="DataGridAppearance.Default" Height="500">
+    <PropertyColumn Property="@((item) => item.Column1)" />
+    <PropertyColumn Property="@((item) => item.Column2)" />
+    <PropertyColumn Property="@((item) => item.Column3)" />
+    <PropertyColumn Property="@((item) => item.Column1)" Sortable="true" Title="Column 4" Format="D6" />
+    <PropertyColumn Property="@((item) => item.Column2)" Sortable="true" Title="Column 5" />
+    <PropertyColumn Property="@((item) => item.Column3)" Sortable="true" Title="Column 6" Format="MMMM/dd/yyyy" />
+    <PropertyColumn Property="@((item) => item.Column1)" Sortable="true" Title="Column 7" />
+    <PropertyColumn Property="@((item) => item.Column2)" Sortable="true" Title="Column 8" />
+    <PropertyColumn Property="@((item) => item.Column3)" Sortable="true" Title="Column 9" />
+</TnTQuickGrid>
 
-<TnTDataGrid Name="@(Name + 4)" Items="Items" Appearance="DataGridAppearance.Stripped | DataGridAppearance.Compat" MaxHeight="500" RowClickedCallback="@RowClicked">
-    <TnTPropertyColumn Property="@((item) => item.Column1)" />
-    <TnTPropertyColumn Property="@((item) => item.Column2)" />
-    <TnTPropertyColumn Property="@((item) => item.Column3)" />
-    <TnTPropertyColumn Property="@((item) => item.Column1)" ColumnHeader="Column 4" Format="D6" />
-    <TnTPropertyColumn Property="@((item) => item.Column2)" ColumnHeader="Column 5" Format="Formatted {0}" />
-    <TnTPropertyColumn Property="@((item) => item.Column3)" ColumnHeader="Column 6" Format="MMMM/dd/yyyy" />
-    <TnTPropertyColumn Property="@((item) => item.Column1)" ColumnHeader="Column 7" />
-    <TnTPropertyColumn Property="@((item) => item.Column2)" ColumnHeader="Column 8" DefaultSort="true" />
-    <TnTPropertyColumn Property="@((item) => item.Column3)" ColumnHeader="Column 9" />
-</TnTDataGrid>
-*@
+<TnTQuickGrid Items="@Items" Appearance="DataGridAppearance.Stripped" Height="500">
+    <PropertyColumn Property="@((item) => item.Column1)" />
+    <PropertyColumn Property="@((item) => item.Column2)" />
+    <PropertyColumn Property="@((item) => item.Column3)" />
+    <PropertyColumn Property="@((item) => item.Column1)" Sortable="true" Title="Column 4" Format="D6" />
+    <PropertyColumn Property="@((item) => item.Column2)" Sortable="true" Title="Column 5" />
+    <PropertyColumn Property="@((item) => item.Column3)" Sortable="true" Title="Column 6" Format="MMMM/dd/yyyy" />
+    <PropertyColumn Property="@((item) => item.Column1)" Sortable="true" Title="Column 7" />
+    <PropertyColumn Property="@((item) => item.Column2)" Sortable="true" Title="Column 8" />
+    <PropertyColumn Property="@((item) => item.Column3)" Sortable="true" Title="Column 9" />
+</TnTQuickGrid>
+
+<TnTQuickGrid Items="@Items" Appearance="DataGridAppearance.Compact" Height="500">
+    <PropertyColumn Property="@((item) => item.Column1)" />
+    <PropertyColumn Property="@((item) => item.Column2)" />
+    <PropertyColumn Property="@((item) => item.Column3)" />
+    <PropertyColumn Property="@((item) => item.Column1)" Sortable="true" Title="Column 4" Format="D6" />
+    <PropertyColumn Property="@((item) => item.Column2)" Sortable="true" Title="Column 5" />
+    <PropertyColumn Property="@((item) => item.Column3)" Sortable="true" Title="Column 6" Format="MMMM/dd/yyyy" />
+    <PropertyColumn Property="@((item) => item.Column1)" Sortable="true" Title="Column 7" />
+    <PropertyColumn Property="@((item) => item.Column2)" Sortable="true" Title="Column 8" />
+    <PropertyColumn Property="@((item) => item.Column3)" Sortable="true" Title="Column 9" />
+</TnTQuickGrid>
+
+<TnTQuickGrid Items="@Items" Appearance="DataGridAppearance.Stripped | DataGridAppearance.Compact" Height="500">
+    <PropertyColumn Property="@((item) => item.Column1)" />
+    <PropertyColumn Property="@((item) => item.Column2)" />
+    <PropertyColumn Property="@((item) => item.Column3)" />
+    <PropertyColumn Property="@((item) => item.Column1)" Sortable="true" Title="Column 4" Format="D6" />
+    <PropertyColumn Property="@((item) => item.Column2)" Sortable="true" Title="Column 5" />
+    <PropertyColumn Property="@((item) => item.Column3)" Sortable="true" Title="Column 6" Format="MMMM/dd/yyyy" />
+    <PropertyColumn Property="@((item) => item.Column1)" Sortable="true" Title="Column 7" />
+    <PropertyColumn Property="@((item) => item.Column2)" Sortable="true" Title="Column 8" />
+    <PropertyColumn Property="@((item) => item.Column3)" Sortable="true" Title="Column 9" />
+</TnTQuickGrid>
+
+
+
 @code {
-    [Parameter, EditorRequired]
-    public string Name { get; set; } = default!;
-
     private IQueryable<DataGridItem>? Items;
 
     protected override async Task OnInitializedAsync() {
@@ -65,8 +66,4 @@
         Items = (await _repo.Get(null)).Items.AsQueryable();
     }
 
-    private void RowClicked(DataGridRowClickEventArgs arg) {
-        var item = arg.Item as DataGridItem;
-        Console.WriteLine($"Clicked row {item.Column2}");
-    }
 }

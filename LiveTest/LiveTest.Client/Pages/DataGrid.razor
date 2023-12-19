@@ -10,20 +10,24 @@
         <h3>
             Static
         </h3>
-        <DataGridComponent Name="Static" />
-        <DataGridComponent Name="A" />
-        <DataGridComponent Name="B" />
-
-        @*
-        <h3>
-        Interactive Server
-        </h3>
-        <DataGridComponent Name="Server" @rendermode="@RenderMode.InteractiveServer" />
+        <DataGridComponent />
 
         <h3>
-        Interactive Web Assembly
+            Interactive Server
         </h3>
-        <DataGridComponent Name="Webassembly" @rendermode="@RenderMode.InteractiveWebAssembly" />
-        *@
+        <DataGridComponent @rendermode="@RenderMode.InteractiveServer" />
+
+        <h3>
+            Interactive Web Assembly
+        </h3>
+        <DataGridComponent @rendermode="@RenderMode.InteractiveWebAssembly" />
+
+    </TnTTabChild>
+    <TnTTabChild Title="Paginated" Active="true">
+        <h3>
+            Static
+        </h3>
+        <DataGridComponent />
+
     </TnTTabChild>
 </TnTTabView>

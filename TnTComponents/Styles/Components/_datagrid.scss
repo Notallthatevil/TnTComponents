@@ -1,10 +1,10 @@
-﻿.tnt-data-grid-container {
+﻿.tnt-quick-grid-container {
     overflow-x: auto;
     margin: 8px;
 
     @include tnt-border-radius(2);
 
-    .tnt-data-grid {
+    .tnt-quick-grid {
         background-color: $tnt-color-surface;
         border-collapse: collapse;
         min-width: 100%;
@@ -25,6 +25,7 @@
                     min-width: 16px;
                     text-align: center;
                     @extend .title-medium;
+
 
                     a {
                         display: block;
@@ -53,31 +54,38 @@
                         border-right: 2px solid $tnt-color-primary;
                     }
 
-                    &.tnt-sortable {
-                        &:has(a.active) {
-                            color: $tnt-color-secondary;
-                        }
 
+                    button.col-title {
+                        color: inherit;
+                        font-family: inherit;
+                        font-weight: inherit;
+                        font-size: inherit;
+                        line-height: inherit;
+                        letter-spacing: inherit;
+                        padding: 0 8px;
+                        @include tnt-border-radius(10);
+                        @include enable-ripple($tnt-color-secondary);
+                    }
+
+
+                    &.col-sort-desc, &.col-sort-asc {
+                        color: $tnt-color-secondary;
+
+                        .sort-indicator {
+                            height: 12px;
+                            width: 12px;
+                            min-height: 12px;
+                            min-width: 12px;
+                            background: $tnt-color-secondary;
+                            clip-path: polygon(50% 75%, 0 25%, 100% 25%);
+                            margin-left: 16px;
+                        }
+                    }
+
+                    &:has(button) {
                         &:hover {
                             color: $tnt-color-primary;
                         }
-
-                        a {
-                            i {
-                                position: absolute;
-                                right: 8px;
-                                user-select: none;
-                                pointer-events: none;
-                            }
-
-                            &.ascending {
-                                i {
-                                    transform: rotateZ(180deg);
-                                }
-                            }
-                        }
-
-                        @include enable-ripple($tnt-color-primary);
                     }
                 }
             }

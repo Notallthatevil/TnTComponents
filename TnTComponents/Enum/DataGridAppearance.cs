@@ -9,6 +9,6 @@ namespace TnTComponents.Enum;
 public enum DataGridAppearance {
     Default = 0,
     Stripped = 1,
-    Compat = 2
+    Compact = 2,
 }
 

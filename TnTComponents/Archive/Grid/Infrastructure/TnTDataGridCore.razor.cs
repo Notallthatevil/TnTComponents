@@ -26,13 +26,8 @@ public partial class TnTDataGridCore<TGridItem> {
 
     private string _sortAscParam => Uri.EscapeDataString(_context.DataGridName) + "asc";
     private string _sortByParam => Uri.EscapeDataString(_context.DataGridName) + "sortonindex";
-    private RenderFragment _renderRowContent;
 
     private TnTColumnBase<TGridItem>? _sortedOn;
-
-    public TnTDataGridCore() {
-        _renderRowContent = RenderRowContent;
-    }
 
     public override string GetClass() {
         var strBuilder = new StringBuilder(_gridSettings.GetClass());
@@ -45,7 +40,7 @@ public partial class TnTDataGridCore<TGridItem> {
             strBuilder.Append(' ').Append("stripped");
         }
 
-        if ((_gridSettings.Appearance & DataGridAppearance.Compat) != DataGridAppearance.Default) {
+        if ((_gridSettings.Appearance & DataGridAppearance.Compact) != DataGridAppearance.Default) {
             strBuilder.Append(' ').Append("compact");
         }
         return strBuilder.ToString();

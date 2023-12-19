@@ -46,18 +46,5 @@
     </DeferRendering>
 </div>
 
-@if (!_gridSettings.Appearance.HasFlag(DataGridAppearance.Compat)) {
-    <TnTPageScript Src="./_content/TnTComponents/Grid/Infrastructure/TnTDataGridCore.razor.js" />
-}
+<TnTPageScript Src="./_content/TnTComponents/Grid/Infrastructure/TnTDataGridCore.razor.js" />
 <TnTPageScript Src="./_content/TnTComponents/TnTButton.razor.js?class=tnt-sortable" />
-
-@code {
-
-    private void RenderHeaderContent(RenderTreeBuilder __builder) {
-
-    }
-
-    private void RenderRowContent(RenderTreeBuilder __builder) {
-
-    }
-}
