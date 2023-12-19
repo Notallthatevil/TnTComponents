@@ -29,16 +29,19 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyn
 
     protected bool Interactive { get; set; }
 
-    protected const string TnTCustomIdentifier = "tnt-custom-identifier";
+    protected const string TnTCustomIdentifier = "tntid";
 
     public virtual string GetClass() => this.GetClassDefault();
 
-    protected virtual bool HasIsolatedJs { get; set; } = false;
+    protected virtual bool HasIsolatedJs => false;
 
     [Inject]
     protected IJSRuntime JSRuntime { get; set; } = default!;
 
     protected IJSObjectReference? IsolatedJsModule;
+
+    protected DotNetObjectReference<TnTComponentBase>? DotNetObjectRef { get; set; }
+
 
     protected override void OnAfterRender(bool firstRender) {
         base.OnAfterRender(firstRender);
@@ -50,8 +53,13 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyn
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         await base.OnAfterRenderAsync(firstRender);
         if (HasIsolatedJs) {
+            DotNetObjectRef ??= DotNetObjectReference.Create(this);
             IsolatedJsModule ??= await JSRuntime.ImportIsolatedJs(this);
-            await (IsolatedJsModule?.InvokeVoidAsync("onUpdate") ?? ValueTask.CompletedTask);
+            if(firstRender) {
+                await (IsolatedJsModule?.InvokeVoidAsync("onLoad", Element, DotNetObjectRef) ?? ValueTask.CompletedTask);
+            }
+
+            await (IsolatedJsModule?.InvokeVoidAsync("onUpdate", Element, DotNetObjectRef) ?? ValueTask.CompletedTask);
         }
     }
 
@@ -66,6 +74,7 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyn
     public async ValueTask DisposeAsync() {
         try {
             if (IsolatedJsModule is not null) {
+                await IsolatedJsModule.InvokeVoidAsync("onDispose", Element, DotNetObjectRef);
                 await IsolatedJsModule.DisposeAsync();
             }
         }

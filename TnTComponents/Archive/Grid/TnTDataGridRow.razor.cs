@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using TnTComponents.Archive.Grid.Infrastructure;
 using TnTComponents.Events;
-using TnTComponents.Grid.Infrastructure;
 
-namespace TnTComponents.Grid;
+namespace TnTComponents.Archive.Grid;
 
 public partial class TnTDataGridRow<TGridItem> : IDisposable {
 

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
+using TnTComponents.Archive.Grid.Columns;
 using TnTComponents.Events;
-using TnTComponents.Grid.Columns;
 
-namespace TnTComponents.Grid.Infrastructure;
+namespace TnTComponents.Archive.Grid.Infrastructure;
 
 internal sealed class TnTDataGridContext<TGridItem>(TnTDataGrid<TGridItem> grid) {
     public string DataGridName { get; set; } = default!;

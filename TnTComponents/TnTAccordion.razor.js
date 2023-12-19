@@ -32,6 +32,8 @@ class TnTAccordion extends HTMLElement {
 }
 
 export function onLoad() {
-    customElements.define('tnt-accordion', TnTAccordion);
+    if (!customElements.get('tnt-accordion')) {
+        customElements.define('tnt-accordion', TnTAccordion);
+    }
 }
 

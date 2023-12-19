@@ -5,6 +5,7 @@ html, body {
     background-color: $tnt-color-background;
     margin: 0;
     overflow-x: hidden;
+    height:4000px;
 }
 
 * {
@@ -19,5 +20,7 @@ html, body {
 @import 'Components/_datagrid.scss';
 @import 'Components/_divider.scss';
 @import 'Components/_form.scss';
+@import 'Components/_header.scss';
 @import 'Components/_progress.scss';
+@import 'Components/_sidenav.scss';
 @import 'Components/_tabview.scss';

@@ -1,0 +1,7 @@
+﻿@inherits TnTComponentBase
+
+<CascadingValue Value="this" IsFixed="true">
+    <tnt-side-nav @attributes="AdditionalAttributes" class="@GetClass()" style="@Style" theme="@Theme" @ref="Element">
+        @ChildContent
+    </tnt-side-nav>
+</CascadingValue>

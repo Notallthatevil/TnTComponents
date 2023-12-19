@@ -269,7 +269,7 @@ $tnt-color-on-info-container: var(--tnt-color-on-info-container);
     overflow: hidden;
 
     span.tnt-ripple {
-        position: absolute; 
+        position: absolute;
         border-radius: 50%;
         transform: scale(0);
         animation: ripple-animation 600ms linear;
@@ -310,4 +310,18 @@ $tnt-color-on-info-container: var(--tnt-color-on-info-container);
 
 @mixin tnt-border-radius($radius) {
     border-radius: ($radius * 4px);
+}
+
+@mixin tnt-clickable($property, $color, $mix-color) {
+    &:not(.disabled) {
+        cursor: pointer;
+    }
+
+    &:hover {
+        #{$property}: color-mix(in srgb, $color 10%, $mix-color);
+    }
+
+    &:active {
+        #{$property}: color-mix(in srgb, $color 20%, $mix-color);
+    }
 }

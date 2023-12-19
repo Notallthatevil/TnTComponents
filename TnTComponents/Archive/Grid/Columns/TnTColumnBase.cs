@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 using System.Linq.Expressions;
+using TnTComponents.Archive.Grid.Infrastructure;
 using TnTComponents.Common;
-using TnTComponents.Grid.Infrastructure;
 
-namespace TnTComponents.Grid.Columns;
+namespace TnTComponents.Archive.Grid.Columns;
 
 public abstract class TnTColumnBase<TGridItem> : TnTComponentBase {
 

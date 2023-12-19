@@ -2,11 +2,11 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Text;
 using System.Web;
+using TnTComponents.Archive.Grid.Columns;
 using TnTComponents.Common.Ext;
 using TnTComponents.Enum;
-using TnTComponents.Grid.Columns;
 
-namespace TnTComponents.Grid.Infrastructure;
+namespace TnTComponents.Archive.Grid.Infrastructure;
 
 public partial class TnTDataGridCore<TGridItem> {
 

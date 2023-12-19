@@ -1,0 +1,16 @@
+﻿@inherits TnTComponentBase
+
+<span @attributes="AdditionalAttributes" class="@GetClass()" style="@Style" theme="@Theme" disabled="@Disabled">
+    @if (Icon is not null) {
+        @TnTIconComponent.RenderIcon(IconType.MaterialIcons, Icon)
+    }
+    <NavLink href="@Href" Match="@Match">
+        @ChildContent
+    </NavLink>
+    @if (Status is not null) {
+        <span class="tnt-side-nav-menu-link-status">
+            @Status
+        </span>
+    }
+</span>
+<TnTPageScript Src="@($"./_content/TnTComponents/TnTButton.razor.js?class={Class}")" />

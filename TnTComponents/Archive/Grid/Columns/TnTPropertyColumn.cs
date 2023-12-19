@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TnTComponents.Common.Ext;
 
-namespace TnTComponents.Grid.Columns;
+namespace TnTComponents.Archive.Grid.Columns;
 public class TnTPropertyColumn<TGridItem, TProperty> : TnTColumnBase<TGridItem> {
 
 

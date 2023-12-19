@@ -4,7 +4,7 @@ using TnTComponents.Common;
 using TnTComponents.Enum;
 using TnTComponents.Events;
 
-namespace TnTComponents.Grid.Infrastructure;
+namespace TnTComponents.Archive.Grid.Infrastructure;
 
 /// <summary>
 /// List of settings that apply to TnTDataGrids. Wrapped in an interface to facilitate easy passing

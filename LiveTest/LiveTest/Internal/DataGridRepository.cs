@@ -1,51 +1,9 @@
-﻿using LiveTest.Client.Repositories;
-using LiveTest.Client.Data;
+﻿using LiveTest.Client.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Reflection;
-using TnTComponents.Grid;
 
 namespace LiveTest.Internal;
-public class DataGridRepository : IDataGridRepository {
-
-    private static IQueryable<DataGridItem>? _items;
-    private static object _locker = new object();
-    public async Task<TnTItemsProviderResult<DataGridItem>> Get(TnTItemsProviderRequest? request) {
-        lock (_locker) {
-            if (_items == null) {
-                var list = new List<DataGridItem>();
-                foreach (var i in Enumerable.Range(1, 100)) {
-                    list.Add(new DataGridItem() {
-                        Column1 = Random.Shared.Next(1, 1000),
-                        Column2 = Guid.NewGuid().ToString(),
-                        Column3 = new DateTime(Random.Shared.Next(1, 10000), Random.Shared.Next(1, 13), Random.Shared.Next(1, 29))
-                    });
-                }
-                _items = list.AsQueryable();
-            }
-        }
-
-        var count = _items.Count();
-        var items = _items;
-        if (request is not null) {
-            if (!string.IsNullOrWhiteSpace(request.OrderBy)) {
-                if (request.Descending) {
-                    items = items.OrderByDescending(request.OrderBy);
-                }
-                else {
-                    items = items.OrderBy(request.OrderBy);
-                }
-            }
-
-            items = items.Skip(request.Offset * request.Count).Take(request.Count);
-        }
-
-        return new TnTItemsProviderResult<DataGridItem>() {
-            Items = items.ToList(),
-            Total = count
-        };
-    }
-}
 
 public static class LinqExtensions {
     private static PropertyInfo GetPropertyInfo(Type objType, string name) {

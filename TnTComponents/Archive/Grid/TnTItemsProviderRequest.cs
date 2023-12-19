@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TnTComponents.Grid;
+namespace TnTComponents.Archive.Grid;
 public record class TnTItemsProviderRequest {
     public required int Count { get; set; } = int.MaxValue;
     public required int Offset { get; set; } = 0;

@@ -1,0 +1,21 @@
+﻿@inherits TnTComponentBase
+
+
+<tnt-side-nav-menu-group @attributes="AdditionalAttributes" class="@GetClass()" style="@Style" theme="@Theme" disabled="@Disabled">
+    <span class="tnt-side-nav-menu-group-header">
+        @if (Icon is not null) {
+            @TnTIconComponent.RenderIcon(IconType.MaterialIcons, Icon)
+        }
+        <h5 class="tnt-side-nav-menu-group-title">
+            @Title
+        </h5>
+        @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "arrow_drop_down", "drop-down-indicator")
+
+    </span>
+    <div class="tnt-side-nav-menu-group-children">
+        @ChildContent
+    </div>
+</tnt-side-nav-menu-group>
+
+<TnTPageScript Src="./_content/TnTComponents/Layout/TnTSideNavMenuGroup.razor.js" />
+<TnTPageScript Src="./_content/TnTComponents/TnTButton.razor.js?class=tnt-side-nav-menu-group-header" />

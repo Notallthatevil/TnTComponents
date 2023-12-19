@@ -1,27 +1,75 @@
-﻿@inherits LayoutComponentBase
+﻿@using TnTComponents
+@inherits LayoutComponentBase
 
 <TnTLayout>
-    <Header>
+    <TnTHeader>
+        <TnTSideNavToggle />
         This is my header
-        <TnTSideNavToggle Icon="menu"></TnTSideNavToggle>
-    </Header>
+    </TnTHeader>
 
-    <SideNav>
-        <TnTSideNavList>
-            <TnTSideNavListItem Icon="home" Label="Home" Href="/" Match="NavLinkMatch.All" />
-            <TnTSideNavListItem Icon="business" Label="Buttons" Href="Buttons" />
-            <TnTSideNavListItem Icon="add_circle" Label="Segmented Buttons" Href="segmentedButton" />
-            <TnTSideNavListItem Icon="search" Label="Cards" Href="card" />
-            <TnTSideNavListItem Icon="settings" Label="Forms" Href="forms" />
-            <TnTSideNavListItem Icon="warning" Label="Upload File" Href="upload" />
-            <TnTSideNavListItem Icon="error" Label="Progress Indicators" Href="progress" />
-            <TnTSideNavListItem Icon="phone" Label="Tab View" Href="tabview" />
-            <TnTSideNavListItem Icon="app" Label="Accordion" Href="accordion" />
-            <TnTSideNavListItem Icon="calendar" Label="DataGrid" Href="datagrid" />
-        </TnTSideNavList>
-    </SideNav>
+    <TnTSideNav Title="My Title">
+        <TnTSideNavHeadline>
+            My First Headline
+        </TnTSideNavHeadline>
+        <TnTSideNavMenuLink Icon="home" Href="/" Match="NavLinkMatch.All" Status="100" Disabled="true">
+            Home
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuLink Icon="error" Href="/Buttons">
+            Buttons
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuLink Icon="warning" Href="/card">
+            Card Some really long content that should be cut off or wrapped
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuGroup Title="Group 1" Icon="business">
+            <TnTSideNavMenuLink Icon="delete" Href="/datagrid">
+                Data Grid
+            </TnTSideNavMenuLink>
+            <TnTSideNavMenuLink Icon="star" Href="/progress">
+                Progress
+            </TnTSideNavMenuLink>
+        </TnTSideNavMenuGroup>
+        <TnTSideNavMenuGroup Title="Group 1" Icon="business" Disabled="true">
+            <TnTSideNavMenuLink Icon="delete" Href="/datagrid">
+                Data Grid
+            </TnTSideNavMenuLink>
+            <TnTSideNavMenuLink Icon="star" Href="/progress">
+                Progress
+            </TnTSideNavMenuLink>
+        </TnTSideNavMenuGroup>
+        <TnTDivider />
+        <TnTSideNavHeadline>
+            My First Headline
+        </TnTSideNavHeadline>
+        <TnTSideNavMenuGroup Title="Group 2" Icon="done" Expand="true">
+            <TnTSideNavMenuLink Icon="logout" Href="/forms">
+                Forms
+            </TnTSideNavMenuLink>
+            <TnTSideNavMenuLink Icon="favorite" Href="/upload">
+                Upload
+            </TnTSideNavMenuLink>
+            <TnTSideNavMenuLink Icon="cancel" Href="/tabview">
+                Tabs
+            </TnTSideNavMenuLink>
+            <TnTSideNavMenuGroup Title="Group 2" Icon="done" Expand="true">
+                <TnTSideNavMenuLink Icon="logout" Href="/forms">
+                    Forms
+                </TnTSideNavMenuLink>
+                <TnTSideNavMenuLink Icon="favorite" Href="/upload">
+                    Upload
+                </TnTSideNavMenuLink>
+                <TnTSideNavMenuLink Icon="cancel" Href="/tabview">
+                    Tabs
+                </TnTSideNavMenuLink>
+            </TnTSideNavMenuGroup>
+        </TnTSideNavMenuGroup>
 
-    <Body>
+    </TnTSideNav>
+
+    <TnTBody>
         @Body
-    </Body>
+    </TnTBody>
+
+    <TnTFooter>
+        Footer content
+    </TnTFooter>
 </TnTLayout>

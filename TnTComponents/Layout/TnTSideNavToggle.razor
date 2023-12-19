@@ -1,0 +1,7 @@
+﻿@inherits TnTComponentBase
+
+<tnt-side-nav-toggle @attributes="AdditionalAttributes" class="@GetClass()" style="@Style" theme="@Theme" expanded="@Expanded" @ref="Element">
+    @TnTIconComponent.RenderIcon(IconType.MaterialIcons, Icon)
+</tnt-side-nav-toggle>
+
+<TnTPageScript Src="./_content/TnTComponents/Layout/TnTSideNavToggle.razor.js" />

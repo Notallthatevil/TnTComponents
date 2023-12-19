@@ -1,11 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Components.QuickGrid
+@using TnTComponents
 @using TnTComponents.Enum
 @using TnTComponents.Events
-@using TnTComponents.Grid
-@using TnTComponents.Grid.Columns
 @using LiveTest.Client.Data
-@using LiveTest.Client.Repositories
-@inject IDataGridRepository _repo
 
 
 <TnTQuickGrid Items="@Items" Appearance="DataGridAppearance.Default" Height="500">
@@ -60,10 +57,26 @@
 
 @code {
     private IQueryable<DataGridItem>? Items;
+    private static object _locker = new();
+    private static List<DataGridItem> _items;
+    protected override Task OnInitializedAsync() {
+        lock (_locker) {
+            if (_items == null) {
+                var list = new List<DataGridItem>();
+                foreach (var i in Enumerable.Range(1, 100)) {
+                    list.Add(new DataGridItem() {
+                            Column1 = Random.Shared.Next(1, 1000),
+                            Column2 = Guid.NewGuid().ToString(),
+                            Column3 = new DateTime(Random.Shared.Next(1, 10000), Random.Shared.Next(1, 13), Random.Shared.Next(1, 29))
+                        });
+                }
+                _items = list;
+            }
+            Items = _items.AsQueryable();
+        }
 
-    protected override async Task OnInitializedAsync() {
-        await base.OnInitializedAsync();
-        Items = (await _repo.Get(null)).Items.AsQueryable();
+        return Task.CompletedTask;
     }
+
 
 }

@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Components;
 using System.Linq.Expressions;
+using TnTComponents.Archive.Grid.Columns;
+using TnTComponents.Archive.Grid.Infrastructure;
 using TnTComponents.Enum;
 using TnTComponents.Events;
-using TnTComponents.Grid;
-using TnTComponents.Grid.Columns;
-using TnTComponents.Grid.Infrastructure;
 
-namespace TnTComponents.Grid;
+namespace TnTComponents.Archive.Grid;
 
 [CascadingTypeParameter(nameof(TGridItem))]
 public partial class TnTDataGrid<TGridItem> {
