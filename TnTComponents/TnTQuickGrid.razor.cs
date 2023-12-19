@@ -7,10 +7,11 @@ using System.Text;
 using TnTComponents.Common.Ext;
 using TnTComponents.Enum;
 
-namespace TnTComponents.Grid;
+namespace TnTComponents;
 
 [CascadingTypeParameter(nameof(TGridItem))]
-public partial class TnTQuickGrid<TGridItem> {
+public partial class TnTQuickGrid<TGridItem>
+{
 
     [Parameter]
     public DataGridAppearance Appearance { get; set; }
@@ -26,20 +27,25 @@ public partial class TnTQuickGrid<TGridItem> {
     private IJSObjectReference? _isolatedJsModule;
 
 
-    protected override void OnParametersSet() {
+    protected override void OnParametersSet()
+    {
         Theme = "TnTComponents";
-        if (string.IsNullOrWhiteSpace(Class)) {
+        if (string.IsNullOrWhiteSpace(Class))
+        {
             Class = "tnt-quick-grid";
         }
         var strBuilder = new StringBuilder(Class);
 
-        if (Appearance.HasFlag(DataGridAppearance.Stripped)) {
+        if (Appearance.HasFlag(DataGridAppearance.Stripped))
+        {
             strBuilder.Append(' ').Append(DataGridAppearance.Stripped.ToString().ToLower());
         }
-        if (Appearance.HasFlag(DataGridAppearance.Compact)) {
+        if (Appearance.HasFlag(DataGridAppearance.Compact))
+        {
             strBuilder.Append(' ').Append(DataGridAppearance.Compact.ToString().ToLower());
         }
-        else {
+        else
+        {
             strBuilder.Append(" tnt-resizable");
         }
 
@@ -47,18 +53,23 @@ public partial class TnTQuickGrid<TGridItem> {
         base.OnParametersSet();
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender) {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
         await base.OnAfterRenderAsync(firstRender);
         _isolatedJsModule ??= await _jsRuntime.ImportIsolatedJs(this);
-        if (firstRender) {
+        if (firstRender)
+        {
             await (_isolatedJsModule?.InvokeVoidAsync("onLoad") ?? ValueTask.CompletedTask);
         }
         await (_isolatedJsModule?.InvokeVoidAsync("onUpdate") ?? ValueTask.CompletedTask);
     }
 
-    public new async ValueTask DisposeAsync() {
-        try {
-            if (_isolatedJsModule is not null) {
+    public new async ValueTask DisposeAsync()
+    {
+        try
+        {
+            if (_isolatedJsModule is not null)
+            {
                 await _isolatedJsModule.InvokeVoidAsync("onDispose");
                 await _isolatedJsModule.DisposeAsync();
             }
@@ -67,13 +78,17 @@ public partial class TnTQuickGrid<TGridItem> {
         await base.DisposeAsync();
     }
 
-    private string? GetContainerStyle() {
-        if (Height.HasValue) {
+    private string? GetContainerStyle()
+    {
+        if (Height.HasValue)
+        {
             var strBuilder = new StringBuilder("height:");
-            if (Height <= 1) {
+            if (Height <= 1)
+            {
                 strBuilder.Append(Height * 100).Append('%');
             }
-            else {
+            else
+            {
                 strBuilder.Append(Height).Append("px");
             }
             strBuilder.Append(';');
