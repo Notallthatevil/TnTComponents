@@ -1,6 +1,6 @@
 ﻿@inherits TnTComponentBase
 
-<span @attributes="AdditionalAttributes" class="@GetClass()" style="@Style" theme="@Theme" disabled="@Disabled">
+<span @attributes="AdditionalAttributes" class="@GetClass()" style="@Style" theme="@Theme">
     @if (Icon is not null) {
         @TnTIconComponent.RenderIcon(IconType.MaterialIcons, Icon)
     }

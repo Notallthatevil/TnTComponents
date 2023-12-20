@@ -40,5 +40,5 @@ public partial class TnTSideNavMenuGroup {
         await Expanded.InvokeAsync(expanded);
     }
 
-    public override string GetClass() => $"{base.GetClass()} {(Expand ? "expanded" : string.Empty)}";
+    public override string GetClass() => $"{base.GetClass()} {(Expand ? "expanded" : string.Empty)} {(Disabled ? "disabled" : string.Empty)}";
 }

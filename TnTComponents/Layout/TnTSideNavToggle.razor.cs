@@ -10,7 +10,7 @@ public partial class TnTSideNavToggle {
     public bool Expanded { get; set; } = false;
 
     [Parameter]
-    public bool AllowToggleOnLargeScreen { get; set; } = false;
+    public bool AlwaysExpandOnLarge { get; set; } = true;
 
     [Parameter]
     public EventCallback<bool> ToggleCallback { get; set; }
@@ -32,6 +32,6 @@ public partial class TnTSideNavToggle {
         await ToggleCallback.InvokeAsync(expanded);
     }
 
-    public override string GetClass() => $"{base.GetClass()} {(AllowToggleOnLargeScreen ? "tnt-allow-hide" : string.Empty)} {(Expanded ? "expanded" : string.Empty)}";
+    public override string GetClass() => $"{base.GetClass()} {(AlwaysExpandOnLarge ? "expand-large" : string.Empty)} {(Expanded ? "expanded" : string.Empty)}";
 
 }

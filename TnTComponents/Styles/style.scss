@@ -5,7 +5,6 @@ html, body {
     background-color: $tnt-color-background;
     margin: 0;
     overflow-x: hidden;
-    height:4000px;
 }
 
 * {
@@ -15,10 +14,12 @@ html, body {
 @import 'Common/_default_typeography.scss';
 @import 'Common/_layout.scss';
 @import 'Components/_accordion.scss';
+@import 'Components/_body.scss';
 @import 'Components/_buttons.scss';
 @import 'Components/_card.scss';
 @import 'Components/_datagrid.scss';
 @import 'Components/_divider.scss';
+@import 'Components/_footer.scss';
 @import 'Components/_form.scss';
 @import 'Components/_header.scss';
 @import 'Components/_progress.scss';

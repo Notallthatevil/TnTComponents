@@ -2,7 +2,7 @@
     position: fixed;
     height: 100%;
     background-color: red;
-    width: 250px;
+    width: $tnt-side-nav-width;
     left: -105%;
     box-sizing: border-box;
     transition: ease-in-out 150ms;
@@ -14,7 +14,6 @@
     padding: 12px 12px;
 
     @include tnt-z-depth(2);
-
 
     &.expanded {
         left: 0;
@@ -30,9 +29,10 @@
     }
 
     .tnt-side-nav-menu-link, .tnt-side-nav-menu-group {
-        &[disabled] {
+        &.disabled {
             opacity: 0.2;
             cursor: not-allowed;
+            pointer-events: none;
         }
 
         display: flex;
@@ -52,7 +52,7 @@
             margin-left: 16px;
         }
 
-        &:not(:has([disabled])) {
+        &:not(.disabled) {
             &:hover {
                 background-color: color-mix(in srgb, $tnt-color-on-surface, transparent 92%);
 
@@ -143,113 +143,44 @@
     }
 }
 
-.tnt-side-nav-toggle i {
-    margin: 0 24px 0 16px;
-    font-size: 24px;
-    border-radius: 100%;
+.tnt-side-nav-toggle {
+    &.expand-large {
+        @media #{$medium-and-up} {
+            margin-left: 16px;
 
-    @include tnt-clickable(background-color, $tnt-color-on-surface, $tnt-color-surface);
+            i {
+                display: none;
+            }
+        }
+    }
+
+    i {
+        margin: 0 24px 0 16px;
+        font-size: 24px;
+        border-radius: 100%;
+
+        @include tnt-clickable(background-color, $tnt-color-on-surface, $tnt-color-surface);
+    }
 }
 
-.tnt-side-nav-menu-link {
+:root:has(.tnt-side-nav-toggle.expand-large) {
+    @media #{$medium-and-up} {
+        .tnt-side-nav {
+            left: 0;
+        }
+
+        .tnt-header {
+            width: calc(100% - $tnt-side-nav-width);
+            padding-left: $tnt-side-nav-width;
+        }
+
+        .tnt-body {
+            width: calc(100% - $tnt-side-nav-width);
+            padding-left: $tnt-side-nav-width;
+        }
+
+        .tnt-footer {
+            padding-left: $tnt-side-nav-width;
+        }
+    }
 }
-
-
-
-//.tnt-sidebar-transition {
-//    transition: transform ease-in-out 150ms;
-//}
-
-//.tnt-side-nav {
-//    position: fixed;
-//    left: 0;
-//    top: 0;
-//    margin: 0.2rem 0 0.2rem 0;
-//    width: 250px;
-//    height: calc(100% - 0.4rem);
-//    z-index: 999;
-//    overflow-y: auto;
-//    will-change: transform;
-//    backface-visibility: hidden;
-//    transform: translateX(-105%);
-//    border-radius: 16px;
-//    @extend .tnt-z-depth-2;
-//    @extend .tnt-sidebar-transition;
-
-//    .tnt-side-nav-list {
-//        padding: 0;
-
-//        .tnt-side-nav-list-item {
-//            float: none;
-//            list-style-type: none;
-//            line-height: 16px;
-//            vertical-align: middle;
-//            margin: 0 12px;
-//            @extend .tnt-border-radius-9;
-
-//            &:hover {
-//                background-color: rgba(0,0,0,.05);
-//            }
-
-//            &:active {
-//                background-color: rgba(0,0,0,.05);
-//            }
-
-//            > a {
-//                display: block;
-//                font-weight: bold;
-//                text-decoration: none;
-//                vertical-align: top;
-//                font-size: 1.1rem;
-//                height: 3.25rem;
-//                line-height: 3.25rem;
-//                margin: 8px 24px;
-
-//                > i,
-//                > i.material-icons {
-//                    float: left;
-//                    padding-right: 1rem;
-//                    line-height: 3.25rem;
-//                }
-
-//                > i.material-icons {
-//                    vertical-align: middle;
-//                }
-
-//                &:not(:has(i)) {
-//                    margin-left: 65px;
-//                }
-//            }
-//        }
-//    }
-
-//    @media #{$medium-and-up} {
-//        position: fixed;
-//        transform: translateX(-5%);
-//        padding-left: 0.1rem;
-//    }
-
-//    @media #{$small-and-down} {
-//        &.expand {
-//            position: fixed;
-//            transform: translateX(5%);
-//        }
-//    }
-//}
-
-//.tnt-sidebar-button {
-//    cursor: pointer;
-//    @extend .tnt-sidebar-transition;
-
-//    @media #{$medium-and-up} {
-//        visibility: hidden;
-//    }
-
-//    @media #{$small-and-down} {
-//        visibility: visible;
-//    }
-//}
-
-//.tnt-sidebar-button {
-//    cursor: pointer;
-//}

@@ -28,4 +28,8 @@ public partial class TnTSideNavMenuLink {
     [Parameter]
     public bool Disabled { get; set; }
 
+    public override string GetClass() => $"{base.GetClass()} {(Disabled ? "disabled" : string.Empty)}";
+
+
+
 }

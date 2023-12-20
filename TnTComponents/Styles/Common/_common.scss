@@ -247,6 +247,10 @@ $tnt-color-on-info: var(--tnt-color-on-info);
 $tnt-color-info-container: var(--tnt-color-info-container);
 $tnt-color-on-info-container: var(--tnt-color-on-info-container);
 
+$tnt-side-nav-width: 250px;
+$tnt-header-height: 64px;
+$tnt-footer-height: 80px;
+
 .tnt-state-layers {
     &:disabled, &[disabled] {
         opacity: 0.4;

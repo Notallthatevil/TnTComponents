@@ -1,5 +1,5 @@
 ﻿.tnt-header {
-    height: 64px;
+    height: $tnt-header-height;
     width: 100%;
     background-color: $tnt-color-surface;
     display: flex;
@@ -8,6 +8,7 @@
     transition: ease-in-out 150ms;
     align-items: center;
     color: $tnt-color-on-surface;
+    z-index: 998;
     @extend .title-large;
 
     &.scroll {
@@ -24,8 +25,7 @@
     }
 
     &.expanded {
-        padding-left: 250px;
+        width: calc(100% - $tnt-side-nav-width);
+        padding-left: $tnt-side-nav-width;
     }
-
-
 }
