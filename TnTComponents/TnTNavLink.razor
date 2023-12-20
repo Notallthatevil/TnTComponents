@@ -1,0 +1,15 @@
+﻿@implements ITnTComponentBase
+@inherits NavLink
+
+
+<a @attributes="AdditionalAttributes" class="@GetClass()" style="@Style" theme="@Theme" @ref="Element">
+    @if (!string.IsNullOrWhiteSpace(StartIcon)) {
+        @TnTIconComponent.RenderIcon(IconType, StartIcon, "tnt-button-start-icon")
+    }
+    @ChildContent
+    @if (!string.IsNullOrWhiteSpace(EndIcon)) {
+        @TnTIconComponent.RenderIcon(IconType, EndIcon, "tnt-button-end-icon")
+    }
+</a>
+
+<TnTPageScript Src="@($"./_content/TnTComponents/TnTButton.razor.js?class={Class}")" />

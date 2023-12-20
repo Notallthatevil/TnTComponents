@@ -1,4 +1,5 @@
-﻿.tnt-button:not(.tnt-segmented-button .tnt-button) {
+﻿.tnt-button:not(.tnt-segmented-button .tnt-button), .tnt-nav-link:not(.none) {
+    text-decoration: none;
     min-height: 40px;
     padding: 0 24px 0 24px;
     margin: 8px;
