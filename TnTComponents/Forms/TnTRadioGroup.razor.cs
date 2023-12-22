@@ -2,15 +2,12 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Xml.Linq;
-using TnTComponents.Common;
 using TnTComponents.Enum;
 
 namespace TnTComponents.Forms;
 
 [CascadingTypeParameter(nameof(TInputType))]
 public partial class TnTRadioGroup<TInputType> {
-
     private TnTRadioButtonContext? _context;
 
     [Parameter]
@@ -33,7 +30,6 @@ public partial class TnTRadioGroup<TInputType> {
     private TnTRadioButtonContext? _cascadedContext { get; set; }
 
     public override string GetClass() => $"{base.GetClass()} {Orientation.ToString().ToLower()} {GetFormType()}";
-
 
     protected override void OnParametersSet() {
         Name ??= FieldIdentifier.FieldName;

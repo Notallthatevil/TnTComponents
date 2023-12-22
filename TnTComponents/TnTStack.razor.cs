@@ -3,7 +3,9 @@ using System.Text;
 using TnTComponents.Enum;
 
 namespace TnTComponents;
+
 public partial class TnTStack {
+
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 

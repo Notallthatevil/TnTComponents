@@ -36,4 +36,3 @@ export function onLoad() {
         customElements.define('tnt-accordion', TnTAccordion);
     }
 }
-

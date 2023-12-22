@@ -2,10 +2,11 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 
 namespace TnTComponents.Layout;
+
 public partial class TnTSideNavMenuLink {
+
     [CascadingParameter]
     private TnTSideNav _sideNav { get; set; } = default!;
-
 
     [Parameter]
     public override string? Class { get; set; } = "tnt-side-nav-menu-link";
@@ -29,7 +30,4 @@ public partial class TnTSideNavMenuLink {
     public bool Disabled { get; set; }
 
     public override string GetClass() => $"{base.GetClass()} {(Disabled ? "disabled" : string.Empty)}";
-
-
-
 }

@@ -11,6 +11,7 @@ public partial class TnTTabView {
 
     [Parameter]
     public string TabHeaderClass { get; set; } = "tnt-tab-header";
+
     [Parameter]
     public string TabActiveIndicatorClass { get; set; } = "tnt-tab-active-indicator";
 

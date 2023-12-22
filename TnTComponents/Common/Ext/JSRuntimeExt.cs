@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System.Runtime.CompilerServices;
 
 namespace TnTComponents.Common.Ext;
 
@@ -13,7 +12,7 @@ internal static class JSRuntimeExt {
     public static async Task<IJSObjectReference> ImportIsolatedJs(this IJSRuntime jsRuntime, object obj) {
         var @namespace = obj.GetType().Namespace?.Split('.') ?? [];
         var name = obj.GetType().Name;
-        if(name.Contains('`')) {
+        if (name.Contains('`')) {
             name = name[..name.IndexOf('`')];
         }
         var root = Directory.GetCurrentDirectory();

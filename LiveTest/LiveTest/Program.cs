@@ -1,9 +1,4 @@
 using LiveTest.Components;
-using LiveTest.Client.Data;
-using LiveTest.Internal;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddLogging();
@@ -43,6 +38,5 @@ app.MapPost("/submitStaticForm", async (IFormFileCollection myFiles) => {
         await file.CopyToAsync(stream);
     }
 });
-
 
 app.Run();

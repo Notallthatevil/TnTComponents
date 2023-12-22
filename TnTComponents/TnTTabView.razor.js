@@ -7,7 +7,6 @@ class TnTTabView extends HTMLElement {
         this.activeIndex = -1;
         this.resizeObserver = null;
         this.interactive = false;
-
     }
 
     disconnectedCallback() {
@@ -38,7 +37,6 @@ class TnTTabView extends HTMLElement {
                     activeHeader = head;
                 }
             });
-
         }
 
         return activeHeader;
@@ -73,7 +71,6 @@ class TnTTabView extends HTMLElement {
             });
         }
 
-
         if (this.resizeObserver) {
             this.resizeObserver.disconnect();
         }
@@ -89,7 +86,6 @@ class TnTTabView extends HTMLElement {
 
             let headers = [...headerArea.children];
             if (headers.length === tabChildren.length && !this.interactive) {
-
                 function setHeaderActive() {
                     let activeHead = null;
                     headers.forEach((head, index) => {
@@ -141,9 +137,6 @@ class TnTTabView extends HTMLElement {
                     }
                 });
                 selectActiveTab();
-
-
-
             }
         }
     }
@@ -192,4 +185,3 @@ export function onUpdate() {
         tntTabView.update();
     }
 }
-

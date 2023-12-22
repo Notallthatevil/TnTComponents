@@ -20,7 +20,6 @@ function scrollEventListener(e) {
 export function onLoad(element = null, dotNetObjectRef = null) {
     window.addEventListener('scroll', scrollEventListener);
 
-
     if (!customElements.get('tnt-side-nav')) {
         customElements.define('tnt-side-nav', class extends HTMLElement { });
     }
@@ -36,11 +35,9 @@ export function onLoad(element = null, dotNetObjectRef = null) {
     if (!customElements.get('tnt-footer')) {
         customElements.define('tnt-footer', class extends HTMLElement { });
     }
-
 }
 
 export function onUpdate(element = null, dotNetObjectRef = null) {
-
 }
 
 export function onDispose(element = null, dotNetObjectRef = null) {

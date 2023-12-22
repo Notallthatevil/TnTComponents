@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TnTComponents.Common;
+
 public abstract class TnTLayoutBase : LayoutComponentBase, ITnTComponentBase {
     [Parameter] public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
     [Parameter] public string? Class { get; set; }
@@ -17,4 +13,3 @@ public abstract class TnTLayoutBase : LayoutComponentBase, ITnTComponentBase {
 
     public virtual string GetClass() => this.GetClassDefault();
 }
-

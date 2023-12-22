@@ -4,7 +4,6 @@
 //namespace TnTComponents.Common;
 
 //public partial class TnTExternalClickHandler {
-
 //    [Parameter, EditorRequired]
 //    public EventCallback Callback { get; set; }
 

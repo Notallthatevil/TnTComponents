@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System.Text;
 using TnTComponents.Common.Ext;
 
 namespace TnTComponents.Common;
@@ -42,7 +41,6 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyn
 
     protected DotNetObjectReference<TnTComponentBase>? DotNetObjectRef { get; set; }
 
-
     protected override void OnAfterRender(bool firstRender) {
         base.OnAfterRender(firstRender);
         if (firstRender) {
@@ -55,7 +53,7 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyn
         if (HasIsolatedJs) {
             DotNetObjectRef ??= DotNetObjectReference.Create(this);
             IsolatedJsModule ??= await JSRuntime.ImportIsolatedJs(this);
-            if(firstRender) {
+            if (firstRender) {
                 await (IsolatedJsModule?.InvokeVoidAsync("onLoad", Element, DotNetObjectRef) ?? ValueTask.CompletedTask);
             }
 

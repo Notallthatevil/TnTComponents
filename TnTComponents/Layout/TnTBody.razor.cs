@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Components;
 
 namespace TnTComponents.Layout;
+
 public partial class TnTBody {
+
     [Parameter]
     public override string? Class { get; set; } = "tnt-body";
 

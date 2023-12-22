@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using System.Diagnostics.CodeAnalysis;
 
 namespace TnTComponents.Layout;
+
 public partial class TnTSideNavToggle {
 
     [Parameter]
@@ -33,5 +33,4 @@ public partial class TnTSideNavToggle {
     }
 
     public override string GetClass() => $"{base.GetClass()} {(AlwaysExpandOnLarge ? "expand-large" : string.Empty)} {(Expanded ? "expanded" : string.Empty)}";
-
 }

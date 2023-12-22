@@ -1,10 +1,11 @@
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components;
-using TnTComponents.Enum;
 using TnTComponents.Common;
+using TnTComponents.Enum;
 
 namespace TnTComponents;
+
 public partial class TnTNavLink {
+
     [Parameter]
     public NavLinkAppearance Appearance { get; set; }
 
@@ -25,9 +26,12 @@ public partial class TnTNavLink {
 
     [Parameter]
     public string? Id { get; set; }
+
     [Parameter]
     public string? Style { get; set; }
+
     [Parameter]
     public string? Theme { get; set; }
+
     public string GetClass() => $"{this.GetClassDefault()} {Appearance.ToString().ToLower()} {CssClass}";
 }

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace TnTComponents.Common.Ext;
+
 internal static partial class StringExt {
 
     public static string SplitPascalCase(this string str, string replacement = " ") {
@@ -15,4 +11,3 @@ internal static partial class StringExt {
     [GeneratedRegex(@"(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.Compiled)]
     private static partial Regex PascalCaseSplit();
 }
-

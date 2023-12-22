@@ -26,7 +26,6 @@
                     text-align: center;
                     @extend .title-medium;
 
-
                     a {
                         display: block;
                         width: 100%;
@@ -54,7 +53,6 @@
                         border-right: 2px solid $tnt-color-primary;
                     }
 
-
                     button.col-title {
                         color: inherit;
                         font-family: inherit;
@@ -66,7 +64,6 @@
                         @include tnt-border-radius(10);
                         @include enable-ripple($tnt-color-secondary);
                     }
-
 
                     &.col-sort-desc, &.col-sort-asc {
                         color: $tnt-color-secondary;
@@ -90,7 +87,6 @@
                 }
             }
         }
-
 
         &.stripped {
             tr:nth-child(even) {

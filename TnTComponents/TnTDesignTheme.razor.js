@@ -21,5 +21,4 @@ export function onLoad() {
 
         document.adoptedStyleSheets = [css];
     }
-
 }

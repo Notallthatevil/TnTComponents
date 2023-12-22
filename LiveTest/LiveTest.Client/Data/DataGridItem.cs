@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LiveTest.Client.Data;
+
 public class DataGridItem {
 
     [Key]
@@ -12,4 +13,3 @@ public class DataGridItem {
 
     public DateTime Column3 { get; set; }
 }
-
