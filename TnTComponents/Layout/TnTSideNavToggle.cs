@@ -6,7 +6,6 @@
 //namespace TnTComponents.Layout;
 
 //public class TnTSideNavToggle : TnTIconComponent {
-
 //    [Parameter]
 //    public override string Icon { get; set; } = "menu";
 

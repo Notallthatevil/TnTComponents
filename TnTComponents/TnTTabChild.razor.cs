@@ -5,7 +5,9 @@ using TnTComponents.Common;
 using TnTComponents.Enum;
 
 namespace TnTComponents;
+
 public partial class TnTTabChild : IDisposable {
+
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 

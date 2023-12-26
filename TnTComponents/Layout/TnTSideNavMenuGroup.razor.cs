@@ -3,12 +3,15 @@ using Microsoft.JSInterop;
 using System.Diagnostics.CodeAnalysis;
 
 namespace TnTComponents.Layout;
+
 public partial class TnTSideNavMenuGroup {
+
     [CascadingParameter]
     private TnTSideNav _sideNav { get; set; } = default!;
 
     [Parameter]
     public string? Icon { get; set; }
+
     [Parameter]
     public override string? Class { get; set; } = "tnt-side-nav-menu-group";
 
@@ -29,10 +32,8 @@ public partial class TnTSideNavMenuGroup {
     [Parameter]
     public EventCallback<bool> Expanded { get; set; }
 
-
     [DynamicDependency(nameof(Toggle))]
     public TnTSideNavMenuGroup() : base() { }
-
 
     [JSInvokable]
     public async Task Toggle(bool expanded) {

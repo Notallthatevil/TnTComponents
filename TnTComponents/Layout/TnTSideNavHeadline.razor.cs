@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Components;
 
 namespace TnTComponents.Layout;
+
 public partial class TnTSideNavHeadline {
+
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 

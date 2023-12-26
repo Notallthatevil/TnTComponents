@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 
 namespace TnTComponents.Layout;
+
 public partial class TnTHeader {
 
     [Parameter]

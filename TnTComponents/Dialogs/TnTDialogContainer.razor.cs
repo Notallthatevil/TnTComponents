@@ -4,7 +4,6 @@
 //namespace TnTComponents.Dialogs;
 
 //public partial class TnTDialogContainer {
-
 //    [Parameter]
 //    public override string BaseCssClass { get; set; } = "tnt-dialog-container";
 

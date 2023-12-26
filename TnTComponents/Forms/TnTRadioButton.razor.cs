@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Components;
 using TnTComponents.Enum;
 
 namespace TnTComponents.Forms;
+
 public partial class TnTRadioButton<TInputType> {
+
     [CascadingParameter]
     internal TnTRadioButtonContext? _cascadedContext { get; set; } = default!;
 
@@ -32,6 +34,7 @@ public partial class TnTRadioButton<TInputType> {
 
     [Parameter]
     public string? EndIcon { get; set; }
+
     [Parameter]
     public bool Required { get; set; }
 
@@ -57,15 +60,12 @@ public partial class TnTRadioButton<TInputType> {
 
         _context = string.IsNullOrWhiteSpace(Name) ? _cascadedContext : _cascadedContext?.FindContextInAncestors(Name);
 
-        if(_context is null ) {
+        if (_context is null) {
             throw new InvalidOperationException($"{nameof(TnTRadioButton<TInputType>)} must have an ancestor of type {nameof(TnTRadioGroup<TInputType>)} and have a matching or empty {nameof(Name)} parameter");
         }
 
-        if(Checked.HasValue && Checked.Value == true) {
+        if (Checked.HasValue && Checked.Value == true) {
             _context.CurrentValue = Value;
         }
-
-
-
     }
 }

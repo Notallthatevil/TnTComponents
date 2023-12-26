@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Components;
 
 namespace TnTComponents.Layout;
-public partial class TnTFooter
-{
+
+public partial class TnTFooter {
+
     [Parameter]
     public override string? Class { get; set; } = "tnt-footer";
 

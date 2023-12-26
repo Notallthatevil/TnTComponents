@@ -40,7 +40,6 @@ public partial class TnTDataGrid<TGridItem> {
     [Parameter]
     public TnTItemsProvider<TGridItem>? ItemsProvider { get; set; }
 
-
     [Parameter]
     public double? MaxHeight { get; set; }
 

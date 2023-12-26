@@ -24,7 +24,6 @@ function toggleChildren(e) {
 }
 
 export class TnTSideNavMenuGroup extends HTMLElement {
-
     static observedAttributes = [TnTComponents.customAttribute];
 
     constructor() {
@@ -47,7 +46,6 @@ export class TnTSideNavMenuGroup extends HTMLElement {
             }
             elementIdentifierMap.set(newValue, { element: this, dotNetRef: old && old.dotNetRef ? old.dotNetRef : null });
         }
-
     }
 }
 
@@ -55,7 +53,6 @@ export function onLoad(element = null, dotNetObjectRef = null) {
     if (!customElements.get('tnt-side-nav-menu-group')) {
         customElements.define('tnt-side-nav-menu-group', TnTSideNavMenuGroup);
     }
-
 }
 
 export function onUpdate(element = null, dotNetObjectRef = null) {
@@ -71,5 +68,4 @@ export function onUpdate(element = null, dotNetObjectRef = null) {
 }
 
 export function onDispose(element = null, dotNetObjectRef = null) {
-
 }

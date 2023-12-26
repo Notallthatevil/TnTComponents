@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Components;
-using TnTComponents.Common;
 
 namespace TnTComponents;
+
 public partial class TnTAccordion {
+
     [Parameter, EditorRequired]
     public string Title { get; set; } = default!;
 
@@ -11,6 +12,7 @@ public partial class TnTAccordion {
 
     [Parameter]
     public string TnTAccordionContentClass { get; set; } = "tnt-accordion-content";
+
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 

@@ -1,11 +1,10 @@
-﻿using LiveTest.Client.Data;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Reflection;
 
 namespace LiveTest.Internal;
 
 public static class LinqExtensions {
+
     private static PropertyInfo GetPropertyInfo(Type objType, string name) {
         var properties = objType.GetProperties();
         var matchedProperty = properties.FirstOrDefault(p => p.Name == name);
@@ -14,6 +13,7 @@ public static class LinqExtensions {
 
         return matchedProperty;
     }
+
     private static LambdaExpression GetOrderExpression(Type objType, PropertyInfo pi) {
         var paramExpr = Expression.Parameter(objType);
         var propAccess = Expression.PropertyOrField(paramExpr, pi.Name);

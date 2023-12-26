@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Components;
 
 namespace TnTComponents.Layout;
+
 public partial class TnTSideNav {
+
     [Parameter]
     public override string? Class { get; set; } = "tnt-side-nav";
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
+
     [Parameter]
     public string? Title { get; set; }
 

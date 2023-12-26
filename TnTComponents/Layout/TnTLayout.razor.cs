@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Components;
-using TnTComponents.Common;
 
 namespace TnTComponents.Layout;
+
 public partial class TnTLayout {
+
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
@@ -17,7 +18,6 @@ public partial class TnTLayout {
         }
         _header = header;
     }
-
 
     public void SetSideNav(TnTSideNav sideNav) {
         if (_sideNav is not null && _sideNav != sideNav) {

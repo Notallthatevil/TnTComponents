@@ -3,7 +3,9 @@ using System.Text;
 using TnTComponents.Enum;
 
 namespace TnTComponents;
+
 public partial class TnTDivider {
+
     [Parameter]
     public Orientation Orientation { get; set; } = Orientation.Horizontal;
 
@@ -16,7 +18,6 @@ public partial class TnTDivider {
     [Parameter]
     public string Class { get; set; } = "tnt-divider";
 
-
     protected override void OnInitialized() {
         base.OnInitialized();
 
@@ -28,7 +29,6 @@ public partial class TnTDivider {
             throw new InvalidOperationException($"When {nameof(Percentage)} is true, {nameof(Size)} must be between 0 and 100.");
         }
     }
-
 
     private string GetStyle() {
         var stringBuilder = new StringBuilder();
@@ -44,12 +44,6 @@ public partial class TnTDivider {
         stringBuilder.Append(Orientation == Orientation.Horizontal ? "border-top-width: " : "border-left-width: ")
             .Append("1px;");
 
-
-
         return stringBuilder.ToString();
-
-
-
     }
-
 }

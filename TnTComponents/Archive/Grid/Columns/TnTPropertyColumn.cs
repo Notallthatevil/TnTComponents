@@ -1,16 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using TnTComponents.Common.Ext;
 
 namespace TnTComponents.Archive.Grid.Columns;
-public class TnTPropertyColumn<TGridItem, TProperty> : TnTColumnBase<TGridItem> {
 
+public class TnTPropertyColumn<TGridItem, TProperty> : TnTColumnBase<TGridItem> {
 
     [Parameter, EditorRequired]
     public Expression<Func<TGridItem, TProperty>> Property { get; set; } = default!;
@@ -24,13 +19,10 @@ public class TnTPropertyColumn<TGridItem, TProperty> : TnTColumnBase<TGridItem> 
     [Parameter]
     public override Expression<Func<TGridItem, object>>? SortFunction { get; set; }
 
-
     private Expression<Func<TGridItem, TProperty>>? _lastUsedExpression;
     private Func<TGridItem, string?>? _cellValueFunc;
 
-
     protected override void OnParametersSet() {
-
         if (_lastUsedExpression != Property) {
             _lastUsedExpression = Property;
             var compiledPropExpression = Property.Compile();
@@ -57,4 +49,3 @@ public class TnTPropertyColumn<TGridItem, TProperty> : TnTColumnBase<TGridItem> 
         __builder.AddContent(0, _cellValueFunc?.Invoke(item));
     }
 }
-

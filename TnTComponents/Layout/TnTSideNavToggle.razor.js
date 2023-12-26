@@ -36,9 +36,7 @@ function toggleSideNav(e) {
 }
 
 export class TnTSideNavToggle extends HTMLElement {
-
     static observedAttributes = [TnTComponents.customAttribute];
-
 
     constructor() {
         super();
@@ -63,12 +61,10 @@ export class TnTSideNavToggle extends HTMLElement {
     }
 }
 
-
 export function onLoad(element = null, dotNetObjectRef = null) {
     if (!customElements.get('tnt-side-nav-toggle')) {
         customElements.define('tnt-side-nav-toggle', TnTSideNavToggle);
     }
-
 }
 
 export function onUpdate(element = null, dotNetObjectRef = null) {
@@ -85,5 +81,4 @@ export function onUpdate(element = null, dotNetObjectRef = null) {
 }
 
 export function onDispose(element = null, dotNetObjectRef = null) {
-
 }
