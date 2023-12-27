@@ -44,7 +44,7 @@
     @if (!string.IsNullOrWhiteSpace(SupportingText)) {
         <span class="@SupportingTextClass">@SupportingText</span>
     }
-    @if (ShowValidation) {
+    @if (ShowValidation && EditContext is not null) {
         <ValidationMessage class="@ValidationClass" For="ValueExpression" />
     }
 </label>
