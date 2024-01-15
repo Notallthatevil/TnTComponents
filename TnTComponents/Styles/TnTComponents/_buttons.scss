@@ -5,13 +5,14 @@ tnt-button {
     appearance: none;
     border: none;
     user-select: none;
-    min-height: 2rem;
-    min-width: 2rem;
+    min-height: 2.5rem;
+    min-width: 2.5rem;
     padding: 0 1rem;
     margin: 0.5rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    vertical-align: bottom;
 
     @extend .tnt-label-large;
 

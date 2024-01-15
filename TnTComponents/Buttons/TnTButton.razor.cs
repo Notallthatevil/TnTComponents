@@ -11,8 +11,8 @@ using TnTComponents.Enum;
 namespace TnTComponents;
 public partial class TnTButton {
 
-    private static readonly TnTColorEnum DefaultBg = TnTColorEnum.SurfaceContainerLow;
-    private static readonly TnTColorEnum DefaultTextColor = TnTColorEnum.Primary;
+    private static readonly TnTColorEnum DefaultBg = TnTColorEnum.Primary;
+    private static readonly TnTColorEnum DefaultTextColor = TnTColorEnum.OnPrimary;
 
     [Parameter]
     public ButtonAppearance Appearance { get; set; }
@@ -27,7 +27,7 @@ public partial class TnTButton {
     public TnTColorEnum? TextColor { get; set; } = DefaultTextColor;
 
     [Parameter]
-    public int Elevation { get; set; }
+    public int Elevation { get; set; } = 1;
 
     [Parameter]
     public TnTCornerRadius CornerRadius { get; set; } = new(10);
