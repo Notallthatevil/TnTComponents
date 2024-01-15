@@ -29,4 +29,12 @@ tnt-button {
 
         @include tnt-actionable();
     }
+
+    .tnt-icon:first-child {
+        padding-right: 0.5rem;
+    }
+
+    .tnt-icon:last-child {
+        padding-left: 0.5rem;
+    }
 }
