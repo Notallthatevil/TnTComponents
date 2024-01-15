@@ -1,11 +1,11 @@
-export function onLoad() {
-    const themeCollection = document.getElementsByTagName('tnt-design-theme');
-    if (themeCollection && themeCollection.length > 0) {
-        const theme = themeCollection[0];
+
+export class TnTDesignTheme extends HTMLElement {
+
+    createTheme() {
         let css = new CSSStyleSheet();
 
-        const isDark = theme.getAttribute('is-dark');
-        const attributes = theme.attributes;
+        const isDark = this.getAttribute('is-dark');
+        const attributes = this.attributes;
 
         let rules = ':root { ';
 
@@ -26,5 +26,20 @@ export function onLoad() {
         css.insertRule(rules);
 
         document.adoptedStyleSheets = [css];
+    }
+}
+
+
+export function onLoad() {
+    if (!customElements.get('tnt-design-theme')) {
+        customElements.define('tnt-design-theme', TnTDesignTheme);
+    }
+
+    const themeCollection = document.getElementsByTagName('tnt-design-theme');
+    if (themeCollection && themeCollection.length > 0) {
+        const theme = themeCollection[0];
+
+        theme.createTheme();
+        
     }
 }

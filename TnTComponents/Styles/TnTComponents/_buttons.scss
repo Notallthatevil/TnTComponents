@@ -17,6 +17,7 @@ tnt-button {
 
     &:not(disabled) {
         cursor: pointer;
+        transition: box-shadow linear 100ms, background-color linear 100ms;
 
         &:hover {
             @for $i from 0 through 9 {
