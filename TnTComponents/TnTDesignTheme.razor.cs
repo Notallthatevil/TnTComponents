@@ -14,286 +14,286 @@ public partial class TnTDesignTheme {
     public bool IsDark { get; set; } = false;
 
     [Parameter]
-    public Color PrimaryLight { get; set; } = ColorTranslator.FromHtml("#7547ad");
+    public System.Drawing.Color PrimaryLight { get; set; } = ColorTranslator.FromHtml("#7547ad");
 
     [Parameter]
-    public Color OnPrimaryLight { get; set; } = ColorTranslator.FromHtml("#Ffffff");
+    public System.Drawing.Color OnPrimaryLight { get; set; } = ColorTranslator.FromHtml("#Ffffff");
 
     [Parameter]
-    public Color PrimaryContainerLight { get; set; } = ColorTranslator.FromHtml("#Eedbff");
+    public System.Drawing.Color PrimaryContainerLight { get; set; } = ColorTranslator.FromHtml("#Eedbff");
 
     [Parameter]
-    public Color OnPrimaryContainerLight { get; set; } = ColorTranslator.FromHtml("#2a0054");
+    public System.Drawing.Color OnPrimaryContainerLight { get; set; } = ColorTranslator.FromHtml("#2a0054");
 
     [Parameter]
-    public Color SecondaryLight { get; set; } = ColorTranslator.FromHtml("#755b00");
+    public System.Drawing.Color SecondaryLight { get; set; } = ColorTranslator.FromHtml("#755b00");
 
     [Parameter]
-    public Color OnSecondaryLight { get; set; } = ColorTranslator.FromHtml("#Ffffff");
+    public System.Drawing.Color OnSecondaryLight { get; set; } = ColorTranslator.FromHtml("#Ffffff");
 
     [Parameter]
-    public Color SecondaryContainerLight { get; set; } = ColorTranslator.FromHtml("#Ffdf91");
+    public System.Drawing.Color SecondaryContainerLight { get; set; } = ColorTranslator.FromHtml("#Ffdf91");
 
     [Parameter]
-    public Color OnSecondaryContainerLight { get; set; } = ColorTranslator.FromHtml("#241a00");
+    public System.Drawing.Color OnSecondaryContainerLight { get; set; } = ColorTranslator.FromHtml("#241a00");
 
     [Parameter]
-    public Color TertiaryLight { get; set; } = ColorTranslator.FromHtml("#005ac1");
+    public System.Drawing.Color TertiaryLight { get; set; } = ColorTranslator.FromHtml("#005ac1");
 
     [Parameter]
-    public Color OnTertiaryLight { get; set; } = ColorTranslator.FromHtml("#Ffffff");
+    public System.Drawing.Color OnTertiaryLight { get; set; } = ColorTranslator.FromHtml("#Ffffff");
 
     [Parameter]
-    public Color TertiaryContainerLight { get; set; } = ColorTranslator.FromHtml("#D8e2ff");
+    public System.Drawing.Color TertiaryContainerLight { get; set; } = ColorTranslator.FromHtml("#D8e2ff");
 
     [Parameter]
-    public Color OnTertiaryContainerLight { get; set; } = ColorTranslator.FromHtml("#001a41");
+    public System.Drawing.Color OnTertiaryContainerLight { get; set; } = ColorTranslator.FromHtml("#001a41");
 
     [Parameter]
-    public Color ErrorLight { get; set; } = ColorTranslator.FromHtml("#Ba1a1a");
+    public System.Drawing.Color ErrorLight { get; set; } = ColorTranslator.FromHtml("#Ba1a1a");
 
     [Parameter]
-    public Color ErrorContainerLight { get; set; } = ColorTranslator.FromHtml("#Ffdad6");
+    public System.Drawing.Color ErrorContainerLight { get; set; } = ColorTranslator.FromHtml("#Ffdad6");
 
     [Parameter]
-    public Color OnErrorLight { get; set; } = ColorTranslator.FromHtml("#Ffffff");
+    public System.Drawing.Color OnErrorLight { get; set; } = ColorTranslator.FromHtml("#Ffffff");
 
     [Parameter]
-    public Color OnErrorContainerLight { get; set; } = ColorTranslator.FromHtml("#410002");
+    public System.Drawing.Color OnErrorContainerLight { get; set; } = ColorTranslator.FromHtml("#410002");
 
     [Parameter]
-    public Color BackgroundLight { get; set; } = ColorTranslator.FromHtml("#Fef7ff");
+    public System.Drawing.Color BackgroundLight { get; set; } = ColorTranslator.FromHtml("#Fef7ff");
 
     [Parameter]
-    public Color OnBackgroundLight { get; set; } = ColorTranslator.FromHtml("#1d1b20");
+    public System.Drawing.Color OnBackgroundLight { get; set; } = ColorTranslator.FromHtml("#1d1b20");
 
     [Parameter]
-    public Color SurfaceLight { get; set; } = ColorTranslator.FromHtml("#Fef7ff");
+    public System.Drawing.Color SurfaceLight { get; set; } = ColorTranslator.FromHtml("#Fef7ff");
 
     [Parameter]
-    public Color OnSurfaceLight { get; set; } = ColorTranslator.FromHtml("#1d1b20");
+    public System.Drawing.Color OnSurfaceLight { get; set; } = ColorTranslator.FromHtml("#1d1b20");
 
     [Parameter]
-    public Color SurfaceVariantLight { get; set; } = ColorTranslator.FromHtml("#E8e0eb");
+    public System.Drawing.Color SurfaceVariantLight { get; set; } = ColorTranslator.FromHtml("#E8e0eb");
 
     [Parameter]
-    public Color OnSurfaceVariantLight { get; set; } = ColorTranslator.FromHtml("#49454f");
+    public System.Drawing.Color OnSurfaceVariantLight { get; set; } = ColorTranslator.FromHtml("#49454f");
 
     [Parameter]
-    public Color SurfaceContainerHighestLight { get; set; } = ColorTranslator.FromHtml("#E7e1e5");
+    public System.Drawing.Color SurfaceContainerHighestLight { get; set; } = ColorTranslator.FromHtml("#E7e1e5");
 
     [Parameter]
-    public Color SurfaceContainerHighLight { get; set; } = ColorTranslator.FromHtml("#Ece6f0");
+    public System.Drawing.Color SurfaceContainerHighLight { get; set; } = ColorTranslator.FromHtml("#Ece6f0");
 
     [Parameter]
-    public Color SurfaceContainerLight { get; set; } = ColorTranslator.FromHtml("#F3edf7");
+    public System.Drawing.Color SurfaceContainerLight { get; set; } = ColorTranslator.FromHtml("#F3edf7");
 
     [Parameter]
-    public Color SurfaceContainerLowLight { get; set; } = ColorTranslator.FromHtml("#F7f2fa");
+    public System.Drawing.Color SurfaceContainerLowLight { get; set; } = ColorTranslator.FromHtml("#F7f2fa");
 
     [Parameter]
-    public Color SurfaceContainerLowestLight { get; set; } = ColorTranslator.FromHtml("#Ffffff");
+    public System.Drawing.Color SurfaceContainerLowestLight { get; set; } = ColorTranslator.FromHtml("#Ffffff");
 
     [Parameter]
-    public Color OutlineLight { get; set; } = ColorTranslator.FromHtml("#7b757f");
+    public System.Drawing.Color OutlineLight { get; set; } = ColorTranslator.FromHtml("#7b757f");
 
     [Parameter]
-    public Color InverseOnSurfaceLight { get; set; } = ColorTranslator.FromHtml("#F5eff4");
+    public System.Drawing.Color InverseOnSurfaceLight { get; set; } = ColorTranslator.FromHtml("#F5eff4");
 
     [Parameter]
-    public Color InverseSurfaceLight { get; set; } = ColorTranslator.FromHtml("#322f33");
+    public System.Drawing.Color InverseSurfaceLight { get; set; } = ColorTranslator.FromHtml("#322f33");
 
     [Parameter]
-    public Color InversePrimaryLight { get; set; } = ColorTranslator.FromHtml("#D9b9ff");
+    public System.Drawing.Color InversePrimaryLight { get; set; } = ColorTranslator.FromHtml("#D9b9ff");
 
     [Parameter]
-    public Color ShadowLight { get; set; } = ColorTranslator.FromHtml("#565656");
+    public System.Drawing.Color ShadowLight { get; set; } = ColorTranslator.FromHtml("#565656");
 
     [Parameter]
-    public Color SurfaceTintLight { get; set; } = ColorTranslator.FromHtml("#7547ad");
+    public System.Drawing.Color SurfaceTintLight { get; set; } = ColorTranslator.FromHtml("#7547ad");
 
     [Parameter]
-    public Color OutlineVariantLight { get; set; } = ColorTranslator.FromHtml("#Ccc4cf");
+    public System.Drawing.Color OutlineVariantLight { get; set; } = ColorTranslator.FromHtml("#Ccc4cf");
 
     [Parameter]
-    public Color ScrimLight { get; set; } = ColorTranslator.FromHtml("#000000");
+    public System.Drawing.Color ScrimLight { get; set; } = ColorTranslator.FromHtml("#000000");
 
     [Parameter]
-    public Color WarningLight { get; set; } = ColorTranslator.FromHtml("#845400");
+    public System.Drawing.Color WarningLight { get; set; } = ColorTranslator.FromHtml("#845400");
 
     [Parameter]
-    public Color OnWarningLight { get; set; } = ColorTranslator.FromHtml("#Ffffff");
+    public System.Drawing.Color OnWarningLight { get; set; } = ColorTranslator.FromHtml("#Ffffff");
 
     [Parameter]
-    public Color WarningContainerLight { get; set; } = ColorTranslator.FromHtml("#Ffddb6");
+    public System.Drawing.Color WarningContainerLight { get; set; } = ColorTranslator.FromHtml("#Ffddb6");
 
     [Parameter]
-    public Color OnWarningContainerLight { get; set; } = ColorTranslator.FromHtml("#2a1800");
+    public System.Drawing.Color OnWarningContainerLight { get; set; } = ColorTranslator.FromHtml("#2a1800");
 
     [Parameter]
-    public Color SuccessLight { get; set; } = ColorTranslator.FromHtml("#006c4c");
+    public System.Drawing.Color SuccessLight { get; set; } = ColorTranslator.FromHtml("#006c4c");
 
     [Parameter]
-    public Color OnSuccessLight { get; set; } = ColorTranslator.FromHtml("#Ffffff");
+    public System.Drawing.Color OnSuccessLight { get; set; } = ColorTranslator.FromHtml("#Ffffff");
 
     [Parameter]
-    public Color SuccessContainerLight { get; set; } = ColorTranslator.FromHtml("#54febf");
+    public System.Drawing.Color SuccessContainerLight { get; set; } = ColorTranslator.FromHtml("#54febf");
 
     [Parameter]
-    public Color OnSuccessContainerLight { get; set; } = ColorTranslator.FromHtml("#002115");
+    public System.Drawing.Color OnSuccessContainerLight { get; set; } = ColorTranslator.FromHtml("#002115");
 
     [Parameter]
-    public Color InfoLight { get; set; } = ColorTranslator.FromHtml("#0d60a8");
+    public System.Drawing.Color InfoLight { get; set; } = ColorTranslator.FromHtml("#0d60a8");
 
     [Parameter]
-    public Color OnInfoLight { get; set; } = ColorTranslator.FromHtml("#Ffffff");
+    public System.Drawing.Color OnInfoLight { get; set; } = ColorTranslator.FromHtml("#Ffffff");
 
     [Parameter]
-    public Color InfoContainerLight { get; set; } = ColorTranslator.FromHtml("#D3e3ff");
+    public System.Drawing.Color InfoContainerLight { get; set; } = ColorTranslator.FromHtml("#D3e3ff");
 
     [Parameter]
-    public Color OnInfoContainerLight { get; set; } = ColorTranslator.FromHtml("#001c39");
+    public System.Drawing.Color OnInfoContainerLight { get; set; } = ColorTranslator.FromHtml("#001c39");
 
     [Parameter]
-    public Color PrimaryDark { get; set; } = ColorTranslator.FromHtml("#D9b9ff");
+    public System.Drawing.Color PrimaryDark { get; set; } = ColorTranslator.FromHtml("#D9b9ff");
 
     [Parameter]
-    public Color OnPrimaryDark { get; set; } = ColorTranslator.FromHtml("#440e7c");
+    public System.Drawing.Color OnPrimaryDark { get; set; } = ColorTranslator.FromHtml("#440e7c");
 
     [Parameter]
-    public Color PrimaryContainerDark { get; set; } = ColorTranslator.FromHtml("#5c2d94");
+    public System.Drawing.Color PrimaryContainerDark { get; set; } = ColorTranslator.FromHtml("#5c2d94");
 
     [Parameter]
-    public Color OnPrimaryContainerDark { get; set; } = ColorTranslator.FromHtml("#Eedbff");
+    public System.Drawing.Color OnPrimaryContainerDark { get; set; } = ColorTranslator.FromHtml("#Eedbff");
 
     [Parameter]
-    public Color SecondaryDark { get; set; } = ColorTranslator.FromHtml("#F3c000");
+    public System.Drawing.Color SecondaryDark { get; set; } = ColorTranslator.FromHtml("#F3c000");
 
     [Parameter]
-    public Color OnSecondaryDark { get; set; } = ColorTranslator.FromHtml("#3d2e00");
+    public System.Drawing.Color OnSecondaryDark { get; set; } = ColorTranslator.FromHtml("#3d2e00");
 
     [Parameter]
-    public Color SecondaryContainerDark { get; set; } = ColorTranslator.FromHtml("#584400");
+    public System.Drawing.Color SecondaryContainerDark { get; set; } = ColorTranslator.FromHtml("#584400");
 
     [Parameter]
-    public Color OnSecondaryContainerDark { get; set; } = ColorTranslator.FromHtml("#Ffdf91");
+    public System.Drawing.Color OnSecondaryContainerDark { get; set; } = ColorTranslator.FromHtml("#Ffdf91");
 
     [Parameter]
-    public Color TertiaryDark { get; set; } = ColorTranslator.FromHtml("#Adc6ff");
+    public System.Drawing.Color TertiaryDark { get; set; } = ColorTranslator.FromHtml("#Adc6ff");
 
     [Parameter]
-    public Color OnTertiaryDark { get; set; } = ColorTranslator.FromHtml("#002e69");
+    public System.Drawing.Color OnTertiaryDark { get; set; } = ColorTranslator.FromHtml("#002e69");
 
     [Parameter]
-    public Color TertiaryContainerDark { get; set; } = ColorTranslator.FromHtml("#004494");
+    public System.Drawing.Color TertiaryContainerDark { get; set; } = ColorTranslator.FromHtml("#004494");
 
     [Parameter]
-    public Color OnTertiaryContainerDark { get; set; } = ColorTranslator.FromHtml("#D8e2ff");
+    public System.Drawing.Color OnTertiaryContainerDark { get; set; } = ColorTranslator.FromHtml("#D8e2ff");
 
     [Parameter]
-    public Color ErrorDark { get; set; } = ColorTranslator.FromHtml("#Ffb4ab");
+    public System.Drawing.Color ErrorDark { get; set; } = ColorTranslator.FromHtml("#Ffb4ab");
 
     [Parameter]
-    public Color ErrorContainerDark { get; set; } = ColorTranslator.FromHtml("#93000a");
+    public System.Drawing.Color ErrorContainerDark { get; set; } = ColorTranslator.FromHtml("#93000a");
 
     [Parameter]
-    public Color OnErrorDark { get; set; } = ColorTranslator.FromHtml("#690005");
+    public System.Drawing.Color OnErrorDark { get; set; } = ColorTranslator.FromHtml("#690005");
 
     [Parameter]
-    public Color OnErrorContainerDark { get; set; } = ColorTranslator.FromHtml("#Ffdad6");
+    public System.Drawing.Color OnErrorContainerDark { get; set; } = ColorTranslator.FromHtml("#Ffdad6");
 
     [Parameter]
-    public Color BackgroundDark { get; set; } = ColorTranslator.FromHtml("#1d1b1e");
+    public System.Drawing.Color BackgroundDark { get; set; } = ColorTranslator.FromHtml("#1d1b1e");
 
     [Parameter]
-    public Color OnBackgroundDark { get; set; } = ColorTranslator.FromHtml("#E7e1e5");
+    public System.Drawing.Color OnBackgroundDark { get; set; } = ColorTranslator.FromHtml("#E7e1e5");
 
     [Parameter]
-    public Color SurfaceDark { get; set; } = ColorTranslator.FromHtml("#1d1b1e");
+    public System.Drawing.Color SurfaceDark { get; set; } = ColorTranslator.FromHtml("#1d1b1e");
 
     [Parameter]
-    public Color OnSurfaceDark { get; set; } = ColorTranslator.FromHtml("#E7e1e5");
+    public System.Drawing.Color OnSurfaceDark { get; set; } = ColorTranslator.FromHtml("#E7e1e5");
 
     [Parameter]
-    public Color SurfaceVariantDark { get; set; } = ColorTranslator.FromHtml("#4a454e");
+    public System.Drawing.Color SurfaceVariantDark { get; set; } = ColorTranslator.FromHtml("#4a454e");
 
     [Parameter]
-    public Color OnSurfaceVariantDark { get; set; } = ColorTranslator.FromHtml("#Ccc4cf");
+    public System.Drawing.Color OnSurfaceVariantDark { get; set; } = ColorTranslator.FromHtml("#Ccc4cf");
 
     [Parameter]
-    public Color SurfaceContainerHighestDark { get; set; } = ColorTranslator.FromHtml("#36343b");
+    public System.Drawing.Color SurfaceContainerHighestDark { get; set; } = ColorTranslator.FromHtml("#36343b");
 
     [Parameter]
-    public Color SurfaceContainerHighDark { get; set; } = ColorTranslator.FromHtml("#2b2930");
+    public System.Drawing.Color SurfaceContainerHighDark { get; set; } = ColorTranslator.FromHtml("#2b2930");
 
     [Parameter]
-    public Color SurfaceContainerDark { get; set; } = ColorTranslator.FromHtml("#211f26");
+    public System.Drawing.Color SurfaceContainerDark { get; set; } = ColorTranslator.FromHtml("#211f26");
 
     [Parameter]
-    public Color SurfaceContainerLowDark { get; set; } = ColorTranslator.FromHtml("#1d1b1e");
+    public System.Drawing.Color SurfaceContainerLowDark { get; set; } = ColorTranslator.FromHtml("#1d1b1e");
 
     [Parameter]
-    public Color SurfaceContainerLowestDark { get; set; } = ColorTranslator.FromHtml("#0f0d13");
+    public System.Drawing.Color SurfaceContainerLowestDark { get; set; } = ColorTranslator.FromHtml("#0f0d13");
 
     [Parameter]
-    public Color OutlineDark { get; set; } = ColorTranslator.FromHtml("#958e99");
+    public System.Drawing.Color OutlineDark { get; set; } = ColorTranslator.FromHtml("#958e99");
 
     [Parameter]
-    public Color InverseOnSurfaceDark { get; set; } = ColorTranslator.FromHtml("#1d1b1e");
+    public System.Drawing.Color InverseOnSurfaceDark { get; set; } = ColorTranslator.FromHtml("#1d1b1e");
 
     [Parameter]
-    public Color InverseSurfaceDark { get; set; } = ColorTranslator.FromHtml("#E7e1e5");
+    public System.Drawing.Color InverseSurfaceDark { get; set; } = ColorTranslator.FromHtml("#E7e1e5");
 
     [Parameter]
-    public Color InversePrimaryDark { get; set; } = ColorTranslator.FromHtml("#7547ad");
+    public System.Drawing.Color InversePrimaryDark { get; set; } = ColorTranslator.FromHtml("#7547ad");
 
     [Parameter]
-    public Color ShadowDark { get; set; } = ColorTranslator.FromHtml("#Ababab");
+    public System.Drawing.Color ShadowDark { get; set; } = ColorTranslator.FromHtml("#Ababab");
 
     [Parameter]
-    public Color SurfaceTintDark { get; set; } = ColorTranslator.FromHtml("#D9b9ff");
+    public System.Drawing.Color SurfaceTintDark { get; set; } = ColorTranslator.FromHtml("#D9b9ff");
 
     [Parameter]
-    public Color OutlineVariantDark { get; set; } = ColorTranslator.FromHtml("#4a454e");
+    public System.Drawing.Color OutlineVariantDark { get; set; } = ColorTranslator.FromHtml("#4a454e");
 
     [Parameter]
-    public Color ScrimDark { get; set; } = ColorTranslator.FromHtml("#000000");
+    public System.Drawing.Color ScrimDark { get; set; } = ColorTranslator.FromHtml("#000000");
 
     [Parameter]
-    public Color WarningDark { get; set; } = ColorTranslator.FromHtml("#Ffb95a");
+    public System.Drawing.Color WarningDark { get; set; } = ColorTranslator.FromHtml("#Ffb95a");
 
     [Parameter]
-    public Color OnWarningDark { get; set; } = ColorTranslator.FromHtml("#462a00");
+    public System.Drawing.Color OnWarningDark { get; set; } = ColorTranslator.FromHtml("#462a00");
 
     [Parameter]
-    public Color WarningContainerDark { get; set; } = ColorTranslator.FromHtml("#643f00");
+    public System.Drawing.Color WarningContainerDark { get; set; } = ColorTranslator.FromHtml("#643f00");
 
     [Parameter]
-    public Color OnWarningContainerDark { get; set; } = ColorTranslator.FromHtml("#Ffddb6");
+    public System.Drawing.Color OnWarningContainerDark { get; set; } = ColorTranslator.FromHtml("#Ffddb6");
 
     [Parameter]
-    public Color SuccessDark { get; set; } = ColorTranslator.FromHtml("#28e0a4");
+    public System.Drawing.Color SuccessDark { get; set; } = ColorTranslator.FromHtml("#28e0a4");
 
     [Parameter]
-    public Color OnSuccessDark { get; set; } = ColorTranslator.FromHtml("#003826");
+    public System.Drawing.Color OnSuccessDark { get; set; } = ColorTranslator.FromHtml("#003826");
 
     [Parameter]
-    public Color SuccessContainerDark { get; set; } = ColorTranslator.FromHtml("#005139");
+    public System.Drawing.Color SuccessContainerDark { get; set; } = ColorTranslator.FromHtml("#005139");
 
     [Parameter]
-    public Color OnSuccessContainerDark { get; set; } = ColorTranslator.FromHtml("#54febf");
+    public System.Drawing.Color OnSuccessContainerDark { get; set; } = ColorTranslator.FromHtml("#54febf");
 
     [Parameter]
-    public Color InfoDark { get; set; } = ColorTranslator.FromHtml("#A3c9ff");
+    public System.Drawing.Color InfoDark { get; set; } = ColorTranslator.FromHtml("#A3c9ff");
 
     [Parameter]
-    public Color OnInfoDark { get; set; } = ColorTranslator.FromHtml("#00315c");
+    public System.Drawing.Color OnInfoDark { get; set; } = ColorTranslator.FromHtml("#00315c");
 
     [Parameter]
-    public Color InfoContainerDark { get; set; } = ColorTranslator.FromHtml("#004883");
+    public System.Drawing.Color InfoContainerDark { get; set; } = ColorTranslator.FromHtml("#004883");
 
     [Parameter]
-    public Color OnInfoContainerDark { get; set; } = ColorTranslator.FromHtml("#D3e3ff");
+    public System.Drawing.Color OnInfoContainerDark { get; set; } = ColorTranslator.FromHtml("#D3e3ff");
 
     private IReadOnlyDictionary<string, object> GetAttributes() {
         var dict = new Dictionary<string, object>();
@@ -303,7 +303,7 @@ public partial class TnTDesignTheme {
                 var propName = prop.Name.SplitPascalCase("-").ToLower();
                 var value = prop.GetValue(this);
 
-                if (value is Color color) {
+                if (value is System.Drawing.Color color) {
                     dict.Add(propName, $"#{color.R:X2}{color.G:X2}{color.B:X2}".ToLower());
                 }
                 else {

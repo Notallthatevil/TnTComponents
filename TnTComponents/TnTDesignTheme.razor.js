@@ -7,17 +7,23 @@ export function onLoad() {
         const isDark = theme.getAttribute('is-dark');
         const attributes = theme.attributes;
 
+        let rules = ':root { ';
+
         for (let i = 0; i < attributes.length; ++i) {
             const attr = attributes[i];
-            if ((isDark != undefined && attr.name.includes('-light')) ||
-                (isDark == und && attr.name.includes('-dark'))) {
+
+            if (!isDark && attr.name.includes('dark')) {
+                continue;
+            } else if (isDark != undefined && isDark != null && isDark === true && attr.name.includes('light')) {
                 continue;
             }
 
             const name = attr.name.replace('-dark', '').replace('-light', '');
-
-            css.insertRule(`:root { --tnt-color-${name}: ${attr.value}; }`);
+            rules += `--tnt-color-${name}: ${attr.value}; `;
         }
+        rules += '}';
+
+        css.insertRule(rules);
 
         document.adoptedStyleSheets = [css];
     }

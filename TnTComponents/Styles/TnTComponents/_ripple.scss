@@ -1,0 +1,36 @@
+﻿.tnt-ripple {
+    position: relative;
+    overflow: hidden;
+
+    &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: var(--ripple-offset-y);
+        left: var(--ripple-offset-x);
+        pointer-events: none;
+        background-repeat: no-repeat;
+        background-position: 50%;
+        transform: scale(20,20);
+        opacity: 0;
+        transition: transform .6s, opacity 1s;
+    }
+
+    &:active:after {
+        transform: scale(0,0);
+        opacity: 0.1;
+        transition: 0s;
+    }
+}
+
+//.tnt-ripple-icon, .tnt-ripple-checkbox, .tnt-ripple-switch, .tnt-ripple-radio {
+//    &:after {
+//        transform: scale(14,14);
+//    }
+//}
+
+//.tnt-ripple-switch {
+//    position: absolute;
+//}

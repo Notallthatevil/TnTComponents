@@ -1,27 +1,13 @@
-﻿@import 'Common/_common.scss';
+﻿@import 'TnTComponents/_colors.scss';
 
-html, body {
-    color: $tnt-color-on-background;
-    background-color: $tnt-color-background;
-    margin: 0;
-    overflow-x: hidden;
-}
+@import 'TnTComponents/_typeography.scss';
+@import 'TnTComponents/_elevation.scss';
+@import 'TnTComponents/_border-radius.scss';
+@import 'TnTComponents/_ripple.scss';
 
-* {
+@import 'TnTComponents/_buttons.scss';
+
+
+.tnt-components {
     font-family: 'Roboto', sans-serif;
 }
-
-@import 'Common/_default_typeography.scss';
-@import 'Common/_layout.scss';
-@import 'Components/_accordion.scss';
-@import 'Components/_body.scss';
-@import 'Components/_buttons.scss';
-@import 'Components/_card.scss';
-@import 'Components/_datagrid.scss';
-@import 'Components/_divider.scss';
-@import 'Components/_footer.scss';
-@import 'Components/_form.scss';
-@import 'Components/_header.scss';
-@import 'Components/_progress.scss';
-@import 'Components/_sidenav.scss';
-@import 'Components/_tabview.scss';

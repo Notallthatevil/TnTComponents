@@ -1,0 +1,83 @@
+﻿@use "sass:color";
+
+$tnt-color-primary: var(--tnt-color-primary);
+$tnt-color-on-primary: var(--tnt-color-on-primary);
+$tnt-color-primary-container: var(--tnt-color-primary-container);
+$tnt-color-on-primary-container: var(--tnt-color-on-primary-container);
+$tnt-color-secondary: var(--tnt-color-secondary);
+$tnt-color-on-secondary: var(--tnt-color-on-secondary);
+$tnt-color-secondary-container: var(--tnt-color-secondary-container);
+$tnt-color-on-secondary-container: var(--tnt-color-on-secondary-container);
+$tnt-color-tertiary: var(--tnt-color-tertiary);
+$tnt-color-on-tertiary: var(--tnt-color-on-tertiary);
+$tnt-color-tertiary-container: var(--tnt-color-tertiary-container);
+$tnt-color-on-tertiary-container: var(--tnt-color-on-tertiary-container);
+$tnt-color-error: var(--tnt-color-error);
+$tnt-color-on-error: var(--tnt-color-on-error);
+$tnt-color-error-container: var(--tnt-color-error-container);
+$tnt-color-on-error-container: var(--tnt-color-on-error-container);
+$tnt-color-outline: var(--tnt-color-outline);
+$tnt-color-background: var(--tnt-color-background);
+$tnt-color-on-background: var(--tnt-color-on-background);
+$tnt-color-surface: var(--tnt-color-surface);
+$tnt-color-on-surface: var(--tnt-color-on-surface);
+$tnt-color-surface-variant: var(--tnt-color-surface-variant);
+$tnt-color-on-surface-variant: var(--tnt-color-on-surface-variant);
+$tnt-color-surface-container-highest: var(--tnt-color-surface-container-highest);
+$tnt-color-surface-container-high: var(--tnt-color-surface-container-high);
+$tnt-color-surface-container: var(--tnt-color-surface-container);
+$tnt-color-surface-container-low: var(--tnt-color-surface-container-low);
+$tnt-color-surface-container-lowest: var(--tnt-color-surface-container-lowest);
+$tnt-color-inverse-surface: var(--tnt-color-inverse-surface);
+$tnt-color-inverse-on-surface: var(--tnt-color-inverse-on-surface);
+$tnt-color-inverse-primary: var(--tnt-color-inverse-primary);
+$tnt-color-shadow: var(--tnt-color-shadow);
+$tnt-color-surface-tint: var(--tnt-color-surface-tint);
+$tnt-color-outline-variant: var(--tnt-color-outline-variant);
+$tnt-color-scrim: var(--tnt-color-scrim);
+$tnt-color-warning: var(--tnt-color-warning);
+$tnt-color-on-warning: var(--tnt-color-on-warning);
+$tnt-color-warning-container: var(--tnt-color-warning-container);
+$tnt-color-on-warning-container: var(--tnt-color-on-warning-container);
+$tnt-color-success: var(--tnt-color-success);
+$tnt-color-on-success: var(--tnt-color-on-success);
+$tnt-color-success-container: var(--tnt-color-success-container);
+$tnt-color-on-success-container: var(--tnt-color-on-success-container);
+$tnt-color-info: var(--tnt-color-info);
+$tnt-color-on-info: var(--tnt-color-on-info);
+$tnt-color-info-container: var(--tnt-color-info-container);
+$tnt-color-on-info-container: var(--tnt-color-on-info-container);
+
+$color-classes: transparent, primary, on-primary, primary-container, on-primary-container, secondary, on-secondary, secondary-container, on-secondary-container, tertiary, on-tertiary, tertiary-container, on-tertiary-container, error, error-container, on-error, on-error-container, background, on-background, surface, on-surface, surface-variant, on-surface-variant, surface-container-highest, surface-container-high, surface-container, surface-container-low, surface-container-lowest, outline, inverse-on-surface, inverse-surface, inverse-primary, shadow, surface-tint, outline-variant, scrim, warning, on-warning, warning-container, on-warning-container, success, on-success, success-container, on-success-container, info, on-info, info-container, on-info-container;
+
+@each $colorClass in $color-classes {
+    .tnt-bg-color-#{$colorClass} {
+        background-color: var(--tnt-color-#{$colorClass});
+    }
+
+    .tnt-fg-color-#{$colorClass} {
+        color: var(--tnt-color-#{$colorClass});
+    }
+}
+
+@mixin tnt-actionable() {
+    @each $colorClass in $color-classes {
+        &:hover {
+            &.tnt-bg-color-#{$colorClass} {
+                background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 90%, $tnt-color-shadow);
+            }
+        }
+
+        &:active:not(.tnt-ripple) {
+            &.tnt-bg-color-#{$colorClass} {
+                background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 80%, $tnt-color-shadow);
+            }
+        }
+        //&.tnt-ripple.tnt-bg-color-#{$colorClass}:after {
+        //    background-image: radial-gradient(circle, var(--tnt-color-#{$colorClass}) 10%, transparent 10.01%);
+        //}
+    }
+    &.tnt-ripple:after {
+        background-image: radial-gradient(circle, black 10%, transparent 10.01%);
+    }
+}

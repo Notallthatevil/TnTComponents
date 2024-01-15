@@ -938,3 +938,17 @@ public class MaterialIcon {
     public static MaterialIcon ZoomOutMap = new("zoom_out_map");
 }
 
+public enum MaterialIconSize {
+    Small,
+    Medium,
+    Large,
+    ExtraLarge
+}
+
+public enum MaterialIconAppearance {
+    Default,
+    Outlined,
+    TwoTone,
+    Round,
+    Sharp
+}

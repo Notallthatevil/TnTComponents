@@ -1,9 +1,7 @@
-﻿namespace TnTComponents.Enum;
+﻿namespace TnTComponents;
 
 public enum ButtonAppearance {
-    Elevated,
-    Filled,
-    FilledAlternative,
+    None,
     Outlined,
     Text
 }
