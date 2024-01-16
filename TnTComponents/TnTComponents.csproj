@@ -37,4 +37,8 @@
         <PackageReference Include="Microsoft.JSInterop" Version="8.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Forms\" />
+    </ItemGroup>
+
 </Project>
