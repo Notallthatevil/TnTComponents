@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
-using TnTComponents.Color;
 using TnTComponents.Layout;
 
 namespace TnTComponents.Core;
@@ -36,8 +35,8 @@ internal class CssBuilder {
 
     public CssBuilder AddRipple(bool enabled = true) => AddClass("tnt-ripple", enabled);
 
-    public CssBuilder AddBackgroundColor(TnTColorEnum? color) => AddClass($"tnt-bg-color-{color?.ToCssClassName() ?? string.Empty}", color is not null);
-    public CssBuilder AddForegroundColor(TnTColorEnum? color) => AddClass($"tnt-fg-color-{color?.ToCssClassName() ?? string.Empty}", color is not null);
+    public CssBuilder AddBackgroundColor(TnTColor? color) => AddClass($"tnt-bg-color-{color?.ToCssClassName() ?? string.Empty}", color is not null);
+    public CssBuilder AddForegroundColor(TnTColor? color) => AddClass($"tnt-fg-color-{color?.ToCssClassName() ?? string.Empty}", color is not null);
 
     public CssBuilder AddOutlined(bool enabled = true) => AddClass("tnt-outlined", enabled);
     public CssBuilder AddNoBackground(bool enabled = true) => AddClass("tnt-no-background", enabled);

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.VisualBasic;
 using System.Reflection.Metadata;
-using TnTComponents.Color;
 using TnTComponents.Common;
 using TnTComponents.Core;
 using TnTComponents.Enum;
@@ -11,8 +10,8 @@ using TnTComponents.Enum;
 namespace TnTComponents;
 public partial class TnTButton {
 
-    private static readonly TnTColorEnum DefaultBg = TnTColorEnum.Primary;
-    private static readonly TnTColorEnum DefaultTextColor = TnTColorEnum.OnPrimary;
+    private static readonly TnTColor DefaultBg = TnTColor.Primary;
+    private static readonly TnTColor DefaultTextColor = TnTColor.OnPrimary;
 
     [Parameter]
     public ButtonAppearance Appearance { get; set; }
@@ -21,10 +20,10 @@ public partial class TnTButton {
     public ButtonType Type { get; set; }
 
     [Parameter]
-    public TnTColorEnum? BackgroundColor { get; set; } = DefaultBg;
+    public TnTColor? BackgroundColor { get; set; } = DefaultBg;
 
     [Parameter]
-    public TnTColorEnum? TextColor { get; set; } = DefaultTextColor;
+    public TnTColor? TextColor { get; set; } = DefaultTextColor;
 
     [Parameter]
     public int Elevation { get; set; } = 1;
