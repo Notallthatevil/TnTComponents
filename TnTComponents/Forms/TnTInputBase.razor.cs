@@ -34,7 +34,7 @@ public abstract partial class TnTInputBase<TInputType> {
     public string? EndIcon { get; set; }
 
     [Parameter]
-    public FormType FormType { get; set; }
+    public FormAppearance FormType { get; set; }
 
     [Parameter]
     public IconType IconType { get; set; }
@@ -100,7 +100,7 @@ public abstract partial class TnTInputBase<TInputType> {
     private ILogger<TnTInputBase<TInputType>>? _logger { get; set; }
 
     [CascadingParameter(Name = TnTForm.ParentFormTypeName)]
-    private FormType? _parentFormType { get; set; }
+    private FormAppearance? _parentFormType { get; set; }
 
     internal const string DefaultContainerClass = "tnt-input-container";
     internal const string DefaultLabelClass = "tnt-input-label";

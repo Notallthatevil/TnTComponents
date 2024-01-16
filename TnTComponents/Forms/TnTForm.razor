@@ -1,0 +1,15 @@
+﻿@inherits EditForm
+@namespace TnTComponents
+@using TnTComponents.Forms
+
+<CascadingValue Value="@Disabled" Name="@nameof(IFormItem.ParentFormDisabled)">
+    <CascadingValue Value="@ReadOnly" Name="@nameof(IFormItem.ParentFormReadOnly)">
+        <CascadingValue Value="this" IsFixed="true">
+            <CascadingValue Value="Appearance" IsFixed="true" Name="@nameof(IFormItem.ParentFormAppearance)">
+                @{
+                    base.BuildRenderTree(__builder5);
+                }
+            </CascadingValue>
+        </CascadingValue>
+    </CascadingValue>
+</CascadingValue>
