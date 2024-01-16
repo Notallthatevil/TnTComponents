@@ -23,7 +23,7 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyn
     private ILogger? _logger;
     protected ILogger Logger => _logger ?? _loggerFactory.CreateLogger(GetType());
 
-    public virtual string? Class { get; }
+    public abstract string? Class { get; }
 
     public string ComponentIdentifier { get; } = TnTComponents.Core.TnComponentIdentifier.NewId();
 

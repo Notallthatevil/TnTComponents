@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace TnTComponents;
 public enum TnTColor {
+    Transparent,
+    Black,
+    White,
     Primary,
     OnPrimary,
     PrimaryContainer,

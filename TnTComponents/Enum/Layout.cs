@@ -1,4 +1,4 @@
-﻿namespace TnTComponents.Enum;
+﻿namespace TnTComponents;
 
 public enum AlignContent {
     Normal,
@@ -49,7 +49,45 @@ public enum WrapStyle {
     Wrap
 }
 
-internal static class EnumExt {
+public static class EnumExt {
+    public static string ToCssString(this AlignItems alignItems) {
+        return alignItems switch {
+            AlignItems.Normal => "normal",
+            AlignItems.Center => "center",
+            AlignItems.Start => "start",
+            AlignItems.End => "end",
+            AlignItems.Stretch => "stretch",
+            AlignItems.Baseline => "baseline",
+            _ => throw new InvalidOperationException($"{alignItems} is not a valid value of {nameof(AlignItems)}")
+        };
+    }
+
+    public static string ToCssString(this JustifyContent justifyContent) {
+        return justifyContent switch {
+            JustifyContent.Normal => "normal",
+            JustifyContent.Center => "center",
+            JustifyContent.Start => "start",
+            JustifyContent.End => "end",
+            JustifyContent.SpaceAround => "space-around",
+            JustifyContent.SpaceBetween => "space-between",
+            JustifyContent.SpaceEvenly => "space-evenly",
+            _ => throw new InvalidOperationException($"{justifyContent} is not a valid value of {nameof(JustifyContent)}")
+        };
+    }
+
+    public static string ToCssString(this AlignContent alignContent) {
+        return alignContent switch {
+            AlignContent.Normal => "normal",
+            AlignContent.Center => "center",
+            AlignContent.Start => "start",
+            AlignContent.End => "end",
+            AlignContent.SpaceAround => "space-around",
+            AlignContent.SpaceBetween => "space-between",
+            AlignContent.Stretch => "stretch",
+            _ => throw new InvalidOperationException($"{alignContent} is not a valid value of {nameof(AlignContent)}")
+        };
+    }
+
 
     public static string ToStyle(this Direction Direction) {
         return "flex-direction: " + Direction switch {

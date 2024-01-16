@@ -60,6 +60,10 @@ $color-classes: transparent, primary, on-primary, primary-container, on-primary-
     }
 }
 
+.tnt-outlined {
+    outline: 1px solid $tnt-color-outline;
+}
+
 @mixin tnt-actionable() {
     @each $colorClass in $color-classes {
         &:hover {

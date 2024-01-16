@@ -13,6 +13,12 @@ public partial class TnTDesignTheme {
     [Parameter]
     public bool IsDark { get; set; } = false;
 
+    public Color Transparent => Color.Transparent;
+
+    public Color White => Color.White;
+
+    public Color Black => Color.Black;
+
     [Parameter]
     public System.Drawing.Color PrimaryLight { get; set; } = ColorTranslator.FromHtml("#7547ad");
 

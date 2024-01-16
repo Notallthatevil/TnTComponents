@@ -1,0 +1,13 @@
+﻿@namespace TnTComponents
+@inherits TnTComponents.Core.TnTComponentBase
+
+<tnt-button @attributes="AdditionalAttributes"
+            class="@Class"
+            style="@Style"
+            name="@Name"
+            type="@Type.ToHtmlType()"
+            disabled="@Disabled"
+            autofocus="@AutoFocus"
+            @onclick="OnClick">
+    <MaterialIcon Icon="@Icon" Color="@Color" Appearance="@Appearance" Size="@Size"/>
+</tnt-button>

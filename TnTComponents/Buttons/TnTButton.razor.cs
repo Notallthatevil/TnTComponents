@@ -29,7 +29,7 @@ public partial class TnTButton {
     public int Elevation { get; set; } = 1;
 
     [Parameter]
-    public TnTCornerRadius CornerRadius { get; set; } = new(10);
+    public TnTBorderRadius CornerRadius { get; set; } = new(10);
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
@@ -47,7 +47,7 @@ public partial class TnTButton {
         .AddElevation(Elevation)
         .AddBackgroundColor(BackgroundColor)
         .AddForegroundColor(TextColor)
-        .AddCornerRadius(CornerRadius)
+        .AddBorderRadius(CornerRadius)
         .AddRipple()
         .Build();
 
