@@ -1,0 +1,50 @@
+﻿@typeparam TInputType
+@inherits InputBase<TInputType>
+@implements ITnTComponentBase
+
+<label class="@LabelClass @CssClass">
+    <span class="@ContainerClass">
+        @TnTIconComponent.RenderIcon(IconType, StartIcon, "start-icon")
+        @{
+            var @class = GetClass();
+            bool placeholderEmpty = string.IsNullOrWhiteSpace(Placeholder);
+            if (placeholderEmpty) {
+                Placeholder = " ";
+            }
+            <input @attributes="AdditionalAttributes"
+                   @ref="Element"
+                   aria-label="@AriaLabel"
+                   type="@InputType"
+                   class="@(string.IsNullOrWhiteSpace(@class) ? null : @class)"
+                   name="@NameAttributeValue"
+                   style="@Style"
+                   readonly="@ReadOnly"
+                   autofocus="@AutoFocus"
+                   placeholder="@Placeholder"
+                   title="@Title"
+                   disabled="@Disabled"
+                   formtype="@GetFormType()"
+                   has-empty-placeholder="@(placeholderEmpty ? true : null)"
+                   minlength="@MinLength"
+                   maxlength="@MaxLength"
+                   min="@Min"
+                   max="@Max"
+                   pattern="@Pattern"
+                   required="@Required"
+                   step="@StepRate"
+                   @bind="@BindValue">
+        }
+        @if (!string.IsNullOrWhiteSpace(Label)) {
+            <span class="@LabelTextClass">
+                @Label
+            </span>
+        }
+        @TnTIconComponent.RenderIcon(IconType, EndIcon, "end-icon")
+    </span>
+    @if (!string.IsNullOrWhiteSpace(SupportingText)) {
+        <span class="@SupportingTextClass">@SupportingText</span>
+    }
+    @if (ShowValidation && EditContext is not null) {
+        <ValidationMessage class="@ValidationClass" For="ValueExpression" />
+    }
+</label>
