@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TnTComponents.Forms;
+namespace TnTComponents.Form;
 public interface IFormItem {
     bool ParentFormDisabled { get; }
     bool ParentFormReadOnly { get; }

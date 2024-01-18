@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 
-namespace TnTComponents
+namespace TnTComponents;
 public partial class TnTForm {
     [Parameter]
     public bool Disabled { get; set; }

@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Components;
-using TnTComponents.Forms;
+using TnTComponents.Form;
 
 namespace TnTComponents;
 public partial class TnTLabel : IFormItem {
