@@ -14,8 +14,7 @@ public interface IFormItem {
 
     bool ReadOnly { get; set; }
 
-    FormAppearance Appearance { get; set; };
-
+    FormAppearance Appearance { get; set; }
 
     TnTForm? ParentForm { get; set; }
 }

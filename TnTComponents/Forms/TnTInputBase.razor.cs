@@ -99,7 +99,7 @@ public abstract partial class TnTInputBase<TInputType> {
     [Inject]
     private ILogger<TnTInputBase<TInputType>>? _logger { get; set; }
 
-    [CascadingParameter(Name = TnTForm.ParentFormTypeName)]
+    [CascadingParameter(Name = "ParentFormType")]
     private FormAppearance? _parentFormType { get; set; }
 
     internal const string DefaultContainerClass = "tnt-input-container";

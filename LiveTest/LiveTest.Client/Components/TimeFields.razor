@@ -1,4 +1,5 @@
-﻿@using static LiveTest.Client.Pages.Forms
+﻿@*
+@using static LiveTest.Client.Pages.Forms
 <TnTTimeOnlyInput @bind-Value="@Model.TimeValue" MinTime="@(new TimeOnly(6, 30))" MaxTime="@(new TimeOnly(15, 45))" />
 <TnTTimeOnlyInput @bind-Value="@Model.TimeValue" StepRate="@(60 * 15)" EndIcon="search" />
 <TnTTimeOnlyInput @bind-Value="@Model.TimeValue" SupportingText="Supporting Text" />
@@ -67,3 +68,4 @@
     [CascadingParameter]
     public InputClass Model { get; set; }
 }
+*@

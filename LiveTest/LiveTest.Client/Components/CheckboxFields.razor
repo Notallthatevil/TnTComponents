@@ -1,4 +1,5 @@
-﻿@using static LiveTest.Client.Pages.Forms
+﻿@*
+@using static LiveTest.Client.Pages.Forms
 <TnTCheckbox @bind-Value="@Model.Checkbox" />
 <TnTCheckbox @bind-Value="@Model.Checkbox" Label="@nameof(Model.Checkbox)" />
 <TnTCheckbox @bind-Value="@Model.Checkbox" StartIcon="home" />
@@ -28,3 +29,4 @@
     [CascadingParameter]
     public InputClass Model { get; set; }
 }
+*@

@@ -1,4 +1,5 @@
-﻿@using static LiveTest.Client.Pages.Forms
+﻿@*
+@using static LiveTest.Client.Pages.Forms
 <TnTSwitch @bind-Value="@Model.Switch" />
 <TnTSwitch @bind-Value="@Model.Switch" Label="@nameof(Model.Checkbox)" />
 <TnTSwitch @bind-Value="@Model.Switch" StartIcon="home" />
@@ -28,3 +29,4 @@
     [CascadingParameter]
     public InputClass Model { get; set; }
 }
+*@
