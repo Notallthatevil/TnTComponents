@@ -7,6 +7,5 @@ using System.Threading.Tasks;
 namespace TnTComponents.Form;
 public interface IFormField : IFormItem {
     InputType Type { get; }
-
 }
 

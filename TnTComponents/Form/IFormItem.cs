@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace TnTComponents.Form;
 
-namespace TnTComponents.Form;
 public interface IFormItem {
-    bool ParentFormDisabled { get; }
-    bool ParentFormReadOnly { get; }
-    FormAppearance ParentFormAppearance { get; }
-
-    bool Disabled { get; set; }
-
-    bool ReadOnly { get; set; }
-
+    IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
     FormAppearance Appearance { get; set; }
-
+    string Class { get; }
+    bool Disabled { get; set; }
     TnTForm? ParentForm { get; set; }
+    FormAppearance? ParentFormAppearance { get; }
+    bool? ParentFormDisabled { get; }
+    bool? ParentFormReadOnly { get; }
+    bool ReadOnly { get; set; }
+    string? Style { get; set; }
 }
-
