@@ -32,7 +32,8 @@
                    pattern="@Pattern"
                    required="@Required"
                    step="@StepRate"
-                   @bind="@BindValue">
+                   @bind="@BindValue"
+                   @bind:event="oninput">
         }
         @if (!string.IsNullOrWhiteSpace(Label)) {
             <span class="@LabelTextClass">

@@ -7,5 +7,10 @@ using System.Threading.Tasks;
 namespace TnTComponents.Form;
 public interface IFormField : IFormItem {
     InputType Type { get; }
+
+    string? Placeholder { get; }
+
+    MaterialIcons? StartIcon { get;  }
+    MaterialIcons? EndIcon { get;  }
 }
 

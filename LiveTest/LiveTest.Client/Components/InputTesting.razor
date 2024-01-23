@@ -1,0 +1,18 @@
+﻿@rendermode InteractiveAuto
+
+<TnTComponents.TnTInputText @bind-Value="_value" OnChanged="@(()=> _value = _value + "CHANGED")" CallbackOnInput="true" BindAfter="After"/>
+
+@_value
+<br />
+@_counter
+
+
+@code {
+    private string _value;
+    private int _counter;
+
+    private void After() {
+        _counter++;
+    }
+
+}

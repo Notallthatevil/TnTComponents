@@ -1,4 +1,6 @@
-﻿namespace TnTComponents.Form;
+﻿using Microsoft.AspNetCore.Components;
+
+namespace TnTComponents.Form;
 
 public interface IFormItem {
     IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
@@ -11,4 +13,5 @@ public interface IFormItem {
     bool? ParentFormReadOnly { get; }
     bool ReadOnly { get; set; }
     string? Style { get; set; }
+    ElementReference Element { get; }
 }

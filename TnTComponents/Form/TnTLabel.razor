@@ -1,7 +1,11 @@
 ﻿@namespace TnTComponents
 
 <CascadingValue Value="this" IsFixed="true">
-    <label>
+    <label @attributes="AdditionalAttributes"
+           @ref="Element"
+           class="@Class"
+           style="@Style">
         @ChildContent
+        @Label
     </label>
 </CascadingValue>

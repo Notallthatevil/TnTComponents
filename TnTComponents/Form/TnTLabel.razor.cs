@@ -37,6 +37,10 @@ public partial class TnTLabel : IFormItem {
     [Parameter]
     public string? Style { get; set; }
 
+    [Parameter, EditorRequired]
+    public string Label { get; set; } = default!;
+    public ElementReference Element { get; protected set; }
+
     private IFormField? _childField;
 
     public void SetChildField(IFormField formField) {

@@ -28,3 +28,29 @@ public enum InputType {
     Week
 }
 
+public static class InputTypeExt {
+    public static string ToInputTypeString(this InputType inputType) {
+        return inputType switch {
+            InputType.Button => "button",
+            InputType.Checkbox => "checkbox",
+            InputType.Color => "color",
+            InputType.Date => "date",
+            InputType.DateTime => "datetime-local",
+            InputType.Email => "email",
+            InputType.File => "file",
+            InputType.Hidden => "hidden",
+            InputType.Image => "image",
+            InputType.Month => "month",
+            InputType.Number => "number",
+            InputType.Password => "password",
+            InputType.Radio => "radio",
+            InputType.Range => "range",
+            InputType.Search => "search",
+            InputType.Tel => "tel",
+            InputType.Text => "text",
+            InputType.Time => "time",
+            InputType.Week => "week",
+            _ => throw new InvalidOperationException($"{inputType} is not a valid value of {nameof(InputType)}")
+        };
+    }
+}
