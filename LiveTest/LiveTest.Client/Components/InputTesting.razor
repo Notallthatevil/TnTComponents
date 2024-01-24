@@ -1,4 +1,5 @@
-﻿@using TnTComponents
+﻿@using System.ComponentModel.DataAnnotations
+@using TnTComponents
 @rendermode InteractiveAuto
 
 <TnTInputText @bind-Value="@_value" BindAfter="@After" />
@@ -12,8 +13,28 @@
 
 
 <TnTLabel Label="My Label" Appearance="FormAppearance.Filled">
-    <TnTInputText @bind-Value="@_value" BindOnInput="true" BindAfter="@After" Appearance="FormAppearance.Filled" />
+    <TnTInputText @bind-Value="@_value" Placeholder="Place" BindOnInput="true" BindAfter="@After" Appearance="FormAppearance.Filled" />
 </TnTLabel>
+
+
+<TnTForm Model="@_model" Appearance="FormAppearance.Outlined">
+    <TnTInputText Appearance="FormAppearance.Filled" @bind-Value="@_model.A" BindAfter="@After" />
+
+
+    <TnTLabel Label="My Label" Appearance="FormAppearance.Filled">
+        <TnTInputText @bind-Value="@_model.A" Placeholder="Place" BindOnInput="true" BindAfter="@After" Appearance="FormAppearance.Filled" />
+    </TnTLabel>
+</TnTForm>
+
+
+<TnTForm Model="@_model" Appearance="FormAppearance.Filled">
+    <TnTInputText Appearance="FormAppearance.Outlined" @bind-Value="@_model.A" BindAfter="@After" />
+
+
+    <TnTLabel Label="My Label" Appearance="FormAppearance.Outlined">
+        <TnTInputText @bind-Value="@_model.A" Placeholder="Place" BindOnInput="true" BindAfter="@After" Appearance="FormAppearance.Outlined" />
+    </TnTLabel>
+</TnTForm>
 
 @_value
 <br />
@@ -24,8 +45,16 @@
     private string _value;
     private int _counter;
 
+    private Model _model = new();
+
     private void After() {
         _counter++;
     }
+
+    class Model {
+        [StringLength(5, MinimumLength = 1), Required]
+        public string A { get; set; }
+    }
+
 
 }

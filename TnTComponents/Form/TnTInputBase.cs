@@ -16,7 +16,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public FormAppearance Appearance { get; set; }
 
     [Parameter]
-    public TnTColor? BackgroundColor { get; set; }
+    public TnTColor? BackgroundColor { get; set; } = TnTColor.SurfaceContainerLow;
 
     [Parameter]
     public EventCallback<TInputType?> BindAfter { get; set; }
@@ -25,11 +25,14 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public bool BindOnInput { get; set; }
 
     public virtual string Class => CssBuilder.Create()
+        .AddClass(CssClass)
         .AddClass("tnt-input")
-                    .AddOutlined(Appearance == FormAppearance.Outlined)
+        .AddOutlined(Appearance == FormAppearance.Outlined)
         .AddFilled(Appearance == FormAppearance.Filled)
-        .AddBackgroundColor(BackgroundColor)
+        .AddBackgroundColor(Appearance == FormAppearance.Filled ? BackgroundColor : null)
         .AddForegroundColor(TextColor)
+        .AddClass("tnt-input-placeholder", !string.IsNullOrWhiteSpace(Placeholder))
+        .AddBorderRadius(Appearance == FormAppearance.Filled ? new TnTBorderRadius() { StartStart = 1, StartEnd = 1 } : new TnTBorderRadius(1))
         .Build();
 
     [Parameter]
@@ -71,7 +74,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public string? Style { get; set; }
 
     [Parameter]
-    public TnTColor? TextColor { get; set; }
+    public TnTColor? TextColor { get; set; } = TnTColor.OnSurfaceVariant;
 
     public abstract InputType Type { get; }
 
@@ -130,6 +133,10 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
 
         if (ValueExpression is not null) {
             FieldIdentifier = FieldIdentifier.Create(ValueExpression);
+        }
+
+        if (string.IsNullOrWhiteSpace(Placeholder)) {
+            Placeholder = " ";
         }
     }
 

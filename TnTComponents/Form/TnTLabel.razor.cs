@@ -47,9 +47,9 @@ public partial class TnTLabel : IFormItem {
     public string Label { get; set; } = default!;
     public ElementReference Element { get; protected set; }
     [Parameter]
-    public TnTColor? BackgroundColor { get; set; } = TnTColor.Transparent;
+    public TnTColor? BackgroundColor { get; set; }
     [Parameter]
-    public TnTColor? TextColor { get; set; } = TnTColor.OnSurface;
+    public TnTColor? TextColor { get; set; }
 
     private IFormField? _childField;
 
@@ -73,6 +73,15 @@ public partial class TnTLabel : IFormItem {
 
         if (ParentFormDisabled.HasValue) {
             Disabled = ParentFormDisabled.Value;
+        }
+
+        if (Appearance == FormAppearance.Filled) {
+            BackgroundColor ??= TnTColor.Transparent;
+            TextColor ??= TnTColor.OnSurfaceVariant;
+        }
+        else if (Appearance == FormAppearance.Outlined) {
+            BackgroundColor ??= TnTColor.Surface;
+            TextColor ??= TnTColor.OnSurface;
         }
     }
 }

@@ -58,6 +58,10 @@ $color-classes: transparent, primary, on-primary, primary-container, on-primary-
     .tnt-fg-color-#{$colorClass} {
         color: var(--tnt-color-#{$colorClass});
     }
+
+    .tnt-accent-color-#{$colorClass} {
+        color: var(--tnt-color-#{$colorClass});
+    }
 }
 
 .tnt-outlined {

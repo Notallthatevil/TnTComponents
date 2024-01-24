@@ -1,17 +1,19 @@
 ﻿.tnt-input {
-    min-height: 2rem;
+    min-height: 1.25rem;
     display: inline-flex;
     padding: 0.5rem 1rem;
     align-items: center;
     position: relative;
+    margin: 0.25rem;
 
     input {
         appearance: none;
         border: none;
         outline: none;
-        background-color: red;
+        background-color: $tnt-color-transparent;
         color: inherit;
-        caret-color:inherit;
+        caret-color: inherit;
+        padding-top: 0.2rem;
         @extend .tnt-body-large;
     }
 
@@ -26,8 +28,6 @@
 
 
     &.tnt-filled {
-        background-color: $tnt-color-surface-container;
-
         &:after {
             content: '';
             height: 1px;
@@ -49,7 +49,7 @@
             position: absolute;
             background-color: $tnt-color-primary;
             transform: rotateY(90deg);
-            transition: 200ms;
+            transition: 200ms ease-in-out;
         }
 
         &:focus-within {
@@ -57,6 +57,73 @@
                 transform: rotateY(0deg);
             }
         }
+    }
 
+    &.tnt-outlined {
+
+        &:after {
+            content: '';
+            height: 100%;
+            width: 100%;
+            background-color: transparent;
+            display: block;
+            position: absolute;
+            left: 0;
+            border-radius: inherit;
+            transition: 200ms ease-in-out;
+            outline: 2px solid $tnt-color-primary;
+            opacity: 0;
+            user-select: none;
+            pointer-events:none;
+        }
+
+        &:focus-within {
+            //outline: 2px solid $tnt-color-primary;
+            &:after {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+label.tnt-components {
+    position: relative;
+
+    span.tnt-label {
+        position: absolute;
+        z-index: 1;
+        left: 1.25rem;
+        top: 0;
+        user-select: none;
+        color: inherit;
+        background-color: inherit;
+        transition: 200ms ease-in-out;
+        cursor: text;
+        @extend .tnt-body-large;
+    }
+
+    &:focus-within {
+        color: $tnt-color-primary;
+    }
+
+    &:focus-within, &:not(:has(input:placeholder-shown)), &:has(.tnt-input-placeholder) {
+        span.tnt-label {
+            transform: translateY(-0.9rem) scale(0.75) translateX(-0.65rem);
+        }
+    }
+
+    &:has(span.tnt-outlined) {
+        border: none;
+        outline: none;
+
+        span.tnt-label {
+            padding: 0 0.25rem;
+        }
+
+        &:focus-within, &:not(:has(input:placeholder-shown)), &:has(.tnt-input-placeholder) {
+            span.tnt-label {
+                transform: translateY(-1.3rem) scale(0.75) translateX(-0.65rem);
+            }
+        }
     }
 }
