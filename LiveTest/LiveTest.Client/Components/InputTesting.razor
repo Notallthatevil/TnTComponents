@@ -1,7 +1,7 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using TnTComponents
 @rendermode InteractiveAuto
-
+@*
 <TnTInputText @bind-Value="@_value" BindAfter="@After" />
 
 
@@ -26,9 +26,9 @@
     </TnTLabel>
 </TnTForm>
 
-
+*@
 <TnTForm Model="@_model" Appearance="FormAppearance.Filled">
-    <TnTInputText Appearance="FormAppearance.Outlined" @bind-Value="@_model.A" BindAfter="@After" />
+    <TnTInputText StartIcon="MaterialIcons.AccessAlarm" Appearance="FormAppearance.Outlined" @bind-Value="@_model.A" BindAfter="@After" EndIcon="MaterialIcons.AccountBalanceWallet" />
 
 
     <TnTLabel Label="My Label" Appearance="FormAppearance.Outlined">

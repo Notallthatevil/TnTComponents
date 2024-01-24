@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
-using Microsoft.AspNetCore.Components.Web;
 using System.ComponentModel.DataAnnotations;
-using System.Linq.Expressions;
 using System.Reflection;
 using TnTComponents.Core;
 using TnTComponents.Form;
@@ -27,12 +25,12 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public virtual string Class => CssBuilder.Create()
         .AddClass(CssClass)
         .AddClass("tnt-input")
-        .AddOutlined(Appearance == FormAppearance.Outlined)
-        .AddFilled(Appearance == FormAppearance.Filled)
-        .AddBackgroundColor(Appearance == FormAppearance.Filled ? BackgroundColor : null)
+        .AddOutlined((ParentFormAppearance ?? Appearance) == FormAppearance.Outlined)
+        .AddFilled((ParentFormAppearance ?? Appearance) == FormAppearance.Filled)
+        .AddBackgroundColor((ParentFormAppearance ?? Appearance) == FormAppearance.Filled ? BackgroundColor : null)
         .AddForegroundColor(TextColor)
         .AddClass("tnt-input-placeholder", !string.IsNullOrWhiteSpace(Placeholder))
-        .AddBorderRadius(Appearance == FormAppearance.Filled ? new TnTBorderRadius() { StartStart = 1, StartEnd = 1 } : new TnTBorderRadius(1))
+        .AddBorderRadius((ParentFormAppearance ?? Appearance) == FormAppearance.Filled ? new TnTBorderRadius() { StartStart = 1, StartEnd = 1 } : new TnTBorderRadius(1))
         .Build();
 
     [Parameter]
@@ -79,61 +77,58 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public abstract InputType Type { get; }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        // TODO add start icon
+        if (StartIcon is not null) {
+            builder.OpenRegion(0);
+            builder.OpenComponent<MaterialIcon>(1);
+            builder.AddComponentParameter(2, "Icon", StartIcon);
+            builder.CloseComponent();
+            builder.CloseRegion();
+        }
 
+        builder.OpenElement(50, "span");
+        builder.AddAttribute(51, "class", Class);
         {
-            builder.OpenElement(50, "span");
-            builder.AddAttribute(51, "class", Class);
-            {
-                builder.OpenElement(100, "input");
-                builder.AddMultipleAttributes(110, AdditionalAttributes);
-                builder.AddAttribute(120, "type", Type.ToInputTypeString());
-                builder.AddAttribute(125, "value", CurrentValueAsString);
-                builder.AddAttribute(140, "style", Style);
-                builder.AddAttribute(150, "readonly", ReadOnly);
-                builder.AddAttribute(160, "placeholder", Placeholder);
-                builder.AddAttribute(170, "disabled", Disabled);
-                builder.AddAttribute(171, "required", IsRequired());
-                builder.AddAttribute(172, "minlength", GetMinLength());
-                builder.AddAttribute(173, "maxlength", GetMaxLength());
-                builder.AddAttribute(174, "min", GetMinValue());
-                builder.AddAttribute(175, "max", GetMaxValue());
-                if (BindOnInput) {
-                    builder.AddAttribute(180, "oninput", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
-                }
-                else {
-                    builder.AddAttribute(180, "onchange", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
-                }
-                builder.SetUpdatesAttributeName("value");
-
-                builder.AddElementReferenceCapture(200, e => Element = e);
-                builder.CloseElement();
+            builder.OpenElement(100, "input");
+            builder.AddMultipleAttributes(110, AdditionalAttributes);
+            builder.AddAttribute(120, "type", Type.ToInputTypeString());
+            builder.AddAttribute(125, "value", CurrentValueAsString);
+            builder.AddAttribute(140, "style", Style);
+            builder.AddAttribute(150, "readonly", ParentFormReadOnly ?? ReadOnly);
+            builder.AddAttribute(160, "placeholder", Placeholder);
+            builder.AddAttribute(170, "disabled", ParentFormDisabled ?? Disabled);
+            builder.AddAttribute(171, "required", IsRequired());
+            builder.AddAttribute(172, "minlength", GetMinLength());
+            builder.AddAttribute(173, "maxlength", GetMaxLength());
+            builder.AddAttribute(174, "min", GetMinValue());
+            builder.AddAttribute(175, "max", GetMaxValue());
+            if (BindOnInput) {
+                builder.AddAttribute(180, "oninput", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
             }
-            builder.CloseElement();
+            else {
+                builder.AddAttribute(180, "onchange", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
+            }
+            builder.SetUpdatesAttributeName("value");
 
+            builder.AddElementReferenceCapture(200, e => Element = e);
+            builder.CloseElement();
+        }
+        builder.CloseElement();
+
+
+        if (EndIcon is not null) {
+            builder.OpenRegion(300);
+            builder.OpenComponent<MaterialIcon>(301);
+            builder.AddComponentParameter(302, "Icon", EndIcon);
+            builder.CloseComponent();
+            builder.CloseRegion();
         }
         //  TODO add end icon
     }
 
     protected override void OnInitialized() {
         base.OnInitialized();
-        if (ParentFormAppearance.HasValue) {
-            Appearance = ParentFormAppearance.Value;
-        }
-
-        if (ParentFormReadOnly.HasValue) {
-            ReadOnly = ParentFormReadOnly.Value;
-        }
-
-        if (ParentFormDisabled.HasValue) {
-            Disabled = ParentFormDisabled.Value;
-        }
 
         Label?.SetChildField(this);
-
-        if (ValueExpression is not null) {
-            FieldIdentifier = FieldIdentifier.Create(ValueExpression);
-        }
 
         if (string.IsNullOrWhiteSpace(Placeholder)) {
             Placeholder = " ";
