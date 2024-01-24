@@ -15,19 +15,22 @@ internal class CssBuilder {
 
     private CssBuilder() { }
 
-    private readonly StringBuilder _stringBuilder = new();
+    private readonly HashSet<string> _classes = [];
 
 
     public CssBuilder AddClass(string className, bool? when = true) {
         if (!string.IsNullOrWhiteSpace(className) && when == true) {
-            _stringBuilder.Append(' ').Append(className);
+            _classes.Add(className);
         }
         return this;
     }
 
     public CssBuilder AddClass(IReadOnlyDictionary<string, object>? additionalAttributes) {
         if (additionalAttributes?.TryGetValue("class", out var @class) == true) {
-            _stringBuilder.AppendJoin(' ', @class);
+            var classes = @class.ToString();
+            if (!string.IsNullOrWhiteSpace(classes)) {
+                _classes.Add(classes);
+            }
         }
         return this;
     }
@@ -70,7 +73,7 @@ internal class CssBuilder {
 
 
 
-    public string Build() => _stringBuilder.ToString();
+    public string Build() => string.Join(' ', _classes).Trim();
 
 }
 

@@ -25,6 +25,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public bool BindOnInput { get; set; }
 
     public virtual string Class => CssBuilder.Create()
+        .AddClass("tnt-input")
                     .AddOutlined(Appearance == FormAppearance.Outlined)
         .AddFilled(Appearance == FormAppearance.Filled)
         .AddBackgroundColor(BackgroundColor)
@@ -72,37 +73,41 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     [Parameter]
     public TnTColor? TextColor { get; set; }
 
-    public abstract InputType Type { get; protected set; }
+    public abstract InputType Type { get; }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         // TODO add start icon
 
         {
-            builder.OpenElement(100, "input");
-            builder.AddMultipleAttributes(110, AdditionalAttributes);
-            builder.AddAttribute(120, "type", Type.ToInputTypeString());
-            builder.AddAttribute(125, "value", CurrentValueAsString);
-            builder.AddAttribute(130, "class", Class);
-            builder.AddAttribute(140, "style", Style);
-            builder.AddAttribute(150, "readonly", ReadOnly);
-            builder.AddAttribute(160, "placeholder", Placeholder);
-            builder.AddAttribute(170, "disabled", Disabled);
-            builder.AddAttribute(171, "required", IsRequired());
-            builder.AddAttribute(172, "minlength", GetMinLength());
-            builder.AddAttribute(173, "maxlength", GetMaxLength());
-            builder.AddAttribute(174, "min", GetMinValue());
-            builder.AddAttribute(175, "max", GetMaxValue());
-            if (BindOnInput) {
-                builder.AddAttribute(180, "oninput", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
-            }
-            else {
-                builder.AddAttribute(180, "onchange", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
-            }
-            builder.SetUpdatesAttributeName("value");
+            builder.OpenElement(50, "span");
+            builder.AddAttribute(51, "class", Class);
+            {
+                builder.OpenElement(100, "input");
+                builder.AddMultipleAttributes(110, AdditionalAttributes);
+                builder.AddAttribute(120, "type", Type.ToInputTypeString());
+                builder.AddAttribute(125, "value", CurrentValueAsString);
+                builder.AddAttribute(140, "style", Style);
+                builder.AddAttribute(150, "readonly", ReadOnly);
+                builder.AddAttribute(160, "placeholder", Placeholder);
+                builder.AddAttribute(170, "disabled", Disabled);
+                builder.AddAttribute(171, "required", IsRequired());
+                builder.AddAttribute(172, "minlength", GetMinLength());
+                builder.AddAttribute(173, "maxlength", GetMaxLength());
+                builder.AddAttribute(174, "min", GetMinValue());
+                builder.AddAttribute(175, "max", GetMaxValue());
+                if (BindOnInput) {
+                    builder.AddAttribute(180, "oninput", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
+                }
+                else {
+                    builder.AddAttribute(180, "onchange", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
+                }
+                builder.SetUpdatesAttributeName("value");
 
-
-            builder.AddElementReferenceCapture(200, e => Element = e);
+                builder.AddElementReferenceCapture(200, e => Element = e);
+                builder.CloseElement();
+            }
             builder.CloseElement();
+
         }
         //  TODO add end icon
     }

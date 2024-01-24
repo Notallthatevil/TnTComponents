@@ -1,12 +1,19 @@
 ﻿@using TnTComponents
-@rendermode InteractiveServer
+@rendermode InteractiveAuto
 
 <TnTInputText @bind-Value="@_value" BindAfter="@After" />
-<TnTInputText @bind-Value="@_value" BindOnInput="true" BindAfter="@After" />
 
-<InputText @bind-Value="@_value" />
 
-<input @bind="_value" />
+<TnTLabel Label="My Label">
+    <TnTInputText @bind-Value="@_value" BindOnInput="true" BindAfter="@After" />
+</TnTLabel>
+
+<TnTInputText Appearance="FormAppearance.Filled" @bind-Value="@_value" BindAfter="@After" />
+
+
+<TnTLabel Label="My Label" Appearance="FormAppearance.Filled">
+    <TnTInputText @bind-Value="@_value" BindOnInput="true" BindAfter="@After" Appearance="FormAppearance.Filled" />
+</TnTLabel>
 
 @_value
 <br />

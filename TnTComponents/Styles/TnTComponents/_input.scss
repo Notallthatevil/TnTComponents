@@ -1,0 +1,62 @@
+﻿.tnt-input {
+    min-height: 2rem;
+    display: inline-flex;
+    padding: 0.5rem 1rem;
+    align-items: center;
+    position: relative;
+
+    input {
+        appearance: none;
+        border: none;
+        outline: none;
+        background-color: red;
+        color: inherit;
+        caret-color:inherit;
+        @extend .tnt-body-large;
+    }
+
+    &:focus-within {
+        caret-color: $tnt-color-primary;
+    }
+
+
+    &:has(input:disabled) {
+        opacity: 0.3;
+    }
+
+
+    &.tnt-filled {
+        background-color: $tnt-color-surface-container;
+
+        &:after {
+            content: '';
+            height: 1px;
+            width: 100%;
+            bottom: 0px;
+            left: 0px;
+            display: block;
+            position: absolute;
+            background-color: $tnt-color-surface-variant;
+        }
+
+        &:before {
+            content: '';
+            height: 2px;
+            width: 100%;
+            bottom: 0px;
+            left: 0px;
+            display: block;
+            position: absolute;
+            background-color: $tnt-color-primary;
+            transform: rotateY(90deg);
+            transition: 200ms;
+        }
+
+        &:focus-within {
+            &:before {
+                transform: rotateY(0deg);
+            }
+        }
+
+    }
+}

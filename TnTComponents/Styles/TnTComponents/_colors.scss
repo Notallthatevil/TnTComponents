@@ -47,7 +47,7 @@ $tnt-color-info: var(--tnt-color-info);
 $tnt-color-on-info: var(--tnt-color-on-info);
 $tnt-color-info-container: var(--tnt-color-info-container);
 $tnt-color-on-info-container: var(--tnt-color-on-info-container);
-
+$tnt-color-transparent: var(--tnt-color-transparent);
 $color-classes: transparent, primary, on-primary, primary-container, on-primary-container, secondary, on-secondary, secondary-container, on-secondary-container, tertiary, on-tertiary, tertiary-container, on-tertiary-container, error, error-container, on-error, on-error-container, background, on-background, surface, on-surface, surface-variant, on-surface-variant, surface-container-highest, surface-container-high, surface-container, surface-container-low, surface-container-lowest, outline, inverse-on-surface, inverse-surface, inverse-primary, shadow, surface-tint, outline-variant, scrim, warning, on-warning, warning-container, on-warning-container, success, on-success, success-container, on-success-container, info, on-info, info-container, on-info-container;
 
 @each $colorClass in $color-classes {
@@ -81,6 +81,7 @@ $color-classes: transparent, primary, on-primary, primary-container, on-primary-
         //    background-image: radial-gradient(circle, var(--tnt-color-#{$colorClass}) 10%, transparent 10.01%);
         //}
     }
+
     &.tnt-ripple:after {
         background-image: radial-gradient(circle, black 10%, transparent 10.01%);
     }

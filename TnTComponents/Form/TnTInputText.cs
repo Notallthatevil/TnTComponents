@@ -8,10 +8,15 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using TnTComponents.Core;
+using TnTComponents.Enum;
 
 namespace TnTComponents;
 public class TnTInputText : TnTInputBase<string?> {
-    public override InputType Type { get; protected set; } = InputType.Text;
+    public override InputType Type => InputType.ToInputType();
+
+    [Parameter]
+    public TextInputType InputType { get; set; } = TextInputType.Text;
+
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out string? result, [NotNullWhen(false)] out string? validationErrorMessage) {
         result = value;
