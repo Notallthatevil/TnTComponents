@@ -1,6 +1,12 @@
-﻿@rendermode InteractiveAuto
+﻿@using TnTComponents
+@rendermode InteractiveServer
 
-<TnTComponents.TnTInputText @bind-Value="_value" OnChanged="@(()=> _value = _value + "CHANGED")" CallbackOnInput="true" BindAfter="After"/>
+<TnTInputText @bind-Value="@_value" BindAfter="@After" />
+<TnTInputText @bind-Value="@_value" BindOnInput="true" BindAfter="@After" />
+
+<InputText @bind-Value="@_value" />
+
+<input @bind="_value" />
 
 @_value
 <br />

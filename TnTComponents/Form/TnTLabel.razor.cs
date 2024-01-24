@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using TnTComponents.Core;
 using TnTComponents.Form;
 
 namespace TnTComponents;
@@ -14,7 +15,12 @@ public partial class TnTLabel : IFormItem {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public string Class { get; }
+    public string Class => CssBuilder.Create()
+        .AddFilled(Appearance == FormAppearance.Filled)
+        .AddOutlined(Appearance == FormAppearance.Outlined)
+        .AddBackgroundColor(BackgroundColor)
+        .AddForegroundColor(TextColor)
+        .Build();
 
     [Parameter]
     public bool Disabled { get; set; }
@@ -23,13 +29,13 @@ public partial class TnTLabel : IFormItem {
     public TnTForm? ParentForm { get; set; }
 
     [CascadingParameter(Name = nameof(ParentFormAppearance))]
-    public FormAppearance? ParentFormAppearance { get; }
+    public FormAppearance? ParentFormAppearance { get; set; }
 
     [CascadingParameter(Name = nameof(ParentFormDisabled))]
-    public bool? ParentFormDisabled { get; }
+    public bool? ParentFormDisabled { get; set; }
 
     [CascadingParameter(Name = nameof(ParentFormReadOnly))]
-    public bool? ParentFormReadOnly { get; }
+    public bool? ParentFormReadOnly { get; set; }
 
     [Parameter]
     public bool ReadOnly { get; set; }
@@ -40,6 +46,10 @@ public partial class TnTLabel : IFormItem {
     [Parameter, EditorRequired]
     public string Label { get; set; } = default!;
     public ElementReference Element { get; protected set; }
+    [Parameter]
+    public TnTColor? BackgroundColor { get; set; } = TnTColor.Transparent;
+    [Parameter]
+    public TnTColor? TextColor { get; set; } = TnTColor.OnSurface;
 
     private IFormField? _childField;
 

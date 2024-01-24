@@ -14,4 +14,6 @@ public interface IFormItem {
     bool ReadOnly { get; set; }
     string? Style { get; set; }
     ElementReference Element { get; }
+    TnTColor? BackgroundColor { get; set; }
+    TnTColor? TextColor { get; set; }
 }
