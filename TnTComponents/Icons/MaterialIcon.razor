@@ -14,7 +14,10 @@
     public TnTColor Color { get; set; } = TnTColor.OnSurface;
 
     [Parameter, EditorRequired]
-    public MaterialIcons Icon { get; set; } = default!;
+    public MaterialIcon Icon { get; set; } = 
+    !;
+
+    private string? _iconString;
 
     protected override void OnInitialized() {
         base.OnInitialized();
