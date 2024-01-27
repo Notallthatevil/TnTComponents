@@ -8,10 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TnTComponents;
-public class TnTInputNumeric<TNumericType> : TnTInputBase<TNumericType> where TNumericType : INumberBase<TNumericType>? {
+public class TnTInputNumeric<TNumericType> : TnTInputBase<TNumericType?> where TNumericType : INumberBase<TNumericType>? {
     public override InputType Type => InputType.Number;
 
-    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TNumericType result, [NotNullWhen(false)] out string? validationErrorMessage) {
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TNumericType? result, [NotNullWhen(false)] out string? validationErrorMessage) {
         validationErrorMessage = null;
         if (TNumericType.TryParse(value, CultureInfo.InvariantCulture, out result)) {
             return true;

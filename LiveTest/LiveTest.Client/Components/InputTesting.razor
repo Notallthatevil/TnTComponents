@@ -3,15 +3,15 @@
 @rendermode InteractiveAuto
 <TnTForm Model="@_model" Appearance="FormAppearance.Outlined">
     <DataAnnotationsValidator/>
-    <TnTInputNumeric step="0.1" Appearance="FormAppearance.Filled" @bind-Value="@_model.A" />
+    <TnTInputDateTime Appearance="FormAppearance.Filled" @bind-Value="@_model.A" />
 
     <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
-        <TnTInputNumeric Appearance="FormAppearance.Filled" @bind-Value="@_model.A" />
+        <TnTInputDateTime Appearance="FormAppearance.Filled" @bind-Value="@_model.A" />
     </TnTLabel>
-    <TnTInputNumeric StartIcon="MaterialIcon.AccessAlarm" Appearance="FormAppearance.Filled" @bind-Value="@_model.A" EndIcon="MaterialIcon.AccountBalanceWallet" />
+    <TnTInputDateTime StartIcon="MaterialIcon.AccessAlarm" Appearance="FormAppearance.Filled" @bind-Value="@_model.A" EndIcon="MaterialIcon.AccountBalanceWallet" />
 
     <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
-        <TnTInputNumeric StartIcon="MaterialIcon.AccessAlarm" Appearance="FormAppearance.Filled" @bind-Value="@_model.A" EndIcon="MaterialIcon.AccountBalanceWallet" />
+        <TnTInputDateTime StartIcon="MaterialIcon.AccessAlarm" Appearance="FormAppearance.Filled" @bind-Value="@_model.A" EndIcon="MaterialIcon.AccountBalanceWallet" />
     </TnTLabel>
 </TnTForm>
 
@@ -24,8 +24,8 @@
     private Model _model = new();
 
     class Model {
-        [Range(5.4, 10.3), Required]
-        public double A { get; set; }
+        [Required]
+        public DateTime? A { get; set; }
     }
 
 
