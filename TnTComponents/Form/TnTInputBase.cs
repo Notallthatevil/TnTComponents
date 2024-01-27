@@ -84,7 +84,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
             {
                 if (StartIcon is not null) {
                     StartIcon.AdditionalClass = "tnt-start";
-                    builder.AddMarkupContent(20, StartIcon.Render().ToString());
+                    builder.AddContent(20, StartIcon.Render());
                 }
             }
             {
@@ -128,7 +128,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
             {
                 if (EndIcon is not null) {
                     EndIcon.AdditionalClass = "tnt-end";
-                    builder.AddMarkupContent(20, EndIcon.Render().ToString());
+                    builder.AddContent(20, EndIcon.Render());
                 }
             }
         }
@@ -218,7 +218,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
         return null;
     }
 
-    private bool IsRequired() {
+    protected bool IsRequired() {
         if (AdditionalAttributes?.TryGetValue("required", out var _) == true || GetCustomAttributeIfExists<RequiredAttribute>() is not null) {
             return true;
         }

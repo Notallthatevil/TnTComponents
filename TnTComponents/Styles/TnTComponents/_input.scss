@@ -7,7 +7,8 @@
     margin: 0.5rem;
     vertical-align: middle;
 
-    input {
+
+    input, select {
         appearance: none;
         border: none;
         outline: none;
@@ -16,6 +17,19 @@
         caret-color: inherit;
         padding-top: 0.2rem;
         @extend .tnt-body-large;
+    }
+
+    select {
+        min-width: 5rem;
+        cursor: pointer;
+
+        &:disabled {
+            cursor: not-allowed;
+        }
+    }
+
+    &:has(input:disabled), &:has(select:disabled) {
+        opacity: 0.3;
     }
 
     &:has(span.tnt-icon.tnt-start) {
@@ -129,6 +143,10 @@ label.tnt-components:not(:has(input[type=checkbox])) {
         @extend .tnt-body-large;
     }
 
+    &:has(input:disabled), &:has(select:disabled) {
+        opacity: 0.3;
+    }
+
     &:focus-within {
         color: $tnt-color-primary;
     }
@@ -175,11 +193,6 @@ label.tnt-components:not(:has(input[type=checkbox])) {
             span.tnt-label {
                 left: 3.25rem;
             }
-            //&:focus-within, &:not(:has(input:placeholder-shown)), &:has(.tnt-input-placeholder) {
-            //    span.tnt-label {
-            //        transform: translateY(-1.3rem) scale(0.75) translateX(-0.65rem);
-            //    }
-            //}
         }
     }
 
@@ -269,7 +282,7 @@ label.tnt-components:has(input[type=checkbox]) {
         padding-right: 2rem;
 
         span.tnt-label {
-            margin-left:0.5rem;
+            margin-left: 0.5rem;
         }
 
         span.tnt-icon.tnt-end {
