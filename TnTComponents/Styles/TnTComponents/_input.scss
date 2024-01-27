@@ -290,4 +290,28 @@ label.tnt-components:has(input[type=checkbox]) {
             right: 0;
         }
     }
+
+    &:has(span.tnt-input.modified.invalid) {
+        span.tnt-label {
+            color: red;
+        }
+
+        &:before {
+            outline-color: $tnt-color-error;
+        }
+
+        &:has(input:checked) {
+            &:before {
+                background-color: $tnt-color-error;
+            }
+
+            &:after {
+                border-color: $tnt-color-on-error;
+            }
+        }
+
+        span.tnt-icon.tnt-end {
+            color: $tnt-color-error;
+        }
+    }
 }

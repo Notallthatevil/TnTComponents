@@ -3,32 +3,14 @@
 @rendermode InteractiveAuto
 <TnTForm Model="@_model" Appearance="FormAppearance.Outlined">
     <DataAnnotationsValidator />
-    <TnTInputSelect @bind-Value="_model.A" Appearance="FormAppearance.Filled">
-        @foreach (var v in Values) {
-            <option value="@v">@v</option>
-        }
-    </TnTInputSelect>
 
     <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
-        <TnTInputSelect @bind-Value="_model.A" Appearance="FormAppearance.Filled">
-            @foreach (var v in Values) {
-                <option value="@v">@v</option>
-            }
-        </TnTInputSelect>
+        <TnTInputCheckbox  @bind-Value="_model.A" Appearance="FormAppearance.Filled" />
     </TnTLabel>
 
-    <TnTInputSelect StartIcon="MaterialIcon.Satellite" EndIcon="MaterialIcon.QueryBuilder" @bind-Value="_model.A" Appearance="FormAppearance.Filled">
-        @foreach (var v in Values) {
-            <option value="@v">@v</option>
-        }
-    </TnTInputSelect>
 
     <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
-        <TnTInputSelect StartIcon="MaterialIcon.Satellite" EndIcon="MaterialIcon.QueryBuilder" @bind-Value="_model.A" Appearance="FormAppearance.Filled">
-            @foreach (var v in Values) {
-                <option value="@v">@v</option>
-            }
-        </TnTInputSelect>
+        <TnTInputCheckbox StartIcon="MaterialIcon.Satellite" EndIcon="MaterialIcon.QueryBuilder" @bind-Value="_model.A" Appearance="FormAppearance.Filled" />
     </TnTLabel>
 </TnTForm>
 
@@ -41,10 +23,9 @@
     private Model _model = new();
 
     class Model {
-        public string A { get; set; }
+        public bool A { get; set; }
     }
 
-    string[] Values = ["One", "Two", "Three", "Four", "Five"];
 
 
 }
