@@ -4,7 +4,8 @@
     padding: 0.5rem 1rem;
     align-items: center;
     position: relative;
-    margin: 0.25rem;
+    margin: 0.5rem;
+    vertical-align: middle;
 
     input {
         appearance: none;
@@ -17,15 +18,37 @@
         @extend .tnt-body-large;
     }
 
+    &:has(span.tnt-icon.tnt-start) {
+        padding-left: 0.75rem;
+
+        span.tnt-icon.tnt-start {
+            padding-right: 1rem;
+        }
+    }
+
+    &:has(span.tnt-icon.tnt-end) {
+        padding-right: 0.75rem;
+
+        span.tnt-icon.tnt-end {
+            padding-left: 1rem;
+        }
+    }
+
     &:focus-within {
         caret-color: $tnt-color-primary;
     }
 
+    &.modified.invalid {
+        color: $tnt-color-error;
+
+        span.tnt-icon.tnt-end {
+            color: inherit;
+        }
+    }
 
     &:has(input:disabled) {
         opacity: 0.3;
     }
-
 
     &.tnt-filled {
         &:after {
@@ -52,6 +75,10 @@
             transition: 200ms ease-in-out;
         }
 
+        &.modified.invalid:before {
+            background-color: $tnt-color-error;
+        }
+
         &:focus-within {
             &:before {
                 transform: rotateY(0deg);
@@ -74,11 +101,14 @@
             outline: 2px solid $tnt-color-primary;
             opacity: 0;
             user-select: none;
-            pointer-events:none;
+            pointer-events: none;
+        }
+
+        &.modified.invalid:after {
+            outline-color: $tnt-color-error;
         }
 
         &:focus-within {
-            //outline: 2px solid $tnt-color-primary;
             &:after {
                 opacity: 1;
             }
@@ -92,11 +122,8 @@ label.tnt-components {
     span.tnt-label {
         position: absolute;
         z-index: 1;
-        left: 1.25rem;
-        top: 0;
         user-select: none;
         color: inherit;
-        background-color: inherit;
         transition: 200ms ease-in-out;
         cursor: text;
         @extend .tnt-body-large;
@@ -112,18 +139,54 @@ label.tnt-components {
         }
     }
 
+    &:has(span.tnt-filled) {
+        span.tnt-label {
+            top: 0;
+            left: 1.25rem;
+        }
+    }
+
+
     &:has(span.tnt-outlined) {
         border: none;
         outline: none;
 
         span.tnt-label {
             padding: 0 0.25rem;
+            left: 1.25rem;
+            top: 0;
         }
 
         &:focus-within, &:not(:has(input:placeholder-shown)), &:has(.tnt-input-placeholder) {
             span.tnt-label {
                 transform: translateY(-1.3rem) scale(0.75) translateX(-0.65rem);
             }
+        }
+    }
+
+    &:has(span.tnt-icon.tnt-start) {
+        &:has(span.tnt-filled) {
+            span.tnt-label {
+                left: 3.5rem;
+            }
+        }
+
+        &:has(span.tnt-outlined) {
+            span.tnt-label {
+                left: 3.25rem;
+            }
+
+            //&:focus-within, &:not(:has(input:placeholder-shown)), &:has(.tnt-input-placeholder) {
+            //    span.tnt-label {
+            //        transform: translateY(-1.3rem) scale(0.75) translateX(-0.65rem);
+            //    }
+            //}
+        }
+    }
+
+    &:has(span.modified.invalid) {
+        &:focus-within {
+            color: $tnt-color-error;
         }
     }
 }

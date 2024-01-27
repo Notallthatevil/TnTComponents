@@ -77,48 +77,50 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public abstract InputType Type { get; }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        if (StartIcon is not null) {
-            builder.OpenRegion(0);
-            builder.AddMarkupContent(1, StartIcon.Render().ToString());
-            builder.CloseRegion();
-        }
-
-        builder.OpenElement(50, "span");
-        builder.AddAttribute(51, "class", Class);
+        builder.OpenElement(0, "span");
+        builder.AddAttribute(10, "class", Class);
         {
-            builder.OpenElement(100, "input");
-            builder.AddMultipleAttributes(110, AdditionalAttributes);
-            builder.AddAttribute(120, "type", Type.ToInputTypeString());
-            builder.AddAttribute(125, "value", CurrentValueAsString);
-            builder.AddAttribute(140, "style", Style);
-            builder.AddAttribute(150, "readonly", ParentFormReadOnly ?? ReadOnly);
-            builder.AddAttribute(160, "placeholder", Placeholder);
-            builder.AddAttribute(170, "disabled", ParentFormDisabled ?? Disabled);
-            builder.AddAttribute(171, "required", IsRequired());
-            builder.AddAttribute(172, "minlength", GetMinLength());
-            builder.AddAttribute(173, "maxlength", GetMaxLength());
-            builder.AddAttribute(174, "min", GetMinValue());
-            builder.AddAttribute(175, "max", GetMaxValue());
-            if (BindOnInput) {
-                builder.AddAttribute(180, "oninput", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
-            }
-            else {
-                builder.AddAttribute(180, "onchange", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
-            }
-            builder.SetUpdatesAttributeName("value");
 
-            builder.AddElementReferenceCapture(200, e => Element = e);
-            builder.CloseElement();
+            {
+                if (StartIcon is not null) {
+                    StartIcon.AdditionalClass = "tnt-start";
+                    builder.AddMarkupContent(20, StartIcon.Render().ToString());
+                }
+            }
+            {
+                builder.OpenElement(100, "input");
+                builder.AddMultipleAttributes(110, AdditionalAttributes);
+                builder.AddAttribute(120, "type", Type.ToInputTypeString());
+                builder.AddAttribute(125, "value", CurrentValueAsString);
+                builder.AddAttribute(140, "style", Style);
+                builder.AddAttribute(150, "readonly", ParentFormReadOnly ?? ReadOnly);
+                builder.AddAttribute(160, "placeholder", Placeholder);
+                builder.AddAttribute(170, "disabled", ParentFormDisabled ?? Disabled);
+                builder.AddAttribute(171, "required", IsRequired());
+                builder.AddAttribute(172, "minlength", GetMinLength());
+                builder.AddAttribute(173, "maxlength", GetMaxLength());
+                builder.AddAttribute(174, "min", GetMinValue());
+                builder.AddAttribute(175, "max", GetMaxValue());
+                if (BindOnInput) {
+                    builder.AddAttribute(180, "oninput", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
+                }
+                else {
+                    builder.AddAttribute(180, "onchange", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
+                }
+                builder.SetUpdatesAttributeName("value");
+
+                builder.AddElementReferenceCapture(200, e => Element = e);
+                builder.CloseElement();
+            }
+            {
+                if (EndIcon is not null) {
+                    EndIcon.AdditionalClass = "tnt-end";
+                    builder.AddMarkupContent(20, EndIcon.Render().ToString());
+                }
+            }
         }
+
         builder.CloseElement();
-
-
-        if (EndIcon is not null) {
-            builder.OpenRegion(300);
-            builder.AddMarkupContent(301, EndIcon.Render().ToString());
-            builder.CloseRegion();
-        }
-        //  TODO add end icon
     }
 
     protected override void OnInitialized() {

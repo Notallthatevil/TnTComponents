@@ -946,6 +946,8 @@ public partial class MaterialIcon : TnTIcon {
 
 
     protected override string GetClass() {
+
+
         var appearanceClass = "material-icons " + Appearance switch {
             MaterialIconAppearance.Default => "",
             MaterialIconAppearance.Outlined => "material-icons-outlined ",
@@ -962,7 +964,7 @@ public partial class MaterialIcon : TnTIcon {
             _ => throw new InvalidOperationException($"Must provide a valid value for {nameof(Size)}. The value {Size} is invalid!")
         };
 
-        return CssBuilder.Create("tnt-icon " + appearanceClass + sizeClass).AddForegroundColor(Color).Build();
+        return CssBuilder.Create($"tnt-icon {AdditionalClass} " + appearanceClass + sizeClass).AddForegroundColor(Color).Build();
     }
 
     public override MarkupString Render() {

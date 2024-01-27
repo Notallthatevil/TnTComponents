@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TnTComponents;
-public abstract class TnTIcon  {
+public abstract class TnTIcon {
     [Parameter]
     public MaterialIconSize Size { get; set; } = MaterialIconSize.Medium;
 
@@ -15,6 +15,8 @@ public abstract class TnTIcon  {
 
     [Parameter]
     public TnTColor Color { get; set; } = TnTColor.OnSurface;
+
+    public string? AdditionalClass { get; set; }
 
     protected abstract string GetClass();
 

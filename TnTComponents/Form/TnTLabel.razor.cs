@@ -16,9 +16,9 @@ public partial class TnTLabel : IFormItem {
     public RenderFragment ChildContent { get; set; } = default!;
 
     public string Class => CssBuilder.Create()
-        .AddFilled(Appearance == FormAppearance.Filled)
-        .AddOutlined(Appearance == FormAppearance.Outlined)
-        .AddBackgroundColor(BackgroundColor)
+        .AddOutlined((ParentFormAppearance ?? Appearance) == FormAppearance.Outlined)
+        .AddFilled((ParentFormAppearance ?? Appearance) == FormAppearance.Filled)
+        .AddBackgroundColor(TnTColor.Transparent)
         .AddForegroundColor(TextColor)
         .Build();
 

@@ -1,4 +1,5 @@
 ﻿@namespace TnTComponents
+@using TnTComponents.Core
 
 <CascadingValue Value="this" IsFixed="true">
     <label @attributes="AdditionalAttributes"
@@ -6,7 +7,7 @@
            class="@Class"
            style="@Style">
         @ChildContent
-        <span class="tnt-label">
+        <span class="@(CssBuilder.Create("tnt-label").AddBackgroundColor((ParentFormAppearance ?? Appearance) == FormAppearance.Outlined ? BackgroundColor : null).Build())">
             @Label
         </span>
     </label>
