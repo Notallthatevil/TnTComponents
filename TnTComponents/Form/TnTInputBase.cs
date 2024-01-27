@@ -212,10 +212,4 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
 
         return false;
     }
-
-    private async Task OnChangedCallback(ChangeEventArgs args) {
-        var tValue = (TInputType?)args.Value;
-        //CurrentValue = tValue;
-        //await BindAfter.InvokeAsync(Value);
-    }
 }

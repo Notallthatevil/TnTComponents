@@ -2,37 +2,30 @@
 @using TnTComponents
 @rendermode InteractiveAuto
 <TnTForm Model="@_model" Appearance="FormAppearance.Outlined">
-
-    <TnTInputText Appearance="FormAppearance.Filled" @bind-Value="@_model.A" BindAfter="@After" />
+    <DataAnnotationsValidator/>
+    <TnTInputNumeric step="0.1" Appearance="FormAppearance.Filled" @bind-Value="@_model.A" />
 
     <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
-        <TnTInputText Appearance="FormAppearance.Filled" @bind-Value="@_model.A" BindAfter="@After" />
+        <TnTInputNumeric Appearance="FormAppearance.Filled" @bind-Value="@_model.A" />
     </TnTLabel>
-    <TnTInputText StartIcon="MaterialIcon.AccessAlarm" Appearance="FormAppearance.Filled" @bind-Value="@_model.A" BindAfter="@After" EndIcon="MaterialIcon.AccountBalanceWallet" />
+    <TnTInputNumeric StartIcon="MaterialIcon.AccessAlarm" Appearance="FormAppearance.Filled" @bind-Value="@_model.A" EndIcon="MaterialIcon.AccountBalanceWallet" />
 
     <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
-        <TnTInputText StartIcon="MaterialIcon.AccessAlarm" Appearance="FormAppearance.Filled" @bind-Value="@_model.A" BindAfter="@After" EndIcon="MaterialIcon.AccountBalanceWallet" />
+        <TnTInputNumeric StartIcon="MaterialIcon.AccessAlarm" Appearance="FormAppearance.Filled" @bind-Value="@_model.A" EndIcon="MaterialIcon.AccountBalanceWallet" />
     </TnTLabel>
 </TnTForm>
 
 @_value
-<br />
-@_counter
 
 
 @code {
-    private string _value;
-    private int _counter;
-
+    private double _value = 0.0;
+    
     private Model _model = new();
 
-    private void After() {
-        _counter++;
-    }
-
     class Model {
-        [StringLength(5, MinimumLength = 1), Required]
-        public string A { get; set; }
+        [Range(5.4, 10.3), Required]
+        public double A { get; set; }
     }
 
 
