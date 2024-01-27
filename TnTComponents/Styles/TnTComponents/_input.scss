@@ -1,4 +1,4 @@
-﻿.tnt-input {
+﻿.tnt-input:not(:has(input[type=checkbox])) {
     min-height: 1.25rem;
     display: inline-flex;
     padding: 0.5rem 1rem;
@@ -116,7 +116,7 @@
     }
 }
 
-label.tnt-components {
+label.tnt-components:not(:has(input[type=checkbox])) {
     position: relative;
 
     span.tnt-label {
@@ -175,7 +175,6 @@ label.tnt-components {
             span.tnt-label {
                 left: 3.25rem;
             }
-
             //&:focus-within, &:not(:has(input:placeholder-shown)), &:has(.tnt-input-placeholder) {
             //    span.tnt-label {
             //        transform: translateY(-1.3rem) scale(0.75) translateX(-0.65rem);
@@ -187,6 +186,95 @@ label.tnt-components {
     &:has(span.modified.invalid) {
         &:focus-within {
             color: $tnt-color-error;
+        }
+    }
+}
+
+label.tnt-components:has(input[type=checkbox]) {
+    position: relative;
+    outline: none;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    min-height: 1.25rem;
+    user-select: none;
+    margin: 0.5rem;
+
+
+    &:not(:has(input:disabled)) {
+        cursor: pointer;
+    }
+
+    &:has(input:disabled) {
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
+
+    &:before, &:after {
+        content: '';
+        position: absolute;
+        transition: 200ms ease-in-out;
+    }
+
+    &:before {
+        border-radius: 0.125rem;
+        width: 1rem;
+        height: 1rem;
+        outline: 2px solid $tnt-color-on-surface-variant;
+        background-color: $tnt-color-transparent
+    }
+
+    &:after {
+        border-bottom: 3px solid $tnt-color-surface;
+        border-right: 2px solid $tnt-color-surface;
+        border-end-end-radius: 0.125rem;
+        width: 0.4rem;
+        height: 0.65rem;
+        left: 0.15rem;
+        transform: rotateY(90deg);
+    }
+
+    &:has(input:checked) {
+        &:before {
+            background-color: $tnt-color-primary;
+        }
+
+        &:after {
+            transform: rotateZ(33deg) translateY(-0.15rem) rotateY(0deg);
+        }
+    }
+
+    span.tnt-label {
+        background-color: transparent;
+        padding-left: 1rem;
+    }
+
+    .tnt-input:has(input[type=checkbox]) {
+        outline: inherit;
+        border: inherit;
+
+        input[type=checkbox] {
+            appearance: none;
+        }
+    }
+
+    &:has(span.tnt-icon.tnt-start) {
+        &:before, &:after {
+            margin-left: 2rem;
+        }
+    }
+
+    &:has(span.tnt-icon.tnt-end) {
+        padding-right: 2rem;
+
+        span.tnt-label {
+            margin-left:0.5rem;
+        }
+
+        span.tnt-icon.tnt-end {
+            position: absolute;
+            right: 0;
         }
     }
 }

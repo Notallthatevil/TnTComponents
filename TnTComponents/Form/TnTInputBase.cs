@@ -91,7 +91,15 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                 builder.OpenElement(100, "input");
                 builder.AddMultipleAttributes(110, AdditionalAttributes);
                 builder.AddAttribute(120, "type", Type.ToInputTypeString());
-                builder.AddAttribute(125, "value", CurrentValueAsString);
+
+                if (CurrentValue is bool) {
+                    builder.AddAttribute(125, "value", bool.TrueString);
+                    builder.AddAttribute(126, "checked", BindConverter.FormatValue(CurrentValue));
+                }
+                else {
+                    builder.AddAttribute(125, "value", CurrentValueAsString);
+
+                }
                 builder.AddAttribute(140, "style", Style);
                 builder.AddAttribute(150, "readonly", ParentFormReadOnly ?? ReadOnly);
                 builder.AddAttribute(160, "placeholder", Placeholder);
@@ -107,7 +115,12 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                 else {
                     builder.AddAttribute(180, "onchange", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
                 }
-                builder.SetUpdatesAttributeName("value");
+                if (CurrentValue is bool) {
+                    builder.SetUpdatesAttributeName("checked");
+                }
+                else {
+                    builder.SetUpdatesAttributeName("value");
+                }
 
                 builder.AddElementReferenceCapture(200, e => Element = e);
                 builder.CloseElement();
