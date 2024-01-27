@@ -9,8 +9,8 @@ public interface IFormField : IFormItem {
     InputType Type { get; }
 
     string? Placeholder { get; }
-
-    MaterialIcons? StartIcon { get;  }
-    MaterialIcons? EndIcon { get;  }
+    
+    TnTIcon? StartIcon { get;  }
+    TnTIcon? EndIcon { get;  }
 }
 

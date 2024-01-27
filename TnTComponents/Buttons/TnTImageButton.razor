@@ -9,5 +9,7 @@
             disabled="@Disabled"
             autofocus="@AutoFocus"
             @onclick="OnClick">
-    <MaterialIcon Icon="@Icon" Color="@Color" Appearance="@Appearance" Size="@Size"/>
+    @Icon.Render()
 </tnt-button>
+
+<TnTPageScript Src="./_content/TnTComponents/Buttons/TnTButton.razor.js" />

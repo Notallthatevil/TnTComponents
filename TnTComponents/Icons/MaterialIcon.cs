@@ -1,8 +1,15 @@
+using Microsoft.AspNetCore.Components;
+using System.Drawing;
+using TnTComponents.Core;
+
 namespace TnTComponents;
 
-public partial class MaterialIcon {
-    private MaterialIcon(string icon) { _iconString = icon; }
-    public MaterialIcon() { }
+public partial class MaterialIcon : TnTIcon {
+    private readonly string _icon;
+    private MaterialIcon(string icon) { _icon = icon; }
+
+
+
 
     public static readonly MaterialIcon AcUnit = new("ac_unit");
     public static readonly MaterialIcon AccessAlarm = new("access_alarm");
@@ -936,19 +943,30 @@ public partial class MaterialIcon {
     public static readonly MaterialIcon ZoomIn = new("zoom_in");
     public static readonly MaterialIcon ZoomOut = new("zoom_out");
     public static readonly MaterialIcon ZoomOutMap = new("zoom_out_map");
+
+
+    protected override string GetClass() {
+        var appearanceClass = "material-icons " + Appearance switch {
+            MaterialIconAppearance.Default => "",
+            MaterialIconAppearance.Outlined => "material-icons-outlined ",
+            MaterialIconAppearance.TwoTone => "material-icons-two-tone ",
+            MaterialIconAppearance.Round => "material-icons-round ",
+            MaterialIconAppearance.Sharp => "material-icons-sharp ",
+            _ => throw new InvalidOperationException($"Must provide a valid value for {nameof(Appearance)}. The value {Appearance} is invalid!")
+        };
+        var sizeClass = Size switch {
+            MaterialIconSize.Small => "mi-small",
+            MaterialIconSize.Medium => "mi-medium",
+            MaterialIconSize.Large => "mi-large",
+            MaterialIconSize.ExtraLarge => "mi-extra-large",
+            _ => throw new InvalidOperationException($"Must provide a valid value for {nameof(Size)}. The value {Size} is invalid!")
+        };
+
+        return CssBuilder.Create("tnt-icon " + appearanceClass + sizeClass).AddForegroundColor(Color).Build();
+    }
+
+    public override MarkupString Render() {
+        return new MarkupString($"<span class=\"{GetClass()}\">{_icon}</span>");
+    }
 }
 
-public enum MaterialIconize {
-    Small,
-    Medium,
-    Large,
-    ExtraLarge
-}
-
-public enum MaterialIconAppearance {
-    Default,
-    Outlined,
-    TwoTone,
-    Round,
-    Sharp
-}

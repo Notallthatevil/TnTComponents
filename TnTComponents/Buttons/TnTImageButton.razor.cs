@@ -10,20 +10,11 @@ public partial class TnTImageButton {
 
     [Parameter]
     public ButtonType Type { get; set; }
-
-    [Parameter]
-    public MaterialIconAppearance Appearance { get; set; }
-
-    [Parameter]
-    public MaterialIconSize Size { get; set; }
-
-
     [Parameter, EditorRequired]
-    public MaterialIcons Icon { get; set; } = default!;
+    public TnTIcon Icon { get; set; } = default!;
 
     [Parameter]
     public EventCallback<MouseEventArgs> OnClick { get; set; }
-
 
     [Parameter]
     public TnTColor Color { get; set; } = TnTColor.OnSurface;

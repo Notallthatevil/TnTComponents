@@ -39,7 +39,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public ElementReference Element { get; protected set; }
 
     [Parameter]
-    public MaterialIcons? EndIcon { get; set; }
+    public TnTIcon? EndIcon { get; set; }
 
     [CascadingParameter]
     public TnTLabel? Label { get; set; }
@@ -66,7 +66,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public bool ReadOnly { get; set; }
 
     [Parameter]
-    public MaterialIcons? StartIcon { get; set; }
+    public TnTIcon? StartIcon { get; set; }
 
     [Parameter]
     public string? Style { get; set; }
@@ -79,9 +79,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         if (StartIcon is not null) {
             builder.OpenRegion(0);
-            builder.OpenComponent<MaterialIcon>(1);
-            builder.AddComponentParameter(2, "Icon", StartIcon);
-            builder.CloseComponent();
+            builder.AddMarkupContent(1, StartIcon.Render().ToString());
             builder.CloseRegion();
         }
 
@@ -117,9 +115,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
 
         if (EndIcon is not null) {
             builder.OpenRegion(300);
-            builder.OpenComponent<MaterialIcon>(301);
-            builder.AddComponentParameter(302, "Icon", EndIcon);
-            builder.CloseComponent();
+            builder.AddMarkupContent(301, EndIcon.Render().ToString());
             builder.CloseRegion();
         }
         //  TODO add end icon
