@@ -1,11 +1,14 @@
 using Microsoft.AspNetCore.Components;
 
-namespace TnTComponents.Layout;
+namespace TnTComponents;
 
 public partial class TnTLayout {
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
+    public override string? Class => null;
+
+    protected override bool RunIsolatedJsScript => true;
 
     private TnTHeader? _header;
     private TnTSideNav? _sideNav;

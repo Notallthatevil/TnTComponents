@@ -6,12 +6,12 @@ function scrollEventListener(e) {
     for (const head of headers) {
         if (head && head.classList) {
             if (window.scrollY > 0) {
-                if (!head.classList.contains('scroll')) {
-                    head.classList.add('scroll');
+                if (!head.classList.contains('tnt-elevation-2')) {
+                    head.classList.add('tnt-elevation-2');
                 }
             }
             else {
-                head.classList.remove('scroll');
+                head.classList.remove('tnt-elevation-2');
             }
         }
     }
@@ -19,6 +19,10 @@ function scrollEventListener(e) {
 
 export function onLoad(element = null, dotNetObjectRef = null) {
     window.addEventListener('scroll', scrollEventListener);
+
+    if (!customElements.get('tnt-layout')) {
+        customElements.define('tnt-layout', class extends HTMLElement { });
+    }
 
     if (!customElements.get('tnt-side-nav')) {
         customElements.define('tnt-side-nav', class extends HTMLElement { });

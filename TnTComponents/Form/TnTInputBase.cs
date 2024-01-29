@@ -14,7 +14,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public FormAppearance Appearance { get; set; }
 
     [Parameter]
-    public TnTColor? BackgroundColor { get; set; } = TnTColor.SurfaceContainerLow;
+    public TnTColor? BackgroundColor { get; set; } = TnTColor.SurfaceContainer;
 
     [Parameter]
     public EventCallback<TInputType?> BindAfter { get; set; }

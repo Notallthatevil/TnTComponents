@@ -1,0 +1,85 @@
+﻿tnt-layout {
+    display: block;
+
+    tnt-header, tnt-footer, tnt-body, tnt-side-nav {
+        transition: 200ms ease-in-out;
+    }
+
+    tnt-header, tnt-footer {
+        display: flex;
+        width: 100%;
+    }
+
+    tnt-body {
+        display: block;
+        min-height: 100vh;
+    }
+
+    tnt-side-nav {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: $tnt-side-nav-width;
+        z-index: 999;
+        padding: 0.5rem;
+        box-sizing: border-box;
+    }
+
+    tnt-header, tnt-footer {
+        align-items: center;
+        position: fixed;
+        padding: 0.5rem;
+        box-sizing: border-box;
+        z-index: 998;
+        opacity: 0.9;
+        @extend .tnt-title-large;
+    }
+
+    tnt-header {
+        height: $tnt-header-height;
+        top: 0;
+    }
+
+    tnt-footer {
+        height: $tnt-footer-height;
+        bottom: 0;
+    }
+
+    &:has(tnt-header) tnt-body {
+        margin-top: $tnt-header-height;
+    }
+
+    &:has(tnt-header):has(tnt-footer) {
+        tnt-body {
+            min-height: calc(calc(100vh - $tnt-header-height) - $tnt-footer-height);
+        }
+    }
+
+    &:has(tnt-footer):not(:has(tnt-header)) {
+        tnt-body {
+            min-height: calc(100vh - $tnt-footer-height);
+        }
+    }
+
+    &:has(tnt-header):not(:has(tnt-footer)) {
+        tnt-body {
+            min-height: calc(100vh - $tnt-header-height);
+        }
+    }
+
+    @media #{$medium-and-up} {
+        &:has(tnt-side-nav) {
+            tnt-header, tnt-footer, tnt-body {
+                margin-left: $tnt-side-nav-width;
+                width: calc(100% - $tnt-side-nav-width);
+            }
+        }
+    }
+
+    @media #{$small-and-down} {
+        tnt-side-nav {
+            transform: translateX(-105%);
+        }
+    }
+}

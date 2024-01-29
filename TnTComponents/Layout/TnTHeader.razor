@@ -1,5 +1,7 @@
-﻿@inherits TnTComponentBase
+﻿@using TnTComponents.Core
+@namespace TnTComponents
+@inherits TnTComponentBase
 
-<tnt-header @attributes="AdditionalAttributes" class="@GetClass()" style="@Style" theme="@Theme">
+<tnt-header @attributes="AdditionalAttributes" class="@Class" style="@Style">
     @ChildContent
 </tnt-header>

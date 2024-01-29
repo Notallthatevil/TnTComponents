@@ -20,8 +20,7 @@ public partial class TnTTabChild : IDisposable {
     [Parameter]
     public string TabButtonClass { get; set; } = "tnt-tab-view-button";
 
-    [Parameter]
-    public override string? Class { get; set; } = "tnt-tab-view-content";
+    public override string? Class => null;
 
     [Parameter]
     public string? Icon { get; set; }
@@ -48,8 +47,6 @@ public partial class TnTTabChild : IDisposable {
         GC.SuppressFinalize(this);
         _context.RemoveTabChild(this);
     }
-
-    public override string GetClass() => base.GetClass() + " " + (Active ? "active" : string.Empty);
 
     protected override async Task OnInitializedAsync() {
         await base.OnInitializedAsync();

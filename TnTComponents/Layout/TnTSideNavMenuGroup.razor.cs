@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Diagnostics.CodeAnalysis;
 
-namespace TnTComponents.Layout;
+namespace TnTComponents;
 
 public partial class TnTSideNavMenuGroup {
 
@@ -12,8 +12,7 @@ public partial class TnTSideNavMenuGroup {
     [Parameter]
     public string? Icon { get; set; }
 
-    [Parameter]
-    public override string? Class { get; set; } = "tnt-side-nav-menu-group";
+    public override string? Class => null;
 
     [Parameter, EditorRequired]
     public string Title { get; set; } = default!;
@@ -21,7 +20,7 @@ public partial class TnTSideNavMenuGroup {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    protected override bool HasIsolatedJs => true;
+    protected override bool RunIsolatedJsScript => base.RunIsolatedJsScript;
 
     [Parameter]
     public bool Expand { get; set; }
@@ -41,5 +40,5 @@ public partial class TnTSideNavMenuGroup {
         await Expanded.InvokeAsync(expanded);
     }
 
-    public override string GetClass() => $"{base.GetClass()} {(Expand ? "expanded" : string.Empty)} {(Disabled ? "disabled" : string.Empty)}";
+    //public override string GetClass() => $"{base.GetClass()} {(Expand ? "expanded" : string.Empty)} {(Disabled ? "disabled" : string.Empty)}";
 }

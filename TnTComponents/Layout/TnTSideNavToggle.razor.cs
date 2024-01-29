@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Diagnostics.CodeAnalysis;
 
-namespace TnTComponents.Layout;
+namespace TnTComponents;
 
 public partial class TnTSideNavToggle {
 
@@ -18,10 +18,9 @@ public partial class TnTSideNavToggle {
     [Parameter]
     public string Icon { get; set; } = "menu";
 
-    [Parameter]
-    public override string? Class { get; set; } = "tnt-side-nav-toggle";
+    public override string? Class => null;
 
-    protected override bool HasIsolatedJs => true;
+    protected override bool RunIsolatedJsScript => true;
 
     [DynamicDependency(nameof(Toggle))]
     public TnTSideNavToggle() : base() { }
@@ -31,6 +30,4 @@ public partial class TnTSideNavToggle {
         Expanded = expanded;
         await ToggleCallback.InvokeAsync(expanded);
     }
-
-    public override string GetClass() => $"{base.GetClass()} {(AlwaysExpandOnLarge ? "expand-large" : string.Empty)} {(Expanded ? "expanded" : string.Empty)}";
 }

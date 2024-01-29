@@ -18,15 +18,14 @@ public partial class TnTTabView {
     [Parameter]
     public string TabContentClass { get; set; } = "tnt-tab-content";
 
-    [Parameter]
-    public override string? Class { get; set; } = "tnt-tab-view";
+    public override string? Class => null;
 
     [Parameter]
     public TabViewAppearance Appearance { get; set; }
 
     public TnTTabChild? ActiveTab { get; private set; }
 
-    protected override bool HasIsolatedJs => true;
+    protected override bool RunIsolatedJsScript => true;
 
     private List<TnTTabChild> _tabChildren = [];
 
@@ -87,6 +86,4 @@ public partial class TnTTabView {
             await IsolatedJsModule.InvokeVoidAsync("updateActiveIndicator", Element, ActiveTab?.TabHeaderElement);
         }
     }
-
-    public override string GetClass() => $"{base.GetClass()} {Appearance.ToString().ToLower()}";
 }

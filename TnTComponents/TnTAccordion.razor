@@ -1,9 +1,9 @@
-﻿@inherits TnTComponentBase
+﻿@using TnTComponents.Core
+@inherits TnTComponentBase
 
-<tnt-accordion @attributes="AdditionalAttributes" class="@Class" theme="@Theme" style="@Style">
+<tnt-accordion @attributes="AdditionalAttributes"   style="@Style">
     <h3 class="@TnTAccordionHeaderClass">
         @Title
-        @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "expand_more")
     </h3>
     <div class="@TnTAccordionContentClass">
         <div>

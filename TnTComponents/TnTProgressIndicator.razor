@@ -1,10 +1,10 @@
-﻿@inherits TnTComponentBase
+﻿@using TnTComponents.Core
+@inherits TnTComponentBase
+@namespace TnTComponents
 <progress @attributes="AdditionalAttributes"
           max="@Max"
           value="@Value"
-          class="@GetClass()"
-          style="@GetStyle()"
-          theme="@Theme">
+          style="@Style">
     @ChildContent
 </progress>
 

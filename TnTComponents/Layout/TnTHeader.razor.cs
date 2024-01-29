@@ -1,17 +1,29 @@
 using Microsoft.AspNetCore.Components;
+using TnTComponents.Core;
 
-namespace TnTComponents.Layout;
+namespace TnTComponents;
 
 public partial class TnTHeader {
 
-    [Parameter]
-    public override string? Class { get; set; } = "tnt-header";
+    public override string? Class => CssBuilder.Create()
+        .AddBackgroundColor(BackgroundColor)
+        .AddForegroundColor(TextColor)
+        .Build();
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
     [CascadingParameter]
     private TnTLayout _layout { get; set; } = default!;
+
+    [Parameter]
+    public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainer;
+
+    [Parameter]
+    public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
+
+    //[Parameter]
+    //public TnTColor ScrolledBackgroundColor { get; set; } = TnTColor.SurfaceContainer;
 
     protected override void OnInitialized() {
         base.OnInitialized();

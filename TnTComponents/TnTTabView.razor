@@ -1,8 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Components.Sections
+@using TnTComponents.Core
 @inherits TnTComponentBase
 
 <CascadingValue Value="this" IsFixed="true">
-    <tnt-tab-view @attributes=AdditionalAttributes class="@GetClass()" style="@Style" theme="@Theme" @ref="Element">
+    <tnt-tab-view @attributes=AdditionalAttributes  style="@Style"  @ref="Element">
         <DeferRendering>
             @{
                 var set = new HashSet<string>();

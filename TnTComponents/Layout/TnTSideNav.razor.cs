@@ -1,11 +1,15 @@
 using Microsoft.AspNetCore.Components;
+using TnTComponents.Core;
 
-namespace TnTComponents.Layout;
+namespace TnTComponents;
 
 public partial class TnTSideNav {
 
-    [Parameter]
-    public override string? Class { get; set; } = "tnt-side-nav";
+    public override string? Class => CssBuilder.Create()
+        .AddBackgroundColor(BackgroundColor)
+        .AddForegroundColor(TextColor)
+        .AddElevation(Elevation)
+        .Build();
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
@@ -15,6 +19,15 @@ public partial class TnTSideNav {
 
     [CascadingParameter]
     private TnTLayout _layout { get; set; } = default!;
+
+    [Parameter]
+    public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainer;
+
+    [Parameter]
+    public TnTColor TextColor { get; set; } = TnTColor.OnSecondaryContainer;
+
+    [Parameter]
+    public int Elevation { get; set; } = 2;
 
     protected override void OnInitialized() {
         base.OnInitialized();

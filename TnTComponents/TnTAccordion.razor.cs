@@ -16,6 +16,5 @@ public partial class TnTAccordion {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    [Parameter]
-    public override string? Class { get; set; } = "tnt-accordion";
+    public override string? Class => null;
 }

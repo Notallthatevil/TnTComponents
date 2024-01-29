@@ -47,8 +47,14 @@ tnt-button {
         position: fixed;
         right: 2rem;
         bottom: 2rem;
-        z-index: 99;
-        
+        z-index: 1000;
+
         @extend .tnt-elevation-1;
+    }
+}
+
+tnt-layout:has(tnt-footer) {
+    .tnt-fab {
+        bottom: calc(2rem + $tnt-footer-height);
     }
 }

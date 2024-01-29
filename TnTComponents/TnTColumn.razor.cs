@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Components;
 using System.Reflection;
 using System.Text;
-using TnTComponents.Common;
+using TnTComponents.Core;
 using TnTComponents.Enum;
 
 namespace TnTComponents;
 
-public partial class TnTColumn {
+public partial class TnTColumn : ITnTComponentBase {
 
     [Parameter(CaptureUnmatchedValues = true)]
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
@@ -90,6 +90,8 @@ public partial class TnTColumn {
 
     [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Push))]
     public int XLPush { get; set; }
+    public bool? AutoFocus { get; set; }
+    public bool? Disabled { get; set; }
 
     private static readonly IReadOnlyDictionary<PropertyInfo, ColSizeAttribute> _sizeValues = GetSizeProperties();
 

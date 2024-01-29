@@ -1,6 +1,10 @@
-﻿@inherits TnTComponentBase
-<CascadingValue Value="this" IsFixed="true">
-    @ChildContent
-</CascadingValue>
-<TnTPageScript Src="./_content/TnTComponents/Layout/TnTLayout.razor.js" />
+﻿@using TnTComponents.Core
+@inherits TnTComponentBase
+@namespace TnTComponents
 
+<tnt-layout>
+    <CascadingValue Value="this" IsFixed="true">
+        @ChildContent
+    </CascadingValue>
+</tnt-layout>
+<TnTPageScript Src="./_content/TnTComponents/Layout/TnTLayout.razor.js" />

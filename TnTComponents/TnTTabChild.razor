@@ -1,4 +1,5 @@
-﻿@inherits TnTComponentBase
+﻿@using TnTComponents.Core
+@inherits TnTComponentBase
 @if (_context.ActiveTab == this && Interactive) {
     @Content()
 }
@@ -10,7 +11,7 @@ else if (!Interactive) {
 
 @code {
     private RenderFragment Content() {
-        return@<div @attributes="AdditionalAttributes" id="tnt-tab-child-content" class="@GetClass()" theme="@Theme" style="@Style" @ref="Element">
+        return@<div @attributes="AdditionalAttributes" id="tnt-tab-child-content" style="@Style" @ref="Element">
         @ChildContent
     </div>;
     }

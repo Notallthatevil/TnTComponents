@@ -1,15 +1,15 @@
-﻿@inherits TnTComponentBase
+﻿@using TnTComponents.Core
+@inherits TnTComponentBase
+@namespace TnTComponents
 
 
-<tnt-side-nav-menu-group @attributes="AdditionalAttributes" class="@GetClass()" style="@Style" theme="@Theme" disabled="@Disabled">
+<tnt-side-nav-menu-group @attributes="AdditionalAttributes" style="@Style" disabled="@Disabled">
     <span class="tnt-side-nav-menu-group-header">
         @if (Icon is not null) {
-            @TnTIconComponent.RenderIcon(IconType.MaterialIcons, Icon)
         }
         <h5 class="tnt-side-nav-menu-group-title">
             @Title
         </h5>
-        @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "arrow_drop_down", "drop-down-indicator")
 
     </span>
     <div class="tnt-side-nav-menu-group-children">

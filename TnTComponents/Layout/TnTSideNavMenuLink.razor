@@ -1,8 +1,9 @@
-﻿@inherits TnTComponentBase
+﻿@using TnTComponents.Core
+@inherits TnTComponentBase
+@namespace TnTComponents
 
-<span @attributes="AdditionalAttributes" class="@GetClass()" style="@Style" theme="@Theme">
+<span @attributes="AdditionalAttributes" style="@Style" >
     @if (Icon is not null) {
-        @TnTIconComponent.RenderIcon(IconType.MaterialIcons, Icon)
     }
     <NavLink href="@Href" Match="@Match">
         @ChildContent

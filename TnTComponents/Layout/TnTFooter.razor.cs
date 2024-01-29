@@ -1,17 +1,26 @@
 using Microsoft.AspNetCore.Components;
+using TnTComponents.Core;
 
-namespace TnTComponents.Layout;
+namespace TnTComponents;
 
 public partial class TnTFooter {
 
-    [Parameter]
-    public override string? Class { get; set; } = "tnt-footer";
+    public override string? Class => CssBuilder.Create()
+        .AddBackgroundColor(BackgroundColor)
+        .AddForegroundColor(TextColor)
+        .Build();
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
     [CascadingParameter]
     private TnTLayout _layout { get; set; } = default!;
+
+    [Parameter]
+    public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceVariant;
+
+    [Parameter]
+    public TnTColor TextColor { get; set; } = TnTColor.OnSurfaceVariant;
 
     protected override void OnInitialized() {
         base.OnInitialized();

@@ -12,16 +12,13 @@ public partial class TnTProgressIndicator {
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    [Parameter]
-    public override string? Class { get; set; } = "tnt-progress-indicator";
+    public override string? Class => null;
 
     [Parameter]
     public double Max { get; set; } = 100.0;
 
     [Parameter]
     public double? Value { get; set; }
-
-    public override string GetClass() => base.GetClass() + " " + Appearance.ToString().ToLower();
 
     private string GetStyle() {
         var stringBuilder = new StringBuilder(Style);
