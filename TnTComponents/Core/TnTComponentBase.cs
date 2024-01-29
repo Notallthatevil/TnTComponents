@@ -49,8 +49,10 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyn
     protected IJSRuntime JSRuntime { get; set; } = default!;
 
     protected DotNetObjectReference<TnTComponentBase>? DotNetObjectRef { get; set; }
+    [Parameter]
     public bool? AutoFocus { get; set; }
-    public bool? Disabled { get; set; }
+    [Parameter]
+    public bool Disabled { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         await base.OnAfterRenderAsync(firstRender);

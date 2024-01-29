@@ -27,7 +27,7 @@ public interface ITnTComponentBase {
     /// </summary>
     bool? AutoFocus { get; set; }
 
-    bool? Disabled { get; set; }
+    bool Disabled { get; set; }
 
 }
 

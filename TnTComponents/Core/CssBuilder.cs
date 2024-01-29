@@ -17,7 +17,7 @@ internal class CssBuilder {
     private readonly HashSet<string> _classes = [];
 
 
-    public CssBuilder AddClass(string className, bool? when = true) {
+    public CssBuilder AddClass(string? className, bool? when = true) {
         if (!string.IsNullOrWhiteSpace(className) && when == true) {
             _classes.Add(className);
         }
@@ -44,6 +44,7 @@ internal class CssBuilder {
     public CssBuilder AddFilled(bool enabled = true) => AddClass("tnt-filled", enabled);
     public CssBuilder AddNoBackground(bool enabled = true) => AddClass("tnt-no-background", enabled);
 
+    public CssBuilder SetDisabled(bool disabled) => AddClass("tnt-disabled", disabled);
 
     public CssBuilder AddFlexBox(LayoutDirection? direction = null,
         AlignItems? alignItems = null,

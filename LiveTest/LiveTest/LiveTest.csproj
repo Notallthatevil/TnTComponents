@@ -7,14 +7,17 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Microsoft.CodeAnalysis.Razor.Compiler.SourceGenerators\**" />
+      <Content Remove="Microsoft.CodeAnalysis.Razor.Compiler.SourceGenerators\**" />
+      <EmbeddedResource Remove="Microsoft.CodeAnalysis.Razor.Compiler.SourceGenerators\**" />
+      <None Remove="Microsoft.CodeAnalysis.Razor.Compiler.SourceGenerators\**" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\LiveTest.Client\LiveTest.Client.csproj" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Microsoft.CodeAnalysis.Razor.Compiler.SourceGenerators\Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator\" />
     </ItemGroup>
 
 </Project>

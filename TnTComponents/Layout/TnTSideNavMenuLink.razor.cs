@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
+using TnTComponents.Core;
 
 namespace TnTComponents;
 
@@ -8,10 +9,14 @@ public partial class TnTSideNavMenuLink {
     [CascadingParameter]
     private TnTSideNav _sideNav { get; set; } = default!;
 
-    public override string? Class => null;
+    public override string? Class => CssBuilder.Create()
+        .AddRipple(Ripple)
+        .SetDisabled(Disabled)
+        .AddBorderRadius(BorderRadius)
+        .Build();
 
     [Parameter]
-    public string? Icon { get; set; }
+    public TnTIcon? Icon { get; set; }
 
     [Parameter]
     public string? Href { get; set; }
@@ -24,5 +29,14 @@ public partial class TnTSideNavMenuLink {
 
     [Parameter]
     public string? Status { get; set; }
+
+    [Parameter]
+    public bool Ripple { get; set; }
+
+    [Parameter]
+    public TnTBorderRadius BorderRadius { get; set; } = new(10);
+
+    [Parameter]
+    public TnTColor ActiveBackgroundColor { get; set; } = TnTColor.SecondaryContainer;
 
 }

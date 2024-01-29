@@ -26,9 +26,6 @@ public partial class TnTSideNavMenuGroup {
     public bool Expand { get; set; }
 
     [Parameter]
-    public bool Disabled { get; set; }
-
-    [Parameter]
     public EventCallback<bool> Expanded { get; set; }
 
     [DynamicDependency(nameof(Toggle))]

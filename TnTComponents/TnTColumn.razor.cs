@@ -91,7 +91,7 @@ public partial class TnTColumn : ITnTComponentBase {
     [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Push))]
     public int XLPush { get; set; }
     public bool? AutoFocus { get; set; }
-    public bool? Disabled { get; set; }
+    public bool Disabled { get; set; }
 
     private static readonly IReadOnlyDictionary<PropertyInfo, ColSizeAttribute> _sizeValues = GetSizeProperties();
 
