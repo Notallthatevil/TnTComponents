@@ -3,18 +3,17 @@
 @namespace TnTComponents
 
 
-<tnt-side-nav-menu-group @attributes="AdditionalAttributes" style="@Style" disabled="@Disabled">
-    <span class="tnt-side-nav-menu-group-header">
-        @if (Icon is not null) {
-        }
-        <h5 class="tnt-side-nav-menu-group-title">
-            @Title
-        </h5>
-
+<tnt-side-nav-menu-group @attributes="AdditionalAttributes" class="@Class" style="@Style">
+    <span>
+        @Icon?.Render()
+        @Title
+        @MaterialIcon.ArrowDropDown.Render()
     </span>
-    <div class="tnt-side-nav-menu-group-children">
+
+    <div>
         @ChildContent
     </div>
+
 </tnt-side-nav-menu-group>
 
 <TnTPageScript Src="./_content/TnTComponents/Layout/TnTSideNavMenuGroup.razor.js" />

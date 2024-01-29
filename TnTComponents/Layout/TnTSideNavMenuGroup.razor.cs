@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Diagnostics.CodeAnalysis;
+using TnTComponents.Core;
 
 namespace TnTComponents;
 
@@ -10,9 +11,12 @@ public partial class TnTSideNavMenuGroup {
     private TnTSideNav _sideNav { get; set; } = default!;
 
     [Parameter]
-    public string? Icon { get; set; }
+    public TnTIcon? Icon { get; set; }
 
-    public override string? Class => null;
+    public override string? Class => CssBuilder.Create()
+        .SetDisabled(Disabled)
+        .AddClass("tnt-expanded", Expand)
+        .Build();
 
     [Parameter, EditorRequired]
     public string Title { get; set; } = default!;
@@ -28,6 +32,9 @@ public partial class TnTSideNavMenuGroup {
     [Parameter]
     public EventCallback<bool> Expanded { get; set; }
 
+    [Parameter]
+    public bool Ripple { get; set; } = true;
+
     [DynamicDependency(nameof(Toggle))]
     public TnTSideNavMenuGroup() : base() { }
 
@@ -36,6 +43,4 @@ public partial class TnTSideNavMenuGroup {
         Expand = expanded;
         await Expanded.InvokeAsync(expanded);
     }
-
-    //public override string GetClass() => $"{base.GetClass()} {(Expand ? "expanded" : string.Empty)} {(Disabled ? "disabled" : string.Empty)}";
 }

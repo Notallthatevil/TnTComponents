@@ -25,6 +25,62 @@
         padding: 0.5rem;
         box-sizing: border-box;
 
+        tnt-side-nav-menu-group {
+            transition: 200ms ease-in-out;
+            user-select: none;
+            cursor: pointer;
+            overflow: hidden;
+
+            & > span {
+                display: inline-flex;
+                height: 3rem;
+                align-content: center;
+                align-items: center;
+                width: 100%;
+            }
+
+            & > span > span:last-child.tnt-icon {
+                transition: 200ms ease-in-out;
+                margin-left: auto;
+                transform: rotateZ(0);
+            }
+
+            &.tnt-disabled {
+                pointer-events: none;
+                cursor: not-allowed;
+                opacity: 0.3;
+            }
+
+            & > div {
+                display: flex;
+                flex-direction: column;
+                margin-left: 1.25rem;
+                height: fit-content;
+                border-left: 1px solid $tnt-color-outline;
+                transition: height ease-in-out 200ms;
+            }
+
+            &:not(.tnt-expanded) {
+                & > div {
+                    height: 0px;
+                }
+            }
+
+
+            &.tnt-expanded {
+                & > span > span:last-child.tnt-icon {
+                    transform: rotateZ(180deg);
+                }
+            }
+
+            @extend .tnt-title-small;
+
+            span.tnt-icon {
+                vertical-align: bottom;
+                padding: 0 0.5rem;
+            }
+        }
+
         div.tnt-components {
             padding: 0;
             cursor: pointer;

@@ -31,7 +31,7 @@ public partial class TnTSideNavMenuLink {
     public string? Status { get; set; }
 
     [Parameter]
-    public bool Ripple { get; set; }
+    public bool Ripple { get; set; } = true;
 
     [Parameter]
     public TnTBorderRadius BorderRadius { get; set; } = new(10);

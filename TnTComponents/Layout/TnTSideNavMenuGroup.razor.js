@@ -1,6 +1,6 @@
 const elementIdentifierMap = new Map();
 
-const expandedClass = 'expanded';
+const expandedClass = 'tnt-expanded';
 
 function toggleChildren(e) {
     if (e.currentTarget) {
