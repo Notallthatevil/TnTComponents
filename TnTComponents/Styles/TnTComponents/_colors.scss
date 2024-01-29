@@ -49,6 +49,7 @@ $tnt-color-info-container: var(--tnt-color-info-container);
 $tnt-color-on-info-container: var(--tnt-color-on-info-container);
 $tnt-color-transparent: var(--tnt-color-transparent);
 $color-classes: transparent, primary, on-primary, primary-container, on-primary-container, secondary, on-secondary, secondary-container, on-secondary-container, tertiary, on-tertiary, tertiary-container, on-tertiary-container, error, error-container, on-error, on-error-container, background, on-background, surface, on-surface, surface-variant, on-surface-variant, surface-container-highest, surface-container-high, surface-container, surface-container-low, surface-container-lowest, outline, inverse-on-surface, inverse-surface, inverse-primary, shadow, surface-tint, outline-variant, scrim, warning, on-warning, warning-container, on-warning-container, success, on-success, success-container, on-success-container, info, on-info, info-container, on-info-container;
+$color-classes-no-transparent: transparent, primary, on-primary, primary-container, on-primary-container, secondary, on-secondary, secondary-container, on-secondary-container, tertiary, on-tertiary, tertiary-container, on-tertiary-container, error, error-container, on-error, on-error-container, background, on-background, surface, on-surface, surface-variant, on-surface-variant, surface-container-highest, surface-container-high, surface-container, surface-container-low, surface-container-lowest, outline, inverse-on-surface, inverse-surface, inverse-primary, shadow, surface-tint, outline-variant, scrim, warning, on-warning, warning-container, on-warning-container, success, on-success, success-container, on-success-container, info, on-info, info-container, on-info-container;
 
 @each $colorClass in $color-classes {
     .tnt-bg-color-#{$colorClass} {
@@ -69,9 +70,15 @@ $color-classes: transparent, primary, on-primary, primary-container, on-primary-
 }
 
 @mixin tnt-actionable() {
-    @each $colorClass in $color-classes {
+    &.tnt-bg-color-transparent {
         &:hover {
-            &.tnt-bg-color-#{$colorClass} {
+            background-color: color-mix(in srgb, var($tnt-color-surface) 90%, $tnt-color-shadow);
+        }
+    }
+
+    @each $colorClass in $color-classes-no-transparent {
+        &.tnt-bg-color-#{$colorClass} {
+            &:hover {
                 background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 90%, $tnt-color-shadow);
             }
         }

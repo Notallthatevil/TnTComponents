@@ -37,7 +37,7 @@ public partial class TnTNavLink {
     public bool Disabled { get; set; }
 
     [Parameter]
-    public TnTColor? BackgroundColor { get; set; }
+    public TnTColor? BackgroundColor { get; set; } = TnTColor.SurfaceContainer;
 
     [Parameter]
     public TnTColor TextColor { get; set; } = TnTColor.OnSurface;

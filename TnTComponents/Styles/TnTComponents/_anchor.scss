@@ -1,3 +1,4 @@
 ﻿a.tnt-components {
     text-decoration: none;
+    @include tnt-actionable();
 }

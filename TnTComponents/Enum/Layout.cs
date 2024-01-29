@@ -19,7 +19,7 @@ public enum AlignItems {
     Baseline
 }
 
-public enum Direction {
+public enum FlexDirection {
     Row,
     Column,
     RowReverse,
@@ -89,12 +89,12 @@ public static class EnumExt {
     }
 
 
-    public static string ToStyle(this Direction Direction) {
+    public static string ToStyle(this FlexDirection Direction) {
         return "flex-direction: " + Direction switch {
-            Direction.Row => "row;",
-            Direction.Column => "column;",
-            Direction.RowReverse => "row-reverse;",
-            Direction.ColumnReverse => "column-reverse;",
+            FlexDirection.Row => "row;",
+            FlexDirection.Column => "column;",
+            FlexDirection.RowReverse => "row-reverse;",
+            FlexDirection.ColumnReverse => "column-reverse;",
             _ => throw new NotImplementedException()
         };
     }
