@@ -4,28 +4,97 @@
 <TnTForm Model="@_model" Appearance="FormAppearance.Outlined">
     <DataAnnotationsValidator />
 
-    <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
-        <TnTInputCheckbox  @bind-Value="_model.A" Appearance="FormAppearance.Filled" />
-    </TnTLabel>
+
+    <TnTInputRadioGroup @bind-Value="_model.A" Appearance="FormAppearance.Filled" RadioGroupName="Group1" Direction="LayoutDirection.Vertical">
+        @foreach (var a in Enum.GetValues<Test>()) {
+            <TnTLabel Label="@a.ToString()" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+                <TnTInputRadio Name="@a.ToString()" Value="a" />
+            </TnTLabel>
+        }
+    </TnTInputRadioGroup>
+
+    <TnTInputRadioGroup @bind-Value="_model.A" Appearance="FormAppearance.Filled" RadioGroupName="Group2" Direction="LayoutDirection.Vertical">
+        @foreach (var a in Enum.GetValues<Test>()) {
+            <TnTLabel Label="@a.ToString()" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+                <TnTInputRadio Name="@a.ToString()" Value="a" />
+            </TnTLabel>
+        }
+    </TnTInputRadioGroup>
 
 
-    <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
-        <TnTInputCheckbox StartIcon="MaterialIcon.Satellite" EndIcon="MaterialIcon.QueryBuilder" @bind-Value="_model.A" Appearance="FormAppearance.Filled" />
-    </TnTLabel>
+
+    <TnTInputRadioGroup @bind-Value="_model.A" Appearance="FormAppearance.Filled" RadioGroupName="Group3" Direction="LayoutDirection.Horizontal">
+        @foreach (var a in Enum.GetValues<Test>()) {
+            <TnTLabel Label="@a.ToString()" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+                <TnTInputRadio  Name="@a.ToString()" Value="a" />
+            </TnTLabel>
+        }
+    </TnTInputRadioGroup>
+
+    <TnTInputRadioGroup @bind-Value="_model.A" Appearance="FormAppearance.Filled" RadioGroupName="Group4" Direction="LayoutDirection.Horizontal">
+        @foreach (var a in Enum.GetValues<Test>()) {
+            <TnTLabel Label="@a.ToString()" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+                <TnTInputRadio Name="@a.ToString()" Value="a" />
+            </TnTLabel>
+        }
+    </TnTInputRadioGroup>
 </TnTForm>
 
-@_value
+<TnTForm Model="@_model" Appearance="FormAppearance.Filled">
+    <DataAnnotationsValidator />
+
+
+    <TnTInputRadioGroup @bind-Value="_model.A" Appearance="FormAppearance.Filled" RadioGroupName="Group1" Direction="LayoutDirection.Vertical">
+        @foreach (var a in Enum.GetValues<Test>()) {
+            <TnTLabel Label="@a.ToString()" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+                <TnTInputRadio Name="@a.ToString()" Value="a" />
+            </TnTLabel>
+        }
+    </TnTInputRadioGroup>
+
+    <TnTInputRadioGroup @bind-Value="_model.A" Appearance="FormAppearance.Filled" RadioGroupName="Group2" Direction="LayoutDirection.Vertical">
+        @foreach (var a in Enum.GetValues<Test>()) {
+            <TnTLabel Label="@a.ToString()" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+                <TnTInputRadio Name="@a.ToString()" Value="a" />
+            </TnTLabel>
+        }
+    </TnTInputRadioGroup>
+
+
+
+    <TnTInputRadioGroup @bind-Value="_model.A" Appearance="FormAppearance.Filled" RadioGroupName="Group3" Direction="LayoutDirection.Horizontal">
+        @foreach (var a in Enum.GetValues<Test>()) {
+            <TnTLabel Label="@a.ToString()" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+                <TnTInputRadio Name="@a.ToString()" Value="a" />
+            </TnTLabel>
+        }
+    </TnTInputRadioGroup>
+
+    <TnTInputRadioGroup @bind-Value="_model.A" Appearance="FormAppearance.Filled" RadioGroupName="Group4" Direction="LayoutDirection.Horizontal">
+        @foreach (var a in Enum.GetValues<Test>()) {
+            <TnTLabel Label="@a.ToString()" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+                <TnTInputRadio Name="@a.ToString()" Value="a" />
+            </TnTLabel>
+        }
+    </TnTInputRadioGroup>
+</TnTForm>
+
+@(_model.A)
 
 
 @code {
-    private double _value = 0.0;
 
     private Model _model = new();
 
     class Model {
-        public bool A { get; set; }
+        public Test? A { get; set; }
     }
 
-
+    enum Test {
+        One,
+        Two,
+        Three,
+        Four
+    }
 
 }

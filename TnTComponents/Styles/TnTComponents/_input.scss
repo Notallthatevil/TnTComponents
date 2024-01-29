@@ -1,4 +1,4 @@
-﻿.tnt-input:not(:has(input[type=checkbox])) {
+﻿.tnt-input:not(:has(input[type=checkbox])):not(:has(input[type=radio])) {
     min-height: 1.25rem;
     display: inline-flex;
     padding: 0.5rem 1rem;
@@ -130,7 +130,7 @@
     }
 }
 
-label.tnt-components:not(:has(input[type=checkbox])) {
+label.tnt-components:not(:has(input[type=checkbox])):not(:has(input[type=radio])) {
     position: relative;
 
     span.tnt-label {
@@ -312,6 +312,126 @@ label.tnt-components:has(input[type=checkbox]) {
 
         span.tnt-icon.tnt-end {
             color: $tnt-color-error;
+        }
+    }
+}
+
+span.tnt-radio-group {
+    position: relative;
+    display: inline-flex;
+    padding: 0.5rem;
+    padding-right: 1rem;
+    margin: 0.5rem;
+
+    span.tnt-radio-group-name {
+        position: absolute;
+    }
+
+    &.tnt-filled {
+        padding-top: 1.5rem;
+
+        span.tnt-radio-group-name {
+            left: 0.5rem;
+            top: 0;
+            padding: 0 0.5rem;
+        }
+    }
+
+    &.tnt-outlined {
+        span.tnt-radio-group-name {
+            left: 0.5rem;
+            top: -0.65rem;
+            background-color: $tnt-color-surface;
+            padding: 0 0.5rem;
+        }
+    }
+
+    label.tnt-components {
+        cursor: pointer;
+        position: relative;
+        padding-left: 1.5rem;
+        display: inline-flex;
+        align-items: center;
+        vertical-align: middle;
+        background-color: transparent;
+        margin: 0.25rem;
+
+        span.tnt-label {
+            background-color: inherit;
+            user-select: none;
+        }
+
+        input[type=radio] {
+            appearance: none;
+        }
+
+
+        &:has(input:disabled) {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        &:before, &:after {
+            content: '';
+            position: absolute;
+            width: 1rem;
+            aspect-ratio: 1/1;
+            border-radius: 50%;
+            left: 0.5rem;
+            transition: 200ms ease-in-out;
+        }
+
+        &:before {
+            outline: 0.125rem solid $tnt-color-on-surface-variant;
+        }
+
+        &:after {
+            background-color: $tnt-color-primary;
+            transform: scale(0);
+        }
+
+
+        &:has(input:checked) {
+            &:before {
+                outline-color: $tnt-color-primary;
+            }
+
+            &:after {
+                transform: scale(0.75);
+            }
+        }
+
+        &.tnt-outlined {
+            outline: none;
+        }
+    }
+
+    &.modified.invalid {
+        outline-color: $tnt-color-error;
+
+        span.tnt-radio-group-name {
+            color: $tnt-color-error;
+        }
+
+        label.tnt-components {
+            span.tnt-label {
+                color: $tnt-color-error;
+            }
+
+            &:before {
+                outline: 0.125rem solid $tnt-color-error;
+            }
+
+            &:after {
+                background-color: $tnt-color-error;
+            }
+
+
+            &:has(input:checked) {
+                &:before {
+                    outline-color: $tnt-color-error;
+                }
+            }
         }
     }
 }
