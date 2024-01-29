@@ -1,41 +1,36 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using TnTComponents.Core;
-using TnTComponents.Enum;
 
 namespace TnTComponents;
-
-public partial class TnTColumn : ITnTComponentBase {
-
+public class TnTColumn : ComponentBase, ITnTComponentBase {
     [Parameter(CaptureUnmatchedValues = true)]
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+    public string? Class => CssBuilder.Create()
+        .AddClass("tnt-col")
+        .AddClass(GetGridClass())
+        .Build();
+
+    public ElementReference Element { get; }
+    [Parameter]
+    public string? Id { get; set; }
+    [Parameter]
+    public string? Style { get; set; }
+    [Parameter]
+    public bool? AutoFocus { get; set; }
+    [Parameter]
+    public bool Disabled { get; set; }
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    [Parameter]
-    public string? Class { get; set; } = "tnt-col";
-
-    [Parameter]
-    public object? Data { get; set; }
-
-    public ElementReference Element { get; protected set; }
-
-    [Parameter]
-    public AlignContent FlexAlignContent { get; set; }
-
-    [Parameter]
-    public AlignItems FlexAlignItems { get; set; }
-
-    [Parameter]
-    public JustifyContent FlexJustifyContent { get; set; }
-
-    [Parameter]
-    public WrapStyle FlexWrap { get; set; }
-
-    [Parameter]
-    public string? Id { get; set; }
 
     [Parameter, ColSize(SizeClass = "l", PropertyName = nameof(ColSize.Size))]
     public int L { get; set; }
@@ -73,12 +68,6 @@ public partial class TnTColumn : ITnTComponentBase {
     [Parameter, ColSize(SizeClass = "s", PropertyName = nameof(ColSize.Push))]
     public int SPush { get; set; }
 
-    [Parameter]
-    public string? Style { get; set; }
-
-    [Parameter]
-    public string? Theme { get; set; }
-
     [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Size))]
     public int XL { get; set; }
 
@@ -90,15 +79,41 @@ public partial class TnTColumn : ITnTComponentBase {
 
     [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Push))]
     public int XLPush { get; set; }
-    public bool? AutoFocus { get; set; }
-    public bool Disabled { get; set; }
-
     private static readonly IReadOnlyDictionary<PropertyInfo, ColSizeAttribute> _sizeValues = GetSizeProperties();
 
     private Dictionary<string, ColSize> _sizes = new Dictionary<string, ColSize>();
 
-    public string GetClass() {
-        var strBuilder = new StringBuilder(this.GetClassDefault());
+    protected override void OnInitialized() {
+        base.OnInitialized();
+        foreach (var sizeValuePair in _sizeValues) {
+            var prop = sizeValuePair.Key;
+            var colSizeAttr = sizeValuePair.Value;
+            var value = (int)(prop.GetValue(this) ?? 0);
+
+            if (value < 0 || value > 12) {
+                throw new ArgumentOutOfRangeException(prop.Name, "Value must be within 0 and 12 inclusively.");
+            }
+            if (value > 0) {
+                if (!_sizes.TryGetValue(colSizeAttr.SizeClass, out var colSize)) {
+                    colSize = new ColSize();
+                    _sizes.Add(colSizeAttr.SizeClass, colSize);
+                }
+                typeof(ColSize).GetProperty(colSizeAttr.PropertyName)!.SetValue(colSize, value);
+            }
+        }
+    }
+
+    protected override void BuildRenderTree(RenderTreeBuilder builder) {
+        builder.OpenElement(0, "div");
+        builder.AddMultipleAttributes(10, AdditionalAttributes);
+        builder.AddAttribute(20, "class", Class);
+        builder.AddAttribute(30, "style", Style);
+        builder.AddContent(40, ChildContent);
+        builder.CloseElement();
+    }
+
+    private string GetGridClass() {
+        var strBuilder = new StringBuilder();
 
         if (_sizes.Count == 0) {
             strBuilder.Append(' ').Append("s12");
@@ -127,40 +142,6 @@ public partial class TnTColumn : ITnTComponentBase {
         }
 
         return strBuilder.ToString();
-    }
-
-    protected string? GetStyle() {
-        var strBuilder = new StringBuilder(FlexWrap.ToStyle())
-            .Append(' ').Append(FlexAlignContent.ToStyle())
-            .Append(' ').Append(FlexJustifyContent.ToStyle())
-            .Append(' ').Append(FlexAlignItems.ToStyle());
-
-        if (AdditionalAttributes?.TryGetValue("style", out var style) ?? false) {
-            strBuilder.AppendJoin(' ', style);
-        }
-        var result = strBuilder.ToString();
-        return !string.IsNullOrWhiteSpace(result) ? result : null;
-    }
-
-    protected override void OnInitialized() {
-        foreach (var sizeValuePair in _sizeValues) {
-            var prop = sizeValuePair.Key;
-            var colSizeAttr = sizeValuePair.Value;
-            var value = (int)(prop.GetValue(this) ?? 0);
-
-            if (value < 0 || value > 12) {
-                throw new ArgumentOutOfRangeException(prop.Name, "Value must be within 0 and 12 inclusively.");
-            }
-            if (value > 0) {
-                if (!_sizes.TryGetValue(colSizeAttr.SizeClass, out var colSize)) {
-                    colSize = new ColSize();
-                    _sizes.Add(colSizeAttr.SizeClass, colSize);
-                }
-                typeof(ColSize).GetProperty(colSizeAttr.PropertyName)!.SetValue(colSize, value);
-            }
-        }
-
-        base.OnInitialized();
     }
 
     private static IReadOnlyDictionary<PropertyInfo, ColSizeAttribute> GetSizeProperties() {

@@ -53,6 +53,11 @@ public class TnTCard : ComponentBase {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
+    [Parameter]
+    public int Padding { get; set; } = 2;
+    [Parameter]
+    public int Margin { get; set; } = 2;
+
     public string? Class => CssBuilder.Create()
         .AddFlexBox(Direction, AlignItems, JustifyContent, AlignContent, FlexBox)
         .AddBackgroundColor(MakeOutlined ? null : BackgroundColor)
@@ -60,6 +65,8 @@ public class TnTCard : ComponentBase {
         .AddForegroundColor(TextColor)
         .AddBorderRadius(BorderRadius)
         .AddElevation(Elevation)
+        .AddPadding(Padding)
+        .AddMargin(Margin)
         .Build();
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {

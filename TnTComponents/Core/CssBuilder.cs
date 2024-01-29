@@ -36,6 +36,8 @@ internal class CssBuilder {
 
     public CssBuilder AddElevation(int elevation) => AddClass($"tnt-elevation-{Math.Clamp(elevation, 0, 10)}", elevation >= 0);
 
+    public CssBuilder AddPadding(int padding) => AddClass($"tnt-padding-{Math.Clamp(padding, 1, 16)}", padding > 0);
+    public CssBuilder AddMargin(int margin) => AddClass($"tnt-margin-{Math.Clamp(margin, 1, 16)}", margin > 0);
     public CssBuilder AddRipple(bool enabled = true) => AddClass("tnt-ripple", enabled);
 
     public CssBuilder AddBackgroundColor(TnTColor? color) => AddClass($"tnt-bg-color-{color?.ToCssClassName() ?? string.Empty}", color is not null);
