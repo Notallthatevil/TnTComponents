@@ -2,10 +2,10 @@
 @inherits TnTComponentBase
 @namespace TnTComponents
 <progress @attributes="AdditionalAttributes"
+          class="@Class"
           max="@Max"
           value="@Value"
-          style="@Style">
+          style="@GetStyle()">
     @ChildContent
 </progress>
 
- 

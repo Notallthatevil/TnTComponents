@@ -44,6 +44,7 @@ internal class CssBuilder {
     public CssBuilder AddFilled(bool enabled = true) => AddClass("tnt-filled", enabled);
     public CssBuilder AddNoBackground(bool enabled = true) => AddClass("tnt-no-background", enabled);
 
+    public CssBuilder SetAlternative(bool enabled = true) => AddClass("tnt-alternative", enabled);
     public CssBuilder SetDisabled(bool disabled) => AddClass("tnt-disabled", disabled);
 
     public CssBuilder AddFlexBox(LayoutDirection? direction = null,
