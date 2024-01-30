@@ -2,11 +2,12 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using TnTComponents.Common;
+using TnTComponents.Core;
 using TnTComponents.Enum;
 
 namespace TnTComponents;
 
-public partial class TnTTabChild : IDisposable {
+public partial class TnTTabChild {
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
@@ -17,78 +18,58 @@ public partial class TnTTabChild : IDisposable {
     [Parameter]
     public RenderFragment? TabHeaderTemplate { get; set; }
 
-    [Parameter]
-    public string TabButtonClass { get; set; } = "tnt-tab-view-button";
-
-    public override string? Class => null;
-
-    [Parameter]
-    public string? Icon { get; set; }
+    public override string? Class => CssBuilder.Create()
+        .SetDisabled(Disabled)
+        .Build();
 
     [Parameter]
-    public IconType IconType { get; set; }
-
-    [Parameter]
-    public bool Active { get; set; } = false;
-
-    [Parameter]
-    public bool Disabled { get; set; }
+    public TnTIcon? Icon { get; set; }
 
     [CascadingParameter]
     private TnTTabView _context { get; set; } = default!;
 
-    [Parameter]
-    public EventCallback<TnTTabChild> TabClickedCallback { get; set; }
+    private string? _style;
 
-    public ElementReference TabHeaderElement { get; set; }
-    public int Index { get; set; }
-
-    public void Dispose() {
-        GC.SuppressFinalize(this);
-        _context.RemoveTabChild(this);
-    }
-
-    protected override async Task OnInitializedAsync() {
-        await base.OnInitializedAsync();
+    protected override void OnInitialized() {
+        base.OnInitialized();
         if (_context is null) {
             throw new InvalidOperationException($"A {nameof(TnTTabChild)} must be a child of {nameof(TnTTabView)}");
         }
-        await _context.AddTabChildAsync(this);
+        _context.AddTabChild(this);
+        _style = $"{Style}; display:none;";
     }
 
     protected override void OnAfterRender(bool firstRender) {
         base.OnAfterRender(firstRender);
-        if (firstRender) {
-            StateHasChanged();
-        }
+        _style = Style;
     }
 
-    [JSInvokable]
-    private void SetActive() {
-        Console.WriteLine($"Set active {Title}");
-    }
+    //[JSInvokable]
+    //private void SetActive() {
+    //    Console.WriteLine($"Set active {Title}");
+    //}
 
-    public RenderFragment RenderTabHeader() {
-        return new RenderFragment(builder => {
-            builder.OpenElement(0, "button");
-            builder.AddAttribute(5, "onclick", EventCallback.Factory.Create<MouseEventArgs>(this, async (args) => {
-                await _context.SetActiveTab(this);
-                await TabClickedCallback.InvokeAsync(this);
-            }));
-            builder.AddAttribute(10, "class", $"{TabButtonClass} {(_context.ActiveTab == this ? "active" : string.Empty)}");
-            builder.AddAttribute(20, "disabled", Disabled);
-            builder.AddAttribute(30, "type", "button");
-            builder.AddAttribute(32, "name", Title.Replace(" ", string.Empty));
+    //public RenderFragment RenderTabHeader() {
+    //    return new RenderFragment(builder => {
+    //        builder.OpenElement(0, "button");
+    //        builder.AddAttribute(5, "onclick", EventCallback.Factory.Create<MouseEventArgs>(this, async (args) => {
+    //            await _context.SetActiveTab(this);
+    //            await TabClickedCallback.InvokeAsync(this);
+    //        }));
+    //        builder.AddAttribute(10, "class", $"{TabButtonClass} {(_context.ActiveTab == this ? "active" : string.Empty)}");
+    //        builder.AddAttribute(20, "disabled", Disabled);
+    //        builder.AddAttribute(30, "type", "button");
+    //        builder.AddAttribute(32, "name", Title.Replace(" ", string.Empty));
 
-            if (TabHeaderTemplate is not null) {
-                builder.AddContent(35, TabHeaderTemplate);
-            }
-            else {
-                builder.AddContent(40, TnTIconComponent.RenderIcon(IconType, Icon));
-                builder.AddContent(50, Title);
-            }
-            builder.AddElementReferenceCapture(60, e => TabHeaderElement = e);
-            builder.CloseElement();
-        });
-    }
+    //        if (TabHeaderTemplate is not null) {
+    //            builder.AddContent(35, TabHeaderTemplate);
+    //        }
+    //        else {
+    //            builder.AddContent(40, TnTIconComponent.RenderIcon(IconType, Icon));
+    //            builder.AddContent(50, Title);
+    //        }
+    //        builder.AddElementReferenceCapture(60, e => TabHeaderElement = e);
+    //        builder.CloseElement();
+    //    });
+    //}
 }

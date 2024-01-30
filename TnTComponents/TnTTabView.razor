@@ -2,28 +2,33 @@
 @using TnTComponents.Core
 @inherits TnTComponentBase
 
-<CascadingValue Value="this" IsFixed="true">
-    <tnt-tab-view @attributes=AdditionalAttributes  style="@Style"  @ref="Element">
+<tnt-tab-view @attributes=AdditionalAttributes class="@Class" style="@Style" @ref="Element">
+    <CascadingValue Value="this" IsFixed="true">
         <DeferRendering>
-            @{
-                var set = new HashSet<string>();
-                <div class="@TabHeaderClass">
-                    <div class="tnt-tab-header-group" id="tnt-tab-header-group" role="group" @onscroll="ButtonScrollListener">
-                        @foreach (var tab in _tabChildren) {
-                            set.Add(tab.TabButtonClass);
-                            @tab.RenderTabHeader()
-                        }
-                    </div>
-                </div>
-                foreach (var str in set) {
-                    <TnTPageScript Src="@($"./_content/TnTComponents/TnTButton.razor.js?class={str}")" />
-                }
-            }
+            <div class="@(CssBuilder.Create().AddBackgroundColor(HeaderBackgroundColor).Build())">
+                <span class="@(CssBuilder.Create(string.Empty).AddForegroundColor(HeaderTextColor).Build())">
+                    @foreach (var pair in _tabChildren.Select((child, index) => new { child, index })) {
+                        var child = pair.child;
+                        var index = pair.index;
+                        <button type="button" title="@child.Title" disabled="@child.Disabled" button-index="@index" class="@(CssBuilder.Create(string.Empty)
+                                                                                                                        .AddActionableBackgroundColor(!child.Disabled ? TnTColor.Transparent : null)
+                                                                                                                        .AddBackgroundColor(child.Disabled ? TnTColor.Transparent : null)
+                                                                                                                        .AddForegroundColor(HeaderTextColor)
+                                                                                                                        .SetDisabled(child.Disabled)
+                                                                                                                        .AddRipple()
+                                                                                                                        .Build())">
+                            @if (!SecondaryTabView) {
+                                @child.Icon?.Render()
+                            }
+                            @child.Title
+                        </button>
+                    }
+                </span>
+                <span class="@(CssBuilder.Create().AddBackgroundColor(ActiveIndicatorColor).Build())"></span>
+            </div>
         </DeferRendering>
-        <span id="tnt-tab-active-indicator" class="@TabActiveIndicatorClass"></span>
         @ChildContent
-    </tnt-tab-view>
-    <TnTPageScript Src="@($"./_content/TnTComponents/TnTTabView.razor.js")" />
-</CascadingValue>
-
+    </CascadingValue>
+</tnt-tab-view>
+<TnTPageScript Src="./_content/TnTComponents/TnTTabView.razor.js" />
 

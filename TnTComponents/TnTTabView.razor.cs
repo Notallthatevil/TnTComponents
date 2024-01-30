@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using TnTComponents.Core;
 using TnTComponents.Enum;
 
 namespace TnTComponents;
@@ -9,81 +10,88 @@ public partial class TnTTabView {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    [Parameter]
-    public string TabHeaderClass { get; set; } = "tnt-tab-header";
+    //[Parameter]
+    //public string TabHeaderClass { get; set; } = "tnt-tab-header";
+
+    //[Parameter]
+    //public string TabActiveIndicatorClass { get; set; } = "tnt-tab-active-indicator";
+
+    //[Parameter]
+    //public string TabContentClass { get; set; } = "tnt-tab-content";
+
+    public override string? Class => CssBuilder.Create()
+        .SetAlternative(SecondaryTabView)
+        .Build();
 
     [Parameter]
-    public string TabActiveIndicatorClass { get; set; } = "tnt-tab-active-indicator";
+    public bool SecondaryTabView { get; set; }
 
     [Parameter]
-    public string TabContentClass { get; set; } = "tnt-tab-content";
-
-    public override string? Class => null;
+    public TnTColor HeaderBackgroundColor { get; set; } = TnTColor.Surface;
 
     [Parameter]
-    public TabViewAppearance Appearance { get; set; }
+    public TnTColor HeaderTextColor { get; set; } = TnTColor.OnSurface;
 
-    public TnTTabChild? ActiveTab { get; private set; }
+    [Parameter]
+    public TnTColor ActiveIndicatorColor { get; set; } = TnTColor.Primary;
+
+    //public TnTTabChild? ActiveTab { get; private set; }
 
     protected override bool RunIsolatedJsScript => true;
 
     private List<TnTTabChild> _tabChildren = [];
 
-    protected override void OnAfterRender(bool firstRender) {
-        base.OnAfterRender(firstRender);
-        if (firstRender) {
-            StateHasChanged();
-        }
-    }
 
-    protected override async Task OnInitializedAsync() {
-        await base.OnInitializedAsync();
-        if (IsolatedJsModule is not null) {
-            await IsolatedJsModule.InvokeVoidAsync("ensureInteractive", Element);
-        }
-    }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender) {
-        await base.OnAfterRenderAsync(firstRender);
-        if (firstRender) {
-            Console.WriteLine("Updating active for first render");
-            await UpdateActiveIndicator();
-        }
-    }
+    //protected override void OnAfterRender(bool firstRender) {
+    //    base.OnAfterRender(firstRender);
+    //    if (firstRender) {
+    //        StateHasChanged();
+    //    }
+    //}
 
-    public async Task SetActiveTab(TnTTabChild? tabChild) {
-        ActiveTab = tabChild;
-        if (IsolatedJsModule is not null && ActiveTab is not null) {
-            await IsolatedJsModule.InvokeVoidAsync("updateActiveIndex", Element, ActiveTab.Index);
-        }
-        await UpdateActiveIndicator();
-        StateHasChanged();
-    }
+    //protected override async Task OnInitializedAsync() {
+    //    await base.OnInitializedAsync();
+    //    if (IsolatedJsModule is not null) {
+    //        await IsolatedJsModule.InvokeVoidAsync("ensureInteractive", Element);
+    //    }
+    //}
 
-    public async Task AddTabChildAsync(TnTTabChild tabChild) {
-        var index = _tabChildren.Count;
+    //protected override async Task OnAfterRenderAsync(bool firstRender) {
+    //    await base.OnAfterRenderAsync(firstRender);
+    //    if (firstRender) {
+    //        await UpdateActiveIndicator();
+    //    }
+    //}
+
+    //public async Task SetActiveTab(TnTTabChild? tabChild) {
+    //    ActiveTab = tabChild;
+    //    if (IsolatedJsModule is not null && ActiveTab is not null) {
+    //        await IsolatedJsModule.InvokeVoidAsync("updateActiveIndex", Element, ActiveTab.Index);
+    //    }
+    //    await UpdateActiveIndicator();
+    //    StateHasChanged();
+    //}
+
+    public void AddTabChild(TnTTabChild tabChild) {
         _tabChildren.Add(tabChild);
-        tabChild.Index = index;
-        if (ActiveTab is null && !tabChild.Disabled) {
-            await SetActiveTab(tabChild);
-        }
     }
 
-    public void RemoveTabChild(TnTTabChild tabChild) {
-        _tabChildren.Remove(tabChild);
-        var index = 0;
-        foreach (var child in _tabChildren) {
-            child.Index = index++;
-        }
-    }
+    //public void RemoveTabChild(TnTTabChild tabChild) {
+    //    _tabChildren.Remove(tabChild);
+    //    var index = 0;
+    //    foreach (var child in _tabChildren) {
+    //        child.Index = index++;
+    //    }
+    //}
 
-    private async Task ButtonScrollListener(EventArgs _) {
-        await UpdateActiveIndicator();
-    }
+    //private async Task ButtonScrollListener(EventArgs _) {
+    //    await UpdateActiveIndicator();
+    //}
 
-    private async Task UpdateActiveIndicator() {
-        if (IsolatedJsModule is not null) {
-            await IsolatedJsModule.InvokeVoidAsync("updateActiveIndicator", Element, ActiveTab?.TabHeaderElement);
-        }
-    }
+    //private async Task UpdateActiveIndicator() {
+    //    if (IsolatedJsModule is not null) {
+    //        await IsolatedJsModule.InvokeVoidAsync("updateActiveIndicator", Element, ActiveTab?.TabHeaderElement);
+    //    }
+    //}
 }

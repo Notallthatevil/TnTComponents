@@ -1,0 +1,79 @@
+﻿tnt-tab-view {
+    display: block;
+    width: 100%;
+
+    div:first-child {
+        display: block;
+        vertical-align: bottom;
+        position: relative;
+        border-bottom: 1px solid $tnt-color-outline;
+        margin: 0 0.5rem;
+        white-space: nowrap;
+        overflow-x: auto;
+
+        & > span {
+            display: table;
+            margin: 0 auto;
+            height: 100%;
+
+            & > button {
+                appearance: none;
+                outline: none;
+                border: none;
+                height: 4rem;
+                display: inline-flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: end;
+                vertical-align: bottom;
+                padding-bottom: 0.75rem;
+                padding-top: 0.25rem;
+                box-sizing: border-box;
+                width: 5rem;
+                cursor: pointer;
+                transition: 200ms ease-in-out;
+                @extend .tnt-title-small;
+
+                &.tnt-disabled {
+                    cursor: not-allowed;
+                }
+
+                & > span {
+                    color: inherit;
+                }
+
+                &:disabled {
+                    opacity: 0.3;
+                }
+            }
+        }
+
+        & > span:last-child {
+            position: absolute;
+            display: inline-block;
+            height: 0.3rem;
+            border-radius: 3px 3px 0 0;
+            width: 3rem;
+            bottom: 0;
+            transition: 200ms ease-in-out;
+        }
+    }
+
+
+    &.tnt-alternative {
+        div:first-child {
+            & > span {
+
+                & > button {
+                    height: 2rem;
+                    padding-bottom: 0.25rem;
+                }
+            }
+
+
+            & > span:last-child {
+                height: 0.2rem;
+            }
+        }
+    }
+}

@@ -1,10 +1,10 @@
 @using TnTComponents
 @using TnTComponents.Enum
-<TnTTabView Name="@Name" Appearance="@Appearance" class="@($"{Name} tnt-tab-view")">
+<TnTTabView SecondaryTabView="Alternative">
     @for (var i = 0; i < TabCount; ++i) {
         var j = i;
         var header = $"Header{j + 1}";
-        <TnTTabChild Title="@header" Icon="apps" Disabled="@((j % 5) == 0 || Disabled)">
+        <TnTTabChild Title="@header" Icon="MaterialIcon.Flight" Disabled="@((j % 5) == 0 || Disabled)">
             Content@(j + 1)
         </TnTTabChild>
 
@@ -19,11 +19,11 @@
 
 @code {
     [Parameter]
-    public int TabCount{ get; set; }
+    public int TabCount { get; set; }
     [Parameter]
-    public string Name{ get; set; }
+    public string Name { get; set; }
     [Parameter]
-    public TabViewAppearance Appearance{ get; set; }
+    public bool Alternative { get; set; }
     [Parameter]
     public bool Disabled { get; set; }
 }
