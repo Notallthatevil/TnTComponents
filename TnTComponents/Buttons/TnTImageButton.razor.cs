@@ -21,7 +21,7 @@ public partial class TnTImageButton {
 
 
     public override string? Class => CssBuilder.Create()
-        .AddBackgroundColor(TnTColor.Transparent)
+        .AddActionableBackgroundColor(TnTColor.Transparent)
         .AddForegroundColor(Color)
         .AddBorderRadius(new(10))
         .Build();

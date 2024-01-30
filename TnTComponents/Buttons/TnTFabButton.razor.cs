@@ -24,7 +24,7 @@ public partial class TnTFabButton {
 
     public override string? Class => CssBuilder.Create()
         .AddClass("tnt-fab")
-        .AddBackgroundColor(BackgroundColor)
+        .AddActionableBackgroundColor(BackgroundColor)
         .AddForegroundColor(ForegroundColor)
         .Build();
 

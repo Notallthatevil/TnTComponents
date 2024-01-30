@@ -51,9 +51,27 @@ $tnt-color-transparent: var(--tnt-color-transparent);
 $color-classes: transparent, primary, on-primary, primary-container, on-primary-container, secondary, on-secondary, secondary-container, on-secondary-container, tertiary, on-tertiary, tertiary-container, on-tertiary-container, error, error-container, on-error, on-error-container, background, on-background, surface, on-surface, surface-variant, on-surface-variant, surface-container-highest, surface-container-high, surface-container, surface-container-low, surface-container-lowest, outline, inverse-on-surface, inverse-surface, inverse-primary, shadow, surface-tint, outline-variant, scrim, warning, on-warning, warning-container, on-warning-container, success, on-success, success-container, on-success-container, info, on-info, info-container, on-info-container;
 $color-classes-no-transparent: transparent, primary, on-primary, primary-container, on-primary-container, secondary, on-secondary, secondary-container, on-secondary-container, tertiary, on-tertiary, tertiary-container, on-tertiary-container, error, error-container, on-error, on-error-container, background, on-background, surface, on-surface, surface-variant, on-surface-variant, surface-container-highest, surface-container-high, surface-container, surface-container-low, surface-container-lowest, outline, inverse-on-surface, inverse-surface, inverse-primary, shadow, surface-tint, outline-variant, scrim, warning, on-warning, warning-container, on-warning-container, success, on-success, success-container, on-success-container, info, on-info, info-container, on-info-container;
 
-@each $colorClass in $color-classes {
+@each $colorClass in $color-classes-no-transparent {
     .tnt-bg-color-#{$colorClass} {
         background-color: var(--tnt-color-#{$colorClass});
+    }
+
+    .tnt-actionable-bg-color-#{$colorClass} {
+        @extend .tnt-bg-color-#{$colorClass};
+
+        &:not(disabled), &:not(.tnt-disabled) {
+            &:hover {
+                background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 50%, $tnt-color-shadow);
+            }
+
+            &:not(.tnt-ripple):active {
+                background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 30%, $tnt-color-shadow);
+            }
+
+            &.tnt-ripple:after {
+                background-image: radial-gradient(circle, black 10%, transparent 10.01%);
+            }
+        }
     }
 
     .tnt-fg-color-#{$colorClass} {
@@ -65,35 +83,28 @@ $color-classes-no-transparent: transparent, primary, on-primary, primary-contain
     }
 }
 
-.tnt-outlined {
-    outline: 1px solid $tnt-color-outline;
+.tnt-bg-color-transparent {
+    background-color: var(--tnt-color-transparent);
 }
 
-@mixin tnt-actionable() {
-    &.tnt-bg-color-transparent {
+.tnt-actionable-bg-color-transparent {
+    @extend .tnt-bg-color-transparent;
+
+    &:not(disabled), &:not(.tnt-disabled) {
         &:hover {
-            background-color: color-mix(in srgb, var($tnt-color-surface) 90%, $tnt-color-shadow);
-        }
-    }
-
-    @each $colorClass in $color-classes-no-transparent {
-        &.tnt-bg-color-#{$colorClass} {
-            &:hover {
-                background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 90%, $tnt-color-shadow);
-            }
+            background-color: color-mix(in srgb, $tnt-color-background 50%, $tnt-color-shadow);
         }
 
-        &:active:not(.tnt-ripple) {
-            &.tnt-bg-color-#{$colorClass} {
-                background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 80%, $tnt-color-shadow);
-            }
+        &:not(.tnt-ripple):active {
+            background-color: color-mix(in srgb, $tnt-color-background 30%, $tnt-color-shadow);
         }
-        //&.tnt-ripple.tnt-bg-color-#{$colorClass}:after {
-        //    background-image: radial-gradient(circle, var(--tnt-color-#{$colorClass}) 10%, transparent 10.01%);
-        //}
-    }
 
-    &.tnt-ripple:after {
-        background-image: radial-gradient(circle, black 10%, transparent 10.01%);
+        &.tnt-ripple:after {
+            background-image: radial-gradient(circle, black 10%, transparent 10.01%);
+        }
     }
+}
+
+.tnt-outlined {
+    outline: 1px solid $tnt-color-outline;
 }

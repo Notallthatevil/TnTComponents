@@ -6,7 +6,11 @@ function toggleChildren(e) {
     if (e.currentTarget) {
         let toggler = elementIdentifierMap.get(e.currentTarget.getAttribute(TnTComponents.customAttribute));
         if (toggler) {
+            if (e.currentTarget.expanded == null || e.currentTarget.expanded == undefined) {
+                e.currentTarget.expanded = e.currentTarget.classList.contains(expandedClass);
+            }
             e.currentTarget.expanded = !e.currentTarget.expanded;
+
             if (toggler.dotNetRef) {
                 toggler.dotNetRef.invokeMethodAsync('Toggle', e.currentTarget.expanded);
             }
@@ -45,6 +49,7 @@ export class TnTSideNavMenuGroup extends HTMLElement {
                 elementIdentifierMap.delete(oldValue);
             }
             elementIdentifierMap.set(newValue, { element: this, dotNetRef: old && old.dotNetRef ? old.dotNetRef : null });
+            TnTComponents.enableRipple(this);
         }
     }
 }

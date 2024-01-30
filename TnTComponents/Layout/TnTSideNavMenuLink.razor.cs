@@ -10,7 +10,6 @@ public partial class TnTSideNavMenuLink {
     private TnTSideNav _sideNav { get; set; } = default!;
 
     public override string? Class => CssBuilder.Create()
-        .AddRipple(Ripple)
         .SetDisabled(Disabled)
         .AddBorderRadius(BorderRadius)
         .Build();

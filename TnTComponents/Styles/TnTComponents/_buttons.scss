@@ -28,7 +28,6 @@ tnt-button {
             }
         }
 
-        @include tnt-actionable();
     }
 
     &:not(.tnt-fab) {

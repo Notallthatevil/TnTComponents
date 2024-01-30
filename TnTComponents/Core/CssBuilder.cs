@@ -41,6 +41,7 @@ internal class CssBuilder {
     public CssBuilder AddRipple(bool enabled = true) => AddClass("tnt-ripple", enabled);
 
     public CssBuilder AddBackgroundColor(TnTColor? color) => AddClass($"tnt-bg-color-{color?.ToCssClassName() ?? string.Empty}", color is not null);
+    public CssBuilder AddActionableBackgroundColor(TnTColor? color) => AddClass($"tnt-actionable-bg-color-{color?.ToCssClassName() ?? string.Empty}", color is not null);
     public CssBuilder AddForegroundColor(TnTColor? color) => AddClass($"tnt-fg-color-{color?.ToCssClassName() ?? string.Empty}", color is not null);
     public CssBuilder AddOutlined(bool enabled = true) => enabled ? AddClass("tnt-outlined", enabled).AddBackgroundColor(TnTColor.Transparent) : this;
     public CssBuilder AddFilled(bool enabled = true) => AddClass("tnt-filled", enabled);

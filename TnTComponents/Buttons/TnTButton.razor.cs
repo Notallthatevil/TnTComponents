@@ -10,8 +10,6 @@ using TnTComponents.Enum;
 namespace TnTComponents;
 public partial class TnTButton {
 
-    private static readonly TnTColor DefaultBg = TnTColor.Primary;
-    private static readonly TnTColor DefaultTextColor = TnTColor.OnPrimary;
 
     [Parameter]
     public ButtonAppearance Appearance { get; set; }
@@ -20,10 +18,10 @@ public partial class TnTButton {
     public ButtonType Type { get; set; }
 
     [Parameter]
-    public TnTColor? BackgroundColor { get; set; } = DefaultBg;
+    public TnTColor? BackgroundColor { get; set; } = TnTColor.Primary;
 
     [Parameter]
-    public TnTColor? TextColor { get; set; } = DefaultTextColor;
+    public TnTColor? TextColor { get; set; } = TnTColor.OnPrimary;
 
     [Parameter]
     public int Elevation { get; set; } = 1;
@@ -45,7 +43,7 @@ public partial class TnTButton {
     public override string? Class => CssBuilder.Create()
         .AddClass(AdditionalAttributes)
         .AddElevation(Elevation)
-        .AddBackgroundColor(BackgroundColor)
+        .AddActionableBackgroundColor(BackgroundColor)
         .AddForegroundColor(TextColor)
         .AddBorderRadius(CornerRadius)
         .AddRipple()
