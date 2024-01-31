@@ -30,10 +30,9 @@ public partial class TnTSideNavMenuGroup {
     [Parameter, EditorRequired]
     public string Title { get; set; } = default!;
 
-    protected override bool RunIsolatedJsScript => base.RunIsolatedJsScript;
+    protected override bool RunIsolatedJsScript => false;
 
-    [CascadingParameter]
-    private TnTSideNav _sideNav { get; set; } = default!;
+    protected override string? JsModulePath => "./_content/TnTComponents/Layout/TnTSideNavMenuGroup.razor.js";
 
     [DynamicDependency(nameof(Toggle))]
     public TnTSideNavMenuGroup() : base() { }

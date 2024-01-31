@@ -8,6 +8,7 @@
     tnt-header, tnt-footer {
         display: flex;
         width: 100%;
+        transition: box-shadow ease-in-out 500ms;
     }
 
     tnt-body {
@@ -137,6 +138,10 @@
 
     &:has(tnt-header) tnt-body {
         margin-top: $tnt-header-height;
+    }
+
+    &:has(tnt-footer) tnt-body {
+        margin-bottom: $tnt-footer-height;
     }
 
     &:has(tnt-header):has(tnt-footer) {

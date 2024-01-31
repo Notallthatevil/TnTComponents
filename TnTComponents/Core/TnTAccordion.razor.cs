@@ -36,7 +36,7 @@ public partial class TnTAccordion {
     [Parameter, EditorRequired]
     public string Title { get; set; } = default!;
 
-    protected override string? JsModulePath => "./_content/TnTComponents/TnTAccordion.razor.js";
+    protected override string? JsModulePath => "./_content/TnTComponents/Core/TnTAccordion.razor.js";
 
     protected override bool RunIsolatedJsScript => true;
 }

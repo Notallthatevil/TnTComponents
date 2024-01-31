@@ -4,27 +4,27 @@ const expandedClass = 'tnt-expanded';
 
 function toggleChildren(e) {
     if (e.currentTarget) {
-        let toggler = elementIdentifierMap.get(e.currentTarget.getAttribute(TnTComponents.customAttribute));
+        let parent = e.currentTarget.parentNode;
+        let toggler = elementIdentifierMap.get(parent.getAttribute(TnTComponents.customAttribute));
         if (toggler) {
-            if (e.currentTarget.expanded == null || e.currentTarget.expanded == undefined) {
-                e.currentTarget.expanded = e.currentTarget.classList.contains(expandedClass);
+            if (parent.expanded == null || parent.expanded == undefined) {
+                parent.expanded = parent.classList.contains(expandedClass);
             }
-            e.currentTarget.expanded = !e.currentTarget.expanded;
-
+            parent.expanded = !parent.expanded;
+    
             if (toggler.dotNetRef) {
-                toggler.dotNetRef.invokeMethodAsync('Toggle', e.currentTarget.expanded);
+                toggler.dotNetRef.invokeMethodAsync('Toggle', parent.expanded);
             }
-
-            if (e.currentTarget.expanded) {
-                if (!e.currentTarget.classList.contains(expandedClass)) {
-                    e.currentTarget.classList.add(expandedClass);
+    
+            if (parent.expanded) {
+                if (!parent.classList.contains(expandedClass)) {
+                    parent.classList.add(expandedClass);
                 }
             } else {
-                e.currentTarget.classList.remove(expandedClass);
+                parent.classList.remove(expandedClass);
             }
         }
     }
-    e.stopPropagation();
 }
 
 export class TnTSideNavMenuGroup extends HTMLElement {
@@ -67,7 +67,16 @@ export function onUpdate(element = null, dotNetObjectRef = null) {
     }
     for (const [_, tntSideNavToggle] of elementIdentifierMap) {
         if (tntSideNavToggle.element) {
-            tntSideNavToggle.element.addEventListener('click', toggleChildren);
+            let span = tntSideNavToggle.element.querySelector(':scope > span:first-child');
+            span.addEventListener('click', toggleChildren);
+
+            if (tntSideNavToggle.element.expanded === true && !tntSideNavToggle.element.classList.contains(expandedClass)) {
+                tntSideNavToggle.element.classList.add(expandedClass);
+            }
+            else if (tntSideNavToggle.element.expanded === false && tntSideNavToggle.element.classList.contains(expandedClass)) {
+                tntSideNavToggle.element.classList.remove(expandedClass);
+            }
+
         }
     }
 }
