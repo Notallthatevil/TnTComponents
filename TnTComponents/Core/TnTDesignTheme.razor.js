@@ -1,6 +1,4 @@
-
 export class TnTDesignTheme extends HTMLElement {
-
     createTheme() {
         let css = new CSSStyleSheet();
 
@@ -38,7 +36,6 @@ export class TnTDesignTheme extends HTMLElement {
     }
 }
 
-
 export function onLoad() {
     if (!customElements.get('tnt-design-theme')) {
         customElements.define('tnt-design-theme', TnTDesignTheme);
@@ -49,6 +46,5 @@ export function onLoad() {
         const theme = themeCollection[0];
 
         theme.createTheme();
-
     }
 }

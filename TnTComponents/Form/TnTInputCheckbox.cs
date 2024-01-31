@@ -1,19 +1,16 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TnTComponents.Core;
 
 namespace TnTComponents;
+
 public class TnTInputCheckbox : TnTInputBase<bool> {
-    public override InputType Type => InputType.Checkbox;
 
     [Parameter]
     public InputCheckboxAppearance CheckboxAppearance { get; set; }
+
+    public override string Class => CssBuilder.Create(base.Class).AddClass(AppearanceClass()).Build();
+    public override InputType Type => InputType.Checkbox;
 
     protected override void OnInitialized() {
         base.OnInitialized();
@@ -21,8 +18,6 @@ public class TnTInputCheckbox : TnTInputBase<bool> {
             throw new InvalidOperationException($"{GetType().Name} must be a child of {nameof(TnTLabel)}");
         }
     }
-
-    public override string Class => CssBuilder.Create(base.Class).AddClass(AppearanceClass()).Build();
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out bool result, [NotNullWhen(false)] out string? validationErrorMessage) {
         throw new NotSupportedException();
@@ -36,4 +31,3 @@ public class TnTInputCheckbox : TnTInputBase<bool> {
         };
     }
 }
-

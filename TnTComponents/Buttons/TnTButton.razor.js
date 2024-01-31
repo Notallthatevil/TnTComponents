@@ -13,15 +13,12 @@ export function onLoad(element, dotNetObjRef) {
 
                 TnTComponents.enableRipple(this);
             }
-
         });
     }
 }
 
 export function onUpdate(element, dotNetObjRef) {
-
 }
 
 export function onDispose(element, dotNetObjRef) {
-
 }

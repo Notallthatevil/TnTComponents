@@ -6,28 +6,15 @@ public partial class TnTLayout {
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
+
     public override string? Class => null;
 
     protected override bool RunIsolatedJsScript => true;
 
-    private TnTHeader? _header;
-    private TnTSideNav? _sideNav;
     private TnTBody? _body;
     private TnTFooter? _footer;
-
-    public void SetHeader(TnTHeader header) {
-        if (_header is not null && _header != header) {
-            throw new InvalidOperationException("Only one header can be set in a layout!");
-        }
-        _header = header;
-    }
-
-    public void SetSideNav(TnTSideNav sideNav) {
-        if (_sideNav is not null && _sideNav != sideNav) {
-            throw new InvalidOperationException("Only one side nav can be set in a layout!");
-        }
-        _sideNav = sideNav;
-    }
+    private TnTHeader? _header;
+    private TnTSideNav? _sideNav;
 
     public void SetBody(TnTBody body) {
         if (_body is not null && _body != body) {
@@ -36,10 +23,24 @@ public partial class TnTLayout {
         _body = body;
     }
 
+    public void SetHeader(TnTHeader header) {
+        if (_header is not null && _header != header) {
+            throw new InvalidOperationException("Only one header can be set in a layout!");
+        }
+        _header = header;
+    }
+
     public void SetHeader(TnTFooter footer) {
         if (_footer is not null && _footer != footer) {
             throw new InvalidOperationException("Only one footer can be set in a layout!");
         }
         _footer = footer;
+    }
+
+    public void SetSideNav(TnTSideNav sideNav) {
+        if (_sideNav is not null && _sideNav != sideNav) {
+            throw new InvalidOperationException("Only one side nav can be set in a layout!");
+        }
+        _sideNav = sideNav;
     }
 }

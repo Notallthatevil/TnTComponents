@@ -1,6 +1,6 @@
 namespace TnTComponents;
-public partial class TnTThemeToggle {
-    protected override bool RunIsolatedJsScript => true;
 
+public partial class TnTThemeToggle {
     public override string? Class => string.Empty;
+    protected override bool RunIsolatedJsScript => true;
 }

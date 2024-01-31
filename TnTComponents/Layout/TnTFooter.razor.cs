@@ -5,22 +5,22 @@ namespace TnTComponents;
 
 public partial class TnTFooter {
 
-    public override string? Class => CssBuilder.Create()
-        .AddBackgroundColor(BackgroundColor)
-        .AddForegroundColor(TextColor)
-        .Build();
-
-    [Parameter]
-    public RenderFragment ChildContent { get; set; } = default!;
-
-    [CascadingParameter]
-    private TnTLayout _layout { get; set; } = default!;
-
     [Parameter]
     public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceVariant;
 
     [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    public override string? Class => CssBuilder.Create()
+                .AddBackgroundColor(BackgroundColor)
+        .AddForegroundColor(TextColor)
+        .Build();
+
+    [Parameter]
     public TnTColor TextColor { get; set; } = TnTColor.OnSurfaceVariant;
+
+    [CascadingParameter]
+    private TnTLayout _layout { get; set; } = default!;
 
     protected override void OnInitialized() {
         base.OnInitialized();

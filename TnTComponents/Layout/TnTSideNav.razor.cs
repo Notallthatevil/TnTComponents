@@ -5,29 +5,29 @@ namespace TnTComponents;
 
 public partial class TnTSideNav {
 
+    [Parameter]
+    public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainer;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
     public override string? Class => CssBuilder.Create()
-        .AddBackgroundColor(BackgroundColor)
+                .AddBackgroundColor(BackgroundColor)
         .AddForegroundColor(TextColor)
         .AddElevation(Elevation)
         .Build();
 
     [Parameter]
-    public RenderFragment ChildContent { get; set; } = default!;
+    public int Elevation { get; set; } = 2;
+
+    [Parameter]
+    public TnTColor TextColor { get; set; } = TnTColor.OnSecondaryContainer;
 
     [Parameter]
     public string? Title { get; set; }
 
     [CascadingParameter]
     private TnTLayout _layout { get; set; } = default!;
-
-    [Parameter]
-    public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainer;
-
-    [Parameter]
-    public TnTColor TextColor { get; set; } = TnTColor.OnSecondaryContainer;
-
-    [Parameter]
-    public int Elevation { get; set; } = 2;
 
     protected override void OnInitialized() {
         base.OnInitialized();

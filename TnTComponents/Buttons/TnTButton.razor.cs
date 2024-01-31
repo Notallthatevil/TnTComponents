@@ -1,46 +1,20 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.AspNetCore.Components.Web;
-using Microsoft.VisualBasic;
 using System.Reflection.Metadata;
-using TnTComponents.Common;
 using TnTComponents.Core;
-using TnTComponents.Enum;
 
 namespace TnTComponents;
-public partial class TnTButton {
 
+public partial class TnTButton {
 
     [Parameter]
     public ButtonAppearance Appearance { get; set; }
 
     [Parameter]
-    public ButtonType Type { get; set; }
-
-    [Parameter]
     public TnTColor? BackgroundColor { get; set; } = TnTColor.Primary;
 
     [Parameter]
-    public TnTColor? TextColor { get; set; } = TnTColor.OnPrimary;
-
-    [Parameter]
-    public int Elevation { get; set; } = 1;
-
-    [Parameter]
-    public TnTBorderRadius CornerRadius { get; set; } = new(10);
-
-    [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
-
-    [Parameter]
-    public string? Name { get; set; }
-
-    [Parameter]
-    public EventCallback<MouseEventArgs> OnClick { get; set; }
-
-    protected override bool RunIsolatedJsScript => true;
-
-    protected override string? JsModulePath => "./_content/TnTComponents/Buttons/TnTButton.razor.js";
 
     public override string? Class => CssBuilder.Create()
         .AddClass(AdditionalAttributes)
@@ -51,6 +25,26 @@ public partial class TnTButton {
         .AddRipple()
         .Build();
 
+    [Parameter]
+    public TnTBorderRadius CornerRadius { get; set; } = new(10);
+
+    [Parameter]
+    public int Elevation { get; set; } = 1;
+
+    [Parameter]
+    public string? Name { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
+
+    [Parameter]
+    public TnTColor? TextColor { get; set; } = TnTColor.OnPrimary;
+
+    [Parameter]
+    public ButtonType Type { get; set; }
+
+    protected override string? JsModulePath => "./_content/TnTComponents/Buttons/TnTButton.razor.js";
+    protected override bool RunIsolatedJsScript => true;
 
     protected override void OnInitialized() {
         base.OnInitialized();
@@ -59,6 +53,7 @@ public partial class TnTButton {
 }
 
 internal static class TnTButtonCssClassExt {
+
     public static CssBuilder AddButtonAppearance(this CssBuilder builder, ButtonAppearance buttonAppearance) {
         return builder.AddOutlined(buttonAppearance == ButtonAppearance.Outlined)
             .AddNoBackground(buttonAppearance == ButtonAppearance.Text);

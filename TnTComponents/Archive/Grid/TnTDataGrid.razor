@@ -1,10 +1,10 @@
-﻿@using Microsoft.AspNetCore.Components.Rendering
+﻿@*
+@using Microsoft.AspNetCore.Components.Rendering
 @using TnTComponents.Archive.Grid.Infrastructure
 @using TnTComponents.Common
 @inherits TnTComponentBase
 @typeparam TGridItem
 @implements ITnTDataGridSettings<TGridItem>
-
 
 <CascadingValue Value="_context" IsFixed="true">
     <CascadingValue Value="this" IsFixed="false" TValue="ITnTDataGridSettings<TGridItem>">
@@ -18,3 +18,4 @@
     </CascadingValue>
 </CascadingValue>
 
+    *@

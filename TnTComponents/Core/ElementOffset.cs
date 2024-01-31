@@ -1,4 +1,4 @@
-﻿namespace TnTComponents.Common;
+﻿namespace TnTComponents.Core;
 
 internal struct ElementOffset {
     public double? OffsetHeight { get; set; }

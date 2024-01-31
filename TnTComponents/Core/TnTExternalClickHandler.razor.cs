@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using TnTComponents.Common.Ext;
+using TnTComponents.Ext;
 
 namespace TnTComponents.Core;
 

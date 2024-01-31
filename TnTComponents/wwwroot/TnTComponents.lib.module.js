@@ -101,16 +101,12 @@ window.TnTComponents = {
             const y = e.clientY - boundingRect.top - (boundingRect.height / 2);
             element.style.setProperty('--ripple-offset-x', `${x}px`);
             element.style.setProperty('--ripple-offset-y', `${y}px`);
-
         }
 
         if (element) {
             element.addEventListener('click', setRippleOffset);
-        }  
+        }
     },
-
-
-
 
     getBoundingRect: (element) => { return element.getBoundingClientRect(); },
     getOffsetPosition: function (element) {

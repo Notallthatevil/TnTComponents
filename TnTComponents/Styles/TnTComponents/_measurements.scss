@@ -2,7 +2,6 @@
 $tnt-header-height: var(--tnt-header-height);
 $tnt-footer-height: var(--tnt-footer-height);
 
-
 // Media Query Ranges
 $small-screen-up: 751px !default;
 $medium-screen-up: 993px !default;
@@ -116,7 +115,6 @@ $element-bottom-margin: ($gutter-width*2)/3 !default;
         }
 
         @media #{$medium-and-up} {
-
             $i: 1;
 
             @while $i <= $num-cols {
@@ -140,7 +138,6 @@ $element-bottom-margin: ($gutter-width*2)/3 !default;
         }
 
         @media #{$large-and-up} {
-
             $i: 1;
 
             @while $i <= $num-cols {
@@ -164,7 +161,6 @@ $element-bottom-margin: ($gutter-width*2)/3 !default;
         }
 
         @media #{$extra-large-and-up} {
-
             $i: 1;
 
             @while $i <= $num-cols {
@@ -189,7 +185,7 @@ $element-bottom-margin: ($gutter-width*2)/3 !default;
     }
 }
 
-@for $i from 1 through 16{
+@for $i from 1 through 16 {
     .tnt-padding-#{$i} {
         padding: #{(0.25 * $i)}rem;
     }

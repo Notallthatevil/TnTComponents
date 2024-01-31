@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using TnTComponents.Core;
-using TnTComponents.Enum;
 
 namespace TnTComponents;
 
 public partial class TnTTabView {
+
+    [Parameter]
+    public TnTColor ActiveIndicatorColor { get; set; } = TnTColor.Primary;
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
@@ -24,24 +25,19 @@ public partial class TnTTabView {
         .Build();
 
     [Parameter]
-    public bool SecondaryTabView { get; set; }
-
-    [Parameter]
     public TnTColor HeaderBackgroundColor { get; set; } = TnTColor.Surface;
 
     [Parameter]
     public TnTColor HeaderTextColor { get; set; } = TnTColor.OnSurface;
 
     [Parameter]
-    public TnTColor ActiveIndicatorColor { get; set; } = TnTColor.Primary;
+    public bool SecondaryTabView { get; set; }
 
     //public TnTTabChild? ActiveTab { get; private set; }
 
     protected override bool RunIsolatedJsScript => true;
 
     private List<TnTTabChild> _tabChildren = [];
-
-
 
     //protected override void OnAfterRender(bool firstRender) {
     //    base.OnAfterRender(firstRender);

@@ -10,6 +10,7 @@ public enum TextInputType {
 }
 
 public static class TextInputTypeExt {
+
     public static InputType ToInputType(this TextInputType textInputType) {
         return textInputType switch {
             TextInputType.Text => InputType.Text,

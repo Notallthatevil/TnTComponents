@@ -80,7 +80,6 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
         builder.OpenElement(0, "span");
         builder.AddAttribute(10, "class", Class);
         {
-
             {
                 if (StartIcon is not null) {
                     StartIcon.AdditionalClass = "tnt-start";
@@ -98,7 +97,6 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                 }
                 else {
                     builder.AddAttribute(125, "value", CurrentValueAsString);
-
                 }
                 builder.AddAttribute(140, "style", Style);
                 builder.AddAttribute(150, "readonly", ParentFormReadOnly ?? ReadOnly);
@@ -134,6 +132,14 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
         }
 
         builder.CloseElement();
+    }
+
+    protected bool IsRequired() {
+        if (AdditionalAttributes?.TryGetValue("required", out var _) == true || GetCustomAttributeIfExists<RequiredAttribute>() is not null) {
+            return true;
+        }
+
+        return false;
     }
 
     protected override void OnInitialized() {
@@ -216,13 +222,5 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
         }
 
         return null;
-    }
-
-    protected bool IsRequired() {
-        if (AdditionalAttributes?.TryGetValue("required", out var _) == true || GetCustomAttributeIfExists<RequiredAttribute>() is not null) {
-            return true;
-        }
-
-        return false;
     }
 }

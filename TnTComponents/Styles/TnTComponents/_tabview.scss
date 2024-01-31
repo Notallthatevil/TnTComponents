@@ -60,17 +60,14 @@
         }
     }
 
-
     &.tnt-alternative {
         div:first-child {
             & > span {
-
                 & > button {
                     height: 2rem;
                     padding-bottom: 0.25rem;
                 }
             }
-
 
             & > span:last-child {
                 height: 0.2rem;

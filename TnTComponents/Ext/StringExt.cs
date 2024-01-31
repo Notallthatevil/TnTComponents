@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace TnTComponents.Common.Ext;
+namespace TnTComponents.Ext;
 
 internal static partial class StringExt {
 

@@ -7,24 +7,13 @@ namespace TnTComponents;
 
 public partial class TnTSideNavMenuGroup {
 
-    [CascadingParameter]
-    private TnTSideNav _sideNav { get; set; } = default!;
-
     [Parameter]
-    public TnTIcon? Icon { get; set; }
+    public RenderFragment ChildContent { get; set; } = default!;
 
     public override string? Class => CssBuilder.Create()
         .SetDisabled(Disabled)
         .AddClass("tnt-expanded", Expand)
         .Build();
-
-    [Parameter, EditorRequired]
-    public string Title { get; set; } = default!;
-
-    [Parameter]
-    public RenderFragment ChildContent { get; set; } = default!;
-
-    protected override bool RunIsolatedJsScript => base.RunIsolatedJsScript;
 
     [Parameter]
     public bool Expand { get; set; }
@@ -33,7 +22,18 @@ public partial class TnTSideNavMenuGroup {
     public EventCallback<bool> Expanded { get; set; }
 
     [Parameter]
+    public TnTIcon? Icon { get; set; }
+
+    [Parameter]
     public bool Ripple { get; set; } = true;
+
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = default!;
+
+    protected override bool RunIsolatedJsScript => base.RunIsolatedJsScript;
+
+    [CascadingParameter]
+    private TnTSideNav _sideNav { get; set; } = default!;
 
     [DynamicDependency(nameof(Toggle))]
     public TnTSideNavMenuGroup() : base() { }

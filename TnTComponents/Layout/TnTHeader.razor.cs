@@ -5,22 +5,22 @@ namespace TnTComponents;
 
 public partial class TnTHeader {
 
-    public override string? Class => CssBuilder.Create()
-        .AddBackgroundColor(BackgroundColor)
-        .AddForegroundColor(TextColor)
-        .Build();
-
-    [Parameter]
-    public RenderFragment ChildContent { get; set; } = default!;
-
-    [CascadingParameter]
-    private TnTLayout _layout { get; set; } = default!;
-
     [Parameter]
     public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainer;
 
     [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    public override string? Class => CssBuilder.Create()
+                .AddBackgroundColor(BackgroundColor)
+        .AddForegroundColor(TextColor)
+        .Build();
+
+    [Parameter]
     public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
+
+    [CascadingParameter]
+    private TnTLayout _layout { get; set; } = default!;
 
     //[Parameter]
     //public TnTColor ScrolledBackgroundColor { get; set; } = TnTColor.SurfaceContainer;

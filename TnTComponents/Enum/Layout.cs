@@ -50,6 +50,7 @@ public enum WrapStyle {
 }
 
 public static class EnumExt {
+
     public static string ToCssString(this AlignItems alignItems) {
         return alignItems switch {
             AlignItems.Normal => "normal",
@@ -87,7 +88,6 @@ public static class EnumExt {
             _ => throw new InvalidOperationException($"{alignContent} is not a valid value of {nameof(AlignContent)}")
         };
     }
-
 
     public static string ToStyle(this FlexDirection Direction) {
         return "flex-direction: " + Direction switch {

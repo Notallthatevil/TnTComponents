@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
-using TnTComponents.Common.Ext;
+using TnTComponents.Ext;
 
 namespace TnTComponents.Core;
 
@@ -21,7 +21,7 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyn
 
     public abstract string? Class { get; }
 
-    public string ComponentIdentifier { get; } = TnTComponents.Core.TnComponentIdentifier.NewId();
+    public string ComponentIdentifier { get; } = TnTComponents.Core.TnTComponentIdentifier.NewId();
 
     [Parameter]
     public bool Disabled { get; set; }

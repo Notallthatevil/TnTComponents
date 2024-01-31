@@ -1,4 +1,3 @@
-
 function toggleTheme(e) {
     const themeCollection = document.getElementsByTagName('tnt-design-theme');
     if (themeCollection && themeCollection.length > 0) {
@@ -35,9 +34,7 @@ export function onLoad(element, dotNetElementRef) {
 }
 
 export function onUpdate(element, dotNetElementRef) {
-
 }
 
 export function onDispose(element, dotNetElementRef) {
-
 }

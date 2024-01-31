@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace TnTComponents.Core;
 
-namespace TnTComponents.Core;
 public struct TnTBorderRadius {
-    public int StartStart { get; init; }
-    public int StartEnd { get; init; }
-    public int EndStart { get; init; }
-    public int EndEnd { get; init; }
     public bool AllSame { get; }
+    public int EndEnd { get; init; }
+    public int EndStart { get; init; }
+    public int StartEnd { get; init; }
+    public int StartStart { get; init; }
 
     public TnTBorderRadius(int radius) {
         StartStart = radius;
@@ -20,6 +15,6 @@ public struct TnTBorderRadius {
         AllSame = true;
     }
 
-    public TnTBorderRadius() { }
+    public TnTBorderRadius() {
+    }
 }
-

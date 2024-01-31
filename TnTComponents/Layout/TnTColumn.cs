@@ -1,36 +1,34 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using TnTComponents.Core;
 
 namespace TnTComponents;
+
 public class TnTColumn : ComponentBase, ITnTComponentBase {
+
     [Parameter(CaptureUnmatchedValues = true)]
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
-    public string? Class => CssBuilder.Create()
-        .AddClass("tnt-col")
-        .AddClass(GetGridClass())
-        .Build();
 
-    public ElementReference Element { get; }
-    [Parameter]
-    public string? Id { get; set; }
-    [Parameter]
-    public string? Style { get; set; }
     [Parameter]
     public bool? AutoFocus { get; set; }
-    [Parameter]
-    public bool Disabled { get; set; }
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
+    public string? Class => CssBuilder.Create()
+                .AddClass("tnt-col")
+        .AddClass(GetGridClass())
+        .Build();
+
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    public ElementReference Element { get; }
+
+    [Parameter]
+    public string? Id { get; set; }
 
     [Parameter, ColSize(SizeClass = "l", PropertyName = nameof(ColSize.Size))]
     public int L { get; set; }
@@ -68,6 +66,9 @@ public class TnTColumn : ComponentBase, ITnTComponentBase {
     [Parameter, ColSize(SizeClass = "s", PropertyName = nameof(ColSize.Push))]
     public int SPush { get; set; }
 
+    [Parameter]
+    public string? Style { get; set; }
+
     [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Size))]
     public int XL { get; set; }
 
@@ -79,9 +80,19 @@ public class TnTColumn : ComponentBase, ITnTComponentBase {
 
     [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Push))]
     public int XLPush { get; set; }
+
     private static readonly IReadOnlyDictionary<PropertyInfo, ColSizeAttribute> _sizeValues = GetSizeProperties();
 
     private Dictionary<string, ColSize> _sizes = new Dictionary<string, ColSize>();
+
+    protected override void BuildRenderTree(RenderTreeBuilder builder) {
+        builder.OpenElement(0, "div");
+        builder.AddMultipleAttributes(10, AdditionalAttributes);
+        builder.AddAttribute(20, "class", Class);
+        builder.AddAttribute(30, "style", Style);
+        builder.AddContent(40, ChildContent);
+        builder.CloseElement();
+    }
 
     protected override void OnInitialized() {
         base.OnInitialized();
@@ -103,13 +114,15 @@ public class TnTColumn : ComponentBase, ITnTComponentBase {
         }
     }
 
-    protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        builder.OpenElement(0, "div");
-        builder.AddMultipleAttributes(10, AdditionalAttributes);
-        builder.AddAttribute(20, "class", Class);
-        builder.AddAttribute(30, "style", Style);
-        builder.AddContent(40, ChildContent);
-        builder.CloseElement();
+    private static IReadOnlyDictionary<PropertyInfo, ColSizeAttribute> GetSizeProperties() {
+        var sizeValues = new Dictionary<PropertyInfo, ColSizeAttribute>();
+        foreach (var prop in typeof(TnTColumn).GetProperties()) {
+            var colSize = prop.GetCustomAttribute<ColSizeAttribute>();
+            if (colSize is not null) {
+                sizeValues.Add(prop, colSize);
+            }
+        }
+        return sizeValues;
     }
 
     private string GetGridClass() {
@@ -142,17 +155,6 @@ public class TnTColumn : ComponentBase, ITnTComponentBase {
         }
 
         return strBuilder.ToString();
-    }
-
-    private static IReadOnlyDictionary<PropertyInfo, ColSizeAttribute> GetSizeProperties() {
-        var sizeValues = new Dictionary<PropertyInfo, ColSizeAttribute>();
-        foreach (var prop in typeof(TnTColumn).GetProperties()) {
-            var colSize = prop.GetCustomAttribute<ColSizeAttribute>();
-            if (colSize is not null) {
-                sizeValues.Add(prop, colSize);
-            }
-        }
-        return sizeValues;
     }
 
     private class ColSize {

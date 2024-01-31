@@ -1,6 +1,5 @@
 ﻿@page "/segmentedButton"
 @using TnTComponents
-@using TnTComponents.Common
 @using TnTComponents.Enum
 
 <TnTRow>
@@ -60,19 +59,13 @@
     <TnTColumn>
         <TnTSegmentedButton>
             <NavLink href="segmentedButton">
-                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "home")
                 First
-                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "search")
             </NavLink>
             <NavLink>
-                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "home")
                 First
-                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "search")
             </NavLink>
             <NavLink disabled>
-                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "home")
                 Second
-                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "search")
             </NavLink>
         </TnTSegmentedButton>
     </TnTColumn>
@@ -80,30 +73,24 @@
         <TnTSegmentedButton>
             <NavLink href="segmentedButton">
                 First
-                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "search")
             </NavLink>
             <NavLink>
                 First
-                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "search")
             </NavLink>
             <NavLink disabled>
                 Second
-                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "search")
             </NavLink>
         </TnTSegmentedButton>
     </TnTColumn>
     <TnTColumn>
         <TnTSegmentedButton>
             <NavLink href="segmentedButton">
-                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "home")
                 First
             </NavLink>
             <NavLink>
-                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "home")
                 First
             </NavLink>
             <NavLink disabled>
-                @TnTIconComponent.RenderIcon(IconType.MaterialIcons, "home")
                 Second
             </NavLink>
         </TnTSegmentedButton>

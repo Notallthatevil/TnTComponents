@@ -13,6 +13,9 @@ public partial class TnTLabel : IFormItem {
     public FormAppearance Appearance { get; set; }
 
     [Parameter]
+    public TnTColor? BackgroundColor { get; set; }
+
+    [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
     public string Class => CssBuilder.Create()
@@ -24,6 +27,11 @@ public partial class TnTLabel : IFormItem {
 
     [Parameter]
     public bool Disabled { get; set; }
+
+    public ElementReference Element { get; protected set; }
+
+    [Parameter, EditorRequired]
+    public string Label { get; set; } = default!;
 
     [CascadingParameter]
     public TnTForm? ParentForm { get; set; }
@@ -43,11 +51,6 @@ public partial class TnTLabel : IFormItem {
     [Parameter]
     public string? Style { get; set; }
 
-    [Parameter, EditorRequired]
-    public string Label { get; set; } = default!;
-    public ElementReference Element { get; protected set; }
-    [Parameter]
-    public TnTColor? BackgroundColor { get; set; }
     [Parameter]
     public TnTColor? TextColor { get; set; }
 

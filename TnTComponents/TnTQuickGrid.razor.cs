@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Text;
-using TnTComponents.Common.Ext;
 using TnTComponents.Enum;
+using TnTComponents.Ext;
 
 namespace TnTComponents;
 
@@ -23,6 +23,26 @@ public partial class TnTQuickGrid<TGridItem> {
 
     private IJSObjectReference? _isolatedJsModule;
 
+    public new async ValueTask DisposeAsync() {
+        try {
+            if (_isolatedJsModule is not null) {
+                await _isolatedJsModule.InvokeVoidAsync("onDispose");
+                await _isolatedJsModule.DisposeAsync();
+            }
+        }
+        catch (JSDisconnectedException) { }
+        await base.DisposeAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        await base.OnAfterRenderAsync(firstRender);
+        _isolatedJsModule ??= await _jsRuntime.ImportIsolatedJs(this);
+        if (firstRender) {
+            await (_isolatedJsModule?.InvokeVoidAsync("onLoad") ?? ValueTask.CompletedTask);
+        }
+        await (_isolatedJsModule?.InvokeVoidAsync("onUpdate") ?? ValueTask.CompletedTask);
+    }
+
     protected override void OnParametersSet() {
         Theme = "TnTComponents";
         if (string.IsNullOrWhiteSpace(Class)) {
@@ -42,26 +62,6 @@ public partial class TnTQuickGrid<TGridItem> {
 
         Class = strBuilder.ToString();
         base.OnParametersSet();
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender) {
-        await base.OnAfterRenderAsync(firstRender);
-        _isolatedJsModule ??= await _jsRuntime.ImportIsolatedJs(this);
-        if (firstRender) {
-            await (_isolatedJsModule?.InvokeVoidAsync("onLoad") ?? ValueTask.CompletedTask);
-        }
-        await (_isolatedJsModule?.InvokeVoidAsync("onUpdate") ?? ValueTask.CompletedTask);
-    }
-
-    public new async ValueTask DisposeAsync() {
-        try {
-            if (_isolatedJsModule is not null) {
-                await _isolatedJsModule.InvokeVoidAsync("onDispose");
-                await _isolatedJsModule.DisposeAsync();
-            }
-        }
-        catch (JSDisconnectedException) { }
-        await base.DisposeAsync();
     }
 
     private string? GetContainerStyle() {

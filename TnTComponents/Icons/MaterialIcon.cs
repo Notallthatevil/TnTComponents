@@ -1,31 +1,24 @@
 using Microsoft.AspNetCore.Components;
-using System.Drawing;
 using TnTComponents.Core;
 
 namespace TnTComponents;
 
 public partial class MaterialIcon : TnTIcon {
-    private readonly string _icon;
-    private MaterialIcon(string icon) { _icon = icon; }
-
-
-
-
-    public static readonly MaterialIcon AcUnit = new("ac_unit");
     public static readonly MaterialIcon AccessAlarm = new("access_alarm");
     public static readonly MaterialIcon AccessAlarms = new("access_alarms");
-    public static readonly MaterialIcon AccessTime = new("access_time");
     public static readonly MaterialIcon Accessibility = new("accessibility");
     public static readonly MaterialIcon Accessible = new("accessible");
+    public static readonly MaterialIcon AccessTime = new("access_time");
     public static readonly MaterialIcon AccountBalance = new("account_balance");
     public static readonly MaterialIcon AccountBalanceWallet = new("account_balance_wallet");
     public static readonly MaterialIcon AccountBox = new("account_box");
     public static readonly MaterialIcon AccountCircle = new("account_circle");
+    public static readonly MaterialIcon AcUnit = new("ac_unit");
     public static readonly MaterialIcon Adb = new("adb");
     public static readonly MaterialIcon Add = new("add");
-    public static readonly MaterialIcon AddAPhoto = new("add_a_photo");
     public static readonly MaterialIcon AddAlarm = new("add_alarm");
     public static readonly MaterialIcon AddAlert = new("add_alert");
+    public static readonly MaterialIcon AddAPhoto = new("add_a_photo");
     public static readonly MaterialIcon AddBox = new("add_box");
     public static readonly MaterialIcon AddCircle = new("add_circle");
     public static readonly MaterialIcon AddCircleOutline = new("add_circle_outline");
@@ -76,8 +69,8 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon Assistant = new("assistant");
     public static readonly MaterialIcon AssistantPhoto = new("assistant_photo");
     public static readonly MaterialIcon AttachFile = new("attach_file");
-    public static readonly MaterialIcon AttachMoney = new("attach_money");
     public static readonly MaterialIcon Attachment = new("attachment");
+    public static readonly MaterialIcon AttachMoney = new("attach_money");
     public static readonly MaterialIcon Audiotrack = new("audiotrack");
     public static readonly MaterialIcon Autorenew = new("autorenew");
     public static readonly MaterialIcon AvTimer = new("av_timer");
@@ -189,8 +182,8 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon Code = new("code");
     public static readonly MaterialIcon Collections = new("collections");
     public static readonly MaterialIcon CollectionsBookmark = new("collections_bookmark");
-    public static readonly MaterialIcon ColorLens = new("color_lens");
     public static readonly MaterialIcon Colorize = new("colorize");
+    public static readonly MaterialIcon ColorLens = new("color_lens");
     public static readonly MaterialIcon Comment = new("comment");
     public static readonly MaterialIcon Compare = new("compare");
     public static readonly MaterialIcon CompareArrows = new("compare_arrows");
@@ -250,14 +243,14 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon DirectionsWalk = new("directions_walk");
     public static readonly MaterialIcon DiscFull = new("disc_full");
     public static readonly MaterialIcon Dns = new("dns");
-    public static readonly MaterialIcon DoNotDisturb = new("do_not_disturb");
-    public static readonly MaterialIcon DoNotDisturbAlt = new("do_not_disturb_alt");
-    public static readonly MaterialIcon DoNotDisturbOff = new("do_not_disturb_off");
-    public static readonly MaterialIcon DoNotDisturbOn = new("do_not_disturb_on");
     public static readonly MaterialIcon Dock = new("dock");
     public static readonly MaterialIcon Domain = new("domain");
     public static readonly MaterialIcon Done = new("done");
     public static readonly MaterialIcon DoneAll = new("done_all");
+    public static readonly MaterialIcon DoNotDisturb = new("do_not_disturb");
+    public static readonly MaterialIcon DoNotDisturbAlt = new("do_not_disturb_alt");
+    public static readonly MaterialIcon DoNotDisturbOff = new("do_not_disturb_off");
+    public static readonly MaterialIcon DoNotDisturbOn = new("do_not_disturb_on");
     public static readonly MaterialIcon DonutLarge = new("donut_large");
     public static readonly MaterialIcon DonutSmall = new("donut_small");
     public static readonly MaterialIcon Drafts = new("drafts");
@@ -273,12 +266,12 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon Error = new("error");
     public static readonly MaterialIcon ErrorOutline = new("error_outline");
     public static readonly MaterialIcon EuroSymbol = new("euro_symbol");
-    public static readonly MaterialIcon EvStation = new("ev_station");
     public static readonly MaterialIcon Event = new("event");
     public static readonly MaterialIcon EventAvailable = new("event_available");
     public static readonly MaterialIcon EventBusy = new("event_busy");
     public static readonly MaterialIcon EventNote = new("event_note");
     public static readonly MaterialIcon EventSeat = new("event_seat");
+    public static readonly MaterialIcon EvStation = new("ev_station");
     public static readonly MaterialIcon ExitToApp = new("exit_to_app");
     public static readonly MaterialIcon ExpandLess = new("expand_less");
     public static readonly MaterialIcon ExpandMore = new("expand_more");
@@ -379,7 +372,6 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon Fullscreen = new("fullscreen");
     public static readonly MaterialIcon FullscreenExit = new("fullscreen_exit");
     public static readonly MaterialIcon Functions = new("functions");
-    public static readonly MaterialIcon GTranslate = new("g_translate");
     public static readonly MaterialIcon Gamepad = new("gamepad");
     public static readonly MaterialIcon Games = new("games");
     public static readonly MaterialIcon Gavel = new("gavel");
@@ -399,6 +391,7 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon Group = new("group");
     public static readonly MaterialIcon GroupAdd = new("group_add");
     public static readonly MaterialIcon GroupWork = new("group_work");
+    public static readonly MaterialIcon GTranslate = new("g_translate");
     public static readonly MaterialIcon Hd = new("hd");
     public static readonly MaterialIcon HdrOff = new("hdr_off");
     public static readonly MaterialIcon HdrOn = new("hdr_on");
@@ -410,22 +403,22 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon Hearing = new("hearing");
     public static readonly MaterialIcon Help = new("help");
     public static readonly MaterialIcon HelpOutline = new("help_outline");
-    public static readonly MaterialIcon HighQuality = new("high_quality");
     public static readonly MaterialIcon Highlight = new("highlight");
     public static readonly MaterialIcon HighlightOff = new("highlight_off");
+    public static readonly MaterialIcon HighQuality = new("high_quality");
     public static readonly MaterialIcon History = new("history");
     public static readonly MaterialIcon Home = new("home");
-    public static readonly MaterialIcon HotTub = new("hot_tub");
     public static readonly MaterialIcon Hotel = new("hotel");
+    public static readonly MaterialIcon HotTub = new("hot_tub");
     public static readonly MaterialIcon HourglassEmpty = new("hourglass_empty");
     public static readonly MaterialIcon HourglassFull = new("hourglass_full");
     public static readonly MaterialIcon Http = new("http");
     public static readonly MaterialIcon Https = new("https");
     public static readonly MaterialIcon Image = new("image");
     public static readonly MaterialIcon ImageAspectRatio = new("image_aspect_ratio");
+    public static readonly MaterialIcon ImportantDevices = new("important_devices");
     public static readonly MaterialIcon ImportContacts = new("import_contacts");
     public static readonly MaterialIcon ImportExport = new("import_export");
-    public static readonly MaterialIcon ImportantDevices = new("important_devices");
     public static readonly MaterialIcon Inbox = new("inbox");
     public static readonly MaterialIcon IndeterminateCheckBox = new("indeterminate_check_box");
     public static readonly MaterialIcon Info = new("info");
@@ -472,9 +465,9 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon LibraryBooks = new("library_books");
     public static readonly MaterialIcon LibraryMusic = new("library_music");
     public static readonly MaterialIcon LightbulbOutline = new("lightbulb_outline");
+    public static readonly MaterialIcon LinearScale = new("linear_scale");
     public static readonly MaterialIcon LineStyle = new("line_style");
     public static readonly MaterialIcon LineWeight = new("line_weight");
-    public static readonly MaterialIcon LinearScale = new("linear_scale");
     public static readonly MaterialIcon Link = new("link");
     public static readonly MaterialIcon LinkedCamera = new("linked_camera");
     public static readonly MaterialIcon List = new("list");
@@ -576,7 +569,6 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon Nfc = new("nfc");
     public static readonly MaterialIcon NoEncryption = new("no_encryption");
     public static readonly MaterialIcon NoSim = new("no_sim");
-    public static readonly MaterialIcon NotInterested = new("not_interested");
     public static readonly MaterialIcon Note = new("note");
     public static readonly MaterialIcon NoteAdd = new("note_add");
     public static readonly MaterialIcon Notifications = new("notifications");
@@ -584,6 +576,7 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon NotificationsNone = new("notifications_none");
     public static readonly MaterialIcon NotificationsOff = new("notifications_off");
     public static readonly MaterialIcon NotificationsPaused = new("notifications_paused");
+    public static readonly MaterialIcon NotInterested = new("not_interested");
     public static readonly MaterialIcon OfflinePin = new("offline_pin");
     public static readonly MaterialIcon OndemandVideo = new("ondemand_video");
     public static readonly MaterialIcon Opacity = new("opacity");
@@ -593,12 +586,12 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon Pages = new("pages");
     public static readonly MaterialIcon Pageview = new("pageview");
     public static readonly MaterialIcon Palette = new("palette");
-    public static readonly MaterialIcon PanTool = new("pan_tool");
     public static readonly MaterialIcon Panorama = new("panorama");
     public static readonly MaterialIcon PanoramaFishEye = new("panorama_fish_eye");
     public static readonly MaterialIcon PanoramaHorizontal = new("panorama_horizontal");
     public static readonly MaterialIcon PanoramaVertical = new("panorama_vertical");
     public static readonly MaterialIcon PanoramaWideAngle = new("panorama_wide_angle");
+    public static readonly MaterialIcon PanTool = new("pan_tool");
     public static readonly MaterialIcon PartyMode = new("party_mode");
     public static readonly MaterialIcon Pause = new("pause");
     public static readonly MaterialIcon PauseCircleFilled = new("pause_circle_filled");
@@ -616,10 +609,10 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon PermScanWifi = new("perm_scan_wifi");
     public static readonly MaterialIcon Person = new("person");
     public static readonly MaterialIcon PersonAdd = new("person_add");
+    public static readonly MaterialIcon PersonalVideo = new("personal_video");
     public static readonly MaterialIcon PersonOutline = new("person_outline");
     public static readonly MaterialIcon PersonPin = new("person_pin");
     public static readonly MaterialIcon PersonPinCircle = new("person_pin_circle");
-    public static readonly MaterialIcon PersonalVideo = new("personal_video");
     public static readonly MaterialIcon Pets = new("pets");
     public static readonly MaterialIcon Phone = new("phone");
     public static readonly MaterialIcon PhoneAndroid = new("phone_android");
@@ -627,15 +620,15 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon PhoneForwarded = new("phone_forwarded");
     public static readonly MaterialIcon PhoneInTalk = new("phone_in_talk");
     public static readonly MaterialIcon PhoneIphone = new("phone_iphone");
-    public static readonly MaterialIcon PhoneLocked = new("phone_locked");
-    public static readonly MaterialIcon PhoneMissed = new("phone_missed");
-    public static readonly MaterialIcon PhonePaused = new("phone_paused");
     public static readonly MaterialIcon Phonelink = new("phonelink");
     public static readonly MaterialIcon PhonelinkErase = new("phonelink_erase");
     public static readonly MaterialIcon PhonelinkLock = new("phonelink_lock");
     public static readonly MaterialIcon PhonelinkOff = new("phonelink_off");
     public static readonly MaterialIcon PhonelinkRing = new("phonelink_ring");
     public static readonly MaterialIcon PhonelinkSetup = new("phonelink_setup");
+    public static readonly MaterialIcon PhoneLocked = new("phone_locked");
+    public static readonly MaterialIcon PhoneMissed = new("phone_missed");
+    public static readonly MaterialIcon PhonePaused = new("phone_paused");
     public static readonly MaterialIcon Photo = new("photo");
     public static readonly MaterialIcon PhotoAlbum = new("photo_album");
     public static readonly MaterialIcon PhotoCamera = new("photo_camera");
@@ -762,9 +755,9 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon SettingsVoice = new("settings_voice");
     public static readonly MaterialIcon Share = new("share");
     public static readonly MaterialIcon Shop = new("shop");
-    public static readonly MaterialIcon ShopTwo = new("shop_two");
     public static readonly MaterialIcon ShoppingBasket = new("shopping_basket");
     public static readonly MaterialIcon ShoppingCart = new("shopping_cart");
+    public static readonly MaterialIcon ShopTwo = new("shop_two");
     public static readonly MaterialIcon ShortText = new("short_text");
     public static readonly MaterialIcon ShowChart = new("show_chart");
     public static readonly MaterialIcon Shuffle = new("shuffle");
@@ -835,10 +828,10 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon SystemUpdate = new("system_update");
     public static readonly MaterialIcon SystemUpdateAlt = new("system_update_alt");
     public static readonly MaterialIcon Tab = new("tab");
-    public static readonly MaterialIcon TabUnselected = new("tab_unselected");
     public static readonly MaterialIcon Tablet = new("tablet");
     public static readonly MaterialIcon TabletAndroid = new("tablet_android");
     public static readonly MaterialIcon TabletMac = new("tablet_mac");
+    public static readonly MaterialIcon TabUnselected = new("tab_unselected");
     public static readonly MaterialIcon TagFaces = new("tag_faces");
     public static readonly MaterialIcon TapAndPlay = new("tap_and_play");
     public static readonly MaterialIcon Terrain = new("terrain");
@@ -848,15 +841,15 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon Texture = new("texture");
     public static readonly MaterialIcon Theaters = new("theaters");
     public static readonly MaterialIcon ThumbDown = new("thumb_down");
-    public static readonly MaterialIcon ThumbUp = new("thumb_up");
     public static readonly MaterialIcon ThumbsUpDown = new("thumbs_up_down");
-    public static readonly MaterialIcon TimeToLeave = new("time_to_leave");
+    public static readonly MaterialIcon ThumbUp = new("thumb_up");
     public static readonly MaterialIcon Timelapse = new("timelapse");
     public static readonly MaterialIcon Timeline = new("timeline");
     public static readonly MaterialIcon Timer = new("timer");
     public static readonly MaterialIcon Timer10 = new("timer_10");
     public static readonly MaterialIcon Timer3 = new("timer_3");
     public static readonly MaterialIcon TimerOff = new("timer_off");
+    public static readonly MaterialIcon TimeToLeave = new("time_to_leave");
     public static readonly MaterialIcon Title = new("title");
     public static readonly MaterialIcon Toc = new("toc");
     public static readonly MaterialIcon Today = new("today");
@@ -890,11 +883,11 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon VerticalAlignTop = new("vertical_align_top");
     public static readonly MaterialIcon Vibration = new("vibration");
     public static readonly MaterialIcon VideoCall = new("video_call");
-    public static readonly MaterialIcon VideoLabel = new("video_label");
-    public static readonly MaterialIcon VideoLibrary = new("video_library");
     public static readonly MaterialIcon Videocam = new("videocam");
     public static readonly MaterialIcon VideocamOff = new("videocam_off");
     public static readonly MaterialIcon VideogameAsset = new("videogame_asset");
+    public static readonly MaterialIcon VideoLabel = new("video_label");
+    public static readonly MaterialIcon VideoLibrary = new("video_library");
     public static readonly MaterialIcon ViewAgenda = new("view_agenda");
     public static readonly MaterialIcon ViewArray = new("view_array");
     public static readonly MaterialIcon ViewCarousel = new("view_carousel");
@@ -943,11 +936,17 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon ZoomIn = new("zoom_in");
     public static readonly MaterialIcon ZoomOut = new("zoom_out");
     public static readonly MaterialIcon ZoomOutMap = new("zoom_out_map");
+    private readonly string _icon;
 
+    private MaterialIcon(string icon) {
+        _icon = icon;
+    }
+
+    public override MarkupString Render() {
+        return new MarkupString($"<span class=\"{GetClass()}\">{_icon}</span>");
+    }
 
     protected override string GetClass() {
-
-
         var appearanceClass = "material-icons " + Appearance switch {
             MaterialIconAppearance.Default => "",
             MaterialIconAppearance.Outlined => "material-icons-outlined ",
@@ -966,9 +965,4 @@ public partial class MaterialIcon : TnTIcon {
 
         return CssBuilder.Create($"tnt-icon {AdditionalClass} " + appearanceClass + sizeClass).AddForegroundColor(Color).Build();
     }
-
-    public override MarkupString Render() {
-        return new MarkupString($"<span class=\"{GetClass()}\">{_icon}</span>");
-    }
 }
-

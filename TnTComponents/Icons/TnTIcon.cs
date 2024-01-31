@@ -1,14 +1,16 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TnTComponents;
+
+public enum MaterialIconSize {
+    Small,
+    Medium,
+    Large,
+    ExtraLarge
+}
+
 public abstract class TnTIcon {
-    [Parameter]
-    public MaterialIconSize Size { get; set; } = MaterialIconSize.Medium;
+    public string? AdditionalClass { get; set; }
 
     [Parameter]
     public MaterialIconAppearance Appearance { get; set; } = MaterialIconAppearance.Default;
@@ -16,18 +18,12 @@ public abstract class TnTIcon {
     [Parameter]
     public TnTColor Color { get; set; } = TnTColor.OnSurface;
 
-    public string? AdditionalClass { get; set; }
-
-    protected abstract string GetClass();
+    [Parameter]
+    public MaterialIconSize Size { get; set; } = MaterialIconSize.Medium;
 
     public abstract MarkupString Render();
-}
 
-public enum MaterialIconSize {
-    Small,
-    Medium,
-    Large,
-    ExtraLarge
+    protected abstract string GetClass();
 }
 
 public enum MaterialIconAppearance {

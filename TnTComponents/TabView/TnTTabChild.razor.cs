@@ -1,23 +1,13 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.JSInterop;
-using TnTComponents.Common;
+
 using TnTComponents.Core;
-using TnTComponents.Enum;
 
 namespace TnTComponents;
 
-public partial class TnTTabChild
-{
+public partial class TnTTabChild {
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
-
-    [Parameter, EditorRequired]
-    public string Title { get; set; } = default!;
-
-    [Parameter]
-    public RenderFragment? TabHeaderTemplate { get; set; }
 
     public override string? Class => CssBuilder.Create()
         .SetDisabled(Disabled)
@@ -26,26 +16,29 @@ public partial class TnTTabChild
     [Parameter]
     public TnTIcon? Icon { get; set; }
 
+    [Parameter]
+    public RenderFragment? TabHeaderTemplate { get; set; }
+
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = default!;
+
     [CascadingParameter]
     private TnTTabView _context { get; set; } = default!;
 
     private string? _style;
 
-    protected override void OnInitialized()
-    {
+    protected override void OnAfterRender(bool firstRender) {
+        base.OnAfterRender(firstRender);
+        _style = Style;
+    }
+
+    protected override void OnInitialized() {
         base.OnInitialized();
-        if (_context is null)
-        {
+        if (_context is null) {
             throw new InvalidOperationException($"A {nameof(TnTTabChild)} must be a child of {nameof(TnTTabView)}");
         }
         _context.AddTabChild(this);
         _style = $"{Style}; display:none;";
-    }
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        base.OnAfterRender(firstRender);
-        _style = Style;
     }
 
     //[JSInvokable]

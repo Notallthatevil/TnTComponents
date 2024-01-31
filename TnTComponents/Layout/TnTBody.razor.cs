@@ -5,22 +5,22 @@ namespace TnTComponents;
 
 public partial class TnTBody {
 
-    public override string? Class => CssBuilder.Create()
-        .AddBackgroundColor(BackgroundColor)
-        .AddForegroundColor(DefaultTextColor)
-        .Build();
-
-    [Parameter]
-    public RenderFragment ChildContent { get; set; } = default!;
-
-    [CascadingParameter]
-    private TnTLayout _layout { get; set; } = default!;
-
     [Parameter]
     public TnTColor BackgroundColor { get; set; } = TnTColor.Background;
 
     [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    public override string? Class => CssBuilder.Create()
+                .AddBackgroundColor(BackgroundColor)
+        .AddForegroundColor(DefaultTextColor)
+        .Build();
+
+    [Parameter]
     public TnTColor DefaultTextColor { get; set; } = TnTColor.OnBackground;
+
+    [CascadingParameter]
+    private TnTLayout _layout { get; set; } = default!;
 
     protected override void OnInitialized() {
         base.OnInitialized();

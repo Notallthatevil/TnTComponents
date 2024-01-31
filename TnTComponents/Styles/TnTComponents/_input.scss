@@ -7,7 +7,6 @@
     margin: 0.5rem;
     vertical-align: middle;
 
-
     input, select {
         appearance: none;
         border: none;
@@ -101,7 +100,6 @@
     }
 
     &.tnt-outlined {
-
         &:after {
             content: '';
             height: 100%;
@@ -164,7 +162,6 @@ label.tnt-components:not(:has(input[type=checkbox])):not(:has(input[type=radio])
         }
     }
 
-
     &:has(span.tnt-outlined) {
         border: none;
         outline: none;
@@ -213,7 +210,6 @@ label.tnt-components:has(input[type=checkbox]) {
     min-height: 1.25rem;
     user-select: none;
     margin: 0.5rem;
-
 
     &:not(:has(input:disabled)) {
         cursor: pointer;
@@ -365,7 +361,6 @@ span.tnt-radio-group {
             appearance: none;
         }
 
-
         &:has(input:disabled) {
             opacity: 0.3;
             cursor: not-allowed;
@@ -389,7 +384,6 @@ span.tnt-radio-group {
             background-color: $tnt-color-primary;
             transform: scale(0);
         }
-
 
         &:has(input:checked) {
             &:before {
@@ -425,7 +419,6 @@ span.tnt-radio-group {
             &:after {
                 background-color: $tnt-color-error;
             }
-
 
             &:has(input:checked) {
                 &:before {

@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TnTComponents.Core;
-internal class TnComponentIdentifier {
 
+internal class TnTComponentIdentifier {
     private const string _identifierPrefix = "tnt_";
     private static readonly Random _rnd = new();
 
@@ -81,4 +81,3 @@ public class TnTComponentIdentifierContext : IDisposable {
         return id;
     }
 }
-

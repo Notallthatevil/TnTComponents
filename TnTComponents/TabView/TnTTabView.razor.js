@@ -27,7 +27,6 @@ export class TnTTabView extends HTMLElement {
         }
 
         this.update();
-
     }
 
     update() {
@@ -43,9 +42,7 @@ export class TnTTabView extends HTMLElement {
             }
         });
 
-
         let self = this;
-
 
         this.querySelectorAll('div > span > button').forEach((button, index) => {
             TnTComponents.enableRipple(button);
@@ -55,7 +52,6 @@ export class TnTTabView extends HTMLElement {
                     const headerButtons = self.querySelectorAll(":scope > div > span > button");
 
                     if (index >= 0 && self.tabViews.length > index) {
-
                         self.tabViews[self.activeIndex].style.display = 'none';
 
                         const parentClasses = e.target.parentNode.className.match(regexSearch);
@@ -152,10 +148,7 @@ export class TnTTabView extends HTMLElement {
     //        });
     //    }
 
-
-
-
-    //    
+    //
 
     //    if (headerArea) {
     //        this.mutationObserver.observe(headerArea, { childList: true, attributes: true, attributeFilter: ['name'] });
