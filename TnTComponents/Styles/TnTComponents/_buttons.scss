@@ -47,6 +47,7 @@ tnt-button {
         right: 2rem;
         bottom: 2rem;
         z-index: 1000;
+        transition: right ease-in-out 200ms;
 
         @extend .tnt-elevation-1;
     }
@@ -55,5 +56,11 @@ tnt-button {
 tnt-layout:has(tnt-footer) {
     .tnt-fab {
         bottom: calc(2rem + $tnt-footer-height);
+    }
+}
+
+body:has(div.tnt-snackbar-container) {
+    tnt-button.tnt-fab {
+        right: 24rem;
     }
 }
