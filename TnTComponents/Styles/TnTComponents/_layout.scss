@@ -31,7 +31,7 @@
             cursor: pointer;
             overflow: hidden;
             display: block;
-            width:100%;
+            width: 100%;
 
             & > span {
                 display: inline-flex;
@@ -158,6 +158,12 @@
         }
     }
 
+    tnt-side-nav-toggle {
+        display: block;
+        aspect-ratio: 1/1;
+        cursor: pointer;
+    }
+
     @media #{$medium-and-up} {
         &:has(tnt-side-nav) {
             tnt-header, tnt-footer, tnt-body {
@@ -165,11 +171,27 @@
                 width: calc(100% - $tnt-side-nav-width);
             }
         }
+
+        tnt-side-nav-toggle {
+            display: none;
+        }
     }
 
     @media #{$small-and-down} {
         tnt-side-nav {
             transform: translateX(-105%);
+
+            &.expanded {
+                transform: translateX(0%);
+            }
+        }
+
+        tnt-header {
+            transition: 200ms ease-in-out;
+
+            &.expanded {
+                transform: translateX($tnt-side-nav-width);
+            }
         }
     }
 }
