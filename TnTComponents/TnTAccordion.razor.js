@@ -11,11 +11,11 @@ class TnTAccordion extends HTMLElement {
             this.header.addEventListener('click', (e) => {
                 if (this.content.clientHeight) {
                     this.content.style.height = 0;
-                    this.content.classList.remove('visible');
+                    this.content.classList.remove('tnt-visible');
                 }
                 else {
                     this.content.style.height = `${this.content.firstChild.clientHeight}px`;
-                    this.content.classList.add('visible');
+                    this.content.classList.add('tnt-visible');
                 }
             });
         }

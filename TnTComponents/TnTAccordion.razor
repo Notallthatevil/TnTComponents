@@ -1,11 +1,12 @@
 ﻿@using TnTComponents.Core
 @inherits TnTComponentBase
 
-<tnt-accordion @attributes="AdditionalAttributes"   style="@Style">
-    <h3 class="@TnTAccordionHeaderClass">
+<tnt-accordion @attributes="AdditionalAttributes" style="@Style" @ref="Element">
+    <h3 class="@Class" >
         @Title
+        @MaterialIcon.ArrowDropDown.Render()
     </h3>
-    <div class="@TnTAccordionContentClass">
+    <div class="@(CssBuilder.Create().AddBackgroundColor(BodyBackgroundColor).AddForegroundColor(BodyTextColor).Build())">
         <div>
             @ChildContent
         </div>
