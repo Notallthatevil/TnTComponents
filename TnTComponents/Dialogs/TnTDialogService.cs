@@ -1,51 +1,43 @@
-﻿using TnTComponents.Dialogs;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
-namespace TnTComponents.Services;
+namespace TnTComponents.Dialogs;
 
-public class TnTDialogService : IDisposable {
+public class TnTDialogService
+{
 
-    internal delegate Task OnCloseCallback(Dialog dialog);
+    public delegate Task OnCloseCallback(ITnTDialog dialog);
 
-    internal delegate Task OnOpenCallback(Dialog dialog);
+    public delegate Task OnOpenCallback(ITnTDialog dialog);
 
-    internal event OnCloseCallback? OnClose;
+    public event OnCloseCallback? OnClose;
 
-    internal event OnOpenCallback? OnOpen;
+    public event OnOpenCallback? OnOpen;
 
-    public TnTDialogService() {
+    internal DotNetObjectReference<TnTDialogService> Reference { get; private set; }
+
+    public TnTDialogService()
+    {
+        Reference = DotNetObjectReference.Create(this);
     }
 
-    public Task CloseAsync(Dialog dialog) {
-        OnClose?.Invoke(dialog);
-        return Task.CompletedTask;
+    private class DialogImpl : ITnTDialog {
+        public TnTDialogOptions? Options { get; init; }
+        public IReadOnlyDictionary<string, object>? Parameters { get; init; }
+        public Type Type { get; init; }
     }
 
-    public void Dispose() {
-    }
-
-    public Task OpenAsync<T>(string title, IReadOnlyDictionary<string, object>? parameters = null, DialogOptions? options = null) {
-        if (OnOpen is not null) {
-            var dialog = new Dialog() {
-                Type = typeof(T),
-                Title = title,
-                Parameters = parameters,
-                Options = options ?? new DialogOptions()
-            };
-            OnOpen.Invoke(dialog);
+    public async Task OpenAsync<TComponent>(TnTDialogOptions? options = null, IReadOnlyDictionary<string, object>? parameters = null) where TComponent : IComponent =>
+        await (OnOpen?.Invoke(new DialogImpl()
+        {
+            Options = options ?? new(),
+            Parameters = parameters,
+            Type = typeof(TComponent)
         }
-        return Task.CompletedTask;
-    }
+        ) ?? Task.CompletedTask);
 
-    //private DotNetObjectReference<DialogService> reference;
-    //internal DotNetObjectReference<DialogService> Reference {
-    //    get {
-    //        if (reference == null) {
-    //            reference = DotNetObjectReference.Create(this);
-    //        }
-    //
-    //        return reference;
-    //    }
-    //}
+    internal async Task CloseAsync(ITnTDialog dialog) => await (OnClose?.Invoke(dialog) ?? Task.CompletedTask);
+
 
     /// <summary>
     /// Gets or sets the URI helper.

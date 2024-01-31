@@ -1,0 +1,19 @@
+﻿@using LiveTest.Client.Pages
+@using TnTComponents.Dialogs
+<h3>DialogComponent</h3>
+
+
+<TnTComponents.TnTButton OnClick="OpenDialog">
+    Open
+</TnTComponents.TnTButton>
+
+@code {
+    [Inject]
+    private TnTDialogService _service { get; set; } = default!;
+
+    private async Task OpenDialog() {
+        await _service.OpenAsync<Accordion>(options: new() {
+                Title = "My Title"
+            });
+    }
+}

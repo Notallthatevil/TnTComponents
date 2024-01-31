@@ -1,4 +1,4 @@
-﻿using TnTComponents.Services;
+﻿using TnTComponents.Dialogs;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

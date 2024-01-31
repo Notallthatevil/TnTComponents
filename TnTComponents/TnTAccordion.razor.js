@@ -4,6 +4,19 @@ class TnTAccordion extends HTMLElement {
     }
 
     connectedCallback() {
+        this.update();
+    }
+
+    disconnectedCallback() {
+    }
+
+    adoptedCallback() {
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+    }
+
+    update() {
         this.header = this.firstChild;
         this.content = this.lastChild;
 
@@ -20,19 +33,19 @@ class TnTAccordion extends HTMLElement {
             });
         }
     }
-
-    disconnectedCallback() {
-    }
-
-    adoptedCallback() {
-    }
-
-    attributeChangedCallback(name, oldValue, newValue) {
-    }
 }
 
-export function onLoad() {
+export function onLoad(element, dotnNetRef) {
     if (!customElements.get('tnt-accordion')) {
         customElements.define('tnt-accordion', TnTAccordion);
     }
+}
+
+export function onUpdate(element, dotnNetRef) {
+    if (element && dotnNetRef) {
+        element.update();
+    }
+}
+
+export function onDispose(element, dotnNetRef) {
 }

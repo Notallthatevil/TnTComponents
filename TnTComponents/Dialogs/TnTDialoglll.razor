@@ -1,0 +1,8 @@
+﻿@namespace TnTComponents
+@*@using TnTComponents.Dialogs
+
+@foreach (var dialog in _dialogs) {
+    <div class="@dialog.Options.GetClass()" style="@dialog.Options.Style">
+        <DialogContainer />
+    </div>
+}*@

@@ -3,6 +3,7 @@ using LiveTest.Components;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddLogging();
 
+builder.Services.AddTnTServices();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()

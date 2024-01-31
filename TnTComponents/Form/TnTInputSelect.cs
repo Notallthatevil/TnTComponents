@@ -5,24 +5,23 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace TnTComponents;
+
 public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
-    public override InputType Type { get; }
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
+    public override InputType Type { get; }
     private bool _multiple;
 
     public TnTInputSelect() {
         _multiple = typeof(TInputType).IsArray;
     }
 
-
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "span");
         builder.AddAttribute(10, "class", Class);
         {
-
             {
                 if (StartIcon is not null) {
                     StartIcon.AdditionalClass = "tnt-start";
@@ -65,7 +64,8 @@ public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TInputType result, [NotNullWhen(false)] out string? validationErrorMessage) {
         try {
-            // We special-case bool values because BindConverter reserves bool conversion for conditional attributes.
+            // We special-case bool values because BindConverter reserves bool conversion for
+            // conditional attributes.
             if (typeof(TInputType) == typeof(bool)) {
                 if (TryConvertToBool(value, out result)) {
                     validationErrorMessage = null;
@@ -115,6 +115,5 @@ public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
     private async Task SetCurrentValueAsStringArray(string?[]? value) {
         CurrentValue = BindConverter.TryConvertTo<TInputType>(value, CultureInfo.CurrentCulture, out var result) ? result : default;
         await BindAfter.InvokeAsync(CurrentValue);
-
     }
 }

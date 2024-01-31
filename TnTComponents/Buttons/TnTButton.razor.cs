@@ -40,6 +40,8 @@ public partial class TnTButton {
 
     protected override bool RunIsolatedJsScript => true;
 
+    protected override string? JsModulePath => "./_content/TnTComponents/Buttons/TnTButton.razor.js";
+
     public override string? Class => CssBuilder.Create()
         .AddClass(AdditionalAttributes)
         .AddElevation(Elevation)
