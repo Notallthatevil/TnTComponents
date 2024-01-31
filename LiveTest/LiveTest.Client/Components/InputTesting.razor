@@ -4,6 +4,17 @@
 <TnTForm Model="@_model" Appearance="FormAppearance.Outlined">
     <DataAnnotationsValidator />
 
+    <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+        <TnTInputCheckbox @bind-Value="@_model.C" />
+    </TnTLabel>
+
+    <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+        <TnTInputText  @bind-Value="@_model.S"   />
+    </TnTLabel>
+
+    <TnTLabel Label="My Lable" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+        <TnTInputText Placeholder="MyPlacholder" @bind-Value="@_model.S" />
+    </TnTLabel>
 
     <TnTInputRadioGroup @bind-Value="_model.A" Appearance="FormAppearance.Filled" RadioGroupName="Group1" Direction="LayoutDirection.Vertical">
         @foreach (var a in Enum.GetValues<Test>()) {
@@ -43,6 +54,17 @@
 <TnTForm Model="@_model" Appearance="FormAppearance.Filled">
     <DataAnnotationsValidator />
 
+    <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+        <TnTInputCheckbox @bind-Value="@_model.C" />
+    </TnTLabel>
+
+    <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+        <TnTInputText  StartIcon="MaterialIcon.People" @bind-Value="@_model.S" />
+    </TnTLabel>
+
+    <TnTLabel Label="My Lable" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+        <TnTInputText Placeholder="MyPlacholder" @bind-Value="@_model.S" />
+    </TnTLabel>
 
     <TnTInputRadioGroup @bind-Value="_model.A" Appearance="FormAppearance.Filled" RadioGroupName="Group1" Direction="LayoutDirection.Vertical">
         @foreach (var a in Enum.GetValues<Test>()) {
@@ -88,6 +110,8 @@
 
     class Model {
         public Test? A { get; set; }
+        public string S{ get; set; }
+        public bool C{ get; set; }
     }
 
     enum Test {
