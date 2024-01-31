@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
 using TnTComponents.Core;
-using TnTComponents.Dialogs;
+using TnTComponents.Dialog;
 
 namespace TnTComponents;
 

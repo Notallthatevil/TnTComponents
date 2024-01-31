@@ -1,6 +1,6 @@
 ﻿using TnTComponents.Core;
 
-namespace TnTComponents.Dialogs;
+namespace TnTComponents.Dialog;
 
 public class TnTDialogOptions {
     public TnTBorderRadius? BorderRadius { get; init; } = new(3);

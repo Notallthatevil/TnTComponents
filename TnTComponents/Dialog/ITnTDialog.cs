@@ -1,4 +1,4 @@
-﻿namespace TnTComponents.Dialogs;
+﻿namespace TnTComponents.Dialog;
 
 public interface ITnTDialog {
     TnTDialogOptions Options { get; init; }
