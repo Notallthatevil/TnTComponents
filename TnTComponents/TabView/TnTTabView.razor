@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components.Sections
 @using TnTComponents.Core
 @inherits TnTComponentBase
+@namespace TnTComponents
 
 <tnt-tab-view @attributes=AdditionalAttributes class="@Class" style="@Style" @ref="Element">
     <CascadingValue Value="this" IsFixed="true">
@@ -30,5 +31,5 @@
         @ChildContent
     </CascadingValue>
 </tnt-tab-view>
-<TnTPageScript Src="./_content/TnTComponents/TnTTabView.razor.js" />
+<TnTPageScript Src="./_content/TnTComponents/TabView/TnTTabView.razor.js" />
 

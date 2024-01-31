@@ -7,7 +7,8 @@ using TnTComponents.Enum;
 
 namespace TnTComponents;
 
-public partial class TnTTabChild {
+public partial class TnTTabChild
+{
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
@@ -30,16 +31,19 @@ public partial class TnTTabChild {
 
     private string? _style;
 
-    protected override void OnInitialized() {
+    protected override void OnInitialized()
+    {
         base.OnInitialized();
-        if (_context is null) {
+        if (_context is null)
+        {
             throw new InvalidOperationException($"A {nameof(TnTTabChild)} must be a child of {nameof(TnTTabView)}");
         }
         _context.AddTabChild(this);
         _style = $"{Style}; display:none;";
     }
 
-    protected override void OnAfterRender(bool firstRender) {
+    protected override void OnAfterRender(bool firstRender)
+    {
         base.OnAfterRender(firstRender);
         _style = Style;
     }
