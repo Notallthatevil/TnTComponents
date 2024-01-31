@@ -1,4 +1,5 @@
-﻿@import 'TnTComponents/_colors.scss';
+﻿@import 'Common/_materialIcons.scss';
+@import 'TnTComponents/_colors.scss';
 @import 'TnTComponents/_measurements.scss';
 
 @import 'TnTComponents/_typeography.scss';
@@ -15,6 +16,7 @@
 @import 'TnTComponents/_tabview.scss';
 @import 'TnTComponents/_accordion.scss';
 @import 'TnTComponents/_dialog.scss';
+@import 'TnTComponents/_snackbar.scss';
 
 .tnt-components {
     font-family: 'Roboto', sans-serif;

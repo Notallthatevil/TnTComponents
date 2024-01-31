@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace TnTComponents;
+
 public enum TnTColor {
     Transparent,
     Black,
@@ -60,6 +61,7 @@ public enum TnTColor {
 }
 
 public static partial class TnTColorEnumExt {
+
     public static string ToCssClassName(this TnTColor tnTColorEnum) {
         return FindAllCapitalsExceptFirstLetter().Replace(tnTColorEnum.ToString(), @"-$1").ToLower();
     }
