@@ -39,7 +39,9 @@ public class TnTSnackbar : ComponentBase, IDisposable {
                 if (snackbar.ShowClose) {
                     builder.OpenComponent<TnTImageButton>(40);
                     builder.AddComponentParameter(50, "Icon", MaterialIcon.Close);
-                    builder.AddComponentParameter(60, "OnClickCallback", EventCallback.Factory.Create<MouseEventArgs>(this, async _ => await _service.CloseAsync(snackbar)));
+                    builder.AddComponentParameter(60, "OnClickCallback", EventCallback.Factory.Create<MouseEventArgs>(this, async _ => {
+                        await _service.CloseAsync(snackbar);
+                    }));
                     builder.CloseComponent();
                 }
 
@@ -69,7 +71,7 @@ public class TnTSnackbar : ComponentBase, IDisposable {
 
                         builder.OpenElement(120, "div");
                         builder.AddAttribute(130, "style", $"background-color:var(--tnt-color-{snackbar.TextColor.ToCssClassName()})");
-                           
+
                         //builder.OpenElement(140, "progress");
                         //builder.AddAttribute(150, "class", id);
                         //builder.AddAttribute(160, "max", snackbar.Timeout * 1000);
@@ -77,7 +79,7 @@ public class TnTSnackbar : ComponentBase, IDisposable {
                         var endTime = pair.Value.Add(new TimeSpan(0, 0, snackbar.Timeout + 1));
                         var currentTime = TimeOnly.FromDateTime(DateTime.UtcNow);
                         var elapsedTime = (currentTime - startTime).TotalMilliseconds;
-                        
+
                         if (currentTime >= endTime) {
                             _ = _service.CloseAsync(snackbar);
                         }
