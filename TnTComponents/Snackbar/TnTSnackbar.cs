@@ -14,7 +14,7 @@ public class TnTSnackbar : ComponentBase, IDisposable {
 
     private readonly ConcurrentDictionary<ITnTSnackbar, TimeOnly> _snackbars = [];
 
-    private readonly ConcurrentStack<ITnTSnackbar> _waitingSnackbars = [];
+    private readonly ConcurrentQueue<ITnTSnackbar> _waitingSnackbars = [];
 
     private Func<Task>? _incrementAction = null;
 
@@ -110,7 +110,7 @@ public class TnTSnackbar : ComponentBase, IDisposable {
         _snackbars.Remove(snackbar, out var _);
 
         if (_waitingSnackbars.Count != 0) {
-            if (_waitingSnackbars.TryPop(out var newSnackbar)) {
+            if (_waitingSnackbars.TryDequeue(out var newSnackbar)) {
                 AddReadySnackbar(newSnackbar);
                 Console.WriteLine($"Popping from stack. Count {_waitingSnackbars.Count}");
             }
@@ -126,7 +126,7 @@ public class TnTSnackbar : ComponentBase, IDisposable {
 
     private Task OnOpen(ITnTSnackbar snackbar) {
         if (_snackbars.Count >= 5) {
-            _waitingSnackbars.Push(snackbar);
+            _waitingSnackbars.Enqueue(snackbar);
             Console.WriteLine($"Pushing to stack. Count {_waitingSnackbars.Count}");
             return Task.CompletedTask;
         }
