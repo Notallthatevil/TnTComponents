@@ -29,7 +29,7 @@ public class TnTSnackbar : ComponentBase, IDisposable {
             builder.OpenElement(0, "div");
             builder.AddAttribute(10, "class", "tnt-components tnt-snackbar-container");
 
-            foreach (var pair in _snackbars) {
+            foreach (var pair in _snackbars.OrderBy(kv => kv.Value)) {
                 var snackbar = pair.Key;
                 builder.OpenElement(20, "div");
                 builder.AddAttribute(30, "class", snackbar.GetClass());
@@ -60,21 +60,9 @@ public class TnTSnackbar : ComponentBase, IDisposable {
 
                 {
                     if (snackbar.Timeout > 0) {
-                        var id = TnTComponentIdentifier.NewId();
-                        //var colorStr = $"var(--tnt-color-{snackbar.TextColor.ToCssClassName()})";
-                        //{
-                        //    builder.OpenElement(120, "style");
-                        //    //builder.AddContent(130, $"progress.{id} {{color:{colorStr};}}progress.{id}::-moz-progress-bar{{background:{colorStr};}}progress.{id}::-webkit-progress-value{{background:{colorStr};}}");
-                        //    builder.AddContent(130, );
-                        //    builder.CloseElement();
-                        //}
-
                         builder.OpenElement(120, "div");
                         builder.AddAttribute(130, "style", $"background-color:var(--tnt-color-{snackbar.TextColor.ToCssClassName()})");
 
-                        //builder.OpenElement(140, "progress");
-                        //builder.AddAttribute(150, "class", id);
-                        //builder.AddAttribute(160, "max", snackbar.Timeout * 1000);
                         var startTime = pair.Value;
                         var endTime = pair.Value.Add(new TimeSpan(0, 0, snackbar.Timeout + 1));
                         var currentTime = TimeOnly.FromDateTime(DateTime.UtcNow);
@@ -83,8 +71,6 @@ public class TnTSnackbar : ComponentBase, IDisposable {
                         if (currentTime >= endTime) {
                             _ = _service.CloseAsync(snackbar);
                         }
-                        //
-                        //builder.AddAttribute(170, "value", elapsedTime);
 
                         builder.CloseElement();
                     }
