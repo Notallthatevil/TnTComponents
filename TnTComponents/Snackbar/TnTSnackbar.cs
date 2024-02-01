@@ -34,7 +34,7 @@ public class TnTSnackbar : ComponentBase, IDisposable {
                 builder.OpenElement(20, "div");
                 builder.AddAttribute(30, "class", snackbar.GetClass());
                 builder.AddAttribute(45, "style", $"--timeout: {snackbar.Timeout}s;");
-                builder.SetKey(snackbar.Identifier);
+                builder.SetKey(snackbar);
 
                 if (snackbar.ShowClose) {
                     builder.OpenComponent<TnTImageButton>(40);

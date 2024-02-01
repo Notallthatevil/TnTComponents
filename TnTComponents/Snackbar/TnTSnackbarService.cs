@@ -54,6 +54,5 @@ public class TnTSnackbarService {
         public TnTColor TextColor { get; set; } = TnTColor.OnSurfaceVariant;
         public int Timeout { get; set; } = 10;
         public string Title { get; set; } = default!;
-        public string? Identifier { get; set; } = TnTComponentIdentifier.NewId();
     }
 }
