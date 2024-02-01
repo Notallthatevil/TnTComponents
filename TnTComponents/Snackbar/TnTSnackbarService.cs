@@ -32,16 +32,16 @@ public class TnTSnackbarService {
         }) ?? Task.CompletedTask);
 
     public async Task ShowErrorAsync(string title, string? message = null, int timeout = 10, bool showClose = true, TnTBorderRadius? borderRadius = null, int elevation = 2) =>
-        await ShowAsync(title, message, timeout, showClose, TnTColor.Error, TnTColor.ErrorContainer, borderRadius, elevation);
+        await ShowAsync(title, message, timeout, showClose, TnTColor.ErrorContainer, TnTColor.Error, borderRadius, elevation);
 
     public async Task ShowInfoAsync(string title, string? message = null, int timeout = 10, bool showClose = true, TnTBorderRadius? borderRadius = null, int elevation = 2) =>
-        await ShowAsync(title, message, timeout, showClose, TnTColor.Info, TnTColor.InfoContainer, borderRadius, elevation);
+        await ShowAsync(title, message, timeout, showClose, TnTColor.InfoContainer, TnTColor.Info, borderRadius, elevation);
 
     public async Task ShowSuccessAsync(string title, string? message = null, int timeout = 10, bool showClose = true, TnTBorderRadius? borderRadius = null, int elevation = 2) =>
-        await ShowAsync(title, message, timeout, showClose, TnTColor.Success, TnTColor.SuccessContainer, borderRadius, elevation);
+        await ShowAsync(title, message, timeout, showClose, TnTColor.SuccessContainer, TnTColor.Success, borderRadius, elevation);
 
     public async Task ShowWarningAsync(string title, string? message = null, int timeout = 10, bool showClose = true, TnTBorderRadius? borderRadius = null, int elevation = 2) =>
-        await ShowAsync(title, message, timeout, showClose, TnTColor.Warning, TnTColor.WarningContainer, borderRadius, elevation);
+        await ShowAsync(title, message, timeout, showClose, TnTColor.WarningContainer, TnTColor.Warning, borderRadius, elevation);
 
     internal async Task CloseAsync(ITnTSnackbar snackbar) => await (OnClose?.Invoke(snackbar) ?? Task.CompletedTask);
 
