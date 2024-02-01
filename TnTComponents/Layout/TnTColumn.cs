@@ -17,7 +17,7 @@ public class TnTColumn : ComponentBase, ITnTComponentBase {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public string? Class => CssBuilder.Create()
+    public string? Class => CssClassBuilder.Create()
                 .AddClass("tnt-col")
         .AddClass(GetGridClass())
         .Build();

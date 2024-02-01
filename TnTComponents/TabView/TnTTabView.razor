@@ -6,12 +6,12 @@
 <tnt-tab-view @attributes=AdditionalAttributes class="@Class" style="@Style" @ref="Element">
     <CascadingValue Value="this" IsFixed="true">
         <DeferRendering>
-            <div class="@(CssBuilder.Create().AddBackgroundColor(HeaderBackgroundColor).Build())">
-                <span class="@(CssBuilder.Create(string.Empty).AddForegroundColor(HeaderTextColor).Build())">
+            <div class="@(CssClassBuilder.Create().AddBackgroundColor(HeaderBackgroundColor).Build())">
+                <span class="@(CssClassBuilder.Create(string.Empty).AddForegroundColor(HeaderTextColor).Build())">
                     @foreach (var pair in _tabChildren.Select((child, index) => new { child, index })) {
                         var child = pair.child;
                         var index = pair.index;
-                        <button type="button" title="@child.Title" disabled="@child.Disabled" button-index="@index" class="@(CssBuilder.Create(string.Empty)
+                        <button type="button" title="@child.Title" disabled="@child.Disabled" button-index="@index" class="@(CssClassBuilder.Create(string.Empty)
                                                                                                                         .AddActionableBackgroundColor(!child.Disabled ? TnTColor.Transparent : null)
                                                                                                                         .AddBackgroundColor(child.Disabled ? TnTColor.Transparent : null)
                                                                                                                         .AddForegroundColor(HeaderTextColor)
@@ -25,7 +25,7 @@
                         </button>
                     }
                 </span>
-                <span class="@(CssBuilder.Create().AddBackgroundColor(ActiveIndicatorColor).Build())"></span>
+                <span class="@(CssClassBuilder.Create().AddBackgroundColor(ActiveIndicatorColor).Build())"></span>
             </div>
         </DeferRendering>
         @ChildContent

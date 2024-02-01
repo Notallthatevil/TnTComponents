@@ -24,7 +24,7 @@ public class TnTCard : ComponentBase {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public string? Class => CssBuilder.Create()
+    public string? Class => CssClassBuilder.Create()
         .AddFlexBox(Direction, AlignItems, JustifyContent, AlignContent, FlexBox)
         .AddBackgroundColor(MakeOutlined ? null : BackgroundColor)
         .AddOutlined(MakeOutlined)

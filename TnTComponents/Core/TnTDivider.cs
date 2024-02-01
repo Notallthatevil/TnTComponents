@@ -9,7 +9,7 @@ public class TnTDivider : ComponentBase {
     [Parameter(CaptureUnmatchedValues = true)]
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
-    public string? Class => CssBuilder.Create()
+    public string? Class => CssClassBuilder.Create()
         .AddBackgroundColor(Color)
         .Build();
 

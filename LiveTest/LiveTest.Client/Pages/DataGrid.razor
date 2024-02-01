@@ -3,29 +3,19 @@
 @using TnTComponents
 @using TnTComponents.Enum
 
-<TnTTabView>
-    <TnTTabChild Title="All Items">
-        <h3>
-            Static
-        </h3>
-        <DataGridComponent />
+@*
+<h3>
+    Static
+</h3>
+<DataGridComponent />
+<h3>
+    Interactive Server
+</h3>
+<DataGridComponent @rendermode="@RenderMode.InteractiveServer" />
+*@
+<h3>
+    Interactive Web Assembly
+</h3>
+<DataGridComponent @rendermode="@RenderMode.InteractiveWebAssembly" />
 
-        <h3>
-            Interactive Server
-        </h3>
-        <DataGridComponent @rendermode="@RenderMode.InteractiveServer" />
 
-        <h3>
-            Interactive Web Assembly
-        </h3>
-        <DataGridComponent @rendermode="@RenderMode.InteractiveWebAssembly" />
-
-    </TnTTabChild>
-    <TnTTabChild Title="Paginated" Active="true">
-        <h3>
-            Static
-        </h3>
-        <DataGridComponent />
-
-    </TnTTabChild>
-</TnTTabView>

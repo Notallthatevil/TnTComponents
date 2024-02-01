@@ -12,7 +12,7 @@ public class TnTSnackbarOptions {
     public int Timeout { get; set; } = 30;
     public string Title { get; set; } = default!;
 
-    internal string GetClass() => CssBuilder.Create()
+    internal string GetClass() => CssClassBuilder.Create()
         .AddClass("tnt-snackbar")
         .AddBackgroundColor(BackgroundColor)
         .AddForegroundColor(TextColor)

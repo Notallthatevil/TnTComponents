@@ -19,7 +19,7 @@ public partial class TnTSideNavToggle {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public override string? Class => CssBuilder.Create()
+    public override string? Class => CssClassBuilder.Create()
         .AddActionableBackgroundColor(BackgroundColor)
         .AddForegroundColor(TextColor)
         .AddRipple(Ripple)

@@ -963,6 +963,6 @@ public partial class MaterialIcon : TnTIcon {
             _ => throw new InvalidOperationException($"Must provide a valid value for {nameof(Size)}. The value {Size} is invalid!")
         };
 
-        return CssBuilder.Create($"tnt-icon {AdditionalClass} " + appearanceClass + sizeClass).AddForegroundColor(Color).Build();
+        return CssClassBuilder.Create($"tnt-icon {AdditionalClass} " + appearanceClass + sizeClass).AddForegroundColor(Color).Build();
     }
 }

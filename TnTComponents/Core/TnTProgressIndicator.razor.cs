@@ -13,7 +13,7 @@ public partial class TnTProgressIndicator {
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    public override string? Class => CssBuilder.Create()
+    public override string? Class => CssClassBuilder.Create()
         .SetAlternative(Appearance == ProgressAppearance.Linear)
         .Build();
 

@@ -15,7 +15,7 @@ public interface ITnTSnackbar {
 
 internal static class ITnTSnackbarExt {
 
-    internal static string GetClass(this ITnTSnackbar snackbar) => CssBuilder.Create()
+    internal static string GetClass(this ITnTSnackbar snackbar) => CssClassBuilder.Create()
         .AddClass("tnt-snackbar")
         .AddBackgroundColor(snackbar.BackgroundColor)
         .AddForegroundColor(snackbar.TextColor)

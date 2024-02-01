@@ -15,7 +15,7 @@ public class TnTRow : ComponentBase, ITnTComponentBase {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public string? Class => CssBuilder.Create()
+    public string? Class => CssClassBuilder.Create()
                 .AddClass("tnt-row")
         .Build();
 

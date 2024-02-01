@@ -7,7 +7,7 @@
            class="@Class"
            style="@Style">
         @ChildContent
-        <span class="@(CssBuilder.Create("tnt-label").AddBackgroundColor((ParentFormAppearance ?? Appearance) == FormAppearance.Outlined ? BackgroundColor : null).Build())">
+        <span class="@(CssClassBuilder.Create("tnt-label").AddBackgroundColor((ParentFormAppearance ?? Appearance) == FormAppearance.Outlined ? BackgroundColor : null).Build())">
             @Label
         </span>
     </label>

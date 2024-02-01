@@ -9,7 +9,7 @@ public partial class TnTTabChild {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public override string? Class => CssBuilder.Create()
+    public override string? Class => CssClassBuilder.Create()
         .SetDisabled(Disabled)
         .Build();
 

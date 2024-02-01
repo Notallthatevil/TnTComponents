@@ -11,7 +11,7 @@ public partial class TnTTabView {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public override string? Class => CssBuilder.Create()
+    public override string? Class => CssClassBuilder.Create()
         .SetAlternative(SecondaryTabView)
         .Build();
 

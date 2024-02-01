@@ -1,0 +1,82 @@
+﻿div.tnt-components.tnt-datagrid {
+    overflow-x: auto;
+    margin: 0.5rem;
+
+    table {
+        min-width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+        table-layout: fixed;
+
+        thead {
+            position: sticky;
+            top: 0;
+            background-color: $tnt-color-surface-container-highest;
+            box-shadow: 0px 1px $tnt-color-outline;
+
+            tr {
+
+                th {
+                    padding: 0.5rem 2rem;
+                    margin: 0;
+                    position: relative;
+                    user-select: none;
+                    min-width: 1rem;
+                    text-align: center;
+                    @extend .tnt-title-medium;
+                }
+            }
+        }
+
+        tbody {
+            tr {
+                background-color: $tnt-color-surface;
+
+                td {
+                    padding: 0.5rem;
+                    min-width: 1rem;
+                    white-space: nowrap;
+                    @extend .tnt-body-medium;
+                }
+            }
+        }
+    }
+
+    &.tnt-compact {
+        table {
+            width: 100%;
+
+            tr {
+                td {
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: clip;
+                }
+
+                &:hover {
+                    td {
+                        white-space: revert;
+                        text-overflow: revert;
+                    }
+                }
+            }
+        }
+    }
+
+    &.tnt-alternative {
+        tbody {
+            tr:nth-child(even) {
+                background-color: $tnt-color-surface-variant;
+            }
+        }
+    }
+
+    &.tnt-interactive {
+        tr:has(td) {
+            &:hover {
+                cursor: pointer;
+                background-color: color-mix(in srgb, $tnt-color-on-surface 25%, transparent);
+            }
+        }
+    }
+}

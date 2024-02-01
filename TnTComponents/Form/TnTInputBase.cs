@@ -22,7 +22,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     [Parameter]
     public bool BindOnInput { get; set; }
 
-    public virtual string Class => CssBuilder.Create()
+    public virtual string Class => CssClassBuilder.Create()
         .AddClass(CssClass)
         .AddClass("tnt-input")
         .AddOutlined((ParentFormAppearance ?? Appearance) == FormAppearance.Outlined)

@@ -21,7 +21,7 @@ public partial class TnTNavLink {
     [Parameter]
     public TnTColor? BackgroundColor { get; set; } = TnTColor.Transparent;
 
-    public string? Class => CssBuilder.Create()
+    public string? Class => CssClassBuilder.Create()
                 .AddClass(CssClass)
         .SetDisabled(Disabled)
         .AddRipple(Ripple)

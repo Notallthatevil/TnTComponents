@@ -16,7 +16,7 @@ public class TnTDialogOptions {
     public TnTColor TextColor { get; init; } = TnTColor.OnSurface;
     public string? Title { get; init; }
 
-    internal string GetDialogClass() => CssBuilder.Create()
+    internal string GetDialogClass() => CssClassBuilder.Create()
         .AddClass("tnt-dialog-container")
         .AddBorderRadius(BorderRadius)
         .AddBackgroundColor(DialogBackgroundColor)
@@ -24,7 +24,7 @@ public class TnTDialogOptions {
         .AddElevation(Elevation)
         .Build();
 
-    internal string GetOverlayClass() => CssBuilder.Create()
+    internal string GetOverlayClass() => CssClassBuilder.Create()
         .AddClass("tnt-dialog")
         .Build();
 }

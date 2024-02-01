@@ -1,0 +1,36 @@
+﻿@namespace TnTComponents
+@using TnTComponents.Core
+@using TnTComponents.Grid
+@typeparam TItem
+
+<div @attributes="AdditionalAttributes" class="@Class" style="@GetStyle()">
+    <table>
+        <CascadingValue Value="this" IsFixed="true">
+            @ChildContent
+            <DeferRendering>
+                <thead>
+                    <tr>
+                        @foreach (var col in _columns) {
+                            <th @key="col" scope="col">
+                                @col.Title
+                            </th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Items) {
+                        <tr @key="item" @onclick="@(() => RowClickedCallback.InvokeAsync(item))">
+                            @foreach (var col in _columns) {
+                                <td>
+                                    @{
+                                        col.RenderCellContent(__builder3, item);
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </DeferRendering>
+        </CascadingValue>
+    </table>
+</div>

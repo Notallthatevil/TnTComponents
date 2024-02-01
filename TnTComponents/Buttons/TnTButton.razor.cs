@@ -16,7 +16,7 @@ public partial class TnTButton {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public override string? Class => CssBuilder.Create()
+    public override string? Class => CssClassBuilder.Create()
         .AddClass(AdditionalAttributes)
         .AddElevation(Elevation)
         .AddActionableBackgroundColor(BackgroundColor)
@@ -54,7 +54,7 @@ public partial class TnTButton {
 
 internal static class TnTButtonCssClassExt {
 
-    public static CssBuilder AddButtonAppearance(this CssBuilder builder, ButtonAppearance buttonAppearance) {
+    public static CssClassBuilder AddButtonAppearance(this CssClassBuilder builder, ButtonAppearance buttonAppearance) {
         return builder.AddOutlined(buttonAppearance == ButtonAppearance.Outlined)
             .AddNoBackground(buttonAppearance == ButtonAppearance.Text);
     }

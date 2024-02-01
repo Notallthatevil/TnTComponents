@@ -7,7 +7,7 @@
         @Title
         @MaterialIcon.ArrowDropDown.Render()
     </h3>
-    <div class="@(CssBuilder.Create().AddBackgroundColor(BodyBackgroundColor).AddForegroundColor(BodyTextColor).Build())">
+    <div class="@(CssClassBuilder.Create().AddBackgroundColor(BodyBackgroundColor).AddForegroundColor(BodyTextColor).Build())">
         <div>
             @ChildContent
         </div>
