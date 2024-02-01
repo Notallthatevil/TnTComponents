@@ -6,7 +6,7 @@
 
     & > div.tnt-snackbar {
         min-height: 4rem;
-        margin: 0.25rem 0;
+        margin: 0.5rem 0;
         position: relative;
         animation: snackbarSlideIn 200ms ease-in-out, snackbarSlideOut 200ms ease-in-out var(--timeout) forwards;
         padding-bottom: 0.25rem;
