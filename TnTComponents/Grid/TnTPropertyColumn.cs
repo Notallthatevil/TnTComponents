@@ -45,4 +45,13 @@ public partial class TnTPropertyColumn<TItem, TProperty> : TnTColumnBase<TItem> 
     public override void RenderCellContent(RenderTreeBuilder builder, TItem item) {
         builder.AddContent(0, _cellValueFunc(item));
     }
+
+    public override IOrderedQueryable<TItem> SortOn(IQueryable<TItem> items, bool descending) {
+        if (descending) {
+            return items.OrderByDescending(Property);
+        }
+        else {
+            return items.OrderBy(Property);
+        }
+    }
 }

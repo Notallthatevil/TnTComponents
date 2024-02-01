@@ -8,7 +8,7 @@ namespace TnTComponents;
 [CascadingTypeParameter(nameof(TItem))]
 public partial class TnTDataGrid<TItem> {
     [Parameter]
-    public IEnumerable<TItem> Items { get; set; } = default!;
+    public IQueryable<TItem> Items { get; set; } = default!;
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
@@ -30,6 +30,9 @@ public partial class TnTDataGrid<TItem> {
 
     [Parameter]
     public TnTBorderRadius? BorderRadius { get; set; } = new(2);
+
+    private TnTColumnBase<TItem>? _lastSortColumn;
+    private bool _descending = true;
 
     public string Class => CssClassBuilder.Create()
         .AddClass("tnt-datagrid")
@@ -68,5 +71,17 @@ public partial class TnTDataGrid<TItem> {
             .Build();
     }
 
+    private async Task SortOn(TnTColumnBase<TItem> column) {
+        if (_lastSortColumn == column) {
+            _descending = !_descending;
+        }
+        else {
+            _lastSortColumn = column;
+            _descending = false;
+        }
+    }
 
+    private IQueryable<TItem> GetSorted() {
+        return _lastSortColumn?.SortOn(Items, _descending) ?? Items;
+    }
 }

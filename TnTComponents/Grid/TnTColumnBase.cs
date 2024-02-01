@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.QuickGrid;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,6 +29,9 @@ public abstract class TnTColumnBase<TItem> : ComponentBase, IDisposable {
         GC.SuppressFinalize(this);
     }
 
+    public abstract IOrderedQueryable<TItem> SortOn(IQueryable<TItem> items, bool descending);
+
+    public virtual void RenderHeaderContent(RenderTreeBuilder builder) => builder.AddContent(0, Title);
     public abstract void RenderCellContent(RenderTreeBuilder builder, TItem item);
 
 }

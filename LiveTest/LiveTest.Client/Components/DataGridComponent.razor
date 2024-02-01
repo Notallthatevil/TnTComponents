@@ -3,9 +3,17 @@
 @using TnTComponents.Snackbar
 
 <TnTDataGrid Items="@Items" TItem="DataGridItem" RowClickedCallback="RowClicked" Appearance="DataGridAppearance.Stripped | DataGridAppearance.Compact">
-    <TnTPropertyColumn Property="@(x => x.Column1)" />
-    <TnTPropertyColumn Property="@(x => x.Column2)" />
+    <TnTPropertyColumn Property="@(x => x.Column1)" Sortable="true" />
+    <TnTPropertyColumn Property="@(x => x.Column2)" Sortable="true" />
     <TnTPropertyColumn Property="@(x => x.Column3)" Format="MM/yyyy" />
+    <TnTTemplateColumn>
+        <RowTemplate>
+            <TnTButton OnClick="() => ItemClicked(context)" Appearance="ButtonAppearance.Text" StopPropagation="true">
+                @MaterialIcon.Edit.Render()
+                Edit
+            </TnTButton>
+        </RowTemplate>
+    </TnTTemplateColumn>
 </TnTDataGrid>
 
 
@@ -36,7 +44,11 @@
     }
 
     private async Task RowClicked(DataGridItem item) {
-        await _service.ShowAsync(item.Column1.ToString());
+        await _service.ShowAsync("Row clicked", item.Column1.ToString());
+    }
+
+    private async Task ItemClicked(DataGridItem item) {
+        await _service.ShowAsync("Item clicked", item.Column2);
     }
 
     public class DataGridItem {

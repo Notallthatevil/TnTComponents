@@ -43,6 +43,9 @@ public partial class TnTButton {
     [Parameter]
     public ButtonType Type { get; set; }
 
+    [Parameter]
+    public bool StopPropagation { get; set; }
+
     protected override string? JsModulePath => "./_content/TnTComponents/Buttons/TnTButton.razor.js";
     protected override bool RunIsolatedJsScript => true;
 

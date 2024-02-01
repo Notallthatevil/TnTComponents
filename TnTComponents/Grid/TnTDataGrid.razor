@@ -11,14 +11,37 @@
                 <thead>
                     <tr>
                         @foreach (var col in _columns) {
-                            <th @key="col" scope="col">
-                                @col.Title
-                            </th>
+                            if (col.Sortable) {
+                                var sortedOn = _lastSortColumn == col;
+                                <th @key="col"
+                                    scope="col"
+                                    class="@(CssClassBuilder.Create()
+                                        .AddClass("tnt-sortable", col.Sortable)
+                                        .AddClass("tnt-sorted-asc", sortedOn && !_descending)
+                                        .AddClass("tnt-sorted-desc", sortedOn && _descending)
+                                        .Build())"
+                                    @onclick="@(() => SortOn(col))">
+                                    @{
+                                        col.RenderHeaderContent(__builder3);
+                                        @if (sortedOn) {
+                                            @MaterialIcon.ArrowDropDown.Render()
+                                        }
+                                    }
+                                    </th>
+                            }
+                            else {
+                                <th @key="col" scope="col" class="@(CssClassBuilder.Create().Build())">
+                                    @{
+                                        col.RenderHeaderContent(__builder3);
+                                    }
+                                </th>
+                            }
+
                         }
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Items) {
+                    @foreach (var item in GetSorted()) {
                         <tr @key="item" @onclick="@(() => RowClickedCallback.InvokeAsync(item))">
                             @foreach (var col in _columns) {
                                 <td>

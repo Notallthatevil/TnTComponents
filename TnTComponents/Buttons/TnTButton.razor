@@ -9,7 +9,8 @@
         type="@Type.ToHtmlType()"
         disabled="@Disabled"
         autofocus="@AutoFocus"
-        @onclick="OnClick">
+        @onclick="OnClick"
+        @onclick:stopPropagation="StopPropagation">
     @ChildContent
 </tnt-button>
 
