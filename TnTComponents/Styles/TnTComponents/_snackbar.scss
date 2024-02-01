@@ -11,6 +11,10 @@
         animation: snackbarSlideIn 200ms ease-in-out, snackbarSlideOut 200ms ease-in-out var(--timeout) forwards;
         padding-bottom: 0.25rem;
 
+        &.slide-out {
+            animation: snackbarSlideOut 200ms ease-in-out forwards;
+        }
+
         &:has( > tnt-button) {
             padding-top: 1rem;
         }
