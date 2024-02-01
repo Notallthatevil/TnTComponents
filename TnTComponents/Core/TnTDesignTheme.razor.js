@@ -11,12 +11,12 @@ export class TnTDesignTheme extends HTMLElement {
             const attr = attributes[i];
             if (isDark === 'system') {
                 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                    isDark = true;
+                    isDark = 'true';
                 }
             }
             if (!isDark && attr.name.includes('dark')) {
                 continue;
-            } else if (isDark != undefined && isDark != null && isDark === true && attr.name.includes('light')) {
+            } else if (isDark != undefined && isDark != null && isDark === 'true' && attr.name.includes('light')) {
                 continue;
             }
 
@@ -31,7 +31,6 @@ export class TnTDesignTheme extends HTMLElement {
         rules += '}';
 
         css.insertRule(rules);
-
         document.adoptedStyleSheets = [css];
     }
 }
