@@ -11,6 +11,7 @@ public interface ITnTSnackbar {
     TnTColor TextColor { get; set; }
     int Timeout { get; set; }
     string Title { get; set; }
+    string? Identifier { get; set; }
 }
 
 internal static class ITnTSnackbarExt {
