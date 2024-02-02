@@ -1,4 +1,5 @@
 ﻿@namespace TnTComponents
+@using Microsoft.AspNetCore.Components.Web.Virtualization
 @using TnTComponents.Core
 @using TnTComponents.Grid
 @typeparam TItem
@@ -27,7 +28,7 @@
                                             @MaterialIcon.ArrowDropDown.Render()
                                         }
                                     }
-                                    </th>
+                                </th>
                             }
                             else {
                                 <th @key="col" scope="col" class="@(CssClassBuilder.Create().Build())">
@@ -41,6 +42,20 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @if (ItemsProvider is not null) {
+                        <Virtualize ItemsProvider="@ItemsProvider">
+                            <tr @key="context" @onclick="@(() => RowClickedCallback.InvokeAsync(context))">
+                                @foreach (var col in _columns) {
+                                    <td>
+                                        @{
+                                            col.RenderCellContent(__builder4, context);
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                        </Virtualize>
+                    }
+
                     @foreach (var item in GetSorted()) {
                         <tr @key="item" @onclick="@(() => RowClickedCallback.InvokeAsync(item))">
                             @foreach (var col in _columns) {

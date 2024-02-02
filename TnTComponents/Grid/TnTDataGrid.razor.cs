@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.Web.Virtualization;
 using TnTComponents.Core;
 using TnTComponents.Grid;
 
@@ -9,6 +10,9 @@ namespace TnTComponents;
 public partial class TnTDataGrid<TItem> {
     [Parameter]
     public IQueryable<TItem> Items { get; set; } = default!;
+
+    [Parameter]
+    public ItemsProviderDelegate<TItem>? ItemsProvider { get; set; }
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
