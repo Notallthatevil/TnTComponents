@@ -15,11 +15,11 @@
             animation: snackbarSlideOut 200ms ease-in-out forwards;
         }
 
-        &:has( > tnt-button) {
+        &:has( > button[is=tnt-button]) {
             padding-top: 1rem;
         }
 
-        & > tnt-button {
+        & > button[is=tnt-button] {
             margin: 0.25rem 0.25rem 0 0;
             padding: 0;
             color: inherit;
