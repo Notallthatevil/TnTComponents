@@ -33,7 +33,6 @@ public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
                     builder.AddContent(20, StartIcon.Render());
                 }
             }
-
             {
                 builder.OpenElement(100, "select");
                 builder.AddMultipleAttributes(110, AdditionalAttributes);
