@@ -1,6 +1,6 @@
 export function onLoad(element, dotNetObjRef) {
     if (!customElements.get('tnt-button')) {
-        customElements.define('tnt-button', class extends HTMLElement {
+        customElements.define('tnt-button', class extends HTMLButtonElement {
             static observedAttributes = [TnTComponents.customAttribute];
 
             // We use attributeChangedCallback instead of connectedCallback

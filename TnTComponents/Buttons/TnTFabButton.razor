@@ -1,15 +1,16 @@
 ﻿@namespace TnTComponents
 @inherits TnTComponents.Core.TnTComponentBase
 
-<tnt-button @attributes="AdditionalAttributes"
-            class="@CssClass"
-            style="@CssStyle"
-            name="@Name"
-            type="@Type.ToHtmlType()"
-            disabled="@Disabled"
-            autofocus="@AutoFocus"
-            @onclick="OnClick">
+<button is="tnt-button"
+    @attributes="AdditionalAttributes"
+    class="@CssClass"
+    style="@CssStyle"
+    name="@Name"
+    type="@Type.ToHtmlType()"
+    disabled="@Disabled"
+    autofocus="@AutoFocus"
+    @onclick="OnClick">
     @ChildContent
-</tnt-button>
+</button>
 
 <TnTPageScript Src="./_content/TnTComponents/Buttons/TnTButton.razor.js" />

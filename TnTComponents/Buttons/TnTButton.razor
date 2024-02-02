@@ -2,7 +2,8 @@
 @using TnTComponents.Core
 @inherits TnTComponentBase
 
-<tnt-button @attributes="AdditionalAttributes"
+<button is="tnt-button"
+        @attributes="AdditionalAttributes"
         class="@CssClass"
         style="@CssStyle"
         name="@Name"
@@ -12,6 +13,6 @@
         @onclick="OnClick"
         @onclick:stopPropagation="StopPropagation">
     @ChildContent
-</tnt-button>
+</button>
 
 <TnTPageScript Src="@JsModulePath" />
