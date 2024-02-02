@@ -6,7 +6,7 @@ using TnTComponents.Core;
 
 namespace TnTComponents;
 
-public class TnTColumn : ComponentBase, ITnTComponentBase {
+public class TnTColumn : ComponentBase, ITnTComponentBase, ITnTFlexBox {
 
     [Parameter(CaptureUnmatchedValues = true)]
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
@@ -17,9 +17,10 @@ public class TnTColumn : ComponentBase, ITnTComponentBase {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public string? Class => CssClassBuilder.Create()
-                .AddClass("tnt-col")
+    public string? CssClass => CssClassBuilder.Create()
+        .AddClass("tnt-col")
         .AddClass(GetGridClass())
+        .AddFlexBox(this)
         .Build();
 
     [Parameter]
@@ -67,7 +68,7 @@ public class TnTColumn : ComponentBase, ITnTComponentBase {
     public int SPush { get; set; }
 
     [Parameter]
-    public string? Style { get; set; }
+    public string? CssStyle { get; set; }
 
     [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Size))]
     public int XL { get; set; }
@@ -80,6 +81,14 @@ public class TnTColumn : ComponentBase, ITnTComponentBase {
 
     [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Push))]
     public int XLPush { get; set; }
+    [Parameter]
+    public LayoutDirection? Direction { get; set; }
+    [Parameter]
+    public JustifyContent? JustifyContent { get; set; }
+    [Parameter]
+    public AlignItems? AlignItems { get; set; }
+    [Parameter]
+    public AlignContent? AlignContent { get; set; }
 
     private static readonly IReadOnlyDictionary<PropertyInfo, ColSizeAttribute> _sizeValues = GetSizeProperties();
 
@@ -88,8 +97,8 @@ public class TnTColumn : ComponentBase, ITnTComponentBase {
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "div");
         builder.AddMultipleAttributes(10, AdditionalAttributes);
-        builder.AddAttribute(20, "class", Class);
-        builder.AddAttribute(30, "style", Style);
+        builder.AddAttribute(20, "class", CssClass);
+        builder.AddAttribute(30, "style", CssStyle);
         builder.AddContent(40, ChildContent);
         builder.CloseElement();
     }

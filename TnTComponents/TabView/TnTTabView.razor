@@ -3,7 +3,7 @@
 @inherits TnTComponentBase
 @namespace TnTComponents
 
-<tnt-tab-view @attributes=AdditionalAttributes class="@Class" style="@Style" @ref="Element">
+<tnt-tab-view @attributes=AdditionalAttributes class="@CssClass" style="@CssStyle" @ref="Element">
     <CascadingValue Value="this" IsFixed="true">
         <DeferRendering>
             <div class="@(CssClassBuilder.Create().AddBackgroundColor(HeaderBackgroundColor).Build())">

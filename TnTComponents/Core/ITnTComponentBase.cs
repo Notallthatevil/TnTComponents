@@ -28,7 +28,7 @@ public interface ITnTComponentBase {
     /// The base css class that should be provided to this component. <see
     /// cref="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/class" />
     /// </summary>
-    string? Class { get; }
+    string? CssClass { get; }
 
     bool Disabled { get; set; }
 
@@ -47,7 +47,7 @@ public interface ITnTComponentBase {
     /// Additional styles that can be applied to this component. <see
     /// cref="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/style" />
     /// </summary>
-    string? Style { get; set; }
+    string? CssStyle { get; set; }
 }
 
 internal static class ITnTComponentBaseExt {
@@ -55,7 +55,7 @@ internal static class ITnTComponentBaseExt {
     internal static string GetClassDefault(this ITnTComponentBase componentBase) {
         if (componentBase is null) return string.Empty;
 
-        var strBuilder = new StringBuilder(componentBase.Class ?? string.Empty);
+        var strBuilder = new StringBuilder(componentBase.CssClass ?? string.Empty);
 
         if (componentBase.AdditionalAttributes?.TryGetValue("class", out var @class) == true) {
             strBuilder.Append(' ').AppendJoin(' ', @class);

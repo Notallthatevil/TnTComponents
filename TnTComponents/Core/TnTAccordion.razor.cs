@@ -17,7 +17,7 @@ public partial class TnTAccordion {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public override string? Class => CssClassBuilder.Create()
+    public override string? CssClass => CssClassBuilder.Create()
         .AddRipple(Ripple)
         .AddElevation(Elevation)
         .AddActionableBackgroundColor(BackgroundColor)

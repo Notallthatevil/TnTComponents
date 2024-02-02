@@ -9,7 +9,7 @@ public partial class TnTExternalClickHandler {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public override string? Class => ExternalClickCssClass;
+    public override string? CssClass => ExternalClickCssClass;
 
     [Parameter, EditorRequired]
     public EventCallback ExternalClickCallback { get; set; }

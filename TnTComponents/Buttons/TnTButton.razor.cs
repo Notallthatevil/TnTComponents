@@ -16,7 +16,7 @@ public partial class TnTButton {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public override string? Class => CssClassBuilder.Create()
+    public override string? CssClass => CssClassBuilder.Create()
         .AddClass(AdditionalAttributes)
         .AddElevation(Elevation)
         .AddActionableBackgroundColor(BackgroundColor)

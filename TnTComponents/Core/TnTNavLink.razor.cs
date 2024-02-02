@@ -21,12 +21,12 @@ public partial class TnTNavLink {
     [Parameter]
     public TnTColor? BackgroundColor { get; set; } = TnTColor.Transparent;
 
-    public string? Class => CssClassBuilder.Create()
-                .AddClass(CssClass)
+    public string? CssClass => CssClassBuilder.Create()
+                .AddClass(base.CssClass)
         .SetDisabled(Disabled)
         .AddRipple(Ripple)
-        .AddActionableBackgroundColor(CssClass?.Contains("active") == true ? ActiveBackgroundColor : BackgroundColor)
-        .AddForegroundColor(CssClass?.Contains("active") == true ? ActiveTextColor : TextColor)
+        .AddActionableBackgroundColor(base.CssClass?.Contains("active") == true ? ActiveBackgroundColor : BackgroundColor)
+        .AddForegroundColor(base.CssClass?.Contains("active") == true ? ActiveTextColor : TextColor)
         .Build();
 
     [Parameter]
@@ -48,7 +48,7 @@ public partial class TnTNavLink {
     public TnTIcon? StartIcon { get; set; }
 
     [Parameter]
-    public string? Style { get; set; }
+    public string? CssStyle { get; set; }
 
     [Parameter]
     public TnTColor TextColor { get; set; } = TnTColor.OnSurface;

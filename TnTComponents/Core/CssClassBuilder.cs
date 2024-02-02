@@ -45,12 +45,14 @@ internal class CssClassBuilder {
         AlignItems? alignItems = null,
         JustifyContent? justifyContent = null,
         AlignContent? alignContent = null,
-        bool enabled = true) => enabled ? AddClass("tnt-flex", enabled)
+        bool enabled = true) => enabled ? AddClass("tnt-flex", enabled && direction != null && alignItems != null && justifyContent != null && alignContent != null)
         .AddLayoutDirection(direction)
         .AddAlignItems(alignItems)
         .AddJustifyContent(justifyContent)
         .AddAlignContent(alignContent) :
         this;
+
+    public CssClassBuilder AddFlexBox(ITnTFlexBox flexBox, bool enabled = true) => AddFlexBox(flexBox.Direction, flexBox.AlignItems, flexBox.JustifyContent, flexBox.AlignContent, enabled);
 
     public CssClassBuilder AddForegroundColor(TnTColor? color) => AddClass($"tnt-fg-color-{color?.ToCssClassName() ?? string.Empty}", color is not null);
 

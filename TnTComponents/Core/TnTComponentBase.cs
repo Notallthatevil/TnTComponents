@@ -11,7 +11,7 @@ namespace TnTComponents.Core;
 /// <seealso cref="Microsoft.AspNetCore.Components.ComponentBase" />
 /// <seealso cref="TnTComponents.Core.ITnTComponentBase" />
 /// <seealso cref="System.IAsyncDisposable" />
-public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyncDisposable {
+public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyncDisposable, ITnTTextAlign {
 
     [Parameter(CaptureUnmatchedValues = true)]
     public virtual IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
@@ -19,7 +19,7 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyn
     [Parameter]
     public bool? AutoFocus { get; set; }
 
-    public abstract string? Class { get; }
+    public abstract string? CssClass { get; }
 
     public string ComponentIdentifier { get; } = TnTComponents.Core.TnTComponentIdentifier.NewId();
 
@@ -32,7 +32,7 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyn
     public virtual string? Id { get; set; }
 
     [Parameter]
-    public virtual string? Style { get; set; }
+    public virtual string? CssStyle { get; set; }
 
     internal const string TnTCustomIdentifierAttribute = "tntid";
 
@@ -57,6 +57,9 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyn
 
     [Inject]
     private ILoggerFactory _loggerFactory { get; set; } = default!;
+
+    [Parameter]
+    public TextAlign? TextAlign { get; set; }
 
     private ILogger? _logger;
 

@@ -7,7 +7,7 @@ public partial class TnTLayout {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public override string? Class => null;
+    public override string? CssClass => null;
 
     protected override bool RunIsolatedJsScript => true;
 

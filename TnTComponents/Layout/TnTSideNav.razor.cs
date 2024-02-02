@@ -11,7 +11,7 @@ public partial class TnTSideNav {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public override string? Class => CssClassBuilder.Create()
+    public override string? CssClass => CssClassBuilder.Create()
                 .AddBackgroundColor(BackgroundColor)
         .AddForegroundColor(TextColor)
         .AddElevation(Elevation)

@@ -11,7 +11,7 @@ public partial class TnTBody {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public override string? Class => CssClassBuilder.Create()
+    public override string? CssClass => CssClassBuilder.Create()
                 .AddBackgroundColor(BackgroundColor)
         .AddForegroundColor(DefaultTextColor)
         .Build();

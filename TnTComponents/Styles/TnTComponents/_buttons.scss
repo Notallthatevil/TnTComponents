@@ -1,6 +1,6 @@
 ﻿@use "sass:map";
 
-tnt-button {
+button[is=tnt-button] {
     outline: none;
     appearance: none;
     border: none;
