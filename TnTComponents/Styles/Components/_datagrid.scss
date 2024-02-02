@@ -1,8 +1,8 @@
 ﻿.tnt-quick-grid-container {
     overflow-x: auto;
     margin: 8px;
-
-    @include tnt-border-radius(2);
+    border-radius:8px;
+    
 
     .tnt-quick-grid {
         background-color: $tnt-color-surface;
@@ -25,7 +25,7 @@
                     user-select: none;
                     min-width: 16px;
                     text-align: center;
-                    @extend .title-medium;
+                    @extend .tnt-title-medium;
 
                     a {
                         display: block;
@@ -62,8 +62,7 @@
                         line-height: inherit;
                         letter-spacing: inherit;
                         padding: 0 8px;
-                        @include tnt-border-radius(10);
-                        @include enable-ripple($tnt-color-secondary);
+                        border-radius:40px;
                     }
 
                     &.col-sort-desc, &.col-sort-asc {
@@ -122,7 +121,7 @@
                     padding: 8px;
                     min-width: 16px;
                     white-space: nowrap;
-                    @extend .body-medium;
+                    @extend .tnt-body-medium;
 
                     &.col-justify-right {
                         margin-right: 8px;
