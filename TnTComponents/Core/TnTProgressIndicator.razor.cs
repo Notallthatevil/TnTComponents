@@ -13,7 +13,7 @@ public partial class TnTProgressIndicator {
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    public override string? Class => CssClassBuilder.Create()
+    public override string? CssClass => CssClassBuilder.Create()
         .SetAlternative(Appearance == ProgressAppearance.Linear)
         .Build();
 
@@ -24,7 +24,7 @@ public partial class TnTProgressIndicator {
     public double? Value { get; set; }
 
     private string GetStyle() {
-        var stringBuilder = new StringBuilder(Style);
+        var stringBuilder = new StringBuilder(CssStyle);
 
         if (Value is not null) {
             var deg = 360 * (Value / Max);

@@ -6,7 +6,7 @@ namespace TnTComponents;
 
 public partial class TnTImageButton {
 
-    public override string? Class => CssClassBuilder.Create()
+    public override string? CssClass => CssClassBuilder.Create()
         .AddActionableBackgroundColor(TnTColor.Transparent)
         .AddForegroundColor(Color)
         .AddBorderRadius(new(10))
