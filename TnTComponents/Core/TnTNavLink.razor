@@ -3,7 +3,7 @@
 @namespace TnTComponents
 @using TnTComponents.Core
 
-<a @attributes="AdditionalAttributes" class="@CssClass" style="@CssStyle" @ref="Element" >
+<a @attributes="AdditionalAttributes" href="@Href" class="@CssClass" style="@CssStyle" @ref="Element" >
     @StartIcon?.Render()
     @ChildContent
     @EndIcon?.Render()

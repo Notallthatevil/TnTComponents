@@ -13,20 +13,33 @@ public partial class TnTNavLink {
     public TnTColor ActiveTextColor { get; set; } = TnTColor.OnSecondaryContainer;
 
     [Parameter]
-    public NavLinkAppearance Appearance { get; set; }
-
-    [Parameter]
     public bool? AutoFocus { get; set; }
 
     [Parameter]
     public TnTColor? BackgroundColor { get; set; } = TnTColor.Transparent;
 
-    public string? CssClass => CssClassBuilder.Create()
-                .AddClass(base.CssClass)
+    [Parameter]
+    public TnTBorderRadius? BorderRadius { get; set; } = new(10);
+
+    [Parameter]
+    public int Elevation { get; set; } = 0;
+
+    [Parameter]
+    public bool Outlined { get; set; }
+
+    [Parameter, EditorRequired]
+    public string Href { get; set; } = default!;
+
+    public new string? CssClass => CssClassBuilder.Create()
+        .AddClass(base.CssClass)
         .SetDisabled(Disabled)
         .AddRipple(Ripple)
         .AddActionableBackgroundColor(base.CssClass?.Contains("active") == true ? ActiveBackgroundColor : BackgroundColor)
         .AddForegroundColor(base.CssClass?.Contains("active") == true ? ActiveTextColor : TextColor)
+        .AddOutlined(Outlined)
+        .AddFilled(BackgroundColor != TnTColor.Transparent)
+        .AddElevation(Elevation)
+        .AddBorderRadius(BorderRadius)
         .Build();
 
     [Parameter]
