@@ -77,17 +77,6 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
 
     public abstract InputType Type { get; }
 
-    protected string Name {
-        get {
-            if (AdditionalAttributes?.TryGetValue("name", out var name) == true) {
-                return Convert.ToString(name, CultureInfo.InvariantCulture) ?? string.Empty;
-            }
-            else {
-                return FieldIdentifier.FieldName;
-            }
-        }
-    }
-
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "span");
         builder.AddAttribute(10, "class", Class);
@@ -102,8 +91,8 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                 builder.OpenElement(100, "input");
                 builder.AddMultipleAttributes(110, AdditionalAttributes);
                 builder.AddAttribute(120, "type", Type.ToInputTypeString());
-                builder.AddAttribute(121, "name", Name);
-
+                builder.AddAttribute(121, "name", NameAttributeValue);
+                
                 if (CurrentValue is bool) {
                     builder.AddAttribute(125, "value", bool.TrueString);
                     builder.AddAttribute(126, "checked", BindConverter.FormatValue(CurrentValue));

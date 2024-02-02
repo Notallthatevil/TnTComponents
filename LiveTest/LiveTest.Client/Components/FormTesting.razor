@@ -3,35 +3,44 @@
 <h3>FormTesting</h3>
 
 
-<TnTForm Model="@_model" FormName="Input Form" OnInvalidSubmit="InvalidSubmit" OnValidSubmit="ValidSubmit">
+<TnTForm Model="@Input" OnValidSubmit="ValidSubmit" OnInvalidSubmit="InvalidSubmit" FormName="Login">
     <DataAnnotationsValidator />
-    <InputText @bind-Value="_model.Name"/>
+    <ValidationSummary />
+    <div>
+        <TnTLabel Label="Email">
+            <TnTInputText @bind-Value="Input.Email" InputType="TextInputType.Email" />
+        </TnTLabel>
 
-    <TnTLabel Label="Name">
-        <TnTInputText StartIcon="MaterialIcon.Person" @bind-Value="_model.Name" />
-    </TnTLabel>
-    @* <TnTLabel Label="Age">
-        <TnTInputNumeric @bind-Value="_model.Age" StartIcon="MaterialIcon.ConfirmationNumber" />
-    </TnTLabel>
-    <TnTLabel Label="Agree">
-        <TnTInputCheckbox StartIcon="MaterialIcon.Check" @bind-Value="_model.Agree" />
-    </TnTLabel>
-    *@<TnTButton Type="ButtonType.Submit">
-        Submit
-    </TnTButton>
+    </div>
+    <div>
+        <TnTLabel Label="Password">
+            <TnTInputText @bind-Value="Input.Password" InputType="TextInputType.Password" />
+        </TnTLabel>
+
+    </div>
+    <div>
+        <TnTButton Type="ButtonType.Submit">
+            Submit
+        </TnTButton>
+    </div>
 </TnTForm>
 
 
 @code {
-    public class Model {
-        public string Name { get; set; }
-        [Range(1, 100)]
-        public int Age { get; set; }
-        [Range(typeof(bool), minimum: "true", maximum: "true")]
-        public bool Agree { get; set; }
+    private sealed class InputModel {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = "";
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; } = "";
+
+        [Display(Name = "Remember me?")]
+        public bool RememberMe { get; set; }
     }
     [SupplyParameterFromForm]
-    private Model _model { get; set; } = new();
+    private InputModel Input { get; set; } = new();
 
     private async Task ValidSubmit() {
         Console.WriteLine("Valid Submit");
