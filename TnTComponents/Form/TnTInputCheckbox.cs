@@ -9,7 +9,7 @@ public class TnTInputCheckbox : TnTInputBase<bool> {
     [Parameter]
     public InputCheckboxAppearance CheckboxAppearance { get; set; }
 
-    public override string Class => CssClassBuilder.Create(base.Class).AddClass(AppearanceClass()).Build();
+    public override string FormCssClass => CssClassBuilder.Create(base.FormCssClass).AddClass(AppearanceClass()).Build();
     public override InputType Type => InputType.Checkbox;
 
     protected override void OnInitialized() {

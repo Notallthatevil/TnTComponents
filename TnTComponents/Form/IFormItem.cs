@@ -6,7 +6,7 @@ public interface IFormItem {
     IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
     FormAppearance Appearance { get; set; }
     TnTColor? BackgroundColor { get; set; }
-    string Class { get; }
+    string FormCssClass { get; }
     bool Disabled { get; set; }
     ElementReference Element { get; }
     TnTForm? ParentForm { get; set; }
@@ -14,6 +14,6 @@ public interface IFormItem {
     bool? ParentFormDisabled { get; }
     bool? ParentFormReadOnly { get; }
     bool ReadOnly { get; set; }
-    string? Style { get; set; }
+    string? FormCssStyle { get; set; }
     TnTColor? TextColor { get; set; }
 }

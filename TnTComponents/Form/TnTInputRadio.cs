@@ -18,7 +18,7 @@ public class TnTInputRadioGroup<TInputType> : TnTInputSelect<TInputType> {
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "span");
-        builder.AddAttribute(1, "class", "tnt-radio-group " + Class);
+        builder.AddAttribute(1, "class", "tnt-radio-group " + FormCssClass);
         builder.AddAttribute(2, "style", $"flex-direction: {(Direction == LayoutDirection.Vertical ? "column" : "row")}");
 
         {
@@ -66,7 +66,7 @@ public class TnTInputRadio<TInputType> : ComponentBase, IFormField {
     [Parameter]
     public TnTColor? BackgroundColor { get; set; }
 
-    public string Class => string.Empty;
+    public string FormCssClass => string.Empty;
 
     [Parameter]
     public bool Disabled { get; set; }
@@ -100,7 +100,7 @@ public class TnTInputRadio<TInputType> : ComponentBase, IFormField {
     public TnTIcon? StartIcon { get; set; }
 
     [Parameter]
-    public string? Style { get; set; }
+    public string? FormCssStyle { get; set; }
 
     [Parameter]
     public TnTColor? TextColor { get; set; }

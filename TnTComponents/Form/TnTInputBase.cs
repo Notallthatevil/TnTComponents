@@ -23,7 +23,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     [Parameter]
     public bool BindOnInput { get; set; }
 
-    public virtual string Class => CssClassBuilder.Create()
+    public virtual string FormCssClass => CssClassBuilder.Create()
         .AddClass(CssClass)
         .AddClass("tnt-input")
         .AddOutlined((ParentFormAppearance ?? Appearance) == FormAppearance.Outlined)
@@ -70,7 +70,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public TnTIcon? StartIcon { get; set; }
 
     [Parameter]
-    public string? Style { get; set; }
+    public string? FormCssStyle { get; set; }
 
     [Parameter]
     public TnTColor? TextColor { get; set; } = TnTColor.OnSurfaceVariant;
@@ -79,7 +79,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "span");
-        builder.AddAttribute(10, "class", Class);
+        builder.AddAttribute(10, "class", FormCssClass);
         {
             {
                 if (StartIcon is not null) {
@@ -100,7 +100,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                 else {
                     builder.AddAttribute(125, "value", CurrentValueAsString);
                 }
-                builder.AddAttribute(140, "style", Style);
+                builder.AddAttribute(140, "style", FormCssStyle);
                 builder.AddAttribute(150, "readonly", ParentFormReadOnly ?? ReadOnly);
                 builder.AddAttribute(160, "placeholder", Placeholder);
                 builder.AddAttribute(170, "disabled", ParentFormDisabled ?? Disabled);

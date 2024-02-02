@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using TnTComponents.Core;
 
 namespace TnTComponents;
 
@@ -14,13 +15,17 @@ public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
     public override InputType Type { get; }
     private bool _multiple;
 
+    public override string FormCssClass => CssClassBuilder.Create(base.FormCssClass)
+        .AddClass("tnt-select-placeholder", !string.IsNullOrWhiteSpace(Placeholder))
+        .Build();
+
     public TnTInputSelect() {
         _multiple = typeof(TInputType).IsArray;
     }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "span");
-        builder.AddAttribute(10, "class", Class);
+        builder.AddAttribute(10, "class", FormCssClass);
         {
             {
                 if (StartIcon is not null) {
@@ -33,7 +38,7 @@ public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
                 builder.OpenElement(100, "select");
                 builder.AddMultipleAttributes(110, AdditionalAttributes);
                 builder.AddAttribute(120, "multiple", _multiple);
-                builder.AddAttribute(140, "style", Style);
+                builder.AddAttribute(140, "style", FormCssStyle);
                 builder.AddAttribute(170, "disabled", ParentFormDisabled ?? Disabled);
                 builder.AddAttribute(171, "required", IsRequired());
                 if (_multiple) {
@@ -48,13 +53,19 @@ public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
                 }
 
                 builder.AddElementReferenceCapture(200, e => Element = e);
-                builder.AddContent(210, ChildContent);
+                if(!string.IsNullOrWhiteSpace(Placeholder)) {
+                    builder.OpenElement(210, "option");
+                    builder.AddAttribute(221, "selected", true);
+                    builder.AddContent(230, Placeholder);
+                    builder.CloseElement();
+                }
+                builder.AddContent(240, ChildContent);
                 builder.CloseElement();
             }
             {
                 if (EndIcon is not null) {
                     EndIcon.AdditionalClass = "tnt-end";
-                    builder.AddContent(20, EndIcon.Render());
+                    builder.AddContent(250, EndIcon.Render());
                 }
             }
         }

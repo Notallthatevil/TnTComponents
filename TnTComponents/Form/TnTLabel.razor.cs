@@ -18,7 +18,7 @@ public partial class TnTLabel : IFormItem {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public string Class => CssClassBuilder.Create()
+    public string FormCssClass => CssClassBuilder.Create()
         .AddOutlined((ParentFormAppearance ?? Appearance) == FormAppearance.Outlined)
         .AddFilled((ParentFormAppearance ?? Appearance) == FormAppearance.Filled)
         .AddBackgroundColor(TnTColor.Transparent)
@@ -49,7 +49,7 @@ public partial class TnTLabel : IFormItem {
     public bool ReadOnly { get; set; }
 
     [Parameter]
-    public string? Style { get; set; }
+    public string? FormCssStyle { get; set; }
 
     [Parameter]
     public TnTColor? TextColor { get; set; }

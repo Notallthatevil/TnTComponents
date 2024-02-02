@@ -49,6 +49,14 @@
             </TnTLabel>
         }
     </TnTInputRadioGroup>
+
+    <TnTLabel Label="Select">
+        <TnTInputSelect @bind-Value="_model.D" Placeholder="Select a value">
+            @foreach (var a in Enum.GetValues<Test>()) {
+                <option @key="a" value="@a">@a.ToString()</option>
+            }
+        </TnTInputSelect>
+    </TnTLabel>
 </TnTForm>
 
 <TnTForm Model="@_model" Appearance="FormAppearance.Filled">
@@ -99,6 +107,14 @@
             </TnTLabel>
         }
     </TnTInputRadioGroup>
+
+    <TnTLabel Label="Select">
+        <TnTInputSelect @bind-Value="_model.D" Placeholder="Select a value">
+            @foreach(var a in Enum.GetValues<Test>()) {
+                <option @key="a" value="@a">@a.ToString()</option>
+            }
+        </TnTInputSelect>
+    </TnTLabel>
 </TnTForm>
 
 @(_model.A)
@@ -112,6 +128,7 @@
         public Test? A { get; set; }
         public string S{ get; set; }
         public bool C{ get; set; }
+        public Test? D{ get; set; }
     }
 
     enum Test {

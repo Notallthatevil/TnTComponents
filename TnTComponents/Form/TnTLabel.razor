@@ -4,8 +4,8 @@
 <CascadingValue Value="this" IsFixed="true">
     <label @attributes="AdditionalAttributes"
            @ref="Element"
-           class="@Class"
-           style="@Style">
+           class="@FormCssClass"
+           style="@FormCssStyle">
         @ChildContent
         <span class="@(CssClassBuilder.Create("tnt-label").AddBackgroundColor((ParentFormAppearance ?? Appearance) == FormAppearance.Outlined ? BackgroundColor : null).Build())">
             @Label
