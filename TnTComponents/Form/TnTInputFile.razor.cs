@@ -7,10 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TnTComponents.Core;
+using TnTComponents.Enum;
 using TnTComponents.Form;
 
 namespace TnTComponents;
-public class TnTInputFile : InputFile {
+public partial class TnTInputFile {
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object>? AdditionalAttributes { get; set; }
 
     public string FormCssClass => CssClassBuilder.Create()
         .AddClass("tnt-input")
@@ -40,34 +44,37 @@ public class TnTInputFile : InputFile {
     [Parameter]
     public bool Readonly { get; set; }
 
+    [Parameter]
+    public int MaximumFileCount { get; set; } = 1;
+    [Parameter]
+    public EventCallback<InputFileChangeEventArgs> OnInputFileChange { get; set; }
 
     protected override void OnParametersSet() {
         base.OnParametersSet();
-        var dict = AdditionalAttributes != null ? new Dictionary<string, object>(AdditionalAttributes) : [];
 
         if (ParentFormDisabled == true || Disabled) {
-            dict.TryAdd("disabled", true);
+            AdditionalAttributes?.TryAdd("disabled", true);
         }
 
         if (ParentFormReadOnly == true || Readonly) {
-            dict.TryAdd("readonly", true);
+            AdditionalAttributes?.TryAdd("readonly", true);
         }
-
-        AdditionalAttributes = dict;
     }
 
-    protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        builder.OpenElement(0, "span");
-        builder.AddAttribute(10, "class", FormCssClass);
-        builder.AddAttribute(11, "style", $"--button-background-color: var(--tnt-color-{ButtonBackgroundColor.ToCssClassName()}); --button-text-color: var(--tnt-color-{ButtonTextColor.ToCssClassName()})");
-
-        {
-            builder.OpenRegion(20);
-            base.BuildRenderTree(builder);
-            builder.CloseRegion();
+    protected async Task OnUploadFilesHandlerAsync(InputFileChangeEventArgs e) {
+        if (e.FileCount > MaximumFileCount) {
+            throw new ApplicationException($"The maximum number of files accepted is {MaximumFileCount}, but {e.FileCount} were supplied.");
         }
 
-        builder.CloseElement();
+
+        // Use the native Blazor event
+        if (OnInputFileChange.HasDelegate) {
+            await OnInputFileChange.InvokeAsync(e);
+            return;
+        }
+
+        throw new NotImplementedException($"Additional upload support is not yet implemented. You must implement {nameof(OnInputFileChange)} parameter.");
     }
+
 }
 
