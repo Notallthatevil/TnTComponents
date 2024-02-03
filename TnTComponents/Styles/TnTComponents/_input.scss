@@ -1,4 +1,4 @@
-﻿.tnt-input:not(:has(input[type=checkbox])):not(:has(input[type=radio])) {
+﻿.tnt-input:not(:has(input[type=checkbox])):not(:has(input[type=radio])):not(:has(input[type=file])) {
     min-height: 1.25rem;
     display: inline-flex;
     padding: 0.5rem 1rem;
@@ -141,7 +141,7 @@
     }
 }
 
-label.tnt-components:not(:has(input[type=checkbox])):not(:has(input[type=radio])) {
+label.tnt-components:not(:has(input[type=checkbox])):not(:has(input[type=radio])):not(:has(input[type=file])) {
     position: relative;
     width: 100%;
     display: inline-block;
@@ -326,6 +326,12 @@ label.tnt-components:has(input[type=checkbox]) {
             color: $tnt-color-error;
         }
     }
+}
+
+label.tnt-components:has(input[type=file]) {
+    outline: none;
+    display: inline-flex;
+    align-items: center;
 }
 
 span.tnt-radio-group {

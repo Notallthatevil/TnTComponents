@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TnTComponents.Core;
 
-namespace TnTComponents.Form;
+namespace TnTComponents;
 public class TnTInputFile : InputFile {
 
     public string FormCssClass => CssClassBuilder.Create()
