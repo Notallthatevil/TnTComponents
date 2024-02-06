@@ -1,23 +1,25 @@
 ﻿@using TnTComponents
 
 <TnTFabButton BackgroundColor="TnTColor.Error">
-    <MaterialIcon Icon="@MaterialIcon.Add" Color="TnTColor.Tertiary" />
+    @MaterialIcon.Add.Render()
 </TnTFabButton>
 
 <TnTImageButton Icon="@MaterialIcon.Gamepad" />
 
 <TnTComponents.TnTButton>
-    <MaterialIcon Icon="@MaterialIcon.Search" Color="TnTColor.Primary" />
+    @MaterialIcon.Search.Render()
     Button Text
-    <MaterialIcon Icon="@MaterialIcon.Poll" Color="TnTColor.Secondary" />
+    @MaterialIcon.Poll.Render()
 </TnTComponents.TnTButton>
 
 <TnTComponents.TnTButton Appearance="ButtonAppearance.Outlined">
     Button Text
+    <TnTProgressIndicator Appearance="ProgressAppearance.Ring"/>
 </TnTComponents.TnTButton>
 
 <TnTComponents.TnTButton Appearance="ButtonAppearance.Text">
     Button Text
+    <TnTProgressIndicator Appearance="ProgressAppearance.Linear"/>
 </TnTComponents.TnTButton>
 
 <TnTComponents.TnTButton Elevation="5">

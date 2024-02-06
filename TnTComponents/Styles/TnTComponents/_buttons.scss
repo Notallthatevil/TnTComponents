@@ -52,6 +52,18 @@ button[is=tnt-button], input::file-selector-button {
     }
 }
 
+button.tnt-components > progress.tnt-components {
+    position: absolute !important;
+    z-index: 5;
+    padding: 0 !important;
+    margin: 0;
+
+    &:not(.tnt-alternative) {
+        width: 2rem !important;
+        height: 2rem !important;
+    }
+}
+
 tnt-layout:has(tnt-footer) {
     .tnt-fab {
         bottom: calc(2rem + $tnt-footer-height) !important;
