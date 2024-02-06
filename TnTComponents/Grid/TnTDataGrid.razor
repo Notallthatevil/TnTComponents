@@ -4,8 +4,8 @@
 @using TnTComponents.Grid
 @typeparam TItem
 
-<div @attributes="AdditionalAttributes" class="@Class" style="@GetStyle()">
-    <table>
+<div @attributes="AdditionalAttributes" class="@CssClass" style="@GetStyle()">
+    <table @ref="_element">
         <CascadingValue Value="this" IsFixed="true">
             @ChildContent
             <DeferRendering>
@@ -42,26 +42,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if (ItemsProvider is not null) {
-                        <Virtualize ItemsProvider="@ItemsProvider">
-                            <tr @key="context" @onclick="@(() => RowClickedCallback.InvokeAsync(context))">
-                                @foreach (var col in _columns) {
-                                    <td>
-                                        @{
-                                            col.RenderCellContent(__builder4, context);
-                                        }
-                                    </td>
-                                }
-                            </tr>
-                        </Virtualize>
-                    }
-
-                    @foreach (var item in GetSorted()) {
-                        <tr @key="item" @onclick="@(() => RowClickedCallback.InvokeAsync(item))">
+                    @foreach (var item in GetSorted().Select((Row, Index) => new { Row, Index = Index + 2 })) {
+                        var row = item.Row;
+                        var index = item.Index;
+                        <tr aria-rowindex="@index" @key="row" @onclick="@(() => RowClickedCallback.InvokeAsync(row))">
                             @foreach (var col in _columns) {
-                                <td>
+                                <td @key="col">
                                     @{
-                                        col.RenderCellContent(__builder3, item);
+                                        col.RenderCellContent(__builder3, row);
                                     }
                                 </td>
                             }

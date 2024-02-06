@@ -37,8 +37,9 @@ public partial class TnTDataGrid<TItem> {
 
     private TnTColumnBase<TItem>? _lastSortColumn;
     private bool _descending = true;
+    private ElementReference _element;
 
-    public string Class => CssClassBuilder.Create()
+    public string CssClass => CssClassBuilder.Create()
         .AddClass("tnt-datagrid")
         .AddClass("tnt-compact", Appearance.HasFlag(DataGridAppearance.Compact))
         .AddClass("tnt-interactive", _interactive && RowClickedCallback.HasDelegate)
