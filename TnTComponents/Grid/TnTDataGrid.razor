@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @using TnTComponents.Core
 @using TnTComponents.Grid
+@implements IAsyncDisposable
 @typeparam TItem
 
 <div @attributes="AdditionalAttributes" class="@CssClass" style="@GetStyle()">
@@ -56,6 +57,7 @@
                         </tr>
                     }
                 </tbody>
+                <TnTPageScript Src="@_jsModulePath"/>
             </DeferRendering>
         </CascadingValue>
     </table>

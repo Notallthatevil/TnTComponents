@@ -2,7 +2,7 @@
 @using TnTComponents
 @using TnTComponents.Snackbar
 
-<TnTDataGrid Items="@Items" TItem="DataGridItem" RowClickedCallback="RowClicked" Appearance="DataGridAppearance.Stripped | DataGridAppearance.Compact">
+<TnTDataGrid Resizable="true" Items="@Items" TItem="DataGridItem" RowClickedCallback="RowClicked" Appearance="DataGridAppearance.Stripped | DataGridAppearance.Compact">
     <TnTPropertyColumn Property="@(x => x.Column1)" Sortable="true" />
     <TnTPropertyColumn Property="@(x => x.Column2)" Sortable="true" />
     <TnTPropertyColumn Property="@(x => x.Column3)" Format="MM/yyyy" />
