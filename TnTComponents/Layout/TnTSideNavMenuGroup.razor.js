@@ -11,7 +11,9 @@ function toggleChildren(e) {
                 parent.expanded = parent.classList.contains(expandedClass);
             }
             parent.expanded = !parent.expanded;
-    
+
+            let content = parent.querySelector(':scope > div:last-child');
+
             if (toggler.dotNetRef) {
                 toggler.dotNetRef.invokeMethodAsync('Toggle', parent.expanded);
             }
@@ -19,9 +21,11 @@ function toggleChildren(e) {
             if (parent.expanded) {
                 if (!parent.classList.contains(expandedClass)) {
                     parent.classList.add(expandedClass);
+                    content.style.height = `${content.firstChild.clientHeight}px`;
                 }
             } else {
                 parent.classList.remove(expandedClass);
+                content.style.height = 0;
             }
         }
     }

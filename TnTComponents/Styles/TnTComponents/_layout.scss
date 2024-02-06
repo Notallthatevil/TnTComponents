@@ -61,8 +61,11 @@
                 flex-direction: column;
                 margin-left: 1.25rem;
                 height: fit-content;
-                border-left: 1px solid $tnt-color-outline;
                 transition: height ease-in-out 200ms;
+
+                & > div {
+                    border-left: 1px solid $tnt-color-outline;
+                }
             }
 
             &:not(.tnt-expanded) {
