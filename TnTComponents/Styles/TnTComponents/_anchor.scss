@@ -5,6 +5,8 @@
     display: inline-block;
     padding: 0.5rem;
     margin: 0.1rem;
+    transition: background-color ease-in-out 200ms, color ease-in-out 200ms;
+
 
     &:disabled {
         cursor: not-allowed;
@@ -12,5 +14,6 @@
 
     span.tnt-icon {
         vertical-align: middle;
+        color: inherit;
     }
 }
