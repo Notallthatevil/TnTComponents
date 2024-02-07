@@ -21,7 +21,7 @@ function toggleChildren(e) {
             if (parent.expanded) {
                 if (!parent.classList.contains(expandedClass)) {
                     parent.classList.add(expandedClass);
-                    content.style.height = `${content.firstChild.clientHeight}px`;
+                    content.style.height = `revert`;
                 }
             } else {
                 parent.classList.remove(expandedClass);
