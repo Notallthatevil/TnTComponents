@@ -16,7 +16,7 @@ button[is=tnt-button], input::file-selector-button {
 
     @extend .tnt-label-large;
 
-    &:not(disabled) {
+    &:not(:disabled) {
         cursor: pointer;
         transition: box-shadow linear 100ms, background-color linear 100ms;
 
@@ -52,15 +52,71 @@ button[is=tnt-button], input::file-selector-button {
     }
 }
 
-button.tnt-components > progress.tnt-components {
-    position: absolute !important;
-    z-index: 5;
-    padding: 0 !important;
-    margin: 0;
+button.tnt-components {
+    &:disabled {
+        cursor: not-allowed;
 
-    &:not(.tnt-alternative) {
-        width: 2rem !important;
-        height: 2rem !important;
+        &:not(:has( > progress.tnt-components)) {
+            opacity: 0.3;
+        }
+
+        &:has( > progress.tnt-components) {
+            @each $colorClass in $color-classes-no-transparent {
+                &.tnt-actionable-bg-color-#{$colorClass} {
+                    background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 30%, transparent);
+                }
+            }
+        }
+    }
+
+    & > progress.tnt-components {
+        position: absolute !important;
+        z-index: 5;
+        padding: 0 !important;
+        margin: 0;
+
+        &:not(.tnt-alternative) {
+            width: 2rem !important;
+            height: 2rem !important;
+        }
+    }
+
+    &.tnt-actionable-bg-color-primary:not(:disabled) {
+        & > progress.tnt-components {
+            &.tnt-alternative {
+                color: $tnt-color-on-primary;
+
+                &::-moz-progress-bar {
+                    background: $tnt-color-on-primary;
+                }
+
+                &::-webkit-progress-value {
+                    background: $tnt-color-on-primary;
+                }
+
+                &:indeterminate {
+                    &:before {
+                        background-color: $tnt-color-on-primary;
+                    }
+
+                    &:after {
+                        background-color: $tnt-color-on-primary;
+                    }
+                }
+            }
+
+            &:not(.tnt-alternative) {
+                color: $tnt-color-on-primary;
+
+
+                &:not(:indeterminate) {
+                    background-color: $tnt-color-on-primary;
+                    -webkit-mask: radial-gradient(circle, transparent 0 1.6rem, black 1.6rem 100%);
+                    mask: radial-gradient(circle, transparent 0 1.6rem, black 1.6rem 100%);
+                    transform: scale(0.8);
+                }
+            }
+        }
     }
 }
 
