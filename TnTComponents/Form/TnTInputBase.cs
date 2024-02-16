@@ -80,6 +80,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "span");
         builder.AddAttribute(10, "class", FormCssClass);
+        builder.AddAttribute(11, "style", FormCssStyle);
         {
             {
                 if (StartIcon is not null) {
