@@ -42,7 +42,7 @@ public class TnTDialog : ComponentBase, IDisposable {
             {
                 builder.OpenComponent<TnTExternalClickHandler>(40);
                 builder.AddComponentParameter(50, "ExternalClickCssClass", dialog.Options.GetDialogClass());
-                builder.AddComponentParameter(60, "Style", dialog.Options.Style);
+                builder.AddComponentParameter(60, "CssStyle", dialog.Options.Style);
 
                 if (dialog.Options.CloseOnExternalClick) {
                     builder.AddComponentParameter(70, "ExternalClickCallback", EventCallback.Factory.Create(this, async () => await _service.CloseAsync(dialog)));
@@ -71,8 +71,15 @@ public class TnTDialog : ComponentBase, IDisposable {
                     }
 
                     {
-                        innerBuilder.OpenComponent(60, dialog.Type);
-                        innerBuilder.AddMultipleAttributes(70, dialog.Parameters);
+                        innerBuilder.OpenComponent<CascadingValue<ITnTDialog>>(52);
+                        innerBuilder.AddAttribute(60, "Value", dialog);
+                        innerBuilder.AddAttribute(70, "IsFixed", true);
+                        innerBuilder.AddAttribute(80, "ChildContent", new RenderFragment(cascadingBuilder => {
+                            cascadingBuilder.OpenComponent(0, dialog.Type);
+                            cascadingBuilder.AddMultipleAttributes(10, dialog.Parameters);
+                            cascadingBuilder.CloseComponent();
+                        }));
+
                         innerBuilder.CloseComponent();
                     }
                 }));
