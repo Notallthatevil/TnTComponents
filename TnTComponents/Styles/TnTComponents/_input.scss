@@ -1,4 +1,8 @@
-﻿.tnt-input:not(:has(input[type=checkbox])):not(:has(input[type=radio])) {
+﻿.tnt-input {
+    box-sizing: border-box;
+}
+
+.tnt-input:not(:has(input[type=checkbox])):not(:has(input[type=radio])) {
     min-height: 1.25rem;
     display: inline-flex;
     padding: 0.5rem 1rem;
