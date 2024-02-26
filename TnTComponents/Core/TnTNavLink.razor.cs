@@ -46,6 +46,7 @@ public partial class TnTNavLink {
         .AddFilled(BackgroundColor != TnTColor.Transparent)
         .AddElevation(Elevation)
         .AddBorderRadius(BorderRadius)
+        .AddClass("tnt-active", _isActive)
         .Build();
 
     [Parameter]
