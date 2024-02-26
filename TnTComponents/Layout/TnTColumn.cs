@@ -18,6 +18,7 @@ public class TnTColumn : ComponentBase, ITnTComponentBase, ITnTFlexBox {
     public RenderFragment ChildContent { get; set; } = default!;
 
     public string? CssClass => CssClassBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-col")
         .AddClass(GetGridClass())
         .AddFlexBox(this)
@@ -67,8 +68,9 @@ public class TnTColumn : ComponentBase, ITnTComponentBase, ITnTFlexBox {
     [Parameter, ColSize(SizeClass = "s", PropertyName = nameof(ColSize.Push))]
     public int SPush { get; set; }
 
-    [Parameter]
-    public string? CssStyle { get; set; }
+    public string? CssStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .Build();
 
     [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Size))]
     public int XL { get; set; }

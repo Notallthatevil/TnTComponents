@@ -14,6 +14,6 @@ public interface IFormItem {
     bool? ParentFormDisabled { get; }
     bool? ParentFormReadOnly { get; }
     bool ReadOnly { get; set; }
-    string? FormCssStyle { get; set; }
+    string? FormCssStyle { get; }
     TnTColor? TextColor { get; set; }
 }

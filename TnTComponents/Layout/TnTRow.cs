@@ -28,8 +28,10 @@ public class TnTRow : ComponentBase, ITnTComponentBase, ITnTFlexBox {
     [Parameter]
     public string? Id { get; set; }
 
-    [Parameter]
-    public string? CssStyle { get; set; }
+    public string? CssStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .Build();
+
     [Parameter]
     public LayoutDirection? Direction { get; set; }
     [Parameter]

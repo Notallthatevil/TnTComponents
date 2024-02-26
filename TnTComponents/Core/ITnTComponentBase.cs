@@ -47,7 +47,7 @@ public interface ITnTComponentBase {
     /// Additional styles that can be applied to this component. <see
     /// cref="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/style" />
     /// </summary>
-    string? CssStyle { get; set; }
+    string? CssStyle { get; }
 }
 
 internal static class ITnTComponentBaseExt {

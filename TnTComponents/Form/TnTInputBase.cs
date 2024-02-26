@@ -69,8 +69,9 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     [Parameter]
     public TnTIcon? StartIcon { get; set; }
 
-    [Parameter]
-    public string? FormCssStyle { get; set; }
+    public string? FormCssStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .Build();
 
     [Parameter]
     public TnTColor? TextColor { get; set; } = TnTColor.OnSurfaceVariant;

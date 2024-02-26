@@ -47,9 +47,9 @@ public partial class TnTLabel : IFormItem {
 
     [Parameter]
     public bool ReadOnly { get; set; }
-
-    [Parameter]
-    public string? FormCssStyle { get; set; }
+    public string? FormCssStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .Build();
 
     [Parameter]
     public TnTColor? TextColor { get; set; }
