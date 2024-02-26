@@ -24,6 +24,10 @@ public partial class TnTAccordion {
         .AddForegroundColor(TextColor)
         .Build();
 
+    public override string? CssStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .Build();
+
     [Parameter]
     public int Elevation { get; set; } = 1;
 

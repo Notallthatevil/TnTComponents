@@ -12,6 +12,12 @@ public class TnTColumn : ComponentBase, ITnTComponentBase, ITnTFlexBox {
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
     [Parameter]
+    public AlignContent? AlignContent { get; set; }
+
+    [Parameter]
+    public AlignItems? AlignItems { get; set; }
+
+    [Parameter]
     public bool? AutoFocus { get; set; }
 
     [Parameter]
@@ -24,6 +30,13 @@ public class TnTColumn : ComponentBase, ITnTComponentBase, ITnTFlexBox {
         .AddFlexBox(this)
         .Build();
 
+    public string? CssStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .Build();
+
+    [Parameter]
+    public LayoutDirection? Direction { get; set; }
+
     [Parameter]
     public bool Disabled { get; set; }
 
@@ -31,6 +44,9 @@ public class TnTColumn : ComponentBase, ITnTComponentBase, ITnTFlexBox {
 
     [Parameter]
     public string? Id { get; set; }
+
+    [Parameter]
+    public JustifyContent? JustifyContent { get; set; }
 
     [Parameter, ColSize(SizeClass = "l", PropertyName = nameof(ColSize.Size))]
     public int L { get; set; }
@@ -68,10 +84,6 @@ public class TnTColumn : ComponentBase, ITnTComponentBase, ITnTFlexBox {
     [Parameter, ColSize(SizeClass = "s", PropertyName = nameof(ColSize.Push))]
     public int SPush { get; set; }
 
-    public string? CssStyle => CssStyleBuilder.Create()
-        .AddFromAdditionalAttributes(AdditionalAttributes)
-        .Build();
-
     [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Size))]
     public int XL { get; set; }
 
@@ -83,14 +95,6 @@ public class TnTColumn : ComponentBase, ITnTComponentBase, ITnTFlexBox {
 
     [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Push))]
     public int XLPush { get; set; }
-    [Parameter]
-    public LayoutDirection? Direction { get; set; }
-    [Parameter]
-    public JustifyContent? JustifyContent { get; set; }
-    [Parameter]
-    public AlignItems? AlignItems { get; set; }
-    [Parameter]
-    public AlignContent? AlignContent { get; set; }
 
     private static readonly IReadOnlyDictionary<PropertyInfo, ColSizeAttribute> _sizeValues = GetSizeProperties();
 

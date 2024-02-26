@@ -16,6 +16,10 @@ public partial class TnTFooter {
         .AddForegroundColor(TextColor)
         .Build();
 
+    public override string? CssStyle => CssStyleBuilder.Create()
+       .AddFromAdditionalAttributes(AdditionalAttributes)
+       .Build();
+
     [Parameter]
     public TnTColor TextColor { get; set; } = TnTColor.OnSurfaceVariant;
 

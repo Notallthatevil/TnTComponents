@@ -18,6 +18,10 @@ public partial class TnTFabButton {
         .AddForegroundColor(ForegroundColor)
         .Build();
 
+    public override string? CssStyle => CssStyleBuilder.Create()
+           .AddFromAdditionalAttributes(AdditionalAttributes)
+       .Build();
+
     [Parameter]
     public TnTColor ForegroundColor { get; set; }
 

@@ -6,14 +6,18 @@ namespace TnTComponents;
 
 public partial class TnTImageButton {
 
+    [Parameter]
+    public TnTColor Color { get; set; } = TnTColor.OnSurface;
+
     public override string? CssClass => CssClassBuilder.Create()
-        .AddActionableBackgroundColor(TnTColor.Transparent)
+            .AddActionableBackgroundColor(TnTColor.Transparent)
         .AddForegroundColor(Color)
         .AddBorderRadius(new(10))
         .Build();
 
-    [Parameter]
-    public TnTColor Color { get; set; } = TnTColor.OnSurface;
+    public override string? CssStyle => CssStyleBuilder.Create()
+       .AddFromAdditionalAttributes(AdditionalAttributes)
+       .Build();
 
     [Parameter, EditorRequired]
     public TnTIcon Icon { get; set; } = default!;

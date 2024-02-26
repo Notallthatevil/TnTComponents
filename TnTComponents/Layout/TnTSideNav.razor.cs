@@ -17,6 +17,10 @@ public partial class TnTSideNav {
         .AddElevation(Elevation)
         .Build();
 
+    public override string? CssStyle => CssStyleBuilder.Create()
+       .AddFromAdditionalAttributes(AdditionalAttributes)
+       .Build();
+
     [Parameter]
     public int Elevation { get; set; } = 2;
 
