@@ -37,6 +37,7 @@ public partial class TnTNavLink {
     public string Href { get; set; } = default!;
 
     public string? CssClass => CssClassBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
         .SetDisabled(Disabled)
         .AddRipple(Ripple)
         .AddActionableBackgroundColor(_isActive ? ActiveBackgroundColor : BackgroundColor)
