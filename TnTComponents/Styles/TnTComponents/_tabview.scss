@@ -30,7 +30,10 @@
                 padding-bottom: 0.75rem;
                 padding-top: 0.25rem;
                 box-sizing: border-box;
-                width: 5rem;
+                min-width: 5rem;
+                width: -webkit-fit-content;
+                width: -moz-fit-content;
+                width: fit-content;
                 cursor: pointer;
                 transition: 200ms ease-in-out;
                 @extend .tnt-title-small;
@@ -65,7 +68,7 @@
             & > span {
                 & > button {
                     height: 2rem;
-                    padding-bottom: 0.25rem;
+                    padding: 0 0.75rem 0.25rem 0.75rem;
                 }
             }
 

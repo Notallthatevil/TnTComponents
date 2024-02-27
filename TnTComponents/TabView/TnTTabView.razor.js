@@ -110,7 +110,7 @@ export class TnTTabView extends HTMLElement {
         const parentScrollLeft = activeHeader.parentElement.scrollLeft;
         const diff = boundingRect.left + parentScrollLeft - activeHeader.offsetLeft;
         if (!this.classList.contains('tnt-alternative')) {
-            let headerElementWidth = activeHeader.clientWidth / 2;
+            const headerElementWidth = activeHeader.clientWidth / 2;
             activeIndicator.style.left = `${(boundingRect.left + headerElementWidth) - (activeIndicator.clientWidth / 2) - diff}px`;
         }
         else {
