@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using System.Text;
 using TnTComponents.Core;
-using TnTComponents.Enum;
 
 namespace TnTComponents;
 
@@ -16,6 +15,10 @@ public partial class TnTProgressIndicator {
     public override string? CssClass => CssClassBuilder.Create()
         .SetAlternative(Appearance == ProgressAppearance.Linear)
         .Build();
+
+    public override string? CssStyle => CssStyleBuilder.Create()
+       .AddFromAdditionalAttributes(AdditionalAttributes)
+       .Build();
 
     [Parameter]
     public double Max { get; set; } = 100.0;

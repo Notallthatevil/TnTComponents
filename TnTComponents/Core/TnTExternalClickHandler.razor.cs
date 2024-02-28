@@ -11,6 +11,10 @@ public partial class TnTExternalClickHandler {
 
     public override string? CssClass => ExternalClickCssClass;
 
+    public override string? CssStyle => CssStyleBuilder.Create()
+   .AddFromAdditionalAttributes(AdditionalAttributes)
+   .Build();
+
     [Parameter, EditorRequired]
     public EventCallback ExternalClickCallback { get; set; }
 

@@ -15,6 +15,10 @@ public partial class TnTSideNavMenuGroup {
         .AddClass("tnt-expanded", Expand)
         .Build();
 
+    public override string? CssStyle => CssStyleBuilder.Create()
+       .AddFromAdditionalAttributes(AdditionalAttributes)
+       .Build();
+
     [Parameter]
     public bool Expand { get; set; }
 
@@ -30,9 +34,8 @@ public partial class TnTSideNavMenuGroup {
     [Parameter, EditorRequired]
     public string Title { get; set; } = default!;
 
-    protected override bool RunIsolatedJsScript => false;
-
     protected override string? JsModulePath => "./_content/TnTComponents/Layout/TnTSideNavMenuGroup.razor.js";
+    protected override bool RunIsolatedJsScript => false;
 
     [DynamicDependency(nameof(Toggle))]
     public TnTSideNavMenuGroup() : base() { }

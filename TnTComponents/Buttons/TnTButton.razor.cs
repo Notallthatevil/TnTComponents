@@ -16,17 +16,22 @@ public partial class TnTButton {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
+    [Parameter]
+    public TnTBorderRadius CornerRadius { get; set; } = new(10);
+
     public override string? CssClass => CssClassBuilder.Create()
-        .AddClass(AdditionalAttributes)
+            .AddClass(AdditionalAttributes)
         .AddElevation(Elevation)
         .AddActionableBackgroundColor(BackgroundColor)
         .AddForegroundColor(TextColor)
         .AddBorderRadius(CornerRadius)
+        .AddOutlined(Appearance == ButtonAppearance.Outlined)
         .AddRipple()
         .Build();
 
-    [Parameter]
-    public TnTBorderRadius CornerRadius { get; set; } = new(10);
+    public override string? CssStyle => CssStyleBuilder.Create()
+       .AddFromAdditionalAttributes(AdditionalAttributes)
+       .Build();
 
     [Parameter]
     public int Elevation { get; set; } = 1;
@@ -38,13 +43,13 @@ public partial class TnTButton {
     public EventCallback<MouseEventArgs> OnClick { get; set; }
 
     [Parameter]
+    public bool StopPropagation { get; set; }
+
+    [Parameter]
     public TnTColor? TextColor { get; set; } = TnTColor.OnPrimary;
 
     [Parameter]
     public ButtonType Type { get; set; }
-
-    [Parameter]
-    public bool StopPropagation { get; set; }
 
     protected override string? JsModulePath => "./_content/TnTComponents/Buttons/TnTButton.razor.js";
     protected override bool RunIsolatedJsScript => true;

@@ -16,6 +16,10 @@ public partial class TnTBody {
         .AddForegroundColor(DefaultTextColor)
         .Build();
 
+    public override string? CssStyle => CssStyleBuilder.Create()
+       .AddFromAdditionalAttributes(AdditionalAttributes)
+       .Build();
+
     [Parameter]
     public TnTColor DefaultTextColor { get; set; } = TnTColor.OnBackground;
 

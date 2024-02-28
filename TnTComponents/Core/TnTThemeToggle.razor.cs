@@ -1,8 +1,14 @@
+using TnTComponents.Core;
+
 namespace TnTComponents;
 
 public partial class TnTThemeToggle {
     public override string? CssClass => string.Empty;
-    protected override bool RunIsolatedJsScript => true;
+
+    public override string? CssStyle => CssStyleBuilder.Create()
+   .AddFromAdditionalAttributes(AdditionalAttributes)
+   .Build();
 
     protected override string? JsModulePath => "./_content/TnTComponents/Core/TnTThemeToggle.razor.js";
+    protected override bool RunIsolatedJsScript => true;
 }

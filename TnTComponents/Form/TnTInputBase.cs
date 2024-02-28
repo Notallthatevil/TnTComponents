@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using System.Reflection;
 using TnTComponents.Core;
 using TnTComponents.Form;
@@ -23,8 +22,16 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     [Parameter]
     public bool BindOnInput { get; set; }
 
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    public ElementReference Element { get; protected set; }
+
+    [Parameter]
+    public TnTIcon? EndIcon { get; set; }
+
     public virtual string FormCssClass => CssClassBuilder.Create()
-        .AddClass(CssClass)
+                    .AddClass(CssClass)
         .AddClass("tnt-input")
         .AddOutlined((ParentFormAppearance ?? Appearance) == FormAppearance.Outlined)
         .AddFilled((ParentFormAppearance ?? Appearance) == FormAppearance.Filled)
@@ -34,13 +41,9 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
         .AddBorderRadius((ParentFormAppearance ?? Appearance) == FormAppearance.Filled ? new TnTBorderRadius() { StartStart = 1, StartEnd = 1 } : new TnTBorderRadius(1))
         .Build();
 
-    [Parameter]
-    public bool Disabled { get; set; }
-
-    public ElementReference Element { get; protected set; }
-
-    [Parameter]
-    public TnTIcon? EndIcon { get; set; }
+    public string? FormCssStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .Build();
 
     [CascadingParameter]
     public TnTLabel? Label { get; set; }
@@ -70,9 +73,6 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public TnTIcon? StartIcon { get; set; }
 
     [Parameter]
-    public string? FormCssStyle { get; set; }
-
-    [Parameter]
     public TnTColor? TextColor { get; set; } = TnTColor.OnSurfaceVariant;
 
     public abstract InputType Type { get; }
@@ -80,6 +80,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "span");
         builder.AddAttribute(10, "class", FormCssClass);
+        builder.AddAttribute(11, "style", FormCssStyle);
         {
             {
                 if (StartIcon is not null) {
@@ -92,7 +93,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                 builder.AddMultipleAttributes(110, AdditionalAttributes);
                 builder.AddAttribute(120, "type", Type.ToInputTypeString());
                 builder.AddAttribute(121, "name", NameAttributeValue);
-                
+
                 if (CurrentValue is bool) {
                     builder.AddAttribute(125, "value", bool.TrueString);
                     builder.AddAttribute(126, "checked", BindConverter.FormatValue(CurrentValue));

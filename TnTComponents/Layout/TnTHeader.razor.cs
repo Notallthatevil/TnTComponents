@@ -16,14 +16,15 @@ public partial class TnTHeader {
         .AddForegroundColor(TextColor)
         .Build();
 
+    public override string? CssStyle => CssStyleBuilder.Create()
+           .AddFromAdditionalAttributes(AdditionalAttributes)
+           .Build();
+
     [Parameter]
     public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
 
     [CascadingParameter]
     private TnTLayout _layout { get; set; } = default!;
-
-    //[Parameter]
-    //public TnTColor ScrolledBackgroundColor { get; set; } = TnTColor.SurfaceContainer;
 
     protected override void OnInitialized() {
         base.OnInitialized();

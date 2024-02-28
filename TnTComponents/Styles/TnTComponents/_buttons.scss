@@ -1,7 +1,6 @@
 ﻿@use "sass:map";
 
 button[is=tnt-button], input::file-selector-button {
-    outline: none;
     appearance: none;
     border: none;
     user-select: none;
@@ -13,6 +12,11 @@ button[is=tnt-button], input::file-selector-button {
     align-items: center;
     justify-content: center;
     vertical-align: bottom;
+    cursor: pointer;
+
+    &:not(:has(.tnt-outlined)) {
+        outline: none;
+    }
 
     @extend .tnt-label-large;
 

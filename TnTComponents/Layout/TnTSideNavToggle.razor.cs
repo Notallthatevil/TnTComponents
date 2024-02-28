@@ -26,6 +26,10 @@ public partial class TnTSideNavToggle {
         .AddBorderRadius(BorderRadius)
         .Build();
 
+    public override string? CssStyle => CssStyleBuilder.Create()
+           .AddFromAdditionalAttributes(AdditionalAttributes)
+       .Build();
+
     [Parameter]
     public bool Expanded { get; set; } = false;
 

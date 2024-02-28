@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using TnTComponents.Core;
 
 namespace TnTComponents;
 
@@ -8,6 +9,10 @@ public partial class TnTLayout {
     public RenderFragment ChildContent { get; set; } = default!;
 
     public override string? CssClass => null;
+
+    public override string? CssStyle => CssStyleBuilder.Create()
+       .AddFromAdditionalAttributes(AdditionalAttributes)
+       .Build();
 
     protected override bool RunIsolatedJsScript => true;
 

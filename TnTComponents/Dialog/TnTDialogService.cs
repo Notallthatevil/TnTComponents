@@ -27,7 +27,7 @@ public class TnTDialogService {
         }
         ) ?? Task.CompletedTask);
 
-    internal async Task CloseAsync(ITnTDialog dialog) => await (OnClose?.Invoke(dialog) ?? Task.CompletedTask);
+    public async Task CloseAsync(ITnTDialog dialog) => await (OnClose?.Invoke(dialog) ?? Task.CompletedTask);
 
     private class DialogImpl : ITnTDialog {
         public TnTDialogOptions Options { get; init; } = default!;

@@ -20,6 +20,10 @@ public partial class TnTSideNavMenuLink {
         .AddBorderRadius(BorderRadius)
         .Build();
 
+    public override string? CssStyle => CssStyleBuilder.Create()
+           .AddFromAdditionalAttributes(AdditionalAttributes)
+       .Build();
+
     [Parameter]
     public string? Href { get; set; }
 

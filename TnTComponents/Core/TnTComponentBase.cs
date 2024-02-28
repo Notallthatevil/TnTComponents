@@ -19,9 +19,9 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyn
     [Parameter]
     public bool? AutoFocus { get; set; }
 
-    public abstract string? CssClass { get; }
-
     public string ComponentIdentifier { get; } = TnTComponents.Core.TnTComponentIdentifier.NewId();
+    public abstract string? CssClass { get; }
+    public abstract string? CssStyle { get; }
 
     [Parameter]
     public bool Disabled { get; set; }
@@ -32,7 +32,7 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyn
     public virtual string? Id { get; set; }
 
     [Parameter]
-    public virtual string? CssStyle { get; set; }
+    public TextAlign? TextAlign { get; set; }
 
     internal const string TnTCustomIdentifierAttribute = "tntid";
 
@@ -57,9 +57,6 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyn
 
     [Inject]
     private ILoggerFactory _loggerFactory { get; set; } = default!;
-
-    [Parameter]
-    public TextAlign? TextAlign { get; set; }
 
     private ILogger? _logger;
 

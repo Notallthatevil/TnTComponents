@@ -15,6 +15,10 @@ public partial class TnTTabView {
         .SetAlternative(SecondaryTabView)
         .Build();
 
+    public override string? CssStyle => CssStyleBuilder.Create()
+                   .AddFromAdditionalAttributes(AdditionalAttributes)
+       .Build();
+
     [Parameter]
     public TnTColor HeaderBackgroundColor { get; set; } = TnTColor.Surface;
 
@@ -24,13 +28,9 @@ public partial class TnTTabView {
     [Parameter]
     public bool SecondaryTabView { get; set; }
 
-
-    protected override bool RunIsolatedJsScript => true;
     protected override string? JsModulePath => "./_content/TnTComponents/TabView/TnTTabView.razor.js";
-
-
+    protected override bool RunIsolatedJsScript => true;
     private List<TnTTabChild> _tabChildren = [];
-
 
     public void AddTabChild(TnTTabChild tabChild) {
         _tabChildren.Add(tabChild);
