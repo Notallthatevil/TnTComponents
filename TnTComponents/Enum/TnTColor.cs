@@ -63,6 +63,15 @@ public enum TnTColor {
 
 public static partial class TnTColorEnumExt {
 
+    public static string ToCssClassName(this TnTColor? tnTColorEnum) {
+        if (tnTColorEnum.HasValue) {
+            return tnTColorEnum.Value.ToCssClassName();
+        }
+        else {
+            return string.Empty;
+        }
+    }
+
     public static string ToCssClassName(this TnTColor tnTColorEnum) {
         return FindAllCapitalsExceptFirstLetter().Replace(tnTColorEnum.ToString(), @"-$1").ToLower();
     }

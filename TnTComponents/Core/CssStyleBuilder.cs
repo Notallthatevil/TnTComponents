@@ -21,6 +21,15 @@ internal class CssStyleBuilder {
         return this;
     }
 
+    public CssStyleBuilder AddVariable(string varName, string varValue, bool enabled = true) {
+        if (enabled) {
+            return AddStyle($"--{varName}", varValue);
+        }
+        else {
+            return this;
+        }
+    }
+
     public CssStyleBuilder AddFromAdditionalAttributes(IReadOnlyDictionary<string, object>? additionalAttributes) {
         if (additionalAttributes?.TryGetValue("style", out var style) == true) {
             return AddStyle(style.ToString() ?? string.Empty, string.Empty);
@@ -31,7 +40,10 @@ internal class CssStyleBuilder {
     public string Build() {
         var sb = new StringBuilder();
         foreach (var (key, value) in _styles) {
-            sb.Append(key).Append(": ").Append(value).Append("; ");
+            sb.Append(key);
+            if (!key.Trim().EndsWith(';')) {
+                sb.Append(": ").Append(value).Append("; ");
+            }
         }
         return sb.ToString().Trim();
     }
