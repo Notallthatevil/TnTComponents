@@ -2,11 +2,12 @@
     display: block;
     width: 100%;
     margin-top: 0.5rem;
+    position: relative;
 
     & > div:first-child {
         display: block;
         vertical-align: bottom;
-        position: relative;
+        position: sticky;
         border-bottom: 1px solid $tnt-color-outline;
         margin: 0 0.5rem;
         white-space: nowrap;
