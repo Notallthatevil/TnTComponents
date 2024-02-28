@@ -5,6 +5,12 @@ using TnTComponents.Ext;
 
 namespace TnTComponents;
 
+public enum Theme {
+    System,
+    Light,
+    Dark
+}
+
 public partial class TnTDesignTheme {
 
     [Parameter]
@@ -67,7 +73,7 @@ public partial class TnTDesignTheme {
     public Color InverseSurfaceLight { get; set; } = ColorTranslator.FromHtml("#322f33");
 
     [Parameter]
-    public bool IsDark { get; set; } = false;
+    public Theme Theme { get; set; }
 
     [Parameter]
     public Color OnBackgroundDark { get; set; } = ColorTranslator.FromHtml("#E7e1e5");
@@ -320,6 +326,9 @@ public partial class TnTDesignTheme {
 
                 if (value is Color color) {
                     dict.Add(propName, $"#{color.R:X2}{color.G:X2}{color.B:X2}".ToLower());
+                }
+                else if(value is Theme theme) {
+                    dict.Add(propName, theme.ToString().ToLower());
                 }
                 else {
                     dict.Add(propName, value!);

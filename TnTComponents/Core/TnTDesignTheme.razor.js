@@ -2,14 +2,18 @@ export class TnTDesignTheme extends HTMLElement {
     createTheme() {
         let css = new CSSStyleSheet();
 
-        let isDark = this.getAttribute('is-dark');
+        const theme = this.getAttribute('theme');
         const attributes = this.attributes;
+        let isDark = null;
+        if (theme === 'system' || theme === 'dark') {
+            isDark = 'true';
+        }
 
         let rules = ':root { ';
 
         for (let i = 0; i < attributes.length; ++i) {
             const attr = attributes[i];
-            if (isDark === 'system') {
+            if (theme === 'system') {
                 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
                     isDark = 'true';
                 }

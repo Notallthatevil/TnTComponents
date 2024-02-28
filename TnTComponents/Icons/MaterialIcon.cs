@@ -465,6 +465,7 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon LibraryBooks = new("library_books");
     public static readonly MaterialIcon LibraryMusic = new("library_music");
     public static readonly MaterialIcon LightbulbOutline = new("lightbulb_outline");
+    public static readonly MaterialIcon LightMode = new("light_mode");
     public static readonly MaterialIcon LinearScale = new("linear_scale");
     public static readonly MaterialIcon LineStyle = new("line_style");
     public static readonly MaterialIcon LineWeight = new("line_weight");
