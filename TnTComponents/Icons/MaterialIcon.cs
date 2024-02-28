@@ -510,6 +510,7 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon Lock = new("lock");
     public static readonly MaterialIcon LockOpen = new("lock_open");
     public static readonly MaterialIcon LockOutline = new("lock_outline");
+    public static readonly MaterialIcon Logout = new("logout");
     public static readonly MaterialIcon Looks = new("looks");
     public static readonly MaterialIcon Looks3 = new("looks_3");
     public static readonly MaterialIcon Looks4 = new("looks_4");

@@ -42,7 +42,7 @@ public class TnTDialog : ComponentBase, IDisposable {
             {
                 builder.OpenComponent<TnTExternalClickHandler>(40);
                 builder.AddComponentParameter(50, "ExternalClickCssClass", dialog.Options.GetDialogClass());
-                builder.AddComponentParameter(60, "CssStyle", dialog.Options.Style);
+                builder.AddAttribute(60, "style", dialog.Options.Style);
 
                 if (dialog.Options.CloseOnExternalClick) {
                     builder.AddComponentParameter(70, "ExternalClickCallback", EventCallback.Factory.Create(this, async () => await _service.CloseAsync(dialog)));
