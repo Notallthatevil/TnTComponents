@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace TnTComponents;
 
 public enum TnTColor {
+    None,
     Transparent,
     Black,
     White,
