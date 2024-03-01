@@ -1,0 +1,24 @@
+﻿@using TnTComponents
+@attribute [StreamRendering]
+@if (_value is null) {
+ <text>   Loading...</text>
+}
+else {
+    <p>
+        @_value
+    </p>
+
+}
+
+@code {
+    private string? _value;
+
+
+    protected override async Task OnParametersSetAsync() {
+        await base.OnParametersSetAsync();
+        await Task.Delay(5000);
+        _value = "streamed";
+
+    }
+
+}
