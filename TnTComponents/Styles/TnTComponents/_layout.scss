@@ -3,6 +3,7 @@
 
     tnt-side-nav {
         transition: 200ms ease-in-out;
+        overflow-y: auto;
     }
 
     tnt-header, tnt-footer {
