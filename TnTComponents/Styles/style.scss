@@ -28,3 +28,7 @@
 body {
     margin: 0;
 }
+
+* {
+    scrollbar-color: $tnt-color-surface $tnt-color-surface-variant;
+}
