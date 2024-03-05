@@ -1,18 +1,16 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 using TnTComponents.Ext;
 
 namespace TnTComponents;
 
-public enum Theme {
-    System,
-    Light,
-    Dark
-}
-
-public partial class TnTDesignTheme {
-
+public class TnTThemeDesign : IComponent {
     [Parameter]
     public bool AllowColorModeToggle { get; set; } = true;
 
@@ -316,25 +314,88 @@ public partial class TnTDesignTheme {
 
     public Color White => Color.White;
 
-    private IReadOnlyDictionary<string, object> GetAttributes() {
-        var dict = new Dictionary<string, object>();
 
-        foreach (var prop in GetType().GetProperties()) {
-            if (prop.GetCustomAttribute<ParameterAttribute>() is not null) {
-                var propName = prop.Name.SplitPascalCase("-").ToLower();
-                var value = prop.GetValue(this);
 
-                if (value is Color color) {
-                    dict.Add(propName, $"#{color.R:X2}{color.G:X2}{color.B:X2}".ToLower());
-                }
-                else if(value is Theme theme) {
-                    dict.Add(propName, theme.ToString().ToLower());
-                }
-                else {
-                    dict.Add(propName, value!);
-                }
+    private RenderHandle _renderHandle;
+
+    public void Attach(RenderHandle renderHandle) {
+        _renderHandle = renderHandle;
+    }
+
+    public Task SetParametersAsync(ParameterView parameters) {
+        var allProperties = GetType().GetProperties().ToDictionary(kv => kv.Name, p => p);
+        foreach (var entry in parameters) {
+            if (allProperties.TryGetValue(entry.Name, out var prop)) {
+                prop.SetValue(this, entry.Value);
             }
         }
-        return dict;
+
+        var other = new StringBuilder(":root{");
+        var darkTheme = new StringBuilder(":root{");
+        var lightTheme = new StringBuilder(":root{");
+
+        foreach (var prop in allProperties.Select(kv => kv.Value)) {
+            var propName = prop.Name.SplitPascalCase("-").ToLower();
+            var value = prop.GetValue(this);
+
+            if (value is Color color) {
+                var darkModeColor = propName.Contains("dark");
+                propName = propName.Replace("-dark", string.Empty);
+                propName = propName.Replace("-light", string.Empty);
+                if (darkModeColor) {
+                    darkTheme.Append("--tnt-color-").Append(propName).Append(':').Append($"#{color.R:X2}{color.G:X2}{color.B:X2}{color.A:X2}").Append(';');
+                }
+                else {
+                    lightTheme.Append("--tnt-color-").Append(propName).Append(':').Append($"#{color.R:X2}{color.G:X2}{color.B:X2}{color.A:X2}").Append(';');
+                }
+            }
+            else if (value is double d) {
+                other.Append("--tnt-").Append(propName).Append(':').Append(d).Append("rem;");
+            }
+            else {
+                other.Append("--tnt-").Append(propName).Append(":'").Append(value?.ToString()?.ToLower()).Append("';");
+            }
+        }
+
+        other.Append('}');
+        darkTheme.Append('}');
+        lightTheme.Append('}');
+
+        _renderHandle.Render(new RenderFragment(builder => {
+            builder.OpenElement(0, "style");
+            builder.AddContent(1, other.ToString());
+            builder.CloseElement();
+
+            builder.OpenElement(2, "style");
+            if (Theme == Theme.System) {
+                builder.AddAttribute(3, "media", "(prefers-color-scheme:dark)");
+            }
+            else if(Theme == Theme.Dark) {
+                builder.AddAttribute(3, "media", "all");
+            }
+            else {
+                builder.AddAttribute(3, "media", "not all");
+            }
+            builder.AddAttribute(4, "id", "tnt-theme-design-dark");
+            builder.AddContent(5, darkTheme.ToString());
+            builder.CloseElement();
+
+            builder.OpenElement(6, "style");
+            if (Theme == Theme.System) {
+                builder.AddAttribute(7, "media", "(prefers-color-scheme:light)");
+            }
+            else if (Theme == Theme.Dark) {
+                builder.AddAttribute(7, "media", "not all");
+            }
+            else {
+                builder.AddAttribute(7, "media", "all");
+            }
+            builder.AddAttribute(8, "id", "tnt-theme-design-light");
+            builder.AddContent(9, lightTheme.ToString());
+            builder.CloseElement();
+        }));
+
+        return Task.CompletedTask;
     }
 }
+

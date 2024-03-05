@@ -51,6 +51,7 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon Apps = new("apps");
     public static readonly MaterialIcon Archive = new("archive");
     public static readonly MaterialIcon ArrowBack = new("arrow_back");
+    public static readonly MaterialIcon ArrowCircleLeft = new("arrow_circle_left");
     public static readonly MaterialIcon ArrowDownward = new("arrow_downward");
     public static readonly MaterialIcon ArrowDropDown = new("arrow_drop_down");
     public static readonly MaterialIcon ArrowDropDownCircle = new("arrow_drop_down_circle");
@@ -76,6 +77,7 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon AvTimer = new("av_timer");
     public static readonly MaterialIcon Backspace = new("backspace");
     public static readonly MaterialIcon Backup = new("backup");
+    public static readonly MaterialIcon BarChart = new("bar_chart");
     public static readonly MaterialIcon BatteryAlert = new("battery_alert");
     public static readonly MaterialIcon BatteryChargingFull = new("battery_charging_full");
     public static readonly MaterialIcon BatteryFull = new("battery_full");
@@ -392,6 +394,7 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon GroupAdd = new("group_add");
     public static readonly MaterialIcon GroupWork = new("group_work");
     public static readonly MaterialIcon GTranslate = new("g_translate");
+    public static readonly MaterialIcon Handshake = new("handshake");
     public static readonly MaterialIcon Hd = new("hd");
     public static readonly MaterialIcon HdrOff = new("hdr_off");
     public static readonly MaterialIcon HdrOn = new("hdr_on");
@@ -573,6 +576,7 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon NoSim = new("no_sim");
     public static readonly MaterialIcon Note = new("note");
     public static readonly MaterialIcon NoteAdd = new("note_add");
+    public static readonly MaterialIcon NoteAlt = new("note_alt");
     public static readonly MaterialIcon Notifications = new("notifications");
     public static readonly MaterialIcon NotificationsActive = new("notifications_active");
     public static readonly MaterialIcon NotificationsNone = new("notifications_none");

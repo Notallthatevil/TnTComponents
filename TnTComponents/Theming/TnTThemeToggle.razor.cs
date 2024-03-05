@@ -9,6 +9,6 @@ public partial class TnTThemeToggle {
    .AddFromAdditionalAttributes(AdditionalAttributes)
    .Build();
 
-    protected override string? JsModulePath => "./_content/TnTComponents/Core/TnTThemeToggle.razor.js";
+    protected override string? JsModulePath => "./_content/TnTComponents/Theming/TnTThemeToggle.razor.js";
     protected override bool RunIsolatedJsScript => true;
 }

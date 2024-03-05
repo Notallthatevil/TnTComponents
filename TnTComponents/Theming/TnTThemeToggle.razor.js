@@ -1,42 +1,48 @@
 function getCurrentTheme() {
-    const themeCollection = document.getElementsByTagName('tnt-design-theme');
-    if (themeCollection && themeCollection.length > 0) {
-        const theme = themeCollection[0].getAttribute('theme');
-        if (theme === 'system') {
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    const darkThemeStyle = document.getElementById('tnt-theme-design-dark');
+    const lightThemeStyle = document.getElementById('tnt-theme-design-light');
+    if (darkThemeStyle && lightThemeStyle) {
+        const darkThemeMedia = darkThemeStyle.getAttribute('media');
+        if (darkThemeMedia && darkThemeMedia.includes) {
+            if (darkThemeMedia.includes('prefers-color-scheme')) {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    return 'dark';
+                }
+                else {
+                    return 'light';
+                }
+            }
+            else if (darkThemeMedia.includes('not all')) {
+                return 'light';
+            }
+            else {
                 return 'dark';
             }
         }
-
-        if (theme === 'dark') {
-            return 'dark';
-        }
-
-        return 'light';
     }
     return null;
 }
 
 function toggleTheme(e) {
-    const themeCollection = document.getElementsByTagName('tnt-design-theme');
-    if (themeCollection && themeCollection.length > 0) {
-        const theme = themeCollection[0];
+    const darkThemeStyle = document.getElementById('tnt-theme-design-dark');
+    const lightThemeStyle = document.getElementById('tnt-theme-design-light');
 
-        if (theme) {
-            const currentTheme = getCurrentTheme();
-            if (currentTheme === 'dark') {
-                theme.setAttribute('theme', 'light');
-            }
-            else {
-                theme.setAttribute('theme', 'dark');
-            }
-
-            theme.createTheme();
-            const toggler = e.target.closest('tnt-theme-toggle');
-            if (toggler) {
-                toggler.updateIcon();
-            }
+    if (darkThemeStyle && lightThemeStyle) {
+        const currentTheme = getCurrentTheme();
+        if (currentTheme === 'dark') {
+            darkThemeStyle.setAttribute('media', 'not all');
+            lightThemeStyle.setAttribute('media', 'all');
         }
+        else {
+            darkThemeStyle.setAttribute('media', 'all');
+            lightThemeStyle.setAttribute('media', 'not all');
+        }
+
+        const toggler = e.target.closest('tnt-theme-toggle');
+        if (toggler) {
+            toggler.updateIcon();
+        }
+
     }
 }
 
