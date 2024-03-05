@@ -10,14 +10,22 @@ public partial class TnTProgressIndicator {
     public ProgressAppearance Appearance { get; set; }
 
     [Parameter]
+    public Size Size { get; set; } = Size.Default;
+
+    [Parameter]
     public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public TnTColor ProgressColor { get; set; } = TnTColor.Primary;
 
     public override string? CssClass => CssClassBuilder.Create()
         .SetAlternative(Appearance == ProgressAppearance.Linear)
+        .AddSize(Size)
         .Build();
 
     public override string? CssStyle => CssStyleBuilder.Create()
        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddVariable("progress-color", $"var(--tnt-color-{ProgressColor.ToCssClassName()})")
        .Build();
 
     [Parameter]

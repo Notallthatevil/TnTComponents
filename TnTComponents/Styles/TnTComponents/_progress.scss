@@ -6,14 +6,14 @@
         margin: 0.5rem;
         position: relative;
         overflow-x: hidden;
-        color: $tnt-color-primary;
+        color: var(--progress-color);
 
         &::-moz-progress-bar {
-            background: $tnt-color-primary;
+            background: var(--progress-color);
         }
 
         &::-webkit-progress-value {
-            background: $tnt-color-primary;
+            background: var(--progress-color);
         }
 
         &:indeterminate {
@@ -22,7 +22,7 @@
                 position: absolute;
                 width: inherit;
                 height: inherit;
-                background-color: $tnt-color-primary;
+                background-color: var(--progress-color);
                 transform-origin: 0 0;
                 animation: indefiniteProgressBarBefore linear 3s infinite;
             }
@@ -32,7 +32,7 @@
                 position: absolute;
                 width: inherit;
                 height: inherit;
-                background-color: $tnt-color-primary;
+                background-color: var(--progress-color);
                 top: 0;
                 left: 0;
                 transform-origin: 0 0;
@@ -51,7 +51,7 @@
         padding: 0.25rem;
         width: 4rem;
         height: 4rem;
-        color: $tnt-color-primary;
+        color: var(--progress-color);
         background-color: transparent;
         font-size: 16px;
         overflow: hidden;
@@ -104,10 +104,62 @@
         }
 
         &:not(:indeterminate) {
-            background-color: $tnt-color-primary;
+            background-color: var(--progress-color);
             -webkit-mask: radial-gradient(circle, transparent 0 1.6rem, black 1.6rem 100%);
             mask: radial-gradient(circle, transparent 0 1.6rem, black 1.6rem 100%);
             transform: scale(0.8);
+        }
+
+        &.tnt-size-smallest {
+            width: 1.5rem;
+            height: 1.5rem;
+
+            &:before, &::-webkit-progress-value {
+                border-width: 2px;
+            }
+
+            &::-moz-progress-bar {
+                border-width: 2px;
+            }
+        }
+
+        &.tnt-size-small {
+            width: 2.5rem;
+            height: 2.5rem;
+
+            &:before, &::-webkit-progress-value {
+                border-width: 3px;
+            }
+
+            &::-moz-progress-bar {
+                border-width: 3px;
+            }
+        }
+
+        &.tnt-size-large {
+            width: 5.5rem;
+            height: 5.5rem;
+
+            &:before, &::-webkit-progress-value {
+                border-width: 6px;
+            }
+
+            &::-moz-progress-bar {
+                border-width: 6px;
+            }
+        }
+
+        &.tnt-size-largest {
+            width: 8rem;
+            height: 8rem;
+
+            &:before, &::-webkit-progress-value {
+                border-width: 10px;
+            }
+
+            &::-moz-progress-bar {
+                border-width: 10px;
+            }
         }
     }
 }

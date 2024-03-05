@@ -52,6 +52,21 @@ internal class CssClassBuilder {
         .AddAlignContent(alignContent) :
         this;
 
+    public CssClassBuilder AddSize(Size? size) {
+        if (size is null || size == Size.Default) {
+            return this;
+        }
+        var sizeSuffix = size switch {
+            Size.Smallest => "smallest",
+            Size.Small => "small",
+            Size.Large => "large",
+            Size.Largest => "largest",
+            _ => string.Empty
+        };
+
+        return AddClass($"tnt-size-{sizeSuffix}", size is not null && size != Size.Default);
+    }
+
     public CssClassBuilder AddFlexBox(ITnTFlexBox flexBox, bool enabled = true) => AddFlexBox(flexBox.Direction, flexBox.AlignItems, flexBox.JustifyContent, flexBox.AlignContent, enabled);
 
     public CssClassBuilder AddForegroundColor(TnTColor? color) => AddClass($"tnt-fg-color-{color?.ToCssClassName() ?? string.Empty}", color is not null && color != TnTColor.None);
