@@ -3,7 +3,7 @@ using TnTComponents.Core;
 
 namespace TnTComponents;
 
-public partial class MaterialIcon : TnTIcon {
+public sealed class MaterialIcon(string icon) : TnTIcon {
     public static readonly MaterialIcon AccessAlarm = new("access_alarm");
     public static readonly MaterialIcon AccessAlarms = new("access_alarms");
     public static readonly MaterialIcon Accessibility = new("accessibility");
@@ -942,10 +942,10 @@ public partial class MaterialIcon : TnTIcon {
     public static readonly MaterialIcon ZoomIn = new("zoom_in");
     public static readonly MaterialIcon ZoomOut = new("zoom_out");
     public static readonly MaterialIcon ZoomOutMap = new("zoom_out_map");
-    private readonly string _icon;
+    private readonly string _icon = icon;
 
-    private MaterialIcon(string icon) {
-        _icon = icon;
+    public override string ToString() {
+        return _icon;
     }
 
     public override MarkupString Render() {
