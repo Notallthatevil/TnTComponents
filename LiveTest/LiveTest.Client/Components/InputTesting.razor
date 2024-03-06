@@ -5,58 +5,69 @@
     <DataAnnotationsValidator />
 
     <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
-        <TnTInputCheckbox @bind-Value="@_model.C" />
+        <TnTInputSwitch @bind-Value="@_model.C" />
+    </TnTLabel>
+
+    <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+        <TnTInputSwitch StartIcon="MaterialIcon.Gif" @bind-Value="@_model.C" />
+    </TnTLabel>
+
+    <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+        <TnTInputSwitch @bind-Value="@_model.C" EndIcon="MaterialIcon.Group"/>
+    </TnTLabel>
+
+    <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+        <TnTInputSwitch StartIcon="MaterialIcon.Gif" @bind-Value="@_model.C" EndIcon="MaterialIcon.Group" />
     </TnTLabel>
 
     <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
         <TnTInputText  @bind-Value="@_model.S"   />
     </TnTLabel>
+</TnTForm>
 
-    <TnTLabel Label="My Lable" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
-        <TnTInputText Placeholder="MyPlacholder" @bind-Value="@_model.S" />
+<TnTForm Model="@_model" Appearance="FormAppearance.Filled">
+    <DataAnnotationsValidator />
+
+    <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+        <TnTInputSwitch @bind-Value="@_model.C" />
     </TnTLabel>
 
-    <TnTInputRadioGroup @bind-Value="_model.A" Appearance="FormAppearance.Filled" RadioGroupName="Group1" Direction="LayoutDirection.Vertical">
-        @foreach (var a in Enum.GetValues<Test>()) {
-            <TnTLabel Label="@a.ToString()" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
-                <TnTInputRadio Name="@a.ToString()" Value="a" />
-            </TnTLabel>
-        }
-    </TnTInputRadioGroup>
-
-    <TnTInputRadioGroup @bind-Value="_model.A" Appearance="FormAppearance.Filled" RadioGroupName="Group2" Direction="LayoutDirection.Vertical">
-        @foreach (var a in Enum.GetValues<Test>()) {
-            <TnTLabel Label="@a.ToString()" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
-                <TnTInputRadio Name="@a.ToString()" Value="a" />
-            </TnTLabel>
-        }
-    </TnTInputRadioGroup>
-
-
-
-    <TnTInputRadioGroup @bind-Value="_model.A" Appearance="FormAppearance.Filled" RadioGroupName="Group3" Direction="LayoutDirection.Horizontal">
-        @foreach (var a in Enum.GetValues<Test>()) {
-            <TnTLabel Label="@a.ToString()" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
-                <TnTInputRadio  Name="@a.ToString()" Value="a" />
-            </TnTLabel>
-        }
-    </TnTInputRadioGroup>
-
-    <TnTInputRadioGroup @bind-Value="_model.A" Appearance="FormAppearance.Filled" RadioGroupName="Group4" Direction="LayoutDirection.Horizontal">
-        @foreach (var a in Enum.GetValues<Test>()) {
-            <TnTLabel Label="@a.ToString()" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
-                <TnTInputRadio Name="@a.ToString()" Value="a" />
-            </TnTLabel>
-        }
-    </TnTInputRadioGroup>
-
-    <TnTLabel Label="Select">
-        <TnTInputSelect @bind-Value="_model.D" Placeholder="Select a value">
-            @foreach (var a in Enum.GetValues<Test>()) {
-                <option @key="a" value="@a">@a.ToString()</option>
-            }
-        </TnTInputSelect>
+    <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+        <TnTInputSwitch StartIcon="MaterialIcon.Gif" @bind-Value="@_model.C" />
     </TnTLabel>
+
+    <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+        <TnTInputSwitch @bind-Value="@_model.C" EndIcon="MaterialIcon.Group" />
+    </TnTLabel>
+
+    <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+        <TnTInputSwitch StartIcon="MaterialIcon.Gif" @bind-Value="@_model.C" EndIcon="MaterialIcon.Group" />
+    </TnTLabel>
+
+    <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+        <TnTInputText  StartIcon="MaterialIcon.People" @bind-Value="@_model.S" />
+    </TnTLabel>
+</TnTForm>
+
+<TnTForm Model="@_model" Appearance="FormAppearance.Outlined">
+    <DataAnnotationsValidator />
+
+    <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+        <TnTInputCheckbox @bind-Value="@_model.C" />
+    </TnTLabel>
+
+    <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+        <TnTInputCheckbox StartIcon="MaterialIcon.Gif" @bind-Value="@_model.C" />
+    </TnTLabel>
+
+    <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+        <TnTInputCheckbox @bind-Value="@_model.C" EndIcon="MaterialIcon.Group" />
+    </TnTLabel>
+
+    <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+        <TnTInputCheckbox StartIcon="MaterialIcon.Gif" @bind-Value="@_model.C" EndIcon="MaterialIcon.Group" />
+    </TnTLabel>
+
 </TnTForm>
 
 <TnTForm Model="@_model" Appearance="FormAppearance.Filled">
@@ -67,55 +78,19 @@
     </TnTLabel>
 
     <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
-        <TnTInputText  StartIcon="MaterialIcon.People" @bind-Value="@_model.S" />
+        <TnTInputCheckbox StartIcon="MaterialIcon.Gif" @bind-Value="@_model.C" />
     </TnTLabel>
 
-    <TnTLabel Label="My Lable" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
-        <TnTInputText Placeholder="MyPlacholder" @bind-Value="@_model.S" />
+    <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+        <TnTInputCheckbox @bind-Value="@_model.C" EndIcon="MaterialIcon.Group" />
     </TnTLabel>
 
-    <TnTInputRadioGroup @bind-Value="_model.A" Appearance="FormAppearance.Filled" RadioGroupName="Group1" Direction="LayoutDirection.Vertical">
-        @foreach (var a in Enum.GetValues<Test>()) {
-            <TnTLabel Label="@a.ToString()" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
-                <TnTInputRadio Name="@a.ToString()" Value="a" />
-            </TnTLabel>
-        }
-    </TnTInputRadioGroup>
-
-    <TnTInputRadioGroup @bind-Value="_model.A" Appearance="FormAppearance.Filled" RadioGroupName="Group2" Direction="LayoutDirection.Vertical">
-        @foreach (var a in Enum.GetValues<Test>()) {
-            <TnTLabel Label="@a.ToString()" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
-                <TnTInputRadio Name="@a.ToString()" Value="a" />
-            </TnTLabel>
-        }
-    </TnTInputRadioGroup>
-
-
-
-    <TnTInputRadioGroup @bind-Value="_model.A" Appearance="FormAppearance.Filled" RadioGroupName="Group3" Direction="LayoutDirection.Horizontal">
-        @foreach (var a in Enum.GetValues<Test>()) {
-            <TnTLabel Label="@a.ToString()" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
-                <TnTInputRadio Name="@a.ToString()" Value="a" />
-            </TnTLabel>
-        }
-    </TnTInputRadioGroup>
-
-    <TnTInputRadioGroup @bind-Value="_model.A" Appearance="FormAppearance.Filled" RadioGroupName="Group4" Direction="LayoutDirection.Horizontal">
-        @foreach (var a in Enum.GetValues<Test>()) {
-            <TnTLabel Label="@a.ToString()" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
-                <TnTInputRadio Name="@a.ToString()" Value="a" />
-            </TnTLabel>
-        }
-    </TnTInputRadioGroup>
-
-    <TnTLabel Label="Select">
-        <TnTInputSelect @bind-Value="_model.D" Placeholder="Select a value">
-            @foreach(var a in Enum.GetValues<Test>()) {
-                <option @key="a" value="@a">@a.ToString()</option>
-            }
-        </TnTInputSelect>
+    <TnTLabel Label="My Label" BackgroundColor="TnTColor.Surface" Appearance="FormAppearance.Filled">
+        <TnTInputCheckbox StartIcon="MaterialIcon.Gif" @bind-Value="@_model.C" EndIcon="MaterialIcon.Group" />
     </TnTLabel>
+
 </TnTForm>
+
 
 @(_model.A)
 

@@ -6,11 +6,26 @@ namespace TnTComponents;
 
 public class TnTInputCheckbox : TnTInputBase<bool> {
 
-    [Parameter]
-    public InputCheckboxAppearance CheckboxAppearance { get; set; }
 
-    public override string FormCssClass => CssClassBuilder.Create(base.FormCssClass).AddClass(AppearanceClass()).Build();
+    public override string FormCssClass => CssClassBuilder.Create(base.FormCssClass).Build();
+
+    public override string? FormCssStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddVariable("outline-color", $"var(--tnt-color-{OutlineColor.ToCssClassName()})")
+        .AddVariable("fill-color", $"var(--tnt-color-{FillColor.ToCssClassName()})")
+        .AddVariable("check-mark-color", $"var(--tnt-color-{CheckMarkColor.ToCssClassName()})")
+        .Build();
+
     public override InputType Type => InputType.Checkbox;
+
+    [Parameter]
+    public TnTColor OutlineColor { get; set; } = TnTColor.Outline;
+
+    [Parameter]
+    public TnTColor FillColor { get; set; } = TnTColor.Primary;
+
+    [Parameter]
+    public TnTColor CheckMarkColor { get; set; } = TnTColor.Surface;
 
     protected override void OnInitialized() {
         base.OnInitialized();
@@ -21,13 +36,5 @@ public class TnTInputCheckbox : TnTInputBase<bool> {
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out bool result, [NotNullWhen(false)] out string? validationErrorMessage) {
         throw new NotSupportedException();
-    }
-
-    private string AppearanceClass() {
-        return CheckboxAppearance switch {
-            InputCheckboxAppearance.Checkbox => string.Empty,
-            InputCheckboxAppearance.Switch => "tnt-alternative",
-            _ => throw new InvalidOperationException($"{CheckboxAppearance} is not a valid value of {nameof(InputCheckboxAppearance)}"),
-        };
     }
 }

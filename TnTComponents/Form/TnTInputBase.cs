@@ -31,7 +31,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public TnTIcon? EndIcon { get; set; }
 
     public virtual string FormCssClass => CssClassBuilder.Create()
-                    .AddClass(CssClass)
+        .AddClass(CssClass)
         .AddClass("tnt-input")
         .AddOutlined((ParentFormAppearance ?? Appearance) == FormAppearance.Outlined)
         .AddFilled((ParentFormAppearance ?? Appearance) == FormAppearance.Filled)
@@ -41,7 +41,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
         .AddBorderRadius((ParentFormAppearance ?? Appearance) == FormAppearance.Filled ? new TnTBorderRadius() { StartStart = 1, StartEnd = 1 } : new TnTBorderRadius(1))
         .Build();
 
-    public string? FormCssStyle => CssStyleBuilder.Create()
+    public virtual string? FormCssStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
