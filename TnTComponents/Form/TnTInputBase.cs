@@ -89,9 +89,15 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                 }
             }
             {
-                builder.OpenElement(100, "input");
-                builder.AddMultipleAttributes(110, AdditionalAttributes);
-                builder.AddAttribute(120, "type", Type.ToInputTypeString());
+                if (Type == InputType.TextArea) {
+                    builder.OpenElement(100, "textarea");
+                }
+                else {
+                    builder.OpenElement(100, "input");
+                    builder.AddAttribute(110, "type", Type.ToInputTypeString());
+
+                }
+                builder.AddMultipleAttributes(120, AdditionalAttributes);
                 builder.AddAttribute(121, "name", NameAttributeValue);
 
                 if (CurrentValue is bool) {
