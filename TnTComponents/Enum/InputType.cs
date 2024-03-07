@@ -26,7 +26,8 @@ public enum InputType {
     Text,
     Time,
     Url,
-    Week
+    Week,
+    TextArea
 }
 
 public static class InputTypeExt {
