@@ -28,17 +28,28 @@ public class TnTDialogService {
         }
         ) ?? Task.CompletedTask);
 
-    public async Task OpenForResultAsync<TComponent>(EventCallback<DialogResult> resultCallback, TnTDialogOptions? options = null, IReadOnlyDictionary<string, object>? parameters = null) where TComponent : IComponent =>
-     await (OnOpen?.Invoke(new DialogImpl(this, resultCallback) {
-         Options = options ?? new(),
-         Parameters = parameters,
-         Type = typeof(TComponent)
-     }
-     ) ?? Task.CompletedTask);
+    public async Task<DialogResult> OpenForResultAsync<TComponent>(TnTDialogOptions? options = null, IReadOnlyDictionary<string, object>? parameters = null) where TComponent : IComponent {
+        var dialog = new DialogImpl(this) {
+            Options = options ?? new(),
+            Parameters = parameters,
+            Type = typeof(TComponent)
+        };
+        if (OnOpen is not null) {
+            await OnOpen.Invoke(dialog);
+            while (dialog.DialogResult == DialogResult.Pending) {
+                await Task.Delay(500);
+            }
+            return dialog.DialogResult;
+        }
+        else {
+            return DialogResult.Failed;
+        }
+
+    }
 
     public async Task CloseAsync(ITnTDialog dialog) => await (OnClose?.Invoke(dialog) ?? Task.CompletedTask);
 
-    private class DialogImpl(TnTDialogService dialogService, EventCallback<DialogResult> resultCallback = default) : ITnTDialog {
+    private class DialogImpl(TnTDialogService dialogService) : ITnTDialog {
         public TnTDialogOptions Options { get; init; } = default!;
         public IReadOnlyDictionary<string, object>? Parameters { get; init; }
         public Type Type { get; init; } = default!;
@@ -47,10 +58,5 @@ public class TnTDialogService {
         public Task CloseAsync() {
             return dialogService.CloseAsync(this);
         }
-
-        public async Task Closing() {
-            await resultCallback.InvokeAsync(DialogResult);
-        }
-
     }
 }
