@@ -12,6 +12,7 @@
         margin: 0 0.5rem;
         white-space: nowrap;
         overflow-x: auto;
+        z-index: 10;
 
         & > span {
             display: table;
