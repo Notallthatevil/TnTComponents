@@ -1,13 +1,13 @@
 ﻿@namespace TnTComponents
-<TnTInputText @bind-Value="_currencyStr"
+<TnTInputText @bind-Value="CurrencyString"
               @attributes="@AdditionalAttributes"
               Appearance="@Appearance"
               BackgroundColor="@BackgroundColor"
-              BindAfter="@BindAfter"
+              BindAfter="@(() => BindAfter.InvokeAsync(Value))"
               BindOnInput="@BindOnInput"
               Disabled="@Disabled"
               EndIcon="@EndIcon"
-              OnChanged="@OnChanged"
+              OnChanged="@(() => OnChanged.InvokeAsync(Value))"
               Placeholder="@Placeholder"
               ReadOnly="@ReadOnly"
               StartIcon="@StartIcon"
@@ -16,4 +16,4 @@
               pattern="^\$?(([1-9](\d*|\d{0,2}(,(\d{1,3})?)*))|0)(\.(\d{1,2})?)?$" />
 
 
-<TnTPageScript Src="@JsModulePath"/>
+<TnTPageScript Src="@JsModulePath" />

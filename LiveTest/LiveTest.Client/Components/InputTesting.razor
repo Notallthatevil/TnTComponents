@@ -43,12 +43,17 @@
 
 </TnTForm>
 
-@(_model.A)
+<TnTInputCurrency @bind-Value="_currencyValue"/>
 
+Currency
+@(_currencyValue)
+Value
 
 @code {
 
     private Model _model = new();
+
+    private decimal? _currencyValue;
 
     class Model {
         public Test? A { get; set; }

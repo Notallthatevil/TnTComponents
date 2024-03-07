@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Microsoft.VisualBasic;
+using System.Globalization;
 using System.Xml.Linq;
 using TnTComponents.Ext;
 
@@ -13,7 +14,7 @@ public partial class TnTInputCurrency {
     public TnTColor? BackgroundColor { get; set; } = TnTColor.SurfaceContainer;
 
     [Parameter]
-    public EventCallback<string?> BindAfter { get; set; }
+    public EventCallback<decimal?> BindAfter { get; set; }
 
     [Parameter]
     public bool BindOnInput { get; set; }
@@ -25,7 +26,7 @@ public partial class TnTInputCurrency {
     public TnTIcon? EndIcon { get; set; }
 
     [Parameter]
-    public EventCallback<string?> OnChanged { get; set; }
+    public EventCallback<decimal?> OnChanged { get; set; }
 
     [Parameter]
     public string? Placeholder { get; set; }
@@ -43,9 +44,21 @@ public partial class TnTInputCurrency {
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
     [Parameter]
-    public decimal? CurrencyValue { get; set; }
+    public decimal? Value { get; set; }
 
-    private string? _currencyStr;
+    private string? _currencyString;
+    private string? CurrencyString {
+        get => _currencyString;
+        set {
+            if (value is not null && decimal.TryParse(value, NumberStyles.Currency, CultureInfo.InvariantCulture, out var result)) {
+                Value = result;
+            }
+            else {
+                Value = null;
+            }
+            _currencyString = value;
+        }
+    }
 
 
     private DotNetObjectReference<TnTInputCurrency>? _dotNetObjRef;
