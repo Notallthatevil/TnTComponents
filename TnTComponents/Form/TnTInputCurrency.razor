@@ -1,19 +1,8 @@
 ﻿@namespace TnTComponents
-<TnTInputText @bind-Value="CurrencyString"
-              @attributes="@AdditionalAttributes"
-              Appearance="@Appearance"
-              BackgroundColor="@BackgroundColor"
-              BindAfter="@(() => BindAfter.InvokeAsync(Value))"
-              BindOnInput="@BindOnInput"
-              Disabled="@Disabled"
-              EndIcon="@EndIcon"
-              OnChanged="@(() => OnChanged.InvokeAsync(Value))"
-              Placeholder="@Placeholder"
-              ReadOnly="@ReadOnly"
-              StartIcon="@StartIcon"
-              TextColor="@TextColor"
-              tnt-input-currency="true"
-              pattern="^\$?(([1-9](\d*|\d{0,2}(,(\d{1,3})?)*))|0)(\.(\d{1,2})?)?$" />
+@inherits TnTInputBase<decimal?>
 
+@{
+    base.BuildRenderTree(__builder);
+}
 
-<TnTPageScript Src="@JsModulePath" />
+<TnTPageScript Src="@JsModulePath"/>

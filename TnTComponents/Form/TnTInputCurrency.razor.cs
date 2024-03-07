@@ -1,65 +1,13 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Microsoft.VisualBasic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Xml.Linq;
 using TnTComponents.Ext;
 
 namespace TnTComponents;
-public partial class TnTInputCurrency {
-    [Parameter]
-    public FormAppearance Appearance { get; set; }
-
-    [Parameter]
-    public TnTColor? BackgroundColor { get; set; } = TnTColor.SurfaceContainer;
-
-    [Parameter]
-    public EventCallback<decimal?> BindAfter { get; set; }
-
-    [Parameter]
-    public bool BindOnInput { get; set; }
-
-    [Parameter]
-    public bool Disabled { get; set; }
-
-    [Parameter]
-    public TnTIcon? EndIcon { get; set; }
-
-    [Parameter]
-    public EventCallback<decimal?> OnChanged { get; set; }
-
-    [Parameter]
-    public string? Placeholder { get; set; }
-
-    [Parameter]
-    public bool ReadOnly { get; set; }
-
-    [Parameter]
-    public TnTIcon? StartIcon { get; set; }
-
-    [Parameter]
-    public TnTColor? TextColor { get; set; } = TnTColor.OnSurfaceVariant;
-
-    [Parameter(CaptureUnmatchedValues = true)]
-    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
-
-    [Parameter]
-    public decimal? Value { get; set; }
-
-    private string? _currencyString;
-    private string? CurrencyString {
-        get => _currencyString;
-        set {
-            if (value is not null && decimal.TryParse(value, NumberStyles.Currency, CultureInfo.InvariantCulture, out var result)) {
-                Value = result;
-            }
-            else {
-                Value = null;
-            }
-            _currencyString = value;
-        }
-    }
-
+public partial class TnTInputCurrency : TnTInputBase<decimal?> {
 
     private DotNetObjectReference<TnTInputCurrency>? _dotNetObjRef;
 
@@ -67,7 +15,18 @@ public partial class TnTInputCurrency {
     [Inject]
     private IJSRuntime _jsRuntime { get; set; } = default!;
 
+    public override InputType Type => InputType.Text;
+
     private const string JsModulePath = "./_content/TnTComponents/Form/TnTInputCurrency.razor.js";
+
+    protected override void OnInitialized() {
+        base.OnInitialized();
+
+        var dict = AdditionalAttributes is not null ? new Dictionary<string, object>(AdditionalAttributes) : [];
+        dict.TryAdd("tnt-input-currency", "");
+        dict.TryAdd("pattern", @"^\$?(([1-9](\d*|\d{0,2}(,(\d{1,3})?)*))|0)(\.(\d{1,2})?)?$");
+        AdditionalAttributes = dict;
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         await base.OnAfterRenderAsync(firstRender);
@@ -78,5 +37,31 @@ public partial class TnTInputCurrency {
         }
 
         await (_isolatedJsModule?.InvokeVoidAsync("onUpdate", null, _dotNetObjRef) ?? ValueTask.CompletedTask);
+    }
+
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out decimal? result, [NotNullWhen(false)] out string? validationErrorMessage) {
+        validationErrorMessage = null;
+        if (value is not null) {
+
+            if (decimal.TryParse(value, NumberStyles.Currency, CultureInfo.InvariantCulture, out var r)) {
+                result = r;
+                return true;
+            }
+            else if (value is null) {
+                result = default;
+                return true;
+            }
+            else {
+                result = null;
+                validationErrorMessage = $"Failed to parse {value} into a {typeof(decimal).Name}";
+                return false;
+            }
+        }
+        else {
+            result = null;
+            validationErrorMessage = null;
+            return true;
+        }
+
     }
 }
