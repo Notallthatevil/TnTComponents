@@ -10,7 +10,8 @@ public partial class TnTImageButton {
     public TnTColor Color { get; set; } = TnTColor.OnSurface;
 
     public override string? CssClass => CssClassBuilder.Create()
-            .AddActionableBackgroundColor(TnTColor.Transparent)
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddActionableBackgroundColor(TnTColor.Transparent)
         .AddForegroundColor(Color)
         .AddBorderRadius(new(10))
         .Build();
@@ -26,7 +27,7 @@ public partial class TnTImageButton {
     public string? Name { get; set; }
 
     [Parameter]
-    public EventCallback<MouseEventArgs> OnClickCallback { get; set; }
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
 
     [Parameter]
     public ButtonType Type { get; set; }
