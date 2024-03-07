@@ -11,7 +11,7 @@
 
     & > div.tnt-dialog-container {
         max-width: 90%;
-        min-height: 30%;
+        min-height: 20%;
         max-height: 75%;
         min-width: 25%;
         overflow: auto;
@@ -20,11 +20,13 @@
         animation: dialogGrow 100ms ease-in-out forwards;
 
         .tnt-dialog-header {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: space-between;
+
             & > button.tnt-components {
                 padding: 0;
-                position: absolute;
-                right: 0;
-                top: 0;
+                margin: 0;
 
                 & + h2, & + tnt-page-script + h2 {
                     padding: 0 2rem;
