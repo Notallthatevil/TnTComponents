@@ -10,22 +10,26 @@
     justify-content: center;
 
     & > div.tnt-dialog-container {
-        max-width: 50%;
+        max-width: 90%;
         min-height: 30%;
         max-height: 75%;
+        min-width: 25%;
         overflow: auto;
         z-index: 2001;
         transition: 200ms ease-in-out;
         animation: dialogGrow 100ms ease-in-out forwards;
 
-        & > tnt-button:first-child {
-            float: right;
-            margin: 0.25rem 0.25rem 0 0;
-            padding: 0;
+        .tnt-dialog-header {
+            & > button.tnt-components {
+                padding: 0;
+                position: absolute;
+                right: 0;
+                top: 0;
 
-            & + h2, & + tnt-page-script + h2 {
-                padding: 0 2rem;
-                margin-bottom: 0.25rem;
+                & + h2, & + tnt-page-script + h2 {
+                    padding: 0 2rem;
+                    margin-bottom: 0.25rem;
+                }
             }
         }
     }

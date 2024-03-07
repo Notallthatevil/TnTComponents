@@ -50,20 +50,26 @@ public class TnTDialog : ComponentBase, IDisposable {
 
                 builder.AddComponentParameter(80, "ChildContent", new RenderFragment(innerBuilder => {
                     var showDivider = false;
-                    if (dialog.Options.ShowClose) {
-                        showDivider = true;
-                        innerBuilder.OpenComponent<TnTImageButton>(0);
-                        innerBuilder.AddComponentParameter(10, "Icon", MaterialIcon.Close);
-                        innerBuilder.AddComponentParameter(20, "OnClickCallback", EventCallback.Factory.Create<MouseEventArgs>(this, async _ => await _service.CloseAsync(dialog)));
-                        innerBuilder.CloseComponent();
-                    }
+                    innerBuilder.OpenElement(0, "div");
+                    innerBuilder.AddAttribute(1, "class", "tnt-dialog-header");
+                    {
 
-                    if (dialog.Options.ShowTitle && dialog.Options.Title is not null) {
-                        showDivider = true;
-                        innerBuilder.OpenElement(30, "h2");
-                        innerBuilder.AddContent(40, dialog.Options.Title);
-                        innerBuilder.CloseElement();
+                        if (dialog.Options.ShowClose) {
+                            showDivider = true;
+                            innerBuilder.OpenComponent<TnTImageButton>(2);
+                            innerBuilder.AddComponentParameter(10, "Icon", MaterialIcon.Close);
+                            innerBuilder.AddComponentParameter(20, "OnClickCallback", EventCallback.Factory.Create<MouseEventArgs>(this, async _ => await _service.CloseAsync(dialog)));
+                            innerBuilder.CloseComponent();
+                        }
+
+                        if (dialog.Options.ShowTitle && dialog.Options.Title is not null) {
+                            showDivider = true;
+                            innerBuilder.OpenElement(30, "h2");
+                            innerBuilder.AddContent(40, dialog.Options.Title);
+                            innerBuilder.CloseElement();
+                        }
                     }
+                    innerBuilder.CloseElement();
 
                     if (showDivider) {
                         innerBuilder.OpenComponent<TnTDivider>(50);

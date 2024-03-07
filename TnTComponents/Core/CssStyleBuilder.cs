@@ -32,20 +32,26 @@ internal class CssStyleBuilder {
 
     public CssStyleBuilder AddFromAdditionalAttributes(IReadOnlyDictionary<string, object>? additionalAttributes) {
         if (additionalAttributes?.TryGetValue("style", out var style) == true) {
-            return AddStyle(style.ToString() ?? string.Empty, string.Empty);
+            return AddStyle(style?.ToString() ?? string.Empty, string.Empty);
         }
         return this;
     }
 
-    public string Build() {
-        var sb = new StringBuilder();
-        foreach (var (key, value) in _styles) {
-            sb.Append(key);
-            if (!key.Trim().EndsWith(';')) {
-                sb.Append(": ").Append(value).Append("; ");
+    public string? Build() {
+        var styles = _styles.Where(kv => !string.IsNullOrWhiteSpace(kv.Key));
+        if (styles.Any()) {
+            var sb = new StringBuilder();
+            foreach (var (key, value) in styles) {
+                sb.Append(key);
+                if (!key.Trim().EndsWith(';')) {
+                    sb.Append(": ").Append(value).Append("; ");
+                }
             }
+            return sb.ToString().Trim();
         }
-        return sb.ToString().Trim();
+        else {
+            return null;
+        }
     }
 }
 
