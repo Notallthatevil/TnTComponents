@@ -61,6 +61,7 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase, IAsyn
     private ILogger? _logger;
 
     public async ValueTask DisposeAsync() {
+        GC.SuppressFinalize(this);
         try {
             if (IsolatedJsModule is not null) {
                 await IsolatedJsModule.InvokeVoidAsync("onDispose", Element, DotNetObjectRef);
