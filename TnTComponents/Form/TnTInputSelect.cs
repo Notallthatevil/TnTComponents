@@ -55,6 +55,7 @@ public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
                 if(!string.IsNullOrWhiteSpace(Placeholder)) {
                     builder.OpenElement(210, "option");
                     builder.AddAttribute(221, "selected", true);
+                    builder.AddAttribute(222, "disabled");
                     builder.AddContent(230, Placeholder);
                     builder.CloseElement();
                 }
