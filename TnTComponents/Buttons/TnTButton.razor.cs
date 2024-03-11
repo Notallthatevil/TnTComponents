@@ -22,7 +22,7 @@ public partial class TnTButton {
     public override string? CssClass => CssClassBuilder.Create()
             .AddClass(AdditionalAttributes)
         .AddElevation(Elevation)
-        .AddActionableBackgroundColor(BackgroundColor)
+        .AddActionableBackgroundColor(Appearance == ButtonAppearance.Text || Appearance == ButtonAppearance.Outlined ? TnTColor.Transparent : BackgroundColor)
         .AddForegroundColor(TextColor)
         .AddBorderRadius(CornerRadius)
         .AddOutlined(Appearance == ButtonAppearance.Outlined)
