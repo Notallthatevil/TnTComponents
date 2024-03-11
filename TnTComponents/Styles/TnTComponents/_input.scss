@@ -250,7 +250,7 @@ label.tnt-components:not(:has(input[type=checkbox])):not(:has(input[type=radio])
     }
 }
 
-label.tnt-components:has(input[type=checkbox]) {
+label.tnt-components:has(input[type=checkbox]):not(.tnt-chip) {
     position: relative;
     outline: none;
     border: none;

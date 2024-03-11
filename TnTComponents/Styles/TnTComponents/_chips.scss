@@ -1,0 +1,67 @@
+﻿.tnt-components.tnt-chip {
+    min-height: 1.5rem;
+    background-color: transparent;
+    border: 1px solid $tnt-color-outline;
+    color: var(--inactive-text-color);
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 1rem;
+    cursor: pointer;
+    position: relative;
+    margin: 0.5rem 0.1rem;
+    vertical-align: middle;
+
+    @extend .tnt-label-large;
+
+    input {
+        position: absolute;
+    }
+
+
+    input, .tnt-icon {
+        cursor: inherit;
+    }
+
+    .tnt-icon {
+        color: inherit;
+        font-size: 18px;
+    }
+
+    &:has(.tnt-icon.tnt-start) {
+        padding: 0 0.75rem 0 0.33rem;
+
+        .tnt-icon.tnt-start {
+            padding: 0 0.33rem 0 0;
+        }
+    }
+
+    input {
+        appearance: none;
+    }
+
+    &:has(input:checked) {
+        background-color: var(--active-color);
+        color: var(--active-text-color);
+        border: none;
+    }
+
+    &.tnt-input-chip {
+        padding-right: 0.5rem;
+        justify-content: space-evenly;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        border: none;
+
+        button.tnt-components {
+            padding: 0 0 0 0.5rem;
+            margin: 0;
+            min-height: revert;
+            min-width: revert;
+            width: 1rem;
+            height: 1rem;
+            float: right;
+            font-size: 14px;
+        }
+    }
+}
