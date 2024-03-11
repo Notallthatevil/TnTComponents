@@ -20,18 +20,16 @@
         animation: dialogGrow 100ms ease-in-out forwards;
 
         .tnt-dialog-header {
-            display: flex;
-            flex-direction: row-reverse;
-            justify-content: space-between;
+            padding: 1rem;
 
-            & > button.tnt-components {
-                padding: 0;
+            & > h2 {
+                display: inline;
+            }
+
+            & > button {
+                float: right;
                 margin: 0;
-
-                & + h2, & + tnt-page-script + h2 {
-                    padding: 0 2rem;
-                    margin-bottom: 0.25rem;
-                }
+                padding: 0;
             }
         }
     }

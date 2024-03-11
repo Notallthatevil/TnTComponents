@@ -41,33 +41,33 @@ public class TnTDialog : ComponentBase, IDisposable {
 
             {
                 builder.OpenComponent<TnTExternalClickHandler>(40);
-                builder.AddComponentParameter(50, "ExternalClickCssClass", dialog.Options.GetDialogClass());
+                builder.AddComponentParameter(50, nameof(TnTExternalClickHandler.ExternalClickCssClass), dialog.Options.GetDialogClass());
                 builder.AddAttribute(60, "style", dialog.Options.Style);
 
                 if (dialog.Options.CloseOnExternalClick) {
-                    builder.AddComponentParameter(70, "ExternalClickCallback", EventCallback.Factory.Create(this, async () => await _service.CloseAsync(dialog)));
+                    builder.AddComponentParameter(70, nameof(TnTExternalClickHandler.ExternalClickCallback), EventCallback.Factory.Create(this, dialog.CloseAsync));
                 }
 
-                builder.AddComponentParameter(80, "ChildContent", new RenderFragment(innerBuilder => {
+                builder.AddComponentParameter(80, nameof(TnTExternalClickHandler.ChildContent), new RenderFragment(innerBuilder => {
                     var showDivider = false;
                     innerBuilder.OpenElement(0, "div");
                     innerBuilder.AddAttribute(1, "class", "tnt-dialog-header");
                     {
+                        if (dialog.Options.ShowTitle && dialog.Options.Title is not null) {
+                            showDivider = true;
+                            innerBuilder.OpenElement(10, "h2");
+                            innerBuilder.AddContent(20, dialog.Options.Title);
+                            innerBuilder.CloseElement();
+                        }
 
                         if (dialog.Options.ShowClose) {
                             showDivider = true;
-                            innerBuilder.OpenComponent<TnTImageButton>(2);
-                            innerBuilder.AddComponentParameter(10, "Icon", MaterialIcon.Close);
-                            innerBuilder.AddComponentParameter(20, "OnClickCallback", EventCallback.Factory.Create<MouseEventArgs>(this, async _ => await _service.CloseAsync(dialog)));
+                            innerBuilder.OpenComponent<TnTImageButton>(30);
+                            innerBuilder.AddComponentParameter(31, nameof(TnTImageButton.Icon), MaterialIcon.Close);
+                            innerBuilder.AddComponentParameter(40, nameof(TnTImageButton.OnClick), EventCallback.Factory.Create<MouseEventArgs>(this, dialog.CloseAsync));
                             innerBuilder.CloseComponent();
                         }
 
-                        if (dialog.Options.ShowTitle && dialog.Options.Title is not null) {
-                            showDivider = true;
-                            innerBuilder.OpenElement(30, "h2");
-                            innerBuilder.AddContent(40, dialog.Options.Title);
-                            innerBuilder.CloseElement();
-                        }
                     }
                     innerBuilder.CloseElement();
 
@@ -78,9 +78,9 @@ public class TnTDialog : ComponentBase, IDisposable {
 
                     {
                         innerBuilder.OpenComponent<CascadingValue<ITnTDialog>>(52);
-                        innerBuilder.AddAttribute(60, "Value", dialog);
-                        innerBuilder.AddAttribute(70, "IsFixed", true);
-                        innerBuilder.AddAttribute(80, "ChildContent", new RenderFragment(cascadingBuilder => {
+                        innerBuilder.AddAttribute(60, nameof(CascadingValue<ITnTDialog>.Value), dialog);
+                        innerBuilder.AddAttribute(70, nameof(CascadingValue<ITnTDialog>.IsFixed), true);
+                        innerBuilder.AddAttribute(80, nameof(CascadingValue<ITnTDialog>.ChildContent), new RenderFragment(cascadingBuilder => {
                             cascadingBuilder.OpenComponent(0, dialog.Type);
                             cascadingBuilder.AddMultipleAttributes(10, dialog.Parameters);
                             cascadingBuilder.CloseComponent();
