@@ -16,8 +16,8 @@ public class TnTInputSwitch : TnTInputBase<bool> {
         .AddVariable("outline-color", $"var(--tnt-color-{OutlineColor.ToCssClassName()})")
         .AddVariable("unchecked-fill-color", $"var(--tnt-color-{UncheckedFillColor.ToCssClassName()})")
         .AddVariable("unchecked-knob-color", $"var(--tnt-color-{UncheckedKnobColor.ToCssClassName()})")
-        .AddVariable("checked-knob-color", $"var(--tnt-color-{CheckedFillColor.ToCssClassName()})")
-        .AddVariable("checked-fill-color", $"var(--tnt-color-{CheckedKnobColor.ToCssClassName()})")
+        .AddVariable("checked-fill-color", $"var(--tnt-color-{CheckedFillColor.ToCssClassName()})")
+        .AddVariable("checked-knob-color", $"var(--tnt-color-{CheckedKnobColor.ToCssClassName()})")
         .Build();
 
     public override InputType Type => InputType.Checkbox;
