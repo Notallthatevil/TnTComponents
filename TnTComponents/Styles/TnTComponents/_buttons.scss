@@ -122,6 +122,20 @@ button.tnt-components {
             }
         }
     }
+
+    .tnt-icon {
+        padding: 0 0.25rem;
+        color: inherit;
+    }
+
+    &.tnt-text-only {
+        padding: 0 0.25rem;
+        margin: 0;
+        text-decoration: underline;
+        background-color: transparent;
+        min-height: revert;
+        min-width: revert;
+    }
 }
 
 tnt-layout:has(tnt-footer) {

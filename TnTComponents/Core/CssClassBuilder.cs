@@ -101,4 +101,6 @@ internal class CssClassBuilder {
 
     private CssClassBuilder AddLayoutDirection(LayoutDirection? direction) => AddClass($"tnt-direction-{direction?.ToCssString()}", direction != null);
 
+    public CssClassBuilder MakeTextOnly(bool enabled = true) => AddClass("tnt-text-only", enabled);
+
 }
