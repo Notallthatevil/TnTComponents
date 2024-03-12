@@ -25,7 +25,7 @@ public partial class TnTSkeleton {
         .AddBackgroundColor(BackgroundColor)
         .Build();
 
-    public string CssStyle => CssStyleBuilder.Create()
+    public string? CssStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddVariable("bg-color", $"var(--tnt-color-{BackgroundColor.ToCssClassName()})", Animated && BackgroundColor.HasValue && BackgroundColor.Value != TnTColor.None)
         .Build();
