@@ -142,6 +142,9 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
 
         builder.CloseElement();
     }
+    public ValueTask SetFocusAsync() {
+        return Element.FocusAsync();
+    }
 
     protected bool IsRequired() {
         if (AdditionalAttributes?.TryGetValue("required", out var _) == true || GetCustomAttributeIfExists<RequiredAttribute>() is not null) {
