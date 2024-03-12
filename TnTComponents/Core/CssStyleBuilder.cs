@@ -42,12 +42,26 @@ internal class CssStyleBuilder {
         if (styles.Any()) {
             var sb = new StringBuilder();
             foreach (var (key, value) in styles) {
-                sb.Append(key);
-                if (!key.Trim().EndsWith(';')) {
-                    sb.Append(": ").Append(value).Append("; ");
+                var trimmedKey = key.Trim();
+                var trimmedValue = value.Trim();
+                sb.Append(trimmedKey);
+                if (!string.IsNullOrWhiteSpace(trimmedValue)) {
+                    if (!trimmedKey.EndsWith(':')) {
+                        sb.Append(':');
+                    }
+                    sb.Append(trimmedValue);
+
+                    if (!trimmedValue.EndsWith(';')) {
+                        sb.Append(';');
+                    }
+                }
+                else {
+                    if (!trimmedKey.EndsWith(';')) {
+                        sb.Append(";");
+                    }
                 }
             }
-            return sb.ToString().Trim();
+            return sb.ToString();
         }
         else {
             return null;
