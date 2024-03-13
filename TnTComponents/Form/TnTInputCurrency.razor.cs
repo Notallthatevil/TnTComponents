@@ -3,18 +3,19 @@ using Microsoft.JSInterop;
 using Microsoft.VisualBasic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Numerics;
 using System.Xml.Linq;
 using TnTComponents.Ext;
 
 namespace TnTComponents;
-public partial class TnTInputCurrency : TnTInputBase<decimal?> {
+public partial class TnTInputCurrency<TCurrency> where TCurrency : struct, IFloatingPoint<TCurrency>, IParsable<TCurrency>  {
 
-    private DotNetObjectReference<TnTInputCurrency>? _dotNetObjRef;
+    private DotNetObjectReference<TnTInputCurrency<TCurrency>>? _dotNetObjRef;
 
     private IJSObjectReference? _isolatedJsModule;
     [Inject]
     private IJSRuntime _jsRuntime { get; set; } = default!;
-
+    
     public override InputType Type => InputType.Text;
 
     private const string JsModulePath = "./_content/TnTComponents/Form/TnTInputCurrency.razor.js";
@@ -39,11 +40,11 @@ public partial class TnTInputCurrency : TnTInputBase<decimal?> {
         await (_isolatedJsModule?.InvokeVoidAsync("onUpdate", null, _dotNetObjRef) ?? ValueTask.CompletedTask);
     }
 
-    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out decimal? result, [NotNullWhen(false)] out string? validationErrorMessage) {
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TCurrency? result, [NotNullWhen(false)] out string? validationErrorMessage) {
         validationErrorMessage = null;
         if (value is not null) {
 
-            if (decimal.TryParse(value, NumberStyles.Currency, CultureInfo.InvariantCulture, out var r)) {
+            if (TCurrency.TryParse(value, NumberStyles.Currency, CultureInfo.InvariantCulture, out var r)) {
                 result = r;
                 return true;
             }

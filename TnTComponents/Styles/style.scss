@@ -33,3 +33,15 @@ body {
 * {
     scrollbar-color: $tnt-color-on-surface-variant $tnt-color-surface-variant;
 }
+
+:has(#tnt-theme-design-dark[media=all]) {
+    ::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+    }
+}
+
+:has(#tnt-theme-design-dark[media=\(prefers-color-scheme\:\ dark\)]) {
+    ::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+    }
+}
