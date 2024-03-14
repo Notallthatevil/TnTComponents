@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.AspNetCore.Components.Web;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using TnTComponents.Core;
@@ -77,6 +78,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
 
     public abstract InputType Type { get; }
 
+
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "span");
         builder.AddAttribute(10, "class", FormCssClass);
@@ -129,6 +131,10 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                     builder.SetUpdatesAttributeName("value");
                 }
 
+                builder.AddAttribute(190, "onblur", EventCallback.Factory.Create<FocusEventArgs>(this, args => {
+                    EditContext.NotifyFieldChanged(FieldIdentifier);
+                }));
+
                 builder.AddElementReferenceCapture(200, e => Element = e);
                 builder.CloseElement();
             }
@@ -147,11 +153,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     }
 
     protected bool IsRequired() {
-        if (AdditionalAttributes?.TryGetValue("required", out var _) == true || GetCustomAttributeIfExists<RequiredAttribute>() is not null) {
-            return true;
-        }
-
-        return false;
+        return AdditionalAttributes?.TryGetValue("required", out var _) == true || GetCustomAttributeIfExists<RequiredAttribute>() is not null;
     }
 
     protected override void OnInitialized() {
