@@ -1,0 +1,8 @@
+﻿@namespace TnTComponents.Grid
+@typeparam TGridItem
+@inherits TnTDataGridCell<TGridItem>
+<th @attributes="AdditionalAttributes"
+    class="@CssClass"
+    style="@CssStyle">
+    @ChildContent
+</th>

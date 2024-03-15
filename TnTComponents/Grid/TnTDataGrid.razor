@@ -1,64 +1,158 @@
-﻿@namespace TnTComponents
+﻿@using Microsoft.AspNetCore.Components.Rendering
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @using TnTComponents.Core
 @using TnTComponents.Grid
-@implements IAsyncDisposable
-@typeparam TItem
+@using TnTComponents.Grid.Infrastructure;
+@namespace TnTComponents
+@typeparam TGridItem
+<CascadingValue TValue="TnTInternalGridContext<TGridItem>" IsFixed="true" Value="@_internalGridContext">
+    @{
+        StartCollectingColumns();
+    }
+    @if (!_manualGrid) {
+        @ChildContent
+    }
+    <DeferRendering>
+        @{
+            FinishCollectingColumns();
+        }
+        <ColumnsCollectedNotifier TGridItem="TGridItem" />
+        <table @attributes="AdditionalAttributes"
+               class="@CssClass"
+               style="@CssStyle"
+               aria-rowcount="@(_ariaBodyRowCount + 1)"
+               @ref="Element">
 
-<div @attributes="AdditionalAttributes" class="@CssClass" style="@GetStyle()">
-    <table @ref="_element">
-        <CascadingValue Value="this" IsFixed="true">
-            @ChildContent
-            <DeferRendering>
-                <thead>
-                    <tr>
-                        @foreach (var col in _columns) {
-                            if (col.Sortable) {
-                                var sortedOn = _lastSortColumn == col;
-                                <th @key="col"
-                                    scope="col"
-                                    class="@(CssClassBuilder.Create()
-                                        .AddClass("tnt-sortable", col.Sortable)
-                                        .AddClass("tnt-sorted-asc", sortedOn && !_descending)
-                                        .AddClass("tnt-sorted-desc", sortedOn && _descending)
-                                        .Build())"
-                                    @onclick="@(() => SortOn(col))">
-                                    @{
-                                        col.RenderHeaderContent(__builder3);
-                                        @if (sortedOn) {
-                                            @MaterialIcon.ArrowDropDown.Render()
-                                        }
-                                    }
-                                </th>
-                            }
-                            else {
-                                <th @key="col" scope="col" class="@(CssClassBuilder.Create().Build())">
-                                    @{
-                                        col.RenderHeaderContent(__builder3);
-                                    }
-                                </th>
-                            }
-
+            <thead>
+                <tr class="tnt-data-grid-header" aria-rowindex="1">
+                    @_renderColumnHeaders
+                </tr>
+            </thead>
+            <tbody>
+                @if (Loading) {
+                    @_renderLoadingContent
+                }
+                else {
+                    @if (Virtualize) {
+                        if (_ariaBodyRowCount == 0) {
+                            @_renderEmptyContent
                         }
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in GetSorted().Select((Row, Index) => new { Row, Index = Index + 2 })) {
-                        var row = item.Row;
-                        var index = item.Index;
-                        <tr aria-rowindex="@index" @key="row" @onclick="@(() => RowClickedCallback.InvokeAsync(row))">
-                            @foreach (var col in _columns) {
-                                <td @key="col">
-                                    @{
-                                        col.RenderCellContent(__builder3, row);
-                                    }
-                                </td>
-                            }
-                        </tr>
+                        else {
+                            <Virtualize @ref="@_virtualizeComponent"
+                                        TItem="(int RowIndex, TGridItem Data)"
+                                        ItemSize="@ItemSize"
+                                        ItemsProvider="@ProvideVirtualizedItemsAsync"
+                                        ItemContent="@(item => builder => RenderRow(builder, item.RowIndex, item.Data))"
+                                        Placeholder="@(placeholderContext => builder => RenderPlaceholderRow(builder, placeholderContext))" />
+                        }
                     }
-                </tbody>
-                <TnTPageScript Src="@_jsModulePath"/>
-            </DeferRendering>
-        </CascadingValue>
-    </table>
-</div>
+                    else {
+                        @_renderNonVirtualizedRows
+                    }
+                }
+                @if (_manualGrid) {
+                    @ChildContent
+                }
+            </tbody>
+
+        </table>
+    </DeferRendering>
+</CascadingValue>
+
+@code {
+    private void RenderNonVirtualizedRows(RenderTreeBuilder __builder) {
+        var initialRowIndex = 1; // aria-rowindex is 1-based, plus 1 if there is a header
+        var rowIndex = initialRowIndex;
+        if (_currentNonVirtualizedViewItems.Any()) {
+            Loading = false;
+            foreach (var item in _currentNonVirtualizedViewItems) {
+                RenderRow(__builder, rowIndex++, item);
+            }
+        }
+        else {
+            RenderEmptyContent(__builder);
+        }
+    }
+
+    private void RenderRow(RenderTreeBuilder __builder, int rowIndex, TGridItem item) {
+        var rowClass = RowClass?.Invoke(item) ?? null;
+        var rowStyle = RowStyle?.Invoke(item) ?? null;
+        Loading = false;
+        <TnTDataGridRow @key="@(ItemKey(item))"
+            aria-rowindex="@rowIndex" 
+            class="@rowClass" 
+            style="@CssStyleBuilder.Create().AddStyle(rowStyle, null).AddStyle("height", $"{ItemSize}px").Build()" OnClick="@OnRowClicked" TGridItem="TGridItem" Item="@item">
+            @for (var colIndex = 0; colIndex < _columns.Count; colIndex++) {
+                var col = _columns[colIndex];
+
+                <TnTDataGridCell @key="@col" class="@col.CssClass" style="@col.CssStyle" TGridItem="TGridItem" Item="@item">
+                    @((RenderFragment)(__builder => col.CellContent(__builder, item)))
+                </TnTDataGridCell>
+            }
+        </TnTDataGridRow>
+    }
+
+    private void RenderPlaceholderRow(RenderTreeBuilder __builder, PlaceholderContext placeholderContext) {
+        string? _rowsDataSize = $"height: {ItemSize}px";
+
+        <TnTDataGridRow aria-rowindex="@(placeholderContext.Index + 1)" style="@_rowsDataSize" TGridItem="TGridItem">
+            @for (var colIndex = 0; colIndex < _columns.Count; colIndex++) {
+                var col = _columns[colIndex];
+
+                <TnTDataGridCell class="grid-cell-placeholder" @key="@col" GridColumn=@(colIndex+1) TGridItem="TGridItem">
+                    @((RenderFragment)(__builder => col.RenderPlaceholderContent(__builder, placeholderContext)))
+                </TnTDataGridCell>
+            }
+        </TnTDataGridRow>
+    }
+
+
+    private void RenderColumnHeaders(RenderTreeBuilder __builder) {
+        @for (var colIndex = 0; colIndex < _columns.Count; colIndex++) {
+            var col = _columns[colIndex];
+            var CellId = TnTComponentIdentifier.NewId();
+
+            col.ShowSortIcon = _sortByColumn == col;
+
+            <TnTDataGridHeaderCell class="@($"{col.CssClass}{(col.Sortable && _interactive ? " tnt-col-sortable" : null)}")"
+                                   style="@col.CssStyle"
+                                   aria-sort="@(_sortByColumn == col? (_sortByAscending ? "ascending" : "descending"): null)"
+                                   @key="@col" scope="col"
+                                   TGridItem="TGridItem">
+                @col.HeaderContent
+            </TnTDataGridHeaderCell>
+        }
+    }
+
+    private void RenderEmptyContent(RenderTreeBuilder __builder) {
+        @if (_manualGrid) {
+            return;
+        }
+        <tr class="empty-content-row">
+            <td class="empty-content-cell">
+                @if (EmptyContent is null) {
+                    @("No data to show!")
+                }
+                else {
+                    @EmptyContent
+                }
+            </td>
+        </tr>
+
+    }
+
+    private void RenderLoadingContent(RenderTreeBuilder __builder) {
+        <TnTDataGridRow TGridItem="TGridItem" Class="loading-content-row">
+            <TnTDataGridCell Class="loading-content-cell">
+                @if (LoadingContent is null) {
+                    <div>
+                        <TnTProgressIndicator Appearance="ProgressAppearance.Ring" />
+                    </div>
+                }
+                else {
+                    @LoadingContent
+                }
+            </TnTDataGridCell>
+        </TnTDataGridRow>
+    }
+}

@@ -1,4 +1,4 @@
-export function tntInitResizable(tableElement) {
+function tntInitResizable(tableElement) {
     const createResizableTable = function (table) {
         const cols = table.querySelectorAll('th');
         [].forEach.call(cols, function (col) {
@@ -12,6 +12,10 @@ export function tntInitResizable(tableElement) {
                 resizer.style.height = '100%';
 
                 col.appendChild(resizer);
+
+                const styles = window.getComputedStyle(col);
+                col.style.width = styles.width;
+                col.style.minWidth = styles.width;
 
                 createResizableColumn(col, resizer);
             }
@@ -36,6 +40,7 @@ export function tntInitResizable(tableElement) {
 
         const mouseMoveHandler = function (e) {
             const dx = e.clientX - x;
+            col.style.width = (w + dx) + 'px';
             col.style.minWidth = (w + dx) + 'px';
         };
 
@@ -50,17 +55,16 @@ export function tntInitResizable(tableElement) {
 
     if (!tableElement.classList.contains('tnt-compact')) {
         createResizableTable(tableElement);
-        tableElement.style.tableLayout = 'revert';
     }
 }
 
-export function onLoad(element, dotNetRef) {
+export function onLoad() {
 }
 
-export function onUpdate(element, dotNetRef) {
-    for (const table of [...document.querySelectorAll('div.tnt-components.tnt-resizable > table')]) {
+export function onUpdate() {
+    for (const table of [...document.querySelectorAll('table.tnt-resizable')]) {
         tntInitResizable(table);
     }
 }
 
-export function onDispose(element, dotNetRef) { }
+export function onDispose() { }

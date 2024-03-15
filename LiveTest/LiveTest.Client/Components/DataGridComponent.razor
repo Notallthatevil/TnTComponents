@@ -1,26 +1,30 @@
 ﻿@using Microsoft.AspNetCore.Components.QuickGrid
 @using TnTComponents
+@using TnTComponents.Grid
 @using TnTComponents.Snackbar
-
-<TnTDataGrid Resizable="true" Items="@Items" TItem="DataGridItem" RowClickedCallback="RowClicked" Appearance="DataGridAppearance.Stripped | DataGridAppearance.Compact">
-    <TnTPropertyColumn Property="@(x => x.Column1)" Sortable="true" />
-    <TnTPropertyColumn Property="@(x => x.Column2)" Sortable="true" />
-    <TnTPropertyColumn Property="@(x => x.Column3)" Format="MM/yyyy" />
-    <TnTTemplateColumn>
-        <RowTemplate>
+<div style="height: 60vh; overflow-y:scroll">
+    <TnTDataGrid Items="@Items" Virtualize="true" OnRowClicked="RowClicked" TGridItem="DataGridItem" DataGridAppearance="DataGridAppearance.Stripped" Resizable="true">
+        <TnTPropertyColumn Property="@(x => x.Column1)" Sortable="true" />
+        <TnTPropertyColumn Property="@(x => x.Column2)" Sortable="true" TextAlign="TextAlign.Center" />
+        <TnTPropertyColumn Property="@(x => x.Column3)" Format="MM/yyyy" />
+        <TnTTemplateColumn>
             <TnTButton OnClick="() => ItemClicked(context)" Appearance="ButtonAppearance.Text" StopPropagation="true">
                 @MaterialIcon.Edit.Render()
                 Edit
             </TnTButton>
-        </RowTemplate>
-    </TnTTemplateColumn>
-</TnTDataGrid>
+        </TnTTemplateColumn>
+    </TnTDataGrid>
+
+
+</div>
 
 
 @code {
     [Inject]
     private TnTSnackbarService _service { get; set; }
 
+    private GridItemsProvider<DataGridItem>? _itemsProvider;
+    private int _count;
 
     private IQueryable<DataGridItem>? Items;
     private static object _locker = new();
@@ -29,7 +33,7 @@
         lock (_locker) {
             if (_items == null) {
                 var list = new List<DataGridItem>();
-                foreach (var i in Enumerable.Range(1, 100)) {
+                foreach (var i in Enumerable.Range(1, 1000)) {
                     list.Add(new DataGridItem() {
                             Column1 = Random.Shared.Next(1, 1000),
                             Column2 = Guid.NewGuid().ToString(),
@@ -40,7 +44,57 @@
             }
             Items = _items.AsQueryable();
         }
+
+        _itemsProvider = async request => {
+            var items = await GetItems(request);
+
+            if (items.TotalItemCount != _count && !request.CancellationToken.IsCancellationRequested) {
+                _count = items.TotalItemCount;
+                StateHasChanged();
+            }
+            return items;
+        };
+
+
+
         return Task.CompletedTask;
+    }
+
+    private Task<GridItemsProviderResult<DataGridItem>> GetItems(GridItemsProviderRequest<DataGridItem> request) {
+        Console.WriteLine(request);
+        if (Items is not null) {
+
+            var result = Items;
+
+            // KeyValuePair<string, SortDirection>? prop = request.SortOnProperties.Any() ? request.SortOnProperties.First() : null;
+            // if (prop is not null) {
+            //     switch (prop.Value.Key) {
+            //         case nameof(DataGridItem.Column1):
+            //             result = prop.Value.Value == SortDirection.Ascending ? result.OrderBy(x => x.Column1) : result.OrderByDescending(x => x.Column1);
+            //             break;
+
+            //         case nameof(DataGridItem.Column2):
+            //             result = prop.Value.Value == SortDirection.Ascending ? result.OrderBy(x => x.Column2) : result.OrderByDescending(x => x.Column2);
+            //             break;
+
+            //         case nameof(DataGridItem.Column3):
+            //             result = prop.Value.Value == SortDirection.Ascending ? result.OrderBy(x => x.Column3) : result.OrderByDescending(x => x.Column3);
+            //             break;
+            //     }
+            // }
+
+            var count = result.Count();
+
+            result = result.Skip(request.StartIndex);
+            if (request.Count.HasValue) {
+                result = result.Take(request.Count.Value);
+            }
+
+            return Task.FromResult(GridItemsProviderResult.From<DataGridItem>(result.ToList(), count));
+        }
+        else {
+            return Task.FromResult(GridItemsProviderResult.From<DataGridItem>([], 0));
+        }
     }
 
     private async Task RowClicked(DataGridItem item) {

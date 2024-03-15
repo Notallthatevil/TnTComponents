@@ -1,124 +1,181 @@
-﻿div.tnt-components.tnt-datagrid {
-    overflow-x: auto;
-    margin: 0.5rem;
+﻿table.tnt-components.tnt-datagrid {
+    min-width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    table-layout: fixed;
 
-    table {
-        min-width: 100%;
-        border-collapse: collapse;
-        border-spacing: 0;
-        table-layout: fixed;
+    thead {
+        position: sticky;
+        top: 0;
+        background-color: $tnt-color-surface-container-highest;
+        box-shadow: 0px 1px $tnt-color-outline;
+        z-index: 3;
 
-        thead {
-            position: sticky;
-            top: 0;
-            background-color: $tnt-color-surface-container-highest;
-            box-shadow: 0px 1px $tnt-color-outline;
-            z-index: 3;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+        tr.tnt-data-grid-header {
+            th {
+                padding: 0.5rem 2rem;
+                margin: 0;
+                position: relative;
+                user-select: none;
+                min-width: 1rem;
+                text-align: center;
+                @extend .tnt-title-medium;
 
-            tr {
+                .tnt-resizeable {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    width: 5px;
+                    background-color: transparent;
+                    cursor: col-resize;
+                    border-right: 1px solid $tnt-color-outline;
+                }
 
-                th {
-                    padding: 0.5rem 2rem;
-                    margin: 0;
-                    position: relative;
-                    user-select: none;
-                    min-width: 1rem;
-                    text-align: center;
-                    @extend .tnt-title-medium;
+                &.tnt-col-sortable {
 
-                    .tnt-resizeable {
-                        position: absolute;
-                        top: 0;
-                        right: 0;
-                        width: 5px;
-                        background-color: transparent;
-                        cursor: col-resize;
-                        border-right: 1px solid $tnt-color-outline;
+                    &:hover {
+                        background-color: $tnt-color-surface-container;
+                        opacity: 0.8;
                     }
 
-                    .tnt-resizing {
-                        border-right: 2px solid $tnt-color-primary;
-                    }
+                    cursor: pointer;
 
-                    &.tnt-sortable {
-                        cursor: pointer;
-                        transition: color ease-in-out 200ms;
-
-                        &:hover {
-                            color: $tnt-color-primary;
-                        }
-                    }
-
-                    &.tnt-sorted-asc, &.tnt-sorted-desc {
+                    .tnt-sorted-on {
                         color: $tnt-color-secondary;
-
-                        span.tnt-icon {
-                            color: $tnt-color-secondary;
-                            float: right;
-                            transition: 200ms;
-                        }
                     }
 
-                    &.tnt-sorted-asc span.tnt-icon {
-                        transform: rotateZ(180deg);
+                    .tnt-sort-icon {
+                        position: absolute;
+                        color: inherit;
+                        right: 0;
+                        margin-right: 1rem;
                     }
                 }
             }
         }
+    }
 
+    &.tnt-stripped {
         tbody {
-            tr {
-                background-color: $tnt-color-surface;
-
-                td {
-                    padding: 0.5rem;
-                    min-width: 1rem;
-                    white-space: nowrap;
-                    @extend .tnt-body-medium;
-                }
+            tr:nth-child(odd) {
+                background-color: $tnt-color-surface-container;
             }
         }
     }
 
     &.tnt-compact {
-        table {
-            width: 100%;
+        width: 100%;
 
-            tr {
-                td {
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    overflow: clip;
-                }
-
-                &:hover {
-                    td {
-                        white-space: revert;
-                        text-overflow: revert;
-                    }
-                }
+        tr {
+            td {
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: clip;
+                height:32px;
             }
-        }
-    }
-
-    &.tnt-alternative {
-        tbody {
-            tr:nth-child(even) {
-                background-color: $tnt-color-surface-variant;
-            }
-        }
-    }
-
-    &.tnt-interactive {
-        tr:has(td) {
-            transition: 150ms ease-in-out;
 
             &:hover {
+                td {
+                    white-space: revert;
+                    text-overflow: revert;
+                }
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            background-color: $tnt-color-surface-container-lowest;
+
+            &.tnt-clickable {
+                transition: background-color ease-in-out 200ms;
                 cursor: pointer;
-                background-color: color-mix(in srgb, $tnt-color-on-surface 25%, transparent);
+
+                &:hover {
+                    background-color: color-mix(in srgb, $tnt-color-surface-tint 25%, transparent);
+                }
+            }
+
+            td {
             }
         }
     }
 }
+//    thead {
+//        position: sticky;
+//        top: 0;
+//        background-color: $tnt-color-surface-container-highest;
+//        box-shadow: 0px 1px $tnt-color-outline;
+//        z-index: 3;
+//        text-overflow: ellipsis;
+//        white-space: nowrap;
+//        tr {
+//            th {
+//                padding: 0.5rem 2rem;
+//                margin: 0;
+//                position: relative;
+//                user-select: none;
+//                min-width: 1rem;
+//                text-align: center;
+//                @extend .tnt-title-medium;
+//                .tnt-resizeable {
+//                    position: absolute;
+//                    top: 0;
+//                    right: 0;
+//                    width: 5px;
+//                    background-color: transparent;
+//                    cursor: col-resize;
+//                    border-right: 1px solid $tnt-color-outline;
+//                }
+//                .tnt-resizing {
+//                    border-right: 2px solid $tnt-color-primary;
+//                }
+//                &.tnt-sortable {
+//                    cursor: pointer;
+//                    transition: color ease-in-out 200ms;
+//                    &:hover {
+//                        color: $tnt-color-primary;
+//                    }
+//                }
+//                &.tnt-sorted-asc, &.tnt-sorted-desc {
+//                    color: $tnt-color-secondary;
+//                    span.tnt-icon {
+//                        color: $tnt-color-secondary;
+//                        float: right;
+//                        transition: 200ms;
+//                    }
+//                }
+//                &.tnt-sorted-asc span.tnt-icon {
+//                    transform: rotateZ(180deg);
+//                }
+//            }
+//        }
+//    }
+//    tbody {
+//        tr {
+//            background-color: $tnt-color-surface;
+//            td {
+//                padding: 0.5rem;
+//                min-width: 1rem;
+//                white-space: nowrap;
+//                @extend .tnt-body-medium;
+//            }
+//        }
+//    }
+//}
+//&.tnt-alternative {
+//    tbody {
+//        tr:nth-child(even) {
+//            background-color: $tnt-color-surface-variant;
+//        }
+//    }
+//}
+//&.tnt-interactive {
+//    tr:has(td) {
+//        transition: 150ms ease-in-out;
+//        &:hover {
+//            cursor: pointer;
+//            background-color: color-mix(in srgb, $tnt-color-on-surface 25%, transparent);
+//        }
+//    }
+//}

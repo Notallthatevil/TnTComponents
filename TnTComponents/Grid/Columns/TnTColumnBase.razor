@@ -1,0 +1,45 @@
+@using Microsoft.AspNetCore.Components.Rendering
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using TnTComponents.Grid.Infrastructure;
+@typeparam TGridItem
+@{
+    InternalGridContext.Grid.AddColumn(this, InitialSortDirection, IsDefaultSortColumn);
+}
+@code
+{
+    private void RenderDefaultHeaderContent(RenderTreeBuilder __builder) {
+        @if (HeaderCellItemTemplate is not null) {
+            @HeaderCellItemTemplate(this)
+        }
+        else if (Sortable) {
+            <div class="tnt-header-content @(ShowSortIcon ? "tnt-sorted-on" : null)" @onclick="@(() => Grid.SortByColumnAsync(this))">
+                @Title
+                @if (ShowSortIcon) {
+                    TnTIcon icon;
+                    if (Grid.SortByAscending == true) {
+                        icon = MaterialIcon.ArrowDropUp;
+                    }
+                    else{
+                        icon = MaterialIcon.ArrowDropDown;
+                    }
+                    icon.AdditionalClass = "tnt-sort-icon";
+
+                    @icon.Render()
+                }
+            </div>
+
+        }
+        else {
+            <td class="tnt-header-content">
+                @Title
+            </td>
+        }
+    }
+
+    internal void RenderPlaceholderContent(RenderTreeBuilder __builder, PlaceholderContext placeholderContext) {
+        // Blank if no placeholder template was supplied, as it's enough to style with CSS by default
+        if (PlaceholderTemplate is not null) {
+            @PlaceholderTemplate(placeholderContext)
+        }
+    }
+}
