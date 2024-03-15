@@ -1,6 +1,6 @@
 ﻿@use "sass:map";
 
-button[is=tnt-button], input::file-selector-button {
+button[is=tnt-button] {
     appearance: none;
     border: none;
     user-select: none;
@@ -53,6 +53,50 @@ button[is=tnt-button], input::file-selector-button {
         transition: right ease-in-out 200ms;
 
         @extend .tnt-elevation-1;
+    }
+}
+
+input::file-selector-button {
+    appearance: none;
+    border: none;
+    user-select: none;
+    min-height: 2.5rem;
+    min-width: 2.5rem;
+    padding: 0 1rem;
+    margin: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: bottom;
+    cursor: pointer;
+
+    &:not(:has(.tnt-outlined)) {
+        outline: none;
+    }
+
+    @extend .tnt-label-large;
+
+    &:not(:disabled) {
+        cursor: pointer;
+        transition: box-shadow linear 100ms, background-color linear 100ms;
+
+        &:hover {
+            @for $i from 0 through 9 {
+                &.tnt-elevation-#{$i} {
+                    box-shadow: map.get($elevation-shadows, $i + 1);
+                }
+            }
+        }
+    }
+
+    &:not(.tnt-fab) {
+        .tnt-icon:first-child {
+            padding-right: 0.5rem;
+        }
+
+        .tnt-icon:last-child {
+            padding-left: 0.5rem;
+        }
     }
 }
 

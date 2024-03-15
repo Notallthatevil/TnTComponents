@@ -13,13 +13,14 @@ public partial class TnTFabButton {
     public RenderFragment ChildContent { get; set; } = default!;
 
     public override string? CssClass => CssClassBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-fab")
         .AddActionableBackgroundColor(BackgroundColor)
         .AddForegroundColor(ForegroundColor)
         .Build();
 
     public override string? CssStyle => CssStyleBuilder.Create()
-           .AddFromAdditionalAttributes(AdditionalAttributes)
+       .AddFromAdditionalAttributes(AdditionalAttributes)
        .Build();
 
     [Parameter]
