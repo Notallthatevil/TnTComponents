@@ -9,10 +9,10 @@ public partial class TnTInputChip
     public RenderFragment ChildContent { get; set; } = default!;
 
     [Parameter]
-    public TnTColor TextColor { get; set; } = TnTColor.Primary;
+    public TnTColor TextColor { get; set; } = TnTColor.OnPrimary;
 
     [Parameter]
-    public TnTColor BackgroundColor { get; set; } = TnTColor.OnPrimary;
+    public TnTColor BackgroundColor { get; set; } = TnTColor.Primary;
 
     [Parameter]
     public TnTBorderRadius? BorderRadius { get; set; } = new TnTBorderRadius(2);

@@ -26,7 +26,7 @@
     input:-webkit-autofill,
     input:-webkit-autofill:hover,
     input:-webkit-autofill:focus,
-    input:-webkit-autofill:active, 
+    input:-webkit-autofill:active,
     select:-webkit-autofill,
     select:-webkit-autofill:hover,
     select:-webkit-autofill:focus,
@@ -81,6 +81,9 @@
 
     &.modified.invalid {
         color: $tnt-color-error;
+        caret-color: $tnt-color-error;
+
+        background-color: color-mix(in srgb, $tnt-color-error-container 50%, transparent);
 
         span.tnt-icon.tnt-end {
             color: inherit;
@@ -124,7 +127,7 @@
             background-color: $tnt-color-error;
         }
 
-        &:focus-within {
+        &:focus-within, &.modified.invalid {
             &:before {
                 transform: rotateY(0deg);
             }
@@ -152,7 +155,7 @@
             outline-color: $tnt-color-error;
         }
 
-        &:focus-within {
+        &:focus-within, &.modified.invalid {
             &:after {
                 opacity: 1;
             }
@@ -248,8 +251,16 @@ label.tnt-components:not(:has(input[type=checkbox])):not(:has(input[type=radio])
     }
 
     &:has(span.modified.invalid) {
-        &:focus-within {
-            color: $tnt-color-error;
+        color: $tnt-color-error;
+
+        span.tnt-label {
+            background-color: transparent;
+        }
+
+        &:focus-within, &:not(:has(input:placeholder-shown)), &:has(.tnt-input-placeholder) {
+            span.tnt-label {
+                background-color: $tnt-color-error-container;
+            }
         }
     }
 }
