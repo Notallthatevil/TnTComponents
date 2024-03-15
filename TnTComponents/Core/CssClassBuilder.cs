@@ -81,8 +81,10 @@ internal class CssClassBuilder {
 
     public CssClassBuilder AddRipple(bool enabled = true) => AddClass("tnt-ripple", enabled);
 
+    public CssClassBuilder AddTextAlign(TextAlign? textAlign) => AddClass("tnt-text-align-" + textAlign.ToCssString(), textAlign != null);
+
     public CssClassBuilder AddFromAdditionalAttributes(IReadOnlyDictionary<string, object>? additionalAttributes) {
-        if (additionalAttributes?.TryGetValue("class", out var @class) == true) {
+        if (additionalAttributes?.TryGetValue("class", out var @class) == true && @class is not null) {
             return AddClass(@class.ToString());
         }
         return this;

@@ -31,8 +31,8 @@ internal class CssStyleBuilder {
     }
 
     public CssStyleBuilder AddFromAdditionalAttributes(IReadOnlyDictionary<string, object>? additionalAttributes) {
-        if (additionalAttributes?.TryGetValue("style", out var style) == true) {
-            return AddStyle(style?.ToString() ?? string.Empty, string.Empty);
+        if (additionalAttributes?.TryGetValue("style", out var style) == true && style is not null) {
+            return AddStyle(style.ToString(), string.Empty);
         }
         return this;
     }
