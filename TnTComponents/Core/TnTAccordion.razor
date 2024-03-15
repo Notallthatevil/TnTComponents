@@ -7,7 +7,7 @@
         @Title
         @MaterialIcon.ArrowDropDown.Render()
     </h3>
-    <div class="@(CssClassBuilder.Create().AddBackgroundColor(BodyBackgroundColor).AddForegroundColor(BodyTextColor).Build())">
+    <div class="@(CssClassBuilder.Create().AddBackgroundColor(BodyBackgroundColor).AddForegroundColor(BodyTextColor).AddClass("tnt-visible", OpenByDefault).Build())" tnt-open-by-default="@OpenByDefault">
         <div>
             @ChildContent
         </div>

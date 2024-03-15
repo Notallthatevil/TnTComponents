@@ -37,6 +37,7 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
         .AddClass("tnt-stripped", DataGridAppearance.HasFlag(DataGridAppearance.Stripped))
         .AddClass("tnt-compact", DataGridAppearance.HasFlag(DataGridAppearance.Compact))
         .AddClass("tnt-resizable", Resizable)
+        .AddClass("tnt-loading", Loading)
         .Build();
 
     public string? CssStyle => CssStyleBuilder.Create()

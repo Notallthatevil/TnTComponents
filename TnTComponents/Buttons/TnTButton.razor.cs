@@ -27,6 +27,7 @@ public partial class TnTButton {
         .AddBorderRadius(CornerRadius)
         .AddOutlined(Appearance == ButtonAppearance.Outlined)
         .MakeTextOnly(Appearance == ButtonAppearance.Text)
+        .AddClass("tnt-button")
         .AddRipple()
         .Build();
 

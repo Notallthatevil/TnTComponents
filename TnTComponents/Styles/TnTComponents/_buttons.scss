@@ -188,8 +188,9 @@ tnt-layout:has(tnt-footer) {
     }
 }
 
-body:has(div.tnt-snackbar-container) {
-    tnt-button.tnt-fab {
+body:has(.tnt-snackbar-container) {
+
+    .tnt-button.tnt-fab {
         right: 24rem;
     }
 }

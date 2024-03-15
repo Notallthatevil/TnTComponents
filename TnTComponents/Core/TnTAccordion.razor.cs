@@ -29,6 +29,9 @@ public partial class TnTAccordion {
         .Build();
 
     [Parameter]
+    public bool? OpenByDefault { get; set; }
+
+    [Parameter]
     public int Elevation { get; set; } = 1;
 
     [Parameter]
@@ -43,4 +46,10 @@ public partial class TnTAccordion {
     protected override string? JsModulePath => "./_content/TnTComponents/Core/TnTAccordion.razor.js";
 
     protected override bool RunIsolatedJsScript => true;
+
+    protected override void OnAfterRender(bool firstRender) {
+        if (firstRender) {
+            OpenByDefault = null;
+        }
+    }
 }

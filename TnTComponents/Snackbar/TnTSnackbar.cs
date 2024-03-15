@@ -33,7 +33,9 @@ public class TnTSnackbar : ComponentBase, IDisposable {
                 var snackbar = pair.Key;
                 builder.OpenElement(20, "div");
                 builder.AddAttribute(30, "class", snackbar.GetClass());
-                builder.AddAttribute(45, "style", $"--timeout: {snackbar.Timeout}s;");
+                if (snackbar.Timeout > 0) {
+                    builder.AddAttribute(45, "style", $"--timeout: {snackbar.Timeout}s;");
+                }
                 builder.SetKey(snackbar);
 
                 if (snackbar.ShowClose) {
