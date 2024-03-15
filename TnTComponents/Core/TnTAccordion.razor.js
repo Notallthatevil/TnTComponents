@@ -1,3 +1,17 @@
+
+function toggle(e) {
+    if (e && e.target && e.target.parentElement) {
+        let parent = e.target.parentElement;
+
+        if (parent.content.classList.contains('tnt-visible') || parent.content.clientHeight) {
+            parent.close();
+        }
+        else {
+            parent.open();
+        }
+    }
+}
+
 class TnTAccordion extends HTMLElement {
     constructor() {
         super();
@@ -5,6 +19,7 @@ class TnTAccordion extends HTMLElement {
 
     connectedCallback() {
         this.update();
+
     }
 
     disconnectedCallback() {
@@ -16,21 +31,21 @@ class TnTAccordion extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
     }
 
+    open() {
+        this.content.style.height = `${this.content.firstChild.clientHeight}px`;
+        this.content.classList.add('tnt-visible');
+    }
+
+    close() {
+        this.content.style.height = 0;
+        this.content.classList.remove('tnt-visible');
+    }
+
     update() {
         this.header = this.firstChild;
         this.content = this.lastChild;
-
         if (this.header && this.content) {
-            this.header.addEventListener('click', (e) => {
-                if (this.content.clientHeight) {
-                    this.content.style.height = 0;
-                    this.content.classList.remove('tnt-visible');
-                }
-                else {
-                    this.content.style.height = `${this.content.firstChild.clientHeight}px`;
-                    this.content.classList.add('tnt-visible');
-                }
-            });
+            this.header.addEventListener('click', toggle);
         }
     }
 }

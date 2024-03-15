@@ -30,7 +30,11 @@
     }
 
     & > div {
-        height: 0;
+
+        &:not([tnt-open-by-default]) {
+            height: 0;
+        }
+
         overflow: hidden;
         transition: ease-in-out 200ms;
         border-radius: 0 0 0.5rem 0.5rem;
