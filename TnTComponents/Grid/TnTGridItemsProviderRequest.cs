@@ -3,10 +3,10 @@ using TnTComponents.Grid.Columns;
 
 namespace TnTComponents.Grid;
 
-public record struct TnTGridItemsProviderRequest {
-    public int StartIndex { get; internal set; }
-    public int? Count { get; internal set; }
-    public IReadOnlyDictionary<string, SortDirection> SortOnProperties { get; internal set; }
+public class TnTGridItemsProviderRequest {
+    public int StartIndex { get; internal protected set; }
+    public int? Count { get; internal protected set; }
+    public IReadOnlyCollection<KeyValuePair<string, SortDirection>> SortOnProperties { get; internal protected set; } = [];
 }
 
 /// <summary>
@@ -58,7 +58,7 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> {
         CancellationToken = cancellationToken;
     }
 
-    public static implicit operator TnTGridItemsProviderRequest(TnTGridItemsProviderRequest<TGridItem> request) => new() { StartIndex = request.StartIndex, Count = request.Count, SortOnProperties = request.GetSortByProperties().Select(sp => new KeyValuePair<string, SortDirection>(sp.PropertyName, sp.Direction)).ToDictionary() };
+    public static implicit operator TnTGridItemsProviderRequest(TnTGridItemsProviderRequest<TGridItem> request) => new TnTGridItemsProviderRequest { StartIndex = request.StartIndex, Count = request.Count, SortOnProperties = request.GetSortByProperties().Select(sp => new KeyValuePair<string, SortDirection>(sp.PropertyName, sp.Direction)).ToList() };
 
     /// <summary>
     /// Applies the request's sorting rules to the supplied <see cref="IQueryable{TGridItem}" />.

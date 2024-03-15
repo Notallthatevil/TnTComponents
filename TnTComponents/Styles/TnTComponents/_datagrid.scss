@@ -13,7 +13,7 @@
 
         tr.tnt-data-grid-header {
             th {
-                padding: 0.5rem 2rem;
+                padding: 0 2rem;
                 margin: 0;
                 position: relative;
                 user-select: none;
@@ -71,7 +71,7 @@
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 overflow: clip;
-                height:32px;
+                height: 32px;
             }
 
             &:hover {
@@ -97,6 +97,8 @@
             }
 
             td {
+                box-sizing: border-box;
+                padding: 0.1rem 0.25rem;
             }
         }
     }
