@@ -94,7 +94,6 @@ public abstract partial class TnTColumnBase<TGridItem> {
     [Parameter]
     public string? Title { get; set; }
 
-
     public bool ShowSortIcon { get; set; }
 
     [CascadingParameter]
