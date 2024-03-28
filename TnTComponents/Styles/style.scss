@@ -39,9 +39,11 @@ body {
     }
 }
 
-:has(#tnt-theme-design-dark[media=\(prefers-color-scheme\:\ dark\)]) {
-    ::-webkit-calendar-picker-indicator {
-        filter: invert(1);
+:has(#tnt-theme-design-dark[media=\(prefers-color-scheme\:\ dark\)]), :has(#tnt-theme-design-dark[media=\(prefers-color-scheme\:dark\)]) {
+    @media (prefers-color-scheme: dark) {
+        ::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
     }
 }
 
