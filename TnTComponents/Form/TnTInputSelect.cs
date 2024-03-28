@@ -62,7 +62,7 @@ public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
                         builder.AddAttribute(222, "disabled");
                     }
                     else {
-                        builder.AddAttribute(223, "value", default(TInputType));
+                        builder.AddAttribute(223, "value", "");
                     }
                     builder.AddContent(230, Placeholder);
                     builder.CloseElement();
