@@ -12,6 +12,9 @@ public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
+    [Parameter]
+    public bool AllowPlaceholderSelection { get; set; }
+
     public override InputType Type { get; }
     private bool _multiple;
 
@@ -52,10 +55,15 @@ public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
                 }
 
                 builder.AddElementReferenceCapture(200, e => Element = e);
-                if(!string.IsNullOrWhiteSpace(Placeholder)) {
+                if (!string.IsNullOrWhiteSpace(Placeholder)) {
                     builder.OpenElement(210, "option");
                     builder.AddAttribute(221, "selected", true);
-                    builder.AddAttribute(222, "disabled");
+                    if (!AllowPlaceholderSelection) {
+                        builder.AddAttribute(222, "disabled");
+                    }
+                    else {
+                        builder.AddAttribute(223, "value", default(TInputType));
+                    }
                     builder.AddContent(230, Placeholder);
                     builder.CloseElement();
                 }
