@@ -131,9 +131,11 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                     builder.SetUpdatesAttributeName("value");
                 }
 
-                builder.AddAttribute(190, "onblur", EventCallback.Factory.Create<FocusEventArgs>(this, args => {
-                    EditContext.NotifyFieldChanged(FieldIdentifier);
-                }));
+                if (EditContext is not null) {
+                    builder.AddAttribute(190, "onblur", EventCallback.Factory.Create<FocusEventArgs>(this, args => {
+                        EditContext.NotifyFieldChanged(FieldIdentifier);
+                    }));
+                }
 
                 builder.AddElementReferenceCapture(200, e => Element = e);
                 builder.CloseElement();
