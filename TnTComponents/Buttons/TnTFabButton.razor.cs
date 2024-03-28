@@ -18,11 +18,15 @@ public partial class TnTFabButton {
         .AddClass("tnt-fab")
         .AddActionableBackgroundColor(BackgroundColor)
         .AddForegroundColor(ForegroundColor)
+        .AddBorderRadius(BorderRadius)
         .Build();
 
     public override string? CssStyle => CssStyleBuilder.Create()
        .AddFromAdditionalAttributes(AdditionalAttributes)
        .Build();
+
+    [Parameter]
+    public TnTBorderRadius? BorderRadius { get; set; } = new(10);
 
     [Parameter]
     public TnTColor ForegroundColor { get; set; }
