@@ -4,6 +4,10 @@
     border-spacing: 0;
     table-layout: fixed;
 
+    @media #{$small-and-down} {
+        table-layout: auto;
+    }
+
     thead {
         position: sticky;
         top: 0;
@@ -67,17 +71,19 @@
         width: 100%;
 
         tr {
-            td {
-                white-space: nowrap;
-                text-overflow: ellipsis;
-                overflow: clip;
-                height: 32px;
-            }
-
-            &:hover {
                 td {
-                    white-space: revert;
-                    text-overflow: revert;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: clip;
+                    height: 32px;
+                }
+
+            @media #{$medium-and-up} {
+                &:hover {
+                    td {
+                        white-space: revert;
+                        text-overflow: revert;
+                    }
                 }
             }
         }
