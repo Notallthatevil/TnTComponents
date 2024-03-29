@@ -9,36 +9,36 @@ public static class LinqExtensions {
         var propInfo = GetPropertyInfo(typeof(T), name);
         var expr = GetOrderExpression(typeof(T), propInfo);
 
-        var method = typeof(Enumerable).GetMethods().FirstOrDefault(m => m.Name == "OrderBy" && m.GetParameters().Length == 2);
-        var genericMethod = method.MakeGenericMethod(typeof(T), propInfo.PropertyType);
-        return (IEnumerable<T>)genericMethod.Invoke(null, new object[] { query, expr.Compile() });
+        MethodInfo method = typeof(Enumerable).GetMethods().First(m => m.Name == "OrderBy" && m.GetParameters().Length == 2);
+        MethodInfo genericMethod = method.MakeGenericMethod(typeof(T), propInfo.PropertyType);
+        return (IEnumerable<T>)genericMethod.Invoke(null, new object[] { query, expr.Compile() })!;
     }
 
     public static IQueryable<T> OrderBy<T>(this IQueryable<T> query, string name) {
         var propInfo = GetPropertyInfo(typeof(T), name);
         var expr = GetOrderExpression(typeof(T), propInfo);
 
-        var method = typeof(Queryable).GetMethods().FirstOrDefault(m => m.Name == "OrderBy" && m.GetParameters().Length == 2);
-        var genericMethod = method.MakeGenericMethod(typeof(T), propInfo.PropertyType);
-        return (IQueryable<T>)genericMethod.Invoke(null, new object[] { query, expr });
+        MethodInfo method = typeof(Queryable).GetMethods().First(m => m.Name == "OrderBy" && m.GetParameters().Length == 2);
+        MethodInfo genericMethod = method.MakeGenericMethod(typeof(T), propInfo.PropertyType);
+        return (IQueryable<T>)genericMethod.Invoke(null, new object[] { query, expr })!;
     }
 
     public static IEnumerable<T> OrderByDescending<T>(this IEnumerable<T> query, string name) {
         var propInfo = GetPropertyInfo(typeof(T), name);
         var expr = GetOrderExpression(typeof(T), propInfo);
 
-        var method = typeof(Enumerable).GetMethods().FirstOrDefault(m => m.Name == "OrderByDescending" && m.GetParameters().Length == 2);
-        var genericMethod = method.MakeGenericMethod(typeof(T), propInfo.PropertyType);
-        return (IEnumerable<T>)genericMethod.Invoke(null, new object[] { query, expr.Compile() });
+        MethodInfo method = typeof(Enumerable).GetMethods().First(m => m.Name == "OrderByDescending" && m.GetParameters().Length == 2);
+        MethodInfo genericMethod = method.MakeGenericMethod(typeof(T), propInfo.PropertyType);
+        return (IEnumerable<T>)genericMethod.Invoke(null, new object[] { query, expr.Compile() })!;
     }
 
     public static IQueryable<T> OrderByDescending<T>(this IQueryable<T> query, string name) {
         var propInfo = GetPropertyInfo(typeof(T), name);
         var expr = GetOrderExpression(typeof(T), propInfo);
 
-        var method = typeof(Queryable).GetMethods().FirstOrDefault(m => m.Name == "OrderByDescending" && m.GetParameters().Length == 2);
-        var genericMethod = method.MakeGenericMethod(typeof(T), propInfo.PropertyType);
-        return (IQueryable<T>)genericMethod.Invoke(null, new object[] { query, expr });
+        MethodInfo method = typeof(Queryable).GetMethods().First(m => m.Name == "OrderByDescending" && m.GetParameters().Length == 2);
+        MethodInfo genericMethod = method.MakeGenericMethod(typeof(T), propInfo.PropertyType);
+        return (IQueryable<T>)genericMethod.Invoke(null, new object[] { query, expr })!;
     }
 
     private static LambdaExpression GetOrderExpression(Type objType, PropertyInfo pi) {
