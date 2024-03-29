@@ -1,0 +1,51 @@
+﻿.tnt-typeahead {
+
+    .tnt-typeahead-box {
+        width:-webkit-fit-content;
+        width:-moz-fit-content;
+        width: fit-content;
+        position: relative;
+
+        progress.tnt-components {
+            position: absolute;
+            top: 0.5rem;
+            right: 0;
+        }
+    }
+
+    .tnt-typeahead-content {
+        width: fit-content;
+        padding: 0.25rem;
+        max-height: 50vh;
+        overflow: auto;
+        margin: 0.25rem;
+        z-index: 3;
+
+        ul {
+            margin: 0;
+            padding: 0;
+
+            li {
+                list-style: none;
+                border-top: 1px solid $tnt-color-outline;
+                cursor: pointer;
+                padding: 0.5rem;
+
+                span {
+                    transition: 200ms;
+                    margin: 0.25rem;
+                    padding: 0.5rem 1rem;
+
+                    &:hover {
+                        background-color: color-mix(in srgb, $tnt-color-surface-tint 20%, transparent);
+                    }
+                }
+            }
+
+            li:first-child {
+                margin-top: 0.5rem;
+                border-top: none;
+            }
+        }
+    }
+}

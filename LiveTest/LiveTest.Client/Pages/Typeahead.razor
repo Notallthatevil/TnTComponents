@@ -1,0 +1,60 @@
+﻿@page "/typeahead"
+@using TnTComponents
+@rendermode InteractiveAuto
+
+<h3>Typeahead</h3>
+
+<TnTTypeahead  ItemsLookupFunc="SearchFunc" Label="Typeahead" ItemSelected="@((Item item) => SelectedItems.Add(item))"/>
+
+@foreach(var item in SelectedItems) {
+    <span>
+        @item.Name @item.Age
+    </span>
+}
+
+
+<TnTTypeahead ItemsLookupFunc="SearchFunc"  ItemSelected="@((Item item) => SelectedItems.Add(item))" />
+
+@foreach (var item in SelectedItems) {
+    <span>
+        @item.Name @item.Age
+    </span>
+}
+
+@code {
+
+
+    private IQueryable<Item> Items = new List<Item>().AsQueryable();
+
+    private List<Item> SelectedItems = [];
+
+    private class Item {
+        public required string Name { get; set; }
+        public required string Email { get; set; }
+        public required int Age { get; set; }
+    }
+
+    protected override void OnInitialized() {
+        base.OnInitialized();
+
+        var items = new List<Item>();
+        foreach (var index in Enumerable.Range(1, 100)) {
+            items.Add(new Item {
+                    Name = $"Name {index}",
+                    Email = $"Email {index}",
+                    Age = index
+                });
+        }
+
+        Items = items.AsQueryable();
+    }
+
+    private async Task<IEnumerable<Item>> SearchFunc(string? search, CancellationToken cancellationToken = default) {
+        await Task.Delay(1000, cancellationToken);
+        if (!string.IsNullOrWhiteSpace(search)) {
+            return Items.Where(x => x.Name.Contains(search, StringComparison.OrdinalIgnoreCase));
+        }
+        return [];
+    }
+
+}
