@@ -21,3 +21,11 @@ export function externalClickCallbackDeregister(dotNetObjectRef) {
         delete externalClickCallbacks[dotNetObjectRef._id];
     }
 }
+export function onLoad(element, dotnNetRef) {
+}
+
+export function onUpdate(element, dotnNetRef) {
+}
+
+export function onDispose(element, dotnNetRef) {
+}

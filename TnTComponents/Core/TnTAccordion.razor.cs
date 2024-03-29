@@ -43,11 +43,10 @@ public partial class TnTAccordion {
     [Parameter, EditorRequired]
     public string Title { get; set; } = default!;
 
-    protected override string? JsModulePath => "./_content/TnTComponents/Core/TnTAccordion.razor.js";
-
-    protected override bool RunIsolatedJsScript => true;
+    public override string? JsModulePath => "./_content/TnTComponents/Core/TnTAccordion.razor.js";
 
     protected override void OnAfterRender(bool firstRender) {
+        base.OnAfterRender(firstRender);
         if (firstRender) {
             OpenByDefault = null;
         }

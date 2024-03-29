@@ -1,6 +1,6 @@
 ﻿@namespace TnTComponents
 @using TnTComponents.Core
-@inherits TnTComponentBase
+@inherits TnTPageScriptComponent<TnTButton>
 
 <button is="tnt-button"
         @attributes="AdditionalAttributes"
@@ -15,4 +15,4 @@
     @ChildContent
 </button>
 
-<TnTPageScript Src="@JsModulePath" />
+@RenderPageScript()

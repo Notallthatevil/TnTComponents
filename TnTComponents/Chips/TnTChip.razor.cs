@@ -30,7 +30,7 @@ public partial class TnTChip
 
     //protected override string? JsModulePath => "./_content/TnTComponents/Chips/TnTChip.razor.js";
 
-    //protected override bool RunIsolatedJsScript => true;
+    //
 
     public override string? CssStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)

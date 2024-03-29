@@ -34,8 +34,7 @@ public partial class TnTSideNavMenuGroup {
     [Parameter, EditorRequired]
     public string Title { get; set; } = default!;
 
-    protected override string? JsModulePath => "./_content/TnTComponents/Layout/TnTSideNavMenuGroup.razor.js";
-    protected override bool RunIsolatedJsScript => false;
+    public override string? JsModulePath => "./_content/TnTComponents/Layout/TnTSideNavMenuGroup.razor.js";
 
     [DynamicDependency(nameof(Toggle))]
     public TnTSideNavMenuGroup() : base() { }

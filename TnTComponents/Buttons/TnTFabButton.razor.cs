@@ -39,6 +39,7 @@ public partial class TnTFabButton {
 
     [Parameter]
     public ButtonType Type { get; set; }
+    public override string? JsModulePath => "./_content/TnTComponents/Buttons/TnTButton.razor.js";
 
     protected override void OnInitialized() {
         base.OnInitialized();

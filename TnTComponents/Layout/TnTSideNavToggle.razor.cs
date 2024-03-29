@@ -42,7 +42,7 @@ public partial class TnTSideNavToggle {
     [Parameter]
     public EventCallback<bool> ToggleCallback { get; set; }
 
-    protected override bool RunIsolatedJsScript => true;
+    
 
     [DynamicDependency(nameof(Toggle))]
     public TnTSideNavToggle() : base() { }

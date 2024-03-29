@@ -14,7 +14,7 @@ public partial class TnTLayout {
        .AddFromAdditionalAttributes(AdditionalAttributes)
        .Build();
 
-    protected override bool RunIsolatedJsScript => true;
+    
 
     private TnTBody? _body;
     private TnTFooter? _footer;

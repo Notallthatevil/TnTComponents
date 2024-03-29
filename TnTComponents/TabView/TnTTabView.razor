@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Sections
 @using TnTComponents.Core
-@inherits TnTComponentBase
+@inherits TnTPageScriptComponent<TnTTabView>
 @namespace TnTComponents
 
 <tnt-tab-view @attributes=AdditionalAttributes class="@CssClass" style="@CssStyle" @ref="Element">
@@ -31,5 +31,5 @@
         @ChildContent
     </CascadingValue>
 </tnt-tab-view>
-<TnTPageScript Src="./_content/TnTComponents/TabView/TnTTabView.razor.js" />
+@RenderPageScript()
 

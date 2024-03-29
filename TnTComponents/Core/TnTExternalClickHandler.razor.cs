@@ -11,6 +11,8 @@ public partial class TnTExternalClickHandler {
 
     public override string? CssClass => ExternalClickCssClass;
 
+    public override string? JsModulePath => "./_content/TnTComponents/Core/TnTExternalClickHandler.razor.js";
+
     public override string? CssStyle => CssStyleBuilder.Create()
    .AddFromAdditionalAttributes(AdditionalAttributes)
    .Build();
@@ -21,17 +23,11 @@ public partial class TnTExternalClickHandler {
     [Parameter]
     public string? ExternalClickCssClass { get; set; }
 
-    protected override string? JsModulePath => "./_content/TnTComponents/Core/TnTExternalClickHandler.razor.js";
-    protected override bool RunIsolatedJsScript => false;
-    private IJSObjectReference? _jsModule;
-
-    private DotNetObjectReference<TnTExternalClickHandler>? _reference;
-
     public new async ValueTask DisposeAsync() {
         try {
-            if (_jsModule is not null) {
-                await _jsModule.InvokeVoidAsync("externalClickCallbackDeregister", Element, _reference);
-                await _jsModule.DisposeAsync();
+            if (IsolatedJsModule is not null) {
+                await IsolatedJsModule.InvokeVoidAsync("externalClickCallbackDeregister", Element, DotNetObjectRef);
+                await IsolatedJsModule.DisposeAsync();
             }
         }
         catch (JSDisconnectedException) { }
@@ -46,10 +42,8 @@ public partial class TnTExternalClickHandler {
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         await base.OnAfterRenderAsync(firstRender);
-        _reference ??= DotNetObjectReference.Create(this);
-        _jsModule ??= await JSRuntime.ImportIsolatedJs(this, JsModulePath);
-        if (firstRender) {
-            await _jsModule.InvokeVoidAsync("externalClickCallbackRegister", Element, _reference);
+        if (firstRender && IsolatedJsModule is not null) {
+            await IsolatedJsModule.InvokeVoidAsync("externalClickCallbackRegister", Element, DotNetObjectRef);
         }
     }
 }

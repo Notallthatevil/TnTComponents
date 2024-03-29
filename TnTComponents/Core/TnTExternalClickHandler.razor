@@ -1,5 +1,7 @@
-﻿@inherits TnTComponentBase
+﻿@inherits TnTPageScriptComponent<TnTExternalClickHandler>
 
 <div @attributes="AdditionalAttributes" class="@CssClass" style="@CssStyle" @ref="Element">
     @ChildContent
 </div>
+
+@RenderPageScript()

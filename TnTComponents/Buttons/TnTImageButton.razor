@@ -1,5 +1,6 @@
 ﻿@namespace TnTComponents
-@inherits TnTComponents.Core.TnTComponentBase
+@using TnTComponents.Core
+@inherits TnTPageScriptComponent<TnTImageButton>
 
 <button is="tnt-button"
     @attributes="AdditionalAttributes"
@@ -13,4 +14,4 @@
     @Icon.Render()
 </button>
 
-<TnTPageScript Src="./_content/TnTComponents/Buttons/TnTButton.razor.js" />
+@RenderPageScript()

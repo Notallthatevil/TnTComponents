@@ -28,8 +28,8 @@ public partial class TnTTabView {
     [Parameter]
     public bool SecondaryTabView { get; set; }
 
-    protected override string? JsModulePath => "./_content/TnTComponents/TabView/TnTTabView.razor.js";
-    protected override bool RunIsolatedJsScript => true;
+    public override string? JsModulePath => "./_content/TnTComponents/TabView/TnTTabView.razor.js";
+    
     private List<TnTTabChild> _tabChildren = [];
 
     public void AddTabChild(TnTTabChild tabChild) {

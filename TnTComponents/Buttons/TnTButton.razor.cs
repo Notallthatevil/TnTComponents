@@ -53,8 +53,7 @@ public partial class TnTButton {
     [Parameter]
     public ButtonType Type { get; set; }
 
-    protected override string? JsModulePath => "./_content/TnTComponents/Buttons/TnTButton.razor.js";
-    protected override bool RunIsolatedJsScript => true;
+    public override string? JsModulePath => "./_content/TnTComponents/Buttons/TnTButton.razor.js";
 
     protected override void OnInitialized() {
         base.OnInitialized();

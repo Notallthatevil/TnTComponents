@@ -1,8 +1,7 @@
-﻿@inherits TnTComponentBase
+﻿@inherits TnTPageScriptComponent<TnTThemeToggle>
 @namespace TnTComponents
 @using TnTComponents.Core
 <tnt-theme-toggle @attributes="AdditionalAttributes">
 </tnt-theme-toggle>
 
-<TnTPageScript Src="@JsModulePath" />
-
+@RenderPageScript()

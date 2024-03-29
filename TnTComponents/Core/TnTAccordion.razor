@@ -1,5 +1,5 @@
 ﻿@using TnTComponents.Core
-@inherits TnTComponentBase
+@inherits TnTPageScriptComponent<TnTAccordion>
 @namespace TnTComponents
 
 <tnt-accordion @attributes="AdditionalAttributes" style="@CssStyle" @ref="Element">
@@ -14,4 +14,4 @@
     </div>
 </tnt-accordion>
 
-<TnTPageScript Src="@JsModulePath" />
+@RenderPageScript()

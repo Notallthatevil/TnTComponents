@@ -6,8 +6,6 @@ namespace TnTComponents.Ext;
 
 internal static class JSRuntimeExt {
 
-
-
     public static async Task<IJSObjectReference> Import(this IJSRuntime jsRuntime, string path) {
         return await jsRuntime.InvokeAsync<IJSObjectReference>("import", path);
     }
@@ -24,9 +22,4 @@ internal static class JSRuntimeExt {
         }
         return await jsRuntime.Import(path);
     }
-
-
-
-
-
 }
