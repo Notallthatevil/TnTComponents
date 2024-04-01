@@ -110,9 +110,9 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                     builder.AddAttribute(125, "value", CurrentValueAsString);
                 }
                 builder.AddAttribute(140, "style", FormCssStyle);
-                builder.AddAttribute(150, "readonly", ParentFormReadOnly ?? ReadOnly);
+                builder.AddAttribute(150, "readonly", ParentFormReadOnly.HasValue ? ReadOnly || ParentFormReadOnly.Value : ReadOnly);
                 builder.AddAttribute(160, "placeholder", Placeholder);
-                builder.AddAttribute(170, "disabled", ParentFormDisabled ?? Disabled);
+                builder.AddAttribute(170, "disabled", ParentFormDisabled.HasValue ? Disabled || ParentFormDisabled.Value : Disabled);
                 builder.AddAttribute(171, "required", IsRequired());
                 builder.AddAttribute(172, "minlength", GetMinLength());
                 builder.AddAttribute(173, "maxlength", GetMaxLength());
