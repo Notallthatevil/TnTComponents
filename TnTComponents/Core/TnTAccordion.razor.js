@@ -50,6 +50,12 @@ class TnTAccordion extends HTMLElement {
     }
 }
 
+export function resize(element, dotNetRef) {
+    if (element && element.open) {
+        element.open();
+    }
+}
+
 export function onLoad(element, dotnNetRef) {
     if (!customElements.get('tnt-accordion')) {
         customElements.define('tnt-accordion', TnTAccordion);

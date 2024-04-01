@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using TnTComponents.Core;
 
 namespace TnTComponents;
@@ -50,5 +51,9 @@ public partial class TnTAccordion {
         if (firstRender) {
             OpenByDefault = null;
         }
+    }
+
+    public ValueTask Resize() {
+        return IsolatedJsModule?.InvokeVoidAsync("resize", Element) ?? ValueTask.CompletedTask;
     }
 }
