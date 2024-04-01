@@ -33,14 +33,14 @@
 
                     @foreach (var item in _items) {
                         <li class="tnt-typeahead-list-item" @onclick="(() => ItemSelectedAsync(item))">
-                            <span class="tnt-corner-radius-5 tnt-body-medium">
-                                @if (ResultTemplate is not null) {
-                                    @ResultTemplate(item)
-                                }
-                                else {
+                            @if (ResultTemplate is not null) {
+                                @ResultTemplate(item)
+                            }
+                            else {
+                                <span class="tnt-corner-radius-5 tnt-body-medium">
                                     @item
-                                }
-                            </span>
+                                </span>
+                            }
                         </li>
                     }
                 </ul>
@@ -54,50 +54,7 @@
     }
 </div>
 
-
 @code {
-    [Parameter]
-    public string? Label { get; set; }
-
-    [Parameter]
-    public TnTIcon StartIcon { get; set; } = MaterialIcon.Search;
-
-    [Parameter, EditorRequired]
-    public EventCallback<TItem> ItemSelected { get; set; }
-
-    [Parameter]
-    public int DebounceMilliseconds { get; set; } = 300;
-
-    [Parameter]
-    public TnTColor SearchProgressColor { get; set; } = TnTColor.Secondary;
-
-    [Parameter, EditorRequired]
-    public Func<string?, CancellationToken, Task<IEnumerable<TItem>>> ItemsLookupFunc { get; set; } = default!;
-
-    [Parameter]
-    public RenderFragment<TItem>? ResultTemplate { get; set; }
-
-    [Parameter]
-    public int ResultsViewElevation { get; set; } = 2;
-    [Parameter]
-    public TnTBorderRadius? ResultsViewBorderRadius { get; set; } = new(2);
-
-    [Parameter]
-    public TnTColor? ResultsViewBackgroundColor { get; set; } = TnTColor.Surface;
-    [Parameter]
-    public TnTColor? ResultsViewTextColor { get; set; } = TnTColor.OnSurface;
-
-    private IEnumerable<TItem> _items = [];
-
-    private string? _searchText;
-
-    private TnTInputText? _inputTextBox;
-
-
-    private bool _searching;
-
-    private Debouncer _debouncer = new();
-
     private void RenderInputBox(RenderTreeBuilder __builder) {
         <TnTInputText @bind-Value="_searchText"
                       BindOnInput="true"
@@ -105,41 +62,5 @@
                       StartIcon="StartIcon"
                       @onkeypress="KeyPressedAsync"
                       @ref="_inputTextBox" />
-    }
-
-
-    private async Task SearchAsync(string value) {
-        if (!string.IsNullOrWhiteSpace(value)) {
-            _searching = true;
-            await _debouncer.DebounceAsync(DebounceMilliseconds, async token => {
-                _items = await ItemsLookupFunc(value, token);
-                _searching = false;
-            });
-        }
-        else {
-            _searching = false;
-            await _debouncer.CancelAsync();
-            _items = [];
-        }
-    }
-
-    private async Task ItemSelectedAsync(TItem item) {
-        await ItemSelected.InvokeAsync(item);
-        _searchText = "";
-        _items = [];
-        _searching = false;
-        if (_inputTextBox is not null) {
-            await _inputTextBox.Element.FocusAsync();
-        }
-    }
-
-    private async Task KeyPressedAsync(KeyboardEventArgs args) {
-        if (args.Key == "Escape") {
-            _items = [];
-            _searching = false;
-        }
-        else if (args.Key == "Enter" && _items.Any()) {
-            await ItemSelectedAsync(_items.First());
-        }
     }
 }
