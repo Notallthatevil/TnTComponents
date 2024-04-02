@@ -7,6 +7,8 @@ using TnTComponents;
 
 namespace TnTComponents;
 public partial class TnTTypeahead<TItem> {
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
     [Parameter]
     public string? Label { get; set; }
 

@@ -56,7 +56,8 @@
 
 @code {
     private void RenderInputBox(RenderTreeBuilder __builder) {
-        <TnTInputText @bind-Value="_searchText"
+        <TnTInputText @attributes="AdditionalAttributes"
+        @bind-Value="_searchText"
                       BindOnInput="true"
                       BindAfter="SearchAsync"
                       StartIcon="StartIcon"
