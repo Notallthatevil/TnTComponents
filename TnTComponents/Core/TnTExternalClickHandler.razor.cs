@@ -23,16 +23,15 @@ public partial class TnTExternalClickHandler {
     [Parameter]
     public string? ExternalClickCssClass { get; set; }
 
-    public new async ValueTask DisposeAsync() {
+    public override async ValueTask DisposeAsync() {
         try {
             if (IsolatedJsModule is not null) {
-                await IsolatedJsModule.InvokeVoidAsync("externalClickCallbackDeregister", Element, DotNetObjectRef);
-                await IsolatedJsModule.DisposeAsync();
+                await IsolatedJsModule.InvokeVoidAsync("externalClickCallbackDeregister", DotNetObjectRef);
+                await base.DisposeAsync();
             }
         }
         catch (JSDisconnectedException) { }
 
-        await base.DisposeAsync();
     }
 
     [JSInvokable]

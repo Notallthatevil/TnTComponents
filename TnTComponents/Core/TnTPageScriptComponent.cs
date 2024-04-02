@@ -33,7 +33,7 @@ public abstract class TnTPageScriptComponent<TComponent> : TnTComponentBase, ITn
         await (IsolatedJsModule?.InvokeVoidAsync("onUpdate", Element, DotNetObjectRef) ?? ValueTask.CompletedTask);
     }
 
-    public async ValueTask DisposeAsync() {
+    public virtual async ValueTask DisposeAsync() {
         GC.SuppressFinalize(this);
         try {
             if (IsolatedJsModule is not null) {
