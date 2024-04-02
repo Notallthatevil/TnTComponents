@@ -24,6 +24,9 @@ public partial class TnTTypeahead<TItem> {
     [Parameter]
     public TnTColor SearchProgressColor { get; set; } = TnTColor.Secondary;
 
+    [Parameter]
+    public TnTColor? LabelBackgroundColor { get; set; }
+
     [Parameter, EditorRequired]
     public Func<string?, CancellationToken, Task<IEnumerable<TItem>>> ItemsLookupFunc { get; set; } = default!;
 
