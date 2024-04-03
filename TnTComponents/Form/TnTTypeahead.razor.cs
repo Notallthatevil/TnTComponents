@@ -55,7 +55,7 @@ public partial class TnTTypeahead<TItem> {
 
     private bool _searching;
 
-    private Debouncer _debouncer = new();
+    private TnTDebouncer _debouncer = new();
 
     private async Task SearchAsync(string value) {
         if (!string.IsNullOrWhiteSpace(value)) {

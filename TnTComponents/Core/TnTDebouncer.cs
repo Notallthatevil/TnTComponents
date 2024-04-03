@@ -27,7 +27,7 @@ namespace TnTComponents.Core;
 /// Debouncer helps you to debounce asynchronous actions.
 /// You can use it in your callbacks to prevent multiple calls of the same action in a short period of time.
 /// </summary>
-public class Debouncer : IDisposable {
+public class TnTDebouncer : IDisposable {
     private CancellationTokenSource _debounceCancellationTokenSource = new();
 
     /// <summary>
