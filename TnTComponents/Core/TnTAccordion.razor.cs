@@ -54,6 +54,16 @@ public partial class TnTAccordion {
     }
 
     public ValueTask Resize() {
-        return IsolatedJsModule?.InvokeVoidAsync("resize", Element) ?? ValueTask.CompletedTask;
+        return IsolatedJsModule?.InvokeVoidAsync("resizeAccordion", Element, DotNetObjectRef) ?? ValueTask.CompletedTask;
     }
+
+    public ValueTask Close() {
+        return IsolatedJsModule?.InvokeVoidAsync("closeAccordion", Element, DotNetObjectRef) ?? ValueTask.CompletedTask;
+    }
+
+    public ValueTask Open() {
+        return IsolatedJsModule?.InvokeVoidAsync("openAccordion", Element, DotNetObjectRef) ?? ValueTask.CompletedTask;
+    }
+
+
 }

@@ -13,6 +13,7 @@
         border-bottom: 1px solid $tnt-color-outline;
 
         span.tnt-icon {
+            color: inherit;
             transition: 200ms ease-in-out;
             float: right;
         }

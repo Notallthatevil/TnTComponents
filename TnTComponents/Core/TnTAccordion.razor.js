@@ -50,10 +50,20 @@ class TnTAccordion extends HTMLElement {
     }
 }
 
-export function resize(element, dotNetRef) {
+export function resizeAccordion(element, dotNetRef) {
     if (element && element.open) {
         element.open();
     }
+}
+
+export function closeAccordion(element, dotNetRef) {
+    if (element && element.close) {
+        element.close();
+    }
+}
+
+export function openAccordion(element, dotNetRef) {
+    resizeAccordion(element, dotNetRef);
 }
 
 export function onLoad(element, dotnNetRef) {
