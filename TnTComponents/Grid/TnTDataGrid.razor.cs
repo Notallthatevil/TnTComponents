@@ -182,6 +182,7 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     private readonly RenderFragment _renderLoadingContent;
     private readonly RenderFragment _renderNonVirtualizedRows;
     private int _ariaBodyRowCount;
+    private int _delay = 100;
 
     // IQueryable only exposes synchronous query APIs. IAsyncQueryExecutor is an adapter that lets
     // us invoke any async query APIs that might be available. We have built-in support for using EF
@@ -359,47 +360,52 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
         // lag after interactions.
         // TODO: Consider making this configurable, or smarter (e.g., doesn't delay on first call in a batch, then the amount
         // of delay increases if you rapidly issue repeated requests, such as when scrolling a long way)
-        await Task.Delay(100);
-        if (request.CancellationToken.IsCancellationRequested) {
-            return default;
+        await Task.Delay(_delay);
+        if (_delay < 2000) {
+            Interlocked.Add(ref _delay, 100);
         }
-
-        // Combine the query parameters from Virtualize with the ones from PaginationState
-        var startIndex = request.StartIndex;
-        var count = request.Count;
-        if (Pagination is not null) {
-            startIndex += Pagination.CurrentPageIndex * Pagination.ItemsPerPage;
-            count = Math.Min(request.Count, Pagination.ItemsPerPage - request.StartIndex);
-        }
-
-        TnTGridItemsProviderRequest<TGridItem> providerRequest = new(startIndex, count, _sortByColumn, _sortByAscending, request.CancellationToken);
-        var providerResult = await ResolveItemsRequestAsync(providerRequest);
-
+        var result = default(ItemsProviderResult<(int, TGridItem)>);
         if (!request.CancellationToken.IsCancellationRequested) {
-            // ARIA's rowcount is part of the UI, so it should reflect what the human user regards
-            // as the number of rows in the table, not the number of physical <tr> elements. For
-            // virtualization this means what's in the entire scrollable range, not just the current
-            // viewport. In the case where you're also paginating then it means what's conceptually
-            // on the current page.
-            // TODO: This currently assumes we always want to expand the last page to have ItemsPerPage rows, but the experience might
-            // be better if we let the last page only be as big as its number of actual rows.
-            _ariaBodyRowCount = Pagination is null ? providerResult.TotalItemCount : Pagination.ItemsPerPage;
-
-            Pagination?.SetTotalItemCountAsync(providerResult.TotalItemCount);
-            if (_ariaBodyRowCount > 0) {
-                Loading = false;
+            // Combine the query parameters from Virtualize with the ones from PaginationState
+            var startIndex = request.StartIndex;
+            var count = request.Count;
+            if (Pagination is not null) {
+                startIndex += Pagination.CurrentPageIndex * Pagination.ItemsPerPage;
+                count = Math.Min(request.Count, Pagination.ItemsPerPage - request.StartIndex);
             }
 
-            // We're supplying the row _index along with each row's data because we need it for
-            // aria-rowindex, and we have to account for the virtualized start _index. It might be
-            // more performant just to have some _latestQueryRowStartIndex field, but we'd have to
-            // make sure it doesn't get out of sync with the rows being rendered.
-            return new ItemsProviderResult<(int, TGridItem)>(
-                 items: providerResult.Items.Select((x, i) => ValueTuple.Create(i + request.StartIndex + 2, x)),
-                 totalItemCount: _ariaBodyRowCount);
+            TnTGridItemsProviderRequest<TGridItem> providerRequest = new(startIndex, count, _sortByColumn, _sortByAscending, request.CancellationToken);
+            var providerResult = await ResolveItemsRequestAsync(providerRequest);
+
+
+            if (!request.CancellationToken.IsCancellationRequested) {
+                // ARIA's rowcount is part of the UI, so it should reflect what the human user regards
+                // as the number of rows in the table, not the number of physical <tr> elements. For
+                // virtualization this means what's in the entire scrollable range, not just the current
+                // viewport. In the case where you're also paginating then it means what's conceptually
+                // on the current page.
+                // TODO: This currently assumes we always want to expand the last page to have ItemsPerPage rows, but the experience might
+                // be better if we let the last page only be as big as its number of actual rows.
+                _ariaBodyRowCount = Pagination is null ? providerResult.TotalItemCount : Pagination.ItemsPerPage;
+
+                Pagination?.SetTotalItemCountAsync(providerResult.TotalItemCount);
+                if (_ariaBodyRowCount > 0) {
+                    Loading = false;
+                }
+
+                // We're supplying the row _index along with each row's data because we need it for
+                // aria-rowindex, and we have to account for the virtualized start _index. It might be
+                // more performant just to have some _latestQueryRowStartIndex field, but we'd have to
+                // make sure it doesn't get out of sync with the rows being rendered.
+                result = new ItemsProviderResult<(int, TGridItem)>(
+                     items: providerResult.Items.Select((x, i) => ValueTuple.Create(i + request.StartIndex + 2, x)),
+                     totalItemCount: _ariaBodyRowCount);
+            }
+
+            Interlocked.Exchange(ref _delay, 0); // Reset the debounce delay
         }
 
-        return default;
+        return result;
     }
 
     // Same as RefreshDataAsync, except without forcing a re-render. We use this from

@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System.Reflection;
-using TnTComponents.Ext;
 
 namespace TnTComponents.Core;
 
@@ -11,8 +9,6 @@ public partial class TnTExternalClickHandler {
     public RenderFragment ChildContent { get; set; } = default!;
 
     public override string? CssClass => ExternalClickCssClass;
-
-    public override string? JsModulePath => "./_content/TnTComponents/Core/TnTExternalClickHandler.razor.js";
 
     public override string? CssStyle => CssStyleBuilder.Create()
    .AddFromAdditionalAttributes(AdditionalAttributes)
@@ -24,6 +20,8 @@ public partial class TnTExternalClickHandler {
     [Parameter]
     public string? ExternalClickCssClass { get; set; }
 
+    public override string? JsModulePath => "./_content/TnTComponents/Core/TnTExternalClickHandler.razor.js";
+
     public override async ValueTask DisposeAsync() {
         try {
             if (IsolatedJsModule is not null) {
@@ -32,7 +30,6 @@ public partial class TnTExternalClickHandler {
             }
         }
         catch (JSDisconnectedException) { }
-
     }
 
     [JSInvokable]
