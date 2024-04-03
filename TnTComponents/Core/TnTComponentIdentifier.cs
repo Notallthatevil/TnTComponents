@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TnTComponents.Core;
 
-internal class TnTComponentIdentifier {
+public static class TnTComponentIdentifier {
     private const string _identifierPrefix = "tnt_";
     private static readonly Random _rnd = new();
 
