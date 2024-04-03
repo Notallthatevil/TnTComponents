@@ -17,8 +17,8 @@ public abstract class TnTPageScriptComponent<TComponent> : TnTComponentBase, ITn
     [Inject]
     protected IJSRuntime JSRuntime { get; private set; } = default!;
 
-    protected override void OnParametersSet() {
-        base.OnParametersSet();
+    protected override void OnInitialized() {
+        base.OnInitialized();
         var derived = this as TComponent;
         DotNetObjectRef = DotNetObjectReference.Create(derived!);
     }
