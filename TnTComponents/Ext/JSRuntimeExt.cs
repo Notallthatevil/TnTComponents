@@ -4,13 +4,13 @@ using TnTComponents.Core;
 
 namespace TnTComponents.Ext;
 
-internal static class JSRuntimeExt {
+public static class JSRuntimeExt {
 
-    public static async Task<IJSObjectReference> Import(this IJSRuntime jsRuntime, string path) {
+    internal static async Task<IJSObjectReference> Import(this IJSRuntime jsRuntime, string path) {
         return await jsRuntime.InvokeAsync<IJSObjectReference>("import", path);
     }
 
-    public static async Task<IJSObjectReference> ImportIsolatedJs(this IJSRuntime jsRuntime, object obj, string? path = null) {
+    internal static async Task<IJSObjectReference> ImportIsolatedJs(this IJSRuntime jsRuntime, object obj, string? path = null) {
         if (path is null) {
             var @namespace = obj.GetType().Namespace?.Split('.') ?? [];
             var name = obj.GetType().Name;
@@ -22,4 +22,15 @@ internal static class JSRuntimeExt {
         }
         return await jsRuntime.Import(path);
     }
+
+    public static async ValueTask DownloadFileFromStream(this IJSRuntime jsRuntime, Stream stream, string fileName = "download", CancellationToken cancellationToken = default) {
+        using var streamRef = new DotNetStreamReference(stream);
+        await jsRuntime.InvokeVoidAsync("TnTComponents.downloadFileFromStream", cancellationToken, fileName, streamRef);
+    }
+
+    public static async ValueTask DownloadFromUrl(this IJSRuntime jsRuntime, string url, string fileName = "download", CancellationToken cancellationToken = default) {
+        ArgumentNullException.ThrowIfNull(url, nameof(url));
+        await jsRuntime.InvokeVoidAsync("TnTComponents.downloadFromUrl", cancellationToken, fileName, url);
+    }
 }
+
