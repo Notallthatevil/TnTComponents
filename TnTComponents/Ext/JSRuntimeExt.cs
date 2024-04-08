@@ -23,13 +23,19 @@ public static class JSRuntimeExt {
         return await jsRuntime.Import(path);
     }
 
-    public static async ValueTask DownloadFileFromStream(this IJSRuntime jsRuntime, Stream stream, string fileName = "download", CancellationToken cancellationToken = default) {
+    public static async ValueTask DownloadFileFromStream(this IJSRuntime jsRuntime, Stream stream, string? fileName = null, CancellationToken cancellationToken = default) {
         using var streamRef = new DotNetStreamReference(stream);
+        if (string.IsNullOrWhiteSpace(fileName)) {
+            fileName = "download";
+        }
         await jsRuntime.InvokeVoidAsync("TnTComponents.downloadFileFromStream", cancellationToken, fileName, streamRef);
     }
 
-    public static async ValueTask DownloadFromUrl(this IJSRuntime jsRuntime, string url, string fileName = "download", CancellationToken cancellationToken = default) {
+    public static async ValueTask DownloadFromUrl(this IJSRuntime jsRuntime, string url, string? fileName = null, CancellationToken cancellationToken = default) {
         ArgumentNullException.ThrowIfNull(url, nameof(url));
+        if (string.IsNullOrWhiteSpace(fileName)) {
+            fileName = "download";
+        }
         await jsRuntime.InvokeVoidAsync("TnTComponents.downloadFromUrl", cancellationToken, fileName, url);
     }
 }
