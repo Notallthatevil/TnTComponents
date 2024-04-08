@@ -447,6 +447,9 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     // GridItemsProvider-shaped API
     private async ValueTask<TnTGridItemsProviderResult<TGridItem>> ResolveItemsRequestAsync(TnTGridItemsProviderRequest<TGridItem> request) {
         if (ItemsProvider is not null) {
+            if(Virtualize && request.Count is null) {
+                request = request with { Count = 1 };
+            }
             var gipr = await ItemsProvider(request);
             if (gipr.Items is not null) {
                 Loading = false;
