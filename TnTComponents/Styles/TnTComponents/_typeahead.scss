@@ -1,9 +1,6 @@
 ﻿.tnt-typeahead {
 
     .tnt-typeahead-box {
-        width:-webkit-fit-content;
-        width:-moz-fit-content;
-        width: fit-content;
         position: relative;
 
         progress.tnt-components {
@@ -14,6 +11,8 @@
     }
 
     .tnt-typeahead-content {
+        width: -webkit-fit-content;
+        width: -moz-fit-content;
         width: fit-content;
         padding: 0.25rem;
         max-height: 50vh;
