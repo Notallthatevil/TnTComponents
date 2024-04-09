@@ -109,6 +109,13 @@ window.TnTComponents = {
     downloadFileFromStream: async (fileName, contentStreamReference) => {
         const arrayBuffer = await contentStreamReference.arrayBuffer();
         const blob = new Blob([arrayBuffer]);
+        TnTComponents.downloadFileFromBlob(fileName, blob);
+    },
+    downloadFromUrl: async (fileName, url) => {
+        const blob = await fetch(url).then(r => r.blob())
+        TnTComponents.downloadFileFromBlob(fileName, blob);
+    },
+    downloadFileFromBlob: (fileName, blob) => {
         const url = URL.createObjectURL(blob);
         const anchorElement = document.createElement('a');
         anchorElement.href = url;
@@ -116,12 +123,5 @@ window.TnTComponents = {
         anchorElement.click();
         anchorElement.remove();
         URL.revokeObjectURL(url);
-    },
-    downloadFromUrl: (fileName, url) => {
-        const anchorElement = document.createElement('a');
-        anchorElement.href = url;
-        anchorElement.download = fileName ?? '';
-        anchorElement.click();
-        anchorElement.remove();
     }
 }
