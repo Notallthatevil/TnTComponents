@@ -321,6 +321,14 @@ label.tnt-components:has(input[type=checkbox]):not(.tnt-chip) {
                 margin-left: 2rem;
             }
         }
+
+        .tnt-input {
+            &:has(:focus-visible) {
+                &:before {
+                    box-shadow: color-mix(in srgb, $tnt-color-shadow 70%, transparent) 0 0 0 0.25rem, inset color-mix(in srgb, $tnt-color-shadow 70%, transparent) 0 0 0 1rem;
+                }
+            }
+        }
     }
 
     &:has(.tnt-input.tnt-alternative) {
@@ -339,6 +347,14 @@ label.tnt-components:has(input[type=checkbox]):not(.tnt-chip) {
         &:has(.tnt-icon.tnt-start) {
             span.tnt-label {
                 margin-left: 3.75rem;
+            }
+        }
+
+        .tnt-input {
+            &:has(:focus-visible) {
+                &:after {
+                    box-shadow: color-mix(in srgb, $tnt-color-shadow 70%, transparent) 0 0 0 0.5rem, inset color-mix(in srgb, $tnt-color-shadow 70%, transparent) 0 0 0 1rem;
+                }
             }
         }
     }
