@@ -76,6 +76,9 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     [Parameter]
     public TnTColor? TextColor { get; set; } = TnTColor.OnSurfaceVariant;
 
+    [Parameter]
+    public bool DisableValidationMessage { get; set; } = false;
+
     public abstract InputType Type { get; }
 
 
@@ -139,11 +142,18 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
 
                 builder.AddElementReferenceCapture(200, e => Element = e);
                 builder.CloseElement();
+
+                if (EditContext is not null && !DisableValidationMessage && ValueExpression is not null) {
+                    builder.OpenComponent<ValidationMessage<TInputType>>(210);
+                    builder.AddComponentParameter(220, nameof(ValidationMessage<TInputType>.For), ValueExpression);
+                    builder.AddAttribute(230, "class", "tnt-components tnt-validation-message tnt-body-small");
+                    builder.CloseComponent();
+                }
             }
             {
                 if (EndIcon is not null) {
                     EndIcon.AdditionalClass = "tnt-end";
-                    builder.AddContent(20, EndIcon.Render());
+                    builder.AddContent(240, EndIcon.Render());
                 }
             }
         }
