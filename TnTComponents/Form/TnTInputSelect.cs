@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.AspNetCore.Components.Web;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using TnTComponents.Core;
@@ -57,6 +58,12 @@ public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
                     builder.SetUpdatesAttributeName("value");
                 }
 
+                if (EditContext is not null) {
+                    builder.AddAttribute(190, "onblur", EventCallback.Factory.Create<FocusEventArgs>(this, args => {
+                        EditContext.NotifyFieldChanged(FieldIdentifier);
+                    }));
+                }
+
                 builder.AddElementReferenceCapture(200, e => Element = e);
                 if (!string.IsNullOrWhiteSpace(Placeholder)) {
                     builder.OpenElement(210, "option");
@@ -79,11 +86,18 @@ public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
                 }
                 builder.AddContent(240, ChildContent);
                 builder.CloseElement();
+
+                if (EditContext is not null && !DisableValidationMessage && ValueExpression is not null) {
+                    builder.OpenComponent<ValidationMessage<TInputType>>(250);
+                    builder.AddComponentParameter(260, nameof(ValidationMessage<TInputType>.For), ValueExpression);
+                    builder.AddAttribute(270, "class", "tnt-components tnt-validation-message tnt-body-small");
+                    builder.CloseComponent();
+                }
             }
             {
                 if (EndIcon is not null) {
                     EndIcon.AdditionalClass = "tnt-end";
-                    builder.AddContent(250, EndIcon.Render());
+                    builder.AddContent(280, EndIcon.Render());
                 }
             }
         }

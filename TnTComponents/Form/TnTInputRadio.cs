@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.AspNetCore.Components.Web;
 using TnTComponents.Form;
 
 namespace TnTComponents;
@@ -35,16 +37,33 @@ public class TnTInputRadioGroup<TInputType> : TnTInputSelect<TInputType> {
             builder.AddComponentParameter(40, "IsFixed", true);
             builder.CloseComponent();
         }
+
+        if (EditContext is not null && !DisableValidationMessage && ValueExpression is not null) {
+            builder.OpenComponent<ValidationMessage<TInputType>>(50);
+            builder.AddComponentParameter(60, nameof(ValidationMessage<TInputType>.For), ValueExpression);
+            builder.AddAttribute(70, "class", "tnt-components tnt-validation-message tnt-body-small");
+            builder.CloseComponent();
+        }
+
         builder.CloseElement();
     }
 
     protected override void OnInitialized() {
         base.OnInitialized();
-        _radioContext.ChangeEventCallback = EventCallback.Factory.CreateBinder(this, async value => { CurrentValue = value; await BindAfter.InvokeAsync(CurrentValue); }, CurrentValue);
+        _radioContext.ChangeEventCallback = EventCallback.Factory.CreateBinder(this, async value => {
+            CurrentValue = value;
+            _radioContext.CurrentValue = CurrentValue;
+            await BindAfter.InvokeAsync(CurrentValue);
+        }, CurrentValue);
+
+        _radioContext.OnBlurCallback = EventCallback.Factory.Create<FocusEventArgs>(this, _ => {
+            EditContext?.NotifyFieldChanged(FieldIdentifier);
+        });
         if (string.IsNullOrWhiteSpace(RadioGroupName)) {
             throw new InvalidOperationException("Must provide a valid name for a radio group");
         }
         _radioContext.GroupName = RadioGroupName;
+
     }
 }
 
@@ -53,6 +72,8 @@ internal class RadioContext {
     public object? CurrentValue { get; internal set; }
     public LayoutDirection Direction { get; internal set; }
     public string GroupName { get; internal set; } = default!;
+
+    public EventCallback<FocusEventArgs> OnBlurCallback { get; internal set; }
 }
 
 public class TnTInputRadio<TInputType> : ComponentBase, IFormField {
@@ -136,6 +157,11 @@ public class TnTInputRadio<TInputType> : ComponentBase, IFormField {
             builder.AddAttribute(70, "checked", _context.CurrentValue?.Equals(Value) == true ? GetToggledTrueValue() : null);
             builder.AddAttribute(80, "onchange", _context.ChangeEventCallback);
             builder.SetUpdatesAttributeName("checked");
+
+            builder.AddAttribute(190, "onblur", EventCallback.Factory.Create<FocusEventArgs>(this, args =>
+                _context.OnBlurCallback.InvokeAsync(args)
+            ));
+
             builder.AddElementReferenceCapture(90, e => Element = e);
             builder.CloseElement();
         }

@@ -690,6 +690,17 @@ span.tnt-radio-group {
             }
         }
     }
+
+    &:has(.tnt-validation-message) {
+        margin-bottom: 1.5rem;
+
+        .tnt-validation-message {
+            color: $tnt-color-error;
+            position: absolute;
+            white-space:nowrap;
+            bottom:-1.25rem;
+        }
+    }
 }
 
 .tnt-col .tnt-input:not(:has(input[type=checkbox])):not(:has(input[type=radio])) {
