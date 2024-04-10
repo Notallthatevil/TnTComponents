@@ -82,7 +82,6 @@
     &.modified.invalid {
         color: $tnt-color-error;
         caret-color: $tnt-color-error;
-
         background-color: color-mix(in srgb, $tnt-color-error-container 50%, transparent);
 
         span.tnt-icon.tnt-end {
@@ -171,6 +170,15 @@
 
             @extend .tnt-corner-radius-2;
             @extend .tnt-elevation-2;
+        }
+    }
+
+    &:has(.tnt-validation-message) {
+        margin-bottom: 1.5rem;
+
+        .tnt-validation-message {
+            position: absolute;
+            bottom: -1.25rem;
         }
     }
 }
@@ -338,6 +346,18 @@ label.tnt-components:has(input[type=checkbox]):not(.tnt-chip) {
     .tnt-input {
         outline: none;
         background-color: transparent;
+
+        &:has(.tnt-validation-message) {
+            margin-bottom: 0.75rem;
+            position: relative;
+
+            .tnt-validation-message {
+                white-space: nowrap;
+                position: absolute;
+                bottom:-1.5rem;
+                color: $tnt-color-on-error-container;
+            }
+        }
     }
 
     input {

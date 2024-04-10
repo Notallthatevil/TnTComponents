@@ -163,6 +163,7 @@
     &:has(tnt-header):not(:has(tnt-footer)) {
         tnt-body {
             min-height: calc(100vh - $tnt-header-height);
+            padding-bottom: 1px;
         }
     }
 
