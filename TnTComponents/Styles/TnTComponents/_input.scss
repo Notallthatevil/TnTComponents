@@ -354,7 +354,7 @@ label.tnt-components:has(input[type=checkbox]):not(.tnt-chip) {
             .tnt-validation-message {
                 white-space: nowrap;
                 position: absolute;
-                bottom:-1.5rem;
+                bottom: -1.5rem;
                 color: $tnt-color-on-error-container;
             }
         }
@@ -540,11 +540,31 @@ span.tnt-radio-group {
     }
 
     &.tnt-outlined {
+        position: relative;
+
+        &:after {
+            content: '';
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            background-color: transparent;
+            left: 0;
+            top: 0;
+            border-radius: inherit;
+            outline: 2px solid $tnt-color-primary;
+            transition: 200ms ease-in-out;
+            outline: 2px solid $tnt-color-primary;
+            opacity: 0;
+            user-select: none;
+            pointer-events: none;
+        }
+
         span.tnt-radio-group-name {
             left: 0.5rem;
             top: -0.65rem;
             background-color: $tnt-color-surface;
             padding: 0 0.5rem;
+            z-index: 3;
         }
     }
 
@@ -583,6 +603,7 @@ span.tnt-radio-group {
         }
 
         &:before {
+            z-index: 4;
             outline: 0.125rem solid $tnt-color-on-surface-variant;
         }
 
@@ -603,6 +624,26 @@ span.tnt-radio-group {
 
         &.tnt-outlined {
             outline: none;
+        }
+
+        &:has(:focus-visible) {
+            color: $tnt-color-primary;
+
+            &:before {
+                box-shadow: color-mix(in srgb, $tnt-color-shadow 70%, transparent) 0 0 0 0.5rem, inset color-mix(in srgb, $tnt-color-shadow 70%, transparent) 0 0 0 0.75rem;
+            }
+        }
+    }
+
+    &:has(:focus-visible) {
+        span.tnt-radio-group-name {
+            color: $tnt-color-primary;
+        }
+
+        &.tnt-outlined {
+            &:after {
+                opacity: 1;
+            }
         }
     }
 
