@@ -29,27 +29,23 @@
                 </tr>
             </thead>
             <tbody>
-                @if (Loading) {
-                    @_renderLoadingContent
-                }
-                else {
-                    @if (Virtualize) {
-                        if (_ariaBodyRowCount == 0) {
-                            @_renderEmptyContent
-                        }
-                        else {
-                            <Virtualize @ref="@_virtualizeComponent"
-                                        TItem="(int RowIndex, TGridItem Data)"
-                                        ItemSize="@ItemSize"
-                                        ItemsProvider="@ProvideVirtualizedItemsAsync"
-                                        ItemContent="@(item => builder => RenderRow(builder, item.RowIndex, item.Data))"
-                                        Placeholder="@(placeholderContext => builder => RenderPlaceholderRow(builder, placeholderContext))" />
-                        }
+                @if (Virtualize) {
+                    if (_ariaBodyRowCount == 0) {
+                        @_renderEmptyContent
                     }
                     else {
-                        @_renderNonVirtualizedRows
+                        <Virtualize @ref="@_virtualizeComponent"
+                                    TItem="(int RowIndex, TGridItem Data)"
+                                    ItemSize="@ItemSize"
+                                    ItemsProvider="@ProvideVirtualizedItemsAsync"
+                                    ItemContent="@(item => builder => RenderRow(builder, item.RowIndex, item.Data))"
+                                    Placeholder="@(placeholderContext => builder => RenderPlaceholderRow(builder, placeholderContext))" />
                     }
                 }
+                else {
+                    @_renderNonVirtualizedRows
+                }
+
                 @if (_manualGrid) {
                     @ChildContent
                 }
