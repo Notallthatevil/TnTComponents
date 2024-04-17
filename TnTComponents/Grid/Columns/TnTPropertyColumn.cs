@@ -16,27 +16,23 @@ namespace TnTComponents;
 public class TnTPropertyColumn<TGridItem, TProp> : TnTColumnBase<TGridItem>, IBindableColumn<TGridItem, TProp> {
 
     /// <summary>
-    /// Optionally specifies how to compare values in this column when sorting.
-    ///
-    /// Using this requires the <typeparamref name="TProp" /> type to implement <see
-    /// cref="IComparable{T}" />.
+    /// Optionally specifies how to compare values in this column when sorting. /// Using this
+    /// requires the <typeparamref name="TProp" /> type to implement <see cref="IComparable{T}" />.
     /// </summary>
-    [Parameter] 
+    [Parameter]
     public IComparer<TProp>? Comparer { get; set; } = null;
 
     /// <summary>
-    /// Optionally specifies a format string for the value.
-    ///
-    /// Using this requires the <typeparamref name="TProp" /> type to implement <see
-    /// cref="IFormattable" />.
+    /// Optionally specifies a format string for the value. /// Using this requires the
+    /// <typeparamref name="TProp" /> type to implement <see cref="IFormattable" />.
     /// </summary>
-    [Parameter] 
+    [Parameter]
     public string? Format { get; set; }
 
     /// <summary>
     /// Defines the value to be displayed in this column's cells.
     /// </summary>
-    [Parameter, EditorRequired] 
+    [Parameter, EditorRequired]
     public Expression<Func<TGridItem, TProp>> Property { get; set; } = default!;
 
     public PropertyInfo? PropertyInfo { get; private set; }
@@ -46,15 +42,15 @@ public class TnTPropertyColumn<TGridItem, TProp> : TnTColumnBase<TGridItem>, IBi
         set => throw new NotSupportedException($"PropertyColumn generates this member internally. For custom sorting rules, see '{typeof(TnTTemplateColumn<TGridItem>)}'.");
     }
 
-    private Func<TGridItem, string?>? _cellTextFunc;
+    private Func<TGridItem, string>? _cellTextFunc;
     private Func<TGridItem, string?>? _cellTooltipTextFunc;
     private Expression<Func<TGridItem, TProp>>? _lastAssignedProperty;
     private TnTGridSort<TGridItem>? _sortBuilder;
 
     /// <inheritdoc />
-    protected internal override void CellContent(RenderTreeBuilder builder, TGridItem item)        => builder.AddContent(0, _cellTextFunc?.Invoke(item));
+    protected internal override void CellContent(RenderTreeBuilder builder, TGridItem item) => builder.AddContent(0, _cellTextFunc?.Invoke(item));
 
-    protected internal override string? RawCellContent(TGridItem item)            => _cellTooltipTextFunc?.Invoke(item);
+    protected internal override string? RawCellContent(TGridItem item) => _cellTooltipTextFunc?.Invoke(item);
 
     /// <inheritdoc />
     protected override void OnParametersSet() {
@@ -76,10 +72,16 @@ public class TnTPropertyColumn<TGridItem, TProp> : TnTColumnBase<TGridItem>, IBi
                     throw new InvalidOperationException($"A '{nameof(Format)}' parameter was supplied, but the type '{typeof(TProp)}' does not implement '{typeof(IFormattable)}'.");
                 }
 
-                _cellTextFunc = item => ((IFormattable?)compiledPropertyExpression!(item))?.ToString(Format, null);
+                _cellTextFunc = item => {
+                    var result = ((IFormattable?)compiledPropertyExpression!(item))?.ToString(Format, null);
+                    return !string.IsNullOrEmpty(result) ? result : " ";
+                };
             }
             else {
-                _cellTextFunc = item => compiledPropertyExpression!(item)?.ToString();
+                _cellTextFunc = item => {
+                    var result = compiledPropertyExpression!(item)?.ToString();
+                    return !string.IsNullOrEmpty(result) ? result : " ";
+                };
             }
 
             _sortBuilder = Comparer is not null ? TnTGridSort<TGridItem>.ByAscending(Property, Comparer) : TnTGridSort<TGridItem>.ByAscending(Property);
