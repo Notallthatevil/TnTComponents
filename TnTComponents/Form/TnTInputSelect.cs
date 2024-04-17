@@ -19,6 +19,9 @@ public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
     [Parameter]
     public bool ShouldHavePlaceholderSelected { get; set; } = true;
 
+    [Parameter]
+    public string? PlaceholderValue { get; set; } = string.Empty;
+
     public override InputType Type { get; }
     private bool _multiple;
 
@@ -74,7 +77,7 @@ public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
                         builder.AddAttribute(222, "disabled");
                     }
                     else {
-                        builder.AddAttribute(223, "value", string.Empty);
+                        builder.AddAttribute(223, "value", PlaceholderValue);
                     }
                     builder.AddContent(230, Placeholder);
                     builder.CloseElement();
