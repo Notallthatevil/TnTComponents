@@ -6,6 +6,10 @@ namespace TnTComponents.Ext;
 
 public static class JSRuntimeExt {
 
+    internal static async Task<BoundingClientRect?> GetBoundingClientRect(this IJSRuntime jsRuntime, ElementReference element) {
+        return await jsRuntime.InvokeAsync<BoundingClientRect?>("TnTComponents.getBoundingClientRect", element);
+    }
+
     internal static async Task<IJSObjectReference> Import(this IJSRuntime jsRuntime, string path) {
         return await jsRuntime.InvokeAsync<IJSObjectReference>("import", path);
     }

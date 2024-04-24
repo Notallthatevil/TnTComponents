@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using TnTComponents.Enum;
 
 namespace TnTComponents.Dialog;
 
@@ -20,7 +19,7 @@ public class TnTDialogService {
         Reference = DotNetObjectReference.Create(this);
     }
 
-    public async Task OpenAsync<TComponent>(TnTDialogOptions? options = null, IReadOnlyDictionary<string, object>? parameters = null) where TComponent : IComponent =>
+    public async Task OpenAsync<TComponent>(TnTDialogOptions? options = null, IReadOnlyDictionary<string, object?>? parameters = null) where TComponent : IComponent =>
         await (OnOpen?.Invoke(new DialogImpl(this) {
             Options = options ?? new(),
             Parameters = parameters,
@@ -28,7 +27,7 @@ public class TnTDialogService {
         }
         ) ?? Task.CompletedTask);
 
-    public async Task<DialogResult> OpenForResultAsync<TComponent>(TnTDialogOptions? options = null, IReadOnlyDictionary<string, object>? parameters = null) where TComponent : IComponent {
+    public async Task<DialogResult> OpenForResultAsync<TComponent>(TnTDialogOptions? options = null, IReadOnlyDictionary<string, object?>? parameters = null) where TComponent : IComponent {
         var dialog = new DialogImpl(this) {
             Options = options ?? new(),
             Parameters = parameters,
@@ -51,7 +50,7 @@ public class TnTDialogService {
 
     private class DialogImpl(TnTDialogService dialogService) : ITnTDialog {
         public TnTDialogOptions Options { get; init; } = default!;
-        public IReadOnlyDictionary<string, object>? Parameters { get; init; }
+        public IReadOnlyDictionary<string, object?>? Parameters { get; init; }
         public Type Type { get; init; } = default!;
         public DialogResult DialogResult { get; set; }
 

@@ -1,0 +1,12 @@
+﻿@namespace TnTComponents
+@using TnTComponents.Core
+@using TnTComponents.Scheduler.Infrastructure
+@typeparam TEventType
+@inherits TnTSchedulerBase
+
+<div @attributes="AdditionalAttributes" class="@CssClass" style="@CssStyle" @ref="Element">
+    <CascadingValue Value="this" IsFixed="true">
+        @ChildContent
+    </CascadingValue>
+</div>
+

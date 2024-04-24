@@ -4,6 +4,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddLogging();
 
 builder.Services.AddTnTServices();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddTnTServerServices();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()

@@ -10,5 +10,6 @@ builder.Services.AddScoped(sp =>
     });
 
 builder.Services.AddTnTServices();
+builder.Services.AddTnTClientServices();
 
 await builder.Build().RunAsync();

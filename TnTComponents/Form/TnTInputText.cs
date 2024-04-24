@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Diagnostics.CodeAnalysis;
-using TnTComponents.Enum;
 
 namespace TnTComponents;
 

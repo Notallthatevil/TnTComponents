@@ -1,0 +1,13 @@
+﻿@typeparam TEventType
+
+
+<div @attributes="AdditionalAttributes" class="tnt-event" tnt-start-time="@(Event.Start?.ToString("yyyy-MM-ddTHH:mm"))" tnt-end-time="@(Event.End?.ToString("yyyy-MM-ddTHH:mm"))">
+    @if (EventTemplate is not null) {
+        @EventTemplate(Event)
+    }
+    else {
+        <span class="tnt-body-small">
+            @Event.Title
+        </span>
+    }
+</div>

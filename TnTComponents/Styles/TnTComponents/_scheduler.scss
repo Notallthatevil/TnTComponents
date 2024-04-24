@@ -1,0 +1,100 @@
+﻿.tnt-scheduler {
+
+    .tnt-day-view {
+    }
+
+    .tnt-week-view {
+        overflow: auto;
+        padding: 0.5rem;
+        position: relative;
+
+        .tnt-week-view-table {
+            table-layout: fixed;
+            width: 100%;
+            min-width: #{$medium-screen-up};
+            border-collapse: collapse;
+            user-select: none;
+
+            thead {
+                user-select: inherit;
+
+                tr {
+                    user-select: inherit;
+
+                    th {
+                        user-select: inherit;
+                        pointer-events: inherit;
+                        border: none;
+                        @extend .tnt-label-large;
+                    }
+                }
+            }
+
+            tbody {
+                user-select: inherit;
+
+                tr {
+                    user-select: inherit;
+
+                    td {
+                        background-color: $tnt-color-surface-container-highest;
+                        user-select: inherit;
+
+                        &.disabled {
+                            background-color: $tnt-color-surface-container-lowest;
+                        }
+
+                        &.tnt-time-slot {
+                            border: none;
+                            text-align: right;
+                        }
+
+                        &.tnt-day-slot {
+                            outline: 1px solid color-mix(in srgb, $tnt-color-outline 10%, transparent);
+
+                            &:not(.disabled) {
+                                &:hover {
+                                    cursor: pointer;
+                                    background-color: color-mix(in srgb, $tnt-color-surface-tint 30%, transparent);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                tr:first-child {
+                    td:first-child {
+                        border-start-start-radius: 1rem;
+                    }
+
+                    td:last-child {
+                        border-start-end-radius: 1rem;
+                    }
+                }
+
+                tr:last-child {
+                    td:first-child {
+                        border-end-start-radius: 1rem;
+                    }
+
+                    td:last-child {
+                        border-end-end-radius: 1rem;
+                    }
+                }
+            }
+
+            .tnt-time-slot {
+                width: 5rem;
+                padding-right: 0.25rem;
+                @extend .tnt-label-large;
+            }
+        }
+
+        .tnt-event {
+            position: absolute;
+        }
+    }
+
+    .tnt-month-view {
+    }
+}

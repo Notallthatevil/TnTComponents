@@ -123,5 +123,11 @@ window.TnTComponents = {
         anchorElement.click();
         anchorElement.remove();
         URL.revokeObjectURL(url);
+    },
+    getBoundingClientRect: (element) => {
+        if (element) {
+            return element.getBoundingClientRect();
+        }
+        return null;
     }
 }

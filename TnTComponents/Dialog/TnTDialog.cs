@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
 using TnTComponents.Core;
 using TnTComponents.Dialog;
+using TnTComponents.Scheduler;
 
 namespace TnTComponents;
 
@@ -82,7 +83,11 @@ public class TnTDialog : ComponentBase, IDisposable {
                         innerBuilder.AddAttribute(70, nameof(CascadingValue<ITnTDialog>.IsFixed), true);
                         innerBuilder.AddAttribute(80, nameof(CascadingValue<ITnTDialog>.ChildContent), new RenderFragment(cascadingBuilder => {
                             cascadingBuilder.OpenComponent(0, dialog.Type);
+#pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
+                            // Disabling warning since value in these key value pairs is allowed to be null when the parameter on the component allows it.
+                            // It is up to the caller when opening a dialog to set the parameters correctly.
                             cascadingBuilder.AddMultipleAttributes(10, dialog.Parameters);
+#pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
                             cascadingBuilder.CloseComponent();
                         }));
 

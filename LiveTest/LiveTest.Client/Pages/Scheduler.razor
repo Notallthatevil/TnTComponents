@@ -1,0 +1,39 @@
+﻿@page "/scheduler"
+@rendermode InteractiveAuto
+@using TnTComponents.Scheduler
+
+<h3>Scheduler</h3>
+
+<TnTComponents.TnTScheduler TEventType="TnTEvent" Events="@([new TnTEvent(){
+Title="Event 1",
+  Start = DateTimeOffset.Now,
+  End=DateTimeOffset.Now.AddHours(1)
+},
+new TnTEvent(){
+    Title ="Event 2",
+Start = DateTimeOffset.Now.AddDays(-1),
+End = DateTimeOffset.Now.AddDays(-1).AddHours(1)
+},
+new TnTEvent(){
+    Title ="Event 3",
+    Start = DateTimeOffset.Now.AddDays(1),
+    End = DateTimeOffset.Now.AddDays(1).AddHours(1)}])">
+    <TnTComponents.TnTWeekView StartWeekDay="DayOfWeek.Monday" DisabledTimes="[new DisabledTime {
+                                                                                DayOfWeek = TnTComponents.TnTDayOfWeekFlag.All,
+                                                                                StartTime=new TimeOnly(0, 0),
+                                                                                EndTime=new TimeOnly(12, 0)
+                                                                            },
+                                                                            new DisabledTime {
+                                                                                DayOfWeek = TnTComponents.TnTDayOfWeekFlag.Monday | TnTComponents.TnTDayOfWeekFlag.Wednesday | TnTComponents.TnTDayOfWeekFlag.Friday,
+                                                                                StartTime= new TimeOnly(20, 0),
+                                                                                EndTime=new TimeOnly(23, 59)
+                                                                            }
+                                                                            ]">
+
+    </TnTComponents.TnTWeekView>
+</TnTComponents.TnTScheduler>
+
+
+@code {
+
+}

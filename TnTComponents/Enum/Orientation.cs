@@ -1,4 +1,4 @@
-﻿namespace TnTComponents.Enum;
+﻿namespace TnTComponents;
 
 public enum Orientation {
     Vertical,

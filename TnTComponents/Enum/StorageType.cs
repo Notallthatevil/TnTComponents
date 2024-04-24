@@ -1,4 +1,4 @@
-﻿namespace TnTComponents.Enum;
+﻿namespace TnTComponents;
 
 internal enum StorageType {
     SessionStorage,
