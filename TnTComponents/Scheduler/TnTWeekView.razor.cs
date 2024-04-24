@@ -34,7 +34,8 @@ public partial class TnTWeekView {
     }
 
     protected override IEnumerable<DateOnly> GetVisibleDates() {
-        var startDate = Scheduler.StartDate.AddDays(((int)StartWeekDay) * -1);
+        var diff = StartWeekDay - Scheduler.StartDate.DayOfWeek;
+        var startDate = Scheduler.StartDate.AddDays(diff);
 
         for (var i = 0; i < 7; i++) {
             yield return startDate.AddDays(i);
