@@ -4,6 +4,7 @@
     tnt-side-nav {
         transition: 200ms ease-in-out;
         overflow-y: auto;
+        overflow-x: hidden;
     }
 
     tnt-header, tnt-footer {
@@ -141,11 +142,11 @@
     }
 
     &:has(tnt-header) tnt-body {
-        margin-top: $tnt-header-height;
+        padding-top: $tnt-header-height;
     }
 
     &:has(tnt-footer) tnt-body {
-        margin-bottom: $tnt-footer-height;
+        padding-bottom: $tnt-footer-height;
     }
 
     &:has(tnt-header):has(tnt-footer) {
