@@ -27,11 +27,17 @@
                     @if (IsSlotDisabled(date, time)) {
                         <div class="tnt-slot tnt-day-slot disabled"></div>
                     }
-                    else{
+                    else {
                         <div class="tnt-slot tnt-day-slot" @onclick="@(() => CreateEventAsync(date, time))"></div>
                     }
                 }
             </div>
+        }
+        @foreach (var @event in Scheduler.Events) {
+            <div class="tnt-event">
+                @(@event.Title)
+            </div>
+
         }
     </div>
 }

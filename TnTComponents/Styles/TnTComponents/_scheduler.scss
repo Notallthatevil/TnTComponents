@@ -10,6 +10,7 @@
         min-width: $small-screen-up;
         display: flex;
         flex-direction: row;
+        position: relative;
 
         .tnt-slot {
             height: 1.5rem;
@@ -33,7 +34,6 @@
         .tnt-slot-column {
             width: calc(calc(100% - 5rem) / 7);
 
-
             .tnt-day-slot:not(.tnt-header-slot) {
                 outline: 1px solid color-mix(in srgb, $tnt-color-outline 15%, transparent);
                 background-color: $tnt-color-surface-container-lowest;
@@ -44,11 +44,16 @@
 
                 &:not(.disabled) {
                     cursor: pointer;
-                    &:hover{
+
+                    &:hover {
                         background-color: color-mix(in srgb, $tnt-color-surface-tint 30%, transparent);
                     }
                 }
             }
+        }
+
+        .tnt-event {
+            position: absolute;
         }
     }
 }
