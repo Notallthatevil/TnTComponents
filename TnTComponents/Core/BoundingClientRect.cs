@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TnTComponents.Core;
-internal class BoundingClientRect {
+internal record BoundingClientRect {
     public double X { get; set; }
     public double Y { get; set; }
     public double Width { get; set; }

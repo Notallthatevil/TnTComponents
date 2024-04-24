@@ -125,7 +125,7 @@ window.TnTComponents = {
         URL.revokeObjectURL(url);
     },
     getBoundingClientRect: (element) => {
-        if (element) {
+        if (element && element.getBoundingClientRect) {
             return element.getBoundingClientRect();
         }
         return null;

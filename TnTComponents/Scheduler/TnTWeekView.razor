@@ -5,46 +5,27 @@
 @inherits TnTScheduleView<TEventType>
 
 <div @attributes="AdditionalAttributes" class="@CssClass" style="@CssStyle" @ref="Element">
-    <table class="tnt-week-view-table">
-        <thead>
-            <tr>
-                <th class="tnt-time-slot"></th>
-                @{
-                    _columnHeaders.Clear();
-                    @foreach (var day in GetDaysOfWeek()) {
-                        ElementReference element;
-                        <th class="tnt-day-slot" tnt-day-of-week="@day.ToString("ddd")" @ref="element">
-                            <div>
-                                @day.DayOfWeek
-                            </div>
-                            <div>
-                                @day.ToString("dd")
-                            </div>
-                        </th>
-                        _columnHeaders.Add(day, element);
-                    }
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var slot in GetTimeSlots(Scheduler.StartTime, Scheduler.EndTime)) {
-                <tr>
-                    <td class="tnt-time-slot">@slot</td>
-                    @foreach (var day in GetDaysOfWeek()) {
-                        if (IsDisabledTime(day.DayOfWeek, slot)) {
-                            <td class="tnt-day-slot disabled"></td>
-                        }
-                        else {
-                            <td class="tnt-day-slot" @onclick="@(() => AddEventAsync(day, slot))"></td>
-                        }
-                    }
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="tnt-time-slots">
+        <span class="tnt-slot"></span>
+        @foreach (var slot in GetTimeSlots(Scheduler.StartTime, Scheduler.EndTime)) {
+            <span class=" tnt-slot tnt-time-slot tnt-label-large">
+                @slot
+            </span>
+        }
+    </div>
 
-    @foreach (var scheduledEvent in GetVisibleEvents()) {
-        <TnTScheduledEvent Event="@scheduledEvent" EventTemplate="@Scheduler.EventTemplate" />
-    }
+    <div class="tnt-days">
+        @foreach (var day in GetDaysOfWeek()) {
+            <div class="tnt-day-column">
+                <span class="tnt-slot tnt-label-large">
+                    @day.DayOfWeek
+                </span>
+                @foreach (var slot in GetTimeSlots(Scheduler.StartTime, Scheduler.EndTime)) {
+                    <div class="tnt-slot tnt-day-slot@(IsDisabledTime(day.DayOfWeek, slot) ? " disabled" : null)">
+                    </div>
+                }
+            </div>
+        }
+    </div>
 
 </div>

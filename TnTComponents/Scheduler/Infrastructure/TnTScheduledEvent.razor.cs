@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+using TnTComponents.Core;
 
 namespace TnTComponents.Scheduler.Infrastructure;
 public partial class TnTScheduledEvent<TEventType> where TEventType : TnTEvent, new() {
@@ -12,10 +14,20 @@ public partial class TnTScheduledEvent<TEventType> where TEventType : TnTEvent, 
     [Parameter]
     public RenderFragment<TEventType>? EventTemplate { get; set; }
 
+    [Inject]
+    private IJSRuntime _jsRuntime { get; set; } = default!;
+
+    [CascadingParameter]
+    private TnTScheduleView<TEventType> _scheduleView { get; set; } = default!;
+    public string? CssStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .Build();
+
     protected override void OnParametersSet() {
         base.OnParametersSet();
         ArgumentNullException.ThrowIfNull(Event, nameof(Event));
+        if(_scheduleView is null) {
+            throw new ArgumentNullException(nameof(_scheduleView), $"{nameof(TnTScheduledEvent<TEventType>)} must be a child of {nameof(TnTScheduleView<TEventType>)}");
+        }
     }
-
-
 }
