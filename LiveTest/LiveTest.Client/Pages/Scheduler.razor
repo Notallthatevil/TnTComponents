@@ -1,39 +1,24 @@
 ﻿@page "/scheduler"
-@rendermode InteractiveAuto
+@using TnTComponents
 @using TnTComponents.Scheduler
+@rendermode InteractiveServer
 
 <h3>Scheduler</h3>
 
-<TnTComponents.TnTScheduler TEventType="TnTEvent" Events="@([new TnTEvent(){
-Title="Event 1",
-  Start = DateTimeOffset.Now,
-  End=DateTimeOffset.Now.AddHours(1)
-},
-new TnTEvent(){
-    Title ="Event 2",
-Start = DateTimeOffset.Now.AddDays(-1),
-End = DateTimeOffset.Now.AddDays(-1).AddHours(1)
-},
-new TnTEvent(){
-    Title ="Event 3",
-    Start = DateTimeOffset.Now.AddDays(1),
-    End = DateTimeOffset.Now.AddDays(1).AddHours(1)}])">
-    <TnTComponents.TnTWeekView StartWeekDay="DayOfWeek.Monday" DisabledTimes="[new DisabledTime {
-                                                                                DayOfWeek = TnTComponents.TnTDayOfWeekFlag.All,
-                                                                                StartTime=new TimeOnly(0, 0),
-                                                                                EndTime=new TimeOnly(12, 0)
-                                                                            },
-                                                                            new DisabledTime {
-                                                                                DayOfWeek = TnTComponents.TnTDayOfWeekFlag.Monday | TnTComponents.TnTDayOfWeekFlag.Wednesday | TnTComponents.TnTDayOfWeekFlag.Friday,
-                                                                                StartTime= new TimeOnly(20, 0),
-                                                                                EndTime=new TimeOnly(23, 59)
-                                                                            }
-                                                                            ]">
 
-    </TnTComponents.TnTWeekView>
-</TnTComponents.TnTScheduler>
-
-
-@code {
-
-}
+<TnTScheduler TEventType="TnTEvent"
+    DisabledTimeRanges="[
+            new DisabledTimeRange{ DaysOfWeek = TnTDayOfWeekFlag.Monday | TnTDayOfWeekFlag.Wednesday | TnTDayOfWeekFlag.Friday,
+                StartTime = new(0, 0),
+                EndTime = new(8, 0)
+            },
+        ]"
+    DisabledDateRanges="[
+            new DisabledDateRange{
+                Start = DateTimeOffset.Now.AddDays(1),
+                End = DateTimeOffset.Now.AddDays(2)
+            }
+        ]"
+>
+    <TnTWeekView />
+</TnTScheduler>

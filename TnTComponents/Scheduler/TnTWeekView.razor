@@ -1,31 +1,37 @@
 ﻿@namespace TnTComponents
-@using TnTComponents.Scheduler
 @using TnTComponents.Scheduler.Infrastructure
-@typeparam TEventType
-@inherits TnTScheduleView<TEventType>
+@inherits ScheduleViewBase
 
-<div @attributes="AdditionalAttributes" class="@CssClass" style="@CssStyle" @ref="Element">
-    <div class="tnt-time-slots">
-        <span class="tnt-slot"></span>
-        @foreach (var slot in GetTimeSlots(Scheduler.StartTime, Scheduler.EndTime)) {
-            <span class=" tnt-slot tnt-time-slot tnt-label-large">
-                @slot
-            </span>
-        }
-    </div>
-
-    <div class="tnt-days">
-        @foreach (var day in GetDaysOfWeek()) {
-            <div class="tnt-day-column">
-                <span class="tnt-slot tnt-label-large">
-                    @day.DayOfWeek
-                </span>
-                @foreach (var slot in GetTimeSlots(Scheduler.StartTime, Scheduler.EndTime)) {
-                    <div class="tnt-slot tnt-day-slot@(IsDisabledTime(day.DayOfWeek, slot) ? " disabled" : null)">
+@if (Scheduler.IsSelectedView(this)) {
+    <div @attributes="AdditionalAttributes" class="@CssClass" style="@CssStyle" @ref="Element">
+        <div class="tnt-time-slots">
+            <div class="tnt-slot tnt-header-slot"></div>
+            @foreach (var time in GetTimeSlots()) {
+                <div class="tnt-slot tnt-time-slot tnt-label-large">
+                    @time
+                </div>
+            }
+        </div>
+        @foreach (var date in GetVisibleDates()) {
+            <div class="tnt-slot-column">
+                <div class="tnt-slot tnt-day-slot tnt-header-slot">
+                    <div>
+                        @date.ToString("dddd")
                     </div>
+                    <div>
+                        @date.ToString("dd")
+                    </div>
+                </div>
+
+                @foreach (var time in GetTimeSlots()) {
+                    @if (IsSlotDisabled(date, time)) {
+                        <div class="tnt-slot tnt-day-slot disabled"></div>
+                    }
+                    else{
+                        <div class="tnt-slot tnt-day-slot" @onclick="@(() => CreateEventAsync(date, time))"></div>
+                    }
                 }
             </div>
         }
     </div>
-
-</div>
+}

@@ -1,37 +1,46 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.DependencyInjection;
 using TnTComponents.Core;
 using TnTComponents.Scheduler;
+using TnTComponents.Scheduler.Infrastructure;
 
 namespace TnTComponents;
-
-[CascadingTypeParameter(nameof(TEventType))]
-public partial class TnTScheduler<TEventType> where TEventType : TnTEvent, new() {
-
+public partial class TnTScheduler<TEventType> {
     [Parameter]
-    public ICollection<TEventType> Events { get; set; } = [];
+    public RenderFragment ChildContent { get; set; } = default!;
 
-    public void AddEvent(TEventType @event) {
-        Events.Add(@event);
+    private ScheduleViewBase _selectedView { get; set; } = default!;
+    protected IDictionary<Type, ScheduleViewBase> ScheduledViews = new Dictionary<Type, ScheduleViewBase>();
+
+    public override string? CssClass => CssClassBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddClass("tnt-scheduler")
+        .Build();
+
+    public override string? CssStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .Build();
+
+    public override bool IsSelectedView(ScheduleViewBase scheduleViewBase) {
+        return _selectedView == scheduleViewBase;
     }
-    public void RemoveEvent(TEventType @event) {
-        Events.Remove(@event);
-    }
-
-
-    [Parameter]
-    public RenderFragment<TEventType>? EventTemplate { get; set; }
 
     protected override void OnParametersSet() {
         base.OnParametersSet();
-        if (MaxDateTime is not null && MinDateTime is not null && MaxDateTime < MinDateTime) {
-            throw new InvalidOperationException($"{nameof(MaxDateTime)} must be greater than {nameof(MinDateTime)}");
-        }
-        else if (MaxDateTime is not null && MinDateTime is null) {
-            throw new InvalidOperationException($"{nameof(MinDateTime)} must be provided if {nameof(MaxDateTime)} is provided");
-        }
-        else if (MaxDateTime is null && MinDateTime is not null) {
-            throw new InvalidOperationException($"{nameof(MaxDateTime)} must be provided if {nameof(MinDateTime)} is provided");
+
+        if (ScheduledViews.Count == 1) {
+            _selectedView = ScheduledViews.Values.First();
         }
     }
+
+    public override void AddView(ScheduleViewBase view) {
+        ScheduledViews.Add(view.GetType(), view);
+        if(ScheduledViews.Count == 1) {
+            _selectedView = view;
+        }
+    }
+
+    public override void RemoveView(ScheduleViewBase view) {
+        ScheduledViews.Remove(view.GetType());
+    }
+
 }
