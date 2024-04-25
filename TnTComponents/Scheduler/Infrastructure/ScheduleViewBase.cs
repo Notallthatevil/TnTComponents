@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using TnTComponents.Core;
 
 namespace TnTComponents.Scheduler.Infrastructure;
 
@@ -51,4 +52,6 @@ public abstract class ScheduleViewBase : ComponentBase, IDisposable {
             throw new InvalidOperationException($"The {GetType().Name} component requires a parent {nameof(SchedulerBase)} component.");
         }
     }
+
+    internal abstract Task<BoundingClientRect> CalculateEventBoundingRect(TnTEvent @event);
 }

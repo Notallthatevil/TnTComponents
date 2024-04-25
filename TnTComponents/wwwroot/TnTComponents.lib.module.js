@@ -129,5 +129,28 @@ window.TnTComponents = {
             return element.getBoundingClientRect();
         }
         return null;
+    },
+    setBoundingClientRect: (element, boundingClientRect) => {
+        if (element && element.style && boundingClientRect) {
+            element.style.top = boundingClientRect.top + 'px';
+            element.style.left = boundingClientRect.left + 'px';
+            element.style.width = boundingClientRect.width + 'px';
+            element.style.height = boundingClientRect.height + 'px';
+        }
+    },
+    hideElement: (element) => {
+        if (element && element.style) {
+            element.style.display = 'none';
+        }
+    },
+    showElement: (element) => {
+        if (element && element.style) {
+            element.style.display = 'revert';
+        }
+    },
+    setOpacity: (element, opacity) => {
+        if (element && element.style) {
+            element.style.opacity = `${opacity}`;
+        }
     }
 }

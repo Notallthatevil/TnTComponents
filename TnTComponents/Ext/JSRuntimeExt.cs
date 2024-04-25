@@ -10,6 +10,23 @@ public static class JSRuntimeExt {
         return await jsRuntime.InvokeAsync<BoundingClientRect?>("TnTComponents.getBoundingClientRect", element);
     }
 
+    internal static async ValueTask SetBoundingClientRectAsync(this IJSRuntime jsRuntime, ElementReference element, BoundingClientRect boundingClientRect) {
+        await jsRuntime.InvokeVoidAsync("TnTComponents.setBoundingClientRect", element, boundingClientRect);
+    }
+
+    internal static async ValueTask HideElement(this IJSRuntime jsRuntime, ElementReference element) {
+        await jsRuntime.InvokeVoidAsync("TnTComponents.hideElement", element);
+    }
+
+    internal static async ValueTask SetOpacity(this IJSRuntime jsRuntime, ElementReference element, float opacity) {
+        opacity = Math.Clamp(opacity, 0, 1);
+        await jsRuntime.InvokeVoidAsync("TnTComponents.setOpacity", element, opacity);
+    }
+
+    internal static async ValueTask ShowElementAsync(this IJSRuntime jsRuntime, ElementReference element) {
+        await jsRuntime.InvokeVoidAsync("TnTComponents.showElement", element);
+    }
+
     internal static async Task<IJSObjectReference> Import(this IJSRuntime jsRuntime, string path) {
         return await jsRuntime.InvokeAsync<IJSObjectReference>("import", path);
     }
