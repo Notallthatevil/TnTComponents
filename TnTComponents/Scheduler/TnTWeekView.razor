@@ -12,7 +12,6 @@
                     <div class="tnt-slot tnt-time-slot tnt-label-large" @ref="_rows[time]">
                         @time
                     </div>
-                    Console.WriteLine($"Rendering time {_rows[time]} {_rows[time].Id}");
                 }
             </div>
             @foreach (var date in GetVisibleDates()) {

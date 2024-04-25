@@ -51,4 +51,8 @@ public abstract class SchedulerBase : ComponentBase {
         var dateTimeDate = date.ToDateTime();
         return Events.Where(e => e.StartTime.Date == dateTimeDate || e.EndTime.Date == dateTimeDate);
     }
+
+    public IEnumerable<TnTEvent> GetOverlappingEvents(TnTEvent @event) {
+        return Events.Where(e => e.Overlaps(@event));
+    }
 }

@@ -54,14 +54,14 @@
             .tnt-event {
                 position: absolute;
                 top: 0;
-                transition: opacity 150ms ease-in-out;
+                opacity: 0;
                 background-color: $tnt-color-tertiary;
                 color: $tnt-color-on-tertiary;
                 padding: 0 0.25rem;
                 outline: 1px solid $tnt-color-outline;
                 box-sizing: border-box;
                 margin: 0 0.25rem;
-                animation: FadeIn 150ms ease-in-out;
+                animation: FadeIn 150ms ease-in-out 150ms forwards;
             }
         }
     }

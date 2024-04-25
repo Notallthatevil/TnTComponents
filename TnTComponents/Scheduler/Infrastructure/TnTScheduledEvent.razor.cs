@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using TnTComponents.Core;
 using TnTComponents.Ext;
 
 namespace TnTComponents.Scheduler.Infrastructure;
@@ -12,8 +13,13 @@ public partial class TnTScheduledEvent {
 
     public override string? JsModulePath => "./_content/TnTComponents/Scheduler/Infrastructure/TnTScheduledEvent.razor.js";
 
-    public override string? CssClass => null;
-    public override string? CssStyle => null;
+    public override string? CssClass => CssClassBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .Build();
+
+    public override string? CssStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .Build();
 
     protected override void OnParametersSet() {
         base.OnParametersSet();

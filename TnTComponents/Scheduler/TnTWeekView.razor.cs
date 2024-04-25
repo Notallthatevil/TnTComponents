@@ -26,8 +26,8 @@ public partial class TnTWeekView {
     [Inject]
     private IJSRuntime _jsRuntime { get; set; } = default!;
 
-    private IDictionary<TimeOnly, ElementReference> _rows = new Dictionary<TimeOnly, ElementReference>();
-    private ElementReference[] _columns = new ElementReference[7];
+    private readonly IDictionary<TimeOnly, ElementReference> _rows = new Dictionary<TimeOnly, ElementReference>();
+    private readonly ElementReference[] _columns = new ElementReference[7];
 
     protected override IEnumerable<TimeOnly> GetTimeSlots() {
         var currentTime = Scheduler.MinimumTime;
@@ -52,6 +52,8 @@ public partial class TnTWeekView {
     }
 
     internal override async Task<BoundingClientRect> CalculateEventBoundingRect(TnTEvent @event) {
+        var sameDayEvents = Scheduler.GetEventsForDate(DateOnly.FromDateTime(@event.StartTime.Date)).Where(e => e != @event);
+
         var startTime = TimeOnly.FromDateTime(@event.StartTime.DateTime).RoundToNearestMinuteInterval(Interval);
         var endTime = TimeOnly.FromDateTime(@event.EndTime.DateTime).RoundToNearestMinuteInterval(Interval);
 
@@ -68,7 +70,7 @@ public partial class TnTWeekView {
         var c = await _jsRuntime.GetBoundingClientRect(endRow);
         var d = await _jsRuntime.GetBoundingClientRect(endColumn);
 
-        if(a is null || b is null || c is null || d is null) {
+        if (a is null || b is null || c is null || d is null) {
             return new BoundingClientRect();
         }
         return new BoundingClientRect() {
