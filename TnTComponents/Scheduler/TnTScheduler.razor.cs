@@ -3,6 +3,7 @@ using BlazorCalendar.Models;
 using Microsoft.AspNetCore.Components;
 using TnTComponents.Core;
 using TnTComponents.Scheduler;
+using TnTComponents.Scheduler.Infrastructure;
 
 namespace TnTComponents;
 
@@ -23,23 +24,21 @@ partial class TnTScheduler<TEventType> : CalendarBase where TEventType : TnTEven
 
     public ElementReference Element { get; private set; }
 
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
 
 
-
-
-
-
+    private IDictionary<Type, ScheduleViewBase<TEventType>> _scheduleViews = new Dictionary<Type, ScheduleViewBase<TEventType>>();
+    private ScheduleViewBase<TEventType>? _selectedView;
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
 
 
     [Parameter]
@@ -52,8 +51,25 @@ partial class TnTScheduler<TEventType> : CalendarBase where TEventType : TnTEven
     public DisplayedView DisplayedView { get; set; }
 
     [Parameter]
-    public Tasks[]? TasksList { get; set; }
+    public Tasks[] TasksList { get; set; } = [];
 
     [Parameter]
     public bool DisableDragAndDrop { get; set; }
+
+
+    public void AddScheduleView(ScheduleViewBase<TEventType> scheduleView) {
+        _scheduleViews[scheduleView.GetType()] = scheduleView;
+        if(_scheduleViews.Count == 1) {
+            _selectedView = scheduleView;
+        }
+    }
+
+    public void RemoveScheduleView(ScheduleViewBase<TEventType> scheduleView) {
+        _scheduleViews.Remove(scheduleView.GetType());
+    }
+
+    public bool IsViewSelected(ScheduleViewBase<TEventType> scheduleView) {
+        return _selectedView == scheduleView;
+    }
+
 }

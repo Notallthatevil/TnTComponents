@@ -41,6 +41,8 @@ internal class CssClassBuilder {
 
     public CssClassBuilder AddFilled(bool enabled = true) => AddClass("tnt-filled", enabled);
 
+    public CssClassBuilder MakeGridContainer(bool enabled = true) => AddClass("tnt-grid-container", enabled);
+
     public CssClassBuilder AddFlexBox(LayoutDirection? direction = null,
         AlignItems? alignItems = null,
         JustifyContent? justifyContent = null,

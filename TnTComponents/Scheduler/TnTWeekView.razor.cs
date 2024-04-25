@@ -3,10 +3,24 @@ using BlazorCalendar;
 using BlazorCalendar.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using TnTComponents.Core;
 using TnTComponents.Scheduler;
 
 namespace TnTComponents;
 partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
+    public override string? CssClass => CssClassBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .MakeGridContainer()
+        .AddClass("tnt-week-view")
+        .Build();
+
+    public override string? CssStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .Build();
+
+    [Parameter]
+    public DayOfWeek StartViewOn { get; set; } = DayOfWeek.Sunday;
+
 
     private DateTime _firstdate;
     [CascadingParameter(Name = "FirstDate")]
@@ -70,6 +84,7 @@ partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         await DropTask.InvokeAsync(dragDropParameter);
 
         TaskDragged = null;
+        StateHasChanged();
     }
 
     private string GetBackground(DateTime day) {
@@ -122,4 +137,13 @@ partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         await TaskClick.InvokeAsync(clickTaskParameter);
     }
 
+    private IEnumerable<DateOnly> GetVisibleDates() {
+        var diff = Math.Abs(StartViewOn - Scheduler.FirstDate.DayOfWeek);
+
+        var startDate = DateOnly.FromDateTime(Scheduler.FirstDate.AddDays(-diff));
+
+        for (int i = 0; i < 7; i++) {
+            yield return startDate.AddDays(i);
+        }
+    }
 }

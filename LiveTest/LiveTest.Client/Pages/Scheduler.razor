@@ -27,14 +27,15 @@
               TEventType="TnTEvent"
               TasksList="TasksList.ToArray()"
               DisplayedView="DisplayedView.Weekly">
-    <TnTWeekView PriorityDisplay="@PriorityDisplay"
-              OutsideCurrentMonthClick="OutsideCurrentMonthClick"
-              TaskClick="TaskClick"
-              DayClick="DayClick"
-              Draggable="@draggable"
-              DragStart="DragStart"
-              DropTask="DropTask"
-              HighlightToday="true" />
+    <TnTWeekView StartViewOn="DayOfWeek.Tuesday"
+                 PriorityDisplay="@PriorityDisplay"
+                 OutsideCurrentMonthClick="OutsideCurrentMonthClick"
+                 TaskClick="TaskClick"
+                 DayClick="DayClick"
+                 Draggable="@draggable"
+                 DragStart="DragStart"
+                 DropTask="DropTask"
+                 HighlightToday="true" />
 </TnTScheduler>
 
 <br />
@@ -53,10 +54,10 @@
         //CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
 
         TasksList = new()
-            {
+                {
             new Tasks { ID = 0, DateStart = today.AddDays(0), DateEnd = today.AddDays(1), Code = "HELLO", Color = "#FFD800", Caption = "Lorem ipsum dolor sit amet", FillStyle = FillStyleEnum.BackwardDiagonal },
             new Tasks { ID = 1, DateStart = today.AddDays(4).AddHours(8), DateEnd = today.AddDays(4).AddHours(11), Code = "😉 CP", Color = "#19C319", Caption = "Lorem ipsum dolor sit amet" } ,
-            new Tasks { ID = 2, DateStart = today.AddDays(-2).AddHours(8), DateEnd = today.AddDays(-2).AddHours(20), Code = "POD", Color = "#844fe7", Caption = "Podcast DevApps", FillStyle = FillStyleEnum.ZigZag } ,
+            new Tasks { ID = 2, DateStart = today.AddDays(-2).AddHours(1), DateEnd = today.AddDays(-2).AddHours(9), Code = "POD", Color = "#844fe7", Caption = "Podcast DevApps", FillStyle = FillStyleEnum.ZigZag } ,
             new Tasks { ID = 3, DateStart = today.AddHours(5), DateEnd = today.AddHours(10), Code = "CALL", Color = "#eb3c37", ForeColor = "#222", Caption = "Lorem ipsum dolor sit amet", FillStyle=FillStyleEnum.CrossDots },
             new Tasks { ID = 4, DateStart = today.AddDays(31), DateEnd = today.AddDays(31), Code = "MTG", Color = "#19C319", Caption = "MTG:France" },
             new Tasks { ID = 5, DateStart = today.AddDays(40), DateEnd = today.AddDays(42), Code = "DEV", Color = "#FFD800", Comment="on Teams template", Caption = "Fusce quis purus eu ante" },
