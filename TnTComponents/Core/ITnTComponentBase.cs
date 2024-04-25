@@ -41,7 +41,7 @@ public interface ITnTComponentBase {
     /// If set, applies this Id to the main html tag for this component. <see
     /// cref="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id" />
     /// </summary>
-    string? Id { get; set; }
+    string? Id { get; }
 
     /// <summary>
     /// Additional styles that can be applied to this component. <see
