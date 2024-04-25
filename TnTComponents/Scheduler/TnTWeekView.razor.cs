@@ -3,9 +3,10 @@ using BlazorCalendar;
 using BlazorCalendar.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using TnTComponents.Scheduler;
 
 namespace TnTComponents;
-partial class TnTWeekView : CalendarBase {
+partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
     [CascadingParameter(Name = "SelectedView")]
     public DisplayedView DisplayedView { get; set; } = DisplayedView.Weekly;
 
@@ -62,11 +63,9 @@ partial class TnTWeekView : CalendarBase {
     }
 
     private async Task HandleDayOnDrop(DateTime day) {
-        if (!Draggable)
+        if (Scheduler.DisableDragAndDrop || TaskDragged is null) {
             return;
-
-        if (TaskDragged is null)
-            return;
+        }
 
         DragDropParameter dragDropParameter = new() {
             Day = day,
@@ -79,6 +78,11 @@ partial class TnTWeekView : CalendarBase {
     }
 
     private string GetBackground(DateTime day) {
+        string WeekDaysColor = "#FFF";
+
+        string SaturdayColor = "#ECF4FD";
+
+        string SundayColor = "#DBE7F8";
         int d = (int)day.DayOfWeek;
 
         if (d == 6) {

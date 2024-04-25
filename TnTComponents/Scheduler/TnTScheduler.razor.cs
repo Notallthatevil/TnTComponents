@@ -18,4 +18,7 @@ partial class TnTScheduler<TEventType> : CalendarBase where TEventType : TnTEven
 
     [Parameter]
     public Tasks[]? TasksList { get; set; }
+
+    [Parameter]
+    public bool DisableDragAndDrop { get; set; }
 }
