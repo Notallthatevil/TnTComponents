@@ -7,8 +7,6 @@ using TnTComponents.Scheduler;
 
 namespace TnTComponents;
 partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
-    [CascadingParameter(Name = "SelectedView")]
-    public DisplayedView DisplayedView { get; set; } = DisplayedView.Weekly;
 
     private DateTime _firstdate;
     [CascadingParameter(Name = "FirstDate")]
@@ -21,9 +19,6 @@ partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
             _firstdate = value;
         }
     }
-
-    [CascadingParameter(Name = "TasksList")]
-    public Tasks[]? TasksList { get; set; }
 
     [Parameter]
     public PriorityLabel PriorityDisplay { get; set; } = PriorityLabel.Code;

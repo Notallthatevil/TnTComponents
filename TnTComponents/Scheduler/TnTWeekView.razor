@@ -10,7 +10,7 @@
 @{
     DateTime FirstDateWeek = new DateTime(FirstDate.Year, FirstDate.Month, FirstDate.Day).AddDays(-(Dates.GetNumOfDay((int)FirstDate.Date.DayOfWeek) - 2));
     string[] dayNames = CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedDayNames;
-    string? isHidden = DisplayedView == DisplayedView.Weekly ? null : "hidden-element";
+    string? isHidden = Scheduler.DisplayedView == DisplayedView.Weekly ? null : "hidden-element";
     string? CSSbackground = null;
     string? taskColor = null;
     string? classPin = null;
@@ -18,9 +18,8 @@
     string borderStyle = "";
 
     // The sorting must be done each time we redraw in case the user moves the spots
-    if (TasksList is not null)
-    {
-        TasksList = TasksList.OrderBy(x => x.DateStart)
+    if (Scheduler.TasksList is not null) {
+        Scheduler.TasksList = Scheduler.TasksList.OrderBy(x => x.DateStart)
                              .ThenByDescending(x => x.DateEnd)
                              .ToArray();
     }
@@ -57,15 +56,13 @@
                         @hours.ToString("HH:mm")
                     </div>
 
-                    @if (TasksList is not null)
-                    {
+                    @if (Scheduler.TasksList is not null) {
                         int column = 1;
 
-                        for (var k = 0; k < TasksList.Length; k++)
-                        {
-                            Tasks t = TasksList[k];
+                        for (var k = 0; k < Scheduler.TasksList.Length; k++) {
+                            Tasks t = Scheduler.TasksList[k];
 
-             
+
                             if (t.DateEnd > hours && t.DateStart <= hours)
                             {
                                 column++;
