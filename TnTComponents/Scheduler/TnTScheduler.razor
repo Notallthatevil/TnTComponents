@@ -4,13 +4,9 @@
 @namespace TnTComponents
 @typeparam TEventType
 
-<CascadingValue Value="this" IsFixed="true">
-    <CascadingValue Value="DisplayedView" Name="SelectedView">
-        <CascadingValue Value="FirstDate" Name="FirstDate">
-            <CascadingValue Value="TasksList" Name="TasksList">
-                @ChildContent
-            </CascadingValue>
-        </CascadingValue>
+<div @attributes="AdditionalAttributes" class="@CssClass" style="@CssStyle" @ref="Element">
+    <CascadingValue Value="this" IsFixed="true">
+        @ChildContent
     </CascadingValue>
-</CascadingValue>
+</div>
 
