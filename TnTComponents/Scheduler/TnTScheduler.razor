@@ -1,0 +1,20 @@
+﻿@using BlazorCalendar
+@using BlazorCalendar.Models
+@inherits CalendarBase
+@namespace TnTComponents
+@typeparam TEventType
+
+<CascadingValue Value="this" IsFixed="true">
+    <CascadingValue Value="DisplayedView" Name="SelectedView">
+        <CascadingValue Value="FirstDate" Name="FirstDate">
+            <CascadingValue Value="TasksList" Name="TasksList">
+                @ChildContent
+            </CascadingValue>
+        </CascadingValue>
+    </CascadingValue>
+</CascadingValue>
+
+@code {
+
+}
+
