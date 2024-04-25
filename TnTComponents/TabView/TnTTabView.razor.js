@@ -15,7 +15,6 @@ export class TnTTabView extends HTMLElement {
         if (tabViewsByIdentifier.get(identifier)) {
             tabViewsByIdentifier.delete(identifier);
         }
-        //this.mutationObserver.disconnect();
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -118,98 +117,6 @@ export class TnTTabView extends HTMLElement {
             activeIndicator.style.width = `${activeHeader.clientWidth}px`;
         }
     }
-
-    //update() {
-    //    const self = this;
-    //    let tabChildren = [...this.querySelectorAll(':scope > #tnt-tab-child')];
-    //    let headerArea = this.querySelector(':scope > div > #tnt-tab-header-group');
-
-    //    if (!this.mutationObserver) {
-    //        this.mutationObserver = new MutationObserver((mutationList, observer) => {
-    //            self.activeIndex = -1;
-    //            for (const mutation of mutationList) {
-    //                if (mutation.type === 'childList' || mutation.type === 'attributes') {
-    //                    let headers = [...headerArea.children];
-    //                    headers.some((head, index) => {
-    //                        if (head.classList.contains('active') && !head.disabled) {
-    //                            self.activeIndex = index;
-    //                            return true;
-    //                        }
-    //                        else if (!head.disabled && self.activeIndex === -1) {
-    //                            self.activeIndex = index;
-    //                        }
-    //                    });
-
-    //                    break;
-    //                }
-    //            }
-    //            observer.disconnect();
-    //            self.update();
-    //        });
-    //    }
-
-    //
-
-    //    if (headerArea) {
-    //        this.mutationObserver.observe(headerArea, { childList: true, attributes: true, attributeFilter: ['name'] });
-    //        headerArea.addEventListener('scroll', (_) => updateActiveIndicator(self, self.getActiveHeader()));
-
-    //        let headers = [...headerArea.children];
-    //        if (headers.length === tabChildren.length && !this.interactive) {
-    //            function setHeaderActive() {
-    //                let activeHead = null;
-    //                headers.forEach((head, index) => {
-    //                    if (index === self.activeIndex) {
-    //                        if (!head.classList.contains('active')) {
-    //                            head.classList.add('active');
-    //                        }
-    //                        activeHead = head;
-    //                    }
-    //                    else {
-    //                        head.classList.remove('active');
-    //                    }
-    //                })
-
-    //                updateActiveIndicator(self, activeHead);
-    //            }
-
-    //            function setNewTabContent() {
-    //                tabChildren.forEach((child, index) => {
-    //                    if (index === self.activeIndex) {
-    //                        child.hidden = false;
-    //                    }
-    //                    else {
-    //                        child.hidden = true;
-    //                    }
-    //                });
-    //            }
-
-    //            function selectActiveTab() {
-    //                setHeaderActive();
-    //                setNewTabContent();
-    //            }
-
-    //            function headClicked(e) {
-    //                let index = e.currentTarget.selectIndex;
-    //                if (index !== self.activeIndex) {
-    //                    self.activeIndex = index;
-    //                    selectActiveTab();
-    //                }
-    //            }
-
-    //            headers.forEach((head, index) => {
-    //                head.removeEventListener('click', headClicked);
-    //                head.addEventListener('click', headClicked);
-    //                head.selectIndex = index;
-
-    //                if (self.activeIndex === -1 && head.classList.contains('active') && !head.disabled) {
-    //                    self.activeIndex = index;
-    //                }
-    //            });
-    //            selectActiveTab();
-    //        }
-    //    }
-    //}
 }
 
 export function ensureInteractive(tabViewElement) {
@@ -257,10 +164,6 @@ export function onLoad(element, dotNetRef) {
 export function onUpdate(element, dotNetRef) {
     if (dotNetRef) {
         element.update();
-    }
-
-    for (const [_, tntTabView] of tabViewsByIdentifier) {
-        //tntTabView.update();
     }
 }
 
