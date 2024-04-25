@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using TnTComponents.Ext;
 
 namespace TnTComponents.Scheduler.Infrastructure;
 
@@ -45,4 +46,9 @@ public abstract class SchedulerBase : ComponentBase {
     }
 
     public abstract void RemoveView(ScheduleViewBase view);
+
+    public IEnumerable<TnTEvent> GetEventsForDate(DateOnly date) {
+        var dateTimeDate = date.ToDateTime();
+        return Events.Where(e => e.StartTime.Date == dateTimeDate || e.EndTime.Date == dateTimeDate);
+    }
 }

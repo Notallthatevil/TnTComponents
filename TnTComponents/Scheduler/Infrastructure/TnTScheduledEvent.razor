@@ -1,4 +1,5 @@
-﻿
-<div class="tnt-components tnt-event tnt-corner-radius-1" @ref="_element">
+﻿@using TnTComponents.Core
+@inherits TnTPageScriptComponent<TnTScheduledEvent>
+<div class="tnt-components tnt-event tnt-corner-radius-1" @ref="Element">
     @Event.Title
 </div>

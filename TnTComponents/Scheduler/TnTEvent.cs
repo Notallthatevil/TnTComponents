@@ -1,4 +1,6 @@
-﻿namespace TnTComponents.Scheduler;
+﻿using Microsoft.AspNetCore.Components;
+
+namespace TnTComponents.Scheduler;
 
 public class TnTEvent {
     public DateTimeOffset EndTime { get; set; } = DateTimeOffset.MaxValue;

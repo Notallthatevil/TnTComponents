@@ -34,11 +34,13 @@
                             <div class="tnt-slot tnt-day-slot" @onclick="@(() => CreateEventAsync(date, time))"></div>
                         }
                     }
+
+                    @foreach (var @event in Scheduler.GetEventsForDate(date)) {
+                        <TnTScheduledEvent Event="@(@event)" ScheduleView="this" />
+                    }
                 </div>
             }
         }
-        @foreach (var @event in Scheduler.Events) {
-            <TnTScheduledEvent Event="@(@event)" ScheduleView="this" />
-        }
+
     </div>
 }

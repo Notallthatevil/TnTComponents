@@ -13,5 +13,9 @@ internal static class DateTimeExt {
     public static TimeOnly RoundToNearestMinuteInterval(this TimeOnly time, TimeSpan interval) {
         return new TimeOnly(time.Hour, (int)(Math.Round(time.Minute / (double)interval.Minutes) * interval.Minutes));
     }
+
+    public static DateTime ToDateTime(this DateOnly date) {
+        return new DateTime(date, default);
+    }
 }
 

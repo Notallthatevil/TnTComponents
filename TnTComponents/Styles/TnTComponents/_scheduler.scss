@@ -31,6 +31,7 @@
         }
 
         .tnt-slot-column {
+            position: relative;
             width: calc(calc(100% - 5rem) / 7);
 
             .tnt-day-slot:not(.tnt-header-slot) {
@@ -49,16 +50,29 @@
                     }
                 }
             }
-        }
 
-        .tnt-event {
-            position: absolute;
-            opacity: 0;
-            transition: 150ms ease-in-out;
-            background-color: $tnt-color-tertiary;
-            color: $tnt-color-on-tertiary;
-            padding: 0 0.25rem;
-            box-sizing: border-box;
+            .tnt-event {
+                position: absolute;
+                top: 0;
+                transition: opacity 150ms ease-in-out;
+                background-color: $tnt-color-tertiary;
+                color: $tnt-color-on-tertiary;
+                padding: 0 0.25rem;
+                outline: 1px solid $tnt-color-outline;
+                box-sizing: border-box;
+                margin: 0 0.25rem;
+                animation: FadeIn 150ms ease-in-out;
+            }
         }
+    }
+}
+
+@keyframes FadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
     }
 }

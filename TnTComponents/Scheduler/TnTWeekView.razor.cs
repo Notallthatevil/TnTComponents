@@ -53,7 +53,7 @@ public partial class TnTWeekView {
 
     internal override async Task<BoundingClientRect> CalculateEventBoundingRect(TnTEvent @event) {
         var startTime = TimeOnly.FromDateTime(@event.StartTime.DateTime).RoundToNearestMinuteInterval(Interval);
-        var endTime = TimeOnly.FromDateTime(@event.StartTime.DateTime).RoundToNearestMinuteInterval(Interval);
+        var endTime = TimeOnly.FromDateTime(@event.EndTime.DateTime).RoundToNearestMinuteInterval(Interval);
 
         var startDate = DateOnly.FromDateTime(@event.StartTime.Date);
         var endDate = DateOnly.FromDateTime(@event.EndTime.Date);
@@ -68,11 +68,13 @@ public partial class TnTWeekView {
         var c = await _jsRuntime.GetBoundingClientRect(endRow);
         var d = await _jsRuntime.GetBoundingClientRect(endColumn);
 
+        if(a is null || b is null || c is null || d is null) {
+            return new BoundingClientRect();
+        }
         return new BoundingClientRect() {
-            Top = b.Top,
-            Height = d.Top - b.Top,
-            Left = a.Left,
-            Width = a.Width
+            Top = b.Top - a.Top,
+            Height = c.Top - b.Top,
+            Width = a.Width - 16
         };
     }
 }

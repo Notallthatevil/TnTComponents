@@ -10,10 +10,10 @@ public partial class TnTScheduledEvent {
     [Parameter, EditorRequired]
     public ScheduleViewBase ScheduleView { get; set; } = default!;
 
-    private ElementReference _element;
+    public override string? JsModulePath => "./_content/TnTComponents/Scheduler/Infrastructure/TnTScheduledEvent.razor.js";
 
-    [Inject]
-    private IJSRuntime _jsRuntime { get; set; } = default!;
+    public override string? CssClass => null;
+    public override string? CssStyle => null;
 
     protected override void OnParametersSet() {
         base.OnParametersSet();
@@ -28,8 +28,12 @@ public partial class TnTScheduledEvent {
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         await base.OnAfterRenderAsync(firstRender);
+        await SizeAndPositionElement();
+    }
+
+    [JSInvokable]
+    public async Task SizeAndPositionElement() {
         var boundingRect = await ScheduleView.CalculateEventBoundingRect(Event);
-        await _jsRuntime.SetBoundingClientRectAsync(_element, boundingRect);
-        await _jsRuntime.SetOpacity(_element, 1);
+        await JSRuntime.SetBoundingClientRectAsync(Element, boundingRect);
     }
 }
