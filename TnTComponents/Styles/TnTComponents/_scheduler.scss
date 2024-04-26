@@ -9,6 +9,8 @@
 
         .tnt-column-header {
             text-align: center;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .tnt-slot {
@@ -30,11 +32,22 @@
                 min-height: 1px;
                 text-align: right;
                 padding-right: 0.5rem;
+                user-select: none;
+                -webkit-user-select: none;
             }
 
             &.tnt-event {
-                background-color: red;
+                background-color: var(--background-color);
+                color: var(--foreground-color);
                 display: inline;
+                border-radius: 12px;
+                padding: 0.25rem;
+                box-sizing: border-box;
+                margin: 0.1rem;
+                cursor: grab;
+                user-select: none;
+                text-overflow: clip;
+                overflow: hidden;
             }
         }
     }

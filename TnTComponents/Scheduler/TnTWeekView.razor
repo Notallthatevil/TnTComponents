@@ -46,13 +46,21 @@
                             ColumnSpan = dateGridPosition.ColumnSpan
                         };
                     <div class="tnt-slot tnt-day-slot@(show ? " tnt-slot-outline" : null)"
-                         style="@gridPosition.ToCssString()">
+                         style="@gridPosition.ToCssString()"
+                         ondragover="event.preventDefault();this.style.fontWeight = '600';"
+                         ondragleave="this.style.fontWeight='100';"
+                         @ondrop:preventDefault="true"
+                         @ondrop="() => HandleDayOnDrop(new DateTime(date, time))"
+                         @onclick="e => ClickDayInternal(e, new DateTime(date, time))">
                     </div>
                 }
             }
         }
         @foreach (var (@event, position) in _events) {
-            <div class="tnt-slot tnt-event" style="@position.ToCssString()">
+            <div class="tnt-slot tnt-event tnt-label-medium"
+                 style="@position.ToCssString() @($"--background-color: var(--tnt-color-{@event.BackgroundColor.ToCssClassName()}); --foreground-color: var(--tnt-color-{@event.ForegroundColor.ToCssClassName()})")"
+                 draggable="@((!Scheduler.DisableDragAndDrop).ToString())"
+                 @ondragstart="@(() => HandleDragStart(@event.ID))">
                 @(@event.Code)
             </div>
 
@@ -60,7 +68,10 @@
     </div>
 
 
-    @foreach (var c in GetVisibleDates().Select((date, index) => new { date, index })) {
+    @foreach (var c in GetVisibleDates().Select((date, index) => new {
+        date,
+        index
+    })) {
         var day = new DateTime(c.date, default);
         var i = c.index;
         <div class="tnt-day-column" style="@($"--column-index: {i + 2}")">
