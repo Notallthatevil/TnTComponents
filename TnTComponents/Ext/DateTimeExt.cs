@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TnTComponents.Ext;
 internal static class DateTimeExt {
@@ -12,6 +13,10 @@ internal static class DateTimeExt {
 
     public static TimeOnly RoundToNearestMinuteInterval(this TimeOnly time, TimeSpan interval) {
         return new TimeOnly(time.Hour, (int)(Math.Round(time.Minute / (double)interval.Minutes) * interval.Minutes));
+    }
+
+    public static DateTime Round(this DateTime dateTime , TimeSpan interval) {
+        return new DateTime((long)Math.Round(dateTime.Ticks / (double)interval.Ticks) * interval.Ticks);
     }
 
     public static DateTime ToDateTime(this DateOnly date) {

@@ -28,17 +28,6 @@ partial class TnTScheduler<TEventType> : CalendarBase where TEventType : TnTEven
 
     private IDictionary<Type, ScheduleViewBase<TEventType>> _scheduleViews = new Dictionary<Type, ScheduleViewBase<TEventType>>();
     private ScheduleViewBase<TEventType>? _selectedView;
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
 
 
     [Parameter]
@@ -71,5 +60,7 @@ partial class TnTScheduler<TEventType> : CalendarBase where TEventType : TnTEven
     public bool IsViewSelected(ScheduleViewBase<TEventType> scheduleView) {
         return _selectedView == scheduleView;
     }
+
+
 
 }

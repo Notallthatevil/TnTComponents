@@ -7,10 +7,6 @@ namespace TnTComponents.Core;
 /// Simple interface that represents a TnTComponent. Each TnTComponent can be thought of as a single
 /// Html Element.
 /// </summary>
-/// <remarks>
-/// While each component can be thought of a single html element, many components contain more then
-/// one html tag in their structure.
-/// </remarks>
 public interface ITnTComponentBase {
 
     /// <summary>
