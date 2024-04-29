@@ -35,7 +35,7 @@ public sealed class TnTGridSort<TGridItem> {
     /// <returns>
     /// A <see cref="TnTGridSort{T}" /> instance representing the specified sorting rule.
     /// </returns>
-    public static TnTGridSort<TGridItem> ByAscending<U>(Expression<Func<TGridItem, U>> expression)=> new((queryable, asc) => asc ? queryable.OrderBy(expression) : queryable.OrderByDescending(expression),(expression, true));
+    public static TnTGridSort<TGridItem> ByAscending<U>(Expression<Func<TGridItem, U>> expression) => new((queryable, asc) => asc ? queryable.OrderBy(expression) : queryable.OrderByDescending(expression), (expression, true));
 
     /// <summary>
     /// Produces a <see cref="TnTGridSort{T}" /> instance that sorts according to the specified
@@ -51,7 +51,7 @@ public sealed class TnTGridSort<TGridItem> {
     /// <returns>
     /// A <see cref="TnTGridSort{T}" /> instance representing the specified sorting rule.
     /// </returns>
-    public static TnTGridSort<TGridItem> ByAscending<U>(Expression<Func<TGridItem, U>> expression, IComparer<U> comparer)=> new((queryable, asc) => asc ? queryable.OrderBy(expression, comparer) : queryable.OrderByDescending(expression, comparer),(expression, true));
+    public static TnTGridSort<TGridItem> ByAscending<U>(Expression<Func<TGridItem, U>> expression, IComparer<U> comparer) => new((queryable, asc) => asc ? queryable.OrderBy(expression, comparer) : queryable.OrderByDescending(expression, comparer), (expression, true));
 
     /// <summary>
     /// Produces a <see cref="TnTGridSort{T}" /> instance that sorts according to the specified
@@ -64,7 +64,7 @@ public sealed class TnTGridSort<TGridItem> {
     /// <returns>
     /// A <see cref="TnTGridSort{T}" /> instance representing the specified sorting rule.
     /// </returns>
-    public static TnTGridSort<TGridItem> ByDescending<U>(Expression<Func<TGridItem, U>> expression)=> new((queryable, asc) => asc ? queryable.OrderByDescending(expression) : queryable.OrderBy(expression),(expression, false));
+    public static TnTGridSort<TGridItem> ByDescending<U>(Expression<Func<TGridItem, U>> expression) => new((queryable, asc) => asc ? queryable.OrderByDescending(expression) : queryable.OrderBy(expression), (expression, false));
 
     /// <summary>
     /// Updates a <see cref="TnTGridSort{T}" /> instance by appending a further sorting rule.

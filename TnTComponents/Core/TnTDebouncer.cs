@@ -24,34 +24,32 @@
 namespace TnTComponents.Core;
 
 /// <summary>
-/// Debouncer helps you to debounce asynchronous actions.
-/// You can use it in your callbacks to prevent multiple calls of the same action in a short period of time.
+/// Debouncer helps you to debounce asynchronous actions. You can use it in your callbacks to
+/// prevent multiple calls of the same action in a short period of time.
 /// </summary>
 public class TnTDebouncer : IDisposable {
     private CancellationTokenSource _debounceCancellationTokenSource = new();
 
-    private async Task DebounceAsync(int millisecondsDelay) {
-        await _debounceCancellationTokenSource.CancelAsync();
-        _debounceCancellationTokenSource.Dispose();
-        _debounceCancellationTokenSource = new();
-
-        await Task.Delay(millisecondsDelay, _debounceCancellationTokenSource.Token);
+    public Task CancelAsync() {
+        return _debounceCancellationTokenSource.CancelAsync();
     }
 
     /// <summary>
     /// Starts the debouncing.
     /// </summary>
     /// <param name="millisecondsDelay">The delay in milliseconds for debouncing.</param>
-    /// <param name="actionAsync">The asynchronous action to be executed. The <see cref="CancellationToken"/> gets canceled if the method is called again.</param>
+    /// <param name="actionAsync">      
+    /// The asynchronous action to be executed. The <see cref="CancellationToken" /> gets canceled
+    /// if the method is called again.
+    /// </param>
     public async Task DebounceAsync(int millisecondsDelay, Func<CancellationToken, Task> actionAsync) {
         try {
             await DebounceAsync(millisecondsDelay);
-           
+
             await actionAsync(_debounceCancellationTokenSource.Token);
         }
         catch (TaskCanceledException) { }
     }
-
 
     public async Task<T> DebounceForResultAsync<T>(int millisecondsDelay, Func<CancellationToken, Task<T>> funcAsync) {
         try {
@@ -63,14 +61,17 @@ public class TnTDebouncer : IDisposable {
         return default!;
     }
 
-    public Task CancelAsync() {
-        return _debounceCancellationTokenSource.CancelAsync();
-    }
-
     public void Dispose() {
         GC.SuppressFinalize(this);
         _debounceCancellationTokenSource.Cancel();
         _debounceCancellationTokenSource.Dispose();
     }
-}
 
+    private async Task DebounceAsync(int millisecondsDelay) {
+        await _debounceCancellationTokenSource.CancelAsync();
+        _debounceCancellationTokenSource.Dispose();
+        _debounceCancellationTokenSource = new();
+
+        await Task.Delay(millisecondsDelay, _debounceCancellationTokenSource.Token);
+    }
+}

@@ -30,10 +30,12 @@ public partial class TnTAccordion {
         .Build();
 
     [Parameter]
-    public bool? OpenByDefault { get; set; }
+    public int Elevation { get; set; } = 1;
+
+    public override string? JsModulePath => "./_content/TnTComponents/Core/TnTAccordion.razor.js";
 
     [Parameter]
-    public int Elevation { get; set; } = 1;
+    public bool? OpenByDefault { get; set; }
 
     [Parameter]
     public bool Ripple { get; set; } = true;
@@ -44,19 +46,6 @@ public partial class TnTAccordion {
     [Parameter, EditorRequired]
     public string Title { get; set; } = default!;
 
-    public override string? JsModulePath => "./_content/TnTComponents/Core/TnTAccordion.razor.js";
-
-    protected override void OnAfterRender(bool firstRender) {
-        base.OnAfterRender(firstRender);
-        if (firstRender) {
-            OpenByDefault = null;
-        }
-    }
-
-    public ValueTask Resize() {
-        return IsolatedJsModule?.InvokeVoidAsync("resizeAccordion", Element, DotNetObjectRef) ?? ValueTask.CompletedTask;
-    }
-
     public ValueTask Close() {
         return IsolatedJsModule?.InvokeVoidAsync("closeAccordion", Element, DotNetObjectRef) ?? ValueTask.CompletedTask;
     }
@@ -65,5 +54,14 @@ public partial class TnTAccordion {
         return IsolatedJsModule?.InvokeVoidAsync("openAccordion", Element, DotNetObjectRef) ?? ValueTask.CompletedTask;
     }
 
+    public ValueTask Resize() {
+        return IsolatedJsModule?.InvokeVoidAsync("resizeAccordion", Element, DotNetObjectRef) ?? ValueTask.CompletedTask;
+    }
 
+    protected override void OnAfterRender(bool firstRender) {
+        base.OnAfterRender(firstRender);
+        if (firstRender) {
+            OpenByDefault = null;
+        }
+    }
 }

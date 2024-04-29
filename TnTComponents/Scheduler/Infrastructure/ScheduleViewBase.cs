@@ -30,8 +30,6 @@ public abstract class ScheduleViewBase<TEventType> : ComponentBase, ITnTComponen
     [Parameter]
     public EventCallback<TEventType> EventClickedCallback { get; set; }
 
-
-
     public string? Id { get; private set; }
 
     [Parameter]
@@ -100,6 +98,10 @@ public abstract class ScheduleViewBase<TEventType> : ComponentBase, ITnTComponen
 
     protected abstract IEnumerable<DateOnly> GetVisibleDates();
 
+    protected bool IsDisabledSlot(DayOfWeek dayOfWeek, TimeOnly timeSlot) {
+        return Scheduler.DisabledDateTimes.Any(disabledDateTime => disabledDateTime.IsDisabledTimeSlot(dayOfWeek, timeSlot));
+    }
+
     protected virtual async Task OnDropEvent(DateTimeOffset dateTimeOffset) {
         if (Scheduler.DisableDragAndDrop || DraggingEvent is null) {
             return;
@@ -126,10 +128,6 @@ public abstract class ScheduleViewBase<TEventType> : ComponentBase, ITnTComponen
 
     protected virtual async Task TimeSlotClicked(DateTimeOffset dateTimeOffset) {
         await TimeSlotClickedCallback.InvokeAsync(dateTimeOffset);
-    }
-
-    protected bool IsDisabledSlot(DayOfWeek dayOfWeek, TimeOnly timeSlot) {
-        return Scheduler.DisabledDateTimes.Any(disabledDateTime => disabledDateTime.IsDisabledTimeSlot(dayOfWeek, timeSlot));
     }
 
     internal readonly record struct GridPosition() {

@@ -1,37 +1,16 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TnTComponents.Ext;
 
 namespace TnTComponents.Core;
+
 public abstract class TnTPageScriptComponent<TComponent> : TnTComponentBase, ITnTPageScriptComponent<TComponent>, IAsyncDisposable where TComponent : ComponentBase {
-    public abstract string? JsModulePath { get; }
-    public IJSObjectReference? IsolatedJsModule { get; private set; }
     public DotNetObjectReference<TComponent>? DotNetObjectRef { get; set; }
+    public IJSObjectReference? IsolatedJsModule { get; private set; }
+    public abstract string? JsModulePath { get; }
 
     [Inject]
     protected IJSRuntime JSRuntime { get; private set; } = default!;
-
-    protected override void OnInitialized() {
-        base.OnInitialized();
-        var derived = this as TComponent;
-        DotNetObjectRef = DotNetObjectReference.Create(derived!);
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender) {
-        await base.OnAfterRenderAsync(firstRender);
-        if (firstRender) {
-            IsolatedJsModule = await JSRuntime.ImportIsolatedJs(this, JsModulePath);
-            await (IsolatedJsModule?.InvokeVoidAsync("onLoad", Element, DotNetObjectRef) ?? ValueTask.CompletedTask);
-        }
-
-        await (IsolatedJsModule?.InvokeVoidAsync("onUpdate", Element, DotNetObjectRef) ?? ValueTask.CompletedTask);
-    }
 
     public virtual async ValueTask DisposeAsync() {
         GC.SuppressFinalize(this);
@@ -44,6 +23,22 @@ public abstract class TnTPageScriptComponent<TComponent> : TnTComponentBase, ITn
         catch (JSDisconnectedException) { }
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        await base.OnAfterRenderAsync(firstRender);
+        if (firstRender) {
+            IsolatedJsModule = await JSRuntime.ImportIsolatedJs(this, JsModulePath);
+            await (IsolatedJsModule?.InvokeVoidAsync("onLoad", Element, DotNetObjectRef) ?? ValueTask.CompletedTask);
+        }
+
+        await (IsolatedJsModule?.InvokeVoidAsync("onUpdate", Element, DotNetObjectRef) ?? ValueTask.CompletedTask);
+    }
+
+    protected override void OnInitialized() {
+        base.OnInitialized();
+        var derived = this as TComponent;
+        DotNetObjectRef = DotNetObjectReference.Create(derived!);
+    }
+
     protected RenderFragment RenderPageScript() {
         return new RenderFragment(builder => {
             builder.OpenComponent<TnTPageScript>(0);
@@ -52,4 +47,3 @@ public abstract class TnTPageScriptComponent<TComponent> : TnTComponentBase, ITn
         });
     }
 }
-

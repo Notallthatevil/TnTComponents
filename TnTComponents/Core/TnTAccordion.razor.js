@@ -1,4 +1,3 @@
-
 function toggle(e) {
     if (e && e.target && e.target.parentElement) {
         let parent = e.target.parentElement;
@@ -19,7 +18,6 @@ class TnTAccordion extends HTMLElement {
 
     connectedCallback() {
         this.update();
-
     }
 
     disconnectedCallback() {

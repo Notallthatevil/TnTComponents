@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace TnTComponents.Core;
 
-namespace TnTComponents.Core;
-/// <inheritdoc/>
+/// <inheritdoc />
 public sealed class TnTClientRenderContext : ITnTRenderContext {
-    /// <inheritdoc/>
+
+    /// <inheritdoc />
     public bool IsClient => true;
 
-    /// <inheritdoc/>
-    public bool IsServer => false;
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public bool IsPrerendering => false;
-}
 
+    /// <inheritdoc />
+    public bool IsServer => false;
+}

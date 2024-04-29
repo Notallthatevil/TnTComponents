@@ -91,7 +91,7 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
 
     protected override IEnumerable<DateOnly> GetVisibleDates() {
         int diff;
-        if(StartViewOn > Scheduler.FirstDate.DayOfWeek) {
+        if (StartViewOn > Scheduler.FirstDate.DayOfWeek) {
             diff = 7 - (int)StartViewOn + (int)Scheduler.FirstDate.DayOfWeek;
         }
         else {

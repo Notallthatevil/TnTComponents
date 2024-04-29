@@ -10,6 +10,12 @@ public class TnTContainer : ComponentBase, ITnTComponentBase, ITnTFlexBox {
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
     [Parameter]
+    public AlignContent? AlignContent { get; set; }
+
+    [Parameter]
+    public AlignItems? AlignItems { get; set; }
+
+    [Parameter]
     public bool? AutoFocus { get; set; }
 
     [Parameter]
@@ -21,6 +27,12 @@ public class TnTContainer : ComponentBase, ITnTComponentBase, ITnTFlexBox {
         .Build();
 
     [Parameter]
+    public string? CssStyle { get; set; }
+
+    [Parameter]
+    public LayoutDirection? Direction { get; set; }
+
+    [Parameter]
     public bool Disabled { get; set; }
 
     public ElementReference Element { get; }
@@ -29,15 +41,7 @@ public class TnTContainer : ComponentBase, ITnTComponentBase, ITnTFlexBox {
     public string? Id { get; set; }
 
     [Parameter]
-    public string? CssStyle { get; set; }
-    [Parameter]
-    public LayoutDirection? Direction { get; set; }
-    [Parameter]
     public JustifyContent? JustifyContent { get; set; }
-    [Parameter]
-    public AlignItems? AlignItems { get; set; }
-    [Parameter]
-    public AlignContent? AlignContent { get; set; }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "div");

@@ -2,10 +2,8 @@ using Microsoft.AspNetCore.Components;
 using TnTComponents.Core;
 
 namespace TnTComponents;
-public partial class TnTChip
-{
-    [Parameter]
-    public RenderFragment ChildContent { get; set; } = default!;
+
+public partial class TnTChip {
 
     [Parameter]
     public TnTColor ActiveColor { get; set; } = TnTColor.Primary;
@@ -14,10 +12,26 @@ public partial class TnTChip
     public TnTColor ActiveTextColor { get; set; } = TnTColor.OnPrimary;
 
     [Parameter]
-    public TnTColor InactiveTextColor { get; set; } = TnTColor.Primary;
+    public TnTBorderRadius? BorderRadius { get; set; } = new TnTBorderRadius(2);
 
     [Parameter]
-    public TnTBorderRadius? BorderRadius { get; set; } = new TnTBorderRadius(2);
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    public override string? CssClass => CssClassBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddClass("tnt-chip")
+        .AddBorderRadius(BorderRadius)
+        .Build();
+
+    public override string? CssStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddVariable("active-color", $"var(--tnt-color-{ActiveColor.ToCssClassName()})")
+        .AddVariable("active-text-color", $"var(--tnt-color-{ActiveTextColor.ToCssClassName()})")
+        .AddVariable("inactive-text-color", $"var(--tnt-color-{InactiveTextColor.ToCssClassName()})")
+        .Build();
+
+    [Parameter]
+    public TnTColor InactiveTextColor { get; set; } = TnTColor.Primary;
 
     [Parameter]
     public TnTIcon? StartIcon { get; set; }
@@ -30,28 +44,10 @@ public partial class TnTChip
 
     //protected override string? JsModulePath => "./_content/TnTComponents/Chips/TnTChip.razor.js";
 
-    //
-
-    public override string? CssStyle => CssStyleBuilder.Create()
-        .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddVariable("active-color", $"var(--tnt-color-{ActiveColor.ToCssClassName()})")
-        .AddVariable("active-text-color", $"var(--tnt-color-{ActiveTextColor.ToCssClassName()})")
-        .AddVariable("inactive-text-color", $"var(--tnt-color-{InactiveTextColor.ToCssClassName()})")
-        .Build();
-
-    public override string? CssClass => CssClassBuilder.Create()
-        .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddClass("tnt-chip")
-        .AddBorderRadius(BorderRadius)
-        .Build();
-
-    protected override void OnParametersSet()
-    {
+    protected override void OnParametersSet() {
         base.OnParametersSet();
-        if (StartIcon is not null)
-        {
+        if (StartIcon is not null) {
             StartIcon.AdditionalClass = "tnt-start";
         }
     }
-
 }

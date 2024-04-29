@@ -26,6 +26,9 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     [Parameter]
     public bool Disabled { get; set; }
 
+    [Parameter]
+    public bool DisableValidationMessage { get; set; } = false;
+
     public ElementReference Element { get; protected set; }
 
     [Parameter]
@@ -76,11 +79,11 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     [Parameter]
     public TnTColor? TextColor { get; set; } = TnTColor.OnSurfaceVariant;
 
-    [Parameter]
-    public bool DisableValidationMessage { get; set; } = false;
-
     public abstract InputType Type { get; }
 
+    public ValueTask SetFocusAsync() {
+        return Element.FocusAsync();
+    }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "span");
@@ -100,7 +103,6 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                 else {
                     builder.OpenElement(100, "input");
                     builder.AddAttribute(110, "type", Type.ToInputTypeString());
-
                 }
                 builder.AddMultipleAttributes(120, AdditionalAttributes);
                 builder.AddAttribute(121, "name", NameAttributeValue);
@@ -159,9 +161,6 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
         }
 
         builder.CloseElement();
-    }
-    public ValueTask SetFocusAsync() {
-        return Element.FocusAsync();
     }
 
     protected bool IsRequired() {

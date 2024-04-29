@@ -1,8 +1,7 @@
 ﻿.tnt-quick-grid-container {
     overflow-x: auto;
     margin: 8px;
-    border-radius:8px;
-    
+    border-radius: 8px;
 
     .tnt-quick-grid {
         background-color: $tnt-color-surface;
@@ -62,7 +61,7 @@
                         line-height: inherit;
                         letter-spacing: inherit;
                         padding: 0 8px;
-                        border-radius:40px;
+                        border-radius: 40px;
                     }
 
                     &.col-sort-desc, &.col-sort-asc {

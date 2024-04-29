@@ -1,31 +1,19 @@
-
-using Microsoft.AspNetCore.Components.Rendering;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using TnTComponents.Core;
-using TnTComponents;
 
 namespace TnTComponents;
+
 public partial class TnTTypeahead<TItem> {
+
     [Parameter(CaptureUnmatchedValues = true)]
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
-    [Parameter]
-    public string? Label { get; set; }
-
-    [Parameter]
-    public TnTIcon StartIcon { get; set; } = MaterialIcon.Search;
-
-    [Parameter, EditorRequired]
-    public EventCallback<TItem> ItemSelected { get; set; }
 
     [Parameter]
     public int DebounceMilliseconds { get; set; } = 300;
 
-    [Parameter]
-    public TnTColor SearchProgressColor { get; set; } = TnTColor.Secondary;
-
-    [Parameter]
-    public TnTColor? LabelBackgroundColor { get; set; }
+    [Parameter, EditorRequired]
+    public EventCallback<TItem> ItemSelected { get; set; }
 
     [Parameter, EditorRequired]
     public Func<string?, CancellationToken, Task<IEnumerable<TItem>>> ItemsLookupFunc { get; set; } = default!;
@@ -34,45 +22,38 @@ public partial class TnTTypeahead<TItem> {
     public EventCallback ItemsSetCallback { get; set; }
 
     [Parameter]
-    public RenderFragment<TItem>? ResultTemplate { get; set; }
+    public string? Label { get; set; }
 
     [Parameter]
-    public int ResultsViewElevation { get; set; } = 2;
+    public TnTColor? LabelBackgroundColor { get; set; }
+
+    [Parameter]
+    public TnTColor? ResultsViewBackgroundColor { get; set; } = TnTColor.Surface;
+
     [Parameter]
     public TnTBorderRadius? ResultsViewBorderRadius { get; set; } = new(2);
 
     [Parameter]
-    public TnTColor? ResultsViewBackgroundColor { get; set; } = TnTColor.Surface;
+    public int ResultsViewElevation { get; set; } = 2;
+
     [Parameter]
     public TnTColor? ResultsViewTextColor { get; set; } = TnTColor.OnSurface;
 
-    private IEnumerable<TItem> _items = [];
+    [Parameter]
+    public RenderFragment<TItem>? ResultTemplate { get; set; }
 
-    private string? _searchText;
+    [Parameter]
+    public TnTColor SearchProgressColor { get; set; } = TnTColor.Secondary;
 
-    private TnTInputText? _inputTextBox;
-
-
-    private bool _searching;
+    [Parameter]
+    public TnTIcon StartIcon { get; set; } = MaterialIcon.Search;
 
     private TnTDebouncer _debouncer = new();
+    private TnTInputText? _inputTextBox;
+    private IEnumerable<TItem> _items = [];
 
-    private async Task SearchAsync(string value) {
-        if (!string.IsNullOrWhiteSpace(value)) {
-            _searching = true;
-            await _debouncer.DebounceAsync(DebounceMilliseconds, async token => {
-                _items = await ItemsLookupFunc(value, token);
-                _searching = false;
-            });
-        }
-        else {
-            _searching = false;
-            await _debouncer.CancelAsync();
-            _items = [];
-        }
-        StateHasChanged();
-        await ItemsSetCallback.InvokeAsync();
-    }
+    private bool _searching;
+    private string? _searchText;
 
     private async Task ItemSelectedAsync(TItem item) {
         _searchText = "";
@@ -92,5 +73,22 @@ public partial class TnTTypeahead<TItem> {
         else if (args.Key == "Enter" && _items.Any()) {
             await ItemSelectedAsync(_items.First());
         }
+    }
+
+    private async Task SearchAsync(string value) {
+        if (!string.IsNullOrWhiteSpace(value)) {
+            _searching = true;
+            await _debouncer.DebounceAsync(DebounceMilliseconds, async token => {
+                _items = await ItemsLookupFunc(value, token);
+                _searching = false;
+            });
+        }
+        else {
+            _searching = false;
+            await _debouncer.CancelAsync();
+            _items = [];
+        }
+        StateHasChanged();
+        await ItemsSetCallback.InvokeAsync();
     }
 }

@@ -19,12 +19,14 @@ public class TnTDialogService {
         Reference = DotNetObjectReference.Create(this);
     }
 
+    public async Task CloseAsync(ITnTDialog dialog) => await (OnClose?.Invoke(dialog) ?? Task.CompletedTask);
+
     public async Task OpenAsync<TComponent>(TnTDialogOptions? options = null, IReadOnlyDictionary<string, object?>? parameters = null) where TComponent : IComponent =>
-        await (OnOpen?.Invoke(new DialogImpl(this) {
-            Options = options ?? new(),
-            Parameters = parameters,
-            Type = typeof(TComponent)
-        }
+            await (OnOpen?.Invoke(new DialogImpl(this) {
+                Options = options ?? new(),
+                Parameters = parameters,
+                Type = typeof(TComponent)
+            }
         ) ?? Task.CompletedTask);
 
     public async Task<DialogResult> OpenForResultAsync<TComponent>(TnTDialogOptions? options = null, IReadOnlyDictionary<string, object?>? parameters = null) where TComponent : IComponent {
@@ -43,16 +45,13 @@ public class TnTDialogService {
         else {
             return DialogResult.Failed;
         }
-
     }
 
-    public async Task CloseAsync(ITnTDialog dialog) => await (OnClose?.Invoke(dialog) ?? Task.CompletedTask);
-
     private class DialogImpl(TnTDialogService dialogService) : ITnTDialog {
+        public DialogResult DialogResult { get; set; }
         public TnTDialogOptions Options { get; init; } = default!;
         public IReadOnlyDictionary<string, object?>? Parameters { get; init; }
         public Type Type { get; init; } = default!;
-        public DialogResult DialogResult { get; set; }
 
         public Task CloseAsync() {
             return dialogService.CloseAsync(this);

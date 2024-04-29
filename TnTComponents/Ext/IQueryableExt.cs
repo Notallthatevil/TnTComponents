@@ -3,22 +3,23 @@ using System.Linq.Expressions;
 using TnTComponents.Grid;
 
 namespace TnTComponents.Ext;
+
 public static class IQueryableExt {
 
-    private static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> query, string propertyName) {
-        return CallOrderedQueryable(query, "OrderBy", propertyName);
-    }
+    public static IQueryable<T> Apply<T>(this IQueryable<T> query, TnTGridItemsProviderRequest request) {
+        if (request.SortOnProperties.Count != 0) {
+            query = query.OrderBy(request.SortOnProperties);
+        }
 
-    private static IOrderedQueryable<T> OrderByDescending<T>(this IQueryable<T> query, string propertyName) {
-        return CallOrderedQueryable(query, "OrderByDescending", propertyName);
-    }
+        if (request.StartIndex != 0) {
+            query = query.Skip(request.StartIndex);
+        }
 
-    private static IOrderedQueryable<T> ThenBy<T>(this IOrderedQueryable<T> query, string propertyName) {
-        return CallOrderedQueryable(query, "ThenBy", propertyName);
-    }
+        if (request.Count.HasValue) {
+            query = query.Take(request.Count.Value);
+        }
 
-    private static IOrderedQueryable<T> ThenByDescending<T>(this IOrderedQueryable<T> query, string propertyName) {
-        return CallOrderedQueryable(query, "ThenByDescending", propertyName);
+        return query;
     }
 
     /// <summary>
@@ -30,6 +31,10 @@ public static class IQueryableExt {
         var body = propertyName.Split('.').Aggregate<string, Expression>(param, Expression.PropertyOrField);
 
         return (IOrderedQueryable<T>)query.Provider.CreateQuery(Expression.Call(typeof(Queryable), methodName, [typeof(T), body.Type], query.Expression, Expression.Lambda(body, param)));
+    }
+
+    private static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> query, string propertyName) {
+        return CallOrderedQueryable(query, "OrderBy", propertyName);
     }
 
     private static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> query, IEnumerable<KeyValuePair<string, SortDirection>> sortOn) {
@@ -59,22 +64,15 @@ public static class IQueryableExt {
         return result;
     }
 
-
-    public static IQueryable<T> Apply<T>(this IQueryable<T> query, TnTGridItemsProviderRequest request) {
-        if (request.SortOnProperties.Count != 0) {
-            query = query.OrderBy(request.SortOnProperties);
-        }
-
-        if (request.StartIndex != 0) {
-            query = query.Skip(request.StartIndex);
-        }
-
-        if (request.Count.HasValue) {
-            query = query.Take(request.Count.Value);
-        }
-
-        return query;
+    private static IOrderedQueryable<T> OrderByDescending<T>(this IQueryable<T> query, string propertyName) {
+        return CallOrderedQueryable(query, "OrderByDescending", propertyName);
     }
 
-}
+    private static IOrderedQueryable<T> ThenBy<T>(this IOrderedQueryable<T> query, string propertyName) {
+        return CallOrderedQueryable(query, "ThenBy", propertyName);
+    }
 
+    private static IOrderedQueryable<T> ThenByDescending<T>(this IOrderedQueryable<T> query, string propertyName) {
+        return CallOrderedQueryable(query, "ThenByDescending", propertyName);
+    }
+}

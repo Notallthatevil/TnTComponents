@@ -28,13 +28,13 @@ public partial class TnTSideNavMenuGroup {
     [Parameter]
     public TnTIcon? Icon { get; set; }
 
+    public override string? JsModulePath => "./_content/TnTComponents/Layout/TnTSideNavMenuGroup.razor.js";
+
     [Parameter]
     public bool Ripple { get; set; } = true;
 
     [Parameter, EditorRequired]
     public string Title { get; set; } = default!;
-
-    public override string? JsModulePath => "./_content/TnTComponents/Layout/TnTSideNavMenuGroup.razor.js";
 
     [DynamicDependency(nameof(Toggle))]
     public TnTSideNavMenuGroup() : base() { }

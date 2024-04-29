@@ -2,20 +2,20 @@ using Microsoft.AspNetCore.Components;
 using TnTComponents.Core;
 
 namespace TnTComponents;
+
 public partial class TnTSkeleton {
+
     [Parameter(CaptureUnmatchedValues = true)]
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
-
-    [Parameter]
-    public SkeletonAppearance Appearance { get; set; }
 
     [Parameter]
     public bool Animated { get; set; } = true;
 
     [Parameter]
-    public TnTColor? BackgroundColor { get; set; } = TnTColor.SurfaceVariant;
+    public SkeletonAppearance Appearance { get; set; }
 
-    public ElementReference Element { get; set; }
+    [Parameter]
+    public TnTColor? BackgroundColor { get; set; } = TnTColor.SurfaceVariant;
 
     public string CssClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
@@ -29,4 +29,6 @@ public partial class TnTSkeleton {
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddVariable("bg-color", $"var(--tnt-color-{BackgroundColor.ToCssClassName()})", Animated && BackgroundColor.HasValue && BackgroundColor.Value != TnTColor.None)
         .Build();
+
+    public ElementReference Element { get; set; }
 }

@@ -16,9 +16,6 @@ public abstract partial class TnTColumnBase<TGridItem> {
     [Parameter(CaptureUnmatchedValues = true)]
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
-    [Parameter]
-    public TextAlign? TextAlign { get; set; } 
-
     /// <summary>
     /// If specified, indicates that this column has this associated options UI. A button to display
     /// this UI will be included in the header cell by default.
@@ -30,6 +27,11 @@ public abstract partial class TnTColumnBase<TGridItem> {
     [Parameter]
     public RenderFragment? ColumnOptions { get; set; }
 
+    public string? CssClass => CssClassBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddTextAlign(TextAlign)
+        .Build();
+
     public string? CssStyle => CssStyleBuilder.Create()
             .AddFromAdditionalAttributes(AdditionalAttributes)
             .Build();
@@ -37,8 +39,7 @@ public abstract partial class TnTColumnBase<TGridItem> {
     /// <summary>
     /// Gets a reference to the enclosing <see cref="TnTDataGrid{TGridItem}" />.
     /// </summary>
-    public
-        TnTDataGrid<TGridItem> Grid => InternalGridContext.Grid;
+    public TnTDataGrid<TGridItem> Grid => InternalGridContext.Grid;
 
     /// <summary>
     /// Gets or sets an optional template for this column's header cell. If not specified, the
@@ -67,6 +68,8 @@ public abstract partial class TnTColumnBase<TGridItem> {
     [Parameter]
     public RenderFragment<PlaceholderContext>? PlaceholderTemplate { get; set; }
 
+    public bool ShowSortIcon { get; set; }
+
     /// <summary>
     /// Gets or sets a value indicating whether the data should be sortable by this column.
     ///
@@ -82,10 +85,8 @@ public abstract partial class TnTColumnBase<TGridItem> {
     /// </summary>
     public abstract TnTGridSort<TGridItem>? SortBy { get; set; }
 
-    public string? CssClass => CssClassBuilder.Create()
-        .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddTextAlign(TextAlign)
-        .Build();
+    [Parameter]
+    public TextAlign? TextAlign { get; set; }
 
     /// <summary>
     /// Gets or sets the title text for the column. This is rendered automatically if <see
@@ -93,8 +94,6 @@ public abstract partial class TnTColumnBase<TGridItem> {
     /// </summary>
     [Parameter]
     public string? Title { get; set; }
-
-    public bool ShowSortIcon { get; set; }
 
     [CascadingParameter]
     internal TnTInternalGridContext<TGridItem> InternalGridContext { get; set; } = default!;

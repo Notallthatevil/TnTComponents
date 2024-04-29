@@ -11,23 +11,23 @@ namespace TnTComponents;
 public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
 
     [Parameter]
-    public RenderFragment ChildContent { get; set; } = default!;
-
-    [Parameter]
     public bool AllowPlaceholderSelection { get; set; }
 
     [Parameter]
-    public bool ShouldHavePlaceholderSelected { get; set; } = true;
-
-    [Parameter]
-    public string? PlaceholderValue { get; set; } = string.Empty;
-
-    public override InputType Type { get; }
-    private bool _multiple;
+    public RenderFragment ChildContent { get; set; } = default!;
 
     public override string FormCssClass => CssClassBuilder.Create(base.FormCssClass)
         .AddClass("tnt-select-placeholder", !string.IsNullOrWhiteSpace(Placeholder))
         .Build();
+
+    [Parameter]
+    public string? PlaceholderValue { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool ShouldHavePlaceholderSelected { get; set; } = true;
+
+    public override InputType Type { get; }
+    private bool _multiple;
 
     public TnTInputSelect() {
         _multiple = typeof(TInputType).IsArray;

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace TnTComponents.Core;
+
 internal class CssStyleBuilder {
     private readonly Dictionary<string, string> _styles = [];
 
@@ -13,6 +9,13 @@ internal class CssStyleBuilder {
     }
 
     public static CssStyleBuilder Create() => new();
+
+    public CssStyleBuilder AddFromAdditionalAttributes(IReadOnlyDictionary<string, object>? additionalAttributes) {
+        if (additionalAttributes?.TryGetValue("style", out var style) == true && style is not null) {
+            return AddStyle(style.ToString(), string.Empty);
+        }
+        return this;
+    }
 
     public CssStyleBuilder AddStyle(string? key, string? value, bool enabled = true) {
         if (!string.IsNullOrWhiteSpace(key) && value is not null && enabled) {
@@ -28,13 +31,6 @@ internal class CssStyleBuilder {
         else {
             return this;
         }
-    }
-
-    public CssStyleBuilder AddFromAdditionalAttributes(IReadOnlyDictionary<string, object>? additionalAttributes) {
-        if (additionalAttributes?.TryGetValue("style", out var style) == true && style is not null) {
-            return AddStyle(style.ToString(), string.Empty);
-        }
-        return this;
     }
 
     public string? Build() {
@@ -68,4 +64,3 @@ internal class CssStyleBuilder {
         }
     }
 }
-

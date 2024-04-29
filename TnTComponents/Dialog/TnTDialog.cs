@@ -67,7 +67,6 @@ public class TnTDialog : ComponentBase, IDisposable {
                             innerBuilder.AddComponentParameter(40, nameof(TnTImageButton.OnClick), EventCallback.Factory.Create<MouseEventArgs>(this, dialog.CloseAsync));
                             innerBuilder.CloseComponent();
                         }
-
                     }
                     innerBuilder.CloseElement();
 
@@ -83,8 +82,9 @@ public class TnTDialog : ComponentBase, IDisposable {
                         innerBuilder.AddAttribute(80, nameof(CascadingValue<ITnTDialog>.ChildContent), new RenderFragment(cascadingBuilder => {
                             cascadingBuilder.OpenComponent(0, dialog.Type);
 #pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
-                            // Disabling warning since value in these key value pairs is allowed to be null when the parameter on the component allows it.
-                            // It is up to the caller when opening a dialog to set the parameters correctly.
+                            // Disabling warning since value in these key value pairs is allowed to
+                            // be null when the parameter on the component allows it. It is up to
+                            // the caller when opening a dialog to set the parameters correctly.
                             cascadingBuilder.AddMultipleAttributes(10, dialog.Parameters);
 #pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
                             cascadingBuilder.CloseComponent();

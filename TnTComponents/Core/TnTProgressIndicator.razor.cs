@@ -10,13 +10,7 @@ public partial class TnTProgressIndicator {
     public ProgressAppearance Appearance { get; set; }
 
     [Parameter]
-    public Size Size { get; set; } = Size.Default;
-
-    [Parameter]
     public RenderFragment? ChildContent { get; set; }
-
-    [Parameter]
-    public TnTColor ProgressColor { get; set; } = TnTColor.Primary;
 
     public override string? CssClass => CssClassBuilder.Create()
         .SetAlternative(Appearance == ProgressAppearance.Linear)
@@ -30,6 +24,12 @@ public partial class TnTProgressIndicator {
 
     [Parameter]
     public double Max { get; set; } = 100.0;
+
+    [Parameter]
+    public TnTColor ProgressColor { get; set; } = TnTColor.Primary;
+
+    [Parameter]
+    public Size Size { get; set; } = Size.Default;
 
     [Parameter]
     public double? Value { get; set; }

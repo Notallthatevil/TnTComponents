@@ -10,6 +10,9 @@ public partial class TnTFabButton {
     public TnTColor BackgroundColor { get; set; }
 
     [Parameter]
+    public TnTBorderRadius? BorderRadius { get; set; } = new(10);
+
+    [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
     public override string? CssClass => CssClassBuilder.Create()
@@ -26,10 +29,9 @@ public partial class TnTFabButton {
        .Build();
 
     [Parameter]
-    public TnTBorderRadius? BorderRadius { get; set; } = new(10);
-
-    [Parameter]
     public TnTColor ForegroundColor { get; set; }
+
+    public override string? JsModulePath => "./_content/TnTComponents/Buttons/TnTButton.razor.js";
 
     [Parameter]
     public string? Name { get; set; }
@@ -39,7 +41,6 @@ public partial class TnTFabButton {
 
     [Parameter]
     public ButtonType Type { get; set; }
-    public override string? JsModulePath => "./_content/TnTComponents/Buttons/TnTButton.razor.js";
 
     protected override void OnInitialized() {
         base.OnInitialized();

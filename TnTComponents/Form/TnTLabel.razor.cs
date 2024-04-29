@@ -18,17 +18,21 @@ public partial class TnTLabel : IFormItem {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    public ElementReference Element { get; protected set; }
+
     public string FormCssClass => CssClassBuilder.Create()
-        .AddOutlined((ParentFormAppearance ?? Appearance) == FormAppearance.Outlined)
+                .AddOutlined((ParentFormAppearance ?? Appearance) == FormAppearance.Outlined)
         .AddFilled((ParentFormAppearance ?? Appearance) == FormAppearance.Filled)
         .AddBackgroundColor(TnTColor.Transparent)
         .AddForegroundColor(TextColor)
         .Build();
 
-    [Parameter]
-    public bool Disabled { get; set; }
-
-    public ElementReference Element { get; protected set; }
+    public string? FormCssStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .Build();
 
     [Parameter, EditorRequired]
     public string Label { get; set; } = default!;
@@ -47,9 +51,6 @@ public partial class TnTLabel : IFormItem {
 
     [Parameter]
     public bool ReadOnly { get; set; }
-    public string? FormCssStyle => CssStyleBuilder.Create()
-        .AddFromAdditionalAttributes(AdditionalAttributes)
-        .Build();
 
     [Parameter]
     public TnTColor? TextColor { get; set; }
