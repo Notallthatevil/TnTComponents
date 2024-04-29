@@ -9,7 +9,7 @@
 
         @{
             @foreach (var (date, gridPosition) in _visibleDates) {
-                <div class="tnt-slot tnt-column-header tnt-label-large" style="@gridPosition.ToCssString()">
+                <div class="tnt-slot tnt-column-header tnt-label-large@(date == DateOnly.FromDateTime(DateTimeOffset.Now.Date) ? " today" : null)" style="@gridPosition.ToCssString()">
                     @date.ToString("dddd")
                     <div>
                         @date.ToString("dd")
@@ -33,12 +33,12 @@
                         };
 
                     @if (IsDisabledSlot(date.DayOfWeek, time)) {
-                        <div class="tnt-slot tnt-day-slot disabled@(show ? " tnt-slot-outline" : null)"
+                        <div class="tnt-slot tnt-day-slot disabled@(show ? " tnt-slot-outline" : null) @(date == DateOnly.FromDateTime(DateTimeOffset.Now.Date) ? " today" : null)"
                              style="@gridPosition.ToCssString()">
                         </div>
                     }
                     else {
-                        <div class="tnt-slot tnt-day-slot@(show ? " tnt-slot-outline" : null)"
+                        <div class="tnt-slot tnt-day-slot@(show ? " tnt-slot-outline" : null) @(date == DateOnly.FromDateTime(DateTimeOffset.Now.Date) ? " today" : null)"
                              style="@gridPosition.ToCssString()"
                              ondragover="event.preventDefault();this.style.fontWeight = '600';"
                              ondragleave="this.style.fontWeight='100';"

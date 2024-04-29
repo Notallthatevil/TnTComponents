@@ -130,6 +130,9 @@ public abstract class ScheduleViewBase<TEventType> : ComponentBase, ITnTComponen
         await TimeSlotClickedCallback.InvokeAsync(dateTimeOffset);
     }
 
+    public abstract DateOnly? IncrementPage(DateOnly date);
+    public abstract DateOnly? DecrementPage(DateOnly date);
+
     internal readonly record struct GridPosition() {
         public required int RowIndex { get; init; }
         public required int ColumnIndex { get; init; }

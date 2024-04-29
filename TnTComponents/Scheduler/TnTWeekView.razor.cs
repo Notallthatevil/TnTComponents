@@ -91,14 +91,18 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
 
     protected override IEnumerable<DateOnly> GetVisibleDates() {
         int diff;
-        if (StartViewOn > Scheduler.FirstDate.DayOfWeek) {
-            diff = 7 - (int)StartViewOn + (int)Scheduler.FirstDate.DayOfWeek;
+        if (StartViewOn > Scheduler.DisplayedDate.DayOfWeek) {
+            diff = 7 - (int)StartViewOn + (int)Scheduler.DisplayedDate.DayOfWeek;
         }
         else {
-            diff = (int)StartViewOn + (int)Scheduler.FirstDate.DayOfWeek;
+            diff = (int)StartViewOn + (int)Scheduler.DisplayedDate.DayOfWeek;
         }
 
-        var startDate = DateOnly.FromDateTime(Scheduler.FirstDate.AddDays(-diff));
+        if(diff >= 7) {
+            diff %= 7;
+        }
+
+        var startDate = Scheduler.DisplayedDate.AddDays(-diff);
 
         for (int i = 0; i < 7; i++) {
             yield return startDate.AddDays(i);
@@ -187,6 +191,12 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         await EventClickedCallback.InvokeAsync(@event);
     }
 
+    public override DateOnly? IncrementPage(DateOnly date) {
+        return date.AddDays(7);
+    }
+    public override DateOnly? DecrementPage(DateOnly date) {
+        return date.AddDays(-7);
+    }
     private string? GetGridTemplateColumns() {
         var stringBuilder = new StringBuilder("grid-template-columns: 5rem");
         foreach (var date in _visibleDates) {

@@ -35,7 +35,12 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
     public ICollection<TEventType> Events { get; set; } = [];
 
     [Parameter]
-    public DateTime FirstDate { get; set; }
+    public DateOnly DisplayedDate { get => _displayDate ?? DateOnly.FromDateTime(DateTime.Today); set => _displayDate = value; }
+
+    [Parameter]
+    public bool HideDateControls { get; set; }
+
+    private DateOnly? _displayDate = DateOnly.FromDateTime(DateTime.Today);
 
     private IDictionary<Type, ScheduleViewBase<TEventType>> _scheduleViews = new Dictionary<Type, ScheduleViewBase<TEventType>>();
     private ScheduleViewBase<TEventType>? _selectedView;
@@ -53,5 +58,24 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
 
     public void RemoveScheduleView(ScheduleViewBase<TEventType> scheduleView) {
         _scheduleViews.Remove(scheduleView.GetType());
+    }
+
+    private void UpdateDate(DateOnly? date) {
+        if (date.HasValue) {
+            DisplayedDate = date.Value;
+            StateHasChanged();
+        }
+    }
+
+    private void NextPage() {
+        UpdateDate(_selectedView?.IncrementPage(DisplayedDate));
+    }
+
+    private void PreviousPage() {
+        UpdateDate(_selectedView?.DecrementPage(DisplayedDate));
+    }
+
+    private void GoToToday() {
+        UpdateDate(DateOnly.FromDateTime(DateTime.Today));
     }
 }
