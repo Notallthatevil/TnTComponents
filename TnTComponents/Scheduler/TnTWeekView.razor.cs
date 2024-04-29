@@ -158,7 +158,7 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
             diff = 7 - (int)StartViewOn + (int)Scheduler.DisplayedDate.DayOfWeek;
         }
         else {
-            diff = (int)StartViewOn + (int)Scheduler.DisplayedDate.DayOfWeek;
+            diff = Math.Abs((int)StartViewOn - (int)Scheduler.DisplayedDate.DayOfWeek);
         }
 
         if (diff >= 7) {

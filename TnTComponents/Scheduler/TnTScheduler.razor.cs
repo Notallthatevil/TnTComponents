@@ -34,6 +34,9 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
 
     public ElementReference Element { get; private set; }
 
+    [Parameter]
+    public EventCallback DateChangedCallback { get; set; }
+
     [Parameter, EditorRequired]
     public ICollection<TEventType> Events { get; set; } = [];
 
@@ -60,23 +63,24 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
         _scheduleViews.Remove(scheduleView.GetType());
     }
 
-    private void GoToToday() {
-        UpdateDate(DateOnly.FromDateTime(DateTime.Today));
+    private async Task GoToToday() {
+        await UpdateDate(DateOnly.FromDateTime(DateTime.Today));
     }
 
-    private void NextPage() {
-        UpdateDate(_selectedView?.IncrementPage(DisplayedDate));
+    private async Task NextPage() {
+        await UpdateDate(_selectedView?.IncrementPage(DisplayedDate));
     }
 
-    private void PreviousPage() {
-        UpdateDate(_selectedView?.DecrementPage(DisplayedDate));
+    private async Task PreviousPage() {
+        await UpdateDate(_selectedView?.DecrementPage(DisplayedDate));
     }
 
-    private void UpdateDate(DateOnly? date) {
+    private async Task UpdateDate(DateOnly? date) {
         if (date.HasValue) {
             DisplayedDate = date.Value;
             StateHasChanged();
             _selectedView?.Refresh();
+            await DateChangedCallback.InvokeAsync();
         }
     }
 }

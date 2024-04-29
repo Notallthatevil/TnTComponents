@@ -18,7 +18,7 @@
             }
 
             @foreach (var (time, timeGridPosition) in _timeSlots) {
-                var show = time.Minute % 60 == 0;
+                var show = time.Minute % 30 == 0;
                 <div class="tnt-slot tnt-time-slot tnt-label-large" style="@timeGridPosition.ToCssString()">
                     @if (show) {
                         @time

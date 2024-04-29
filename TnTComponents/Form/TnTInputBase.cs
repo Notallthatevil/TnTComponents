@@ -208,7 +208,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
 
     private string? GetMaxValue() {
         if (AdditionalAttributes?.TryGetValue("max", out var max) == true) {
-            return max.ToString();
+            return max?.ToString();
         }
         var rangeAttr = GetCustomAttributeIfExists<RangeAttribute>();
         if (rangeAttr is not null) {
@@ -239,7 +239,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
 
     private string? GetMinValue() {
         if (AdditionalAttributes?.TryGetValue("min", out var min) == true) {
-            return min.ToString();
+            return min?.ToString();
         }
         var rangeAttr = GetCustomAttributeIfExists<RangeAttribute>();
         if (rangeAttr is not null) {
