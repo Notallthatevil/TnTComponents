@@ -32,6 +32,61 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         return date.AddDays(7);
     }
 
+    public override void Refresh() {
+        _timeSlots = new SortedDictionary<TimeOnly, GridPosition>(GetTimeSlots().Select((time, index) => new { time, index }).ToDictionary(x => x.time, x => new GridPosition() {
+            ColumnIndex = 1,
+            RowIndex = x.index + 2,
+            RowSpan = 1,
+            ColumnSpan = 1
+        }));
+
+        var columnIndex = 2;
+        _visibleDates.Clear();
+        _events.Clear();
+        foreach (var date in GetVisibleDates()) {
+            var events = GetEventsOnDate(date);
+
+            if (events.Count() <= 1) {
+                _visibleDates.Add(date, new GridPosition() {
+                    ColumnIndex = columnIndex,
+                    RowIndex = 1,
+                    RowSpan = 1,
+                    ColumnSpan = 1
+                });
+                columnIndex++;
+
+                if (events.Any()) {
+                    var eventPosition = GetEventPosition(events.First());
+                    if (eventPosition.HasValue) {
+                        _events.Add(new KeyValuePair<TEventType, GridPosition>(events.First(), eventPosition.Value));
+                    }
+                }
+            }
+            else {
+                var overlaps = TnTWeekView<TEventType>.CountOverlaps(events);
+                _visibleDates.Add(date, new GridPosition() {
+                    ColumnIndex = columnIndex,
+                    RowIndex = 1,
+                    RowSpan = 1,
+                    ColumnSpan = overlaps + 1
+                });
+
+                foreach (var pair in events.Select((@event, index) => new { Event = @event, Index = index })) {
+                    var @event = pair.Event;
+                    var index = pair.Index;
+                    var eventPosition = GetEventPosition(@event);
+                    if (eventPosition.HasValue) {
+                        _events.Add(new KeyValuePair<TEventType, GridPosition>(@event, eventPosition.Value with {
+                            ColumnIndex = columnIndex + index
+                        }));
+                    }
+                }
+                columnIndex += overlaps + 1;
+            }
+        }
+        base.Refresh();
+    }
+
     internal override GridPosition? GetEventPosition(TnTEvent task) {
         if (_timeSlots.TryGetValue(task.StartTime, out var startTime) &&
             _visibleDates.TryGetValue(task.StartDate, out var startDate)) {
@@ -119,58 +174,7 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
 
     protected override void OnParametersSet() {
         base.OnParametersSet();
-
-        _timeSlots = new SortedDictionary<TimeOnly, GridPosition>(GetTimeSlots().Select((time, index) => new { time, index }).ToDictionary(x => x.time, x => new GridPosition() {
-            ColumnIndex = 1,
-            RowIndex = x.index + 2,
-            RowSpan = 1,
-            ColumnSpan = 1
-        }));
-
-        var columnIndex = 2;
-        _visibleDates.Clear();
-        _events.Clear();
-        foreach (var date in GetVisibleDates()) {
-            var events = GetEventsOnDate(date);
-
-            if (events.Count() <= 1) {
-                _visibleDates.Add(date, new GridPosition() {
-                    ColumnIndex = columnIndex,
-                    RowIndex = 1,
-                    RowSpan = 1,
-                    ColumnSpan = 1
-                });
-                columnIndex++;
-
-                if (events.Any()) {
-                    var eventPosition = GetEventPosition(events.First());
-                    if (eventPosition.HasValue) {
-                        _events.Add(new KeyValuePair<TEventType, GridPosition>(events.First(), eventPosition.Value));
-                    }
-                }
-            }
-            else {
-                var overlaps = TnTWeekView<TEventType>.CountOverlaps(events);
-                _visibleDates.Add(date, new GridPosition() {
-                    ColumnIndex = columnIndex,
-                    RowIndex = 1,
-                    RowSpan = 1,
-                    ColumnSpan = overlaps + 1
-                });
-
-                foreach (var pair in events.Select((@event, index) => new { Event = @event, Index = index })) {
-                    var @event = pair.Event;
-                    var index = pair.Index;
-                    var eventPosition = GetEventPosition(@event);
-                    if (eventPosition.HasValue) {
-                        _events.Add(new KeyValuePair<TEventType, GridPosition>(@event, eventPosition.Value with {
-                            ColumnIndex = columnIndex + index
-                        }));
-                    }
-                }
-                columnIndex += overlaps + 1;
-            }
-        }
+        Refresh();
     }
 
     private static int CountOverlaps(IEnumerable<TnTEvent> events) {

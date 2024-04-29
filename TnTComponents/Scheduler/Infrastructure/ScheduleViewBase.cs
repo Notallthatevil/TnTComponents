@@ -52,6 +52,10 @@ public abstract class ScheduleViewBase<TEventType> : ComponentBase, ITnTComponen
 
     public abstract DateOnly? IncrementPage(DateOnly date);
 
+    public virtual void Refresh() {
+        StateHasChanged();
+    }
+
     internal abstract GridPosition? GetEventPosition(TnTEvent task);
 
     protected virtual void DragEventEnd() {

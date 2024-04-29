@@ -76,6 +76,7 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
         if (date.HasValue) {
             DisplayedDate = date.Value;
             StateHasChanged();
+            _selectedView?.Refresh();
         }
     }
 }
