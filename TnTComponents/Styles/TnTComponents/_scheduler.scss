@@ -63,6 +63,14 @@
                     border-left: 1px solid $tnt-color-primary;
                     border-right: 1px solid $tnt-color-primary;
                 }
+
+                &.tnt-clickable {
+                    cursor: pointer;
+
+                    &:hover {
+                        background-color: color-mix(in srgb, $tnt-color-surface-tint 30%, transparent);
+                    }
+                }
             }
 
             &.tnt-time-slot {

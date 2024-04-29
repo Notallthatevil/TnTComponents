@@ -38,7 +38,7 @@
                         </div>
                     }
                     else {
-                        <div class="tnt-slot tnt-day-slot@(show ? " tnt-slot-outline" : null) @(date == DateOnly.FromDateTime(DateTimeOffset.Now.Date) ? " today" : null)"
+                        <div class="tnt-slot tnt-day-slot@(show ? " tnt-slot-outline" : null) @(date == DateOnly.FromDateTime(DateTimeOffset.Now.Date) ? " today" : null) @(TimeSlotClickedCallback.HasDelegate ? " tnt-clickable" : null)"
                              style="@gridPosition.ToCssString()"
                              ondragover="event.preventDefault();this.style.fontWeight = '600';"
                              ondragleave="this.style.fontWeight='100';"
