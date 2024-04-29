@@ -25,7 +25,8 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
 
     [Parameter]
     public bool DisableDragAndDrop { get; set; }
-
+    [Parameter]
+    public IEnumerable<TnTDisabledDateTime> DisabledDateTimes { get; set; } = [];
     public ElementReference Element { get; private set; }
 
     [Parameter, EditorRequired]

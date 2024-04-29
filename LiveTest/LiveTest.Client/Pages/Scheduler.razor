@@ -9,7 +9,8 @@
 
 <TnTScheduler FirstDate="today"
               TEventType="TnTEvent"
-              Events="TasksList.ToArray()">
+              Events="TasksList.ToArray()"
+              DisabledDateTimes="[TnTDisabledDateTime.DisabledDayOfWeek(TnTDayOfWeekFlag.Sunday | TnTDayOfWeekFlag.Saturday | TnTDayOfWeekFlag.Wednesday, new TimeOnly(0, 0), new TimeOnly(12, 0))]">
     <TnTWeekView StartViewOn="DayOfWeek.Tuesday"
                  DropEventCallback="@((TnTDropEventArgs<TnTEvent> args) => DropEvent(args))" />
 </TnTScheduler>
@@ -29,7 +30,7 @@
         //CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
 
         TasksList = new()
-                                {
+                                    {
             new TnTEvent { EventStart = today.AddDays(0), EventEnd = today.AddDays(1), Title = "HELLO",  },
             new TnTEvent { EventStart = today.AddDays(4).AddHours(8), EventEnd = today.AddDays(4).AddHours(11), Title = "😉 CP" } ,
             new TnTEvent { EventStart = today.AddDays(-2).AddHours(1).AddMinutes(15), EventEnd = today.AddDays(-2).AddHours(9) , Title="POD"} ,

@@ -90,7 +90,13 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
     }
 
     protected override IEnumerable<DateOnly> GetVisibleDates() {
-        var diff = Math.Abs(StartViewOn - Scheduler.FirstDate.DayOfWeek);
+        int diff;
+        if(StartViewOn > Scheduler.FirstDate.DayOfWeek) {
+            diff = 7 - (int)StartViewOn + (int)Scheduler.FirstDate.DayOfWeek;
+        }
+        else {
+            diff = (int)StartViewOn + (int)Scheduler.FirstDate.DayOfWeek;
+        }
 
         var startDate = DateOnly.FromDateTime(Scheduler.FirstDate.AddDays(-diff));
 

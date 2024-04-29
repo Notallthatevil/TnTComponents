@@ -22,6 +22,12 @@
             &.tnt-day-slot {
                 border-left: 1px solid color-mix(in srgb, $tnt-color-outline-variant 30%, transparent);
                 border-right: 1px solid color-mix(in srgb, $tnt-color-outline-variant 30%, transparent);
+                background-color: $tnt-color-surface-container-lowest;
+
+
+                &.disabled {
+                    background-color: $tnt-color-surface-container-highest;
+                }
 
                 &.tnt-slot-outline {
                     border: 1px solid color-mix(in srgb, $tnt-color-outline-variant 30%, transparent);
