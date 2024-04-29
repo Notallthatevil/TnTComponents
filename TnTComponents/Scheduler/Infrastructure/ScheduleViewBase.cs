@@ -43,10 +43,14 @@ public abstract class ScheduleViewBase<TEventType> : ComponentBase, ITnTComponen
 
     protected TEventType? DraggingEvent;
 
+    public abstract DateOnly? DecrementPage(DateOnly date);
+
     public void Dispose() {
         GC.SuppressFinalize(this);
         Scheduler.RemoveScheduleView(this);
     }
+
+    public abstract DateOnly? IncrementPage(DateOnly date);
 
     internal abstract GridPosition? GetEventPosition(TnTEvent task);
 
@@ -129,9 +133,6 @@ public abstract class ScheduleViewBase<TEventType> : ComponentBase, ITnTComponen
     protected virtual async Task TimeSlotClicked(DateTimeOffset dateTimeOffset) {
         await TimeSlotClickedCallback.InvokeAsync(dateTimeOffset);
     }
-
-    public abstract DateOnly? IncrementPage(DateOnly date);
-    public abstract DateOnly? DecrementPage(DateOnly date);
 
     internal readonly record struct GridPosition() {
         public required int RowIndex { get; init; }

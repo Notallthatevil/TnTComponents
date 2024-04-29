@@ -29,13 +29,13 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
     [Parameter]
     public bool DisableDragAndDrop { get; set; }
 
+    [Parameter]
+    public DateOnly DisplayedDate { get => _displayDate ?? DateOnly.FromDateTime(DateTime.Today); set => _displayDate = value; }
+
     public ElementReference Element { get; private set; }
 
     [Parameter, EditorRequired]
     public ICollection<TEventType> Events { get; set; } = [];
-
-    [Parameter]
-    public DateOnly DisplayedDate { get => _displayDate ?? DateOnly.FromDateTime(DateTime.Today); set => _displayDate = value; }
 
     [Parameter]
     public bool HideDateControls { get; set; }
@@ -60,11 +60,8 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
         _scheduleViews.Remove(scheduleView.GetType());
     }
 
-    private void UpdateDate(DateOnly? date) {
-        if (date.HasValue) {
-            DisplayedDate = date.Value;
-            StateHasChanged();
-        }
+    private void GoToToday() {
+        UpdateDate(DateOnly.FromDateTime(DateTime.Today));
     }
 
     private void NextPage() {
@@ -75,7 +72,10 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
         UpdateDate(_selectedView?.DecrementPage(DisplayedDate));
     }
 
-    private void GoToToday() {
-        UpdateDate(DateOnly.FromDateTime(DateTime.Today));
+    private void UpdateDate(DateOnly? date) {
+        if (date.HasValue) {
+            DisplayedDate = date.Value;
+            StateHasChanged();
+        }
     }
 }

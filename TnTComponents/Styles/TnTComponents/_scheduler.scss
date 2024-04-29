@@ -6,7 +6,7 @@
     .date-controls {
         display: flex;
 
-        .today-button{
+        .today-button {
             padding: 0 1rem;
         }
     }
@@ -25,7 +25,6 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-
 
                 div {
                     background-color: $tnt-color-primary;
@@ -55,7 +54,6 @@
                 &.disabled {
                     background-color: $tnt-color-surface-container-highest;
                 }
-
 
                 &.tnt-slot-outline {
                     border: 1px solid color-mix(in srgb, $tnt-color-outline-variant 30%, transparent);

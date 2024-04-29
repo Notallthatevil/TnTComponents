@@ -24,6 +24,14 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
     private SortedDictionary<TimeOnly, GridPosition> _timeSlots = [];
     private SortedDictionary<DateOnly, GridPosition> _visibleDates = [];
 
+    public override DateOnly? DecrementPage(DateOnly date) {
+        return date.AddDays(-7);
+    }
+
+    public override DateOnly? IncrementPage(DateOnly date) {
+        return date.AddDays(7);
+    }
+
     internal override GridPosition? GetEventPosition(TnTEvent task) {
         if (_timeSlots.TryGetValue(task.StartTime, out var startTime) &&
             _visibleDates.TryGetValue(task.StartDate, out var startDate)) {
@@ -98,7 +106,7 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
             diff = (int)StartViewOn + (int)Scheduler.DisplayedDate.DayOfWeek;
         }
 
-        if(diff >= 7) {
+        if (diff >= 7) {
             diff %= 7;
         }
 
@@ -191,12 +199,6 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         await EventClickedCallback.InvokeAsync(@event);
     }
 
-    public override DateOnly? IncrementPage(DateOnly date) {
-        return date.AddDays(7);
-    }
-    public override DateOnly? DecrementPage(DateOnly date) {
-        return date.AddDays(-7);
-    }
     private string? GetGridTemplateColumns() {
         var stringBuilder = new StringBuilder("grid-template-columns: 5rem");
         foreach (var date in _visibleDates) {
