@@ -17,6 +17,8 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
     public string? CssClass => CssClassBuilder.Create()
             .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-scheduler")
+        .AddBackgroundColor(BackgroundColor)
+        .AddForegroundColor(TextColor)
         .Build();
 
     public string? CssStyle => CssStyleBuilder.Create()
@@ -31,6 +33,12 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
 
     [Parameter]
     public DateOnly DisplayedDate { get => _displayDate ?? DateOnly.FromDateTime(DateTime.Today); set => _displayDate = value; }
+
+    [Parameter]
+    public TnTColor BackgroundColor { get; set; } = TnTColor.Surface;
+
+    [Parameter]
+    public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
 
     public ElementReference Element { get; private set; }
 
