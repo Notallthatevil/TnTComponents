@@ -104,7 +104,7 @@ public abstract class ScheduleViewBase<TEventType> : ComponentBase, ITnTComponen
         }
     }
 
-    protected abstract IEnumerable<DateOnly> GetVisibleDates();
+    public abstract IEnumerable<DateOnly> GetVisibleDates();
 
     protected bool IsDisabledSlot(DayOfWeek dayOfWeek, TimeOnly timeSlot) {
         return Scheduler.DisabledDateTimes.Any(disabledDateTime => disabledDateTime.IsDisabledTimeSlot(dayOfWeek, timeSlot));

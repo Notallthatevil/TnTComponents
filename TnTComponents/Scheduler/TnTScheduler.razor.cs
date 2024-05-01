@@ -83,4 +83,12 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
             await DateChangedCallback.InvokeAsync();
         }
     }
+
+    public DateOnly? GetFirstVisibleDate() {
+        return _selectedView?.GetVisibleDates().First();
+    }
+
+    public DateOnly? GetLastVisibleDate() {
+        return _selectedView?.GetVisibleDates().Last();
+    }
 }

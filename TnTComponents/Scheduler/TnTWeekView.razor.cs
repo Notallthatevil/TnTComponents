@@ -152,7 +152,7 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         }
     }
 
-    protected override IEnumerable<DateOnly> GetVisibleDates() {
+    public override IEnumerable<DateOnly> GetVisibleDates() {
         int diff;
         if (StartViewOn > Scheduler.DisplayedDate.DayOfWeek) {
             diff = 7 - (int)StartViewOn + (int)Scheduler.DisplayedDate.DayOfWeek;
@@ -178,7 +178,9 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
     }
 
     private static int CountOverlaps(IEnumerable<TnTEvent> events) {
+        // TODO Fix this so that overlaps are only counted with overlapping events
         if (events.Any()) {
+            return events.Count() - 1;
             var overlaps = 0;
             var currentEvent = events.First();
             foreach (var @event in events.Skip(1)) {
