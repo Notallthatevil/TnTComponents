@@ -30,7 +30,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="BuildWebCompiler2022" Version="1.14.10" />
+        <PackageReference Include="BuildWebCompiler2022" Version="1.14.10" Condition="'$(OS)' == 'Windows_NT'"/>
         <PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.4" />
         <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.4" />
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.4" />
