@@ -38,7 +38,7 @@ public class TnTDebouncer : IDisposable {
     /// Starts the debouncing.
     /// </summary>
     /// <param name="millisecondsDelay">The delay in milliseconds for debouncing.</param>
-    /// <param name="actionAsync">      
+    /// <param name="actionAsync">
     /// The asynchronous action to be executed. The <see cref="CancellationToken" /> gets canceled
     /// if the method is called again.
     /// </param>

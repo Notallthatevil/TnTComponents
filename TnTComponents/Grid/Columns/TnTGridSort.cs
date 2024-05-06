@@ -45,7 +45,7 @@ public sealed class TnTGridSort<TGridItem> {
     /// <param name="expression">
     /// An expression defining how a set of <typeparamref name="TGridItem" /> instances are to be sorted.
     /// </param>
-    /// <param name="comparer">  
+    /// <param name="comparer">
     /// Defines how a items in a set of <typeparamref name="TGridItem" /> instances are to be compared.
     /// </param>
     /// <returns>

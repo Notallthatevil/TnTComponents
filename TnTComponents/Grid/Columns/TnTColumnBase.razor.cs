@@ -117,7 +117,7 @@ public abstract partial class TnTColumnBase<TGridItem> {
     /// Overridden by derived components to provide rendering logic for the column's cells.
     /// </summary>
     /// <param name="builder">The current <see cref="RenderTreeBuilder" />.</param>
-    /// <param name="item">   The data for the row being rendered.</param>
+    /// <param name="item">The data for the row being rendered.</param>
     protected internal abstract void CellContent(RenderTreeBuilder builder, TGridItem item);
 
     /// <summary>

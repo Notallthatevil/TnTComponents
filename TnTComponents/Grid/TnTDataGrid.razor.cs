@@ -270,7 +270,7 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     /// <summary>
     /// Sets the grid's current sort column to the specified <paramref name="column" />.
     /// </summary>
-    /// <param name="column">   The column that defines the new sort order.</param>
+    /// <param name="column">The column that defines the new sort order.</param>
     /// <param name="direction">
     /// The direction of sorting. If the value is <see cref="SortDirection.Auto" />, then it will
     /// toggle the direction on each call.

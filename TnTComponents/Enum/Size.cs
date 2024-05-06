@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TnTComponents;
+
 public enum Size {
     Smallest,
     Small,
@@ -13,4 +14,3 @@ public enum Size {
     Large,
     Largest
 }
-
