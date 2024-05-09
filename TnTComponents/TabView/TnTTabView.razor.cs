@@ -25,11 +25,11 @@ public partial class TnTTabView {
     [Parameter]
     public TnTColor HeaderTextColor { get; set; } = TnTColor.OnSurface;
 
+    public override string? JsModulePath => "./_content/TnTComponents/TabView/TnTTabView.razor.js";
+
     [Parameter]
     public bool SecondaryTabView { get; set; }
 
-    public override string? JsModulePath => "./_content/TnTComponents/TabView/TnTTabView.razor.js";
-    
     private List<TnTTabChild> _tabChildren = [];
 
     public void AddTabChild(TnTTabChild tabChild) {

@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.QuickGrid;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 using Microsoft.JSInterop;
-using System.Xml.Linq;
 using TnTComponents.Core;
 using TnTComponents.Ext;
 using TnTComponents.Grid;
@@ -29,9 +27,6 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    [Parameter]
-    public DataGridAppearance DataGridAppearance { get; set; }
-
     public string? CssClass => CssClassBuilder.Create()
         .AddClass("tnt-datagrid")
         .AddClass("tnt-stripped", DataGridAppearance.HasFlag(DataGridAppearance.Stripped))
@@ -43,14 +38,16 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     public string? CssStyle => CssStyleBuilder.Create()
         .Build();
 
+    [Parameter]
+    public DataGridAppearance DataGridAppearance { get; set; }
+
+    public ElementReference Element { get; private set; }
+
     /// <summary>
     /// If specified, grids render this fragment when there is no content.
     /// </summary>
     [Parameter]
     public RenderFragment? EmptyContent { get; set; }
-
-    [Parameter]
-    public EventCallback<TGridItem?> OnRowClicked { get; set; }
 
     /// <summary>
     /// Gets or sets the value that gets applied to the css gridTemplateColumns attribute of child rows.
@@ -112,6 +109,8 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     [Parameter]
     public RenderFragment? LoadingContent { get; set; }
 
+    [Parameter]
+    public EventCallback<TGridItem?> OnRowClicked { get; set; }
 
     /// <summary>
     /// Optionally links this <see cref="TnTDataGrid{TGridItem}" /> instance with a <see
@@ -163,8 +162,10 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
 
     [Inject]
     private IJSRuntime JSRuntime { get; set; } = default!;
+
     [Inject]
     private IServiceProvider Services { get; set; } = default!;
+
     private const string JsModulePath = "./_content/TnTComponents/Grid/TnTDataGrid.razor.js";
     private readonly List<TnTColumnBase<TGridItem>> _columns;
 
@@ -182,7 +183,6 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     private readonly RenderFragment _renderLoadingContent;
     private readonly RenderFragment _renderNonVirtualizedRows;
     private int _ariaBodyRowCount;
-    private int _delay = 100;
 
     // IQueryable only exposes synchronous query APIs. IAsyncQueryExecutor is an adapter that lets
     // us invoke any async query APIs that might be available. We have built-in support for using EF
@@ -191,10 +191,14 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
 
     private bool _collectingColumns;
     private IReadOnlyCollection<TGridItem> _currentNonVirtualizedViewItems = Array.Empty<TGridItem>();
-
-    public ElementReference Element { get; private set; }
-    private object? _lastAssignedItemsOrProvider;
+    private int _delay = 100;
     private DotNetObjectReference<TnTDataGrid<TGridItem>>? _dotNetObjectRef;
+    private bool _interactive;
+
+    // The associated ES6 module, which uses document-level event listeners
+    private IJSObjectReference? _jsModule;
+
+    private object? _lastAssignedItemsOrProvider;
 
     // We try to minimize the number of times we query the items provider, since queries may be
     // expensive We only re-query when the developer calls RefreshDataAsync, or if we know
@@ -211,11 +215,6 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     private TnTColumnBase<TGridItem>? _sortByColumn;
 
     private Virtualize<(int, TGridItem)>? _virtualizeComponent;
-
-    // The associated ES6 module, which uses document-level event listeners
-    private IJSObjectReference? _jsModule;
-
-    private bool _interactive;
 
     /// <summary>
     /// Constructs an instance of <see cref="TnTDataGrid{TGridItem}" />.
@@ -271,7 +270,7 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     /// <summary>
     /// Sets the grid's current sort column to the specified <paramref name="column" />.
     /// </summary>
-    /// <param name="column">   The column that defines the new sort order.</param>
+    /// <param name="column">The column that defines the new sort order.</param>
     /// <param name="direction">
     /// The direction of sorting. If the value is <see cref="SortDirection.Auto" />, then it will
     /// toggle the direction on each call.
@@ -313,8 +312,6 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
         }
 
         await (_jsModule?.InvokeVoidAsync("onUpdate", Element, _dotNetObjectRef) ?? ValueTask.CompletedTask);
-
-
     }
 
     /// <inheritdoc />
@@ -350,8 +347,6 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
         }
     }
 
-
-
     // Gets called both by RefreshDataCoreAsync and directly by the Virtualize child component
     // during scrolling
     private async ValueTask<ItemsProviderResult<(int, TGridItem)>> ProvideVirtualizedItemsAsync(ItemsProviderRequest request) {
@@ -377,13 +372,12 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
             TnTGridItemsProviderRequest<TGridItem> providerRequest = new(startIndex, count, _sortByColumn, _sortByAscending, request.CancellationToken);
             var providerResult = await ResolveItemsRequestAsync(providerRequest);
 
-
             if (!request.CancellationToken.IsCancellationRequested) {
-                // ARIA's rowcount is part of the UI, so it should reflect what the human user regards
-                // as the number of rows in the table, not the number of physical <tr> elements. For
-                // virtualization this means what's in the entire scrollable range, not just the current
-                // viewport. In the case where you're also paginating then it means what's conceptually
-                // on the current page.
+                // ARIA's rowcount is part of the UI, so it should reflect what the human user
+                // regards as the number of rows in the table, not the number of physical <tr>
+                // elements. For virtualization this means what's in the entire scrollable range,
+                // not just the current viewport. In the case where you're also paginating then it
+                // means what's conceptually on the current page.
                 // TODO: This currently assumes we always want to expand the last page to have ItemsPerPage rows, but the experience might
                 // be better if we let the last page only be as big as its number of actual rows.
                 _ariaBodyRowCount = Pagination is null ? providerResult.TotalItemCount : Pagination.ItemsPerPage;
@@ -394,9 +388,9 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
                 }
 
                 // We're supplying the row _index along with each row's data because we need it for
-                // aria-rowindex, and we have to account for the virtualized start _index. It might be
-                // more performant just to have some _latestQueryRowStartIndex field, but we'd have to
-                // make sure it doesn't get out of sync with the rows being rendered.
+                // aria-rowindex, and we have to account for the virtualized start _index. It might
+                // be more performant just to have some _latestQueryRowStartIndex field, but we'd
+                // have to make sure it doesn't get out of sync with the rows being rendered.
                 result = new ItemsProviderResult<(int, TGridItem)>(
                      items: providerResult.Items.Select((x, i) => ValueTuple.Create(i + request.StartIndex + 2, x)),
                      totalItemCount: _ariaBodyRowCount);
@@ -447,7 +441,7 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     // GridItemsProvider-shaped API
     private async ValueTask<TnTGridItemsProviderResult<TGridItem>> ResolveItemsRequestAsync(TnTGridItemsProviderRequest<TGridItem> request) {
         if (ItemsProvider is not null) {
-            if(Virtualize && request.Count is null) {
+            if (Virtualize && request.Count is null) {
                 request = request with { Count = 1 };
             }
             var gipr = await ItemsProvider(request);

@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TnTComponents;
+
 public enum SkeletonAppearance {
     Rectangle,
     Circle
 }
-

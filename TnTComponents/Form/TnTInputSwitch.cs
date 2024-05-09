@@ -1,14 +1,17 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TnTComponents.Core;
 
 namespace TnTComponents;
+
 public class TnTInputSwitch : TnTInputBase<bool> {
+
+    [Parameter]
+    public TnTColor CheckedFillColor { get; set; } = TnTColor.Primary;
+
+    [Parameter]
+    public TnTColor CheckedKnobColor { get; set; } = TnTColor.OnPrimary;
+
     public override string FormCssClass => CssClassBuilder.Create(base.FormCssClass).AddClass("tnt-alternative").Build();
 
     public override string? FormCssStyle => CssStyleBuilder.Create()
@@ -20,22 +23,16 @@ public class TnTInputSwitch : TnTInputBase<bool> {
         .AddVariable("checked-knob-color", $"var(--tnt-color-{CheckedKnobColor.ToCssClassName()})")
         .Build();
 
-    public override InputType Type => InputType.Checkbox;
-
     [Parameter]
     public TnTColor OutlineColor { get; set; } = TnTColor.Outline;
+
+    public override InputType Type => InputType.Checkbox;
 
     [Parameter]
     public TnTColor UncheckedFillColor { get; set; } = TnTColor.SurfaceVariant;
 
     [Parameter]
     public TnTColor UncheckedKnobColor { get; set; } = TnTColor.OnSurfaceVariant;
-
-    [Parameter]
-    public TnTColor CheckedFillColor { get; set; } = TnTColor.Primary;
-
-    [Parameter]
-    public TnTColor CheckedKnobColor { get; set; } = TnTColor.OnPrimary;
 
     protected override void OnInitialized() {
         base.OnInitialized();
@@ -47,6 +44,4 @@ public class TnTInputSwitch : TnTInputBase<bool> {
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out bool result, [NotNullWhen(false)] out string? validationErrorMessage) {
         throw new NotSupportedException();
     }
-
 }
-

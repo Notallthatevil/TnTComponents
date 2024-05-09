@@ -63,7 +63,6 @@ public class TnTInputRadioGroup<TInputType> : TnTInputSelect<TInputType> {
             throw new InvalidOperationException("Must provide a valid name for a radio group");
         }
         _radioContext.GroupName = RadioGroupName;
-
     }
 }
 
@@ -87,8 +86,6 @@ public class TnTInputRadio<TInputType> : ComponentBase, IFormField {
     [Parameter]
     public TnTColor? BackgroundColor { get; set; }
 
-    public string FormCssClass => string.Empty;
-
     [Parameter]
     public bool Disabled { get; set; }
 
@@ -96,6 +93,11 @@ public class TnTInputRadio<TInputType> : ComponentBase, IFormField {
 
     [Parameter]
     public TnTIcon? EndIcon { get; set; }
+
+    public string FormCssClass => string.Empty;
+
+    [Parameter]
+    public string? FormCssStyle { get; set; }
 
     [Parameter]
     public string? Name { get; set; }
@@ -119,9 +121,6 @@ public class TnTInputRadio<TInputType> : ComponentBase, IFormField {
 
     [Parameter]
     public TnTIcon? StartIcon { get; set; }
-
-    [Parameter]
-    public string? FormCssStyle { get; set; }
 
     [Parameter]
     public TnTColor? TextColor { get; set; }

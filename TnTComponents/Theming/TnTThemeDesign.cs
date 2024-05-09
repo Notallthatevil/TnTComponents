@@ -1,16 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using TnTComponents.Ext;
 
 namespace TnTComponents;
 
 public class TnTThemeDesign : IComponent {
+
     [Parameter]
     public bool AllowColorModeToggle { get; set; } = true;
 
@@ -69,9 +65,6 @@ public class TnTThemeDesign : IComponent {
 
     [Parameter]
     public Color InverseSurfaceLight { get; set; } = ColorTranslator.FromHtml("#322f33");
-
-    [Parameter]
-    public Theme Theme { get; set; }
 
     [Parameter]
     public Color OnBackgroundDark { get; set; } = ColorTranslator.FromHtml("#E7e1e5");
@@ -298,6 +291,9 @@ public class TnTThemeDesign : IComponent {
     [Parameter]
     public Color TertiaryLight { get; set; } = ColorTranslator.FromHtml("#005ac1");
 
+    [Parameter]
+    public Theme Theme { get; set; }
+
     public Color Transparent => Color.Transparent;
 
     [Parameter]
@@ -313,8 +309,6 @@ public class TnTThemeDesign : IComponent {
     public Color WarningLight { get; set; } = ColorTranslator.FromHtml("#845400");
 
     public Color White => Color.White;
-
-
 
     private RenderHandle _renderHandle;
 
@@ -370,7 +364,7 @@ public class TnTThemeDesign : IComponent {
             if (Theme == Theme.System) {
                 builder.AddAttribute(3, "media", "(prefers-color-scheme:dark)");
             }
-            else if(Theme == Theme.Dark) {
+            else if (Theme == Theme.Dark) {
                 builder.AddAttribute(3, "media", "all");
             }
             else {
@@ -398,4 +392,3 @@ public class TnTThemeDesign : IComponent {
         return Task.CompletedTask;
     }
 }
-

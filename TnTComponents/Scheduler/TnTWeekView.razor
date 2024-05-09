@@ -1,29 +1,15 @@
 ﻿@using System.Globalization
-@using BlazorCalendar
-@using BlazorCalendar.Models
-@using BlazorCalendar.Styles
 @using TnTComponents.Scheduler.Infrastructure
 @namespace TnTComponents
 @typeparam TEventType
 @inherits ScheduleViewBase<TEventType>
 
 @if (Scheduler.IsViewSelected(this)) {
-
-    DateTime FirstDateWeek = new DateTime(FirstDate.Year, FirstDate.Month, FirstDate.Day).AddDays(-(Dates.GetNumOfDay((int)FirstDate.Date.DayOfWeek) - 2));
-    string[] dayNames = CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedDayNames;
-    string? isHidden = Scheduler.DisplayedView == DisplayedView.Weekly ? null : "hidden-element";
-    string? CSSbackground = null;
-    string? taskColor = null;
-    string? classPin = null;
-    string? classPointer = null;
-    string borderStyle = "";
-
-
     <div @attributes="AdditionalAttributes" class="@CssClass" style="@CssStyle" tntid="@Id" @ref="Element">
 
         @{
             @foreach (var (date, gridPosition) in _visibleDates) {
-                <div class="tnt-slot tnt-column-header tnt-label-large" style="@gridPosition.ToCssString()">
+                <div class="tnt-slot tnt-column-header tnt-label-large@(date == DateOnly.FromDateTime(DateTimeOffset.Now.Date) ? " today" : null)" style="@gridPosition.ToCssString()">
                     @date.ToString("dddd")
                     <div>
                         @date.ToString("dd")
@@ -32,7 +18,7 @@
             }
 
             @foreach (var (time, timeGridPosition) in _timeSlots) {
-                var show = time.Minute % 60 == 0;
+                var show = time.Minute % 30 == 0;
                 <div class="tnt-slot tnt-time-slot tnt-label-large" style="@timeGridPosition.ToCssString()">
                     @if (show) {
                         @time
@@ -45,14 +31,22 @@
                             RowIndex = timeGridPosition.RowIndex,
                             ColumnSpan = dateGridPosition.ColumnSpan
                         };
-                    <div class="tnt-slot tnt-day-slot@(show ? " tnt-slot-outline" : null)"
-                         style="@gridPosition.ToCssString()"
-                         ondragover="event.preventDefault();this.style.fontWeight = '600';"
-                         ondragleave="this.style.fontWeight='100';"
-                         @ondrop:preventDefault="true"
-                         @ondrop="() => HandleDayOnDrop(new DateTime(date, time))"
-                         @onclick="e => ClickDayInternal(e, new DateTime(date, time))">
-                    </div>
+
+                    @if (IsDisabledSlot(date.DayOfWeek, time)) {
+                        <div class="tnt-slot tnt-day-slot disabled@(show ? " tnt-slot-outline" : null) @(date == DateOnly.FromDateTime(DateTimeOffset.Now.Date) ? " today" : null)"
+                             style="@gridPosition.ToCssString()">
+                        </div>
+                    }
+                    else {
+                        <div class="tnt-slot tnt-day-slot@(show ? " tnt-slot-outline" : null) @(date == DateOnly.FromDateTime(DateTimeOffset.Now.Date) ? " today" : null) @(TimeSlotClickedCallback.HasDelegate ? " tnt-clickable" : null)"
+                             style="@gridPosition.ToCssString()"
+                             ondragover="event.preventDefault();this.style.fontWeight = '600';"
+                             ondragleave="this.style.fontWeight='100';"
+                             @ondrop:preventDefault="true"
+                             @ondrop="@(() => OnDropEvent(new DateTime(date, time)))"
+                             @onclick="@(() => TimeSlotClicked(new DateTime(date, time)))">
+                        </div>
+                    }
                 }
             }
         }
@@ -60,75 +54,12 @@
             <div class="tnt-slot tnt-event tnt-label-medium"
                  style="@position.ToCssString() @($"--background-color: var(--tnt-color-{@event.BackgroundColor.ToCssClassName()}); --foreground-color: var(--tnt-color-{@event.ForegroundColor.ToCssClassName()})")"
                  draggable="@((!Scheduler.DisableDragAndDrop).ToString())"
-                 @ondragstart="@(() => HandleDragStart(@event.ID))">
-                @(@event.Code)
+                 @ondragstart="@(() => DragEventStart(@event))"
+                 @ondragend="@DragEventEnd"
+                 @onclick="@(() => EventClicked(@event))">
+                @(@event.Title)
             </div>
 
         }
     </div>
-
-
-    @foreach (var c in GetVisibleDates().Select((date, index) => new {
-        date,
-        index
-    })) {
-        var day = new DateTime(c.date, default);
-        var i = c.index;
-        <div class="tnt-day-column" style="@($"--column-index: {i + 2}")">
-
-            <div class="day-header header-name noselect" style="@HeaderStyle">
-                @day.DayOfWeek @day.ToString("dd.MM")
-
-            </div>
-
-            <div class="hours">
-                @{
-                    CSSbackground = GetBackground(day);
-                }
-                @for (int hour = 0; hour < 24; hour++) {
-                    DateTime hours = day.AddHours(hour);
-                    <div class="hour day-cellule noselect"
-                         ondragover="event.preventDefault();this.style.fontWeight = '600';"
-                         ondragleave="this.style.fontWeight='100';"
-                         @ondrop:preventDefault="true"
-                         @ondrop="() => HandleDayOnDrop(hours)"
-                         @onclick="e => ClickDayInternal(e, hours)"
-                         style="@CSSbackground">
-                        @hours.ToString("HH:mm")
-                    </div>
-
-                    @if (Scheduler.TasksList is not null) {
-                        int column = 1;
-
-                        for (var k = 0; k < Scheduler.TasksList.Length; k++) {
-                            Tasks t = Scheduler.TasksList[k];
-
-
-                            if (t.DateEnd > hours && t.DateStart <= hours) {
-                                column++;
-
-                                taskColor = Colors.GetHatching(t.FillStyle, t.Color);
-                                taskColor = $"{taskColor};color:{t.ForeColor}";
-
-                                classPin = string.IsNullOrWhiteSpace(t.Comment) ? null : " pin";
-                                classPointer = " cursor-pointer";
-
-                                <div class="@($"hour-task {classPin}{classPointer} border-start border-top border-bottom")"
-                                     style="grid-column-start: @column; @taskColor"
-                                     draggable="@((!Scheduler.DisableDragAndDrop).ToString())"
-                                     @ondragstart="() => HandleDragStart(t.ID)"
-                                     @onclick="e => ClickTaskInternal(e, t.ID, day)">
-                                    @t.Code
-                                </div>
-
-                            }
-                        }
-                    }
-
-                }
-            </div>
-
-        </div>
-    }
-
 }

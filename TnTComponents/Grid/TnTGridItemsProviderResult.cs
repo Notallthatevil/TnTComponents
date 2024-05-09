@@ -1,5 +1,3 @@
-using TnTComponents.Ext;
-
 namespace TnTComponents.Grid;
 
 /// <summary>
@@ -8,11 +6,6 @@ namespace TnTComponents.Grid;
 /// </summary>
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
 public readonly struct TnTGridItemsProviderResult<TGridItem>() {
-
-    public TnTGridItemsProviderResult(IReadOnlyCollection<TGridItem> items, int totalCount) : this() {
-        Items = items;
-        TotalItemCount = totalCount;
-    }
 
     /// <summary>
     /// Gets or sets the items being supplied.
@@ -28,4 +21,9 @@ public readonly struct TnTGridItemsProviderResult<TGridItem>() {
     /// should include the entire scroll range.
     /// </summary>
     public int TotalItemCount { get; init; }
+
+    public TnTGridItemsProviderResult(IReadOnlyCollection<TGridItem> items, int totalCount) : this() {
+        Items = items;
+        TotalItemCount = totalCount;
+    }
 }

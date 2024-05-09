@@ -17,7 +17,7 @@ function toggleChildren(e) {
             if (toggler.dotNetRef) {
                 toggler.dotNetRef.invokeMethodAsync('Toggle', parent.expanded);
             }
-    
+
             if (parent.expanded) {
                 if (!parent.classList.contains(expandedClass)) {
                     parent.classList.add(expandedClass);
@@ -80,7 +80,6 @@ export function onUpdate(element = null, dotNetObjectRef = null) {
             else if (tntSideNavToggle.element.expanded === false && tntSideNavToggle.element.classList.contains(expandedClass)) {
                 tntSideNavToggle.element.classList.remove(expandedClass);
             }
-
         }
     }
 }

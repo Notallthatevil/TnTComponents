@@ -42,8 +42,6 @@ public partial class TnTSideNavToggle {
     [Parameter]
     public EventCallback<bool> ToggleCallback { get; set; }
 
-    
-
     [DynamicDependency(nameof(Toggle))]
     public TnTSideNavToggle() : base() { }
 

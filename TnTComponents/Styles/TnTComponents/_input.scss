@@ -34,7 +34,6 @@
         -webkit-background-clip: text;
     }
 
-
     select {
         min-width: 5rem;
         cursor: pointer;
@@ -182,7 +181,6 @@
         }
     }
 }
-
 
 label.tnt-components:not(:has(input[type=checkbox])):not(:has(input[type=radio])) {
     position: relative;
@@ -419,7 +417,6 @@ label.tnt-components:has(input[type=checkbox]):not(.tnt-chip) {
                 transform: rotateZ(35deg) translateY(-0.15rem) rotateY(0deg);
             }
         }
-
 
         &:has(.tnt-start) {
             &:before, &:after {
@@ -697,8 +694,8 @@ span.tnt-radio-group {
         .tnt-validation-message {
             color: $tnt-color-error;
             position: absolute;
-            white-space:nowrap;
-            bottom:-1.25rem;
+            white-space: nowrap;
+            bottom: -1.25rem;
         }
     }
 }

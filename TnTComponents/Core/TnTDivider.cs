@@ -9,19 +9,19 @@ public class TnTDivider : ComponentBase {
     [Parameter(CaptureUnmatchedValues = true)]
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
-    public string? CssClass => CssClassBuilder.Create()
-        .AddClass($"tnt-divider-{Orientation.ToString().ToLower()}")
-        .Build();
-
-    public Orientation Orientation { get; set; } = Orientation.Horizontal;
-
     [Parameter]
     public TnTColor? Color { get; set; } = TnTColor.OutlineVariant;
+
+    public string? CssClass => CssClassBuilder.Create()
+            .AddClass($"tnt-divider-{Orientation.ToString().ToLower()}")
+        .Build();
 
     public string? CssStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddVariable("divider-color", $"var(--tnt-color-{Color.ToCssClassName()})", Color.HasValue)
         .Build();
+
+    public Orientation Orientation { get; set; } = Orientation.Horizontal;
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "div");

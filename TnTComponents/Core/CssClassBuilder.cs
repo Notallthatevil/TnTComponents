@@ -41,8 +41,6 @@ internal class CssClassBuilder {
 
     public CssClassBuilder AddFilled(bool enabled = true) => AddClass("tnt-filled", enabled);
 
-    public CssClassBuilder MakeGridContainer(bool enabled = true) => AddClass("tnt-grid-container", enabled);
-
     public CssClassBuilder AddFlexBox(LayoutDirection? direction = null,
         AlignItems? alignItems = null,
         JustifyContent? justifyContent = null,
@@ -53,6 +51,27 @@ internal class CssClassBuilder {
         .AddJustifyContent(justifyContent)
         .AddAlignContent(alignContent) :
         this;
+
+    public CssClassBuilder AddFlexBox(ITnTFlexBox flexBox, bool enabled = true) => AddFlexBox(flexBox.Direction, flexBox.AlignItems, flexBox.JustifyContent, flexBox.AlignContent, enabled);
+
+    public CssClassBuilder AddForegroundColor(TnTColor? color) => AddClass($"tnt-fg-color-{color?.ToCssClassName() ?? string.Empty}", color is not null && color != TnTColor.None);
+
+    public CssClassBuilder AddFromAdditionalAttributes(IReadOnlyDictionary<string, object>? additionalAttributes) {
+        if (additionalAttributes?.TryGetValue("class", out var @class) == true && @class is not null) {
+            return AddClass(@class.ToString());
+        }
+        return this;
+    }
+
+    public CssClassBuilder AddMargin(int margin) => AddClass($"tnt-margin-{Math.Clamp(margin, 1, 16)}", margin > 0);
+
+    public CssClassBuilder AddNoBackground(bool enabled = true) => AddClass("tnt-bg-color-transparent", enabled);
+
+    public CssClassBuilder AddOutlined(bool enabled = true) => enabled ? AddClass("tnt-outlined", enabled).AddBackgroundColor(TnTColor.Transparent) : this;
+
+    public CssClassBuilder AddPadding(int padding) => AddClass($"tnt-padding-{Math.Clamp(padding, 1, 16)}", padding > 0);
+
+    public CssClassBuilder AddRipple(bool enabled = true) => AddClass("tnt-ripple", enabled);
 
     public CssClassBuilder AddSize(Size? size) {
         if (size is null || size == Size.Default) {
@@ -69,29 +88,13 @@ internal class CssClassBuilder {
         return AddClass($"tnt-size-{sizeSuffix}", size is not null && size != Size.Default);
     }
 
-    public CssClassBuilder AddFlexBox(ITnTFlexBox flexBox, bool enabled = true) => AddFlexBox(flexBox.Direction, flexBox.AlignItems, flexBox.JustifyContent, flexBox.AlignContent, enabled);
-
-    public CssClassBuilder AddForegroundColor(TnTColor? color) => AddClass($"tnt-fg-color-{color?.ToCssClassName() ?? string.Empty}", color is not null && color != TnTColor.None);
-
-    public CssClassBuilder AddMargin(int margin) => AddClass($"tnt-margin-{Math.Clamp(margin, 1, 16)}", margin > 0);
-
-    public CssClassBuilder AddNoBackground(bool enabled = true) => AddClass("tnt-bg-color-transparent", enabled);
-
-    public CssClassBuilder AddOutlined(bool enabled = true) => enabled ? AddClass("tnt-outlined", enabled).AddBackgroundColor(TnTColor.Transparent) : this;
-
-    public CssClassBuilder AddPadding(int padding) => AddClass($"tnt-padding-{Math.Clamp(padding, 1, 16)}", padding > 0);
-
-    public CssClassBuilder AddRipple(bool enabled = true) => AddClass("tnt-ripple", enabled);
-
     public CssClassBuilder AddTextAlign(TextAlign? textAlign) => AddClass("tnt-text-align-" + textAlign.ToCssString(), textAlign != null);
 
-    public CssClassBuilder AddFromAdditionalAttributes(IReadOnlyDictionary<string, object>? additionalAttributes) {
-        if (additionalAttributes?.TryGetValue("class", out var @class) == true && @class is not null) {
-            return AddClass(@class.ToString());
-        }
-        return this;
-    }
     public string Build() => string.Join(' ', _classes).Trim();
+
+    public CssClassBuilder MakeGridContainer(bool enabled = true) => AddClass("tnt-grid-container", enabled);
+
+    public CssClassBuilder MakeTextOnly(bool enabled = true) => AddClass("tnt-text-only", enabled);
 
     public CssClassBuilder SetAlternative(bool enabled = true) => AddClass("tnt-alternative", enabled);
 
@@ -104,7 +107,4 @@ internal class CssClassBuilder {
     private CssClassBuilder AddJustifyContent(JustifyContent? justifyContent) => AddClass($"tnt-justify-content-{justifyContent?.ToCssString()}", justifyContent != null);
 
     private CssClassBuilder AddLayoutDirection(LayoutDirection? direction) => AddClass($"tnt-direction-{direction?.ToCssString()}", direction != null);
-
-    public CssClassBuilder MakeTextOnly(bool enabled = true) => AddClass("tnt-text-only", enabled);
-
 }

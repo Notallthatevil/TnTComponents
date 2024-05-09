@@ -1,16 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TnTComponents.Ext;
+
 public static class NavigationManagerExt {
 
-
     public static string UpdateOrReplaceParameters(this NavigationManager navManager, IReadOnlyDictionary<string, object?> parameters) {
-       return navManager.UpdateOrReplaceParameters(navManager.Uri, parameters);
+        return navManager.UpdateOrReplaceParameters(navManager.Uri, parameters);
     }
 
     public static string UpdateOrReplaceParameters(this NavigationManager navManager, string uri, IReadOnlyDictionary<string, object?> parameters) {
@@ -27,6 +22,4 @@ public static class NavigationManagerExt {
 
         return navManager.GetUriWithQueryParameters(uri, parameters);
     }
-
 }
-

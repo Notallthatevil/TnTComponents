@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
 using System.Collections.Concurrent;
-using TnTComponents.Core;
 using TnTComponents.Snackbar;
 
 namespace TnTComponents;

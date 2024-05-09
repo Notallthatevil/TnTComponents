@@ -14,11 +14,11 @@ public class TnTTemplateColumn<TGridItem> : TnTColumnBase<TGridItem> {
     /// <summary>
     /// Gets or sets the content to be rendered for each row in the table.
     /// </summary>
-    [Parameter] 
+    [Parameter]
     public RenderFragment<TGridItem> ChildContent { get; set; } = EmptyChildContent;
 
     /// <inheritdoc />
-    [Parameter] 
+    [Parameter]
     public override TnTGridSort<TGridItem>? SortBy { get; set; }
 
     private static readonly RenderFragment<TGridItem> EmptyChildContent = _ => builder => { };

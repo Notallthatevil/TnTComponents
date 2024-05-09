@@ -6,6 +6,11 @@ namespace TnTComponents;
 
 public class TnTInputCheckbox : TnTInputBase<bool> {
 
+    [Parameter]
+    public TnTColor CheckMarkColor { get; set; } = TnTColor.Surface;
+
+    [Parameter]
+    public TnTColor FillColor { get; set; } = TnTColor.Primary;
 
     public override string FormCssClass => CssClassBuilder.Create(base.FormCssClass).Build();
 
@@ -16,16 +21,10 @@ public class TnTInputCheckbox : TnTInputBase<bool> {
         .AddVariable("check-mark-color", $"var(--tnt-color-{CheckMarkColor.ToCssClassName()})")
         .Build();
 
-    public override InputType Type => InputType.Checkbox;
-
     [Parameter]
     public TnTColor OutlineColor { get; set; } = TnTColor.Outline;
 
-    [Parameter]
-    public TnTColor FillColor { get; set; } = TnTColor.Primary;
-
-    [Parameter]
-    public TnTColor CheckMarkColor { get; set; } = TnTColor.Surface;
+    public override InputType Type => InputType.Checkbox;
 
     protected override void OnInitialized() {
         base.OnInitialized();

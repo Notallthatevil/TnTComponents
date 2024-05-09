@@ -4,9 +4,9 @@ using TnTComponents.Grid.Columns;
 namespace TnTComponents.Grid;
 
 public class TnTGridItemsProviderRequest {
-    public int StartIndex { get; internal protected set; }
-    public int? Count { get; internal protected set; }
-    public IReadOnlyCollection<KeyValuePair<string, SortDirection>> SortOnProperties { get; internal protected set; } = [];
+    public int? Count { get; init; }
+    public IReadOnlyCollection<KeyValuePair<string, SortDirection>> SortOnProperties { get; init; } = [];
+    public int StartIndex { get; init; }
 }
 
 /// <summary>

@@ -944,12 +944,12 @@ public sealed class MaterialIcon(string icon) : TnTIcon {
     public static readonly MaterialIcon ZoomOutMap = new("zoom_out_map");
     private readonly string _icon = icon;
 
-    public override string ToString() {
-        return _icon;
-    }
-
     public override MarkupString Render() {
         return new MarkupString($"<span class=\"{GetClass()}\">{_icon}</span>");
+    }
+
+    public override string ToString() {
+        return _icon;
     }
 
     protected override string GetClass() {

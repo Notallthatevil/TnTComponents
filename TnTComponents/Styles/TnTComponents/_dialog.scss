@@ -14,7 +14,8 @@
         min-height: 20%;
         max-height: 75%;
         min-width: 25%;
-        overflow-y:auto;
+        overflow-y: auto;
+        overflow-x: clip;
         z-index: 2001;
         transition: 200ms ease-in-out;
         animation: dialogGrow 100ms ease-in-out forwards;

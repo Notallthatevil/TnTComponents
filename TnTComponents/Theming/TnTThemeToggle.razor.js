@@ -42,7 +42,6 @@ function toggleTheme(e) {
         if (toggler) {
             toggler.updateIcon();
         }
-
     }
 }
 
@@ -61,7 +60,6 @@ export function onLoad(element, dotNetElementRef) {
 
                 this.addEventListener('click', toggleTheme);
                 this.updateIcon();
-
             }
 
             updateIcon() {

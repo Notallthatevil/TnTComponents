@@ -1,16 +1,12 @@
-﻿
-using BlazorCalendar;
-using BlazorCalendar.Models;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using System.Collections.Immutable;
+﻿using Microsoft.AspNetCore.Components;
 using System.Text;
 using TnTComponents.Core;
-using TnTComponents.Ext;
 using TnTComponents.Scheduler;
 
 namespace TnTComponents;
-partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
+
+public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
+
     public override string? CssClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-week-view")
@@ -24,50 +20,39 @@ partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
     [Parameter]
     public DayOfWeek StartViewOn { get; set; } = DayOfWeek.Sunday;
 
+    private ICollection<KeyValuePair<TEventType, GridPosition>> _events = [];
+    private SortedDictionary<TimeOnly, GridPosition> _timeSlots = [];
+    private SortedDictionary<DateOnly, GridPosition> _visibleDates = [];
 
-    private DateTime _firstdate;
-    [CascadingParameter(Name = "FirstDate")]
-    public DateTime FirstDate {
-        get {
-            if (_firstdate == DateTime.MinValue) _firstdate = DateTime.Today;
-            return _firstdate.Date;
+    public override DateOnly? DecrementPage(DateOnly date) {
+        return date.AddDays(-7);
+    }
+
+    public override IEnumerable<DateOnly> GetVisibleDates() {
+        int diff;
+        if (StartViewOn > Scheduler.DisplayedDate.DayOfWeek) {
+            diff = 7 - (int)StartViewOn + (int)Scheduler.DisplayedDate.DayOfWeek;
         }
-        set {
-            _firstdate = value;
+        else {
+            diff = Math.Abs((int)StartViewOn - (int)Scheduler.DisplayedDate.DayOfWeek);
+        }
+
+        if (diff >= 7) {
+            diff %= 7;
+        }
+
+        var startDate = Scheduler.DisplayedDate.AddDays(-diff);
+
+        for (int i = 0; i < 7; i++) {
+            yield return startDate.AddDays(i);
         }
     }
 
-    [Parameter]
-    public PriorityLabel PriorityDisplay { get; set; } = PriorityLabel.Code;
+    public override DateOnly? IncrementPage(DateOnly date) {
+        return date.AddDays(7);
+    }
 
-    [Parameter]
-    public bool HighlightToday { get; set; } = false;
-
-    [Parameter]
-    public EventCallback<int> OutsideCurrentMonthClick { get; set; }
-
-    [Parameter]
-    public EventCallback<ClickEmptyDayParameter> DayClick { get; set; }
-
-    [Parameter]
-    public EventCallback<ClickEmptyDayParameter> EmptyDayClick { get; set; }
-
-    [Parameter]
-    public EventCallback<ClickTaskParameter> TaskClick { get; set; }
-
-    [Parameter]
-    public EventCallback<DragDropParameter> DragStart { get; set; }
-
-    [Parameter]
-    public EventCallback<DragDropParameter> DropTask { get; set; }
-
-    private SortedDictionary<DateOnly, GridPosition> _visibleDates = [];
-    private SortedDictionary<TimeOnly, GridPosition> _timeSlots = [];
-    private ICollection<KeyValuePair<Tasks, GridPosition>> _events = [];
-
-    protected override void OnParametersSet() {
-        base.OnParametersSet();
-
+    public override void Refresh() {
         _timeSlots = new SortedDictionary<TimeOnly, GridPosition>(GetTimeSlots().Select((time, index) => new { time, index }).ToDictionary(x => x.time, x => new GridPosition() {
             ColumnIndex = 1,
             RowIndex = x.index + 2,
@@ -91,11 +76,14 @@ partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
                 columnIndex++;
 
                 if (events.Any()) {
-                    _events.Add(new KeyValuePair<Tasks, GridPosition>(events.First(), GetEventPosition(events.First())));
+                    var eventPosition = GetEventPosition(events.First());
+                    if (eventPosition.HasValue) {
+                        _events.Add(new KeyValuePair<TEventType, GridPosition>(events.First(), eventPosition.Value));
+                    }
                 }
             }
             else {
-                var overlaps = CountOverlaps(events);
+                var overlaps = TnTWeekView<TEventType>.CountOverlaps(events);
                 _visibleDates.Add(date, new GridPosition() {
                     ColumnIndex = columnIndex,
                     RowIndex = 1,
@@ -106,14 +94,115 @@ partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
                 foreach (var pair in events.Select((@event, index) => new { Event = @event, Index = index })) {
                     var @event = pair.Event;
                     var index = pair.Index;
-                    var position = GetEventPosition(@event) with {
-                        ColumnIndex = columnIndex + index
-                    };
-                    _events.Add(new KeyValuePair<Tasks, GridPosition>(@event, position));
+                    var eventPosition = GetEventPosition(@event);
+                    if (eventPosition.HasValue) {
+                        _events.Add(new KeyValuePair<TEventType, GridPosition>(@event, eventPosition.Value with {
+                            ColumnIndex = columnIndex + index
+                        }));
+                    }
                 }
                 columnIndex += overlaps + 1;
             }
         }
+        base.Refresh();
+    }
+
+    internal override GridPosition? GetEventPosition(TnTEvent task) {
+        if (_timeSlots.TryGetValue(task.StartTime, out var startTime) &&
+            _visibleDates.TryGetValue(task.StartDate, out var startDate)) {
+            var rowIndex = startTime.RowIndex;
+            var columnIndex = startDate.ColumnIndex;
+
+            if (task.StartDate == task.EndDate &&
+                _timeSlots.TryGetValue(task.EndTime, out var endTime)) {
+                return new GridPosition {
+                    ColumnIndex = columnIndex,
+                    RowIndex = rowIndex,
+                    RowSpan = endTime.RowIndex - rowIndex
+                };
+            }
+            else if (_timeSlots.Count != 0) {
+                return new GridPosition {
+                    ColumnIndex = columnIndex,
+                    RowIndex = rowIndex,
+                    RowSpan = _timeSlots.Last().Value.RowIndex - rowIndex + 1 // Plus one to account for last row in column.
+                };
+            }
+        }
+
+        return null;
+    }
+
+    protected override IEnumerable<TnTEvent> GetTasksForDates(DateOnly startDate, DateOnly endDate) {
+        var startDateTime = new DateTime(startDate, TimeOnly.MinValue);
+        var endDateTime = new DateTime(endDate, TimeOnly.MaxValue);
+
+        var tasks = Scheduler.Events.Where(t => t.EventStart < endDateTime && startDateTime < t.EventEnd);
+        foreach (var @event in tasks) {
+            if (@event.EventStart.Date == @event.EventEnd.Date) {
+                yield return @event;
+            }
+            else {
+                var eventStart = @event.EventStart;
+                var eventEnd = new DateTimeOffset(DateOnly.FromDateTime(eventStart.AddDays(1).Date), TimeOnly.MinValue, eventStart.Offset);
+
+                var subEvent = @event with {
+                    EventEnd = eventEnd
+                };
+
+                yield return subEvent;
+
+                while (subEvent.EventEnd != @event.EventEnd) {
+                    var newEventStart = new DateTimeOffset(DateOnly.FromDateTime(subEvent.EventStart.AddDays(1).Date), TimeOnly.MinValue, eventStart.Offset);
+                    var newEventEnd = new DateTimeOffset(DateOnly.FromDateTime(subEvent.EventEnd.AddDays(1).Date), TimeOnly.MaxValue, eventStart.Offset);
+                    newEventEnd = newEventEnd < @event.EventEnd ? newEventEnd : @event.EventEnd;
+
+                    if (newEventStart == newEventEnd) {
+                        break;
+                    }
+
+                    subEvent = @event with {
+                        EventStart = newEventStart,
+                        EventEnd = newEventEnd
+                    };
+
+                    yield return subEvent;
+                }
+            }
+        }
+    }
+
+    protected override void OnParametersSet() {
+        base.OnParametersSet();
+        Refresh();
+    }
+
+    private static int CountOverlaps(IEnumerable<TnTEvent> events) {
+        // TODO Fix this so that overlaps are only counted with overlapping events
+        if (events.Any()) {
+            return events.Count() - 1;
+            var overlaps = 0;
+            var currentEvent = events.First();
+            foreach (var @event in events.Skip(1)) {
+                if (@event.EventStart < currentEvent.EventEnd) {
+                    overlaps++;
+                }
+                else {
+                    currentEvent = @event;
+                }
+            }
+            return overlaps;
+        }
+        return 0;
+    }
+
+    private async Task DragEventStart(TEventType @event) {
+        DraggingEvent = @event;
+        await DragStartCallback.InvokeAsync(@event);
+    }
+
+    private async Task EventClicked(TEventType @event) {
+        await EventClickedCallback.InvokeAsync(@event);
     }
 
     private string? GetGridTemplateColumns() {
@@ -126,192 +215,4 @@ partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         }
         return stringBuilder.Append(';').ToString();
     }
-
-    private IEnumerable<Tasks> GetEventsOnDate(DateOnly date) {
-        var startDateTime = new DateTime(date, TimeOnly.MinValue);
-        var endDateTime = new DateTime(date, TimeOnly.MaxValue);
-        var events = Scheduler.TasksList.Where(t => t.DateStart < endDateTime && startDateTime < t.DateEnd);
-        var list = new List<Tasks>();
-
-        foreach (var @event in events) {
-            if (@event.DateStart.Date == @event.DateEnd.Date) {
-                yield return @event with {
-                    DateStart = @event.DateStart.Round(Interval),
-                    DateEnd = @event.DateEnd.Round(Interval)
-                };
-            }
-            else {
-                yield return @event with {
-                    DateStart = (startDateTime > @event.DateStart ? startDateTime : @event.DateStart).Round(Interval),
-                    DateEnd = (endDateTime < @event.DateEnd ? endDateTime : @event.DateEnd).Round(Interval)
-                };
-            }
-        }
-    }
-
-    private Tasks? TaskDragged;
-    private async Task HandleDragStart(int taskID) {
-        TaskDragged = new Tasks() {
-            ID = taskID
-        };
-
-        DragDropParameter dragDropParameter = new() {
-            taskID = TaskDragged.ID
-        };
-
-        await DragStart.InvokeAsync(dragDropParameter);
-    }
-
-    private async Task HandleDayOnDrop(DateTime day) {
-        if (Scheduler.DisableDragAndDrop || TaskDragged is null) {
-            return;
-        }
-
-        DragDropParameter dragDropParameter = new() {
-            Day = day,
-            taskID = TaskDragged.ID
-        };
-
-        await DropTask.InvokeAsync(dragDropParameter);
-
-        TaskDragged = null;
-        StateHasChanged();
-    }
-
-    private string GetBackground(DateTime day) {
-        string WeekDaysColor = "#FFF";
-
-        string SaturdayColor = "#ECF4FD";
-
-        string SundayColor = "#DBE7F8";
-        int d = (int)day.DayOfWeek;
-
-        if (d == 6) {
-            return $"background:{SaturdayColor}";
-        }
-        else if (d == 0) {
-            return $"background:{SundayColor}";
-        }
-
-        return $"background:{WeekDaysColor}";
-    }
-
-    private async Task ClickDayInternal(MouseEventArgs e, DateTime day) {
-        if (!DayClick.HasDelegate)
-            return;
-
-        ClickEmptyDayParameter clickEmptyDayParameter = new() {
-            Day = day,
-            X = e.ClientX,
-            Y = e.ClientY
-        };
-
-        await DayClick.InvokeAsync(clickEmptyDayParameter);
-    }
-
-    private async Task ClickTaskInternal(MouseEventArgs e, int taskID, DateTime day) {
-        if (!TaskClick.HasDelegate)
-            return;
-
-        List<int> listID = new()
-        {
-            taskID
-        };
-
-        ClickTaskParameter clickTaskParameter = new() {
-            IDList = listID,
-            X = e.ClientX,
-            Y = e.ClientY,
-            Day = day
-        };
-
-        await TaskClick.InvokeAsync(clickTaskParameter);
-    }
-
-    private IEnumerable<DateOnly> GetVisibleDates() {
-        var diff = Math.Abs(StartViewOn - Scheduler.FirstDate.DayOfWeek);
-
-        var startDate = DateOnly.FromDateTime(Scheduler.FirstDate.AddDays(-diff));
-
-        for (int i = 0; i < 7; i++) {
-            yield return startDate.AddDays(i);
-        }
-    }
-
-    protected override IEnumerable<Tasks> GetTasksForDates(DateOnly startDate, DateOnly endDate) {
-        var startDateTime = new DateTime(startDate, TimeOnly.MinValue);
-        var endDateTime = new DateTime(endDate, TimeOnly.MaxValue);
-        var tasks = Scheduler.TasksList.Where(t => t.DateStart < endDateTime && startDateTime < t.DateEnd);
-        foreach (var @event in tasks) {
-            if (@event.DateStart.Date == @event.DateEnd.Date) {
-                yield return @event;
-            }
-            else {
-                var eventStart = @event.DateStart;
-                var eventEnd = new DateTime(DateOnly.FromDateTime(eventStart.AddDays(1)), TimeOnly.MinValue);
-
-                var subEvent = @event with {
-                    DateEnd = eventEnd
-                };
-
-                yield return subEvent;
-
-                while (subEvent.DateEnd != @event.DateEnd) {
-
-                    var newEventStart = new DateTime(DateOnly.FromDateTime(subEvent.DateStart.AddDays(1)), TimeOnly.MinValue);
-                    var newEventEnd = new DateTime(DateOnly.FromDateTime(subEvent.DateEnd.AddDays(1)), TimeOnly.MaxValue);
-                    newEventEnd = newEventEnd < @event.DateEnd ? newEventEnd : @event.DateEnd;
-
-                    if (newEventStart == newEventEnd) {
-                        break;
-                    }
-
-                    subEvent = @event with {
-                        DateStart = newEventStart,
-                        DateEnd = newEventEnd
-                    };
-
-                    yield return subEvent;
-                }
-
-            }
-
-        }
-    }
-
-    private int CountOverlaps(IEnumerable<Tasks> events) {
-        if (events.Any()) {
-            var overlaps = 0;
-            var currentEvent = events.First();
-            foreach (var @event in events.Skip(1)) {
-                if (@event.DateStart < currentEvent.DateEnd) {
-                    overlaps++;
-                }
-                else {
-                    currentEvent = @event;
-                }
-            }
-            return overlaps;
-        }
-        return 0;
-    }
-
-
-    internal override GridPosition GetEventPosition(Tasks task) {
-        var rowIndex = _timeSlots[TimeOnly.FromDateTime(task.DateStart)].RowIndex;
-        var columnIndex = _visibleDates[DateOnly.FromDateTime(task.DateStart)].ColumnIndex;
-        int rowSpan;
-        if (task.DateStart.Date == task.DateEnd.Date) {
-            rowSpan = _timeSlots[TimeOnly.FromDateTime(task.DateEnd)].RowIndex - rowIndex;
-        }
-        else {
-            rowSpan = _timeSlots.Last().Value.RowIndex - rowIndex + 1;
-        }
-        return new GridPosition() {
-            ColumnIndex = columnIndex,
-            RowIndex = rowIndex,
-            RowSpan = rowSpan,
-        };
-    }
-
 }

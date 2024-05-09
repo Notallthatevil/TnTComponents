@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TnTComponents;
+
 public class TnTInputTextArea : TnTInputBase<string?> {
     public override InputType Type => InputType.TextArea;
 
@@ -17,6 +18,4 @@ public class TnTInputTextArea : TnTInputBase<string?> {
         validationErrorMessage = null;
         return true;
     }
-
 }
-

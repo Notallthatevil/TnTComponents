@@ -38,6 +38,8 @@ public partial class TnTButton {
     [Parameter]
     public int Elevation { get; set; } = 1;
 
+    public override string? JsModulePath => "./_content/TnTComponents/Buttons/TnTButton.razor.js";
+
     [Parameter]
     public string? Name { get; set; }
 
@@ -52,8 +54,6 @@ public partial class TnTButton {
 
     [Parameter]
     public ButtonType Type { get; set; }
-
-    public override string? JsModulePath => "./_content/TnTComponents/Buttons/TnTButton.razor.js";
 
     protected override void OnInitialized() {
         base.OnInitialized();

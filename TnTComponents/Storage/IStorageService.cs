@@ -40,7 +40,7 @@ public interface IStorageService {
     /// <summary>
     /// Checks if the <paramref name="key" /> exists in session storage, but does not check its value.
     /// </summary>
-    /// <param name="key">              
+    /// <param name="key">
     /// A <see cref="string" /> value specifying the name of the storage slot to use
     /// </param>
     /// <param name="cancellationToken">
@@ -54,7 +54,7 @@ public interface IStorageService {
     /// <summary>
     /// Retrieve the specified data from session storage as a <see cref="string" />.
     /// </summary>
-    /// <param name="key">              
+    /// <param name="key">
     /// A <see cref="string" /> value specifying the name of the storage slot to use
     /// </param>
     /// <param name="cancellationToken">
@@ -68,7 +68,7 @@ public interface IStorageService {
     /// <summary>
     /// Retrieve the specified data from session storage and deseralise it to the specfied type.
     /// </summary>
-    /// <param name="key">              
+    /// <param name="key">
     /// A <see cref="string" /> value specifying the name of the session storage slot to use
     /// </param>
     /// <param name="cancellationToken">
@@ -82,7 +82,7 @@ public interface IStorageService {
     /// <summary>
     /// Return the name of the key at the specified <paramref name="index" />.
     /// </summary>
-    /// <param name="index">            </param>
+    /// <param name="index"></param>
     /// <param name="cancellationToken">
     /// A cancellation token to signal the cancellation of the operation. Specifying this parameter
     /// will override any default cancellations such as due to timeouts ( <see
@@ -116,7 +116,7 @@ public interface IStorageService {
     /// <summary>
     /// Remove the data with the specified <paramref name="key" />.
     /// </summary>
-    /// <param name="key">              
+    /// <param name="key">
     /// A <see cref="string" /> value specifying the name of the storage slot to use
     /// </param>
     /// <param name="cancellationToken">
@@ -130,7 +130,7 @@ public interface IStorageService {
     /// <summary>
     /// Removes a collection of <paramref name="keys" />.
     /// </summary>
-    /// <param name="keys">             
+    /// <param name="keys">
     /// A IEnumerable collection of strings specifying the name of the storage slot to remove
     /// </param>
     /// <param name="cancellationToken">
@@ -145,10 +145,10 @@ public interface IStorageService {
     /// Sets or updates the <paramref name="data" /> in session storage with the specified <paramref
     /// name="key" />. Does not serialize the value before storing.
     /// </summary>
-    /// <param name="key">              
+    /// <param name="key">
     /// A <see cref="string" /> value specifying the name of the storage slot to use
     /// </param>
-    /// <param name="data">             The string to be saved</param>
+    /// <param name="data">The string to be saved</param>
     /// <param name="cancellationToken">
     /// A cancellation token to signal the cancellation of the operation. Specifying this parameter
     /// will override any default cancellations such as due to timeouts ( <see
@@ -161,10 +161,10 @@ public interface IStorageService {
     /// Sets or updates the <paramref name="data" /> in session storage with the specified <paramref
     /// name="key" />.
     /// </summary>
-    /// <param name="key">              
+    /// <param name="key">
     /// A <see cref="string" /> value specifying the name of the storage slot to use
     /// </param>
-    /// <param name="data">             The data to be saved</param>
+    /// <param name="data">The data to be saved</param>
     /// <param name="cancellationToken">
     /// A cancellation token to signal the cancellation of the operation. Specifying this parameter
     /// will override any default cancellations such as due to timeouts ( <see

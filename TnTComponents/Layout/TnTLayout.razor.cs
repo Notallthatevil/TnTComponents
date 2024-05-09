@@ -14,8 +14,6 @@ public partial class TnTLayout {
        .AddFromAdditionalAttributes(AdditionalAttributes)
        .Build();
 
-    
-
     private TnTBody? _body;
     private TnTFooter? _footer;
     private TnTHeader? _header;

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace TnTComponents.Core;
 
-namespace TnTComponents.Core;
 public interface ITnTFlexBox {
+    AlignContent? AlignContent { get; set; }
+    AlignItems? AlignItems { get; set; }
     LayoutDirection? Direction { get; set; }
     JustifyContent? JustifyContent { get; set; }
-    AlignItems? AlignItems { get; set; }
-    AlignContent? AlignContent { get; set; }
 }
-

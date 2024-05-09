@@ -26,6 +26,12 @@ public interface ITnTComponentBase {
     /// </summary>
     string? CssClass { get; }
 
+    /// <summary>
+    /// Additional styles that can be applied to this component. <see
+    /// cref="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/style" />
+    /// </summary>
+    string? CssStyle { get; }
+
     bool Disabled { get; set; }
 
     /// <summary>
@@ -38,12 +44,6 @@ public interface ITnTComponentBase {
     /// cref="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id" />
     /// </summary>
     string? Id { get; }
-
-    /// <summary>
-    /// Additional styles that can be applied to this component. <see
-    /// cref="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/style" />
-    /// </summary>
-    string? CssStyle { get; }
 }
 
 internal static class ITnTComponentBaseExt {

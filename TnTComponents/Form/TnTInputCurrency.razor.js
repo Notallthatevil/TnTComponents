@@ -1,4 +1,3 @@
-
 function validateCurrencyInput(e) {
     if (e && e.target) {
         const oldValue = e.target.value;
@@ -32,9 +31,7 @@ function formatCurrencyValue(e) {
     }
 }
 
-
 export function onLoad(element, dotNetRef) {
-
 }
 
 export function onUpdate(element, dotNetRef) {

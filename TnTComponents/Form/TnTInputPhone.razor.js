@@ -1,4 +1,3 @@
-
 function validatePhoneInput(e) {
     if (e && e.target) {
         const oldValue = e.target.value;
@@ -25,7 +24,6 @@ function formatPhoneValue(e) {
         }
     }
 }
-
 
 export function onLoad(element, dotNetRef) {
     var currencyInputs = document.querySelectorAll('input[tnt-input-phone]');

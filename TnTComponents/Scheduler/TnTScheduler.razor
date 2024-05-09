@@ -1,10 +1,19 @@
-﻿@using BlazorCalendar
-@using BlazorCalendar.Models
-@inherits CalendarBase
-@namespace TnTComponents
+﻿@namespace TnTComponents
 @typeparam TEventType
 
 <div @attributes="AdditionalAttributes" class="@CssClass" style="@CssStyle" @ref="Element">
+    @if (!HideDateControls) {
+        <div class="date-controls">
+            <TnTImageButton Icon="@MaterialIcon.ChevronLeft" OnClick="PreviousPage" class="prev-button" />
+            <TnTButton Appearance="ButtonAppearance.Text" OnClick="GoToToday" class="today-button" TextColor="TnTColor.OnSurface" Elevation="0">
+                TODAY
+            </TnTButton>
+            <TnTImageButton Icon="@MaterialIcon.ChevronRight" OnClick="NextPage" class="next-button" />
+            <TnTLabel Label="DatePicker">
+                <TnTInputDateOnly @bind-Value="_displayDate" BindAfter="@((DateOnly? date) => UpdateDate(date))" />
+            </TnTLabel>
+        </div>
+    }
     <CascadingValue Value="this" IsFixed="true">
         @ChildContent
     </CascadingValue>

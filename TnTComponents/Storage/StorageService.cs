@@ -1,21 +1,14 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.JSInterop;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace TnTComponents.Storage;
 
-internal class SessionStorageService(IJSRuntime jsRuntime) : StorageService(jsRuntime), ISessionStorageService {
-    internal override StorageType StorageType => StorageType.SessionStorage;
-}
-
 internal class LocalStorageService(IJSRuntime jsRuntime) : StorageService(jsRuntime), ILocalStorageService {
     internal override StorageType StorageType => StorageType.LocalStorage;
+}
+
+internal class SessionStorageService(IJSRuntime jsRuntime) : StorageService(jsRuntime), ISessionStorageService {
+    internal override StorageType StorageType => StorageType.SessionStorage;
 }
 
 internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService {
