@@ -19,6 +19,13 @@ function isValidTableElement(element) {
         || ((element instanceof HTMLTableSectionElement && element.style.display === '') || element.style.display === 'table-row-group');
 }
 
+export function onNewItems(element) {
+    if (element && element.observer && element.observer.unobserve && element.observer.observe) {
+        element.observer.unobserve(element);
+        element.observer.observe(element);
+    }
+}
+
 export function onLoad(element, dotNetRef) {
     const options = {
         root: findClosestScrollContainer(element),
@@ -30,28 +37,24 @@ export function onLoad(element, dotNetRef) {
         element.style.display = 'table-row';
     }
 
-    const observer = new IntersectionObserver(async (entries) => {
+    element.observer = new IntersectionObserver(async (entries) => {
         for (const entry of entries) {
             if (entry.isIntersecting) {
-                observer.unobserve(element);
-                await dotNetObjRef.invokeMethodAsync("LoadMoreItems");
+                element.observer.unobserve(element);
+                await dotNetRef.invokeMethodAsync("LoadMoreItems");
             }
         }
     }, options);
 
-    observer.observe(element);
-
-    return {
-        dispose: () => infiniteScollingDispose(observer),
-        onNewItems: () => {
-            observer.unobserve(element);
-            observer.observe(element);
-        },
-    };
+    element.observer.observe(element);
+    element.dispose = () => infiniteScollingDispose(element.observer);
 }
 
 export function onUpdate(element, dotNetRef) {
 }
 
 export function onDispose(element, dotNetRef) {
+    if (element.dispose) {
+        element.dispose();
+    }
 }

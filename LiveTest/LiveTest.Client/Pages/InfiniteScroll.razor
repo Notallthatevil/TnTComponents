@@ -1,0 +1,20 @@
+﻿@page "/InfiniteScroll"
+@rendermode InteractiveAuto
+@using TnTComponents
+
+<h3>InfiniteScroll</h3>
+
+<TnTComponents.TnTVirtualize ItemsProvider="GetItems">
+
+</TnTComponents.TnTVirtualize>
+
+
+@code {
+    async Task<TnTVirtualizeItemsResult<int>> GetItems(TnTVirtualizeItemsRequest request) {
+        await Task.Delay(1000); // Simulate async loading
+        return new TnTVirtualizeItemsResult<int>() {
+            Items = Enumerable.Range(request.StartIndex, 50).ToList(),
+            TotalItemsCount = 1000
+        };
+    }
+}
