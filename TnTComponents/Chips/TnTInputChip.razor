@@ -3,7 +3,7 @@
 @inherits TnTComponentBase
 
 <span @attributes="AdditionalAttributes" class="@CssClass" style="@CssStyle" @ref="Element">
-    @StartIcon?.Render()
+    @StartIcon
     @ChildContent
     <TnTImageButton Icon="@CloseIcon" OnClick="CloseClicked"/>
 </span>

@@ -5,7 +5,7 @@
 <tnt-accordion @attributes="AdditionalAttributes" style="@CssStyle" @ref="Element">
     <h3 class="@CssClass" >
         @Title
-        @MaterialIcon.ArrowDropDown.Render()
+        @MaterialIcon.ArrowDropDown
     </h3>
     <div class="@(CssClassBuilder.Create().AddBackgroundColor(BodyBackgroundColor).AddForegroundColor(BodyTextColor).AddClass("tnt-visible", OpenByDefault).Build())" tnt-open-by-default="@OpenByDefault">
         <div>

@@ -8,12 +8,12 @@
 <div class="tnt-basic-confirmation-dialog-buttons">
     @if (ShowCancelButton) {
         <TnTButton TextColor="@CancelButtonTextColor" Appearance="ButtonAppearance.Outlined" OnClick="@CancelClicked">
-            @MaterialIcon.Cancel.Render();
+            @MaterialIcon.Cancel
             @CancelButtonText
         </TnTButton>
     }
     <TnTButton OnClick="@ConfirmClicked">
-        @MaterialIcon.Check.Render();
+        @MaterialIcon.Check
         @ConfirmButtonText
     </TnTButton>
 </div>

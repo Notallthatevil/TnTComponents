@@ -40,7 +40,7 @@ public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
             {
                 if (StartIcon is not null) {
                     StartIcon.AdditionalClass = "tnt-start";
-                    builder.AddContent(20, StartIcon.Render());
+                    builder.AddContent(20, StartIcon);
                 }
             }
             {
@@ -95,7 +95,7 @@ public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
             {
                 if (EndIcon is not null) {
                     EndIcon.AdditionalClass = "tnt-end";
-                    builder.AddContent(280, EndIcon.Render());
+                    builder.AddContent(280, EndIcon);
                 }
             }
         }

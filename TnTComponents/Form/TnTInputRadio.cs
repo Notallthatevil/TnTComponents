@@ -145,7 +145,7 @@ public class TnTInputRadio<TInputType> : ComponentBase, IFormField {
         builder.OpenElement(0, "span");
 
         if (StartIcon is not null) {
-            builder.AddContent(10, StartIcon.Render());
+            builder.AddContent(10, StartIcon);
         }
         {
             builder.OpenElement(20, "input");
@@ -166,7 +166,7 @@ public class TnTInputRadio<TInputType> : ComponentBase, IFormField {
         }
 
         if (EndIcon is not null) {
-            builder.AddContent(100, EndIcon.Render());
+            builder.AddContent(100, EndIcon);
         }
 
         builder.CloseElement();

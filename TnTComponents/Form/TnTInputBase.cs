@@ -93,7 +93,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
             {
                 if (StartIcon is not null) {
                     StartIcon.AdditionalClass = "tnt-start";
-                    builder.AddContent(20, StartIcon.Render());
+                    builder.AddContent(20, StartIcon);
                 }
             }
             {
@@ -155,7 +155,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
             {
                 if (EndIcon is not null) {
                     EndIcon.AdditionalClass = "tnt-end";
-                    builder.AddContent(240, EndIcon.Render());
+                    builder.AddContent(240, EndIcon);
                 }
             }
         }
