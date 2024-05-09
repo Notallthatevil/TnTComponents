@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components.QuickGrid;
 using System.Linq.Expressions;
-using TnTComponents.Grid;
+using TnTComponents.Virtualization;
 
 namespace TnTComponents.Ext;
 
 public static class IQueryableExt {
 
-    public static IQueryable<T> Apply<T>(this IQueryable<T> query, TnTGridItemsProviderRequest request) {
+    public static IQueryable<T> Apply<T>(this IQueryable<T> query, ITnTVirtualizeItemsProviderRequest request) {
         if (request.SortOnProperties.Count != 0) {
             query = query.OrderBy(request.SortOnProperties);
         }

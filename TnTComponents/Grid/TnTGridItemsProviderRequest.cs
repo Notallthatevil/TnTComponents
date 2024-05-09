@@ -1,20 +1,20 @@
-using Microsoft.AspNetCore.Components.QuickGrid;
+﻿using Microsoft.AspNetCore.Components.QuickGrid;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using TnTComponents.Grid.Columns;
+using TnTComponents.Virtualization;
 
 namespace TnTComponents.Grid;
-
-public class TnTGridItemsProviderRequest {
-    public int? Count { get; init; }
-    public IReadOnlyCollection<KeyValuePair<string, SortDirection>> SortOnProperties { get; init; } = [];
-    public int StartIndex { get; init; }
-}
 
 /// <summary>
 /// Parameters for data to be supplied by a <see cref="TnTDataGrid{TGridItem}" />'s <see
 /// cref="TnTDataGrid{TGridItem}.ItemsProvider" />.
 /// </summary>
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
-public readonly struct TnTGridItemsProviderRequest<TGridItem> {
+public readonly struct TnTGridItemsProviderRequest<TGridItem> : ITnTVirtualizeItemsProviderRequest {
 
     /// <summary>
     /// Gets or sets a token that indicates if the request should be cancelled.
@@ -48,6 +48,8 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> {
     /// Gets or sets the zero-based index of the first item to be supplied.
     /// </summary>
     public int StartIndex { get; init; }
+    public IReadOnlyCollection<KeyValuePair<string, SortDirection>> SortOnProperties =>
+        GetSortByProperties().Select(sp => new KeyValuePair<string, SortDirection>(sp.PropertyName, sp.Direction)).ToList();
 
     internal TnTGridItemsProviderRequest(int startIndex, int? count, TnTColumnBase<TGridItem>? sortByColumn, bool sortByAscending,
         CancellationToken cancellationToken) {
@@ -57,8 +59,6 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> {
         SortByAscending = sortByAscending;
         CancellationToken = cancellationToken;
     }
-
-    public static implicit operator TnTGridItemsProviderRequest(TnTGridItemsProviderRequest<TGridItem> request) => new TnTGridItemsProviderRequest { StartIndex = request.StartIndex, Count = request.Count, SortOnProperties = request.GetSortByProperties().Select(sp => new KeyValuePair<string, SortDirection>(sp.PropertyName, sp.Direction)).ToList() };
 
     /// <summary>
     /// Applies the request's sorting rules to the supplied <see cref="IQueryable{TGridItem}" />.
@@ -78,3 +78,4 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> {
     public IReadOnlyCollection<SortedProperty> GetSortByProperties() =>
         SortByColumn?.SortBy?.ToPropertyList(SortByAscending) ?? Array.Empty<SortedProperty>();
 }
+

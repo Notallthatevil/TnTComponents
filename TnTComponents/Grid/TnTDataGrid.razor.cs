@@ -7,6 +7,7 @@ using TnTComponents.Ext;
 using TnTComponents.Grid;
 using TnTComponents.Grid.Columns;
 using TnTComponents.Grid.Infrastructure;
+using TnTComponents.Virtualization;
 
 namespace TnTComponents;
 
@@ -270,7 +271,7 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     /// <summary>
     /// Sets the grid's current sort column to the specified <paramref name="column" />.
     /// </summary>
-    /// <param name="column">The column that defines the new sort order.</param>
+    /// <param name="column">   The column that defines the new sort order.</param>
     /// <param name="direction">
     /// The direction of sorting. If the value is <see cref="SortDirection.Auto" />, then it will
     /// toggle the direction on each call.
@@ -439,7 +440,7 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
 
     // Normalizes all the different ways of configuring a data source so they have common
     // GridItemsProvider-shaped API
-    private async ValueTask<TnTGridItemsProviderResult<TGridItem>> ResolveItemsRequestAsync(TnTGridItemsProviderRequest<TGridItem> request) {
+    private async ValueTask<TnTVirtualizeItemsProviderResult<TGridItem>> ResolveItemsRequestAsync(TnTGridItemsProviderRequest<TGridItem> request) {
         if (ItemsProvider is not null) {
             if (Virtualize && request.Count is null) {
                 request = request with { Count = 1 };
@@ -458,10 +459,10 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
                 result = result.Take(request.Count.Value);
             }
             var resultArray = _asyncQueryExecutor is null ? [.. result] : await _asyncQueryExecutor.ToArrayAsync(result);
-            return new TnTGridItemsProviderResult<TGridItem> { Items = resultArray, TotalItemCount = totalItemCount };
+            return new TnTVirtualizeItemsProviderResult<TGridItem> { Items = resultArray, TotalItemCount = totalItemCount };
         }
         else {
-            return new TnTGridItemsProviderResult<TGridItem> { Items = [], TotalItemCount = 0 };
+            return new TnTVirtualizeItemsProviderResult<TGridItem> { Items = [], TotalItemCount = 0 };
         }
     }
 
@@ -470,3 +471,13 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
         _collectingColumns = true;
     }
 }
+
+/// <summary>
+/// A callback that provides data for a <see cref="TnTDataGrid{TGridItem}" />.
+/// </summary>
+/// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
+/// <param name="request">Parameters describing the data being requested.</param>
+/// <returns>
+/// A <see cref="T:ValueTask{TnTGridItemsProviderResult{TResult}}" /> that gives the data to be displayed.
+/// </returns>
+public delegate ValueTask<TnTVirtualizeItemsProviderResult<TGridItem>> TnTGridItemsProvider<TGridItem>(TnTGridItemsProviderRequest<TGridItem> request);

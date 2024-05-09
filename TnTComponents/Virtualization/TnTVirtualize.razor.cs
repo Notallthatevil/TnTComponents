@@ -1,10 +1,16 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.QuickGrid;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 using Microsoft.JSInterop;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using TnTComponents.Core;
+using TnTComponents.Grid;
+using TnTComponents.Grid.Infrastructure;
+using TnTComponents.Virtualization;
 
 namespace TnTComponents;
 
@@ -20,7 +26,7 @@ public partial class TnTVirtualize<TItem> {
         .Build();
 
     [Parameter, EditorRequired]
-    public TnTVirtualizeItemsRequestDelegate<TItem> ItemsProvider { get; set; } = default!;
+    public TnTVirtualizeItemsProvider<TItem> ItemsProvider { get; set; } = default!;
 
     [Parameter]
     public RenderFragment<TItem>? ItemTemplate { get; set; }
@@ -28,15 +34,19 @@ public partial class TnTVirtualize<TItem> {
     [Parameter]
     public bool InfiniteScroll { get; set; } = true;
 
-    public override string? JsModulePath => "./_content/TnTComponents/TnTVirtualize.razor.js";
+    public override string? JsModulePath => "./_content/TnTComponents/Virtualization/TnTVirtualize.razor.js";
 
     [Parameter]
     public RenderFragment? LoadingTemplate { get; set; }
 
+    [Parameter]
+    public Expression<Func<TItem, object>>? SortOnProperty { get; set; }
+
     private bool _allItemsRetrieved;
-    private ICollection<TItem> _items = [];
-    private TnTVirtualizeItemsRequestDelegate<TItem> _lastUsedProvider = default!;
+    private IEnumerable<TItem> _items = [];
+    private TnTVirtualizeItemsProvider<TItem> _lastUsedProvider = default!;
     private CancellationTokenSource? _loadItemsCts;
+    private KeyValuePair<string, SortDirection>? _sortOnProperty;
 
     public override async ValueTask DisposeAsync() {
         GC.SuppressFinalize(this);
@@ -56,14 +66,15 @@ public partial class TnTVirtualize<TItem> {
         _loadItemsCts = new CancellationTokenSource();
         StateHasChanged(); // Allow the UI to display the loading indicator
         try {
-            var result = await ItemsProvider(new TnTVirtualizeItemsRequest { StartIndex = _items.Count, CancellationToken = _loadItemsCts.Token });
+            var result = await ItemsProvider(new TnTVirtualizeItemsProviderRequest<TItem> {
+                StartIndex = _items.Count(),
+                SortOnProperties = _sortOnProperty.HasValue ? [_sortOnProperty.Value] : [],
+                CancellationToken = _loadItemsCts.Token
+            });
             if (!_loadItemsCts.IsCancellationRequested) {
-                var length = _items.Count;
-                foreach (var item in result.Items) {
-                    _items.Add(item);
-                }
+                _items = _items.Concat(result.Items);
 
-                if (_items.Count == result.TotalItemsCount) {
+                if (_items.Count() == result.TotalItemCount) {
                     _allItemsRetrieved = true;
                 }
                 else if (IsolatedJsModule is not null) {
@@ -99,6 +110,13 @@ public partial class TnTVirtualize<TItem> {
         }
 
         _lastUsedProvider = ItemsProvider;
+
+        if (SortOnProperty is not null) {
+            var compiledPropertyExpression = SortOnProperty.Compile();
+            if (SortOnProperty.Body is MemberExpression memberExpression) {
+                _sortOnProperty = new KeyValuePair<string, SortDirection>(memberExpression.Member.Name, SortDirection.Ascending);
+            }
+        }
     }
 
     private void Reset() {
@@ -114,15 +132,20 @@ public partial class TnTVirtualize<TItem> {
     }
 }
 
-public class TnTVirtualizeItemsRequest {
-    public CancellationToken CancellationToken { get; init; }
-    public int? RequestedCount { get; init; }
+public class TnTVirtualizeItemsProviderRequest<TItem> : ITnTVirtualizeItemsProviderRequest {
     public int StartIndex { get; init; }
+    public int? Count { get; set; }
+    public IReadOnlyCollection<KeyValuePair<string, SortDirection>> SortOnProperties { get; init; } = [];
+    public CancellationToken CancellationToken { get; init; }
+
 }
 
-public sealed class TnTVirtualizeItemsResult<TItem> {
-    public required IReadOnlyCollection<TItem> Items { get; init; }
-    public required int TotalItemsCount { get; init; }
-}
-
-public delegate Task<TnTVirtualizeItemsResult<TItem>> TnTVirtualizeItemsRequestDelegate<TItem>(TnTVirtualizeItemsRequest request);
+/// <summary>
+/// A callback that provides data for a <see cref="TnTDataGrid{TGridItem}" />.
+/// </summary>
+/// <typeparam name="TItem">The type of data represented by each row in the grid.</typeparam>
+/// <param name="request">Parameters describing the data being requested.</param>
+/// <returns>
+/// A <see cref="ValueTask{TnTVirtualizeItemsProviderResult{TGridItem}}" /> that gives the data to be displayed.
+/// </returns>
+public delegate ValueTask<TnTVirtualizeItemsProviderResult<TItem>> TnTVirtualizeItemsProvider<TItem>(TnTVirtualizeItemsProviderRequest<TItem> request);
