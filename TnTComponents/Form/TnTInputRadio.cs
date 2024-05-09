@@ -204,19 +204,17 @@ public class TnTInputRadio<TInputType> : ComponentBase, IFormField {
     // notified to update its state in the old rendertree. So, if the setter reverts the incoming
     // value, the previously-selected one would produce an empty diff (because its .NET value hasn't
     // changed) and hence it would be left unselected in the DOM. If you don't understand why this
-    // is a problem, try commenting out the line that toggles _trueValueToggle and see the E2E test fail.
-    //
-    // This hack works around that by causing InputRadio *always* to force its own 'checked' state
-    // to be true in the DOM if it's true in .NET, whether or not it was true before, by continally
-    // changing the value that represents 'true'. This doesn't really cause any significant increase
-    // in traffic because if we're rendering this InputRadio at all, sending one more small
-    // attribute value is inconsequential.
-    //
-    // Ultimately, a better solution would be to make SetUpdatesAttributeName smarter still so that
-    // it knows about the special semantics of radio buttons so that, when one <input type="radio">
-    // changes, it treats any previously-selected sibling as needing DOM sync as well. That's a more
-    // sophisticated change and might not even be useful if the radio buttons aren't truly siblings
-    // and are in different DOM subtrees (and especially if they were rendered by different components!)
+    // is a problem, try commenting out the line that toggles _trueValueToggle and see the E2E test
+    // fail. // This hack works around that by causing InputRadio *always* to force its own
+    // 'checked' state to be true in the DOM if it's true in .NET, whether or not it was true
+    // before, by continally changing the value that represents 'true'. This doesn't really cause
+    // any significant increase in traffic because if we're rendering this InputRadio at all,
+    // sending one more small attribute value is inconsequential. // Ultimately, a better solution
+    // would be to make SetUpdatesAttributeName smarter still so that it knows about the special
+    // semantics of radio buttons so that, when one <input type="radio"> changes, it treats any
+    // previously-selected sibling as needing DOM sync as well. That's a more sophisticated change
+    // and might not even be useful if the radio buttons aren't truly siblings and are in different
+    // DOM subtrees (and especially if they were rendered by different components!)
     private string GetToggledTrueValue() {
         _toggle = !_toggle;
         return _toggle ? "a" : "b";

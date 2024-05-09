@@ -18,10 +18,9 @@ public abstract partial class TnTColumnBase<TGridItem> {
 
     /// <summary>
     /// If specified, indicates that this column has this associated options UI. A button to display
-    /// this UI will be included in the header cell by default.
-    ///
-    /// If <see cref="HeaderCellItemTemplate" /> is used, it is left up to that template to render
-    /// any relevant "show options" UI and invoke the grid's <see
+    /// this UI will be included in the header cell by default. /// If <see
+    /// cref="HeaderCellItemTemplate" /> is used, it is left up to that template to render any
+    /// relevant "show options" UI and invoke the grid's <see
     /// cref="TnTDataGrid{TGridItem}.ShowColumnOptionsAsync(TnTColumnBase{TGridItem})" />).
     /// </summary>
     [Parameter]
@@ -71,9 +70,8 @@ public abstract partial class TnTColumnBase<TGridItem> {
     public bool ShowSortIcon { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the data should be sortable by this column.
-    ///
-    /// The default value may vary according to the column type (for example, a <see
+    /// Gets or sets a value indicating whether the data should be sortable by this column. /// The
+    /// default value may vary according to the column type (for example, a <see
     /// cref="TnTTemplateColumn{TGridItem}" /> is sortable by default if any <see
     /// cref="TnTTemplateColumn{TGridItem}.SortBy" /> parameter is specified).
     /// </summary>
@@ -129,9 +127,8 @@ public abstract partial class TnTColumnBase<TGridItem> {
     /// <summary>
     /// Gets a value indicating whether this column should act as sortable if no value was set for
     /// the <see cref="ColumnBase{TGridItem}.Sortable" /> parameter. The default behavior is not to
-    /// be sortable unless <see cref="ColumnBase{TGridItem}.Sortable" /> is true.
-    ///
-    /// Derived components may override this to implement alternative default sortability rules.
+    /// be sortable unless <see cref="ColumnBase{TGridItem}.Sortable" /> is true. /// Derived
+    /// components may override this to implement alternative default sortability rules.
     /// </summary>
     /// <returns>True if the column should be sortable by default, otherwise false.</returns>
     protected virtual bool IsSortableByDefault() => false;

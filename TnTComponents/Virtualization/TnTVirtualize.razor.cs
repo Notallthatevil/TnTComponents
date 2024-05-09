@@ -1,15 +1,9 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.QuickGrid;
-using Microsoft.AspNetCore.Components.Rendering;
-using Microsoft.AspNetCore.Components.Web.Virtualization;
 using Microsoft.JSInterop;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using TnTComponents.Core;
-using TnTComponents.Grid;
-using TnTComponents.Grid.Infrastructure;
 using TnTComponents.Virtualization;
 
 namespace TnTComponents;
@@ -25,14 +19,14 @@ public partial class TnTVirtualize<TItem> {
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
+    [Parameter]
+    public bool InfiniteScroll { get; set; } = true;
+
     [Parameter, EditorRequired]
     public TnTVirtualizeItemsProvider<TItem> ItemsProvider { get; set; } = default!;
 
     [Parameter]
     public RenderFragment<TItem>? ItemTemplate { get; set; }
-
-    [Parameter]
-    public bool InfiniteScroll { get; set; } = true;
 
     public override string? JsModulePath => "./_content/TnTComponents/Virtualization/TnTVirtualize.razor.js";
 
@@ -48,14 +42,14 @@ public partial class TnTVirtualize<TItem> {
     private CancellationTokenSource? _loadItemsCts;
     private KeyValuePair<string, SortDirection>? _sortOnProperty;
 
+    [DynamicDependency(nameof(LoadMoreItems))]
+    public TnTVirtualize() { }
+
     public override async ValueTask DisposeAsync() {
         GC.SuppressFinalize(this);
         DisposeCancellationToken();
         await base.DisposeAsync();
     }
-
-    [DynamicDependency(nameof(LoadMoreItems))]
-    public TnTVirtualize() { }
 
     [JSInvokable]
     public async Task LoadMoreItems() {
@@ -119,25 +113,24 @@ public partial class TnTVirtualize<TItem> {
         }
     }
 
-    private void Reset() {
-        _items = [];
-        _allItemsRetrieved = false;
-        DisposeCancellationToken();
-    }
-
     private void DisposeCancellationToken() {
         _loadItemsCts?.Cancel();
         _loadItemsCts?.Dispose();
         _loadItemsCts = null;
     }
+
+    private void Reset() {
+        _items = [];
+        _allItemsRetrieved = false;
+        DisposeCancellationToken();
+    }
 }
 
 public class TnTVirtualizeItemsProviderRequest<TItem> : ITnTVirtualizeItemsProviderRequest {
-    public int StartIndex { get; init; }
+    public CancellationToken CancellationToken { get; init; }
     public int? Count { get; set; }
     public IReadOnlyCollection<KeyValuePair<string, SortDirection>> SortOnProperties { get; init; } = [];
-    public CancellationToken CancellationToken { get; init; }
-
+    public int StartIndex { get; init; }
 }
 
 /// <summary>
@@ -146,6 +139,7 @@ public class TnTVirtualizeItemsProviderRequest<TItem> : ITnTVirtualizeItemsProvi
 /// <typeparam name="TItem">The type of data represented by each row in the grid.</typeparam>
 /// <param name="request">Parameters describing the data being requested.</param>
 /// <returns>
-/// A <see cref="ValueTask{TnTVirtualizeItemsProviderResult{TGridItem}}" /> that gives the data to be displayed.
+/// A <see cref="ValueTask{TnTVirtualizeItemsProviderResult{TGridItem}}" /> that gives the data to
+/// be displayed.
 /// </returns>
 public delegate ValueTask<TnTVirtualizeItemsProviderResult<TItem>> TnTVirtualizeItemsProvider<TItem>(TnTVirtualizeItemsProviderRequest<TItem> request);

@@ -21,12 +21,10 @@ function systemPrefersDark() {
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
 }
 
-
 function updateThemeAttributes() {
     const darkThemeStyle = document.getElementById('tnt-theme-design-dark');
     const lightThemeStyle = document.getElementById('tnt-theme-design-light');
     if (darkThemeStyle && lightThemeStyle) {
-
         const storedTheme = getStoredTheme();
         if (storedTheme === prefersDark || ((storedTheme === prefersSystem || storedTheme == null) && systemPrefersDark())) {
             darkThemeStyle.setAttribute('media', 'all');
@@ -49,10 +47,8 @@ function themeSelected(e) {
         if (e.target.updateIcon) {
             e.target.updateIcon(currentTheme);
         }
-
     }
 }
-
 
 export function onLoad(element, dotNetElementRef) {
     if (!customElements.get('tnt-theme-toggle')) {

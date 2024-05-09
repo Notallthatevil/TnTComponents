@@ -138,12 +138,11 @@ public partial class TnTNavLink {
 
         if (currentUriAbsolute.Length == _hrefAbsolute.Length - 1) {
             // Special case: highlight links to http://host/path/ even if you're at http://host/path
-            // (with no trailing slash)
-            //
-            // This is because the router accepts an absolute URI value of "same as base URI but
-            // without trailing slash" as equivalent to "base URI", which in turn is because it's
-            // common for servers to return the same page for http://host/vdir as they do for
-            // host://host/vdir/ as it's no good to display a blank page in that case.
+            // (with no trailing slash) // This is because the router accepts an absolute URI value
+            // of "same as base URI but without trailing slash" as equivalent to "base URI", which
+            // in turn is because it's common for servers to return the same page for
+            // http://host/vdir as they do for host://host/vdir/ as it's no good to display a blank
+            // page in that case.
             if (_hrefAbsolute[_hrefAbsolute.Length - 1] == '/' && _hrefAbsolute.StartsWith(currentUriAbsolute, StringComparison.OrdinalIgnoreCase)) {
                 return true;
             }

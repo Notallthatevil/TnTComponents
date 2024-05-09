@@ -1,9 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components.QuickGrid;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TnTComponents.Grid.Columns;
 using TnTComponents.Virtualization;
 
@@ -44,12 +39,13 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> : ITnTVirtualizeIt
     /// </summary>
     public TnTColumnBase<TGridItem>? SortByColumn { get; init; }
 
+    public IReadOnlyCollection<KeyValuePair<string, SortDirection>> SortOnProperties =>
+            GetSortByProperties().Select(sp => new KeyValuePair<string, SortDirection>(sp.PropertyName, sp.Direction)).ToList();
+
     /// <summary>
     /// Gets or sets the zero-based index of the first item to be supplied.
     /// </summary>
     public int StartIndex { get; init; }
-    public IReadOnlyCollection<KeyValuePair<string, SortDirection>> SortOnProperties =>
-        GetSortByProperties().Select(sp => new KeyValuePair<string, SortDirection>(sp.PropertyName, sp.Direction)).ToList();
 
     internal TnTGridItemsProviderRequest(int startIndex, int? count, TnTColumnBase<TGridItem>? sortByColumn, bool sortByAscending,
         CancellationToken cancellationToken) {
@@ -78,4 +74,3 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> : ITnTVirtualizeIt
     public IReadOnlyCollection<SortedProperty> GetSortByProperties() =>
         SortByColumn?.SortBy?.ToPropertyList(SortByAscending) ?? Array.Empty<SortedProperty>();
 }
-

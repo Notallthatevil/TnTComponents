@@ -58,24 +58,20 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
 
     /// <summary>
     /// Optionally defines a value for @key on each rendered row. Typically this should be used to
-    /// specify a unique identifier, such as a primary key value, for each data item.
-    ///
-    /// This allows the grid to preserve the association between row elements and data items based
-    /// on their unique identifiers, even when the <typeparamref name="TGridItem" /> instances are
+    /// specify a unique identifier, such as a primary key value, for each data item. /// This
+    /// allows the grid to preserve the association between row elements and data items based on
+    /// their unique identifiers, even when the <typeparamref name="TGridItem" /> instances are
     /// replaced by new copies (for example, after a new query against the underlying data store).
-    ///
-    /// If not set, the @key will be the <typeparamref name="TGridItem" /> instance itself.
+    /// /// If not set, the @key will be the <typeparamref name="TGridItem" /> instance itself.
     /// </summary>
     [Parameter]
     public Func<TGridItem, object> ItemKey { get; set; } = x => x!;
 
     /// <summary>
-    /// Gets or sets a queryable source of data for the grid.
-    ///
-    /// This could be in-memory data converted to queryable using the <see
+    /// Gets or sets a queryable source of data for the grid. /// This could be in-memory data
+    /// converted to queryable using the <see
     /// cref="System.Linq.Queryable.AsQueryable(System.Collections.IEnumerable)" /> extension
-    /// method, or an EntityFramework DataSet or an <see cref="IQueryable" /> derived from it.
-    ///
+    /// method, or an EntityFramework DataSet or an <see cref="IQueryable" /> derived from it. ///
     /// You should supply either <see cref="Items" /> or <see cref="ItemsProvider" />, but not both.
     /// </summary>
     [Parameter]
@@ -90,9 +86,8 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     public float ItemSize { get; set; } = 32;
 
     /// <summary>
-    /// Gets or sets a callback that supplies data for the rid.
-    ///
-    /// You should supply either <see cref="Items" /> or <see cref="ItemsProvider" />, but not both.
+    /// Gets or sets a callback that supplies data for the rid. /// You should supply either <see
+    /// cref="Items" /> or <see cref="ItemsProvider" />, but not both.
     /// </summary>
     [Parameter]
     public TnTGridItemsProvider<TGridItem>? ItemsProvider { get; set; }
@@ -116,10 +111,9 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     /// <summary>
     /// Optionally links this <see cref="TnTDataGrid{TGridItem}" /> instance with a <see
     /// cref="TnTPaginationState" /> model, causing the grid to fetch and render only the current
-    /// page of data.
-    ///
-    /// This is normally used in conjunction with a <see cref="FluentPaginator" /> component or some
-    /// other UI logic that displays and updates the supplied <see cref="TnTPaginationState" /> instance.
+    /// page of data. /// This is normally used in conjunction with a <see cref="FluentPaginator" />
+    /// component or some other UI logic that displays and updates the supplied <see
+    /// cref="TnTPaginationState" /> instance.
     /// </summary>
     [Parameter]
     public TnTPaginationState? Pagination { get; set; }
@@ -150,11 +144,9 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     /// <summary>
     /// If true, the grid will be rendered with virtualization. This is normally used in conjunction
     /// with scrolling and causes the grid to fetch and render only the data around the current
-    /// scroll viewport. This can greatly improve the performance when scrolling through large data sets.
-    ///
-    /// If you use <see cref="Virtualize" />, you should supply a value for <see cref="ItemSize" />
-    /// and must ensure that every row renders with the same constant height.
-    ///
+    /// scroll viewport. This can greatly improve the performance when scrolling through large data
+    /// sets. /// If you use <see cref="Virtualize" />, you should supply a value for <see
+    /// cref="ItemSize" /> and must ensure that every row renders with the same constant height. ///
     /// Generally it's preferable not to use <see cref="Virtualize" /> if the amount of data being
     /// rendered is small or if you are using pagination.
     /// </summary>
@@ -271,7 +263,7 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     /// <summary>
     /// Sets the grid's current sort column to the specified <paramref name="column" />.
     /// </summary>
-    /// <param name="column">   The column that defines the new sort order.</param>
+    /// <param name="column">The column that defines the new sort order.</param>
     /// <param name="direction">
     /// The direction of sorting. If the value is <see cref="SortDirection.Auto" />, then it will
     /// toggle the direction on each call.

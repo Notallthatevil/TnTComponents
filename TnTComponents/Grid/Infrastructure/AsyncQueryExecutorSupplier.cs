@@ -12,8 +12,7 @@ internal static class AsyncQueryExecutorSupplier {
     // - ... but without FluentDataGrid referencing Microsoft.EntityFramework directly. That's
     // because it would bring in heavy dependencies you may not be using (and relying on trimming
     // isn't enough, as it's still desirable to have heavy unused dependencies for Blazor Server).
-    //
-    // As a side-effect, we have an abstraction IAsyncQueryExecutor that developers could use to
+    // // As a side-effect, we have an abstraction IAsyncQueryExecutor that developers could use to
     // plug in their own mechanism for resolving async queries from other data sources than EF. It's
     // not really a major goal to make this adapter generally useful beyond EF, but fine if people
     // do have their own uses for it.

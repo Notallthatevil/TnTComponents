@@ -13,10 +13,8 @@ internal sealed class EventCallbackSubscriber<T>(EventCallback<T> handler) : IDi
     /// <summary>
     /// Creates a subscription on the <paramref name="subscribable" />, or moves any existing
     /// subscription to it by first unsubscribing from the previous <see
-    /// cref="EventCallbackSubscribable{T}" />.
-    ///
-    /// If the supplied <paramref name="subscribable" /> is null, no new subscription will be
-    /// created, but any existing one will still be unsubscribed.
+    /// cref="EventCallbackSubscribable{T}" />. /// If the supplied <paramref name="subscribable" />
+    /// is null, no new subscription will be created, but any existing one will still be unsubscribed.
     /// </summary>
     /// <param name="subscribable"></param>
     public void SubscribeOrMove(EventCallbackSubscribable<T>? subscribable) {

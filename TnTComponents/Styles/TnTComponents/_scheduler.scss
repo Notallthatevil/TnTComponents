@@ -92,10 +92,10 @@
                 user-select: none;
                 text-overflow: clip;
                 overflow: hidden;
-                &.tnt-grabbable{
-                    cursor:grab;
-                }
 
+                &.tnt-grabbable {
+                    cursor: grab;
+                }
             }
         }
     }

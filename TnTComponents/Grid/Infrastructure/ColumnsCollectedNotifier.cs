@@ -7,13 +7,9 @@ namespace TnTComponents.Grid.Infrastructure;
 // OnParametersSetAsync, it only knows about the set of columns that were present on the *previous*
 // render. If it's going to trigger a data load during OnParametersSetAsync, that operation can't
 // depend on the current set of columns as it might have changed, or might even still be empty
-// (i.e., on the first render).
-//
-// Ways this could be resolved:
-//
-// - In the future, we could implement the long-wanted feature of being able to query the contents
-// of a RenderFragment separately from rendering. Then the whole trick of
-// collection-during-rendering would not be needed.
+// (i.e., on the first render). // Ways this could be resolved: // - In the future, we could
+// implement the long-wanted feature of being able to query the contents of a RenderFragment
+// separately from rendering. Then the whole trick of collection-during-rendering would not be needed.
 // - Or, we could factor out most of TnTDataGrid's internals into some new component
 // TnTDataGridCore. The parent component, TnTDataGrid, would then only be responsible for collecting
 // columns followed by rendering TnTDataGridCore. So each time TnTDataGridCore renders, we'd already
@@ -26,11 +22,10 @@ namespace TnTComponents.Grid.Infrastructure;
 // we're going to guarantee to apply a default sort order), and then as a special case put in some
 // extra component in the render flow that raises an event once the columns are first collected.
 // - This is relatively simple and non-disruptive, though it doesn't cover cases where queries need
-// to be delayed until after a dynamically-added column is added
-//
-// The final option is what's implemented here. We send the notification via
-// EventCallbackSubscribable so that the async operation and re-rendering follows normal semantics
-// without us having to call StateHasChanged or think about exceptions.
+// to be delayed until after a dynamically-added column is added // The final option is what's
+// implemented here. We send the notification via EventCallbackSubscribable so that the async
+// operation and re-rendering follows normal semantics without us having to call StateHasChanged or
+// think about exceptions.
 
 /// <summary>
 /// For internal use only. Do not use.
