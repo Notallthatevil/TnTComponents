@@ -1,49 +1,58 @@
-function getCurrentTheme() {
+const localStorageKey = 'TnTComponentsStoredThemeKey';
+const prefersDark = 'DARK';
+const prefersLight = 'LIGHT';
+const prefersSystem = 'SYSTEM';
+
+function getStoredTheme() {
+    let storedTheme = localStorage.getItem(localStorageKey);
+    if (storedTheme) {
+        return storedTheme;
+    }
+    else {
+        return null;
+    }
+}
+
+function setStoredTheme(theme) {
+    localStorage.setItem(localStorageKey, theme);
+}
+
+function systemPrefersDark() {
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+}
+
+
+function updateThemeAttributes() {
     const darkThemeStyle = document.getElementById('tnt-theme-design-dark');
     const lightThemeStyle = document.getElementById('tnt-theme-design-light');
     if (darkThemeStyle && lightThemeStyle) {
-        const darkThemeMedia = darkThemeStyle.getAttribute('media');
-        if (darkThemeMedia && darkThemeMedia.includes) {
-            if (darkThemeMedia.includes('prefers-color-scheme')) {
-                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                    return 'dark';
-                }
-                else {
-                    return 'light';
-                }
-            }
-            else if (darkThemeMedia.includes('not all')) {
-                return 'light';
-            }
-            else {
-                return 'dark';
-            }
+
+        const storedTheme = getStoredTheme();
+        if (storedTheme === prefersDark || ((storedTheme === prefersSystem || storedTheme == null) && systemPrefersDark())) {
+            darkThemeStyle.setAttribute('media', 'all');
+            lightThemeStyle.setAttribute('media', 'not all');
+            return prefersDark;
+        }
+        else {
+            darkThemeStyle.setAttribute('media', 'not all');
+            lightThemeStyle.setAttribute('media', 'all');
+            return prefersLight;
         }
     }
     return null;
 }
 
-function toggleTheme(e) {
-    const darkThemeStyle = document.getElementById('tnt-theme-design-dark');
-    const lightThemeStyle = document.getElementById('tnt-theme-design-light');
-
-    if (darkThemeStyle && lightThemeStyle) {
-        const currentTheme = getCurrentTheme();
-        if (currentTheme === 'dark') {
-            darkThemeStyle.setAttribute('media', 'not all');
-            lightThemeStyle.setAttribute('media', 'all');
-        }
-        else {
-            darkThemeStyle.setAttribute('media', 'all');
-            lightThemeStyle.setAttribute('media', 'not all');
+function themeSelected(e) {
+    if (e && e.target) {
+        setStoredTheme(e.target.value);
+        const currentTheme = updateThemeAttributes();
+        if (e.target.updateIcon) {
+            e.target.updateIcon(currentTheme);
         }
 
-        const toggler = e.target.closest('tnt-theme-toggle');
-        if (toggler) {
-            toggler.updateIcon();
-        }
     }
 }
+
 
 export function onLoad(element, dotNetElementRef) {
     if (!customElements.get('tnt-theme-toggle')) {
@@ -58,27 +67,29 @@ export function onLoad(element, dotNetElementRef) {
                     return;
                 }
 
-                this.addEventListener('click', toggleTheme);
-                this.updateIcon();
+                const currentTheme = updateThemeAttributes();
+
+                this.updateIcon(currentTheme);
+                this.initSelect();
             }
 
-            updateIcon() {
-                this.innerHTML = '';
-                let element = document.createElement('span');
-                element.className = 'tnt-icon material-icons';
-                element.style.userSelect = 'none';
-                element.style.cursor = 'pointer';
-
-                const currentTheme = getCurrentTheme();
-
-                if (currentTheme === 'dark') {
-                    element.innerHTML = 'light_mode';
+            updateIcon(currentTheme) {
+                let iconElement = this.querySelector('span.tnt-theme-toggle-icon');
+                if (iconElement) {
+                    if (currentTheme === prefersDark) {
+                        iconElement.innerHTML = 'light_mode';
+                    }
+                    else if (currentTheme === prefersLight) {
+                        iconElement.innerHTML = 'dark_mode';
+                    }
                 }
-                else if (currentTheme === 'light') {
-                    element.innerHTML = 'dark_mode';
-                }
+            }
 
-                this.appendChild(element);
+            initSelect() {
+                let selectElement = this.querySelector('select.tnt-theme-select');
+                if (selectElement) {
+                    selectElement.addEventListener('change', themeSelected);
+                }
             }
         });
     }

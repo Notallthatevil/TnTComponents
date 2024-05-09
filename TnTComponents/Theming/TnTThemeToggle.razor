@@ -2,6 +2,13 @@
 @namespace TnTComponents
 @using TnTComponents.Core
 <tnt-theme-toggle @attributes="AdditionalAttributes">
+    <span class="tnt-icon material-icons tnt-theme-toggle-icon">
+    </span>
+    <select title="Select Theme" class="tnt-theme-select">
+        <option value="LIGHT">Light</option>
+        <option value="DARK">Dark</option>
+        <option value="SYSTEM">System</option>
+    </select>
 </tnt-theme-toggle>
 
 @RenderPageScript()
