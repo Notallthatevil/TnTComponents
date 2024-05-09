@@ -17,7 +17,6 @@ public record TnTEvent {
     public TnTColor BackgroundColor { get; set; } = TnTColor.Tertiary;
     public TnTColor ForegroundColor { get; set; } = TnTColor.OnTertiary;
 
-
     public bool Overlaps(TnTEvent other) {
         return EventStart < other.EventEnd && other.EventStart < EventEnd;
     }

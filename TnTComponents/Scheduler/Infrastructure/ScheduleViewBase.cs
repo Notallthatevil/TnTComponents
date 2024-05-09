@@ -50,6 +50,8 @@ public abstract class ScheduleViewBase<TEventType> : ComponentBase, ITnTComponen
         Scheduler.RemoveScheduleView(this);
     }
 
+    public abstract IEnumerable<DateOnly> GetVisibleDates();
+
     public abstract DateOnly? IncrementPage(DateOnly date);
 
     public virtual void Refresh() {
@@ -103,8 +105,6 @@ public abstract class ScheduleViewBase<TEventType> : ComponentBase, ITnTComponen
             currentTime = newTime;
         }
     }
-
-    public abstract IEnumerable<DateOnly> GetVisibleDates();
 
     protected bool IsDisabledSlot(DayOfWeek dayOfWeek, TimeOnly timeSlot) {
         return Scheduler.DisabledDateTimes.Any(disabledDateTime => disabledDateTime.IsDisabledTimeSlot(dayOfWeek, timeSlot));

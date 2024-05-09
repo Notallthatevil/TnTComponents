@@ -12,6 +12,9 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
     [Parameter]
+    public TnTColor BackgroundColor { get; set; } = TnTColor.Surface;
+
+    [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
     public string? CssClass => CssClassBuilder.Create()
@@ -26,6 +29,9 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
         .Build();
 
     [Parameter]
+    public EventCallback DateChangedCallback { get; set; }
+
+    [Parameter]
     public IEnumerable<TnTDisabledDateTime> DisabledDateTimes { get; set; } = [];
 
     [Parameter]
@@ -34,22 +40,16 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
     [Parameter]
     public DateOnly DisplayedDate { get => _displayDate ?? DateOnly.FromDateTime(DateTime.Today); set => _displayDate = value; }
 
-    [Parameter]
-    public TnTColor BackgroundColor { get; set; } = TnTColor.Surface;
-
-    [Parameter]
-    public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
-
     public ElementReference Element { get; private set; }
-
-    [Parameter]
-    public EventCallback DateChangedCallback { get; set; }
 
     [Parameter, EditorRequired]
     public ICollection<TEventType> Events { get; set; } = [];
 
     [Parameter]
     public bool HideDateControls { get; set; }
+
+    [Parameter]
+    public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
 
     private DateOnly? _displayDate = DateOnly.FromDateTime(DateTime.Today);
 
@@ -61,6 +61,14 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
         if (_scheduleViews.Count == 1) {
             _selectedView = scheduleView;
         }
+    }
+
+    public DateOnly? GetFirstVisibleDate() {
+        return _selectedView?.GetVisibleDates().First();
+    }
+
+    public DateOnly? GetLastVisibleDate() {
+        return _selectedView?.GetVisibleDates().Last();
     }
 
     public bool IsViewSelected(ScheduleViewBase<TEventType> scheduleView) {
@@ -90,13 +98,5 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
             _selectedView?.Refresh();
             await DateChangedCallback.InvokeAsync();
         }
-    }
-
-    public DateOnly? GetFirstVisibleDate() {
-        return _selectedView?.GetVisibleDates().First();
-    }
-
-    public DateOnly? GetLastVisibleDate() {
-        return _selectedView?.GetVisibleDates().Last();
     }
 }

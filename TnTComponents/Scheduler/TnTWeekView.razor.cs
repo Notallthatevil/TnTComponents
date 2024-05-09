@@ -28,6 +28,26 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         return date.AddDays(-7);
     }
 
+    public override IEnumerable<DateOnly> GetVisibleDates() {
+        int diff;
+        if (StartViewOn > Scheduler.DisplayedDate.DayOfWeek) {
+            diff = 7 - (int)StartViewOn + (int)Scheduler.DisplayedDate.DayOfWeek;
+        }
+        else {
+            diff = Math.Abs((int)StartViewOn - (int)Scheduler.DisplayedDate.DayOfWeek);
+        }
+
+        if (diff >= 7) {
+            diff %= 7;
+        }
+
+        var startDate = Scheduler.DisplayedDate.AddDays(-diff);
+
+        for (int i = 0; i < 7; i++) {
+            yield return startDate.AddDays(i);
+        }
+    }
+
     public override DateOnly? IncrementPage(DateOnly date) {
         return date.AddDays(7);
     }
@@ -149,26 +169,6 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
                     yield return subEvent;
                 }
             }
-        }
-    }
-
-    public override IEnumerable<DateOnly> GetVisibleDates() {
-        int diff;
-        if (StartViewOn > Scheduler.DisplayedDate.DayOfWeek) {
-            diff = 7 - (int)StartViewOn + (int)Scheduler.DisplayedDate.DayOfWeek;
-        }
-        else {
-            diff = Math.Abs((int)StartViewOn - (int)Scheduler.DisplayedDate.DayOfWeek);
-        }
-
-        if (diff >= 7) {
-            diff %= 7;
-        }
-
-        var startDate = Scheduler.DisplayedDate.AddDays(-diff);
-
-        for (int i = 0; i < 7; i++) {
-            yield return startDate.AddDays(i);
         }
     }
 
