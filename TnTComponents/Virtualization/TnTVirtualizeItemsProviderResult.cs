@@ -1,17 +1,11 @@
 namespace TnTComponents.Virtualization;
 
-/// <summary>
-/// Holds data being supplied to a <see cref="TnTDataGrid{TGridItem}" />'s <see
-/// cref="TnTDataGrid{TGridItem}.ItemsProvider" />.
-/// </summary>
-/// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
-public readonly struct TnTVirtualizeItemsProviderResult<TGridItem>()
-{
+public readonly struct TnTVirtualizeItemsProviderResult<TItem>() {
 
     /// <summary>
     /// Gets or sets the items being supplied.
     /// </summary>
-    public IReadOnlyCollection<TGridItem> Items { get; init; } = [];
+    public IReadOnlyCollection<TItem> Items { get; init; } = [];
 
     /// <summary>
     /// Gets or sets the total number of items that may be displayed in the grid. This normally
@@ -23,8 +17,7 @@ public readonly struct TnTVirtualizeItemsProviderResult<TGridItem>()
     /// </summary>
     public int TotalItemCount { get; init; }
 
-    public TnTVirtualizeItemsProviderResult(IReadOnlyCollection<TGridItem> items, int totalCount) : this()
-    {
+    public TnTVirtualizeItemsProviderResult(IReadOnlyCollection<TItem> items, int totalCount) : this() {
         Items = items;
         TotalItemCount = totalCount;
     }
