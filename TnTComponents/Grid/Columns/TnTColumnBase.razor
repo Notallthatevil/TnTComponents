@@ -15,15 +15,12 @@
             <div class="tnt-header-content @(ShowSortIcon ? "tnt-sorted-on" : null)" @onclick="@(() => Grid.SortByColumnAsync(this))">
                 @Title
                 @if (ShowSortIcon) {
-                    <MaterialIcon class="tnt-sort-icon">
-                        @if (Grid.SortByAscending == true) {
-                            @MaterialIcon.ArrowDropUp
-                        }
-                        else {
-                            @MaterialIcon.ArrowDropDown
-                            ;
-                        }
-                    </MaterialIcon>
+                    @if (Grid.SortByAscending == true) {
+                        <MaterialIcon class="tnt-sort-icon" Icon="@MaterialIcon.ArrowDropUp" />
+                    }
+                    else {
+                        <MaterialIcon class="tnt-sort-icon" Icon="@MaterialIcon.ArrowDropDown" />
+                    }
 
                 }
             </div>

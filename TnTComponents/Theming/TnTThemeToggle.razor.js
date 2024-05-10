@@ -44,8 +44,8 @@ function themeSelected(e) {
     if (e && e.target) {
         setStoredTheme(e.target.value);
         const currentTheme = updateThemeAttributes();
-        if (e.target.updateIcon) {
-            e.target.updateIcon(currentTheme);
+        if (e.target.parentElement && e.target.parentElement.updateIcon) {
+            e.target.parentElement.updateIcon(currentTheme);
         }
     }
 }

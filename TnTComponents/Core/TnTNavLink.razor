@@ -4,7 +4,7 @@
 @using TnTComponents.Core
 
 <a @attributes="AdditionalAttributes" href="@Href" class="@CssClass" style="@CssStyle" @ref="Element" >
-    @StartIcon
+    @StartIcon?.Render()
     @ChildContent
-    @EndIcon
+    @EndIcon?.Render()
 </a>

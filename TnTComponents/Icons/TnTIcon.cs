@@ -56,5 +56,7 @@ public abstract class TnTIcon : ComponentBase {
 
         builder.CloseElement();
     }
+
+    public RenderFragment Render() => new RenderFragment(BuildRenderTree);
 }
 

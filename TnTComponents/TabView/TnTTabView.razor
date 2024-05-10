@@ -19,7 +19,7 @@
                                                                                                                         .AddRipple()
                                                                                                                         .Build())">
                             @if (!SecondaryTabView) {
-                                @child.Icon
+                                @child.Icon?.Render()
                             }
                             @child.Title
                         </button>

@@ -3,7 +3,7 @@
 @inherits TnTComponentBase
 
 <label @attributes="AdditionalAttributes" class="@CssClass" style="@CssStyle" @ref="Element">
-    @StartIcon
+    @StartIcon?.Render()
     <input type="checkbox" @onchange="@((args) => ValueChanged.InvokeAsync((bool)args.Value!))" />
     @ChildContent
 </label>

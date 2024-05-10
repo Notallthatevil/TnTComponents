@@ -5,9 +5,9 @@
 
 <tnt-side-nav-menu-group @attributes="AdditionalAttributes" class="@CssClass" style="@CssStyle">
     <span>
-        @Icon
+        @Icon?.Render()
         @Title
-        @MaterialIcon.ArrowDropDown
+        <MaterialIcon Icon="@MaterialIcon.ArrowDropDown" />
     </span>
 
     <div>
