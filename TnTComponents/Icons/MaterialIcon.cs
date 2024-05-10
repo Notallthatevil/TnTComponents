@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using TnTComponents.Core;
 
 namespace TnTComponents;
@@ -25,4 +26,8 @@ public sealed partial class MaterialIcon : TnTIcon {
     public MaterialIcon() : base() { }
 
     public MaterialIcon(string icon) : base(icon) { }
+
+    protected override void BuildRenderTree(RenderTreeBuilder builder) {
+        base.BuildRenderTree(builder);
+    }
 }

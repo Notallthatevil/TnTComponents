@@ -19,7 +19,7 @@ public partial class TnTInputChip {
     public EventCallback<MouseEventArgs> ClosedCallback { get; set; }
 
     [Parameter]
-    public TnTIcon CloseIcon { get; set; } = MaterialIcon.Close;
+    public TnTIcon CloseIcon { get; set; } = new MaterialIcon(MaterialIcon.Close);
 
     public override string? CssClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)

@@ -1,20 +1,21 @@
 ﻿@page "/InfiniteScroll"
 @rendermode InteractiveAuto
 @using TnTComponents
+@using TnTComponents.Virtualization
 
 <h3>InfiniteScroll</h3>
 
-<TnTComponents.TnTVirtualize ItemsProvider="GetItems">
+<TnTComponents.TnTVirtualize TItem="int" ItemsProvider="GetItems">
 
 </TnTComponents.TnTVirtualize>
 
 
 @code {
-    async Task<TnTVirtualizeItemsResult<int>> GetItems(TnTVirtualizeItemsRequest request) {
+    async ValueTask<TnTVirtualizeItemsProviderResult<int>> GetItems(TnTVirtualizeItemsProviderRequest<int> request) {
         await Task.Delay(1000); // Simulate async loading
-        return new TnTVirtualizeItemsResult<int>() {
-            Items = Enumerable.Range(request.StartIndex, 50).ToList(),
-            TotalItemsCount = 1000
-        };
+        return new TnTVirtualizeItemsProviderResult<int>() {
+                Items = Enumerable.Range(request.StartIndex, 50).ToList(),
+                TotalItemCount = 1000
+            };
     }
 }

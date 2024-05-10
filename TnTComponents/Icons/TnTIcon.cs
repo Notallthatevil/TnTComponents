@@ -32,14 +32,12 @@ public abstract class TnTIcon : ComponentBase {
     [Parameter]
     public IconSize Size { get; set; } = IconSize.Medium;
 
-    public string? Icon { get; }
+    [Parameter, EditorRequired]
+    public string? Icon { get; set; }
 
     public string? AdditionalClass { get; set; }
 
     public ElementReference Element { get; private set; }
-
-    [Parameter]
-    public RenderFragment? ChildContent { get; set; }
 
     protected TnTIcon() { }
     protected TnTIcon(string icon) {
@@ -54,21 +52,9 @@ public abstract class TnTIcon : ComponentBase {
         builder.AddAttribute(30, "style", CssStyle);
         builder.AddElementReferenceCapture(40, e => Element = e);
 
-        if (ChildContent is not null) {
-            builder.AddContent(50, ChildContent);
-        }
-        else {
-            builder.AddContent(60, Icon);
-        }
+        builder.AddContent(60, Icon);
 
         builder.CloseElement();
-    }
-
-    protected override void OnParametersSet() {
-        base.OnParametersSet();
-        if (Icon is null && ChildContent is null) {
-            throw new InvalidOperationException("Must provide either child content or use a constructor which takes a string.");
-        }
     }
 }
 

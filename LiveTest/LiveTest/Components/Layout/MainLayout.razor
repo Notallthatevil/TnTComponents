@@ -4,7 +4,7 @@
 <TnTLayout>
     <TnTHeader>
         <TnTSideNavToggle>
-            @MaterialIcon.Menu.Render()
+            <MaterialIcon Icon="@MaterialIcon.Menu" />
         </TnTSideNavToggle>
         <TnTThemeToggle />
         This is my header
@@ -14,43 +14,43 @@
         <h3>
             My First Headline
         </h3>
-        <TnTSideNavMenuLink Icon="MaterialIcon.Home" Href="/" Match="NavLinkMatch.All" Status="100" Disabled="true">
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Home))" Href="/" Match="NavLinkMatch.All" Status="100" Disabled="true">
             Home
         </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="MaterialIcon.PermContactCalendar" Href="/scheduler" Match="NavLinkMatch.All" Status="100">
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.PermContactCalendar))" Href="/scheduler" Match="NavLinkMatch.All" Status="100">
             Scheduler
         </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="MaterialIcon.Error" Href="/Buttons">
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Error))" Href="/Buttons">
             Buttons
         </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="MaterialIcon.Warning" Href="/card">
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Warning))" Href="/card">
             Card Some really long content that should be cut off or wrapped
         </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="MaterialIcon.Snooze" Href="/snackbar">
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Snooze))" Href="/snackbar">
             Snackbar
         </TnTSideNavMenuLink>
         <TnTSideNavMenuLink Href="/navlinks">
             Nav Links
         </TnTSideNavMenuLink>
-        <TnTSideNavMenuGroup Title="Group 1" Icon="MaterialIcon.Business">
-            <TnTSideNavMenuLink Icon="MaterialIcon.Delete" Href="/datagrid">
+        <TnTSideNavMenuGroup Title="Group 1" Icon="@(new MaterialIcon(MaterialIcon.Business))">
+            <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Delete))" Href="/datagrid">
                 Data Grid
             </TnTSideNavMenuLink>
-            <TnTSideNavMenuLink Icon="MaterialIcon.Star" Href="/progress">
+            <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Star))" Href="/progress">
                 Progress
             </TnTSideNavMenuLink>
-            <TnTSideNavMenuLink Icon="MaterialIcon.MusicNote" Href="/accordion">
+            <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.MusicNote))" Href="/accordion">
                 Accordion
             </TnTSideNavMenuLink>
-            <TnTSideNavMenuLink Icon="MaterialIcon.Language" Href="/dialog">
+            <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Language))" Href="/dialog">
                 Dialog
             </TnTSideNavMenuLink>
         </TnTSideNavMenuGroup>
-        <TnTSideNavMenuGroup Title="Group 1" Icon="MaterialIcon.Cached" Disabled="true">
-            <TnTSideNavMenuLink Icon="MaterialIcon.AccountBalance" Href="/datagrid">
+        <TnTSideNavMenuGroup Title="Group 1" Icon="@(new MaterialIcon(MaterialIcon.Cached))" Disabled="true">
+            <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.AccountBalance))" Href="/datagrid">
                 Data Grid
             </TnTSideNavMenuLink>
-            <TnTSideNavMenuLink Icon="MaterialIcon.Backup" Href="/progress">
+            <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Backup))" Href="/progress">
                 Progress
             </TnTSideNavMenuLink>
         </TnTSideNavMenuGroup>
@@ -58,35 +58,35 @@
         <h3>
             My Second Headline
         </h3>
-        <TnTSideNavMenuGroup Title="Group 2" Icon="MaterialIcon.Dock" Expand="true">
-            <TnTSideNavMenuLink Icon="MaterialIcon.Publish" Href="/forms">
+        <TnTSideNavMenuGroup Title="Group 2" Icon="@(new MaterialIcon(MaterialIcon.Dock))" Expand="true">
+            <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Publish))" Href="/forms">
                 Forms
             </TnTSideNavMenuLink>
-            <TnTSideNavMenuLink Icon="MaterialIcon.PanoramaHorizontal" Href="/upload">
+            <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.PanoramaHorizontal))" Href="/upload">
                 Upload
             </TnTSideNavMenuLink>
-            <TnTSideNavMenuLink Icon="MaterialIcon.Poll" Href="/tabview">
+            <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Poll))" Href="/tabview">
                 Tabs
             </TnTSideNavMenuLink>
-            <TnTSideNavMenuGroup Title="Group 2" Icon="MaterialIcon.Face" Expand="true">
-                <TnTSideNavMenuLink Icon="MaterialIcon.Http" Href="/forms">
+            <TnTSideNavMenuGroup Title="Group 2" Icon="@(new MaterialIcon(MaterialIcon.Face))" Expand="true">
+                <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Http))" Href="/forms">
                     Forms
                 </TnTSideNavMenuLink>
-                <TnTSideNavMenuLink Icon="MaterialIcon.Edit" Href="/upload">
+                <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Edit))" Href="/upload">
                     Upload
                 </TnTSideNavMenuLink>
-                <TnTSideNavMenuLink Icon="MaterialIcon.ArrowDropDownCircle" Href="/tabview">
+                <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.ArrowDropDownCircle))" Href="/tabview">
                     Tabs
                 </TnTSideNavMenuLink>
             </TnTSideNavMenuGroup>
         </TnTSideNavMenuGroup>
-        <TnTSideNavMenuLink Icon="MaterialIcon.ShoppingBasket" Href="/skeleton">
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.ShoppingBasket))" Href="/skeleton">
             Skeleton
         </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="MaterialIcon.MergeType" Href="/typeahead">
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.MergeType))" Href="/typeahead">
             Typeahead
         </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="MaterialIcon.ScreenLockLandscape" Href="/InfiniteScroll">
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.ScreenLockLandscape))" Href="/InfiniteScroll">
             Infinite Scroll
         </TnTSideNavMenuLink>
     </TnTSideNav>

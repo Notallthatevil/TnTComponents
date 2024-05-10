@@ -9,7 +9,7 @@
         <TnTPropertyColumn Property="@(x => x.Column3)" Format="MM/yyyy" />
         <TnTTemplateColumn>
             <TnTButton OnClick="() => ItemClicked(context)" Appearance="ButtonAppearance.Text" StopPropagation="true">
-                @MaterialIcon.Edit.Render()
+                <MaterialIcon Icon="@MaterialIcon.Edit" />
                 Edit
             </TnTButton>
         </TnTTemplateColumn>

@@ -46,7 +46,7 @@ public partial class TnTTypeahead<TItem> {
     public TnTColor SearchProgressColor { get; set; } = TnTColor.Secondary;
 
     [Parameter]
-    public TnTIcon StartIcon { get; set; } = MaterialIcon.Search;
+    public TnTIcon StartIcon { get; set; } = new MaterialIcon(MaterialIcon.Search);
 
     private TnTDebouncer _debouncer = new();
     private TnTInputText? _inputTextBox;
