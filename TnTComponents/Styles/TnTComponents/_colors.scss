@@ -76,6 +76,7 @@ $color-classes-no-transparent: transparent, primary, on-primary, primary-contain
 
     .tnt-fg-color-#{$colorClass} {
         color: var(--tnt-color-#{$colorClass});
+        -webkit-text-fill-color: var(--tnt-color-#{$colorClass});
     }
 
     .tnt-accent-color-#{$colorClass} {
