@@ -18,6 +18,7 @@ public enum IconAppearance {
 }
 
 public abstract class TnTIcon : ComponentBase {
+    [Parameter(CaptureUnmatchedValues = true)]
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
     public abstract string? CssClass { get; }
