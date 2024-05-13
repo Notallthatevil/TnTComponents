@@ -22,12 +22,14 @@ public class TnTContainer : ComponentBase, ITnTComponentBase, ITnTFlexBox {
     public RenderFragment ChildContent { get; set; } = default!;
 
     public string? CssClass => CssClassBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddFlexBox(this)
         .AddClass("tnt-container")
         .Build();
 
-    [Parameter]
-    public string? CssStyle { get; set; }
+    public string? CssStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .Build();
 
     [Parameter]
     public LayoutDirection? Direction { get; set; }

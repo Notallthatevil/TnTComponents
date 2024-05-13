@@ -41,8 +41,9 @@ public partial class TnTNavLink {
         .AddClass("tnt-active", _isActive)
         .Build();
 
-    [Parameter]
-    public string? CssStyle { get; set; }
+    public string? CssStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .Build();
 
     [Parameter]
     public bool Disabled { get; set; }
