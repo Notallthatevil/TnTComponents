@@ -9,7 +9,7 @@ namespace TnTComponents.Grid;
 /// cref="TnTDataGrid{TGridItem}.ItemsProvider" />.
 /// </summary>
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
-public readonly struct TnTGridItemsProviderRequest<TGridItem> : ITnTVirtualizeItemsProviderRequest {
+public readonly struct TnTGridItemsProviderRequest<TGridItem> {
 
     /// <summary>
     /// Gets or sets a token that indicates if the request should be cancelled.
@@ -54,6 +54,24 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> : ITnTVirtualizeIt
         SortByColumn = sortByColumn;
         SortByAscending = sortByAscending;
         CancellationToken = cancellationToken;
+    }
+
+    public static implicit operator TnTGridItemsProviderRequest<TGridItem>(TnTItemsProviderRequest request) {
+        return new TnTGridItemsProviderRequest<TGridItem> {
+            Count = request.Count,
+            SortByColumn = null,
+            SortByAscending = request.SortOnProperties.Count() > 0 && request.SortOnProperties.First().Value == SortDirection.Ascending,
+            StartIndex = request.StartIndex,
+            CancellationToken = default
+        };
+    }
+
+    public static implicit operator TnTItemsProviderRequest(TnTGridItemsProviderRequest<TGridItem> request) {
+        return new TnTItemsProviderRequest {
+            StartIndex = request.StartIndex,
+            SortOnProperties = request.SortOnProperties,
+            Count = request.Count
+        };
     }
 
     /// <summary>

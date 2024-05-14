@@ -126,11 +126,28 @@ public partial class TnTVirtualize<TItem> {
     }
 }
 
-public class TnTVirtualizeItemsProviderRequest<TItem> : ITnTVirtualizeItemsProviderRequest {
+public class TnTVirtualizeItemsProviderRequest<TItem> {
     public CancellationToken CancellationToken { get; init; }
     public int? Count { get; set; }
     public IReadOnlyCollection<KeyValuePair<string, SortDirection>> SortOnProperties { get; init; } = [];
     public int StartIndex { get; init; }
+
+    public static implicit operator TnTItemsProviderRequest(TnTVirtualizeItemsProviderRequest<TItem> request) {
+        return new TnTItemsProviderRequest {
+            StartIndex = request.StartIndex,
+            SortOnProperties = request.SortOnProperties,
+            Count = request.Count
+        };
+    }
+
+    public static implicit operator TnTVirtualizeItemsProviderRequest<TItem>(TnTItemsProviderRequest request) {
+        return new TnTVirtualizeItemsProviderRequest<TItem> {
+            Count = request.Count,
+            SortOnProperties = request.SortOnProperties.ToList(),
+            StartIndex = request.StartIndex,
+            CancellationToken = default
+        };
+    }
 }
 
 /// <summary>
@@ -139,7 +156,6 @@ public class TnTVirtualizeItemsProviderRequest<TItem> : ITnTVirtualizeItemsProvi
 /// <typeparam name="TItem">The type of data represented by each row in the grid.</typeparam>
 /// <param name="request">Parameters describing the data being requested.</param>
 /// <returns>
-/// A <see cref="ValueTask{TnTVirtualizeItemsProviderResult{TGridItem}}" /> that gives the data to
-/// be displayed.
+/// A <see cref="ValueTask{TnTItemsProviderResult{TGridItem}}" /> that gives the data to be displayed.
 /// </returns>
-public delegate ValueTask<TnTVirtualizeItemsProviderResult<TItem>> TnTVirtualizeItemsProvider<TItem>(TnTVirtualizeItemsProviderRequest<TItem> request);
+public delegate ValueTask<TnTItemsProviderResult<TItem>> TnTVirtualizeItemsProvider<TItem>(TnTVirtualizeItemsProviderRequest<TItem> request);

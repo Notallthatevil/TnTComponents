@@ -1,6 +1,6 @@
 namespace TnTComponents.Virtualization;
 
-public readonly struct TnTVirtualizeItemsProviderResult<TItem>() {
+public readonly struct TnTItemsProviderResult<TItem>() {
 
     /// <summary>
     /// Gets or sets the items being supplied.
@@ -15,7 +15,7 @@ public readonly struct TnTVirtualizeItemsProviderResult<TItem>() {
     /// </summary>
     public int TotalItemCount { get; init; }
 
-    public TnTVirtualizeItemsProviderResult(IReadOnlyCollection<TItem> items, int totalCount) : this() {
+    public TnTItemsProviderResult(IReadOnlyCollection<TItem> items, int totalCount) : this() {
         Items = items;
         TotalItemCount = totalCount;
     }
