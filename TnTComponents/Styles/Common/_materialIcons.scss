@@ -2,18 +2,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
 
-.material-icons.mi-small {
+.material-icons.mi-small, .material-symbols.mi-small {
     font-size: 18px;
 }
 
-.material-icons.mi-medium {
+.material-icons.mi-medium, .material-symbols.mi-large {
     font-size: 24px;
 }
 
-.material-icons.mi-large {
+.material-icons.mi-large, .material-symbols.mi-large {
     font-size: 36px;
 }
 
-.material-icons.mi-extra-large {
+.material-icons.mi-extra-large, .material-symbols.mi-large {
     font-size: 48px;
 }

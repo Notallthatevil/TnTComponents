@@ -5,9 +5,10 @@ using TnTComponents.Core;
 namespace TnTComponents;
 
 public sealed partial class MaterialIcon : TnTIcon {
+
     public override string? CssClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddClass("tnt-icons")
+        .AddClass("tnt-icon")
         .AddClass("material-symbols-outlined", Appearance == IconAppearance.Default || Appearance == IconAppearance.Outlined)
         .AddClass("material-symbols-sharp", Appearance == IconAppearance.Sharp)
         .AddClass("material-symbols-rounded", Appearance == IconAppearance.Round)
@@ -22,10 +23,11 @@ public sealed partial class MaterialIcon : TnTIcon {
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
+    public MaterialIcon() : base() {
+    }
 
-    public MaterialIcon() : base() { }
-
-    public MaterialIcon(string icon) : base(icon) { }
+    public MaterialIcon(string icon) : base(icon) {
+    }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         base.BuildRenderTree(builder);
