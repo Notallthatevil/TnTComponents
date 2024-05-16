@@ -362,13 +362,13 @@ public class TnTThemeDesign : IComponent {
 
             builder.OpenElement(2, "style");
             if (Theme == Theme.System) {
-                builder.AddAttribute(3, "media", "(prefers-color-scheme:dark)");
+                //builder.AddAttribute(3, "media", "(prefers-color-scheme:dark)");
             }
             else if (Theme == Theme.Dark) {
-                builder.AddAttribute(3, "media", "all");
+                //builder.AddAttribute(3, "media", "all");
             }
             else {
-                builder.AddAttribute(3, "media", "not all");
+                //builder.AddAttribute(3, "media", "not all");
             }
             builder.AddAttribute(4, "id", "tnt-theme-design-dark");
             builder.AddContent(5, darkTheme.ToString());
@@ -376,13 +376,13 @@ public class TnTThemeDesign : IComponent {
 
             builder.OpenElement(6, "style");
             if (Theme == Theme.System) {
-                builder.AddAttribute(7, "media", "(prefers-color-scheme:light)");
+                //builder.AddAttribute(7, "media", "(prefers-color-scheme:light)");
             }
             else if (Theme == Theme.Dark) {
-                builder.AddAttribute(7, "media", "not all");
+                //builder.AddAttribute(7, "media", "not all");
             }
             else {
-                builder.AddAttribute(7, "media", "all");
+                //builder.AddAttribute(7, "media", "all");
             }
             builder.AddAttribute(8, "id", "tnt-theme-design-light");
             builder.AddContent(9, lightTheme.ToString());

@@ -46,6 +46,7 @@ function themeSelected(e) {
         const currentTheme = updateThemeAttributes();
         if (e.target.parentElement && e.target.parentElement.updateIcon) {
             e.target.parentElement.updateIcon(currentTheme);
+            e.target.parentElement.initSelect(currentTheme);
         }
     }
 }
@@ -66,7 +67,7 @@ export function onLoad(element, dotNetElementRef) {
                 const currentTheme = updateThemeAttributes();
 
                 this.updateIcon(currentTheme);
-                this.initSelect();
+                this.initSelect(currentTheme);
             }
 
             updateIcon(currentTheme) {
@@ -81,17 +82,35 @@ export function onLoad(element, dotNetElementRef) {
                 }
             }
 
-            initSelect() {
+            initSelect(currentTheme) {
                 let selectElement = this.querySelector('select.tnt-theme-select');
                 if (selectElement) {
                     selectElement.addEventListener('change', themeSelected);
+
+                    let options = selectElement.querySelectorAll('option');
+
+                    options.forEach(opt => {
+                        if (opt.value === getStoredTheme()) {
+                            opt.selected = 'selected';
+                            opt.setAttribute('selected', true);
+                        }
+                    })
                 }
+
             }
         });
     }
 }
 
 export function onUpdate(element, dotNetElementRef) {
+    const currentTheme = updateThemeAttributes();
+    if (element && element.updateIcon) {
+        element.updateIcon(currentTheme);
+    }
+
+    if (element && element.initSelect) {
+        element.initSelect(currentTheme);
+    }
 }
 
 export function onDispose(element, dotNetElementRef) {
