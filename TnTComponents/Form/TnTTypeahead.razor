@@ -57,10 +57,11 @@
 @code {
     private void RenderInputBox(RenderTreeBuilder __builder) {
         <TnTInputText @attributes="AdditionalAttributes"
-        @bind-Value="_searchText"
+                      @bind-Value="_searchText"
                       BindOnInput="true"
                       BindAfter="SearchAsync"
                       StartIcon="StartIcon"
+                      Placeholder="@Placeholder"
                       @onkeypress="KeyPressedAsync"
                       @ref="_inputTextBox" />
     }

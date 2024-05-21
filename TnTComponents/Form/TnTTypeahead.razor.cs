@@ -12,6 +12,9 @@ public partial class TnTTypeahead<TItem> {
     [Parameter]
     public int DebounceMilliseconds { get; set; } = 300;
 
+    [Parameter]
+    public string? Placeholder { get; set; }
+
     [Parameter, EditorRequired]
     public EventCallback<TItem> ItemSelected { get; set; }
 
