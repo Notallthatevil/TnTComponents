@@ -7,6 +7,9 @@ namespace TnTComponents;
 
 public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
 
+    [Parameter]
+    public bool HideDates { get; set; }
+
     public override string? CssClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-week-view")

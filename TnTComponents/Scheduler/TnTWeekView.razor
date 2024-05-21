@@ -11,9 +11,11 @@
             @foreach (var (date, gridPosition) in _visibleDates) {
                 <div class="tnt-slot tnt-column-header tnt-label-large@(date == DateOnly.FromDateTime(DateTimeOffset.Now.Date) ? " today" : null)" style="@gridPosition.ToCssString()">
                     @date.ToString("dddd")
-                    <div>
-                        @date.ToString("dd")
-                    </div>
+                    @if (!HideDates) {
+                        <div>
+                            @date.ToString("dd")
+                        </div>
+                    }
                 </div>
             }
 
