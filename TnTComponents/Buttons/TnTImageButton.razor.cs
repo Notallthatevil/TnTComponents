@@ -35,6 +35,9 @@ public partial class TnTImageButton {
     [Parameter]
     public ButtonType Type { get; set; }
 
+    [Parameter]
+    public bool StopPropagation { get; set; }
+
     protected override void OnInitialized() {
         base.OnInitialized();
         Name ??= ComponentIdentifier;

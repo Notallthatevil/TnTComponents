@@ -3,14 +3,15 @@
 @inherits TnTPageScriptComponent<TnTImageButton>
 
 <button is="tnt-button"
-    @attributes="AdditionalAttributes"
-    class="@CssClass"
-    style="@CssStyle"
-    name="@Name"
-    type="@Type.ToHtmlType()"
-    disabled="@Disabled"
-    autofocus="@AutoFocus"
-    @onclick="OnClick">
+        @attributes="AdditionalAttributes"
+        class="@CssClass"
+        style="@CssStyle"
+        name="@Name"
+        type="@Type.ToHtmlType()"
+        disabled="@Disabled"
+        autofocus="@AutoFocus"
+        @onclick="OnClick"
+        @onclick:stopPropagation="StopPropagation">
     @Icon.Render()
 </button>
 
