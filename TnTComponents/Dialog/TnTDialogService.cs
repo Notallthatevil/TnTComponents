@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using TnTComponents.Dialog.Infrastructure;
 
 namespace TnTComponents.Dialog;
 
@@ -29,6 +30,13 @@ public class TnTDialogService {
             }
         ) ?? Task.CompletedTask);
 
+    public async Task OpenAsync(RenderFragment renderFragment, TnTDialogOptions? options = null) {
+        ArgumentNullException.ThrowIfNull(renderFragment, nameof(renderFragment));
+        await OpenAsync<DialogHelperComponent>(options, new Dictionary<string, object?> {
+            { nameof(DialogHelperComponent.ChildContent), renderFragment }
+        });
+    }
+
     public async Task<DialogResult> OpenForResultAsync<TComponent>(TnTDialogOptions? options = null, IReadOnlyDictionary<string, object?>? parameters = null) where TComponent : IComponent {
         var dialog = new DialogImpl(this) {
             Options = options ?? new(),
@@ -45,6 +53,14 @@ public class TnTDialogService {
         else {
             return DialogResult.Failed;
         }
+    }
+
+
+    public async Task<DialogResult> OpenForResultAsync(RenderFragment renderFragment, TnTDialogOptions? options = null) {
+        ArgumentNullException.ThrowIfNull(renderFragment, nameof(renderFragment));
+        return await OpenForResultAsync<DialogHelperComponent>(options, new Dictionary<string, object?> {
+            { nameof(DialogHelperComponent.ChildContent), renderFragment }
+        });
     }
 
     private class DialogImpl(TnTDialogService dialogService) : ITnTDialog {
