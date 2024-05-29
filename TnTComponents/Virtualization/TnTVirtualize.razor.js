@@ -54,7 +54,7 @@ export function onUpdate(element, dotNetRef) {
 }
 
 export function onDispose(element, dotNetRef) {
-    if (element.dispose) {
+    if (element && element.dispose) {
         element.dispose();
     }
 }
