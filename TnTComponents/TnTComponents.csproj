@@ -24,7 +24,7 @@
     </ItemGroup>
 
     <Target Name="MoveCSS" BeforeTargets="Build">
-        <Move SourceFiles="Styles/style.css" DestinationFolder="wwwroot" />
+        <Copy SourceFiles="Styles/style.css" DestinationFolder="wwwroot" />
     </Target>
 
 </Project>
