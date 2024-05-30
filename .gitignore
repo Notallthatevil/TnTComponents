@@ -359,13 +359,4 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
-# Fody - auto-generated XML schema
-FodyWeavers.xsd
-/TnTComponents/wwwroot/style.css
-/TnTComponents/wwwroot/style.min.css
-/TnTComponents/wwwroot/style.dark.css
-/TnTComponents/wwwroot/style.dark.min.css
-/TnTComponents/wwwroot/style.light.css
-/TnTComponents/wwwroot/style.light.min.css
-/TnTComponents/wwwroot/variables.css
-/TnTComponents/wwwroot/variables.min.css
+*.css
