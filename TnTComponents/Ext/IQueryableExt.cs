@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.QuickGrid;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using TnTComponents.Virtualization;
 
 namespace TnTComponents.Ext;

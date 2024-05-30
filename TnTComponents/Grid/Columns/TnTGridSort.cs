@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Components.QuickGrid;
 using System.Linq.Expressions;
+using TnTComponents.Core;
 
 namespace TnTComponents.Grid;
 

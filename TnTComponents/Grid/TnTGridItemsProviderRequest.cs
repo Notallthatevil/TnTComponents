@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.QuickGrid;
+﻿using TnTComponents.Core;
 using TnTComponents.Grid.Columns;
 using TnTComponents.Virtualization;
 
