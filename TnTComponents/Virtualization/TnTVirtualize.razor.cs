@@ -22,7 +22,7 @@ public partial class TnTVirtualize<TItem> {
     public bool InfiniteScroll { get; set; } = true;
 
     [Parameter, EditorRequired]
-    public TnTVirtualizeItemsProvider<TItem> ItemsProvider { get; set; } = default!;
+    public TnTVirtualizeItemsProvider<TItem>? ItemsProvider { get; set; }
 
     [Parameter]
     public RenderFragment<TItem>? ItemTemplate { get; set; }
@@ -37,7 +37,7 @@ public partial class TnTVirtualize<TItem> {
 
     private bool _allItemsRetrieved;
     private IEnumerable<TItem> _items = [];
-    private TnTVirtualizeItemsProvider<TItem> _lastUsedProvider = default!;
+    private TnTVirtualizeItemsProvider<TItem>? _lastUsedProvider;
     private CancellationTokenSource? _loadItemsCts;
     private KeyValuePair<string, SortDirection>? _sortOnProperty;
 
@@ -52,7 +52,7 @@ public partial class TnTVirtualize<TItem> {
 
     [JSInvokable]
     public async Task LoadMoreItems() {
-        if (_loadItemsCts is not null) {
+        if (_loadItemsCts is not null || ItemsProvider is null) {
             return;
         }
 
@@ -91,9 +91,6 @@ public partial class TnTVirtualize<TItem> {
 
     protected override void OnParametersSet() {
         base.OnParametersSet();
-        if (ItemsProvider is null) {
-            throw new InvalidOperationException($"{nameof(ItemsProvider)} is required.");
-        }
         if (!InfiniteScroll) {
             throw new NotImplementedException("Non-infinite scroll has not been implemented");
         }
@@ -105,8 +102,12 @@ public partial class TnTVirtualize<TItem> {
         _lastUsedProvider = ItemsProvider;
 
         if (SortOnProperty is not null) {
-            var compiledPropertyExpression = SortOnProperty.Compile();
-            if (SortOnProperty.Body is MemberExpression memberExpression) {
+            if(SortOnProperty.Body is UnaryExpression unaryExpression) {
+                if (unaryExpression.Operand is MemberExpression memberExpression) {
+                    _sortOnProperty = new KeyValuePair<string, SortDirection>(memberExpression.Member.Name, SortDirection.Ascending);
+                }
+            }
+            else if (SortOnProperty.Body is MemberExpression memberExpression) {
                 _sortOnProperty = new KeyValuePair<string, SortDirection>(memberExpression.Member.Name, SortDirection.Ascending);
             }
         }
