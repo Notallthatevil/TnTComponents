@@ -536,7 +536,8 @@ span.tnt-radio-group {
     display: inline-flex;
     padding: 0.5rem;
     padding-right: 1rem;
-    margin: 0.5rem;
+    margin: 0.5rem 0;
+    width: 100%;
 
     span.tnt-radio-group-name {
         position: absolute;
