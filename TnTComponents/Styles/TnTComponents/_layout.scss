@@ -151,19 +151,19 @@
 
     &:has(tnt-header):has(tnt-footer) {
         tnt-body {
-            min-height: calc(calc(100vh - $tnt-header-height) - $tnt-footer-height);
+            min-height: calc(calc(30vh - $tnt-header-height) - $tnt-footer-height);
         }
     }
 
     &:has(tnt-footer):not(:has(tnt-header)) {
         tnt-body {
-            min-height: calc(100vh - $tnt-footer-height);
+            min-height: calc(30vh - $tnt-footer-height);
         }
     }
 
     &:has(tnt-header):not(:has(tnt-footer)) {
         tnt-body {
-            min-height: calc(100vh - $tnt-header-height);
+            min-height: calc(30vh - $tnt-header-height);
             padding-bottom: 1px;
         }
     }
