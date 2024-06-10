@@ -1,30 +1,39 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
+    <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <TypeScriptOutFile></TypeScriptOutFile>
+      <TypeScriptOutDir></TypeScriptOutDir>
+      <TypeScriptTarget>ES6</TypeScriptTarget>
+    </PropertyGroup>
+
+    <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <TypeScriptOutFile></TypeScriptOutFile>
+      <TypeScriptOutDir></TypeScriptOutDir>
+      <TypeScriptTarget>ES6</TypeScriptTarget>
+    </PropertyGroup>
+
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+        <TypeScriptModuleKind>es6</TypeScriptModuleKind>
     </PropertyGroup>
+
+    <ItemGroup>
+        <Content Remove="compilerconfig.json" />
+    </ItemGroup>
 
     <ItemGroup>
         <SupportedPlatform Include="browser" />
     </ItemGroup>
 
-    <PropertyGroup>
-        <DartSassOutputStyle>compressed</DartSassOutputStyle>
-        <DartSassOutputStyle Condition="'$(Configuration)' == 'Debug'">expanded</DartSassOutputStyle>
-    </PropertyGroup>
-
     <ItemGroup>
-        <PackageReference Include="DartSassBuilder" Version="1.1.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.6" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.6" />
+        <PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.4" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.4" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.4" />
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-        <PackageReference Include="Microsoft.JSInterop" Version="8.0.6" />
+        <PackageReference Include="Microsoft.JSInterop" Version="8.0.4" />
     </ItemGroup>
-
-    <Target Name="MoveCSS" BeforeTargets="Build">
-        <Copy SourceFiles="Styles/style.css" DestinationFolder="wwwroot" />
-    </Target>
 
 </Project>

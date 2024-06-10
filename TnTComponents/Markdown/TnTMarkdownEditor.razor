@@ -1,0 +1,13 @@
+﻿@namespace TnTComponents
+@using TnTComponents.Core
+@inherits TnTPageScriptComponent<TnTMarkdownEditor>
+<HeadContent>
+    <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css">
+</HeadContent>
+
+<tnt-markdown-editor @attributes="AdditionalAttributes">
+    <textarea />
+</tnt-markdown-editor>
+
+@RenderPageScript()
