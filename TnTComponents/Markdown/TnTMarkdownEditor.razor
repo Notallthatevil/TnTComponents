@@ -6,8 +6,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css">
 </HeadContent>
 
-<tnt-markdown-editor @attributes="AdditionalAttributes">
-    <textarea />
+<tnt-markdown-editor @attributes="AdditionalAttributes" @ref="Element">
+    <textarea style="display:hidden;" />
 </tnt-markdown-editor>
 
 @RenderPageScript()

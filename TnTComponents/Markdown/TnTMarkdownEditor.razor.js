@@ -2,6 +2,8 @@ import * as _ from "https://unpkg.com/easymde/dist/easymde.min.js";
 import * as __ from "https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js";
 
 const markdownEditorsMap = new Map();
+const elementDotNetRefMap = new Map();
+
 
 export function onLoad(element, dotNetElementRef) {
     if (!customElements.get('tnt-markdown-editor')) {
@@ -16,7 +18,15 @@ export function onLoad(element, dotNetElementRef) {
                     return;
                 }
 
+                if (elementDotNetRefMap.get(oldValue)) {
+                    elementDotNetRefMap.set(newValue, elementDotNetRefMap.get(oldValue));
+                    elementDotNetRefMap.delete(newValue);
+                }
+
+
                 let easyMDE = null;
+
+
 
                 if (markdownEditorsMap.get(oldValue)) {
                     easyMDE = markdownEditorsMap.get(oldValue).mde;
@@ -26,6 +36,13 @@ export function onLoad(element, dotNetElementRef) {
                 if (easyMDE === null) {
                     let child = this.querySelector('textarea');
                     easyMDE = new EasyMDE({ element: child });
+                    easyMDE.codemirror.on("change", function () {
+                        var text = easyMDE.value();
+                        const dotNetRef = elementDotNetRefMap.get(newValue);
+                        if (dotNetRef) {
+                            dotNetRef.invokeMethodAsync("UpdateValue", text, easyMDE.options.previewRender(text));
+                        }
+                    });
                 }
 
                 markdownEditorsMap.set(newValue, {
@@ -45,8 +62,18 @@ export function onLoad(element, dotNetElementRef) {
 }
 
 export function onUpdate(element, dotNetElementRef) {
+    if (element && dotNetElementRef) {
+        const key = element.getAttribute(TnTComponents.customAttribute);
 
+        if (elementDotNetRefMap.get(key)) {
+            elementDotNetRefMap.delete(key);
+        }
+        elementDotNetRefMap.set(key, dotNetElementRef);
+    }
 }
 
 export function onDispose(element, dotNetElementRef) {
+    if (element && elementDotNetRefMap.get(element)) {
+        elementDotNetRefMap.delete(element);
+    } 
 }
