@@ -9,7 +9,7 @@ using TnTComponents.Core;
 namespace TnTComponents;
 public partial class TnTMarkdownEditor {
 
-    public override string? JsModulePath => "./_content/TnTComponents/Markdown/TnTMarkdownEditor.razor.js";
+    public override string? JsModulePath => "./_content/TnTComponents/Editors/TnTMarkdownEditor.razor.js";
 
     public override string? CssClass => string.Empty;
 
