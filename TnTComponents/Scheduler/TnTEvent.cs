@@ -6,6 +6,7 @@ public record TnTEvent {
     private static int _id = 0;
     public int Id { get; internal set; } = Interlocked.Increment(ref _id);
     public required string Title { get; init; }
+    public string? Description { get; set; }
     public required DateTimeOffset EventStart { get; init; }
     public required DateTimeOffset EventEnd { get; init; }
 

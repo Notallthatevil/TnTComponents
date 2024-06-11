@@ -60,6 +60,11 @@
                  @ondragend="@DragEventEnd"
                  @onclick="@(() => EventClicked(@event))">
                 @(@event.Title)
+                @if (!string.IsNullOrWhiteSpace(@event.Description)) {
+                    <p class="tnt-body-small">
+                        @(new MarkupString(@event.Description))
+                    </p>
+                }
             </div>
 
         }
