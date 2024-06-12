@@ -1,28 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
-    <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-      <TypeScriptOutFile></TypeScriptOutFile>
-      <TypeScriptOutDir></TypeScriptOutDir>
-      <TypeScriptTarget>ES6</TypeScriptTarget>
-    </PropertyGroup>
-
-    <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-      <TypeScriptOutFile></TypeScriptOutFile>
-      <TypeScriptOutDir></TypeScriptOutDir>
-      <TypeScriptTarget>ES6</TypeScriptTarget>
-    </PropertyGroup>
-
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-        <TypeScriptModuleKind>es6</TypeScriptModuleKind>
     </PropertyGroup>
-
-    <ItemGroup>
-        <Content Remove="compilerconfig.json" />
-    </ItemGroup>
 
     <ItemGroup>
         <SupportedPlatform Include="browser" />
@@ -35,5 +17,9 @@
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.JSInterop" Version="8.0.4" />
     </ItemGroup>
+
+    <Target Name="CopyStyles" BeforeTargets="Build">
+        <Copy SourceFiles="Styles/style.css" DestinationFolder="wwwroot" />
+    </Target>
 
 </Project>
