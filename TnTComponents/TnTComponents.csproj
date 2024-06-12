@@ -36,6 +36,6 @@
     </ItemGroup>
     
     <Target Name="CopyCss" BeforeTargets="Build">
-        <Copy SourceFiles="Styles/app.css" DestinationFolder="wwwroot" />
+        <Copy SourceFiles="Styles/style.css" DestinationFolder="wwwroot" />
     </Target>
 </Project>
