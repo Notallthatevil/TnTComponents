@@ -4,7 +4,6 @@ import * as __ from "https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.
 const markdownEditorsMap = new Map();
 const elementDotNetRefMap = new Map();
 
-
 export function onLoad(element, dotNetElementRef) {
     if (!customElements.get('tnt-markdown-editor')) {
         customElements.define('tnt-markdown-editor', class extends HTMLElement {
@@ -23,10 +22,7 @@ export function onLoad(element, dotNetElementRef) {
                     elementDotNetRefMap.delete(newValue);
                 }
 
-
                 let easyMDE = null;
-
-
 
                 if (markdownEditorsMap.get(oldValue)) {
                     easyMDE = markdownEditorsMap.get(oldValue).mde;
@@ -73,7 +69,8 @@ export function onUpdate(element, dotNetElementRef) {
 }
 
 export function onDispose(element, dotNetElementRef) {
-    if (element && elementDotNetRefMap.get(element)) {
-        elementDotNetRefMap.delete(element);
-    } 
+    if (element) {
+        const key = element.getAttribute(TnTComponents.customAttribute);
+        elementDotNetRefMap.delete(key);
+    }
 }
