@@ -1,27 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
-
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+        <Title>TnTComponents</Title>
+        <Authors>Nate Tripp</Authors>
+        <Company>Tripp'N Technology LLC</Company>
+        <Description>Material 3 Blazor Components</Description>
+        <PackageProjectUrl>https://github.com/Notallthatevil/TnTComponents</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Notallthatevil/TnTComponents</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>blazor</PackageTags>
+        <NeutralLanguage>af</NeutralLanguage>
+        <AssemblyVersion>0.1.0</AssemblyVersion>
+        <FileVersion>0.1.0</FileVersion>
+        <Version>0.1.0</Version>
     </PropertyGroup>
+
+    <ItemGroup>
+        <Content Remove="compilerconfig.json" />
+    </ItemGroup>
 
     <ItemGroup>
         <SupportedPlatform Include="browser" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="DartSassBuilder" Version="1.1.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.6" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.6" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.6" />
+        <PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.4" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.4" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.4" />
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-        <PackageReference Include="Microsoft.JSInterop" Version="8.0.6" />
-        <PackageReference Include="System.Text.Encodings.Web" Version="8.0.0" />
+        <PackageReference Include="Microsoft.JSInterop" Version="8.0.4" />
     </ItemGroup>
-
-    <Target Name="CopyStyles" BeforeTargets="Build">
-        <Copy SourceFiles="Styles/style.css" DestinationFolder="wwwroot" />
-    </Target>
 
 </Project>
