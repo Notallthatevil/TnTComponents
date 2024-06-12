@@ -27,11 +27,15 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="DartSassBuilder" Version="1.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.4" />
         <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.4" />
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.4" />
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.JSInterop" Version="8.0.4" />
     </ItemGroup>
-
+    
+    <Target Name="CopyCss" BeforeTargets="Build">
+        <Copy SourceFiles="Styles/app.css" DestinationFolder="wwwroot" />
+    </Target>
 </Project>
