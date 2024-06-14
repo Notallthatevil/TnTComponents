@@ -7,7 +7,7 @@
 <div class="tnt-typeahead">
     <div class="tnt-typeahead-box">
         @if (Label is not null) {
-            <TnTLabel Label="@Label" BackgroundColor="LabelBackgroundColor">
+            <TnTLabel Disabled="@Disabled" Label="@Label" BackgroundColor="LabelBackgroundColor">
                 @((RenderFragment)RenderInputBox)
             </TnTLabel>
         }
@@ -62,6 +62,7 @@
                       BindAfter="SearchAsync"
                       StartIcon="StartIcon"
                       Placeholder="@Placeholder"
+                      Disabled="@Disabled"
                       @onkeypress="KeyPressedAsync"
                       @ref="_inputTextBox" />
     }

@@ -15,6 +15,9 @@ public partial class TnTTypeahead<TItem> {
     [Parameter]
     public string? Placeholder { get; set; }
 
+    [Parameter]
+    public bool Disabled { get; set; }
+
     [Parameter, EditorRequired]
     public EventCallback<TItem> ItemSelected { get; set; }
 
