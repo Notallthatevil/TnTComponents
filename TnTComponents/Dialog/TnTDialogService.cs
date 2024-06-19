@@ -22,17 +22,20 @@ public class TnTDialogService {
 
     public async Task CloseAsync(ITnTDialog dialog) => await (OnClose?.Invoke(dialog) ?? Task.CompletedTask);
 
-    public async Task OpenAsync<TComponent>(TnTDialogOptions? options = null, IReadOnlyDictionary<string, object?>? parameters = null) where TComponent : IComponent =>
-            await (OnOpen?.Invoke(new DialogImpl(this) {
-                Options = options ?? new(),
-                Parameters = parameters,
-                Type = typeof(TComponent)
-            }
-        ) ?? Task.CompletedTask);
+    public async Task<ITnTDialog> OpenAsync<TComponent>(TnTDialogOptions? options = null, IReadOnlyDictionary<string, object?>? parameters = null) where TComponent : IComponent {
+        var dialog = new DialogImpl(this) {
+            Options = options ?? new(),
+            Parameters = parameters,
+            Type = typeof(TComponent)
+        };
 
-    public async Task OpenAsync(RenderFragment renderFragment, TnTDialogOptions? options = null) {
+        await (OnOpen?.Invoke(dialog) ?? Task.CompletedTask);
+        return dialog;
+    }
+
+    public async Task<ITnTDialog> OpenAsync(RenderFragment renderFragment, TnTDialogOptions? options = null) {
         ArgumentNullException.ThrowIfNull(renderFragment, nameof(renderFragment));
-        await OpenAsync<DialogHelperComponent>(options, new Dictionary<string, object?> {
+        return await OpenAsync<DialogHelperComponent>(options, new Dictionary<string, object?> {
             { nameof(DialogHelperComponent.ChildContent), renderFragment }
         });
     }
