@@ -22,6 +22,10 @@ public static class JSRuntimeExt {
         await jsRuntime.InvokeVoidAsync("TnTComponents.downloadFromUrl", cancellationToken, fileName, url);
     }
 
+    public static ValueTask<string> GetCurrentLocation(this IJSRuntime jsRuntime) {
+        return jsRuntime.InvokeAsync<string>("TnTComponents.getCurrentLocation");
+    }
+
     internal static async Task<BoundingClientRect?> GetBoundingClientRect(this IJSRuntime jsRuntime, ElementReference element) {
         return await jsRuntime.InvokeAsync<BoundingClientRect?>("TnTComponents.getBoundingClientRect", element);
     }

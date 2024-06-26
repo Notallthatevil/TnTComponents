@@ -152,5 +152,8 @@ window.TnTComponents = {
         if (element && element.style) {
             element.style.opacity = `${opacity}`;
         }
+    },
+    getCurrentLocation: () => {
+        return window.location.href;
     }
 }
