@@ -8,6 +8,9 @@ namespace TnTComponents;
 public partial class TnTNavLink {
 
     [Parameter]
+    public TnTNavLinkAppearance Appearance { get; set; } = TnTNavLinkAppearance.Flat;
+
+    [Parameter]
     public TnTColor? ActiveBackgroundColor { get; set; }
 
     [Parameter]
@@ -30,11 +33,14 @@ public partial class TnTNavLink {
 
     public string? CssClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddClass("tnt-nav-link")
+        .AddOutlined(Appearance == TnTNavLinkAppearance.Outlined)
+        .AddClass("tnt-underlined", Appearance == TnTNavLinkAppearance.Underlined)
+        .AddClass("tnt-flat", Appearance == TnTNavLinkAppearance.Flat)
         .SetDisabled(Disabled)
         .AddRipple(Ripple)
         .AddActionableBackgroundColor(_isActive ? ActiveBackgroundColor : BackgroundColor)
         .AddForegroundColor(_isActive ? ActiveTextColor : TextColor)
-        .AddOutlined(Outlined)
         .AddFilled(BackgroundColor != TnTColor.Transparent)
         .AddElevation(Elevation)
         .AddBorderRadius(BorderRadius)
@@ -67,16 +73,13 @@ public partial class TnTNavLink {
     public NavLinkMatch Match { get; set; }
 
     [Parameter]
-    public bool Outlined { get; set; }
-
-    [Parameter]
     public bool Ripple { get; set; }
 
     [Parameter]
     public TnTIcon? StartIcon { get; set; }
 
     [Parameter]
-    public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
+    public TnTColor TextColor { get; set; } = TnTColor.Secondary;
 
     private bool _isActive { get; set; }
 
