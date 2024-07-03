@@ -360,3 +360,5 @@ MigrationBackup/
 .ionide/
 
 *.css
+*/compilerconfig.json
+*/compilerconfig.json.defaults

@@ -19,10 +19,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Remove="compilerconfig.json" />
-    </ItemGroup>
-
-    <ItemGroup>
         <SupportedPlatform Include="browser" />
     </ItemGroup>
 
@@ -34,7 +30,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.JSInterop" Version="8.0.6" />
     </ItemGroup>
-    
+
     <Target Name="CopyCss" BeforeTargets="Build">
         <Copy SourceFiles="Styles/style.css" DestinationFolder="wwwroot" />
     </Target>
