@@ -17,6 +17,12 @@
         <FileVersion>0.1.0</FileVersion>
         <Version>0.1.0</Version>
     </PropertyGroup>
+    <ItemGroup>
+      <Content Remove="compilerconfig.json" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="compilerconfig.json" />
+    </ItemGroup>
 
     <ItemGroup>
         <SupportedPlatform Include="browser" />
