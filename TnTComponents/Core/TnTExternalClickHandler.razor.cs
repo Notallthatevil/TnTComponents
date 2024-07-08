@@ -8,7 +8,10 @@ public partial class TnTExternalClickHandler {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public override string? CssClass => ExternalClickCssClass;
+    public override string? CssClass => CssClassBuilder.Create()
+        .AddClass("tnt-external-click-handler")
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .Build();
 
     public override string? CssStyle => CssStyleBuilder.Create()
    .AddFromAdditionalAttributes(AdditionalAttributes)
@@ -16,9 +19,6 @@ public partial class TnTExternalClickHandler {
 
     [Parameter, EditorRequired]
     public EventCallback ExternalClickCallback { get; set; }
-
-    [Parameter]
-    public string? ExternalClickCssClass { get; set; }
 
     public override string? JsModulePath => "./_content/TnTComponents/Core/TnTExternalClickHandler.razor.js";
 
