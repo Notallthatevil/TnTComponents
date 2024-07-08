@@ -4,6 +4,22 @@
     margin-top: 0.5rem;
     position: relative;
 
+    &:not(.ready) {
+        &:before {
+            display: block;
+            content: '';
+            position: absolute;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(to right, var(--tnt-color-surface-dim) 33%, color-mix(in srgb, var(--tnt-color-surface-container) 60%, var(--tnt-color-background)) 50%, var(--tnt-color-surface-dim) 66%);
+            background-size: 300%;
+            animation: tnt-tab-view-loading 1.5s infinite ease-in-out;
+        }
+    }
+
     & > div:first-child {
         display: block;
         vertical-align: bottom;
@@ -82,5 +98,16 @@
 
     tnt-tab-child {
         margin-top: 1rem;
+    }
+}
+
+
+@keyframes tnt-tab-view-loading {
+    0% {
+        background-position: 100%;
+    }
+
+    100% {
+        background-position: 0%;
     }
 }

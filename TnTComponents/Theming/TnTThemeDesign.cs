@@ -48,13 +48,16 @@ public class TnTThemeDesign : IComponent {
         }
 
         var allProperties = GetType().GetProperties().Select(p => new KeyValuePair<string, object?>(p.Name, p.GetValue(this)));
-        var themeFile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", ThemeFileName);
 
-        if (File.Exists(themeFile)) {
-            await using var fs = File.OpenRead(themeFile);
-            _themeFile = await JsonSerializer.DeserializeAsync<ThemeFile>(fs, new JsonSerializerOptions() {
-                PropertyNameCaseInsensitive = true
-            });
+        if (!string.IsNullOrWhiteSpace(ThemeFileName)) {
+            var themeFile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", ThemeFileName);
+
+            if (File.Exists(themeFile)) {
+                await using var fs = File.OpenRead(themeFile);
+                _themeFile = await JsonSerializer.DeserializeAsync<ThemeFile>(fs, new JsonSerializerOptions() {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
         }
 
         IEnumerable<KeyValuePair<string, object?>> properties = [];

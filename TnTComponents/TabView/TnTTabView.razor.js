@@ -23,12 +23,14 @@ export class TnTTabView extends HTMLElement {
                 tabViewsByIdentifier.delete(oldValue);
             }
             tabViewsByIdentifier.set(newValue, this);
+            this.update().then(() => {
+                this.classList.add('ready');
+            });
         }
 
-        this.update();
     }
 
-    update() {
+    async update() {
         this.tabViews = [];
         this.querySelectorAll('tnt-tab-child').forEach((element, index) => {
             this.tabViews.push(element);
@@ -89,7 +91,7 @@ export class TnTTabView extends HTMLElement {
         return null;
     }
 
-    updateActiveIndicator() {
+    async updateActiveIndicator() {
         const activeHeader = this.getActiveHeader();
         let activeIndicator = this.querySelector(":scope > div > span:last-child");
         if (!activeHeader || !activeIndicator) {
