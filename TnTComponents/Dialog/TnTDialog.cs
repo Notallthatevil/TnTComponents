@@ -23,82 +23,95 @@ public class TnTDialog : ComponentBase, IDisposable {
         foreach (var dialog in _dialogs) {
             builder.OpenElement(0, "div");
             builder.AddAttribute(10, "class", dialog.Options.GetOverlayClass());
-            string style;
-            if (dialog.Options.OverlayOpacity is not null) {
-                style = $"background-color:color-mix(in srgb, var(--tnt-color-{dialog.Options.OverlayColor.ToCssClassName()}) {Math.Clamp(dialog.Options.OverlayOpacity.Value * 100, 0, 100)}%, transparent);";
-            }
-            else {
-                style = $"background-color:var(--tnt-color-{dialog.Options.OverlayColor.ToCssClassName()});";
-            }
-            if (dialog.Options.OverlayBlur) {
-                style += $"backdrop-filter:blur(0.25rem);";
-            }
-
-            if (!string.IsNullOrWhiteSpace(style)) {
-                builder.AddAttribute(20, "style", style);
-            }
-            builder.SetKey(dialog);
-
-            {
-                builder.OpenComponent<TnTExternalClickHandler>(40);
-                builder.AddComponentParameter(50, nameof(TnTExternalClickHandler.ExternalClickCssClass), dialog.Options.GetDialogClass());
-                builder.AddAttribute(60, "style", dialog.Options.Style);
-
-                if (dialog.Options.CloseOnExternalClick) {
-                    builder.AddComponentParameter(70, nameof(TnTExternalClickHandler.ExternalClickCallback), EventCallback.Factory.Create(this, dialog.CloseAsync));
+            if (dialog == _dialogs.Last()) {
+                string style;
+                if (dialog.Options.OverlayOpacity is not null) {
+                    style = $"background-color:color-mix(in srgb, var(--tnt-color-{dialog.Options.OverlayColor.ToCssClassName()}) {Math.Clamp(dialog.Options.OverlayOpacity.Value * 100, 0, 100)}%, transparent);";
+                }
+                else {
+                    style = $"background-color:var(--tnt-color-{dialog.Options.OverlayColor.ToCssClassName()});";
+                }
+                if (dialog.Options.OverlayBlur) {
+                    style += $"backdrop-filter:blur(0.25rem);";
                 }
 
-                builder.AddComponentParameter(80, nameof(TnTExternalClickHandler.ChildContent), new RenderFragment(innerBuilder => {
-                    var showDivider = false;
-                    innerBuilder.OpenElement(0, "div");
-                    innerBuilder.AddAttribute(1, "class", "tnt-dialog-header");
-                    {
-                        if (dialog.Options.ShowTitle && dialog.Options.Title is not null) {
-                            showDivider = true;
-                            innerBuilder.OpenElement(10, "h2");
-                            innerBuilder.AddContent(20, dialog.Options.Title);
-                            innerBuilder.CloseElement();
-                        }
+                if (!string.IsNullOrWhiteSpace(style)) {
+                    builder.AddAttribute(20, "style", style);
+                }
+            }
 
-                        if (dialog.Options.ShowClose) {
-                            showDivider = true;
-                            innerBuilder.OpenComponent<TnTImageButton>(30);
-                            innerBuilder.AddComponentParameter(31, nameof(TnTImageButton.Icon), new MaterialIcon(MaterialIcon.Close));
-                            innerBuilder.AddComponentParameter(40, nameof(TnTImageButton.OnClick), EventCallback.Factory.Create<MouseEventArgs>(this, dialog.CloseAsync));
-                            innerBuilder.CloseComponent();
-                        }
+            builder.OpenElement(30, "div");
+            builder.SetKey(dialog);
+            builder.AddAttribute(40, "class", dialog.Options.GetDialogClass());
+            builder.AddAttribute(50, "style", dialog.Options.Style);
+
+            if (dialog == _dialogs.Last()) {
+                builder.OpenComponent<TnTExternalClickHandler>(60);
+                builder.AddComponentParameter(70, nameof(TnTExternalClickHandler.ExternalClickCallback), EventCallback.Factory.Create(this, dialog.CloseAsync));
+                builder.AddComponentParameter(80, nameof(TnTExternalClickHandler.ChildContent), RenderDialogContent(dialog));
+                builder.CloseComponent();
+            }
+            else {
+                builder.AddContent(60, RenderDialogContent(dialog));
+            }
+
+
+            builder.CloseElement();
+
+            builder.CloseElement();
+
+        }
+    }
+
+    private RenderFragment RenderDialogContent(ITnTDialog dialog) {
+        return new RenderFragment(builder => {
+            var showDivider = false;
+            {
+
+                builder.OpenElement(0, "div");
+                builder.AddAttribute(10, "class", "tnt-dialog-header");
+                {
+                    if (dialog.Options.ShowTitle && dialog.Options.Title is not null) {
+                        showDivider = true;
+                        builder.OpenElement(20, "h2");
+                        builder.AddContent(30, dialog.Options.Title);
+                        builder.CloseElement();
                     }
-                    innerBuilder.CloseElement();
 
-                    if (showDivider) {
-                        innerBuilder.OpenComponent<TnTDivider>(50);
-                        innerBuilder.CloseComponent();
+                    if (dialog.Options.ShowClose) {
+                        showDivider = true;
+                        builder.OpenComponent<TnTImageButton>(40);
+                        builder.AddComponentParameter(50, nameof(TnTImageButton.Icon), new MaterialIcon(MaterialIcon.Close));
+                        builder.AddComponentParameter(60, nameof(TnTImageButton.OnClick), EventCallback.Factory.Create<MouseEventArgs>(this, dialog.CloseAsync));
+                        builder.CloseComponent();
                     }
+                }
+                builder.CloseElement();
+            }
 
-                    {
-                        innerBuilder.OpenComponent<CascadingValue<ITnTDialog>>(52);
-                        innerBuilder.AddAttribute(60, nameof(CascadingValue<ITnTDialog>.Value), dialog);
-                        innerBuilder.AddAttribute(70, nameof(CascadingValue<ITnTDialog>.IsFixed), true);
-                        innerBuilder.AddAttribute(80, nameof(CascadingValue<ITnTDialog>.ChildContent), new RenderFragment(cascadingBuilder => {
-                            cascadingBuilder.OpenComponent(0, dialog.Type);
+            if (showDivider) {
+                builder.OpenComponent<TnTDivider>(70);
+                builder.CloseComponent();
+            }
+
+            {
+                builder.OpenComponent<CascadingValue<ITnTDialog>>(80);
+                builder.AddAttribute(150, nameof(CascadingValue<ITnTDialog>.Value), dialog);
+                builder.AddAttribute(160, nameof(CascadingValue<ITnTDialog>.IsFixed), true);
+                builder.AddAttribute(170, nameof(CascadingValue<ITnTDialog>.ChildContent), new RenderFragment(cascadingBuilder => {
+                    cascadingBuilder.OpenComponent(0, dialog.Type);
 #pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
-                            // Disabling warning since value in these key value pairs is allowed to
-                            // be null when the parameter on the component allows it. It is up to
-                            // the caller when opening a dialog to set the parameters correctly.
-                            cascadingBuilder.AddMultipleAttributes(10, dialog.Parameters);
+                    // Disabling warning since value in these key value pairs is allowed to
+                    // be null when the parameter on the component allows it. It is up to
+                    // the caller when opening a dialog to set the parameters correctly.
+                    cascadingBuilder.AddMultipleAttributes(10, dialog.Parameters);
 #pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
-                            cascadingBuilder.CloseComponent();
-                        }));
-
-                        innerBuilder.CloseComponent();
-                    }
+                    cascadingBuilder.CloseComponent();
                 }));
 
                 builder.CloseComponent();
             }
-
-            builder.CloseElement();
-        }
+        });
     }
 
     protected override void OnInitialized() {
@@ -106,7 +119,6 @@ public class TnTDialog : ComponentBase, IDisposable {
         _service.OnOpen += OnOpen;
         _service.OnClose += OnClose;
     }
-
     private Task OnClose(ITnTDialog dialog) {
         _dialogs.Remove(dialog);
         StateHasChanged();

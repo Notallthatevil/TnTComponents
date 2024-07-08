@@ -1,19 +1,46 @@
 ﻿@using LiveTest.Client.Pages
 @using TnTComponents.Dialog
+@rendermode InteractiveAuto
 <h3>DialogComponent</h3>
-
 
 <TnTComponents.TnTButton OnClick="OpenDialog">
     Open
 </TnTComponents.TnTButton>
 
+<TnTComponents.TnTButton OnClick="OpenCloseDialog">
+    Open Close Dialog @index
+</TnTComponents.TnTButton>
+
+@if (_dialog is not null) {
+    <TnTComponents.TnTButton OnClick="Close">
+        Close
+    </TnTComponents.TnTButton>
+}
+
 @code {
     [Inject]
     private TnTDialogService _service { get; set; } = default!;
+
+    [CascadingParameter]
+    private ITnTDialog? _dialog { get; set; }
+
+    private static int index;
 
     private async Task OpenDialog() {
         await _service.OpenAsync<Accordion>(options: new() {
                 Title = "My Title"
             });
     }
+
+    private async Task OpenCloseDialog() {
+        await _service.OpenAsync<DialogComponent>(options: new() {
+                Title = $"My Title {++index}",
+                ShowClose = true
+            });
+    }
+
+    private async Task Close() {
+        await _dialog!.CloseAsync();
+    }
 }
+
