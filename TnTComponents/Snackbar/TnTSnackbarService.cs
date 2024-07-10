@@ -34,6 +34,9 @@ public class TnTSnackbarService {
     public async Task ShowErrorAsync(string title, string? message = null, int timeout = 10, bool showClose = true, TnTBorderRadius? borderRadius = null, int elevation = 2) =>
         await ShowAsync(title, message, timeout, showClose, TnTColor.ErrorContainer, TnTColor.Error, borderRadius, elevation);
 
+    public async Task ShowErrorAsync(string title, Exception? message, int timeout = 10, bool showClose = true, TnTBorderRadius? borderRadius = null, int elevation = 2) =>
+        await ShowErrorAsync(title, message?.Message, timeout, showClose, borderRadius, elevation);
+
     public async Task ShowInfoAsync(string title, string? message = null, int timeout = 10, bool showClose = true, TnTBorderRadius? borderRadius = null, int elevation = 2) =>
         await ShowAsync(title, message, timeout, showClose, TnTColor.InfoContainer, TnTColor.Info, borderRadius, elevation);
 
