@@ -120,6 +120,7 @@ public class TnTDialog : ComponentBase, IDisposable {
         _service.OnClose += OnClose;
     }
     private Task OnClose(ITnTDialog dialog) {
+        dialog.Options.Closing = true;
         _dialogs.Remove(dialog);
         StateHasChanged();
         return Task.CompletedTask;

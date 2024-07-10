@@ -15,9 +15,11 @@ public class TnTDialogOptions {
     public string? Style { get; init; }
     public TnTColor TextColor { get; init; } = TnTColor.OnSurface;
     public string? Title { get; init; }
+    internal bool Closing { get; set; }
 
     internal string GetDialogClass() => CssClassBuilder.Create()
         .AddClass("tnt-dialog-container")
+        .AddClass("tnt-grow", !Closing)
         .AddBorderRadius(BorderRadius)
         .AddBackgroundColor(DialogBackgroundColor)
         .AddForegroundColor(TextColor)
