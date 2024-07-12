@@ -334,9 +334,6 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     private void FinishCollectingColumns() {
         _collectingColumns = false;
         _manualGrid = _columns.Count == 0;
-        if (Resizable) {
-            _ = _jsModule?.InvokeVoidAsync("enableColumnResizing", Element).AsTask();
-        }
     }
 
     // Gets called both by RefreshDataCoreAsync and directly by the Virtualize child component
