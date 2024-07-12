@@ -15,11 +15,17 @@ public static class NavigationManagerExt {
         var dictionary = new Dictionary<string, object?>(parameters);
 
         foreach (var key in currentParams.AllKeys) {
-            if (key is not null && !dictionary.ContainsKey(key)) {
-                dictionary[key] = currentParams[key];
+            if (key is not null) {
+                if (!dictionary.ContainsKey(key)) {
+                    dictionary[key] = currentParams[key];
+                }
+
+                if (dictionary[key] is string str && string.IsNullOrWhiteSpace(str)) {
+                    dictionary[key] = null;
+                }
             }
         }
 
-        return navManager.GetUriWithQueryParameters(uri, parameters);
+        return navManager.GetUriWithQueryParameters(uri, dictionary);
     }
 }
