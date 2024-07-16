@@ -48,7 +48,7 @@ public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
                 builder.AddMultipleAttributes(110, AdditionalAttributes);
                 builder.AddAttribute(120, "multiple", _multiple);
                 builder.AddAttribute(140, "style", FormCssStyle);
-                builder.AddAttribute(170, "disabled", ParentFormDisabled ?? Disabled);
+                builder.AddAttribute(170, "disabled", (ParentFormDisabled ?? Disabled) || (ParentFormReadOnly ?? ReadOnly));
                 builder.AddAttribute(171, "required", IsRequired());
                 if (_multiple) {
                     builder.AddAttribute(5, "value", BindConverter.FormatValue(CurrentValue)?.ToString());
