@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Drawing;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
@@ -13,7 +14,7 @@ namespace TnTComponents;
 public class TnTThemeDesign : IComponent {
 
     [Parameter, EditorRequired]
-    public string ThemeFileName { get; set; } = default!;
+    public string ThemeFile { get; set; } = default!;
 
     [Parameter]
     public bool AllowColorModeToggle { get; set; } = true;
@@ -38,6 +39,9 @@ public class TnTThemeDesign : IComponent {
 
     private RenderHandle _renderHandle;
 
+    [Inject]
+    private IServiceProvider _serviceProvider { get; set; } = default!;
+
     public void Attach(RenderHandle renderHandle) {
         _renderHandle = renderHandle;
     }
@@ -49,8 +53,8 @@ public class TnTThemeDesign : IComponent {
 
         var allProperties = GetType().GetProperties().Select(p => new KeyValuePair<string, object?>(p.Name, p.GetValue(this)));
 
-        if (!string.IsNullOrWhiteSpace(ThemeFileName)) {
-            var themeFile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", ThemeFileName);
+        if (!string.IsNullOrWhiteSpace(ThemeFile)) {
+            var themeFile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", ThemeFile);
 
             if (File.Exists(themeFile)) {
                 await using var fs = File.OpenRead(themeFile);
@@ -58,6 +62,24 @@ public class TnTThemeDesign : IComponent {
                     PropertyNameCaseInsensitive = true
                 });
             }
+            else {
+                HttpClient httpClient = (HttpClient?)_serviceProvider.GetService(typeof(HttpClient)) ?? new HttpClient();
+
+                if (httpClient is not null) {
+                    try {
+
+                        var content = await httpClient.GetStreamAsync(ThemeFile);
+                        _themeFile = await JsonSerializer.DeserializeAsync<ThemeFile>(content, new JsonSerializerOptions() {
+                            PropertyNameCaseInsensitive = true
+                        });
+                    }
+                    catch { }
+                }
+            }
+        }
+
+        if(_themeFile is null) {
+            throw new InvalidOperationException($"Unable to obtain the theme file from {_themeFile}");
         }
 
         IEnumerable<KeyValuePair<string, object?>> properties = [];
@@ -77,7 +99,7 @@ public class TnTThemeDesign : IComponent {
 
         allProperties = allProperties.Concat(properties)
             .Where(p => p.Value is not null)
-            .Where(p => p.Key != nameof(ThemeFileName));
+            .Where(p => p.Key != nameof(ThemeFile));
 
         var other = new StringBuilder(":root{");
         var darkTheme = new StringBuilder(":root{");
