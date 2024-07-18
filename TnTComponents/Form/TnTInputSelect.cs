@@ -44,58 +44,58 @@ public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
                 }
             }
             {
-                builder.OpenElement(100, "select");
-                builder.AddMultipleAttributes(110, AdditionalAttributes);
-                builder.AddAttribute(120, "multiple", _multiple);
-                builder.AddAttribute(140, "style", FormCssStyle);
-                builder.AddAttribute(170, "disabled", (ParentFormDisabled ?? Disabled) || (ParentFormReadOnly ?? ReadOnly));
-                builder.AddAttribute(171, "required", IsRequired());
+                builder.OpenElement(30, "select");
+                builder.AddMultipleAttributes(40, AdditionalAttributes);
+                builder.AddAttribute(50, "multiple", _multiple);
+                builder.AddAttribute(60, "style", FormCssStyle);
+                builder.AddAttribute(70, "disabled", (ParentFormDisabled ?? Disabled) || (ParentFormReadOnly ?? ReadOnly));
+                builder.AddAttribute(80, "required", IsRequired());
                 if (_multiple) {
-                    builder.AddAttribute(5, "value", BindConverter.FormatValue(CurrentValue)?.ToString());
-                    builder.AddAttribute(6, "onchange", EventCallback.Factory.CreateBinder<string?[]?>(this, SetCurrentValueAsStringArray, default));
+                    builder.AddAttribute(90, "value", BindConverter.FormatValue(CurrentValue)?.ToString());
+                    builder.AddAttribute(100, "onchange", EventCallback.Factory.CreateBinder<string?[]?>(this, SetCurrentValueAsStringArray, default));
                     builder.SetUpdatesAttributeName("value");
                 }
                 else {
-                    builder.AddAttribute(7, "value", CurrentValueAsString);
-                    builder.AddAttribute(8, "onchange", EventCallback.Factory.CreateBinder<string?>(this, value => { CurrentValueAsString = value; BindAfter.InvokeAsync(CurrentValue); }, default));
+                    builder.AddAttribute(110, "value", CurrentValueAsString);
+                    builder.AddAttribute(120, "onchange", EventCallback.Factory.CreateBinder<string?>(this, value => { CurrentValueAsString = value; BindAfter.InvokeAsync(CurrentValue); }, default));
                     builder.SetUpdatesAttributeName("value");
                 }
 
                 if (EditContext is not null) {
-                    builder.AddAttribute(190, "onblur", EventCallback.Factory.Create<FocusEventArgs>(this, args => {
+                    builder.AddAttribute(130, "onblur", EventCallback.Factory.Create<FocusEventArgs>(this, args => {
                         EditContext.NotifyFieldChanged(FieldIdentifier);
                     }));
                 }
 
-                builder.AddElementReferenceCapture(200, e => Element = e);
+                builder.AddElementReferenceCapture(140, e => Element = e);
                 if (!string.IsNullOrWhiteSpace(Placeholder)) {
-                    builder.OpenElement(210, "option");
+                    builder.OpenElement(150, "option");
                     if (ShouldHavePlaceholderSelected) {
-                        builder.AddAttribute(221, "selected", true);
+                        builder.AddAttribute(160, "selected", true);
                     }
                     if (!AllowPlaceholderSelection) {
-                        builder.AddAttribute(222, "disabled");
+                        builder.AddAttribute(170, "disabled");
                     }
                     else {
-                        builder.AddAttribute(223, "value", PlaceholderValue);
+                        builder.AddAttribute(180, "value", PlaceholderValue);
                     }
-                    builder.AddContent(230, Placeholder);
+                    builder.AddContent(190, Placeholder);
                     builder.CloseElement();
                 }
-                builder.AddContent(240, ChildContent);
+                builder.AddContent(200, ChildContent);
                 builder.CloseElement();
 
                 if (EditContext is not null && !DisableValidationMessage && ValueExpression is not null) {
-                    builder.OpenComponent<ValidationMessage<TInputType>>(250);
-                    builder.AddComponentParameter(260, nameof(ValidationMessage<TInputType>.For), ValueExpression);
-                    builder.AddAttribute(270, "class", "tnt-components tnt-validation-message tnt-body-small");
+                    builder.OpenComponent<ValidationMessage<TInputType>>(210);
+                    builder.AddComponentParameter(220, nameof(ValidationMessage<TInputType>.For), ValueExpression);
+                    builder.AddAttribute(230, "class", "tnt-components tnt-validation-message tnt-body-small");
                     builder.CloseComponent();
                 }
             }
             {
                 if (EndIcon is not null) {
                     EndIcon.AdditionalClass = "tnt-end";
-                    builder.AddContent(280, EndIcon.Render());
+                    builder.AddContent(240, EndIcon.Render());
                 }
             }
         }
