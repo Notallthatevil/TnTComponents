@@ -1,7 +1,7 @@
 ﻿namespace TnTComponents;
 
 public enum ButtonAppearance {
-    None,
+    Filled,
     Outlined,
     Text
 }
