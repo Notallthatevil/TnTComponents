@@ -32,7 +32,7 @@ public partial class TnTAccordion {
     [Parameter]
     public int Elevation { get; set; } = 1;
 
-    public override string? JsModulePath => "./_content/TnTComponents/Core/TnTAccordion.razor.js";
+    public override string? JsModulePath => "./_content/TnTComponents/Accordion/TnTAccordion.razor.js";
 
     [Parameter]
     public bool? OpenByDefault { get; set; }
