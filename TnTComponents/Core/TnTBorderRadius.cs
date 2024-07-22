@@ -17,4 +17,8 @@ public struct TnTBorderRadius {
 
     public TnTBorderRadius() {
     }
+
+    public static TnTBorderRadius Full => new TnTBorderRadius(10);
+    public static TnTBorderRadius Half => new TnTBorderRadius(5);
+    public static TnTBorderRadius None => new TnTBorderRadius(0);
 }

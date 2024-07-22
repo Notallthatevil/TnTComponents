@@ -1,77 +1,137 @@
 ﻿@using TnTComponents
+<TnTRow>
+    <TnTColumn S="12">
 
-<TnTFabButton BackgroundColor="TnTColor.Error">
-    <MaterialIcon Icon="@MaterialIcon.Add" />
-</TnTFabButton>
+        <TnTButton Appearance="ButtonAppearance.Filled">
+            Filled
+        </TnTButton>
 
-<TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.Gamepad))" />
+        <TnTButton Appearance="ButtonAppearance.Outlined" TextColor="TnTColor.Primary">
+            Outlined
+        </TnTButton>
 
-<TnTComponents.TnTButton Disabled="true">
-    <MaterialIcon Icon="@MaterialIcon.Search"/>
-    Button Text
-    <MaterialIcon Icon="@MaterialIcon.Poll"/>
-</TnTComponents.TnTButton>
+        <TnTButton Appearance="ButtonAppearance.Text" TextColor="TnTColor.Primary">
+            Text
+        </TnTButton>
 
-<TnTComponents.TnTButton Appearance="ButtonAppearance.Outlined" Disabled="true">
-    Button Text
-    <TnTProgressIndicator Appearance="ProgressAppearance.Ring" />
-</TnTComponents.TnTButton>
+        <TnTButton Elevation="0">
+            Elevation 0
+        </TnTButton>
 
-<TnTComponents.TnTButton Appearance="ButtonAppearance.Text" Disabled="true">
-    Button Text
-    <TnTProgressIndicator Appearance="ProgressAppearance.Linear" />
-</TnTComponents.TnTButton>
+        <TnTButton Elevation="2">
+            Elevation 2
+        </TnTButton>
 
-<TnTComponents.TnTButton Elevation="5">
-    Button Text
-</TnTComponents.TnTButton>
+        <TnTButton Elevation="5">
+            Elevation 5
+        </TnTButton>
 
-<TnTComponents.TnTButton Elevation="5" Appearance="ButtonAppearance.Outlined">
-    Button Text
-</TnTComponents.TnTButton>
+        <TnTButton Elevation="10">
+            Elevation 10
+        </TnTButton>
 
-<TnTComponents.TnTButton Elevation="5" Appearance="ButtonAppearance.Text">
-    Button Text
-</TnTComponents.TnTButton>
+        <TnTButton BorderRadius="new TnTComponents.Core.TnTBorderRadius(0)">
+            CornerRadius 0
+        </TnTButton>
 
-<TnTComponents.TnTButton BackgroundColor="TnTColor.Secondary" TextColor="TnTColor.Tertiary">
-    Button Text
-</TnTComponents.TnTButton>
+        <TnTButton BorderRadius="new TnTComponents.Core.TnTBorderRadius(10)">
+            CornerRadius 10
+        </TnTButton>
 
-<TnTComponents.TnTButton BackgroundColor="TnTColor.Secondary" TextColor="TnTColor.Tertiary" Appearance="ButtonAppearance.Outlined">
-    Button Text
-</TnTComponents.TnTButton>
+        <TnTButton Disabled="true">
+            Disabled
+        </TnTButton>
 
-<TnTComponents.TnTButton BackgroundColor="TnTColor.Secondary" TextColor="TnTColor.Tertiary" Appearance="ButtonAppearance.Text">
-    Button Text
-</TnTComponents.TnTButton>
+        <TnTButton>
+            <MaterialIcon Icon="@MaterialIcon.Abc" />
+            StartIcon
+        </TnTButton>
 
-<TnTComponents.TnTButton CornerRadius="new TnTComponents.Core.TnTBorderRadius(0)">
-    Button Text
-</TnTComponents.TnTButton>
+        <TnTButton>
+            <MaterialIcon Icon="@MaterialIcon.Abc" />
+            Both
+            <MaterialIcon Icon="@MaterialIcon.ZoomOutMap" />
+        </TnTButton>
 
-<TnTComponents.TnTButton CornerRadius="new TnTComponents.Core.TnTBorderRadius(0)" Appearance="ButtonAppearance.Outlined">
-    Button Text
-</TnTComponents.TnTButton>
+        <TnTButton>
+            EndIcon
+            <MaterialIcon Icon="@MaterialIcon.ZoomOutMap" />
+        </TnTButton>
 
-<TnTComponents.TnTButton CornerRadius="new TnTComponents.Core.TnTBorderRadius(0)" Appearance="ButtonAppearance.Text">
-    Button Text
-</TnTComponents.TnTButton>
+        <TnTButton>
+            <TnTProgressIndicator Appearance="ProgressAppearance.Ring" />
+            Progress Ring
+        </TnTButton>
 
-<TnTComponents.TnTButton CornerRadius="new TnTComponents.Core.TnTBorderRadius(){StartEnd = 5}">
-    Button Text
-</TnTComponents.TnTButton>
+        <TnTButton>
+            <TnTProgressIndicator Appearance="ProgressAppearance.Linear" />
+            Progress Linear
+        </TnTButton>
 
-<TnTComponents.TnTButton CornerRadius="new TnTComponents.Core.TnTBorderRadius(){StartEnd = 5}" Appearance="ButtonAppearance.Outlined">
-    Button Text
-</TnTComponents.TnTButton>
+        <TnTButton>
+            <TnTProgressIndicator Appearance="ProgressAppearance.Ring" Value="50" />
+            Progress Ring 50%
+        </TnTButton>
 
-<TnTComponents.TnTButton CornerRadius="new TnTComponents.Core.TnTBorderRadius(){StartEnd = 5}" Appearance="ButtonAppearance.Text">
-    Button Text
-</TnTComponents.TnTButton>
+        <TnTButton>
+            <TnTProgressIndicator Appearance="ProgressAppearance.Linear" Value="50" />
+            Progress Linear 50%
+        </TnTButton>
 
+        <TnTButton Appearance="ButtonAppearance.Outlined" TextColor="TnTColor.Primary">
+            <TnTProgressIndicator Appearance="ProgressAppearance.Ring" />
+            Outline With Progress Ring
+        </TnTButton>
 
-<TnTButton Appearance="ButtonAppearance.Text">
-    <MaterialIcon Icon="@MaterialIcon.Apps"/>
-    Button Text
-</TnTButton>
+        <TnTButton Appearance="ButtonAppearance.Outlined" TextColor="TnTColor.Primary">
+            <TnTProgressIndicator Appearance="ProgressAppearance.Linear" />
+            Outline With  Progress Linear
+        </TnTButton>
+
+        <TnTButton Appearance="ButtonAppearance.Outlined" TextColor="TnTColor.Primary">
+            <TnTProgressIndicator Appearance="ProgressAppearance.Ring" Value="50" />
+            Outline With Progress Ring 50%
+        </TnTButton>
+
+        <TnTButton Appearance="ButtonAppearance.Outlined" TextColor="TnTColor.Primary">
+            <TnTProgressIndicator Appearance="ProgressAppearance.Linear" Value="50" />
+            Outline With Progress Linear 50%
+        </TnTButton>
+
+        <TnTButton Appearance="ButtonAppearance.Text" TextColor="TnTColor.Primary">
+            <TnTProgressIndicator Appearance="ProgressAppearance.Ring" />
+            Text With Progress Ring
+        </TnTButton>
+
+        <TnTButton Appearance="ButtonAppearance.Text" TextColor="TnTColor.Primary">
+            <TnTProgressIndicator Appearance="ProgressAppearance.Linear" />
+            Text With Progress Linear
+        </TnTButton>
+
+        <TnTButton Appearance="ButtonAppearance.Text" TextColor="TnTColor.Primary">
+            <TnTProgressIndicator Appearance="ProgressAppearance.Ring" Value="50" />
+            Text With Progress Ring 50%
+        </TnTButton>
+
+        <TnTButton Appearance="ButtonAppearance.Text" TextColor="TnTColor.Primary">
+            <TnTProgressIndicator Appearance="ProgressAppearance.Linear" Value="50" />
+            Text With Progress Linear 50%
+        </TnTButton>
+
+        <TnTButton TextAlignment="TextAlign.Left">
+            Left
+        </TnTButton>
+
+        <TnTButton TextAlignment="TextAlign.Right">
+            Right
+        </TnTButton>
+
+        <TnTButton BackgroundColor="TnTColor.SecondaryContainer" TextColor="TnTColor.OnSecondaryContainer" TintColor="TnTColor.Secondary">
+            Colored
+        </TnTButton>
+
+        <TnTButton BorderRadius="@(new TnTComponents.Core.TnTBorderRadius() {StartStart = 5, StartEnd = 2, EndEnd = 9, EndStart=3})">
+            Obscure Radius
+        </TnTButton>
+    </TnTColumn>
+</TnTRow>

@@ -14,7 +14,7 @@ public partial class TnTSideNavMenuGroup {
     public string? Name { get; set; }
 
     public override string? ElementClass => CssClassBuilder.Create()
-        .SetDisabled(Disabled)
+        .AddDisabled(Disabled)
         .AddClass("tnt-expanded", Expand)
         .Build();
 

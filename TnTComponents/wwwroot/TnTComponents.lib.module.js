@@ -62,6 +62,55 @@ function onEnhancedLoad() {
     for (const { module } of pageScriptInfoBySrc.values()) {
         module?.onUpdate?.();
     }
+    setupRipple();
+}
+
+
+function setupRipple() {
+    const elements = document.querySelectorAll('.tnt-ripple');
+
+    function ripple(e) {
+
+        // Setup
+        let posX = this.offsetLeft;
+        let posY = this.offsetTop;
+        let buttonWidth = this.offsetWidth;
+        let buttonHeight = this.offsetHeight;
+
+        // Add the element
+        let ripple = document.createElement('span');
+
+        this.appendChild(ripple);
+
+
+        // Make it round!
+        if (buttonWidth >= buttonHeight) {
+            buttonHeight = buttonWidth;
+        } else {
+            buttonWidth = buttonHeight;
+        }
+
+        // Get the center of the element
+        var x = e.pageX - posX - buttonWidth / 2;
+        var y = e.pageY - posY - buttonHeight / 2;
+
+
+        ripple.style.width = `${buttonWidth}px`;
+        ripple.style.height = `${buttonHeight}px`;
+        ripple.style.top = `${y}px`;
+        ripple.style.left = `${x}px`;
+
+        ripple.classList.add('tnt-rippling');
+
+        setTimeout(() => {
+            this.removeChild(ripple);
+        }, 500);
+
+    }
+
+    elements.forEach(element => {
+        element.addEventListener('click', ripple);
+    });
 }
 
 function setupPageScriptElement() {
@@ -89,6 +138,7 @@ function setupPageScriptElement() {
 export function afterWebStarted(blazor) {
     setupPageScriptElement();
     blazor.addEventListener('enhancedload', onEnhancedLoad);
+    setupRipple();
 }
 
 window.TnTComponents = {
@@ -155,5 +205,42 @@ window.TnTComponents = {
     },
     getCurrentLocation: () => {
         return window.location.href;
+    },
+    rippleEffect: (e) => {
+
+        // Setup
+        let posX = this.offsetLeft;
+        let posY = this.offsetTop;
+        let buttonWidth = this.offsetWidth;
+        let buttonHeight = this.offsetHeight;
+
+        // Add the element
+        let ripple = document.createElement('span');
+
+        this.appendChild(ripple);
+
+
+        // Make it round!
+        if (buttonWidth >= buttonHeight) {
+            buttonHeight = buttonWidth;
+        } else {
+            buttonWidth = buttonHeight;
+        }
+
+        // Get the center of the element
+        var x = e.pageX - posX - buttonWidth / 2;
+        var y = e.pageY - posY - buttonHeight / 2;
+
+
+        ripple.style.width = `${buttonWidth}px`;
+        ripple.style.height = `${buttonHeight}px`;
+        ripple.style.top = `${y}px`;
+        ripple.style.left = `${x}px`;
+
+        ripple.classList.add('tnt-rippling');
+
+        setTimeout(() => {
+            this.removeChild(ripple);
+        }, 1000);
     }
 }

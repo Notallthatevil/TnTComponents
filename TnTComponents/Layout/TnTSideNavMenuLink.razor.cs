@@ -16,7 +16,7 @@ public partial class TnTSideNavMenuLink {
     public RenderFragment ChildContent { get; set; } = default!;
 
     public override string? ElementClass => CssClassBuilder.Create()
-        .SetDisabled(Disabled)
+        .AddDisabled(Disabled)
         .AddBorderRadius(BorderRadius)
         .Build();
 

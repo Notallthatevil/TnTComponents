@@ -1,6 +1,9 @@
 ﻿@use "sass:color";
-
+$tnt-color-transparent: var(--tnt-color-transparent);
+$tnt-color-black: var(--tnt-color-black);
+$tnt-color-white: var(--tnt-color-white);
 $tnt-color-primary: var(--tnt-color-primary);
+$tnt-color-surface-tint: var(--tnt-color-surface-tint);
 $tnt-color-on-primary: var(--tnt-color-on-primary);
 $tnt-color-primary-container: var(--tnt-color-primary-container);
 $tnt-color-on-primary-container: var(--tnt-color-on-primary-container);
@@ -16,60 +19,74 @@ $tnt-color-error: var(--tnt-color-error);
 $tnt-color-on-error: var(--tnt-color-on-error);
 $tnt-color-error-container: var(--tnt-color-error-container);
 $tnt-color-on-error-container: var(--tnt-color-on-error-container);
-$tnt-color-outline: var(--tnt-color-outline);
 $tnt-color-background: var(--tnt-color-background);
 $tnt-color-on-background: var(--tnt-color-on-background);
 $tnt-color-surface: var(--tnt-color-surface);
 $tnt-color-on-surface: var(--tnt-color-on-surface);
 $tnt-color-surface-variant: var(--tnt-color-surface-variant);
 $tnt-color-on-surface-variant: var(--tnt-color-on-surface-variant);
-$tnt-color-surface-container-highest: var(--tnt-color-surface-container-highest);
-$tnt-color-surface-container-high: var(--tnt-color-surface-container-high);
-$tnt-color-surface-container: var(--tnt-color-surface-container);
-$tnt-color-surface-container-low: var(--tnt-color-surface-container-low);
-$tnt-color-surface-container-lowest: var(--tnt-color-surface-container-lowest);
+$tnt-color-outline: var(--tnt-color-outline);
+$tnt-color-outline-variant: var(--tnt-color-outline-variant);
+$tnt-color-shadow: var(--tnt-color-shadow);
+$tnt-color-scrim: var(--tnt-color-scrim);
 $tnt-color-inverse-surface: var(--tnt-color-inverse-surface);
 $tnt-color-inverse-on-surface: var(--tnt-color-inverse-on-surface);
 $tnt-color-inverse-primary: var(--tnt-color-inverse-primary);
-$tnt-color-shadow: var(--tnt-color-shadow);
-$tnt-color-surface-tint: var(--tnt-color-surface-tint);
-$tnt-color-outline-variant: var(--tnt-color-outline-variant);
-$tnt-color-scrim: var(--tnt-color-scrim);
-$tnt-color-warning: var(--tnt-color-warning);
-$tnt-color-on-warning: var(--tnt-color-on-warning);
-$tnt-color-warning-container: var(--tnt-color-warning-container);
-$tnt-color-on-warning-container: var(--tnt-color-on-warning-container);
+$tnt-color-primary-fixed: var(--tnt-color-primary-fixed);
+$tnt-color-on-primary-fixed: var(--tnt-color-on-primary-fixed);
+$tnt-color-primary-fixed-dim: var(--tnt-color-primary-fixed-dim);
+$tnt-color-on-primary-fixed-variant: var(--tnt-color-on-primary-fixed-variant);
+$tnt-color-secondary-fixed: var(--tnt-color-secondary-fixed);
+$tnt-color-on-secondary-fixed: var(--tnt-color-on-secondary-fixed);
+$tnt-color-secondary-fixed-dim: var(--tnt-color-secondary-fixed-dim);
+$tnt-color-on-secondary-fixed-variant: var(--tnt-color-on-secondary-fixed-variant);
+$tnt-color-tertiary-fixed: var(--tnt-color-tertiary-fixed);
+$tnt-color-on-tertiary-fixed: var(--tnt-color-on-tertiary-fixed);
+$tnt-color-tertiary-fixed-dim: var(--tnt-color-tertiary-fixed-dim);
+$tnt-color-on-tertiary-fixed-variant: var(--tnt-color-on-tertiary-fixed-variant);
+$tnt-color-surface-dim: var(--tnt-color-surface-dim);
+$tnt-color-surface-bright: var(--tnt-color-surface-bright);
+$tnt-color-surface-container-lowest: var(--tnt-color-surface-container-lowest);
+$tnt-color-surface-container-low: var(--tnt-color-surface-container-low);
+$tnt-color-surface-container: var(--tnt-color-surface-container);
+$tnt-color-surface-container-high: var(--tnt-color-surface-container-high);
+$tnt-color-surface-container-highest: var(--tnt-color-surface-container-highest);
 $tnt-color-success: var(--tnt-color-success);
 $tnt-color-on-success: var(--tnt-color-on-success);
 $tnt-color-success-container: var(--tnt-color-success-container);
 $tnt-color-on-success-container: var(--tnt-color-on-success-container);
+$tnt-color-warning: var(--tnt-color-warning);
+$tnt-color-on-warning: var(--tnt-color-on-warning);
+$tnt-color-warning-container: var(--tnt-color-warning-container);
+$tnt-color-on-warning-container: var(--tnt-color-on-warning-container);
 $tnt-color-info: var(--tnt-color-info);
 $tnt-color-on-info: var(--tnt-color-on-info);
 $tnt-color-info-container: var(--tnt-color-info-container);
 $tnt-color-on-info-container: var(--tnt-color-on-info-container);
-$tnt-color-transparent: var(--tnt-color-transparent);
-$color-classes: transparent, primary, on-primary, primary-container, on-primary-container, secondary, on-secondary, secondary-container, on-secondary-container, tertiary, on-tertiary, tertiary-container, on-tertiary-container, error, error-container, on-error, on-error-container, background, on-background, surface, on-surface, surface-variant, on-surface-variant, surface-container-highest, surface-container-high, surface-container, surface-container-low, surface-container-lowest, outline, inverse-on-surface, inverse-surface, inverse-primary, shadow, surface-tint, outline-variant, scrim, warning, on-warning, warning-container, on-warning-container, success, on-success, success-container, on-success-container, info, on-info, info-container, on-info-container;
-$color-classes-no-transparent: transparent, primary, on-primary, primary-container, on-primary-container, secondary, on-secondary, secondary-container, on-secondary-container, tertiary, on-tertiary, tertiary-container, on-tertiary-container, error, error-container, on-error, on-error-container, background, on-background, surface, on-surface, surface-variant, on-surface-variant, surface-container-highest, surface-container-high, surface-container, surface-container-low, surface-container-lowest, outline, inverse-on-surface, inverse-surface, inverse-primary, shadow, surface-tint, outline-variant, scrim, warning, on-warning, warning-container, on-warning-container, success, on-success, success-container, on-success-container, info, on-info, info-container, on-info-container;
 
-@each $colorClass in $color-classes-no-transparent {
+$color-classes: transparent, black, white, primary, surface-tint, on-primary, primary-container, on-primary-container, secondary, on-secondary, secondary-container, on-secondary-container, tertiary, on-tertiary, tertiary-container, on-tertiary-container, error, on-error, error-container, on-error-container, background, on-background, surface, on-surface, surface-variant, on-surface-variant, outline, outline-variant, shadow, scrim, inverse-surface, inverse-on-surface, inverse-primary, primary-fixed, on-primary-fixed, primary-fixed-dim, on-primary-fixed-variant, secondary-fixed, on-secondary-fixed, secondary-fixed-dim, on-secondary-fixed-variant, tertiary-fixed, on-tertiary-fixed, tertiary-fixed-dim, on-tertiary-fixed-variant, surface-dim, surface-bright, surface-container-lowest, surface-container-low, surface-container, surface-container-high, surface-container-highest, success, on-success, success-container, on-success-container, warning, on-warning, warning-container, on-warning-container, info, on-info, info-container, on-info-container;
+$color-classes-no-transparent: black, white, primary, surface-tint, on-primary, primary-container, on-primary-container, secondary, on-secondary, secondary-container, on-secondary-container, tertiary, on-tertiary, tertiary-container, on-tertiary-container, error, on-error, error-container, on-error-container, background, on-background, surface, on-surface, surface-variant, on-surface-variant, outline, outline-variant, shadow, scrim, inverse-surface, inverse-on-surface, inverse-primary, primary-fixed, on-primary-fixed, primary-fixed-dim, on-primary-fixed-variant, secondary-fixed, on-secondary-fixed, secondary-fixed-dim, on-secondary-fixed-variant, tertiary-fixed, on-tertiary-fixed, tertiary-fixed-dim, on-tertiary-fixed-variant, surface-dim, surface-bright, surface-container-lowest, surface-container-low, surface-container, surface-container-high, surface-container-highest, success, on-success, success-container, on-success-container, warning, on-warning, warning-container, on-warning-container, info, on-info, info-container, on-info-container;
+
+.tnt-disabled {
+    opacity: 0.4;
+}
+
+.tnt-outlined {
+    background-color: transparent;
+    border: 1px solid $tnt-color-outline;
+}
+
+@each $colorClass in $color-classes {
     .tnt-bg-color-#{$colorClass} {
-        background-color: var(--tnt-color-#{$colorClass});
-    }
+        &.tnt-filled {
+            background-color: var(--tnt-color-#{$colorClass});
 
-    .tnt-actionable-bg-color-#{$colorClass} {
-        @extend .tnt-bg-color-#{$colorClass};
+            &:has(> progress.tnt-components) {
+                background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 40%, transparent);
 
-        &:not(disabled), &:not(.tnt-disabled) {
-            &:hover {
-                background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 50%, $tnt-color-shadow);
-            }
-
-            &:not(.tnt-ripple):active {
-                background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 30%, $tnt-color-shadow);
-            }
-
-            &.tnt-ripple:after {
-                background-image: radial-gradient(circle, black 10%, transparent 10.01%);
+                & > progress.tnt-components {
+                    color: var(--tnt-color-#{$colorClass});
+                }
             }
         }
     }
@@ -77,46 +94,111 @@ $color-classes-no-transparent: transparent, primary, on-primary, primary-contain
     .tnt-fg-color-#{$colorClass} {
         color: var(--tnt-color-#{$colorClass});
 
-        &:is(input) {
-            &:-webkit-autofill {
-                -webkit-text-fill-color: var(--tnt-color-#{$colorClass});
-            }
-        }
+        &:has(> progress.tnt-components) {
+            color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 40%, transparent);
 
-        &:has(input) {
-            input:-webkit-autofill {
-                -webkit-text-fill-color: var(--tnt-color-#{$colorClass});
+            & > progress.tnt-components {
+                color: var(--tnt-color-#{$colorClass});
             }
         }
     }
 
-    .tnt-accent-color-#{$colorClass} {
-        color: var(--tnt-color-#{$colorClass});
+    .tnt-tint-color-#{$colorClass} {
+        &:not(disabled):not(.tnt-disabled) {
+            &:hover {
+                &.tnt-filled {
+                    background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 70%, transparent);
+                }
+
+                &:not(.tnt-filled) {
+                    background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 10%, transparent);
+                }
+            }
+
+            &:active:not(.tnt-ripple) {
+                &.tnt-filled {
+                    background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 50%, transparent);
+                }
+
+                &:not(.tnt-filled) {
+                    background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 20%, transparent);
+                }
+            }
+
+            .tnt-rippling {
+                background-color: var(--tnt-color-#{$colorClass});
+            }
+        }
     }
 }
 
-.tnt-bg-color-transparent {
-    background-color: var(--tnt-color-transparent);
-}
 
-.tnt-actionable-bg-color-transparent {
-    @extend .tnt-bg-color-transparent;
+//@each $colorClass in $color-classes-no-transparent {
+//    .tnt-bg-color-#{$colorClass} {
+//        background-color: var(--tnt-color-#{$colorClass});
+//    }
 
-    &:not(disabled), &:not(.tnt-disabled) {
-        &:hover {
-            background-color: color-mix(in srgb, $tnt-color-background 50%, $tnt-color-shadow);
-        }
+//    .tnt-actionable-bg-color-#{$colorClass} {
+//        @extend .tnt-bg-color-#{$colorClass};
 
-        &:not(.tnt-ripple):active {
-            background-color: color-mix(in srgb, $tnt-color-background 30%, $tnt-color-shadow);
-        }
+//        &:not(disabled), &:not(.tnt-disabled) {
+//            &:hover {
+//                background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 50%, $tnt-color-shadow);
+//            }
 
-        &.tnt-ripple:after {
-            background-image: radial-gradient(circle, black 10%, transparent 10.01%);
-        }
-    }
-}
+//            &:not(.tnt-ripple):active {
+//                background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 30%, $tnt-color-shadow);
+//            }
 
-.tnt-outlined {
-    outline: 1px solid $tnt-color-outline;
-}
+//            &.tnt-ripple:after {
+//                background-image: radial-gradient(circle, black 10%, transparent 10.01%);
+//            }
+//        }
+//    }
+
+//    .tnt-fg-color-#{$colorClass} {
+//        color: var(--tnt-color-#{$colorClass});
+
+//        &:is(input) {
+//            &:-webkit-autofill {
+//                -webkit-text-fill-color: var(--tnt-color-#{$colorClass});
+//            }
+//        }
+
+//        &:has(input) {
+//            input:-webkit-autofill {
+//                -webkit-text-fill-color: var(--tnt-color-#{$colorClass});
+//            }
+//        }
+//    }
+
+//    .tnt-accent-color-#{$colorClass} {
+//        color: var(--tnt-color-#{$colorClass});
+//    }
+//}
+
+//.tnt-bg-color-transparent {
+//    background-color: var(--tnt-color-transparent);
+//}
+
+//.tnt-actionable-bg-color-transparent {
+//    @extend .tnt-bg-color-transparent;
+
+//    &:not(disabled), &:not(.tnt-disabled) {
+//        &:hover {
+//            background-color: color-mix(in srgb, $tnt-color-background 50%, $tnt-color-shadow);
+//        }
+
+//        &:not(.tnt-ripple):active {
+//            background-color: color-mix(in srgb, $tnt-color-background 30%, $tnt-color-shadow);
+//        }
+
+//        &.tnt-ripple:after {
+//            background-image: radial-gradient(circle, black 10%, transparent 10.01%);
+//        }
+//    }
+//}
+
+//.tnt-outlined {
+//    outline: 1px solid $tnt-color-outline;
+//}

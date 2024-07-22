@@ -35,7 +35,7 @@ public partial class TnTNavLink {
     public string? ElementTitle { get; set; }
     public string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
-        .SetDisabled(Disabled)
+        .AddDisabled(Disabled)
         .AddRipple(Ripple)
         .AddActionableBackgroundColor(_isActive ? ActiveBackgroundColor : BackgroundColor)
         .AddForegroundColor(_isActive ? ActiveTextColor : TextColor)
