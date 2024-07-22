@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using TnTComponents.Core;
+using TnTComponents.Interfaces;
 
 namespace TnTComponents;
 

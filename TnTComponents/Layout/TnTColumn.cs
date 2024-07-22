@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Rendering;
 using System.Reflection;
 using System.Text;
 using TnTComponents.Core;
+using TnTComponents.Interfaces;
 
 namespace TnTComponents;
 

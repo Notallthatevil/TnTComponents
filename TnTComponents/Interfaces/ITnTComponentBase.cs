@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Text;
 
-namespace TnTComponents.Core;
+namespace TnTComponents.Interfaces;
 
 /// <summary>
 /// Simple interface that represents a TnTComponent. Each TnTComponent can be thought of as a single
 /// Html Element.
 /// </summary>
-public interface ITnTComponentBase {
+public interface ITnTComponentBase
+{
 
     /// <summary>
     /// Contains all attributes provided to this component that do not match a parameter.
@@ -44,19 +45,4 @@ public interface ITnTComponentBase {
     /// cref="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id" />
     /// </summary>
     string? Id { get; }
-}
-
-internal static class ITnTComponentBaseExt {
-
-    internal static string GetClassDefault(this ITnTComponentBase componentBase) {
-        if (componentBase is null) return string.Empty;
-
-        var strBuilder = new StringBuilder(componentBase.CssClass ?? string.Empty);
-
-        if (componentBase.AdditionalAttributes?.TryGetValue("class", out var @class) == true) {
-            strBuilder.Append(' ').AppendJoin(' ', @class);
-        }
-
-        return strBuilder.ToString();
-    }
 }

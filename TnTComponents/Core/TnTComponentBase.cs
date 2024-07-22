@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using TnTComponents.Ext;
+using TnTComponents.Interfaces;
 
 namespace TnTComponents.Core;
 
@@ -9,7 +10,7 @@ namespace TnTComponents.Core;
 /// Base component containing all common logic.
 /// </summary>
 /// <seealso cref="Microsoft.AspNetCore.Components.ComponentBase" />
-/// <seealso cref="TnTComponents.Core.ITnTComponentBase" />
+/// <seealso cref="Interfaces.ITnTComponentBase" />
 /// <seealso cref="System.IAsyncDisposable" />
 public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
 

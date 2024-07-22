@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using TnTComponents.Core;
 using TnTComponents.Ext;
+using TnTComponents.Interfaces;
 using TnTComponents.Scheduler.Events;
 
 namespace TnTComponents.Scheduler.Infrastructure;
