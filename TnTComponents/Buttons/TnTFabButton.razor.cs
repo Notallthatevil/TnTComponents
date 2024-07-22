@@ -24,6 +24,9 @@ public partial class TnTFabButton {
         .AddBorderRadius(BorderRadius)
         .Build();
 
+    [Parameter]
+    public bool Disabled { get; set; }
+
     public override string? ElementStyle => CssStyleBuilder.Create()
        .AddFromAdditionalAttributes(AdditionalAttributes)
        .Build();

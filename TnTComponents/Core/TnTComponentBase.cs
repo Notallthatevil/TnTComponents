@@ -28,9 +28,6 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
     /// <inheritdoc />
     public abstract string? ElementStyle { get; }
 
-    [Parameter]
-    public bool Disabled { get; set; }
-
     public ElementReference Element { get; protected set; }
 
     /// <inheritdoc />

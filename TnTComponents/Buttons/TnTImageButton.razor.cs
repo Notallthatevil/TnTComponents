@@ -24,6 +24,9 @@ public partial class TnTImageButton {
     [Parameter, EditorRequired]
     public TnTIcon Icon { get; set; } = default!;
 
+    [Parameter]
+    public bool Disabled { get; set; }
+
     public override string? JsModulePath => "./_content/TnTComponents/Buttons/TnTButton.razor.js";
 
     [Parameter]

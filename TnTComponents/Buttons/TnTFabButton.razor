@@ -1,7 +1,8 @@
 ﻿@namespace TnTComponents
 @using TnTComponents.Core
+@using TnTComponents.Interfaces
 @inherits TnTPageScriptComponent<TnTFabButton>
-
+@implements ITnTInteractable
 <button is="tnt-button"
     @attributes="AdditionalAttributes"
     class="@ElementClass"

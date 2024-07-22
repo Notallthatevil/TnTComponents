@@ -1,7 +1,8 @@
 ﻿@using TnTComponents.Core
+@using TnTComponents.Interfaces
 @inherits TnTPageScriptComponent<TnTSideNavMenuGroup>
 @namespace TnTComponents
-
+@implements ITnTInteractable
 
 <tnt-side-nav-menu-group @attributes="AdditionalAttributes" class="@ElementClass" style="@ElementStyle">
     <span>

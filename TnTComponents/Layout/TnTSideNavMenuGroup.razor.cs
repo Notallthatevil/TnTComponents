@@ -15,6 +15,9 @@ public partial class TnTSideNavMenuGroup {
         .AddClass("tnt-expanded", Expand)
         .Build();
 
+    [Parameter]
+    public bool Disabled { get; set; }
+
     public override string? ElementStyle => CssStyleBuilder.Create()
        .AddFromAdditionalAttributes(AdditionalAttributes)
        .Build();

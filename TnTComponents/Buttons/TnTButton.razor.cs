@@ -18,7 +18,8 @@ public partial class TnTButton {
 
     [Parameter]
     public TnTBorderRadius CornerRadius { get; set; } = new(10);
-
+    [Parameter]
+    public bool Disabled { get; set; }
     public override string? ElementClass => CssClassBuilder.Create()
             .AddClass(AdditionalAttributes)
         .AddElevation(Elevation)
