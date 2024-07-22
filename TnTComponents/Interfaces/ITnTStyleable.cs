@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace TnTComponents.Interfaces;
 public interface ITnTStyleable {
-    TextAlign? TextAlign { get; set; }
+    TextAlign? TextAlignment { get; }
+    TnTColor BackgroundColor { get; }
+
+    TnTColor TintColor { get; }
+
+    TnTColor TextColor { get; }
 }
 
