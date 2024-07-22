@@ -14,7 +14,9 @@
         autofocus="@AutoFocus"
         title="@ElementTitle"
         id="@ElementId"
-        @ref="Element">
+        @ref="Element"
+        @onclick="OnClickCallback"
+        @onclick:stopPropagation="StopPropagation">
     @ChildContent
 </button>
 

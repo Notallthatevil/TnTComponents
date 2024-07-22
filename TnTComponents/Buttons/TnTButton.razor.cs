@@ -53,4 +53,10 @@ public partial class TnTButton {
     public bool EnableRipple { get; set; } = true;
 
     public override string? JsModulePath => "./_content/TnTComponents/Buttons/TnTButton.razor.js";
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClickCallback { get; set; }
+
+    [Parameter]
+    public bool StopPropagation { get; set; }
 }
