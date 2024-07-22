@@ -10,6 +10,9 @@ public partial class TnTSideNavMenuGroup {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
+    [Parameter]
+    public string? Name { get; set; }
+
     public override string? ElementClass => CssClassBuilder.Create()
         .SetDisabled(Disabled)
         .AddClass("tnt-expanded", Expand)

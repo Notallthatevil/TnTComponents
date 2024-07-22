@@ -11,5 +11,8 @@ public abstract class TnTInteractableComponentBase : TnTComponentBase, ITnTInter
     [Parameter]
     // <inheritdoc/>
     public bool Disabled { get; set; }
+
+    [Parameter]
+    public string? Name { get; set; }
 }
 
