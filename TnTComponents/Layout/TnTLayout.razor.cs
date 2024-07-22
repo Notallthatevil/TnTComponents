@@ -8,9 +8,9 @@ public partial class TnTLayout {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public override string? CssClass => null;
+    public override string? ElementClass => null;
 
-    public override string? CssStyle => CssStyleBuilder.Create()
+    public override string? ElementStyle => CssStyleBuilder.Create()
        .AddFromAdditionalAttributes(AdditionalAttributes)
        .Build();
 

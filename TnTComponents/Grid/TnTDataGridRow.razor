@@ -2,8 +2,8 @@
 @typeparam TGridItem
 @attribute [CascadingTypeParameter(nameof(TGridItem))]
     <tr @attributes="AdditionalAttributes"
-        class="@CssClass"
-        style="@CssStyle"
+        class="@ElementClass"
+        style="@ElementStyle"
         @onclick="RowClicked">
         @ChildContent
     </tr>

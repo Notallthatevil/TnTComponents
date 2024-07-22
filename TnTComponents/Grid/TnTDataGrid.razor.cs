@@ -27,7 +27,7 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    public string? CssClass => CssClassBuilder.Create()
+    public string? ElementClass => CssClassBuilder.Create()
         .AddClass("tnt-datagrid")
         .AddClass("tnt-stripped", DataGridAppearance.HasFlag(DataGridAppearance.Stripped))
         .AddClass("tnt-compact", DataGridAppearance.HasFlag(DataGridAppearance.Compact))
@@ -35,7 +35,7 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
         .AddClass("tnt-loading", Loading)
         .Build();
 
-    public string? CssStyle => CssStyleBuilder.Create()
+    public string? ElementStyle => CssStyleBuilder.Create()
         .Build();
 
     [Parameter]

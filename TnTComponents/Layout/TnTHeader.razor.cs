@@ -11,12 +11,12 @@ public partial class TnTHeader {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public override string? CssClass => CssClassBuilder.Create()
+    public override string? ElementClass => CssClassBuilder.Create()
                 .AddBackgroundColor(BackgroundColor)
         .AddForegroundColor(TextColor)
         .Build();
 
-    public override string? CssStyle => CssStyleBuilder.Create()
+    public override string? ElementStyle => CssStyleBuilder.Create()
            .AddFromAdditionalAttributes(AdditionalAttributes)
            .Build();
 

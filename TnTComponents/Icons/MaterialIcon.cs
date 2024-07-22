@@ -6,7 +6,7 @@ namespace TnTComponents;
 
 public sealed partial class MaterialIcon : TnTIcon {
 
-    public override string? CssClass => CssClassBuilder.Create()
+    public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-icon")
         .AddClass("material-symbols-outlined", Appearance == IconAppearance.Default || Appearance == IconAppearance.Outlined)
@@ -19,7 +19,7 @@ public sealed partial class MaterialIcon : TnTIcon {
         .AddClass(AdditionalClass, AdditionalClass is not null)
         .Build();
 
-    public override string? CssStyle => CssStyleBuilder.Create()
+    public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 

@@ -25,12 +25,12 @@ public abstract partial class TnTColumnBase<TGridItem> {
     [Parameter]
     public RenderFragment? ColumnOptions { get; set; }
 
-    public string? CssClass => CssClassBuilder.Create()
+    public string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddTextAlign(TextAlign)
         .Build();
 
-    public string? CssStyle => CssStyleBuilder.Create()
+    public string? ElementStyle => CssStyleBuilder.Create()
             .AddFromAdditionalAttributes(AdditionalAttributes)
             .Build();
 

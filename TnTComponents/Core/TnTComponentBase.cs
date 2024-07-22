@@ -24,9 +24,9 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
 
     public string ComponentIdentifier { get; } = TnTComponentIdentifier.NewId();
     /// <inheritdoc />
-    public abstract string? CssClass { get; }
+    public abstract string? ElementClass { get; }
     /// <inheritdoc />
-    public abstract string? CssStyle { get; }
+    public abstract string? ElementStyle { get; }
 
     [Parameter]
     public bool Disabled { get; set; }
@@ -35,7 +35,7 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
 
     /// <inheritdoc />
     [Parameter]
-    public virtual string? Id { get; set; }
+    public virtual string? ElementId { get; set; }
 
     [Parameter]
     public TextAlign? TextAlign { get; set; }
@@ -43,6 +43,13 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
     internal const string TnTCustomIdentifierAttribute = "tntid";
 
     protected bool Interactive { get; private set; }
+
+    [Parameter]
+    /// <inheritdoc />
+    public string? ElementLang { get; set; }
+    [Parameter]
+    /// <inheritdoc />
+    public string? ElementTitle { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         await base.OnAfterRenderAsync(firstRender);

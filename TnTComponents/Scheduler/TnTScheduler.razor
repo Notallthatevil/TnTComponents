@@ -1,7 +1,7 @@
 ﻿@namespace TnTComponents
 @typeparam TEventType
 
-<div @attributes="AdditionalAttributes" class="@CssClass" style="@CssStyle" @ref="Element">
+<div @attributes="AdditionalAttributes" class="@ElementClass" style="@ElementStyle" @ref="Element">
     @if (!HideDateControls) {
         <div class="date-controls">
             <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.ChevronLeft))" OnClick="PreviousPage" class="prev-button" />

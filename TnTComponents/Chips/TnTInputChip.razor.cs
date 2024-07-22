@@ -21,14 +21,14 @@ public partial class TnTInputChip {
     [Parameter]
     public TnTIcon CloseIcon { get; set; } = new MaterialIcon(MaterialIcon.Close);
 
-    public override string? CssClass => CssClassBuilder.Create()
+    public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-input-chip")
         .AddClass("tnt-chip")
         .AddBorderRadius(BorderRadius)
         .Build();
 
-    public override string? CssStyle => CssStyleBuilder.Create()
+    public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddVariable("bg-color", $"var(--tnt-color-{BackgroundColor.ToCssClassName()})")
         .AddVariable("text-color", $"var(--tnt-color-{TextColor.ToCssClassName()})")

@@ -24,7 +24,7 @@ public class TnTCard : ComponentBase {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public string? CssClass => CssClassBuilder.Create()
+    public string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddFlexBox(Direction, AlignItems, JustifyContent, AlignContent, FlexBox)
         .AddBackgroundColor(MakeOutlined ? null : BackgroundColor)
@@ -57,7 +57,7 @@ public class TnTCard : ComponentBase {
     [Parameter]
     public int Padding { get; set; } = 2;
 
-    public string? CssStyle => CssStyleBuilder.Create()
+    public string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
@@ -70,8 +70,8 @@ public class TnTCard : ComponentBase {
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, UseSpan ? "span" : "div");
         builder.AddMultipleAttributes(10, AdditionalAttributes);
-        builder.AddAttribute(20, "class", CssClass);
-        builder.AddAttribute(30, "style", CssStyle);
+        builder.AddAttribute(20, "class", ElementClass);
+        builder.AddAttribute(30, "style", ElementStyle);
         builder.AddContent(40, ChildContent);
         builder.CloseElement();
     }

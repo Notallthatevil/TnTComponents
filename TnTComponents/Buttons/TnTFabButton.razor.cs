@@ -15,7 +15,7 @@ public partial class TnTFabButton {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public override string? CssClass => CssClassBuilder.Create()
+    public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-button")
         .AddClass("tnt-fab")
@@ -24,7 +24,7 @@ public partial class TnTFabButton {
         .AddBorderRadius(BorderRadius)
         .Build();
 
-    public override string? CssStyle => CssStyleBuilder.Create()
+    public override string? ElementStyle => CssStyleBuilder.Create()
        .AddFromAdditionalAttributes(AdditionalAttributes)
        .Build();
 

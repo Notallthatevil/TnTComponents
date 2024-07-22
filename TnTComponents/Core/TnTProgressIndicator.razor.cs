@@ -12,12 +12,12 @@ public partial class TnTProgressIndicator {
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    public override string? CssClass => CssClassBuilder.Create()
+    public override string? ElementClass => CssClassBuilder.Create()
         .SetAlternative(Appearance == ProgressAppearance.Linear)
         .AddSize(Size)
         .Build();
 
-    public override string? CssStyle => CssStyleBuilder.Create()
+    public override string? ElementStyle => CssStyleBuilder.Create()
        .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddVariable("progress-color", $"var(--tnt-color-{ProgressColor.ToCssClassName()})")
        .Build();
@@ -35,7 +35,7 @@ public partial class TnTProgressIndicator {
     public double? Value { get; set; }
 
     private string GetStyle() {
-        var stringBuilder = new StringBuilder(CssStyle);
+        var stringBuilder = new StringBuilder(ElementStyle);
 
         if (Value is not null) {
             var deg = 360 * (Value / Max);

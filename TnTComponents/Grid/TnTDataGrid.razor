@@ -18,8 +18,8 @@
         }
         <ColumnsCollectedNotifier TGridItem="TGridItem" />
         <table @attributes="AdditionalAttributes"
-               class="@CssClass"
-               style="@CssStyle"
+               class="@ElementClass"
+               style="@ElementStyle"
                aria-rowcount="@(_ariaBodyRowCount + 1)"
                @ref="Element">
 
@@ -81,7 +81,7 @@
             @for (var colIndex = 0; colIndex < _columns.Count; colIndex++) {
                 var col = _columns[colIndex];
 
-                <TnTDataGridCell @key="@col" class="@col.CssClass" style="@col.CssStyle" TGridItem="TGridItem" Item="@item">
+                <TnTDataGridCell @key="@col" class="@col.ElementClass" style="@col.ElementStyle" TGridItem="TGridItem" Item="@item">
                     @((RenderFragment)(__builder => col.CellContent(__builder, item)))
                 </TnTDataGridCell>
             }
@@ -110,8 +110,8 @@
 
             col.ShowSortIcon = _sortByColumn == col;
 
-            <TnTDataGridHeaderCell class="@($"{col.CssClass}{(col.Sortable && _interactive ? " tnt-col-sortable" : null)}")"
-                                   style="@col.CssStyle"
+            <TnTDataGridHeaderCell class="@($"{col.ElementClass}{(col.Sortable && _interactive ? " tnt-col-sortable" : null)}")"
+                                   style="@col.ElementStyle"
                                    aria-sort="@(_sortByColumn == col? (_sortByAscending ? "ascending" : "descending"): null)"
                                    @key="@col" scope="col"
                                    TGridItem="TGridItem">

@@ -2,7 +2,7 @@
 @using TnTComponents.Core
 @typeparam TItem
 @inherits TnTPageScriptComponent<TnTVirtualize<TItem>>
-<div @attributes="AdditionalAttributes" class="@CssClass" style="@CssStyle" id="@Id">
+<div @attributes="AdditionalAttributes" class="@ElementClass" style="@ElementStyle" id="@ElementId">
     @foreach (var item in _items) {
         if (ItemTemplate is not null) {
             @ItemTemplate(item)

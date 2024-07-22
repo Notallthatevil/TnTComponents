@@ -12,11 +12,11 @@ public class TnTDivider : ComponentBase {
     [Parameter]
     public TnTColor? Color { get; set; } = TnTColor.OutlineVariant;
 
-    public string? CssClass => CssClassBuilder.Create()
+    public string? ElementClass => CssClassBuilder.Create()
             .AddClass($"tnt-divider-{Orientation.ToString().ToLower()}")
         .Build();
 
-    public string? CssStyle => CssStyleBuilder.Create()
+    public string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddVariable("divider-color", $"var(--tnt-color-{Color.ToCssClassName()})", Color.HasValue)
         .Build();
@@ -26,8 +26,8 @@ public class TnTDivider : ComponentBase {
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "div");
         builder.AddMultipleAttributes(10, AdditionalAttributes);
-        builder.AddAttribute(20, "class", CssClass);
-        builder.AddAttribute(30, "style", CssStyle);
+        builder.AddAttribute(20, "class", ElementClass);
+        builder.AddAttribute(30, "style", ElementStyle);
         builder.CloseElement();
     }
 }

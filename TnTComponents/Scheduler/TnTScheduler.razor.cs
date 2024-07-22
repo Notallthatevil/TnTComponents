@@ -17,14 +17,14 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public string? CssClass => CssClassBuilder.Create()
+    public string? ElementClass => CssClassBuilder.Create()
             .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-scheduler")
         .AddBackgroundColor(BackgroundColor)
         .AddForegroundColor(TextColor)
         .Build();
 
-    public string? CssStyle => CssStyleBuilder.Create()
+    public string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 

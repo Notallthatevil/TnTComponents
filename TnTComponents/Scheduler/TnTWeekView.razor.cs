@@ -10,12 +10,12 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
     [Parameter]
     public bool HideDates { get; set; }
 
-    public override string? CssClass => CssClassBuilder.Create()
+    public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-week-view")
         .Build();
 
-    public override string? CssStyle => CssStyleBuilder.Create()
+    public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddStyle(GetGridTemplateColumns(), string.Empty)
         .Build();

@@ -17,13 +17,13 @@ public partial class TnTChip {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public override string? CssClass => CssClassBuilder.Create()
+    public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-chip")
         .AddBorderRadius(BorderRadius)
         .Build();
 
-    public override string? CssStyle => CssStyleBuilder.Create()
+    public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddVariable("active-color", $"var(--tnt-color-{ActiveColor.ToCssClassName()})")
         .AddVariable("active-text-color", $"var(--tnt-color-{ActiveTextColor.ToCssClassName()})")

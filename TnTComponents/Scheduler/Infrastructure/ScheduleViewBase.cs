@@ -13,9 +13,9 @@ public abstract class ScheduleViewBase<TEventType> : ComponentBase, ITnTComponen
 
     [Parameter] public bool? AutoFocus { get; set; }
 
-    public virtual string? CssClass => null;
+    public virtual string? ElementClass => null;
 
-    public virtual string? CssStyle => null;
+    public virtual string? ElementStyle => null;
 
     [Parameter]
     public bool Disabled { get; set; }
@@ -31,7 +31,7 @@ public abstract class ScheduleViewBase<TEventType> : ComponentBase, ITnTComponen
     [Parameter]
     public EventCallback<TEventType> EventClickedCallback { get; set; }
 
-    public string? Id { get; private set; }
+    public string? ElementId { get; private set; }
 
     [Parameter]
     public TimeSpan Interval { get; set; } = TimeSpan.FromMinutes(30);
@@ -41,6 +41,12 @@ public abstract class ScheduleViewBase<TEventType> : ComponentBase, ITnTComponen
 
     [CascadingParameter]
     protected TnTScheduler<TEventType> Scheduler { get; set; } = default!;
+    [Parameter]
+
+    public string? ElementLang { get; set; }
+    [Parameter]
+
+    public string? ElementTitle { get; set; }
 
     protected TEventType? DraggingEvent;
 
@@ -124,7 +130,7 @@ public abstract class ScheduleViewBase<TEventType> : ComponentBase, ITnTComponen
 
     protected override void OnInitialized() {
         base.OnInitialized();
-        Id ??= TnTComponentIdentifier.NewId();
+        ElementId ??= TnTComponentIdentifier.NewId();
         Scheduler?.AddScheduleView(this);
     }
 

@@ -9,11 +9,11 @@ public partial class TnTTabChild {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public override string? CssClass => CssClassBuilder.Create()
+    public override string? ElementClass => CssClassBuilder.Create()
         .SetDisabled(Disabled)
         .Build();
 
-    public override string? CssStyle => CssStyleBuilder.Create()
+    public override string? ElementStyle => CssStyleBuilder.Create()
        .AddFromAdditionalAttributes(AdditionalAttributes)
        .Build();
 
@@ -33,7 +33,7 @@ public partial class TnTTabChild {
 
     protected override void OnAfterRender(bool firstRender) {
         base.OnAfterRender(firstRender);
-        _style = CssStyle;
+        _style = ElementStyle;
     }
 
     protected override void OnInitialized() {
@@ -42,6 +42,6 @@ public partial class TnTTabChild {
             throw new InvalidOperationException($"A {nameof(TnTTabChild)} must be a child of {nameof(TnTTabView)}");
         }
         _context.AddTabChild(this);
-        _style = $"{CssStyle}; display:none;";
+        _style = $"{ElementStyle}; display:none;";
     }
 }

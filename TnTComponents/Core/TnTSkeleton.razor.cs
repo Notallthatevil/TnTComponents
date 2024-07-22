@@ -17,7 +17,7 @@ public partial class TnTSkeleton {
     [Parameter]
     public TnTColor? BackgroundColor { get; set; } = TnTColor.SurfaceVariant;
 
-    public string CssClass => CssClassBuilder.Create()
+    public string ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-skeleton")
         .AddBorderRadius(Appearance == SkeletonAppearance.Circle ? new TnTBorderRadius(10) : null)
@@ -25,7 +25,7 @@ public partial class TnTSkeleton {
         .AddBackgroundColor(BackgroundColor)
         .Build();
 
-    public string? CssStyle => CssStyleBuilder.Create()
+    public string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddVariable("bg-color", $"var(--tnt-color-{BackgroundColor.ToCssClassName()})", Animated && BackgroundColor.HasValue && BackgroundColor.Value != TnTColor.None)
         .Build();

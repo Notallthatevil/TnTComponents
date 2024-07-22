@@ -8,9 +8,6 @@ namespace TnTComponents;
 public partial class TnTNavLink {
 
     [Parameter]
-    public TnTNavLinkAppearance Appearance { get; set; } = TnTNavLinkAppearance.Flat;
-
-    [Parameter]
     public TnTColor? ActiveBackgroundColor { get; set; }
 
     [Parameter]
@@ -30,24 +27,26 @@ public partial class TnTNavLink {
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
-
-    public string? CssClass => CssClassBuilder.Create()
+    [Parameter]
+    /// <inheritdoc />
+    public string? ElementLang { get; set; }
+    [Parameter]
+    /// <inheritdoc />
+    public string? ElementTitle { get; set; }
+    public string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddClass("tnt-nav-link")
-        .AddOutlined(Appearance == TnTNavLinkAppearance.Outlined)
-        .AddClass("tnt-underlined", Appearance == TnTNavLinkAppearance.Underlined)
-        .AddClass("tnt-flat", Appearance == TnTNavLinkAppearance.Flat)
         .SetDisabled(Disabled)
         .AddRipple(Ripple)
         .AddActionableBackgroundColor(_isActive ? ActiveBackgroundColor : BackgroundColor)
         .AddForegroundColor(_isActive ? ActiveTextColor : TextColor)
+        .AddOutlined(Outlined)
         .AddFilled(BackgroundColor != TnTColor.Transparent)
         .AddElevation(Elevation)
         .AddBorderRadius(BorderRadius)
         .AddClass("tnt-active", _isActive)
         .Build();
 
-    public string? CssStyle => CssStyleBuilder.Create()
+    public string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
@@ -67,10 +66,13 @@ public partial class TnTNavLink {
     public string Href { get; set; } = default!;
 
     [Parameter]
-    public string? Id { get; set; }
+    public string? ElementId { get; set; }
 
     [Parameter]
     public NavLinkMatch Match { get; set; }
+
+    [Parameter]
+    public bool Outlined { get; set; }
 
     [Parameter]
     public bool Ripple { get; set; }
@@ -79,7 +81,7 @@ public partial class TnTNavLink {
     public TnTIcon? StartIcon { get; set; }
 
     [Parameter]
-    public TnTColor TextColor { get; set; } = TnTColor.Secondary;
+    public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
 
     private bool _isActive { get; set; }
 

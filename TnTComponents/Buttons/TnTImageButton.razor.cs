@@ -9,7 +9,7 @@ public partial class TnTImageButton {
     [Parameter]
     public TnTColor Color { get; set; } = TnTColor.OnSurface;
 
-    public override string? CssClass => CssClassBuilder.Create()
+    public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddActionableBackgroundColor(TnTColor.Transparent)
         .AddForegroundColor(Color)
@@ -17,7 +17,7 @@ public partial class TnTImageButton {
         .AddClass("tnt-button")
         .Build();
 
-    public override string? CssStyle => CssStyleBuilder.Create()
+    public override string? ElementStyle => CssStyleBuilder.Create()
        .AddFromAdditionalAttributes(AdditionalAttributes)
        .Build();
 

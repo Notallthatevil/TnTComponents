@@ -11,9 +11,9 @@ public partial class TnTMarkdownEditor {
 
     public override string? JsModulePath => "./_content/TnTComponents/Editors/TnTMarkdownEditor.razor.js";
 
-    public override string? CssClass => string.Empty;
+    public override string? ElementClass => string.Empty;
 
-    public override string? CssStyle => string.Empty;
+    public override string? ElementStyle => string.Empty;
 
     [Parameter]
     public string? Value { get; set; }
@@ -29,7 +29,7 @@ public partial class TnTMarkdownEditor {
 
     protected override void OnInitialized() {
         base.OnInitialized();
-        Id = TnTComponentIdentifier.NewId();
+        ElementId = TnTComponentIdentifier.NewId();
     }
 
 

@@ -24,14 +24,14 @@ public class TnTColumn : ComponentBase, ITnTComponentBase, ITnTFlexBox {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public string? CssClass => CssClassBuilder.Create()
+    public string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-col")
         .AddClass(GetGridClass())
         .AddFlexBox(this)
         .Build();
 
-    public string? CssStyle => CssStyleBuilder.Create()
+    public string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
@@ -44,7 +44,7 @@ public class TnTColumn : ComponentBase, ITnTComponentBase, ITnTFlexBox {
     public ElementReference Element { get; }
 
     [Parameter]
-    public string? Id { get; set; }
+    public string? ElementId { get; set; }
 
     [Parameter]
     public JustifyContent? JustifyContent { get; set; }
@@ -96,6 +96,12 @@ public class TnTColumn : ComponentBase, ITnTComponentBase, ITnTFlexBox {
 
     [Parameter, ColSize(SizeClass = "xl", PropertyName = nameof(ColSize.Push))]
     public int XLPush { get; set; }
+    [Parameter]
+
+    public string? ElementLang { get; set; }
+    [Parameter]
+
+    public string? ElementTitle { get; set; }
 
     private static readonly IReadOnlyDictionary<PropertyInfo, ColSizeAttribute> _sizeValues = GetSizeProperties();
 
@@ -104,8 +110,8 @@ public class TnTColumn : ComponentBase, ITnTComponentBase, ITnTFlexBox {
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "div");
         builder.AddMultipleAttributes(10, AdditionalAttributes);
-        builder.AddAttribute(20, "class", CssClass);
-        builder.AddAttribute(30, "style", CssStyle);
+        builder.AddAttribute(20, "class", ElementClass);
+        builder.AddAttribute(30, "style", ElementStyle);
         builder.AddContent(40, ChildContent);
         builder.CloseElement();
     }

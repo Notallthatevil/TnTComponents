@@ -19,7 +19,7 @@ public partial class TnTButton {
     [Parameter]
     public TnTBorderRadius CornerRadius { get; set; } = new(10);
 
-    public override string? CssClass => CssClassBuilder.Create()
+    public override string? ElementClass => CssClassBuilder.Create()
             .AddClass(AdditionalAttributes)
         .AddElevation(Elevation)
         .AddActionableBackgroundColor(Appearance == ButtonAppearance.Text || Appearance == ButtonAppearance.Outlined ? TnTColor.Transparent : BackgroundColor)
@@ -31,7 +31,7 @@ public partial class TnTButton {
         .AddRipple()
         .Build();
 
-    public override string? CssStyle => CssStyleBuilder.Create()
+    public override string? ElementStyle => CssStyleBuilder.Create()
        .AddFromAdditionalAttributes(AdditionalAttributes)
        .Build();
 
