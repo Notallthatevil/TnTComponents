@@ -1,19 +1,20 @@
 ﻿@namespace TnTComponents
 @using TnTComponents.Core
 @using TnTComponents.Interfaces
-@inherits TnTPageScriptComponent<TnTButton>
-@implements ITnTInteractable
-<button is="tnt-button"
-        @attributes="AdditionalAttributes"
+@inherits TnTInteractablePageScriptComponent<TnTButton>
+@implements ITnTStyleable
+
+
+<button @attributes="AdditionalAttributes"
         class="@ElementClass"
+        type="@Type.ToHtmlAttribute()"
         style="@ElementStyle"
         name="@Name"
-        type="@Type.ToHtmlType()"
         disabled="@Disabled"
         autofocus="@AutoFocus"
-        @onclick="OnClick"
-        @onclick:stopPropagation="StopPropagation">
+        title="@ElementTitle"
+        id="@ElementId"
+        @ref="Element">
     @ChildContent
 </button>
 
-@RenderPageScript()

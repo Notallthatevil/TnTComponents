@@ -1,10 +1,22 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using TnTComponents.Ext;
+using TnTComponents.Interfaces;
 
 namespace TnTComponents.Core;
+public abstract class TnTInteractablePageScriptComponent<TComponent> : TnTComponentBase, ITnTPageScriptComponent<TComponent>, ITnTInteractable, IAsyncDisposable where TComponent : ComponentBase {
+    [Parameter]
+    // <inheritdoc/>
+    public bool Disabled { get; set; }
 
-public abstract class TnTPageScriptComponent<TComponent> : TnTComponentBase, ITnTPageScriptComponent<TComponent>, IAsyncDisposable where TComponent : ComponentBase {
+    [Parameter]
+    public string? Name { get; set; }
+
     public DotNetObjectReference<TComponent>? DotNetObjectRef { get; set; }
     public IJSObjectReference? IsolatedJsModule { get; private set; }
     public abstract string? JsModulePath { get; }
@@ -13,14 +25,6 @@ public abstract class TnTPageScriptComponent<TComponent> : TnTComponentBase, ITn
     protected IJSRuntime JSRuntime { get; private set; } = default!;
 
     protected RenderFragment PageScript;
-
-    protected TnTPageScriptComponent() {
-        PageScript = new RenderFragment(builder => {
-            builder.OpenComponent<TnTPageScript>(0);
-            builder.AddAttribute(1, "Src", JsModulePath);
-            builder.CloseComponent();
-        });
-    }
 
     public virtual async ValueTask DisposeAsync() {
         GC.SuppressFinalize(this);
