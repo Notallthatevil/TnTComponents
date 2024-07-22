@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 using System.Drawing;
 using System.Net.Http;
 using System.Reflection;
@@ -30,6 +31,9 @@ public class TnTThemeDesign : IComponent {
 
     [Parameter]
     public Theme Theme { get; set; }
+
+    [Inject]
+    private ILogger<TnTThemeDesign> _logger { get; set; } = default!;
 
     public Color Transparent => Color.Transparent;
 
@@ -78,8 +82,9 @@ public class TnTThemeDesign : IComponent {
             }
         }
 
-        if(_themeFile is null) {
-            throw new InvalidOperationException($"Unable to obtain the theme file from {_themeFile}");
+        if (_themeFile is null) {
+            _themeFile = new();
+            _logger.LogWarning("No theme file was found, using default theme.");
         }
 
         IEnumerable<KeyValuePair<string, object?>> properties = [];

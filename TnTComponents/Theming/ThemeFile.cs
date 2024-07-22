@@ -5,7 +5,7 @@ internal class ThemeFile {
     public string? Description { get; set; } = "TYPE: CUSTOM\nMaterial Theme Builder export 2024-07-03 09:43:27";
     public string? Seed { get; set; } = "#B33B15";
     public CoreColors? CoreColors { get; set; }
-    public Scheme? Schemes { get; set; }
+    public Scheme? Schemes { get; set; } = new();
 }
 
 internal class CoreColors {
