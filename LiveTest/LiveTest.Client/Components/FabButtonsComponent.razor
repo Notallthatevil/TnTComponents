@@ -1,0 +1,15 @@
+﻿@using TnTComponents
+<TnTRow>
+    <TnTColumn S="12">
+        <TnTFabButton OnClickCallback="@OnClick" Appearance="ButtonAppearance.Filled">
+            Filled
+        </TnTFabButton>
+    </TnTColumn>
+</TnTRow>
+
+
+@code {
+    private void OnClick() {
+        Console.WriteLine("Button Clicked");
+    }
+}
