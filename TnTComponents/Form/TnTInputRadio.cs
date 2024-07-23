@@ -6,65 +6,65 @@ using TnTComponents.Form;
 
 namespace TnTComponents;
 
-[CascadingTypeParameter(nameof(TInputType))]
-public class TnTInputRadioGroup<TInputType> : TnTInputSelect<TInputType> {
+//[CascadingTypeParameter(nameof(TInputType))]
+//public class TnTInputRadioGroup<TInputType> : TnTInputSelect<TInputType> {
 
-    [Parameter]
-    public LayoutDirection Direction { get; set; } = LayoutDirection.Vertical;
+    //[Parameter]
+    //public LayoutDirection Direction { get; set; } = LayoutDirection.Vertical;
 
-    [Parameter, EditorRequired]
-    public string RadioGroupName { get; set; } = default!;
+    //[Parameter, EditorRequired]
+    //public string RadioGroupName { get; set; } = default!;
 
-    public override InputType Type { get; }
-    internal RadioContext _radioContext = new();
+    //public override InputType Type { get; }
+    //internal RadioContext _radioContext = new();
 
-    protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        builder.OpenElement(0, "span");
-        builder.AddAttribute(1, "class", "tnt-radio-group " + FormCssClass);
-        builder.AddAttribute(2, "style", $"flex-direction: {(Direction == LayoutDirection.Vertical ? "column" : "row")}");
+    //protected override void BuildRenderTree(RenderTreeBuilder builder) {
+    //    builder.OpenElement(0, "span");
+    //    builder.AddAttribute(1, "class", "tnt-radio-group " + FormCssClass);
+    //    builder.AddAttribute(2, "style", $"flex-direction: {(Direction == LayoutDirection.Vertical ? "column" : "row")}");
 
-        {
-            builder.OpenElement(3, "span");
-            builder.AddAttribute(4, "class", "tnt-radio-group-name");
-            builder.AddContent(5, RadioGroupName);
-            builder.CloseElement();
-        }
+    //    {
+    //        builder.OpenElement(3, "span");
+    //        builder.AddAttribute(4, "class", "tnt-radio-group-name");
+    //        builder.AddContent(5, RadioGroupName);
+    //        builder.CloseElement();
+    //    }
 
-        {
-            builder.OpenComponent<CascadingValue<RadioContext>>(10);
-            builder.AddComponentParameter(20, "Value", _radioContext);
-            builder.AddComponentParameter(30, "ChildContent", ChildContent);
-            builder.AddComponentParameter(40, "IsFixed", true);
-            builder.CloseComponent();
-        }
+    //    {
+    //        builder.OpenComponent<CascadingValue<RadioContext>>(10);
+    //        builder.AddComponentParameter(20, "Value", _radioContext);
+    //        builder.AddComponentParameter(30, "ChildContent", ChildContent);
+    //        builder.AddComponentParameter(40, "IsFixed", true);
+    //        builder.CloseComponent();
+    //    }
 
-        if (EditContext is not null && !DisableValidationMessage && ValueExpression is not null) {
-            builder.OpenComponent<ValidationMessage<TInputType>>(50);
-            builder.AddComponentParameter(60, nameof(ValidationMessage<TInputType>.For), ValueExpression);
-            builder.AddAttribute(70, "class", "tnt-components tnt-validation-message tnt-body-small");
-            builder.CloseComponent();
-        }
+    //    if (EditContext is not null && !DisableValidationMessage && ValueExpression is not null) {
+    //        builder.OpenComponent<ValidationMessage<TInputType>>(50);
+    //        builder.AddComponentParameter(60, nameof(ValidationMessage<TInputType>.For), ValueExpression);
+    //        builder.AddAttribute(70, "class", "tnt-components tnt-validation-message tnt-body-small");
+    //        builder.CloseComponent();
+    //    }
 
-        builder.CloseElement();
-    }
+    //    builder.CloseElement();
+    //}
 
-    protected override void OnInitialized() {
-        base.OnInitialized();
-        _radioContext.ChangeEventCallback = EventCallback.Factory.CreateBinder(this, async value => {
-            CurrentValue = value;
-            _radioContext.CurrentValue = CurrentValue;
-            await BindAfter.InvokeAsync(CurrentValue);
-        }, CurrentValue);
+    //protected override void OnInitialized() {
+    //    base.OnInitialized();
+    //    _radioContext.ChangeEventCallback = EventCallback.Factory.CreateBinder(this, async value => {
+    //        CurrentValue = value;
+    //        _radioContext.CurrentValue = CurrentValue;
+    //        await BindAfter.InvokeAsync(CurrentValue);
+    //    }, CurrentValue);
 
-        _radioContext.OnBlurCallback = EventCallback.Factory.Create<FocusEventArgs>(this, _ => {
-            EditContext?.NotifyFieldChanged(FieldIdentifier);
-        });
-        if (string.IsNullOrWhiteSpace(RadioGroupName)) {
-            throw new InvalidOperationException("Must provide a valid name for a radio group");
-        }
-        _radioContext.GroupName = RadioGroupName;
-    }
-}
+    //    _radioContext.OnBlurCallback = EventCallback.Factory.Create<FocusEventArgs>(this, _ => {
+    //        EditContext?.NotifyFieldChanged(FieldIdentifier);
+    //    });
+    //    if (string.IsNullOrWhiteSpace(RadioGroupName)) {
+    //        throw new InvalidOperationException("Must provide a valid name for a radio group");
+    //    }
+    //    _radioContext.GroupName = RadioGroupName;
+    //}
+//}
 
 internal class RadioContext {
     public EventCallback<ChangeEventArgs> ChangeEventCallback { get; internal set; }
@@ -173,26 +173,26 @@ public class TnTInputRadio<TInputType> : ComponentBase, IFormField {
     }
 
     protected override void OnInitialized() {
-        base.OnInitialized();
-        if (_context is null) {
-            throw new InvalidOperationException($"{nameof(TnTInputRadio<TInputType>)} must be a child of {nameof(TnTInputRadioGroup<TInputType>)}");
-        }
-        if (_label is null) {
-            throw new InvalidOperationException($"{nameof(TnTInputRadio<TInputType>)} must be a child of {nameof(TnTLabel)}");
-        }
-        _label.SetChildField(this);
+        //base.OnInitialized();
+        //if (_context is null) {
+        //    throw new InvalidOperationException($"{nameof(TnTInputRadio<TInputType>)} must be a child of {nameof(TnTInputRadioGroup<TInputType>)}");
+        //}
+        //if (_label is null) {
+        //    throw new InvalidOperationException($"{nameof(TnTInputRadio<TInputType>)} must be a child of {nameof(TnTLabel)}");
+        //}
+        //_label.SetChildField(this);
 
-        if (ParentFormAppearance.HasValue) {
-            Appearance = ParentFormAppearance.Value;
-        }
+        //if (ParentFormAppearance.HasValue) {
+        //    Appearance = ParentFormAppearance.Value;
+        //}
 
-        if (ParentFormReadOnly.HasValue) {
-            ReadOnly = ParentFormReadOnly.Value;
-        }
+        //if (ParentFormReadOnly.HasValue) {
+        //    ReadOnly = ParentFormReadOnly.Value;
+        //}
 
-        if (ParentFormDisabled.HasValue) {
-            Disabled = ParentFormDisabled.Value;
-        }
+        //if (ParentFormDisabled.HasValue) {
+        //    Disabled = ParentFormDisabled.Value;
+        //}
     }
 
     // This is an unfortunate hack, but is needed for the scenario described by test

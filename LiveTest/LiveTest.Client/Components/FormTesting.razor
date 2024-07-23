@@ -3,24 +3,74 @@
 
 @rendermode InteractiveAuto
 <h3>FormTesting</h3>
+<label>
+    Appearance
+    <input type="checkbox" @bind="_a" />
+</label>
+<label>
+    Readonly
+    <input type="checkbox" @bind="_readonly" />
+</label>
+<label>
+    Disable
+    <input type="checkbox" @bind="_disabled" />
+</label>
+<label>
+    Start Icon
+    <input type="checkbox" @bind="_b" />
+</label>
+<label>
+    End Icon
+    <input type="checkbox" @bind="_c" />
+</label>
+<label>
+    Placeholder
+    <input type="checkbox" @bind="_d" />
+</label>
+<label>
+    Label
+    <input type="checkbox" @bind="_e" />
+</label>
 
-
-<TnTForm Model="@Input" OnValidSubmit="ValidSubmit" OnInvalidSubmit="InvalidSubmit" FormName="Login">
+<TnTForm Model="@Input" OnValidSubmit="ValidSubmit" OnInvalidSubmit="InvalidSubmit" Disabled="@_disabled" ReadOnly="@_readonly" FormName="Login" Appearance="@(_a ? FormAppearance.Filled : FormAppearance.Outlined)">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <TnTLabel Label="Checkbox">
-        <TnTInputCheckbox @bind-Value="@Input.Checkbox" />
-    </TnTLabel>
+
+    <TnTRow>
+        <TnTColumn S="6">
+            <TnTInputText @bind-Value="@Input.Text" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+    </TnTRow>
+
 </TnTForm>
 
 
 @code {
     private sealed class InputModel {
+        [Required]
+        public string? Text { get; set; }
+
         [Range(typeof(bool), minimum: "true", maximum: "true")]
         public bool Checkbox { get; set; }
     }
     [SupplyParameterFromForm]
     private InputModel Input { get; set; } = new();
+
+    private bool _disabled;
+    private bool _readonly;
+    private bool _a;
+    private bool _b;
+    private bool _c;
+    private bool _d;
+    private bool _e;
+
+    private TnTIcon? _startIcon => _b ? new MaterialIcon(MaterialIcon.SavedSearch) : null;
+    private TnTIcon? _endIcon => _c ? new MaterialIcon(MaterialIcon.QrCode) : null;
+    private string? _placeholder => _d ? "Placeholder" : null;
+    private string? _label => _e ? "Label" : null;
+
+    private FormAppearance _appearance = FormAppearance.Filled;
+
 
     private async Task ValidSubmit() {
         Console.WriteLine("Valid Submit");

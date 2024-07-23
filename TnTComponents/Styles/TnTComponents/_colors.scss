@@ -105,7 +105,7 @@ $color-classes-no-transparent: black, white, primary, surface-tint, on-primary, 
         }
     }
 
-    .tnt-tint-color-#{$colorClass} {
+    .tnt-tint-color-#{$colorClass}:not(:has(input)) {
         &:not(disabled):not(.tnt-disabled) {
             &:hover {
                 &.tnt-filled {

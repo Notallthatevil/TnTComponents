@@ -55,16 +55,6 @@ public partial class TnTLabel : IFormItem {
     [Parameter]
     public TnTColor? TextColor { get; set; }
 
-    private IFormField? _childField;
-
-    public void SetChildField(IFormField formField) {
-        if (_childField is not null) {
-            throw new InvalidOperationException($"{nameof(TnTLabel)}s can only have one child field added!");
-        }
-
-        _childField = formField;
-    }
-
     protected override void OnInitialized() {
         base.OnInitialized();
         if (ParentFormAppearance.HasValue) {

@@ -10,7 +10,7 @@
             </TnTButton>
             <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.ChevronRight))" OnClick="NextPage" class="next-button" />
             <TnTLabel Label="DatePicker">
-                <TnTInputDateOnly @bind-Value="_displayDate" BindAfter="@((DateOnly? date) => UpdateDate(date))" />
+               @*<TnTInputDateOnly @bind-Value="_displayDate" BindAfter="@((DateOnly? date) => UpdateDate(date))" />*@
             </TnTLabel>
         </div>
     }

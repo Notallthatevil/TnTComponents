@@ -12,14 +12,14 @@ public class TnTInputCheckbox : TnTInputBase<bool> {
     [Parameter]
     public TnTColor FillColor { get; set; } = TnTColor.Primary;
 
-    public override string FormCssClass => CssClassBuilder.Create(base.FormCssClass).Build();
+    //public override string FormCssClass => CssClassBuilder.Create(base.FormCssClass).Build();
 
-    public override string? FormCssStyle => CssStyleBuilder.Create()
-        .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddVariable("outline-color", $"var(--tnt-color-{OutlineColor.ToCssClassName()})")
-        .AddVariable("fill-color", $"var(--tnt-color-{FillColor.ToCssClassName()})")
-        .AddVariable("check-mark-color", $"var(--tnt-color-{CheckMarkColor.ToCssClassName()})")
-        .Build();
+    //public override string? FormCssStyle => CssStyleBuilder.Create()
+    //    .AddFromAdditionalAttributes(AdditionalAttributes)
+    //    .AddVariable("outline-color", $"var(--tnt-color-{OutlineColor.ToCssClassName()})")
+    //    .AddVariable("fill-color", $"var(--tnt-color-{FillColor.ToCssClassName()})")
+    //    .AddVariable("check-mark-color", $"var(--tnt-color-{CheckMarkColor.ToCssClassName()})")
+    //    .Build();
 
     [Parameter]
     public TnTColor OutlineColor { get; set; } = TnTColor.Outline;
