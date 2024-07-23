@@ -1,43 +1,23 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using TnTComponents
+
+@rendermode InteractiveAuto
 <h3>FormTesting</h3>
 
 
 <TnTForm Model="@Input" OnValidSubmit="ValidSubmit" OnInvalidSubmit="InvalidSubmit" FormName="Login">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <div>
-        <TnTLabel Label="Email">
-            <TnTInputText @bind-Value="Input.Email" InputType="TextInputType.Email" />
-        </TnTLabel>
-
-    </div>
-    <div>
-        <TnTLabel Label="Password">
-            <TnTInputText @bind-Value="Input.Password" InputType="TextInputType.Password" />
-        </TnTLabel>
-
-    </div>
-    <div>
-        <TnTButton Type="ButtonType.Submit">
-            Submit
-        </TnTButton>
-    </div>
+    <TnTLabel Label="Checkbox">
+        <TnTInputCheckbox @bind-Value="@Input.Checkbox" />
+    </TnTLabel>
 </TnTForm>
 
 
 @code {
     private sealed class InputModel {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; } = "";
-
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; } = "";
-
-        [Display(Name = "Remember me?")]
-        public bool RememberMe { get; set; }
+        [Range(typeof(bool), minimum: "true", maximum: "true")]
+        public bool Checkbox { get; set; }
     }
     [SupplyParameterFromForm]
     private InputModel Input { get; set; } = new();

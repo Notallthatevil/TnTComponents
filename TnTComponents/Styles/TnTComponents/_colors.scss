@@ -72,8 +72,10 @@ $color-classes-no-transparent: black, white, primary, surface-tint, on-primary, 
 }
 
 .tnt-outlined {
-    background-color: transparent;
-    border: 1px solid $tnt-color-outline;
+    &:not(.tnt-input) {
+        background-color: transparent;
+        border: 1px solid $tnt-color-outline;
+    }
 }
 
 @each $colorClass in $color-classes {

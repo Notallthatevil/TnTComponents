@@ -279,7 +279,6 @@ label.tnt-components:has(input[type=checkbox]):not(.tnt-chip) {
     align-items: center;
     vertical-align: middle;
     min-height: 1.25rem;
-    user-select: none;
     margin: 0.5rem 0.5rem 0.5rem 0.75rem;
 
     &:not(:has(input:disabled)) {
