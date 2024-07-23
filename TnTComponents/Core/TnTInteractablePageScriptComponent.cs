@@ -23,6 +23,10 @@ public abstract class TnTInteractablePageScriptComponent<TComponent> : TnTCompon
 
     [Inject]
     protected IJSRuntime JSRuntime { get; private set; } = default!;
+    [Parameter]
+    public bool EnableRipple { get; set; } = true;
+    [Parameter]
+    public virtual TnTColor? TintColor { get; set; }
 
     protected RenderFragment PageScript;
 

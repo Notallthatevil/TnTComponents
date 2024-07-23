@@ -14,5 +14,9 @@ public abstract class TnTInteractableComponentBase : TnTComponentBase, ITnTInter
 
     [Parameter]
     public string? Name { get; set; }
+    [Parameter]
+    public bool EnableRipple { get; set; } = true;
+    [Parameter]
+    public virtual TnTColor? TintColor { get; set; }
 }
 

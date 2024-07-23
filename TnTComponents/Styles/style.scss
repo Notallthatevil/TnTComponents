@@ -104,3 +104,11 @@ tnt-theme-toggle {
         }
     }
 }
+
+tnt-body {
+    .editor-toolbar {
+        i.fa {
+            color: $tnt-color-on-surface;
+        }
+    }
+}

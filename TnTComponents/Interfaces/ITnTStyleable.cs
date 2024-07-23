@@ -10,12 +10,8 @@ namespace TnTComponents.Interfaces;
 public interface ITnTStyleable {
     TextAlign? TextAlignment { get; }
     TnTColor BackgroundColor { get; }
-
-    TnTColor TintColor { get; }
-
     TnTColor TextColor { get; }
     int Elevation { get; }
     TnTBorderRadius? BorderRadius { get; }
-    bool EnableRipple { get; }
 }
 

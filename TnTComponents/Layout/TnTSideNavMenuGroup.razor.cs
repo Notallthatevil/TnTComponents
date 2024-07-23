@@ -25,6 +25,9 @@ public partial class TnTSideNavMenuGroup {
        .AddFromAdditionalAttributes(AdditionalAttributes)
        .Build();
 
+    public bool EnableRipple { get; set; }
+    public TnTColor? TintColor { get; set; }
+
     [Parameter]
     public bool Expand { get; set; }
 

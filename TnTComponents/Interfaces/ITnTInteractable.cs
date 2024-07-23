@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,5 +19,8 @@ public interface ITnTInteractable {
     /// Gets the name of the component.
     /// </summary>
     string? Name { get; }
+
+    bool EnableRipple { get; }
+    TnTColor? TintColor { get; }
 }
 

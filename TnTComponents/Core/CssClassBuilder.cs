@@ -40,19 +40,19 @@ internal class CssClassBuilder {
     public CssClassBuilder AddTnTStyleable(ITnTStyleable styleable, bool enableBackground = true, bool enableForeground = true, bool enableTint = true, bool enableElevation = true, bool enableBorderRadius = true) {
         AddBackgroundColor(enableBackground ? styleable.BackgroundColor : null);
         AddForegroundColor(enableForeground ? styleable.TextColor : null);
-        AddTintColor(enableTint ? styleable.TintColor : null);
         AddTextAlign(styleable.TextAlignment);
         if (enableElevation) {
             AddElevation(styleable.Elevation);
         }
         AddBorderRadius(enableBorderRadius ? styleable.BorderRadius : null);
-        AddRipple(styleable.EnableRipple);
         return this;
     }
 
-    public CssClassBuilder AddTnTInteractable(ITnTInteractable interactable) {
+    public CssClassBuilder AddTnTInteractable(ITnTInteractable interactable, bool enableTint = true) {
         AddDisabled(interactable.Disabled);
         AddClass("tnt-interactable");
+        AddRipple(interactable.EnableRipple);
+        AddTintColor(enableTint ? interactable.TintColor : null);
         return this;
     }
 

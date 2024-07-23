@@ -32,7 +32,7 @@ public partial class TnTButton {
     public TnTColor BackgroundColor { get; set; } = TnTColor.Primary;
 
     [Parameter]
-    public TnTColor TintColor { get; set; } = TnTColor.SurfaceTint;
+    public override TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
 
     [Parameter]
     public TnTColor TextColor { get; set; } = TnTColor.OnPrimary;
@@ -48,9 +48,6 @@ public partial class TnTButton {
 
     [Parameter]
     public virtual TnTBorderRadius? BorderRadius { get; set; } = TnTBorderRadius.Full;
-
-    [Parameter]
-    public bool EnableRipple { get; set; } = true;
 
     public override string? JsModulePath => "./_content/TnTComponents/Buttons/TnTButton.razor.js";
 
