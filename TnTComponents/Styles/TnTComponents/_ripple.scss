@@ -1,8 +1,14 @@
-﻿.tnt-rippling {
+﻿.tnt-ripple {
+    overflow: hidden;
+    position: relative;
+}
+
+.tnt-rippling {
     animation: ripple 500ms ease-out;
     display: block;
     position: absolute;
     border-radius: 50%;
+    z-index: 1000;
 }
 
 @keyframes ripple {

@@ -201,11 +201,40 @@ window.TnTComponents = {
     setupRipple: () => {
         const elements = document.querySelectorAll('.tnt-ripple');
 
-        
+
 
         elements.forEach(element => {
             element.removeEventListener('click', ripple);
             element.addEventListener('click', ripple, false);
         });
+    },
+    toggleAccordion: (event) => {
+        if (event && event.target) {
+            const element = event.target;
+            if (element && element.parentElement) {
+                const parent = element.parentElement;
+                if (parent && parent.querySelector) {
+                    const accordion = parent.parentElement;
+                    
+
+                    let content = parent.querySelector('.tnt-accordion-content');
+                    if (content) {
+                        if (content.classList.contains('tnt-hidden')) {
+                            if (accordion && accordion.getAttribute) {
+                                if (accordion.getAttribute('tnt-one-expanded') != null ? true : false) {
+                                    accordion.querySelectorAll('.tnt-accordion-content').forEach(ele => {
+                                        ele.classList.add('tnt-hidden');
+                                    });
+                                }
+                            }
+                            content.classList.remove('tnt-hidden');
+                        }
+                        else {
+                            content.classList.add('tnt-hidden');
+                        }
+                    }
+                }
+            }
+        }
     }
 }

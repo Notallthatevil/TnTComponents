@@ -81,7 +81,7 @@ $color-classes-no-transparent: black, white, primary, surface-tint, on-primary, 
         &.tnt-filled {
             background-color: var(--tnt-color-#{$colorClass});
 
-            &:has(> progress.tnt-components) {
+            &.tnt-disabled:has(> progress.tnt-components) {
                 background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 40%, transparent);
 
                 & > progress.tnt-components {
