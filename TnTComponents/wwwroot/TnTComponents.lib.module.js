@@ -91,7 +91,23 @@ export function afterWebStarted(blazor) {
     blazor.addEventListener('enhancedload', onEnhancedLoad);
     TnTComponents.setupRipple();
 }
+function getCoords(elem) { // crossbrowser version
+    var box = elem.getBoundingClientRect();
 
+    var body = document.body;
+    var docEl = document.documentElement;
+
+    var scrollTop = window.scrollY || docEl.scrollTop || body.scrollTop;
+    var scrollLeft = window.scrollX || docEl.scrollLeft || body.scrollLeft;
+
+    var clientTop = docEl.clientTop || body.clientTop || 0;
+    var clientLeft = docEl.clientLeft || body.clientLeft || 0;
+
+    var top = box.top + scrollTop - clientTop;
+    var left = box.left + scrollLeft - clientLeft;
+
+    return { top: Math.round(top), left: Math.round(left) };
+}
 
 function ripple(e) {
 
@@ -105,6 +121,7 @@ function ripple(e) {
     let ripple = document.createElement('span');
 
     this.appendChild(ripple);
+    ripple.style.pointerEvents = 'none';
 
 
     // Make it round!
@@ -115,8 +132,9 @@ function ripple(e) {
     }
 
     // Get the center of the element
-    var x = e.pageX - posX - buttonWidth / 2;
-    var y = e.pageY - posY - buttonHeight / 2;
+    const coords = getCoords(e.target);
+    var x = e.pageX - coords.left - buttonWidth / 2;
+    var y = e.pageY - coords.top - buttonHeight / 2;
 
 
     ripple.style.width = `${buttonWidth}px`;
@@ -200,8 +218,6 @@ window.TnTComponents = {
 
     setupRipple: () => {
         const elements = document.querySelectorAll('.tnt-ripple');
-
-
 
         elements.forEach(element => {
             element.removeEventListener('click', ripple);
