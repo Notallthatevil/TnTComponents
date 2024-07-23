@@ -1,0 +1,15 @@
+﻿@page "/Buttons"
+@using TnTComponents
+
+
+<LiveTest.Client.Components.ButtonsComponent />
+<h3>
+    WASM
+</h3>
+<LiveTest.Client.Components.ButtonsComponent @rendermode="InteractiveWebAssembly" />
+
+<h3>
+    Server
+</h3>
+<LiveTest.Client.Components.ButtonsComponent @rendermode="InteractiveServer" />
+

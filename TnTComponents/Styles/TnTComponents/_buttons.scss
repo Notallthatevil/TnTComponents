@@ -27,6 +27,7 @@
         text-align: inherit;
         font-size: 1.125rem;
         padding: 0 0.25rem;
+        pointer-events: none;
     }
 
     &:not(.tnt-filled):not(.tnt-outlined) {
@@ -52,6 +53,16 @@
             }
         }
     }
+
+    &.tnt-image-button {
+        height: 2.5rem;
+        width: 2.5rem;
+        padding: 0;
+
+        .tnt-icon {
+            font-size: 1.5rem;
+        }
+    }
 }
 
 .tnt-components.tnt-fab {
@@ -69,8 +80,6 @@
         font-size: 2rem;
     }
 }
-
-
 
 body:has(tnt-footer) {
     .tnt-components.tnt-fab {

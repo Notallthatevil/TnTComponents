@@ -8,4 +8,13 @@ public class TnTImageButton : TnTButton {
     [Parameter, EditorRequired]
     public TnTIcon Icon { get; set; } = default!;
 
+    public override string? ElementClass => CssClassBuilder.Create(base.ElementClass!)
+        .AddClass("tnt-image-button")
+        .Build();
+
+
+    protected override void OnParametersSet() {
+        base.OnParametersSet();
+        ChildContent = Icon.Render();
+    }
 }
