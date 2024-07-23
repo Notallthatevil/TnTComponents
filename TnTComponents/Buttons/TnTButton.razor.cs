@@ -41,13 +41,13 @@ public partial class TnTButton {
     public TextAlign? TextAlignment { get; set; }
 
     [Parameter]
-    public int Elevation { get; set; } = 1;
+    public virtual int Elevation { get; set; } = 1;
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
     [Parameter]
-    public TnTBorderRadius? BorderRadius { get; set; } = TnTBorderRadius.Full;
+    public virtual TnTBorderRadius? BorderRadius { get; set; } = TnTBorderRadius.Full;
 
     [Parameter]
     public bool EnableRipple { get; set; } = true;

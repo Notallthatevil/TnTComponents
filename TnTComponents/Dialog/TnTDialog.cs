@@ -82,7 +82,7 @@ public class TnTDialog : ComponentBase, IDisposable {
                         showDivider = true;
                         builder.OpenComponent<TnTImageButton>(40);
                         builder.AddComponentParameter(50, nameof(TnTImageButton.Icon), new MaterialIcon(MaterialIcon.Close));
-                        builder.AddComponentParameter(60, nameof(TnTImageButton.OnClick), EventCallback.Factory.Create<MouseEventArgs>(this, dialog.CloseAsync));
+                        builder.AddComponentParameter(60, nameof(TnTImageButton.OnClickCallback), EventCallback.Factory.Create<MouseEventArgs>(this, dialog.CloseAsync));
                         builder.CloseComponent();
                     }
                 }

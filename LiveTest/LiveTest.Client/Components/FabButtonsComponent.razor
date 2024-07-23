@@ -1,13 +1,25 @@
 ﻿@using TnTComponents
-<TnTRow>
-    <TnTColumn S="12">
-        <TnTFabButton OnClickCallback="@OnClick" Appearance="ButtonAppearance.Filled">
-            Filled
-        </TnTFabButton>
-    </TnTColumn>
-</TnTRow>
+<TnTFabButton OnClickCallback="@OnClick" Appearance="ButtonAppearance.Filled">
+    Filled
+</TnTFabButton>
+<TnTFabButton OnClickCallback="@OnClick" Appearance="ButtonAppearance.Outlined" TextColor="TnTColor.Primary">
+    Outlined
+</TnTFabButton>
+<TnTFabButton OnClickCallback="@OnClick" >
+    <MaterialIcon Icon="@MaterialIcon.Abc" />
+</TnTFabButton>
 
+<TnTFabButton OnClickCallback="@OnClick">
+    <MaterialIcon Icon="@MaterialIcon.Abc" />
+    StartIcon
+</TnTFabButton>
 
+<TnTFabButton OnClickCallback="@OnClick">
+    <TnTProgressIndicator Appearance="ProgressAppearance.Ring" />
+    Progress Ring
+</TnTFabButton>
+@*
+*@
 @code {
     private void OnClick() {
         Console.WriteLine("Button Clicked");
