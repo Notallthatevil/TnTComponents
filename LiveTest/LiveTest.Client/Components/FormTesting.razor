@@ -51,7 +51,30 @@
             <TnTInputNumeric @bind-Value="@Input.Decimal" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
     </TnTRow>
+
+    <TnTRow>
+        <TnTColumn S="3">
+            <TnTInputDateTime @bind-Value="@Input.DateTimeField" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+
+        <TnTColumn S="3">
+            <TnTInputDateTime @bind-Value="@Input.Date" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" MonthOnly="true" />
+        </TnTColumn>
+        <TnTColumn S="3">
+            <TnTInputDateTime @bind-Value="@Input.Time" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+        <TnTColumn S="3">
+            <TnTInputDateTime @bind-Value="@Input.DateTimeOff" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+    </TnTRow>
 </TnTForm>
+@Input.Text
+@Input.Integer
+@Input.Decimal
+@Input.DateTimeField
+@Input.Date
+@Input.Time
+@Input.DateTimeOff
 
 
 @code {
@@ -60,11 +83,24 @@
         public string? Text { get; set; }
 
         [Required, Range(10, 100)]
-        public int? Integer{ get; set; }
+        public int? Integer { get; set; }
 
         [Required]
-        public decimal Decimal{ get; set; }
+        public decimal Decimal { get; set; }
+
+        [Required]
+        public DateTime DateTimeField { get; set; }
+
+        [Required]
+        public DateOnly Date { get; set; }
+
+        [Required]
+        public TimeOnly? Time { get; set; }
+
+        [Required]
+        public DateTimeOffset? DateTimeOff { get; set; }
     }
+
     [SupplyParameterFromForm]
     private InputModel Input { get; set; } = new();
 
