@@ -42,6 +42,15 @@
         </TnTColumn>
     </TnTRow>
 
+    <TnTRow>
+        <TnTColumn S="6">
+            <TnTInputNumeric @bind-Value="@Input.Integer" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+
+        <TnTColumn S="6">
+            <TnTInputNumeric @bind-Value="@Input.Decimal" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+    </TnTRow>
 </TnTForm>
 
 
@@ -50,8 +59,11 @@
         [Required]
         public string? Text { get; set; }
 
-        [Range(typeof(bool), minimum: "true", maximum: "true")]
-        public bool Checkbox { get; set; }
+        [Required, Range(10, 100)]
+        public int? Integer{ get; set; }
+
+        [Required]
+        public decimal Decimal{ get; set; }
     }
     [SupplyParameterFromForm]
     private InputModel Input { get; set; } = new();
