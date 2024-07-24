@@ -123,11 +123,11 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                 builder.AddMultipleAttributes(80, AdditionalAttributes);
                 builder.AddAttribute(90, "name", Name);
 
-                if(Type == InputType.Tel) {
+                if (Type == InputType.Tel) {
                     builder.AddAttribute(91, "onkeydown", "TnTComponents.enforcePhoneFormat(event)");
                     builder.AddAttribute(92, "onkeyup", "TnTComponents.formatToPhone(event)");
                 }
-                else if(Type == InputType.Currency) {
+                else if (Type == InputType.Currency) {
                     builder.AddAttribute(91, "onkeydown", "TnTComponents.enforceCurrencyFormat(event)");
                     builder.AddAttribute(92, "onkeyup", "TnTComponents.formatToCurrency(event)");
                 }
@@ -170,6 +170,10 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                 builder.AddElementReferenceCapture(230, e => Element = e);
                 builder.CloseElement();
 
+                builder.OpenRegion(235);
+                RenderCustomContent(builder);
+                builder.CloseRegion();
+
                 if (EditContext is not null && !DisableValidationMessage && ValueExpression is not null) {
                     builder.OpenComponent<ValidationMessage<TInputType>>(240);
                     builder.AddComponentParameter(250, nameof(ValidationMessage<TInputType>.For), ValueExpression);
@@ -178,23 +182,26 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                 }
             }
             {
-                if (EndIcon is not null) {
-                    EndIcon.AdditionalClass = "tnt-end-icon";
-                    builder.AddContent(270, EndIcon.Render());
-                }
-            }
-            {
                 if (!string.IsNullOrWhiteSpace(Label)) {
-                    builder.OpenElement(280, "span");
-                    builder.AddAttribute(290, "class", CssClassBuilder.Create().AddClass("tnt-label").Build());
-                    builder.AddContent(300, Label);
+                    builder.OpenElement(270, "span");
+                    builder.AddAttribute(280, "class", CssClassBuilder.Create().AddClass("tnt-label").Build());
+                    builder.AddContent(290, Label);
                     builder.CloseElement();
                 }
             }
+            {
+                if (EndIcon is not null) {
+                    EndIcon.AdditionalClass = "tnt-end-icon";
+                    builder.AddContent(300, EndIcon.Render());
+                }
+            }
+
         }
 
         builder.CloseElement();
     }
+
+    protected virtual void RenderCustomContent(RenderTreeBuilder builder) { }
 
     protected bool IsRequired() {
         return AdditionalAttributes?.TryGetValue("required", out var _) == true || GetCustomAttributeIfExists<RequiredAttribute>() is not null;

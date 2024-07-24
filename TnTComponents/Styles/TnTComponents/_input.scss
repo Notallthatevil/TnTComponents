@@ -100,7 +100,7 @@
     &.tnt-filled {
         border-bottom: 1px solid $tnt-color-outline;
 
-        .tnt-icon, input{
+        .tnt-icon, input {
             transform: translateY(0.5rem);
         }
 
@@ -164,6 +164,161 @@
 
         .tnt-icon.tnt-end-icon {
             color: $tnt-color-error;
+        }
+    }
+
+
+    &:has(input[type=checkbox]) {
+        border: none;
+        outline: none;
+
+        input {
+            width: unset;
+        }
+
+        .tnt-checkbox {
+            position: absolute;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+
+
+            &:before {
+                position: absolute;
+                content: '';
+                width: 1.125rem;
+                height: 1.125rem;
+                left: calc(100% / 2 - calc(1.125rem / 2));
+                top: calc(100% / 2 - calc(1.125rem / 2));
+                border-radius: 2px;
+                border: 2px solid $tnt-color-outline;
+                box-sizing: border-box;
+                transition: 250ms;
+            }
+
+            &:after {
+                position: absolute;
+                content: '';
+                width: calc(1.125rem / 3);
+                height: calc(1.125rem * .7);
+                left: 0; //;
+                top: 0; //;
+                box-sizing: border-box;
+                border-radius: 1px;
+                border-bottom-width: 2px;
+                border-right-width: 2px;
+                border-bottom-style: solid;
+                border-right-style: solid;
+                transform: translateX(calc(2.5rem / 2 - calc(calc(1.125rem / 3) / 2))) translateY(calc(2.5rem / 2 - calc(calc(1.125rem * .8) / 1.75))) rotateZ(45deg) rotateX(90deg);
+                transition: 250ms;
+            }
+        }
+
+        .tnt-label {
+            position: relative;
+            background-color: transparent !important;
+            transform: none;
+            margin-left: 3rem;
+        }
+
+        @each $colorClass in $color-classes {
+            &.tnt-fg-color-#{$colorClass} {
+                .tnt-checkbox:after {
+                    border-color: var(--tnt-color-#{$colorClass});
+                    filter: invert(1);
+                }
+            }
+        }
+
+        .tnt-icon {
+            transform: none;
+        }
+
+        &:has(input:checked) {
+
+            @each $colorClass in $color-classes {
+                &.tnt-tint-color-#{$colorClass} {
+                    .tnt-checkbox:before {
+                        background-color: var(--tnt-color-#{$colorClass});
+                        border-color: var(--tnt-color-#{$colorClass});
+                    }
+                }
+            }
+
+            .tnt-checkbox {
+                &:after {
+                    transform: translateX(calc(2.5rem / 2 - calc(calc(1.125rem / 3) / 2))) translateY(calc(2.5rem / 2 - calc(calc(1.125rem * .8) / 1.75))) rotateZ(45deg);
+                }
+            }
+
+            &:has(input:disabled) {
+                .tnt-checkbox:before {
+                    background-color: $tnt-color-outline;
+                    border-color: $tnt-color-outline;
+                }
+            }
+        }
+
+        &:has(.tnt-start-icon) {
+            .tnt-checkbox {
+                left: 2.5rem;
+            }
+
+            .tnt-label {
+                margin-left: 2rem;
+            }
+        }
+
+        &:hover {
+            &:not(:has(input:disabled)) {
+                cursor: pointer;
+            }
+        }
+
+        &:focus-within, &:hover {
+            &:not(:has(input:disabled)) {
+                .tnt-checkbox {
+                    background-color: color-mix(in srgb, $tnt-color-shadow 50%, transparent);
+                }
+            }
+        }
+
+        &.tnt-placeholder, &:not(:has(input:placeholder-shown)), &:focus-within {
+            .tnt-label {
+                transform: none !important;
+                color: inherit;
+                @extend .tnt-body-large;
+            }
+        }
+
+        &.invalid.modified {
+            .tnt-label, .tnt-end-icon {
+                color: $tnt-color-error;
+            }
+
+            &:focus-within, &:hover {
+                &:not(:has(input:disabled)) {
+                    .tnt-checkbox {
+                        background-color: color-mix(in srgb, $tnt-color-error 30%, transparent);
+                    }
+                }
+            }
+
+            &:has(input:checked) {
+                .tnt-checkbox:before {
+                    background-color: $tnt-color-error;
+                    border-color: $tnt-color-error;
+                }
+            }
+
+            .tnt-checkbox:before {
+                border-color: $tnt-color-error;
+            }
+
+            .tnt-checkbox:after {
+                border-color: $tnt-color-on-error;
+                filter: invert(0);
+            }
         }
     }
 }

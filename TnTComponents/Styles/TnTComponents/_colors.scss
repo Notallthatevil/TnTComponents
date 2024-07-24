@@ -80,7 +80,7 @@ $color-classes-no-transparent: black, white, primary, surface-tint, on-primary, 
 
 @each $colorClass in $color-classes {
     .tnt-bg-color-#{$colorClass} {
-        &.tnt-filled {
+        &.tnt-filled:not(:has(.tnt-checkbox)) {
             background-color: var(--tnt-color-#{$colorClass});
 
             &.tnt-disabled:has(> progress.tnt-components) {

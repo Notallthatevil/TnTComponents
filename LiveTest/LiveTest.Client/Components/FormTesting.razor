@@ -94,6 +94,19 @@
             <TnTInputCurrency @bind-Value="@Input.Currency" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
     </TnTRow>
+
+    <TnTRow>
+        <h3>
+            Checkboxes
+        </h3>
+        <TnTColumn S="6">
+            <TnTInputCheckbox @bind-Value="@Input.Checkbox" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+
+        <TnTColumn S="6">
+            <TnTInputSwitch @bind-Value="@Input.Switch" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+    </TnTRow>
 </TnTForm>
 @Input.Text
 @Input.Integer
@@ -133,6 +146,12 @@
 
         [Required]
         public decimal? Currency { get; set; }
+
+        [Required, Range(typeof(bool), "true", "true")]
+        public bool Checkbox { get; set; }
+
+        [Required]
+        public bool Switch { get; set; }
 
     }
 
