@@ -123,6 +123,11 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                 builder.AddMultipleAttributes(80, AdditionalAttributes);
                 builder.AddAttribute(90, "name", Name);
 
+                if(Type == InputType.Tel) {
+                    builder.AddAttribute(91, "onkeydown", "TnTComponents.enforcePhoneFormat(event)");
+                    builder.AddAttribute(92, "onkeyup", "TnTComponents.formatToPhone(event)");
+                }
+
                 if (typeof(TInputType) == typeof(bool)) {
                     builder.AddAttribute(100, "value", bool.TrueString);
                     builder.AddAttribute(110, "checked", BindConverter.FormatValue(CurrentValue));

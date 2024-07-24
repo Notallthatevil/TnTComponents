@@ -37,12 +37,18 @@
     <ValidationSummary />
 
     <TnTRow>
+        <h3>
+            Text
+        </h3>
         <TnTColumn S="6">
             <TnTInputText @bind-Value="@Input.Text" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
     </TnTRow>
 
     <TnTRow>
+        <h3>
+            Numeric
+        </h3>
         <TnTColumn S="6">
             <TnTInputNumeric @bind-Value="@Input.Integer" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
@@ -53,6 +59,9 @@
     </TnTRow>
 
     <TnTRow>
+        <h3>
+            Date Time Types
+        </h3>
         <TnTColumn S="3">
             <TnTInputDateTime @bind-Value="@Input.DateTimeField" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
@@ -67,6 +76,15 @@
             <TnTInputDateTime @bind-Value="@Input.DateTimeOff" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
     </TnTRow>
+
+    <TnTRow>
+        <h3>
+            Phone
+        </h3>
+        <TnTColumn S="6">
+            <TnTInputText @bind-Value="@Input.Phone" InputType="TextInputType.Tel" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+    </TnTRow>
 </TnTForm>
 @Input.Text
 @Input.Integer
@@ -75,6 +93,7 @@
 @Input.Date
 @Input.Time
 @Input.DateTimeOff
+@Input.Phone
 
 
 @code {
@@ -99,6 +118,10 @@
 
         [Required]
         public DateTimeOffset? DateTimeOff { get; set; }
+
+        [Phone, Required]
+        public string? Phone { get; set; }
+
     }
 
     [SupplyParameterFromForm]
