@@ -85,6 +85,15 @@
             <TnTInputText @bind-Value="@Input.Phone" InputType="TextInputType.Tel" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
     </TnTRow>
+
+    <TnTRow>
+        <h3>
+            Currency
+        </h3>
+        <TnTColumn S="6">
+            <TnTInputCurrency @bind-Value="@Input.Currency" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+    </TnTRow>
 </TnTForm>
 @Input.Text
 @Input.Integer
@@ -121,6 +130,9 @@
 
         [Phone, Required]
         public string? Phone { get; set; }
+
+        [Required]
+        public decimal? Currency { get; set; }
 
     }
 

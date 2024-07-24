@@ -127,6 +127,10 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                     builder.AddAttribute(91, "onkeydown", "TnTComponents.enforcePhoneFormat(event)");
                     builder.AddAttribute(92, "onkeyup", "TnTComponents.formatToPhone(event)");
                 }
+                else if(Type == InputType.Currency) {
+                    builder.AddAttribute(91, "onkeydown", "TnTComponents.enforceCurrencyFormat(event)");
+                    builder.AddAttribute(92, "onkeyup", "TnTComponents.formatToCurrency(event)");
+                }
 
                 if (typeof(TInputType) == typeof(bool)) {
                     builder.AddAttribute(100, "value", bool.TrueString);

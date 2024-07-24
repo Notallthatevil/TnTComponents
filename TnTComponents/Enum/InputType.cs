@@ -27,7 +27,8 @@ public enum InputType {
     Time,
     Url,
     Week,
-    TextArea
+    TextArea,
+    Currency
 }
 
 public static class InputTypeExt {
@@ -53,6 +54,7 @@ public static class InputTypeExt {
             InputType.Time => "time",
             InputType.Url => "url",
             InputType.Week => "week",
+            InputType.Currency => "text",
             _ => throw new InvalidOperationException($"{inputType} is not a valid value of {nameof(InputType)}")
         };
     }

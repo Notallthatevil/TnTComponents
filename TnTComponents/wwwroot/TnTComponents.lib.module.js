@@ -208,7 +208,39 @@ window.TnTComponents = {
             event.preventDefault();
         }
     },
-    formatToPhone : (event) => {
+    enforceCurrencyFormat: (event) => {
+        // Input must be of a valid number format or a modifier key, and not longer than ten digits
+        if (!isNumericInput(event) && !isModifierKey(event) && event.keyCode != 188 && event.keyCode != 190 && event.keyCode != 110) {
+            event.preventDefault();
+        }
+    },
+    formatToCurrency: (event) => {
+        if (isModifierKey(event)) { return; }
+
+        const numberRegex = new RegExp('[0-9.]', 'g');
+        let numbers = '';
+        let result;
+        while ((result = numberRegex.exec(event.target.value)) != null) {
+            numbers += result.toString();
+        }
+
+        // Create our number formatter.
+        const formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+        });
+        let formatted = formatter.format(numbers);
+        if (!event.target.value.includes('.')) {
+            formatted = formatted.substring(0, formatted.length - 3);
+        }
+        else {
+            const cents = event.target.value.split('.')[1];
+            formatted = formatted.substring(0, formatted.length - 3) + '.' + cents.substring(0, 2);
+        }
+
+        event.target.value = formatted;
+    },
+    formatToPhone: (event) => {
         if (isModifierKey(event)) { return; }
 
         const input = event.target.value.replace(/\D/g, '').substring(0, 10); // First ten digits of input only
@@ -268,7 +300,7 @@ window.TnTComponents = {
                 const parent = element.parentElement;
                 if (parent && parent.querySelector) {
                     const accordion = parent.parentElement;
-                    
+
 
                     let content = parent.querySelector('.tnt-accordion-content');
                     if (content) {
