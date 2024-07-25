@@ -3,14 +3,25 @@
 @rendermode InteractiveAuto
 
 
-<TnTComponents.TnTInputChip StartIcon="@(new MaterialIcon(MaterialIcon.GridOn))">
-    Text
-</TnTComponents.TnTInputChip>
+<TnTComponents.TnTChip Label="Chip" @bind-Value="_a" BindAfter="Checked" />
+<TnTComponents.TnTChip StartIcon="@(new MaterialIcon(MaterialIcon.GridOn))" Label="Chip" BindAfter="Checked" @bind-Value="_b" />
+<TnTComponents.TnTChip Label="Chip" CloseButtonClicked="@Closed" @bind-Value="_c" BindAfter="Checked" />
+<TnTComponents.TnTChip StartIcon="@(new MaterialIcon(MaterialIcon.GridOn))" Label="Chip" CloseButtonClicked="@Closed" BindAfter="Checked" @bind-Value="_d" />
 
 
-<TnTComponents.TnTInputChip >
-    Text
-</TnTComponents.TnTInputChip>
+@code {
+    private bool _a;
+    private bool _b;
+    private bool _c;
+    private bool _d;
 
 
+    private void Checked(bool b) {
+        Console.WriteLine(b);
+    }
+
+    private void Closed() {
+        Console.WriteLine("Closed");
+    }
+}
 

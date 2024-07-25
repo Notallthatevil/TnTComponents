@@ -27,6 +27,7 @@ public partial class TnTSideNavMenuGroup {
 
     public bool EnableRipple { get; set; }
     public TnTColor? TintColor { get; set; }
+    public TnTColor? OnTintColor { get; set; }
 
     [Parameter]
     public bool Expand { get; set; }

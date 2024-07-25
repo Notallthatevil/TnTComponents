@@ -132,6 +132,34 @@ $color-classes-no-transparent: black, white, primary, surface-tint, on-primary, 
             }
         }
     }
+
+    .tnt-on-tint-color-#{$colorClass}:not(:has(input)) {
+        &:not(disabled):not(.tnt-disabled) {
+            &:hover {
+                &.tnt-filled {
+                    color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 70%, transparent);
+                }
+
+                &:not(.tnt-filled) {
+                    color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 10%, transparent);
+                }
+            }
+
+            &:active:not(.tnt-ripple) {
+                &.tnt-filled {
+                    color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 50%, transparent);
+                }
+
+                &:not(.tnt-filled) {
+                    color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 20%, transparent);
+                }
+            }
+
+            .tnt-rippling {
+                color: var(--tnt-color-#{$colorClass});
+            }
+        }
+    }
 }
 
 

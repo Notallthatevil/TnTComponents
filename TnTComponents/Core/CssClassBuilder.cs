@@ -20,6 +20,7 @@ internal class CssClassBuilder {
     public CssClassBuilder AddFilled(bool enabled = true) => AddClass("tnt-filled", enabled);
     public CssClassBuilder AddBackgroundColor(TnTColor? color) => AddClass($"tnt-bg-color-{color?.ToCssClassName() ?? string.Empty}", color is not null && color != TnTColor.None);
     public CssClassBuilder AddTintColor(TnTColor? color) => AddClass($"tnt-tint-color-{color?.ToCssClassName() ?? string.Empty}", color is not null && color != TnTColor.None);
+    public CssClassBuilder AddOnTintColor(TnTColor? color) => AddClass($"tnt-on-tint-color-{color?.ToCssClassName() ?? string.Empty}", color is not null && color != TnTColor.None);
     public CssClassBuilder AddForegroundColor(TnTColor? color) => AddClass($"tnt-fg-color-{color?.ToCssClassName() ?? string.Empty}", color is not null && color != TnTColor.None);
     public CssClassBuilder AddTextAlign(TextAlign? textAlign) => AddClass("tnt-text-align-" + textAlign.ToCssString(), textAlign != null);
     public CssClassBuilder AddDisabled(bool disabled) => AddClass("tnt-disabled", disabled);
@@ -48,11 +49,12 @@ internal class CssClassBuilder {
         return this;
     }
 
-    public CssClassBuilder AddTnTInteractable(ITnTInteractable interactable, bool enableTint = true) {
+    public CssClassBuilder AddTnTInteractable(ITnTInteractable interactable, bool enableTint = true, bool enableOnTintColor = true) {
         AddDisabled(interactable.Disabled);
         AddClass("tnt-interactable");
         AddRipple(interactable.EnableRipple);
         AddTintColor(enableTint ? interactable.TintColor : null);
+        AddOnTintColor(enableOnTintColor ? interactable.OnTintColor : null);
         return this;
     }
 

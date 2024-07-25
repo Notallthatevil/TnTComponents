@@ -27,6 +27,8 @@ public abstract class TnTInteractablePageScriptComponent<TComponent> : TnTCompon
     public bool EnableRipple { get; set; } = true;
     [Parameter]
     public virtual TnTColor? TintColor { get; set; }
+    [Parameter] 
+    public virtual TnTColor? OnTintColor { get; set; }
 
     protected RenderFragment PageScript;
 

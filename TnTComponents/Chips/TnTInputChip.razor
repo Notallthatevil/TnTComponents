@@ -1,9 +1,0 @@
-﻿@namespace TnTComponents
-@using TnTComponents.Core
-@inherits TnTComponentBase
-
-<span @attributes="AdditionalAttributes" class="@ElementClass" style="@ElementStyle" @ref="Element">
-    @StartIcon?.Render()
-    @ChildContent
-    <TnTImageButton Icon="@CloseIcon" OnClick="CloseClicked"/>
-</span>

@@ -94,6 +94,8 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
 
     [CascadingParameter]
     private ITnTForm? _tntForm { get; set; }
+    [Parameter]
+    public TnTColor? OnTintColor { get; set; }
 
     public ValueTask SetFocusAsync() {
         return Element.FocusAsync();

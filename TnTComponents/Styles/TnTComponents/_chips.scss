@@ -1,73 +1,125 @@
 ﻿.tnt-components.tnt-chip {
-    min-height: 1.5rem;
-    background-color: transparent;
+    height: 2rem;
+    border-radius: 0.5rem;
     border: 1px solid $tnt-color-outline;
-    color: var(--inactive-text-color);
-    user-select: none;
+    box-sizing: border-box;
     display: inline-flex;
     align-items: center;
-    padding: 0 1rem;
-    cursor: pointer;
+    justify-content: center;
+    padding: 0 0.75rem;
     position: relative;
-    margin: 0.5rem 0.1rem;
     vertical-align: middle;
-
+    margin: 0.25rem;
     @extend .tnt-label-large;
 
-    input {
-        position: absolute;
-    }
-
-    input, .tnt-icon {
-        cursor: inherit;
-    }
-
     .tnt-icon {
+        user-select: none;
         color: inherit;
-        font-size: 18px;
     }
 
-    &:has(.tnt-icon.tnt-start) {
-        padding: 0 0.75rem 0 0.33rem;
+    &:has(.tnt-start-icon) {
+        padding-left: 0;
 
-        .tnt-icon.tnt-start {
-            padding: 0 0.33rem 0 0;
+        .tnt-start-icon {
+            padding: 0 0.5rem;
+        }
+    }
+
+    &:has(.tnt-chip-close-button) {
+        padding-right: 0;
+
+        .tnt-chip-close-button {
+            margin: 0 0.5rem;
+            min-width: unset;
+            min-height: unset;
+            width: unset;
+            height: unset;
+            color: inherit;
+
+            .tnt-icon {
+                margin: 0;
+                padding: 0;
+                font-size: 1.125rem;
+            }
         }
     }
 
     input {
         appearance: none;
+        position: absolute;
     }
 
     &:has(input:checked) {
-        background-color: var(--active-color);
-        color: var(--active-text-color);
-        border: none;
-    }
+        @each $colorClass in $color-classes {
+            &.tnt-tint-color-#{$colorClass} {
+                background-color: var(--tnt-color-#{$colorClass});
+            }
 
-    &.tnt-input-chip {
-        padding-right: 0.5rem;
-        justify-content: space-evenly;
-        background-color: var(--bg-color);
-        color: var(--text-color);
-        border: none;
-        min-width: 2rem;
-
-        button.tnt-components {
-            padding: 0;
-            margin: 0 0 0 0.5rem;
-            min-height: revert;
-            min-width: revert;
-            width: 1rem;
-            height: 1rem;
-            float: right;
-            font-size: 12px;
-            color: inherit;
-
-            .tnt-icon {
-                font-size: inherit;
-                padding: 0;
+            &.tnt-on-tint-color-#{$colorClass} {
+                color: var(--tnt-color-#{$colorClass});
             }
         }
     }
 }
+//.tnt-components.tnt-chip {
+//    min-height: 1.5rem;
+//    background-color: transparent;
+//    border: 1px solid $tnt-color-outline;
+//    color: var(--inactive-text-color);
+//    user-select: none;
+//    display: inline-flex;
+//    align-items: center;
+//    padding: 0 1rem;
+//    cursor: pointer;
+//    position: relative;
+//    margin: 0.5rem 0.1rem;
+//    vertical-align: middle;
+//    @extend .tnt-label-large;
+//    input {
+//        position: absolute;
+//    }
+//    input, .tnt-icon {
+//        cursor: inherit;
+//    }
+//    .tnt-icon {
+//        color: inherit;
+//        font-size: 18px;
+//    }
+//    &:has(.tnt-icon.tnt-start) {
+//        padding: 0 0.75rem 0 0.33rem;
+//        .tnt-icon.tnt-start {
+//            padding: 0 0.33rem 0 0;
+//        }
+//    }
+//    input {
+//        appearance: none;
+//    }
+//    &:has(input:checked) {
+//        background-color: var(--active-color);
+//        color: var(--active-text-color);
+//        border: none;
+//    }
+//    &.tnt-input-chip {
+//        padding-right: 0.5rem;
+//        justify-content: space-evenly;
+//        background-color: var(--bg-color);
+//        color: var(--text-color);
+//        border: none;
+//        min-width: 2rem;
+//        button.tnt-components {
+//            padding: 0;
+//            margin: 0 0 0 0.5rem;
+//            min-height: revert;
+//            min-width: revert;
+//            width: 1rem;
+//            height: 1rem;
+//            float: right;
+//            font-size: 12px;
+//            color: inherit;
+//            .tnt-icon {
+//                font-size: inherit;
+//                padding: 0;
+//            }
+//        }
+//    }
+//}

@@ -22,5 +22,6 @@ public interface ITnTInteractable {
 
     bool EnableRipple { get; }
     TnTColor? TintColor { get; }
+    TnTColor? OnTintColor { get; }
 }
 
