@@ -4,15 +4,11 @@ using TnTComponents.Dialog.Infrastructure;
 
 namespace TnTComponents.Dialog;
 
-public class TnTDialogService {
+internal class TnTDialogService : ITnTDialogService {
 
-    public event OnCloseCallback? OnClose;
+    public event ITnTDialogService.OnCloseCallback? OnClose;
 
-    public delegate Task OnCloseCallback(ITnTDialog dialog);
-
-    public event OnOpenCallback? OnOpen;
-
-    public delegate Task OnOpenCallback(ITnTDialog dialog);
+    public event ITnTDialogService.OnOpenCallback? OnOpen;
 
     internal DotNetObjectReference<TnTDialogService> Reference { get; private set; }
 
@@ -57,7 +53,6 @@ public class TnTDialogService {
             return DialogResult.Failed;
         }
     }
-
 
     public async Task<DialogResult> OpenForResultAsync(RenderFragment renderFragment, TnTDialogOptions? options = null) {
         ArgumentNullException.ThrowIfNull(renderFragment, nameof(renderFragment));

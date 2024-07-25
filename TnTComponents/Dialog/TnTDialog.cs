@@ -9,7 +9,7 @@ namespace TnTComponents;
 public class TnTDialog : ComponentBase, IDisposable {
 
     [Inject]
-    private TnTDialogService _service { get; set; } = default!;
+    private ITnTDialogService _service { get; set; } = default!;
 
     private readonly List<ITnTDialog> _dialogs = [];
 
@@ -55,19 +55,35 @@ public class TnTDialog : ComponentBase, IDisposable {
                 builder.AddContent(60, RenderDialogContent(dialog));
             }
 
-
             builder.CloseElement();
 
             builder.CloseElement();
-
         }
+    }
+
+    protected override void OnInitialized() {
+        base.OnInitialized();
+        _service.OnOpen += OnOpen;
+        _service.OnClose += OnClose;
+    }
+
+    private Task OnClose(ITnTDialog dialog) {
+        dialog.Options.Closing = true;
+        _dialogs.Remove(dialog);
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+    private Task OnOpen(ITnTDialog dialog) {
+        _dialogs.Add(dialog);
+        StateHasChanged();
+        return Task.CompletedTask;
     }
 
     private RenderFragment RenderDialogContent(ITnTDialog dialog) {
         return new RenderFragment(builder => {
             var showDivider = false;
             {
-
                 builder.OpenElement(0, "div");
                 builder.AddAttribute(10, "class", "tnt-dialog-header");
                 {
@@ -101,9 +117,9 @@ public class TnTDialog : ComponentBase, IDisposable {
                 builder.AddAttribute(170, nameof(CascadingValue<ITnTDialog>.ChildContent), new RenderFragment(cascadingBuilder => {
                     cascadingBuilder.OpenComponent(0, dialog.Type);
 #pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
-                    // Disabling warning since value in these key value pairs is allowed to
-                    // be null when the parameter on the component allows it. It is up to
-                    // the caller when opening a dialog to set the parameters correctly.
+                    // Disabling warning since value in these key value pairs is allowed to be null
+                    // when the parameter on the component allows it. It is up to the caller when
+                    // opening a dialog to set the parameters correctly.
                     cascadingBuilder.AddMultipleAttributes(10, dialog.Parameters);
 #pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
                     cascadingBuilder.CloseComponent();
@@ -112,23 +128,5 @@ public class TnTDialog : ComponentBase, IDisposable {
                 builder.CloseComponent();
             }
         });
-    }
-
-    protected override void OnInitialized() {
-        base.OnInitialized();
-        _service.OnOpen += OnOpen;
-        _service.OnClose += OnClose;
-    }
-    private Task OnClose(ITnTDialog dialog) {
-        dialog.Options.Closing = true;
-        _dialogs.Remove(dialog);
-        StateHasChanged();
-        return Task.CompletedTask;
-    }
-
-    private Task OnOpen(ITnTDialog dialog) {
-        _dialogs.Add(dialog);
-        StateHasChanged();
-        return Task.CompletedTask;
     }
 }

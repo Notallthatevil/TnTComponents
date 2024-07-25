@@ -33,7 +33,7 @@ public partial class BasicConfirmationDialog {
     [Inject]
     private TnTDialogService _dialogService { get; set; } = default!;
 
-    public static async Task<DialogResult> OpenForResultAsync(TnTDialogService dialogService, string title, string body, string? confirmButtonText = "Confirm", string? cancelButtonText = "Cancel", EventCallback? confirmClickedCallback = null, EventCallback? cancelClickedCallback = null,
+    public static async Task<DialogResult> OpenForResultAsync(ITnTDialogService dialogService, string title, string body, string? confirmButtonText = "Confirm", string? cancelButtonText = "Cancel", EventCallback? confirmClickedCallback = null, EventCallback? cancelClickedCallback = null,
         TnTBorderRadius? borderRadius = null,
         TnTColor dialogBackgroundColor = TnTColor.SurfaceContainer,
         int elevation = 1,

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Hosting;
+using TnTComponents;
 using TnTComponents.Core;
 using TnTComponents.Dialog;
 using TnTComponents.Snackbar;
@@ -30,7 +31,7 @@ public static class TnTServicesExt {
     }
 
     private static IServiceCollection AddTnTServices(this IServiceCollection services) {
-        return services.AddScoped<TnTDialogService>()
+        return services.AddScoped<ITnTDialogService, TnTDialogService>()
              .AddScoped<TnTSnackbarService>()
              .AddScoped<ISessionStorageService, SessionStorageService>()
              .AddScoped<ILocalStorageService, LocalStorageService>();

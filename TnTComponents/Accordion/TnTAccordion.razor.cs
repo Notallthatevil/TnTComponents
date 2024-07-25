@@ -33,8 +33,6 @@ public partial class TnTAccordion {
     [Parameter]
     public TnTColor ContentBodyColor { get; set; } = TnTColor.SurfaceVariant;
 
-    public override string? JsModulePath => "./_content/TnTComponents/Accordion/TnTAccordion.razor.js";
-
     private readonly List<TnTAccordionChild> _children = [];
 
     public void RegisterChild(TnTAccordionChild child) {
@@ -50,23 +48,4 @@ public partial class TnTAccordion {
             StateHasChanged();
         }
     }
-
-    //public ValueTask Close() {
-    //    return IsolatedJsModule?.InvokeVoidAsync("closeAccordion", Element, DotNetObjectRef) ?? ValueTask.CompletedTask;
-    //}
-
-    //public ValueTask Open() {
-    //    return IsolatedJsModule?.InvokeVoidAsync("openAccordion", Element, DotNetObjectRef) ?? ValueTask.CompletedTask;
-    //}
-
-    //public ValueTask Resize() {
-    //    return IsolatedJsModule?.InvokeVoidAsync("resizeAccordion", Element, DotNetObjectRef) ?? ValueTask.CompletedTask;
-    //}
-
-    //protected override void OnAfterRender(bool firstRender) {
-    //    base.OnAfterRender(firstRender);
-    //    if (firstRender) {
-    //        OpenByDefault = null;
-    //    }
-    //}
 }
