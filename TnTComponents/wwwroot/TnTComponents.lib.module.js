@@ -171,6 +171,25 @@ const isModifierKey = (event) => {
 
 window.TnTComponents = {
     customAttribute: "tntid",
+    openDialog: (dialogId) => {
+        console.log('openDialog');
+        const dialog = document.getElementById(dialogId);
+        if (dialog) {
+            dialog.show();
+        }
+    },
+    closeDialog: (dialogId) => {
+        const dialog = document.getElementById(dialogId);
+        if (dialog) {
+            dialog.close();
+        }
+    },
+    openModalDialog: (dialogId) => {
+        const dialog = document.getElementById(dialogId);
+        if (dialog) {
+            dialog.showModal();
+        }
+    },
     enableRipple: (element) => {
         function setRippleOffset(e) {
             const boundingRect = element.getBoundingClientRect();
@@ -284,7 +303,6 @@ window.TnTComponents = {
     getCurrentLocation: () => {
         return window.location.href;
     },
-
     setupRipple: () => {
         const elements = document.querySelectorAll('.tnt-ripple');
 

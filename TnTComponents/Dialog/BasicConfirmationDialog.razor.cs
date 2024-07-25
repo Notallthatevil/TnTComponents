@@ -46,14 +46,10 @@ public partial class BasicConfirmationDialog {
         var options = new TnTDialogOptions() {
             BorderRadius = borderRadius ?? new(3),
             CloseOnExternalClick = false,
-            ShowClose = false,
+            ShowCloseButton = false,
             Title = title,
-            DialogBackgroundColor = dialogBackgroundColor,
             Elevation = elevation,
-            OverlayBlur = overlayBlur,
-            OverlayColor = overlayColor,
-            OverlayOpacity = overlayOpacity,
-            Style = style,
+            ElementStyle = style,
             TextColor = textColor
         };
 

@@ -6,4 +6,5 @@ public interface ITnTDialog {
     IReadOnlyDictionary<string, object?>? Parameters { get; init; }
     Type Type { get; init; }
     Task CloseAsync();
+    string ElementId { get; init; }
 }

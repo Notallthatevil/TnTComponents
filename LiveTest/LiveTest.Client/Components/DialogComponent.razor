@@ -12,6 +12,10 @@
     Open Close Dialog @index
 </TnTComponents.TnTButton>
 
+<TnTComponents.TnTButton OnClickCallback="OpenOtherDialog">
+    Open Other Dialog
+</TnTComponents.TnTButton>
+
 @if (_dialog is not null) {
     <TnTComponents.TnTButton OnClickCallback="Close">
         Close
@@ -36,7 +40,15 @@
     private async Task OpenCloseDialog() {
         await _service.OpenAsync<DialogComponent>(options: new() {
                 Title = $"My Title {++index}",
-                ShowClose = true
+                ShowCloseButton = true
+            });
+    }
+
+    private async Task OpenOtherDialog() {
+        await _service.OpenAsync<DialogComponent>(options: new() {
+                CloseOnExternalClick = false,
+                Title = null,
+                ShowCloseButton = false
             });
     }
 

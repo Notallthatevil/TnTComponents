@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using TnTComponents.Core;
 using TnTComponents.Dialog;
 
@@ -13,6 +14,9 @@ public class TnTDialog : ComponentBase, IDisposable {
 
     private readonly List<ITnTDialog> _dialogs = [];
 
+    [Inject]
+    private IJSRuntime _jsRuntime { get; set; } = default!;
+
     public void Dispose() {
         _service.OnClose -= OnClose;
         _service.OnOpen -= OnOpen;
@@ -20,32 +24,17 @@ public class TnTDialog : ComponentBase, IDisposable {
     }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
+        Console.WriteLine("Starting Render");
         foreach (var dialog in _dialogs) {
-            builder.OpenElement(0, "div");
-            builder.AddAttribute(10, "class", dialog.Options.GetOverlayClass());
-            if (dialog == _dialogs.Last()) {
-                string style;
-                if (dialog.Options.OverlayOpacity is not null) {
-                    style = $"background-color:color-mix(in srgb, var(--tnt-color-{dialog.Options.OverlayColor.ToCssClassName()}) {Math.Clamp(dialog.Options.OverlayOpacity.Value * 100, 0, 100)}%, transparent);";
-                }
-                else {
-                    style = $"background-color:var(--tnt-color-{dialog.Options.OverlayColor.ToCssClassName()});";
-                }
-                if (dialog.Options.OverlayBlur) {
-                    style += $"backdrop-filter:blur(0.25rem);";
-                }
-
-                if (!string.IsNullOrWhiteSpace(style)) {
-                    builder.AddAttribute(20, "style", style);
-                }
-            }
-
-            builder.OpenElement(30, "div");
+            builder.OpenElement(0, "dialog");
+            builder.AddAttribute(10, "class", CssClassBuilder.Create().AddTnTStyleable(dialog.Options).AddClass("tnt-closing", dialog.Options.Closing).AddClass(dialog.Options.ElementClass).AddClass("tnt-dialog").Build());
+            builder.AddAttribute(20, "style", CssStyleBuilder.Create().AddStyle(dialog.Options.ElementStyle, string.Empty).Build());
+            builder.AddAttribute(30, "id", dialog.ElementId);
             builder.SetKey(dialog);
-            builder.AddAttribute(40, "class", dialog.Options.GetDialogClass());
-            builder.AddAttribute(50, "style", dialog.Options.Style);
+            //builder.AddAttribute(40, "class", dialog.Options.GetDialogClass());
+            //builder.AddAttribute(50, "style", dialog.Options.Style);
 
-            if (dialog == _dialogs.Last()) {
+            if (dialog == _dialogs.Last() && dialog.Options.CloseOnExternalClick) {
                 builder.OpenComponent<TnTExternalClickHandler>(60);
                 builder.AddComponentParameter(70, nameof(TnTExternalClickHandler.ExternalClickCallback), EventCallback.Factory.Create(this, dialog.CloseAsync));
                 builder.AddComponentParameter(80, nameof(TnTExternalClickHandler.ChildContent), RenderDialogContent(dialog));
@@ -56,9 +45,8 @@ public class TnTDialog : ComponentBase, IDisposable {
             }
 
             builder.CloseElement();
-
-            builder.CloseElement();
         }
+        Console.WriteLine("Finished Render");
     }
 
     protected override void OnInitialized() {
@@ -67,11 +55,19 @@ public class TnTDialog : ComponentBase, IDisposable {
         _service.OnClose += OnClose;
     }
 
-    private Task OnClose(ITnTDialog dialog) {
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        await base.OnAfterRenderAsync(firstRender);
+        foreach (var dialog in _dialogs) {
+            await _jsRuntime.InvokeVoidAsync("TnTComponents.openModalDialog", dialog.ElementId);
+        }
+    }
+
+    private async Task OnClose(ITnTDialog dialog) {
         dialog.Options.Closing = true;
+        StateHasChanged();
+        await Task.Delay(150);
         _dialogs.Remove(dialog);
         StateHasChanged();
-        return Task.CompletedTask;
     }
 
     private Task OnOpen(ITnTDialog dialog) {
@@ -82,20 +78,17 @@ public class TnTDialog : ComponentBase, IDisposable {
 
     private RenderFragment RenderDialogContent(ITnTDialog dialog) {
         return new RenderFragment(builder => {
-            var showDivider = false;
-            {
+            if (dialog.Options.Title is not null || dialog.Options.ShowCloseButton) {
                 builder.OpenElement(0, "div");
                 builder.AddAttribute(10, "class", "tnt-dialog-header");
                 {
-                    if (dialog.Options.ShowTitle && dialog.Options.Title is not null) {
-                        showDivider = true;
+                    if (dialog.Options.Title is not null) {
                         builder.OpenElement(20, "h2");
                         builder.AddContent(30, dialog.Options.Title);
                         builder.CloseElement();
                     }
 
-                    if (dialog.Options.ShowClose) {
-                        showDivider = true;
+                    if (dialog.Options.ShowCloseButton) {
                         builder.OpenComponent<TnTImageButton>(40);
                         builder.AddComponentParameter(50, nameof(TnTImageButton.Icon), new MaterialIcon(MaterialIcon.Close));
                         builder.AddComponentParameter(60, nameof(TnTImageButton.OnClickCallback), EventCallback.Factory.Create<MouseEventArgs>(this, dialog.CloseAsync));
@@ -103,9 +96,7 @@ public class TnTDialog : ComponentBase, IDisposable {
                     }
                 }
                 builder.CloseElement();
-            }
 
-            if (showDivider) {
                 builder.OpenComponent<TnTDivider>(70);
                 builder.CloseComponent();
             }

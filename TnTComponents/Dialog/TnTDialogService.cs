@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using TnTComponents.Core;
 using TnTComponents.Dialog.Infrastructure;
 
 namespace TnTComponents.Dialog;
@@ -66,6 +67,7 @@ internal class TnTDialogService : ITnTDialogService {
         public TnTDialogOptions Options { get; init; } = default!;
         public IReadOnlyDictionary<string, object?>? Parameters { get; init; }
         public Type Type { get; init; } = default!;
+        public string ElementId { get; init; } = TnTComponentIdentifier.NewId();
 
         public Task CloseAsync() {
             return dialogService.CloseAsync(this);
