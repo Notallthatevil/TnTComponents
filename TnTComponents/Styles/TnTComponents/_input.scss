@@ -27,7 +27,7 @@
     }
 
 
-    input {
+    input, select {
         appearance: none;
         border: none;
         outline: none;
@@ -37,6 +37,8 @@
         width: 100%;
         @extend .tnt-body-large;
     }
+
+
 
     .tnt-label {
         position: absolute;
@@ -60,7 +62,7 @@
         &:has(.tnt-start-icon) {
             padding-left: 0.75rem;
 
-            &:not(:has(input[type=checkbox])) {
+            &:not(:has(input[type=checkbox])):not(:has(select[multiple])) {
 
                 .tnt-label {
                     transform: translateX(2.5rem);
@@ -86,9 +88,7 @@
         outline: 1px solid $tnt-color-outline;
         @extend .tnt-border-radius-1;
 
-
-
-        &:not(:has(input[type=checkbox])) {
+        &:not(:has(input[type=checkbox])):not(:has(select[multiple])) {
             &.tnt-placeholder, &:not(:has(input:placeholder-shown)), &:focus-within {
                 @each $colorClass in $color-classes {
                     &.tnt-bg-color-#{$colorClass} {
@@ -108,11 +108,11 @@
     &.tnt-filled {
         border-bottom: 1px solid $tnt-color-outline;
 
-        .tnt-icon, input {
+        .tnt-icon, input, select {
             transform: translateY(0.5rem);
         }
 
-        &:not(:has(input[type=checkbox])) {
+        &:not(:has(input[type=checkbox])):not(:has(select[multiple])) {
             &.tnt-placeholder, &:not(:has(input:placeholder-shown)), &:focus-within {
                 .tnt-label {
                     transform-origin: left;
@@ -124,6 +124,43 @@
                         transform: translateX(2.5rem) translateY(-0.8rem) scale(0.8);
                     }
                 }
+            }
+        }
+    }
+
+    &:has(select[multiple]) {
+        height: 12rem;
+
+        select {
+            height: 10rem;
+        }
+
+        &.tnt-filled {
+
+            .tnt-label {
+                transform-origin: left;
+                transform: translateY(-5.3rem) scale(0.8);
+            }
+
+            &:has(.tnt-start-icon) {
+                .tnt-label {
+                    transform: translateX(2.5rem) translateY(-5.3rem) scale(0.8);
+                }
+            }
+        }
+
+        &.tnt-outlined {
+            @each $colorClass in $color-classes {
+                &.tnt-bg-color-#{$colorClass} {
+                    .tnt-label {
+                        background-color: var(--tnt-color-#{$colorClass});
+                    }
+                }
+            }
+
+            .tnt-label {
+                transform-origin: left;
+                transform: translateY(-6rem);
             }
         }
     }
@@ -180,6 +217,30 @@
 
         .tnt-icon.tnt-end-icon {
             color: $tnt-color-error;
+        }
+    }
+
+    @each $colorClass in $color-classes {
+        &.tnt-bg-color-#{$colorClass} {
+            option {
+                background-color: var(--tnt-color-#{$colorClass});
+            }
+        }
+
+        &.tnt-fg-color-#{$colorClass} {
+            option {
+                color: var(--tnt-color-#{$colorClass});
+            }
+        }
+    }
+
+    &:has(select:not(disabled)) {
+        &:hover {
+            cursor: pointer;
+        }
+
+        select {
+            cursor: inherit;
         }
     }
 
@@ -409,7 +470,7 @@
                 }
             }
 
-            .tnt-checkbox{
+            .tnt-checkbox {
                 border-color: $tnt-color-error;
             }
 

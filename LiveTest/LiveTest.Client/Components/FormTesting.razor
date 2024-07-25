@@ -38,7 +38,7 @@
 
     <TnTRow>
         <h3>
-            Text
+            Text @Input.Text
         </h3>
         <TnTColumn S="6">
             <TnTInputText @bind-Value="@Input.Text" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
@@ -47,7 +47,7 @@
 
     <TnTRow>
         <h3>
-            Numeric
+            Numeric @Input.Integer @Input.Decimal
         </h3>
         <TnTColumn S="6">
             <TnTInputNumeric @bind-Value="@Input.Integer" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
@@ -60,7 +60,7 @@
 
     <TnTRow>
         <h3>
-            Date Time Types
+            Date Time Types @Input.DateTimeField @Input.Date @Input.Time @Input.DateTimeOff
         </h3>
         <TnTColumn S="3">
             <TnTInputDateTime @bind-Value="@Input.DateTimeField" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
@@ -79,7 +79,7 @@
 
     <TnTRow>
         <h3>
-            Phone
+            Phone @Input.Phone
         </h3>
         <TnTColumn S="6">
             <TnTInputText @bind-Value="@Input.Phone" InputType="TextInputType.Tel" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
@@ -88,7 +88,7 @@
 
     <TnTRow>
         <h3>
-            Currency
+            Currency @Input.Currency
         </h3>
         <TnTColumn S="6">
             <TnTInputCurrency @bind-Value="@Input.Currency" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
@@ -97,7 +97,7 @@
 
     <TnTRow>
         <h3>
-            Checkboxes
+            Checkboxes @Input.Checkbox @Input.Switch
         </h3>
         <TnTColumn S="6">
             <TnTInputCheckbox @bind-Value="@Input.Checkbox" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
@@ -107,15 +107,30 @@
             <TnTInputSwitch @bind-Value="@Input.Switch" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
     </TnTRow>
+
+    <TnTRow>
+        <h3>
+            Select @Input.Select @string.Join(", ", Input.Multi)
+        </h3>
+        <TnTColumn S="6">
+            <TnTInputSelect @bind-Value="@Input.Select" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" AllowPlaceholderSelection="true" PlaceholderValue="@null">
+                @foreach (var value in _values) {
+                    <option value="@value">@value</option>
+                }
+            </TnTInputSelect>
+        </TnTColumn>
+
+        <TnTColumn S="6">
+            <TnTInputSelect @bind-Value="@Input.Multi" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" AllowPlaceholderSelection="true" PlaceholderValue="@null">
+                @foreach (var value in _values) {
+                    <option value="@value">@value</option>
+                }
+            </TnTInputSelect>
+        </TnTColumn>
+    </TnTRow>
 </TnTForm>
-@Input.Text
-@Input.Integer
-@Input.Decimal
-@Input.DateTimeField
-@Input.Date
-@Input.Time
-@Input.DateTimeOff
-@Input.Phone
+
+
 
 
 @code {
@@ -153,6 +168,12 @@
         [Required]
         public bool Switch { get; set; }
 
+        [Required]
+        public string? Select { get; set; }
+
+        [Required]
+        public string[] Multi { get; set; } = [];
+
     }
 
     [SupplyParameterFromForm]
@@ -173,6 +194,7 @@
 
     private FormAppearance _appearance = FormAppearance.Filled;
 
+    private List<string> _values = new() { "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten" };
 
     private async Task ValidSubmit() {
         Console.WriteLine("Valid Submit");

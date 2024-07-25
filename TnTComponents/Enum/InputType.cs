@@ -28,7 +28,8 @@ public enum InputType {
     Url,
     Week,
     TextArea,
-    Currency
+    Currency,
+    Select
 }
 
 public static class InputTypeExt {

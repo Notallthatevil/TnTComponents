@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Reflection;
 using TnTComponents.Core;
 using TnTComponents.Form;
@@ -116,6 +117,10 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                 if (Type == InputType.TextArea) {
                     builder.OpenElement(60, "textarea");
                 }
+                else if (Type == InputType.Select) {
+                    builder.OpenElement(60, "select");
+                    builder.AddAttribute(70, "multiple", typeof(TInputType).IsArray || Nullable.GetUnderlyingType(typeof(TInputType))?.IsArray == true);
+                }
                 else {
                     builder.OpenElement(60, "input");
                     builder.AddAttribute(70, "type", Type.ToInputTypeString());
@@ -136,24 +141,34 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                     builder.AddAttribute(100, "value", bool.TrueString);
                     builder.AddAttribute(110, "checked", BindConverter.FormatValue(CurrentValue));
                 }
+                else if (Type == InputType.Select && (typeof(TInputType).IsArray || Nullable.GetUnderlyingType(typeof(TInputType))?.IsArray == true)) {
+                    builder.AddAttribute(210, "value", BindConverter.FormatValue(CurrentValue)?.ToString());
+                }
                 else {
                     builder.AddAttribute(100, "value", CurrentValueAsString);
                 }
                 builder.AddAttribute(120, "style", ElementStyle);
                 builder.AddAttribute(130, "readonly", _readOnly);
                 builder.AddAttribute(140, "placeholder", string.IsNullOrEmpty(Placeholder) ? " " : Placeholder);
-                builder.AddAttribute(150, "disabled", _disabled);
+                builder.AddAttribute(150, "disabled", _disabled || (Type == InputType.Select && _readOnly));
                 builder.AddAttribute(160, "required", IsRequired());
                 builder.AddAttribute(170, "minlength", GetMinLength());
                 builder.AddAttribute(180, "maxlength", GetMaxLength());
                 builder.AddAttribute(190, "min", GetMinValue());
                 builder.AddAttribute(200, "max", GetMaxValue());
-                if (BindOnInput) {
+
+                if (BindOnInput && Type != InputType.Select) {
                     builder.AddAttribute(210, "oninput", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
                 }
                 else {
-                    builder.AddAttribute(210, "onchange", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
+                    if (Type == InputType.Select && (typeof(TInputType).IsArray || Nullable.GetUnderlyingType(typeof(TInputType))?.IsArray == true)) {
+                        builder.AddAttribute(210, "onchange", EventCallback.Factory.CreateBinder<string?[]?>(this, SetCurrentValueAsStringArray, default));
+                    }
+                    else {
+                        builder.AddAttribute(210, "onchange", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
+                    }
                 }
+
                 if (typeof(TInputType) == typeof(bool)) {
                     builder.SetUpdatesAttributeName("checked");
                 }
@@ -168,6 +183,11 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                 }
 
                 builder.AddElementReferenceCapture(230, e => Element = e);
+
+                builder.OpenRegion(231);
+                RenderChildContent(builder);
+                builder.CloseRegion(); 
+                
                 builder.CloseElement();
 
                 builder.OpenRegion(235);
@@ -201,7 +221,15 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
         builder.CloseElement();
     }
 
+    private void SetCurrentValueAsStringArray(string?[]? value) {
+        CurrentValue = BindConverter.TryConvertTo<TInputType>(value, CultureInfo.CurrentCulture, out var result)
+            ? result
+            : default;
+    }
+
     protected virtual void RenderCustomContent(RenderTreeBuilder builder) { }
+
+    protected virtual void RenderChildContent(RenderTreeBuilder builder) { }
 
     protected bool IsRequired() {
         return AdditionalAttributes?.TryGetValue("required", out var _) == true || GetCustomAttributeIfExists<RequiredAttribute>() is not null;
