@@ -10,6 +10,7 @@ public partial class TnTLayout {
 
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddClass("tnt-layout")
         .Build();
 
     public override string? ElementStyle => CssStyleBuilder.Create()

@@ -90,7 +90,6 @@ export function afterWebStarted(blazor) {
     setupPageScriptElement();
     blazor.addEventListener('enhancedload', onEnhancedLoad);
     TnTComponents.setupRipple();
-    window.addEventListener('scroll', TnTComponents.headerScrollListener);
 }
 function getCoords(elem) { // crossbrowser version
     var box = elem.getBoundingClientRect();
@@ -169,6 +168,7 @@ const isModifierKey = (event) => {
             (key === 65 || key === 67 || key === 86 || key === 88 || key === 90)
         )
 };
+
 
 window.TnTComponents = {
     customAttribute: "tntid",
@@ -341,12 +341,12 @@ window.TnTComponents = {
             }
         }
     },
-    headerScrollListener: (event) => {
-        const headers = document.getElementsByTagName('tnt-header');
+    bodyScrollListener: (event) => {
+        const headers = document.getElementsByClassName('tnt-header');
 
         for (const head of headers) {
             if (head && head.classList) {
-                if (window.scrollY > 0) {
+                if (event.target.scrollTop > 0) {
                     if (!head.classList.contains('tnt-elevation-2')) {
                         head.classList.add('tnt-elevation-2');
                     }
