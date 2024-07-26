@@ -21,10 +21,10 @@ public class TnTThemeDesign : IComponent {
     public bool AllowColorModeToggle { get; set; } = true;
 
     [Parameter]
-    public double FooterHeight { get; set; } = 4;
+    public double FooterHeight { get; set; } = 64;
 
     [Parameter]
-    public double HeaderHeight { get; set; } = 4;
+    public double HeaderHeight { get; set; } = 64;
 
     [Parameter]
     public double SideNavWidth { get; set; } = 16;
@@ -132,7 +132,7 @@ public class TnTThemeDesign : IComponent {
             }
             else if (value is double d) {
                 var propName = name.SplitPascalCase("-").ToLower();
-                other.Append("--tnt-").Append(propName).Append(':').Append(d).Append("rem;");
+                other.Append("--tnt-").Append(propName).Append(':').Append(d).Append("px;");
             }
             else {
                 var propName = name.SplitPascalCase("-").ToLower();
