@@ -95,6 +95,7 @@ public class TnTNavLink : NavLink, ITnTComponentBase, ITnTInteractable, ITnTStyl
     }
 
     protected override void OnParametersSet() {
+        base.OnParametersSet();
         if (Disabled && AdditionalAttributes?.ContainsKey("href") == true) {
             var attributes = new Dictionary<string, object>(AdditionalAttributes);
             attributes.Remove("href");
