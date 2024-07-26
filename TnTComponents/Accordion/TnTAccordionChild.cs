@@ -7,7 +7,7 @@ public class TnTAccordionChild : TnTInteractableComponentBase, IDisposable {
     public override string? ElementStyle => throw new NotImplementedException();
 
     [Parameter, EditorRequired]
-    public string Title { get; set; } = default!;
+    public string Label { get; set; } = default!;
 
     [Parameter]
     public bool OpenByDefault { get; set; }
