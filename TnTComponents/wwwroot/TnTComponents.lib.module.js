@@ -373,5 +373,20 @@ window.TnTComponents = {
                 }
             }
         }
+    },
+    toggleSideNavGroup: (event) => {
+        const indicator = event.target.parentElement.querySelector('.tnt-side-nav-group-toggle-indicator');
+
+        if (indicator) {
+            const toggler = indicator.querySelector('.tnt-toggle-indicator');
+            if (toggler && toggler.classList) {
+                if (toggler.classList.contains('tnt-toggle')) {
+                    toggler.classList.remove('tnt-toggle');
+                }
+                else {
+                    toggler.classList.add('tnt-toggle');
+                }
+            }
+        }
     }
 }
