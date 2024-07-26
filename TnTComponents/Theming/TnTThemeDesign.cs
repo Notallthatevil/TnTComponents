@@ -27,7 +27,7 @@ public class TnTThemeDesign : IComponent {
     public double HeaderHeight { get; set; } = 64;
 
     [Parameter]
-    public double SideNavWidth { get; set; } = 16;
+    public double SideNavWidth { get; set; } = 256;
 
     [Parameter]
     public Theme Theme { get; set; }
