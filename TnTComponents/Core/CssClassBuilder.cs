@@ -18,6 +18,7 @@ internal class CssClassBuilder {
     }
     public CssClassBuilder AddOutlined(bool enabled = true) => enabled ? AddClass("tnt-outlined", enabled) : this;
     public CssClassBuilder AddFilled(bool enabled = true) => AddClass("tnt-filled", enabled);
+    public CssClassBuilder AddUnderlined(bool enabled = true) => AddClass("tnt-underlined", enabled);
     public CssClassBuilder AddBackgroundColor(TnTColor? color) => AddClass($"tnt-bg-color-{color?.ToCssClassName() ?? string.Empty}", color is not null && color != TnTColor.None);
     public CssClassBuilder AddTintColor(TnTColor? color) => AddClass($"tnt-tint-color-{color?.ToCssClassName() ?? string.Empty}", color is not null && color != TnTColor.None);
     public CssClassBuilder AddOnTintColor(TnTColor? color) => AddClass($"tnt-on-tint-color-{color?.ToCssClassName() ?? string.Empty}", color is not null && color != TnTColor.None);
@@ -38,7 +39,7 @@ internal class CssClassBuilder {
 
 
 
-    public CssClassBuilder AddTnTStyleable(ITnTStyleable styleable, bool enableBackground = true, bool enableForeground = true, bool enableTint = true, bool enableElevation = true, bool enableBorderRadius = true) {
+    public CssClassBuilder AddTnTStyleable(ITnTStyleable styleable, bool enableBackground = true, bool enableForeground = true, bool enableElevation = true, bool enableBorderRadius = true) {
         AddBackgroundColor(enableBackground ? styleable.BackgroundColor : null);
         AddForegroundColor(enableForeground ? styleable.TextColor : null);
         AddTextAlign(styleable.TextAlignment);

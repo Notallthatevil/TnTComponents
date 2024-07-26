@@ -5,10 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TnTComponents;
-public enum TnTNavLinkAppearance {
-    None,
-    Outlined,
+public enum AnchorAppearance {
     Underlined,
-    Flat
+    Filled,
+    Outlined
 }
 
