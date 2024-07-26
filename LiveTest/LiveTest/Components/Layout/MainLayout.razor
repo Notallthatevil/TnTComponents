@@ -17,10 +17,16 @@
     <TnTFooter>
         Footer content
     </TnTFooter>
+
     <TnTSideNav HideOnLargeScreens="true">
         <h3>
             My First Headline
         </h3>
+        <TnTNavLink href="/" Match="NavLinkMatch.All">
+            <MaterialIcon Icon="@MaterialIcon.Home" />
+            Home
+        </TnTNavLink>
+
         @*
         <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Home))" Href="/" Match="NavLinkMatch.All" Status="100" Disabled="true">
         Home

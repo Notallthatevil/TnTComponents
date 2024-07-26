@@ -56,8 +56,6 @@
         transition: color 250ms ease-in-out;
     }
 
-
-
     &:has(.tnt-header):not(:has(.tnt-footer)) {
         .tnt-body {
             margin-top: $tnt-header-height;

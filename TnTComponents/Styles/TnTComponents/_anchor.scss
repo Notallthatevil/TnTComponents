@@ -1,15 +1,16 @@
 ﻿.tnt-components.tnt-nav-link {
-    user-select: none;
     box-sizing: border-box;
+    overflow: hidden;
+    display: inline-flex;
 
     &.tnt-filled, &.tnt-outlined {
         @extend .tnt-label-large;
+        user-select: none;
         appearance: none;
         text-decoration: none;
         min-height: 40px;
         min-width: 40px;
         padding: 0 16px;
-        display: inline-flex;
         align-items: center;
         vertical-align: middle;
     }
