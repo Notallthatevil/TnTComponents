@@ -345,7 +345,7 @@ window.TnTComponents = {
         const headers = document.getElementsByClassName('tnt-header');
 
         for (const head of headers) {
-            if (head && head.classList) {
+            if (head && head.classList && event.target) {
                 if (event.target.scrollTop > 0) {
                     if (!head.classList.contains('tnt-elevation-2')) {
                         head.classList.add('tnt-elevation-2');
@@ -353,6 +353,20 @@ window.TnTComponents = {
                 }
                 else {
                     head.classList.remove('tnt-elevation-2');
+                }
+            }
+        }
+    },
+    toggleSideNav: (event) => {
+        const sideNavs = document.getElementsByClassName('tnt-side-nav');
+
+        for (const nav of sideNavs) {
+            if (nav && nav.classList) {
+                if (nav.classList.contains('tnt-toggle')) {
+                    nav.classList.remove('tnt-toggle');
+                }
+                else {
+                    nav.classList.add('tnt-toggle');
                 }
             }
         }

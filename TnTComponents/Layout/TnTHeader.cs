@@ -10,7 +10,7 @@ public class TnTHeader : TnTLayoutComponent {
         .Build();
 
     [Parameter]
-    public override TnTColor BackgroundColor { get; set; } = TnTColor.Surface;
+    public override TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerLowest;
     [Parameter]
     public override TnTColor TextColor { get; set; } = TnTColor.OnSurface;
 
