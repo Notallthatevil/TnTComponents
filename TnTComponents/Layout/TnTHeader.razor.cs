@@ -23,14 +23,4 @@ public partial class TnTHeader {
     [Parameter]
     public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
 
-    [CascadingParameter]
-    private TnTLayout _layout { get; set; } = default!;
-
-    protected override void OnInitialized() {
-        base.OnInitialized();
-        if (_layout is null) {
-            throw new InvalidOperationException($"{nameof(TnTHeader)} must be a descendant of {nameof(TnTLayout)}");
-        }
-        _layout.SetHeader(this);
-    }
 }

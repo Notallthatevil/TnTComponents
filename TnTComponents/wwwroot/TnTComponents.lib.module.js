@@ -90,6 +90,7 @@ export function afterWebStarted(blazor) {
     setupPageScriptElement();
     blazor.addEventListener('enhancedload', onEnhancedLoad);
     TnTComponents.setupRipple();
+    window.addEventListener('scroll', TnTComponents.headerScrollListener);
 }
 function getCoords(elem) { // crossbrowser version
     var box = elem.getBoundingClientRect();
@@ -336,6 +337,22 @@ window.TnTComponents = {
                             content.classList.add('tnt-hidden');
                         }
                     }
+                }
+            }
+        }
+    },
+    headerScrollListener: (event) => {
+        const headers = document.getElementsByTagName('tnt-header');
+
+        for (const head of headers) {
+            if (head && head.classList) {
+                if (window.scrollY > 0) {
+                    if (!head.classList.contains('tnt-elevation-2')) {
+                        head.classList.add('tnt-elevation-2');
+                    }
+                }
+                else {
+                    head.classList.remove('tnt-elevation-2');
                 }
             }
         }

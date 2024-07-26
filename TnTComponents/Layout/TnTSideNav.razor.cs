@@ -30,14 +30,4 @@ public partial class TnTSideNav {
     [Parameter]
     public string? Title { get; set; }
 
-    [CascadingParameter]
-    private TnTLayout _layout { get; set; } = default!;
-
-    protected override void OnInitialized() {
-        base.OnInitialized();
-        if (_layout is null) {
-            throw new InvalidOperationException($"{nameof(TnTHeader)} must be a descendant of {nameof(TnTLayout)}");
-        }
-        _layout.SetSideNav(this);
-    }
 }
