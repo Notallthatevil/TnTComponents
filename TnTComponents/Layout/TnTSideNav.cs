@@ -14,7 +14,7 @@ public class TnTSideNav : TnTLayoutComponent {
         .Build();
 
     [Parameter]
-    public override TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceVariant;
+    public override TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerLow;
 
     [Parameter]
     public override TnTColor TextColor { get; set; } = TnTColor.OnSurfaceVariant;
