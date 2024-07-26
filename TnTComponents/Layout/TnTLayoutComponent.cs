@@ -40,30 +40,34 @@ public abstract class TnTLayoutComponent : TnTComponentBase, ITnTStyleable {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
+    protected virtual bool DataPermanent => false;
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        builder.OpenElement(0, "div");
-        builder.AddAttribute(10, "data-permanent");
-        builder.OpenRegion(20);
-
-        {
+        if (DataPermanent) {
             builder.OpenElement(0, "div");
-            builder.AddMultipleAttributes(10, AdditionalAttributes);
-            builder.AddAttribute(20, "class", ElementClass);
-            builder.AddAttribute(30, "style", ElementStyle);
-            builder.AddAttribute(40, "lang", ElementLang);
-            builder.AddAttribute(50, "id", ElementId);
-            builder.AddAttribute(60, "title", ElementTitle);
-            builder.AddElementReferenceCapture(70, e => Element = e);
-            builder.AddContent(80, ChildContent);
+            builder.AddAttribute(10, "data-permanent");
+            builder.OpenRegion(20);
+
+            RenderContent(builder);
+
+            builder.CloseRegion();
             builder.CloseElement();
         }
-
-        builder.CloseRegion();
-        builder.CloseElement();
+        else {
+            RenderContent(builder);
+        }
     }
 
     private void RenderContent(RenderTreeBuilder builder) {
-
+        builder.OpenElement(0, "div");
+        builder.AddMultipleAttributes(10, AdditionalAttributes);
+        builder.AddAttribute(20, "class", ElementClass);
+        builder.AddAttribute(30, "style", ElementStyle);
+        builder.AddAttribute(40, "lang", ElementLang);
+        builder.AddAttribute(50, "id", ElementId);
+        builder.AddAttribute(60, "title", ElementTitle);
+        builder.AddElementReferenceCapture(70, e => Element = e);
+        builder.AddContent(80, ChildContent);
+        builder.CloseElement();
     }
 }

@@ -22,10 +22,9 @@
         <h3>
             My First Headline
         </h3>
-        <TnTNavLink href="/" Match="NavLinkMatch.All">
-            <MaterialIcon Icon="@MaterialIcon.Home" />
-            Home
-        </TnTNavLink>
+        <TnTSideNavLink Label="Home" href="/" Match="NavLinkMatch.All" Disabled="true" />
+        <TnTSideNavLink Label="Accordion" href="/accordion" Icon="@(new MaterialIcon(MaterialIcon.MusicNote))" />
+        <TnTSideNavLink Label="Anchors" href="/navlinks" Icon="@(new MaterialIcon(MaterialIcon.Link))" />
 
         @*
         <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Home))" Href="/" Match="NavLinkMatch.All" Status="100" Disabled="true">

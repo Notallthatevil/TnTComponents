@@ -14,4 +14,5 @@ public class TnTHeader : TnTLayoutComponent {
     [Parameter]
     public override TnTColor TextColor { get; set; } = TnTColor.OnSurface;
 
+    protected override bool DataPermanent => true;
 }

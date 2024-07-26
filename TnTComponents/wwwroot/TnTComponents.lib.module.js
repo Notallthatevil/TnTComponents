@@ -358,15 +358,18 @@ window.TnTComponents = {
         }
     },
     toggleSideNav: (event) => {
-        const sideNavs = document.getElementsByClassName('tnt-side-nav');
+        const sideNavs = document.getElementsByClassName('tnt-side-nav-toggle-indicator');
 
         for (const nav of sideNavs) {
-            if (nav && nav.classList) {
-                if (nav.classList.contains('tnt-toggle')) {
-                    nav.classList.remove('tnt-toggle');
-                }
-                else {
-                    nav.classList.add('tnt-toggle');
+            if (nav && nav.querySelector) {
+                const toggler = nav.querySelector('.tnt-toggle-indicator');
+                if (toggler && toggler.classList) {
+                    if (toggler .classList.contains('tnt-toggle')) {
+                        toggler.classList.remove('tnt-toggle');
+                    }
+                    else {
+                        toggler.classList.add('tnt-toggle');
+                    }
                 }
             }
         }

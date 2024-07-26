@@ -3,7 +3,7 @@
         display: flex;
         flex-direction: row;
         width: 100%;
-        transition: box-shadow ease-in-out 250ms, padding ease-in-out 200ms;
+        transition: ease-in-out 250ms;
         align-items: center;
         position: fixed;
         padding: 0 8px;
@@ -46,6 +46,34 @@
         h1, h2, h3, h4, h5, h6 {
             @extend .tnt-title-small;
         }
+
+        .tnt-side-nav-link {
+            height: 46px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            padding-left: 48px;
+
+            &:has(.tnt-icon) {
+                padding-left: 16px;
+            }
+
+            .tnt-icon {
+                vertical-align: middle;
+                font-size: 24px;
+                padding-right: 8px;
+            }
+
+            &.active {
+                &.active-fg-color {
+                    color: var(--active-fg-color);
+                }
+
+                &.active-bg-color {
+                    background-color: var(--active-bg-color);
+                }
+            }
+        }
     }
 
     .tnt-side-nav-toggle {
@@ -79,54 +107,86 @@
     }
 
     @media #{$medium-and-up} {
-        &:has(.tnt-side-nav:not(.tnt-side-nav-hide-on-large):not(.tnt-toggle)), &:has(.tnt-side-nav-hide-on-large.tnt-toggle) {
+        &:has(.tnt-side-nav:not(.tnt-side-nav-hide-on-large)) {
             .tnt-header, .tnt-footer, .tnt-body {
                 padding-left: calc($tnt-side-nav-width + 8px);
             }
-        }
 
+            &:has(.tnt-side-nav-toggle-indicator .tnt-toggle-indicator.tnt-toggle) {
+                .tnt-header, .tnt-footer, .tnt-body {
+                    padding-left: 8px;
+                }
 
-        &:has(.tnt-side-nav.tnt-toggle:not(.tnt-side-nav-hide-on-large)) .tnt-toggle {
-            transform: translate(-105%);
-        }
-
-
-        .tnt-side-nav-hide-on-large {
-            transform: translateX(-105%);
-
-            &.tnt-toggle {
-                transform: none;
+                .tnt-side-nav {
+                    transform: translate(-105%);
+                }
             }
         }
+
+        &:has(.tnt-side-nav.tnt-side-nav-hide-on-large) {
+            .tnt-header, .tnt-footer, .tnt-body {
+                padding-left: 8px;
+            }
+
+            .tnt-side-nav {
+                transform: translate(-105%);
+            }
+
+            &:has(.tnt-side-nav-toggle-indicator .tnt-toggle-indicator.tnt-toggle) {
+                .tnt-header, .tnt-footer, .tnt-body {
+                    padding-left: calc($tnt-side-nav-width + 8px);
+                }
+
+                .tnt-side-nav {
+                    transform: translate(0);
+                }
+            }
+        }
+        //}
+        //&:has(.tnt-side-nav.tnt-toggle:not(.tnt-side-nav-hide-on-large)) .tnt-toggle {
+        //    transform: translate(-105%);
+        //}
+        //.tnt-side-nav-hide-on-large {
+        //    transform: translateX(-105%);
+        //    &.tnt-toggle {
+        //        transform: none;
+        //    }
+        //}
     }
 
     @media #{$small-and-down} {
         .tnt-side-nav {
             transform: translateX(-105%);
         }
+
+
+        &:has(.tnt-side-nav-toggle-indicator .tnt-toggle-indicator.tnt-toggle) {
+            .tnt-header {
+                transform: translateX(calc($tnt-side-nav-width + 8px));
+            }
+
+            .tnt-side-nav {
+                transform: translate(0%);
+            }
+        }
     }
 }
-
 //.tnt-layout {
 //    display: block;
-
 //    tnt-side-nav {
 //        transition: 200ms ease-in-out;
 //        overflow-y: auto;
 //        overflow-x: hidden;
 //    }
-
 //    .tnt-header, .tnt-footer {
 //        display: flex;
 //        width: 100%;
 //        transition: box-shadow ease-in-out 500ms;
 //    }
-
 //    .tnt-body {
 //        display: block;
 //        min-height: 100vh;
 //    }
-
 //    tnt-side-nav {
 //        position: fixed;
 //        left: 0;
@@ -136,7 +196,6 @@
 //        z-index: 999;
 //        padding: 0.5rem;
 //        box-sizing: border-box;
-
 //        tnt-side-nav-menu-group {
 //            transition: 200ms ease-in-out;
 //            user-select: none;
@@ -144,67 +203,55 @@
 //            overflow: hidden;
 //            display: block;
 //            width: 100%;
-
 //            & > span {
 //                display: inline-flex;
 //                height: 3rem;
 //                align-content: center;
 //                align-items: center;
 //                width: 100%;
-
 //@extend .tnt-actionable-bg-color-transparent;
 //            }
-
 //            & > span > span:last-child.tnt-icon {
 //                transition: 200ms ease-in-out;
 //                margin-left: auto;
 //                transform: rotateZ(0);
 //            }
-
 //            &.tnt-disabled {
 //                pointer-events: none;
 //                cursor: not-allowed;
 //                opacity: 0.3;
 //            }
-
 //            & > div {
 //                display: flex;
 //                flex-direction: column;
 //                margin-left: 1.25rem;
 //                height: fit-content;
 //                transition: height ease-in-out 200ms;
-
 //                & > div {
 //                    border-left: 1px solid $tnt-color-outline;
 //                }
 //            }
-
 //            &:not(.tnt-expanded) {
 //                & > div {
 //                    height: 0px;
 //                }
 //            }
-
 //            &.tnt-expanded {
 //                & > span > span:last-child.tnt-icon {
 //                    transform: rotateZ(180deg);
 //                }
 //            }
-
 //            @extend .tnt-title-small;
-
 //            span.tnt-icon {
 //                vertical-align: bottom;
 //                padding: 0 0.5rem;
 //            }
 //        }
-
 //        div.tnt-components {
 //            padding: 0;
 //            cursor: pointer;
 //            overflow: hidden;
 //            display: flex;
-
 //            a {
 //                display: inline-flex;
 //                width: 100%;
@@ -216,12 +263,10 @@
 //                flex-wrap: nowrap;
 //                box-sizing: border-box;
 //                align-items: center;
-
 //                span.tnt-icon {
 //                    padding: 0 0.5rem;
 //                }
 //            }
-
 //            &.tnt-disabled {
 //                opacity: 0.3;
 //                pointer-events: none;
@@ -229,7 +274,6 @@
 //            }
 //        }
 //    }
-
 //    .tnt-header, .tnt-footer {
 //        align-items: center;
 //        position: fixed;
@@ -239,50 +283,41 @@
 //        opacity: 0.9;
 //        @extend .tnt-title-large;
 //    }
-
 //    .tnt-header {
 //        height: $tnt-header-height;
 //        top: 0;
 //    }
-
 //    .tnt-footer {
 //        height: $tnt-footer-height;
 //        bottom: 0;
 //    }
-
 //    &:has(.tnt-header) tnt-body {
 //        padding-top: $tnt-header-height;
 //    }
-
 //    &:has(.tnt-footer) tnt-body {
 //        padding-bottom: $tnt-footer-height;
 //    }
-
 //    &:has(.tnt-header):has(.tnt-footer) {
 //        .tnt-body {
 //            min-height: calc(calc(30vh - $tnt-header-height) - $tnt-footer-height);
 //        }
 //    }
-
 //    &:has(.tnt-footer):not(:has(.tnt-header)) {
 //        .tnt-body {
 //            min-height: calc(30vh - $tnt-footer-height);
 //        }
 //    }
-
 //    &:has(.tnt-header):not(:has(.tnt-footer)) {
 //        .tnt-body {
 //            min-height: calc(30vh - $tnt-header-height);
 //            padding-bottom: 1px;
 //        }
 //    }
-
 //    tnt-side-nav-toggle {
 //        display: block;
 //        aspect-ratio: 1/1;
 //        cursor: pointer;
 //    }
-
 //    @media #{$medium-and-up} {
 //        &:has(tnt-side-nav) {
 //            .tnt-header, .tnt-footer, .tnt-body {
@@ -290,24 +325,19 @@
 //                width: calc(100% - $tnt-side-nav-width);
 //            }
 //        }
-
 //        tnt-side-nav-toggle {
 //            display: none;
 //        }
 //    }
-
 //    @media #{$small-and-down} {
 //        tnt-side-nav {
 //            transform: translateX(-105%);
-
 //            &.expanded {
 //                transform: translateX(0%);
 //            }
 //        }
-
 //        .tnt-header {
 //            transition: 200ms ease-in-out;
-
 //            &.expanded {
 //                transform: translateX($tnt-side-nav-width);
 //            }
