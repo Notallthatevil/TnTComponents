@@ -18,7 +18,7 @@ public interface ITnTInteractable {
     /// <summary>
     /// Gets the name of the component.
     /// </summary>
-    string? Name { get; }
+    string? ElementName { get; }
 
     bool EnableRipple { get; }
     TnTColor? TintColor { get; }

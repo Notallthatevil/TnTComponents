@@ -70,7 +70,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     [Parameter]
     public string? Label { get; set; }
 
-    public string? Name => NameAttributeValue;
+    public string? ElementName => NameAttributeValue;
 
     [Parameter]
     public string? Placeholder { get; set; }
@@ -128,7 +128,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                     builder.AddAttribute(70, "type", Type.ToInputTypeString());
                 }
                 builder.AddMultipleAttributes(80, AdditionalAttributes);
-                builder.AddAttribute(90, "name", Name);
+                builder.AddAttribute(90, "name", ElementName);
 
                 if (Type == InputType.Tel) {
                     builder.AddAttribute(91, "onkeydown", "TnTComponents.enforcePhoneFormat(event)");

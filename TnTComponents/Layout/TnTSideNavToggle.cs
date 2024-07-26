@@ -25,7 +25,7 @@ public class TnTSideNavToggle : TnTComponentBase, ITnTInteractable {
     [Parameter]
     public bool Disabled { get; set; }
     [Parameter]
-    public string? Name { get; set; }
+    public string? ElementName { get; set; }
     public bool EnableRipple => true;
     [Parameter]
     public TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;

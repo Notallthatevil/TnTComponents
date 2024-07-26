@@ -13,7 +13,7 @@ public abstract class TnTInteractableComponentBase : TnTComponentBase, ITnTInter
     public bool Disabled { get; set; }
 
     [Parameter]
-    public string? Name { get; set; }
+    public string? ElementName { get; set; }
     [Parameter]
     public bool EnableRipple { get; set; } = true;
     [Parameter]

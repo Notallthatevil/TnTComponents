@@ -66,7 +66,7 @@ public class TnTNavLink : NavLink, ITnTComponentBase, ITnTInteractable, ITnTStyl
     public bool EnableRipple => true;
 
     [Parameter]
-    public string? Name { get; set; }
+    public string? ElementName { get; set; }
 
     [Parameter]
     public TnTColor? OnTintColor { get; set; }

@@ -15,7 +15,7 @@ public abstract class TnTInteractablePageScriptComponent<TComponent> : TnTCompon
     public bool Disabled { get; set; }
 
     [Parameter]
-    public string? Name { get; set; }
+    public string? ElementName { get; set; }
 
     public DotNetObjectReference<TComponent>? DotNetObjectRef { get; set; }
     public IJSObjectReference? IsolatedJsModule { get; private set; }
