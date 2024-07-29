@@ -4,19 +4,17 @@ using TnTComponents.Core;
 
 namespace TnTComponents;
 
-public class TnTDivider : ComponentBase {
-
-    [Parameter(CaptureUnmatchedValues = true)]
-    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+public class TnTDivider : TnTComponentBase {
 
     [Parameter]
     public TnTColor? Color { get; set; } = TnTColor.OutlineVariant;
 
-    public string? ElementClass => CssClassBuilder.Create()
-            .AddClass($"tnt-divider-{Orientation.ToString().ToLower()}")
+    public override string? ElementClass => CssClassBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddClass($"tnt-divider-{Orientation.ToString().ToLower()}")
         .Build();
 
-    public string? ElementStyle => CssStyleBuilder.Create()
+    public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddVariable("divider-color", $"var(--tnt-color-{Color.ToCssClassName()})", Color.HasValue)
         .Build();
@@ -28,6 +26,9 @@ public class TnTDivider : ComponentBase {
         builder.AddMultipleAttributes(10, AdditionalAttributes);
         builder.AddAttribute(20, "class", ElementClass);
         builder.AddAttribute(30, "style", ElementStyle);
+        builder.AddAttribute(40, "title", ElementTitle);
+        builder.AddAttribute(50, "lang", ElementLang);
+        builder.AddAttribute(60, "id", ElementId);
         builder.CloseElement();
     }
 }
