@@ -4,14 +4,12 @@
 <div @attributes="AdditionalAttributes" class="@ElementClass" style="@ElementStyle" @ref="Element">
     @if (!HideDateControls) {
         <div class="date-controls">
-            <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.ChevronLeft))" OnClick="PreviousPage" class="prev-button" />
-            <TnTButton Appearance="ButtonAppearance.Text" OnClick="GoToToday" class="today-button" TextColor="TnTColor.OnSurface" Elevation="0">
+            <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.ChevronLeft))" OnClickCallback="PreviousPage" class="prev-button" />
+            <TnTButton Appearance="ButtonAppearance.Text" OnClickCallback="GoToToday" class="today-button" TextColor="TnTColor.OnSurface" Elevation="0">
                 TODAY
             </TnTButton>
-            <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.ChevronRight))" OnClick="NextPage" class="next-button" />
-            <TnTLabel Label="DatePicker">
-               @*<TnTInputDateOnly @bind-Value="_displayDate" BindAfter="@((DateOnly? date) => UpdateDate(date))" />*@
-            </TnTLabel>
+            <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.ChevronRight))" OnClickCallback="NextPage" class="next-button" />
+            <TnTInputDateTime @bind-Value="_displayDate" Label="Date Picker" BindAfter="@((DateOnly? date) => UpdateDate(date))" />
         </div>
     }
     <CascadingValue Value="this" IsFixed="true">
