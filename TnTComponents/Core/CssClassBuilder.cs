@@ -58,6 +58,7 @@ internal class CssClassBuilder {
         AddOnTintColor(enableOnTintColor ? interactable.OnTintColor : null);
         return this;
     }
+    public CssClassBuilder AddFlexBox(ITnTFlexBox flexBox, bool enabled = true) => AddFlexBox(flexBox.Direction, flexBox.AlignItems, flexBox.JustifyContent, flexBox.AlignContent, enabled);
 
 
 
@@ -82,7 +83,6 @@ internal class CssClassBuilder {
         .AddAlignContent(alignContent) :
         this;
 
-    public CssClassBuilder AddFlexBox(ITnTFlexBox flexBox, bool enabled = true) => AddFlexBox(flexBox.Direction, flexBox.AlignItems, flexBox.JustifyContent, flexBox.AlignContent, enabled);
 
 
     public CssClassBuilder AddFromAdditionalAttributes(IReadOnlyDictionary<string, object>? additionalAttributes) {
@@ -91,13 +91,6 @@ internal class CssClassBuilder {
         }
         return this;
     }
-
-    public CssClassBuilder AddMargin(int margin) => AddClass($"tnt-margin-{Math.Clamp(margin, 1, 16)}", margin > 0);
-
-    public CssClassBuilder AddNoBackground(bool enabled = true) => AddClass("tnt-bg-color-transparent", enabled);
-
-
-    public CssClassBuilder AddPadding(int padding) => AddClass($"tnt-padding-{Math.Clamp(padding, 1, 16)}", padding > 0);
 
 
     public CssClassBuilder AddSize(Size? size) {
@@ -117,10 +110,6 @@ internal class CssClassBuilder {
 
 
     public string Build() => string.Join(' ', _classes).Trim();
-
-    public CssClassBuilder MakeGridContainer(bool enabled = true) => AddClass("tnt-grid-container", enabled);
-
-    public CssClassBuilder MakeTextOnly(bool enabled = true) => AddClass("tnt-text-only", enabled);
 
     public CssClassBuilder SetAlternative(bool enabled = true) => AddClass("tnt-alternative", enabled);
 

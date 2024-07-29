@@ -5,10 +5,7 @@ using TnTComponents.Interfaces;
 
 namespace TnTComponents;
 
-public class TnTRow : ComponentBase, ITnTComponentBase, ITnTFlexBox {
-
-    [Parameter(CaptureUnmatchedValues = true)]
-    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+public class TnTRow : TnTComponentBase, ITnTComponentBase, ITnTFlexBox {
 
     [Parameter]
     public AlignContent? AlignContent { get; set; }
@@ -17,17 +14,15 @@ public class TnTRow : ComponentBase, ITnTComponentBase, ITnTFlexBox {
     public AlignItems? AlignItems { get; set; }
 
     [Parameter]
-    public bool? AutoFocus { get; set; }
-
-    [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public string? ElementClass => CssClassBuilder.Create()
+    public override string? ElementClass => CssClassBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-row")
         .AddFlexBox(this)
         .Build();
 
-    public string? ElementStyle => CssStyleBuilder.Create()
+    public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
@@ -35,29 +30,19 @@ public class TnTRow : ComponentBase, ITnTComponentBase, ITnTFlexBox {
     public LayoutDirection? Direction { get; set; }
 
     [Parameter]
-    public bool Disabled { get; set; }
-
-    public ElementReference Element { get; }
-
-    [Parameter]
-    public string? ElementId { get; set; }
-
-    [Parameter]
     public JustifyContent? JustifyContent { get; set; }
-
-    [Parameter]
-    /// <inheritdoc />
-    public string? ElementLang { get; set; }
-    [Parameter]
-    /// <inheritdoc />
-    public string? ElementTitle { get; set; }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "div");
         builder.AddMultipleAttributes(10, AdditionalAttributes);
         builder.AddAttribute(20, "class", ElementClass);
         builder.AddAttribute(30, "style", ElementStyle);
-        builder.AddContent(40, ChildContent);
+        builder.AddAttribute(40, "autofocus", AutoFocus);
+        builder.AddAttribute(50, "lang", ElementLang);
+        builder.AddAttribute(60, "title", ElementTitle);
+        builder.AddAttribute(70, "id", ElementId);
+        builder.AddElementReferenceCapture(80, e => Element = e);
+        builder.AddContent(90, ChildContent);
         builder.CloseElement();
     }
 }
