@@ -1,21 +1,23 @@
 using Microsoft.AspNetCore.Components;
-
+using Microsoft.AspNetCore.Components.Rendering;
 using TnTComponents.Core;
 
 namespace TnTComponents;
 
-public partial class TnTTabChild {
+public class TnTTabChild : TnTInteractableComponentBase {
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
     public override string? ElementClass => CssClassBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddClass("tnt-tab-child")
         .AddDisabled(Disabled)
         .Build();
 
     public override string? ElementStyle => CssStyleBuilder.Create()
-       .AddFromAdditionalAttributes(AdditionalAttributes)
-       .Build();
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .Build();
 
     [Parameter]
     public TnTIcon? Icon { get; set; }
@@ -24,16 +26,14 @@ public partial class TnTTabChild {
     public RenderFragment? TabHeaderTemplate { get; set; }
 
     [Parameter, EditorRequired]
-    public string Title { get; set; } = default!;
+    public string Label { get; set; } = default!;
 
     [CascadingParameter]
     private TnTTabView _context { get; set; } = default!;
 
-    private string? _style;
 
     protected override void OnAfterRender(bool firstRender) {
         base.OnAfterRender(firstRender);
-        _style = ElementStyle;
     }
 
     protected override void OnInitialized() {
@@ -42,6 +42,19 @@ public partial class TnTTabChild {
             throw new InvalidOperationException($"A {nameof(TnTTabChild)} must be a child of {nameof(TnTTabView)}");
         }
         _context.AddTabChild(this);
-        _style = $"{ElementStyle}; display:none;";
+    }
+
+    protected override void BuildRenderTree(RenderTreeBuilder builder) {
+        builder.OpenElement(0, "div");
+        builder.AddMultipleAttributes(10, AdditionalAttributes);
+        builder.AddAttribute(20, "class", ElementClass);
+        builder.AddAttribute(30, "style", ElementStyle);
+        builder.AddAttribute(40, "title", ElementTitle ?? Label);
+        builder.AddAttribute(50, "id", ElementId);
+        builder.AddAttribute(60, "lang", ElementLang);
+        builder.AddAttribute(70, "name", ElementName);
+        builder.AddElementReferenceCapture(80, e => Element = e);
+        builder.AddContent(90, ChildContent);
+        builder.CloseElement();
     }
 }
