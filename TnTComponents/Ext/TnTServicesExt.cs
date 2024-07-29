@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using TnTComponents;
 using TnTComponents.Core;
 using TnTComponents.Dialog;
+using TnTComponents.RenderContext;
 using TnTComponents.Snackbar;
 using TnTComponents.Storage;
 

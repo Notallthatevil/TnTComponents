@@ -1,4 +1,4 @@
-﻿namespace TnTComponents.Core;
+﻿namespace TnTComponents.RenderContext;
 
 /// <inheritdoc />
 public sealed class TnTClientRenderContext : ITnTRenderContext {

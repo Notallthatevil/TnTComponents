@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace TnTComponents.Core;
+namespace TnTComponents.RenderContext;
 
 /// <inheritdoc />
 public sealed class TnTServerRenderContext(IHttpContextAccessor contextAccessor) : ITnTRenderContext {

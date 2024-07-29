@@ -1,4 +1,4 @@
-﻿namespace TnTComponents.Core;
+﻿namespace TnTComponents;
 
 /// <summary>
 /// Provide the render mode information in which the component is rendering.
