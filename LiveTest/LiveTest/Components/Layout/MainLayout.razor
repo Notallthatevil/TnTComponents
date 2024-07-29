@@ -36,9 +36,12 @@
         <TnTSideNavLink Label="Chips" href="/chips" Icon="@(new MaterialIcon(MaterialIcon.BedroomChild))" />
         <TnTSideNavLink Label="Dialogs" href="/dialog" Icon="@(new MaterialIcon(MaterialIcon.Diamond))" />
 
-        <TnTSideNavMenuGroup Icon="@(new MaterialIcon(MaterialIcon.EditNote))" Label="Editors">
+        <TnTSideNavMenuGroup Icon="@(new MaterialIcon(MaterialIcon.EditNote))" ExpandByDefault="false" Label="Editors">
             <TnTSideNavLink Label="Markdown Editor" href="/markdown" Icon="@(new MaterialIcon(MaterialIcon.MarkAsUnread))" />
         </TnTSideNavMenuGroup>
+
+        <TnTSideNavLink Label="Forms" href="/forms" Icon="@(new MaterialIcon(MaterialIcon.FormatAlignCenter))" />
+
         @*
         <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Home))" Href="/" Match="NavLinkMatch.All" Status="100" Disabled="true">
         Home
