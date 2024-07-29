@@ -40,6 +40,10 @@ body {
     background-color: $tnt-color-background;
 }
 
+.fa {
+    color: $tnt-color-on-background;
+}
+
 * {
     scrollbar-color: $tnt-color-on-surface-variant $tnt-color-surface-variant;
 }
