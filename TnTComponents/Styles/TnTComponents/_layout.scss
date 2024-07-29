@@ -27,8 +27,8 @@
         width: 100vw;
         padding: 8px;
         box-sizing: border-box;
-        background-color: red;
         overflow: auto;
+        transition: padding 250ms ease-in-out;
     }
 
     .tnt-side-nav {
