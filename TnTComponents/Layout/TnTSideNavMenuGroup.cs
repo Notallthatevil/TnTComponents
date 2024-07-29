@@ -22,9 +22,9 @@ public class TnTSideNavMenuGroup : TnTInteractableComponentBase, ITnTStyleable {
     [Parameter]
     public TextAlign? TextAlignment { get; set; }
     [Parameter]
-    public TnTColor BackgroundColor { get; set; } = TnTColor.SecondaryContainer;
+    public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceVariant;
     [Parameter]
-    public TnTColor TextColor { get; set; } = TnTColor.OnSecondaryContainer;
+    public TnTColor TextColor { get; set; } = TnTColor.OnSurfaceVariant;
     [Parameter]
     public int Elevation { get; set; }
     [Parameter]
