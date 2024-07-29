@@ -12,9 +12,6 @@ namespace TnTComponents.Grid.Columns;
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
 public abstract partial class TnTColumnBase<TGridItem> {
 
-    [Parameter(CaptureUnmatchedValues = true)]
-    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
-
     /// <summary>
     /// If specified, indicates that this column has this associated options UI. A button to display
     /// this UI will be included in the header cell by default. /// If <see
@@ -25,12 +22,12 @@ public abstract partial class TnTColumnBase<TGridItem> {
     [Parameter]
     public RenderFragment? ColumnOptions { get; set; }
 
-    public string? ElementClass => CssClassBuilder.Create()
+    public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddTextAlign(TextAlign)
         .Build();
 
-    public string? ElementStyle => CssStyleBuilder.Create()
+    public override string? ElementStyle => CssStyleBuilder.Create()
             .AddFromAdditionalAttributes(AdditionalAttributes)
             .Build();
 
@@ -81,6 +78,9 @@ public abstract partial class TnTColumnBase<TGridItem> {
     /// Gets or sets the sorting rules for a column.
     /// </summary>
     public abstract TnTGridSort<TGridItem>? SortBy { get; set; }
+
+    [Parameter]
+    public TextAlign HeaderAlignment { get; set; } = TnTComponents.TextAlign.Center;
 
     [Parameter]
     public TextAlign? TextAlign { get; set; }

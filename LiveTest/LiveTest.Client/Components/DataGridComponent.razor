@@ -5,10 +5,10 @@
 <div style="height: 60vh; overflow-y:scroll">
     <TnTDataGrid Items="@Items" Virtualize="true" OnRowClicked="RowClicked" TGridItem="DataGridItem" DataGridAppearance="DataGridAppearance.Stripped" Resizable="true">
         <TnTPropertyColumn Property="@(x => x.Column1)" Sortable="true" />
-        <TnTPropertyColumn Property="@(x => x.Column2)" Sortable="true" TextAlign="TextAlign.Center" />
-        <TnTPropertyColumn Property="@(x => x.Column3)" Format="MM/yyyy" />
+        <TnTPropertyColumn Property="@(x => x.Column2)" Sortable="true" TextAlign="TextAlign.Center" HeaderAlignment="TextAlign.Left" />
+        <TnTPropertyColumn Property="@(x => x.Column3)" Format="MM/yyyy" HeaderAlignment="TextAlign.Right" />
         <TnTTemplateColumn>
-            <TnTButton OnClick="() => ItemClicked(context)" Appearance="ButtonAppearance.Text" StopPropagation="true">
+            <TnTButton OnClickCallback="() => ItemClicked(context)" Appearance="ButtonAppearance.Text" TextColor="TnTColor.OnSurface" BackgroundColor="TnTColor.Surface" StopPropagation="true">
                 <MaterialIcon Icon="@MaterialIcon.Edit" />
                 Edit
             </TnTButton>

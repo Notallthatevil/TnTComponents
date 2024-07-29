@@ -2,9 +2,11 @@
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @using TnTComponents.Core
 @using TnTComponents.Grid
-@using TnTComponents.Grid.Infrastructure;
+@using TnTComponents.Grid.Infrastructure
 @namespace TnTComponents
 @typeparam TGridItem
+@inherits TnTPageScriptComponent<TnTDataGrid<TGridItem>>
+@implements IHandleEvent
 <CascadingValue TValue="TnTInternalGridContext<TGridItem>" IsFixed="true" Value="@_internalGridContext">
     @{
         StartCollectingColumns();
@@ -20,11 +22,14 @@
         <table @attributes="AdditionalAttributes"
                class="@ElementClass"
                style="@ElementStyle"
+               lang="@ElementLang"
+               title="@ElementTitle"
+               id="@ElementId"
                aria-rowcount="@(_ariaBodyRowCount + 1)"
                @ref="Element">
 
             <thead>
-                <tr class="tnt-data-grid-header" aria-rowindex="1">
+                <tr class="tnt-components tnt-data-grid-header" aria-rowindex="1">
                     @_renderColumnHeaders
                 </tr>
             </thead>
@@ -39,6 +44,7 @@
                                     ItemSize="@ItemSize"
                                     ItemsProvider="@ProvideVirtualizedItemsAsync"
                                     ItemContent="@(item => builder => RenderRow(builder, item.RowIndex, item.Data))"
+                                    OverscanCount="@OverscanCount"
                                     Placeholder="@(placeholderContext => builder => RenderPlaceholderRow(builder, placeholderContext))" />
                     }
                 }
