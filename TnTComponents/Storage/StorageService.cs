@@ -13,9 +13,9 @@ internal class SessionStorageService(IJSRuntime jsRuntime) : StorageService(jsRu
 
 internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService {
 
-    public event EventHandler<ChangedEventArgs> Changed;
+    public event EventHandler<ChangedEventArgs> Changed = default!;
 
-    public event EventHandler<ChangingEventArgs> Changing;
+    public event EventHandler<ChangingEventArgs> Changing = default!;
 
     internal abstract StorageType StorageType { get; }
     private string _storageType => StorageType.GetStorageType();
