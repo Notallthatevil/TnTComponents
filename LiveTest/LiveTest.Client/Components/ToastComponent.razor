@@ -1,31 +1,31 @@
-﻿@using TnTComponents.Snackbar
+﻿@using TnTComponents
 
 
 
-<TnTComponents.TnTButton OnClick="ShowBasic">
+<TnTComponents.TnTButton OnClickCallback="ShowBasic">
     Show Basic
 </TnTComponents.TnTButton>
 
-<TnTComponents.TnTButton OnClick="ShowInfo">
+<TnTComponents.TnTButton OnClickCallback="ShowInfo">
     Show Info
 </TnTComponents.TnTButton>
 
-<TnTComponents.TnTButton OnClick="ShowSuccess">
+<TnTComponents.TnTButton OnClickCallback="ShowSuccess">
     Show Success
 </TnTComponents.TnTButton>
 
-<TnTComponents.TnTButton OnClick="ShowWarning">
+<TnTComponents.TnTButton OnClickCallback="ShowWarning">
     Show Warning
 </TnTComponents.TnTButton>
 
-<TnTComponents.TnTButton OnClick="ShowError">
+<TnTComponents.TnTButton OnClickCallback="ShowError">
     Show Error
 </TnTComponents.TnTButton>
 
 
 @code {
     [Inject]
-    private TnTSnackbarService _service { get; set; } = default!;
+    private ITnTToastService _service { get; set; } = default!;
 
     private async Task ShowBasic() {
         await _service.ShowAsync("My title", "My longer message description that takes up space My longer message description that takes up space My longer message description that takes up space My longer message description that takes up space");

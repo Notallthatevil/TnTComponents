@@ -1,7 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.QuickGrid
 @using TnTComponents
 @using TnTComponents.Grid
-@using TnTComponents.Snackbar
 <div style="height: 60vh; overflow-y:scroll">
     <TnTDataGrid Items="@Items" Virtualize="true" OnRowClicked="RowClicked" TGridItem="DataGridItem" DataGridAppearance="DataGridAppearance.Stripped" Resizable="true">
         <TnTPropertyColumn Property="@(x => x.Column1)" Sortable="true" />
@@ -21,7 +20,7 @@
 
 @code {
     [Inject]
-    private TnTSnackbarService _service { get; set; }
+    private ITnTToastService _service { get; set; }
 
     private GridItemsProvider<DataGridItem>? _itemsProvider;
     private int _count;

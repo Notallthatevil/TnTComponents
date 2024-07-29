@@ -24,7 +24,6 @@ public class TnTDialog : ComponentBase, IDisposable {
     }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        Console.WriteLine("Starting Render");
         foreach (var dialog in _dialogs) {
             builder.OpenElement(0, "dialog");
             builder.AddAttribute(10, "class", CssClassBuilder.Create().AddTnTStyleable(dialog.Options).AddClass("tnt-closing", dialog.Options.Closing).AddClass(dialog.Options.ElementClass).AddClass("tnt-dialog").Build());
@@ -46,7 +45,6 @@ public class TnTDialog : ComponentBase, IDisposable {
 
             builder.CloseElement();
         }
-        Console.WriteLine("Finished Render");
     }
 
     protected override void OnInitialized() {

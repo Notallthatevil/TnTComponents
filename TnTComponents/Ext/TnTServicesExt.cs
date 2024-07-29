@@ -4,7 +4,7 @@ using TnTComponents;
 using TnTComponents.Core;
 using TnTComponents.Dialog;
 using TnTComponents.RenderContext;
-using TnTComponents.Snackbar;
+using TnTComponents.Toast;
 using TnTComponents.Storage;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -33,7 +33,7 @@ public static class TnTServicesExt {
 
     private static IServiceCollection AddTnTServices(this IServiceCollection services) {
         return services.AddScoped<ITnTDialogService, TnTDialogService>()
-             .AddScoped<TnTSnackbarService>()
+             .AddScoped<ITnTToastService, TnTToastService>()
              .AddScoped<ISessionStorageService, SessionStorageService>()
              .AddScoped<ILocalStorageService, LocalStorageService>();
     }
