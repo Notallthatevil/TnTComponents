@@ -1,5 +1,5 @@
 ﻿progress.tnt-components {
-    &.tnt-alternative {
+    &.tnt-progress-linear {
         width: calc(100% - 1rem);
         background-color: $tnt-color-surface-container-highest;
         height: 0.25rem;
@@ -41,7 +41,7 @@
         }
     }
 
-    &:not(.tnt-alternative) {
+    &:not(.tnt-progress-linear) {
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
