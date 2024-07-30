@@ -14,6 +14,9 @@ public class TnTProgressIndicator : TnTComponentBase {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
+    [Parameter]
+    public bool ShouldRender { get; set; }
+
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-progress-linear", Appearance == ProgressAppearance.Linear)
@@ -39,18 +42,20 @@ public class TnTProgressIndicator : TnTComponentBase {
     public double? Value { get; set; }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        builder.OpenElement(0, "progress");
-        builder.AddMultipleAttributes(10, AdditionalAttributes);
-        builder.AddAttribute(20, "class", ElementClass);
-        builder.AddAttribute(30, "max", Max);
-        builder.AddAttribute(40, "value", Value);
-        builder.AddAttribute(50, "style", ElementStyle);
-        builder.AddAttribute(60, "autofocus", AutoFocus);
-        builder.AddAttribute(70, "lang", ElementLang);
-        builder.AddAttribute(80, "title", ElementTitle);
-        builder.AddAttribute(90, "id", ElementId);
-        builder.AddElementReferenceCapture(100, e => Element = e);
-        builder.AddContent(110, ChildContent);
-        builder.CloseElement();
+        if (ShouldRender) {
+            builder.OpenElement(0, "progress");
+            builder.AddMultipleAttributes(10, AdditionalAttributes);
+            builder.AddAttribute(20, "class", ElementClass);
+            builder.AddAttribute(30, "max", Max);
+            builder.AddAttribute(40, "value", Value);
+            builder.AddAttribute(50, "style", ElementStyle);
+            builder.AddAttribute(60, "autofocus", AutoFocus);
+            builder.AddAttribute(70, "lang", ElementLang);
+            builder.AddAttribute(80, "title", ElementTitle);
+            builder.AddAttribute(90, "id", ElementId);
+            builder.AddElementReferenceCapture(100, e => Element = e);
+            builder.AddContent(110, ChildContent);
+            builder.CloseElement();
+        }
     }
 }
