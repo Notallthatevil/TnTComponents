@@ -89,16 +89,12 @@
             outline: 1px solid $tnt-color-outline;
         }
 
+        .tnt-label {
+            background-color: $tnt-color-background;
+        }
+
         &:not(:has(input[type=checkbox])):not(:has(select[multiple])):not(fieldset) {
             &.tnt-placeholder, &:not(:has(input:placeholder-shown)), &:focus-within {
-                @each $colorClass in $color-classes {
-                    &.tnt-bg-color-#{$colorClass} {
-                        .tnt-label {
-                            background-color: var(--tnt-color-#{$colorClass});
-                        }
-                    }
-                }
-
                 .tnt-label {
                     transform: translateY(-1.65rem);
                 }
