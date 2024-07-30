@@ -188,7 +188,6 @@ public partial class TnTDataGrid<TGridItem> {
     private bool _collectingColumns;
     private IReadOnlyCollection<TGridItem> _currentNonVirtualizedViewItems = Array.Empty<TGridItem>();
     private int _delay = 100;
-    private DotNetObjectReference<TnTDataGrid<TGridItem>>? _dotNetObjectRef;
     private bool _interactive;
 
     private object? _lastAssignedItemsOrProvider;
@@ -297,6 +296,13 @@ public partial class TnTDataGrid<TGridItem> {
         // columns, because they might perform some action like setting the default sort order, so
         // it would be wasteful to have to re-query immediately
         return (_columns.Count > 0 && mustRefreshData) ? RefreshDataCoreAsync() : Task.CompletedTask;
+    }
+
+    protected override void OnAfterRender(bool firstRender) {
+        base.OnAfterRender(firstRender);
+        if (firstRender) {
+            _interactive = true;
+        }
     }
 
     private void FinishCollectingColumns() {

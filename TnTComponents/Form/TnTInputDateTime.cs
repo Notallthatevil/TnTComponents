@@ -58,7 +58,7 @@ public class TnTInputDateTime<DateTimeType> : TnTInputBase<DateTimeType> {
         }
     }
 
-    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out DateTimeType? result, [NotNullWhen(false)] out string? validationErrorMessage) {
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out DateTimeType result, [NotNullWhen(false)] out string? validationErrorMessage) {
         if (BindConverter.TryConvertTo(value, CultureInfo.InvariantCulture, out result)) {
             Debug.Assert(result != null);
             validationErrorMessage = null;

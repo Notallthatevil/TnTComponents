@@ -38,7 +38,9 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
     public bool DisableDragAndDrop { get; set; }
 
     [Parameter]
+#pragma warning disable BL0007 // Component parameters should be auto properties
     public DateOnly DisplayedDate { get => _displayDate ?? DateOnly.FromDateTime(DateTime.Today); set => _displayDate = value; }
+#pragma warning restore BL0007 // Component parameters should be auto properties
 
     public ElementReference Element { get; private set; }
 

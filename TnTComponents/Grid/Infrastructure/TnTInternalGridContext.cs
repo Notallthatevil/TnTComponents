@@ -27,7 +27,9 @@ internal sealed class TnTInternalGridContext<TGridItem> {
     internal void Register(TnTDataGridRow<TGridItem> row) {
         Rows.Add(row.RowId, row);
         if (!Grid.Virtualize) {
+#pragma warning disable BL0005 // Component parameter should not be set outside of its component.
             row.RowIndex = _index++;
+#pragma warning restore BL0005 // Component parameter should not be set outside of its component.
         }
     }
 

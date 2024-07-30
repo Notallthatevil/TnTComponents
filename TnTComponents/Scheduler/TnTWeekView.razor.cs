@@ -184,17 +184,17 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         // TODO Fix this so that overlaps are only counted with overlapping events
         if (events.Any()) {
             return events.Count() - 1;
-            var overlaps = 0;
-            var currentEvent = events.First();
-            foreach (var @event in events.Skip(1)) {
-                if (@event.EventStart < currentEvent.EventEnd) {
-                    overlaps++;
-                }
-                else {
-                    currentEvent = @event;
-                }
-            }
-            return overlaps;
+            //var overlaps = 0;
+            //var currentEvent = events.First();
+            //foreach (var @event in events.Skip(1)) {
+            //    if (@event.EventStart < currentEvent.EventEnd) {
+            //        overlaps++;
+            //    }
+            //    else {
+            //        currentEvent = @event;
+            //    }
+            //}
+            //return overlaps;
         }
         return 0;
     }

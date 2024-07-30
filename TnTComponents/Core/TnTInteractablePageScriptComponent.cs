@@ -30,7 +30,7 @@ public abstract class TnTInteractablePageScriptComponent<TComponent> : TnTCompon
     [Parameter] 
     public virtual TnTColor? OnTintColor { get; set; }
 
-    protected RenderFragment PageScript;
+    protected RenderFragment PageScript = default!;
 
     public virtual async ValueTask DisposeAsync() {
         GC.SuppressFinalize(this);
