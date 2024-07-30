@@ -29,9 +29,8 @@ public class TnTDialog : ComponentBase, IDisposable {
             builder.AddAttribute(10, "class", CssClassBuilder.Create().AddTnTStyleable(dialog.Options).AddClass("tnt-closing", dialog.Options.Closing).AddClass(dialog.Options.ElementClass).AddClass("tnt-dialog").Build());
             builder.AddAttribute(20, "style", CssStyleBuilder.Create().AddStyle(dialog.Options.ElementStyle, string.Empty).Build());
             builder.AddAttribute(30, "id", dialog.ElementId);
+            builder.AddAttribute(40, "oncancel", EventCallback.Factory.Create<EventArgs>(this, dialog.CloseAsync));
             builder.SetKey(dialog);
-            //builder.AddAttribute(40, "class", dialog.Options.GetDialogClass());
-            //builder.AddAttribute(50, "style", dialog.Options.Style);
 
             if (dialog == _dialogs.Last() && dialog.Options.CloseOnExternalClick) {
                 builder.OpenComponent<TnTExternalClickHandler>(60);

@@ -189,6 +189,11 @@ window.TnTComponents = {
         const dialog = document.getElementById(dialogId);
         if (dialog) {
             dialog.showModal();
+
+            dialog.addEventListener('cancel', e => {
+                e.preventDefault();
+                e.stopPropagation();
+            });
         }
     },
     enableRipple: (element) => {
