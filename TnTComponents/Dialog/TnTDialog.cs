@@ -45,7 +45,7 @@ public class TnTDialog : ComponentBase, IDisposable {
             builder.AddAttribute(40, "class", dialog.Options.GetDialogClass());
             builder.AddAttribute(50, "style", dialog.Options.Style);
 
-            if (dialog == _dialogs.Last()) {
+            if (dialog == _dialogs.Last() && dialog.Options.CloseOnExternalClick) {
                 builder.OpenComponent<TnTExternalClickHandler>(60);
                 builder.AddComponentParameter(70, nameof(TnTExternalClickHandler.ExternalClickCallback), EventCallback.Factory.Create(this, dialog.CloseAsync));
                 builder.AddComponentParameter(80, nameof(TnTExternalClickHandler.ChildContent), RenderDialogContent(dialog));
