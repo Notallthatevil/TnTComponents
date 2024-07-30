@@ -168,9 +168,9 @@
         }
     }
 
-    &:focus-within, &:has(input:active), &:has(label:active) {
-        outline-width: 3px;
-        border-width: 3px;
+    &:focus-within, &:has(input:active), &:has(label:active), &:has(select:active) {
+        outline-width: 3px !important;
+        border-width: 3px !important;
 
         @each $colorClass in $color-classes {
             &.tnt-tint-color-#{$colorClass} {
