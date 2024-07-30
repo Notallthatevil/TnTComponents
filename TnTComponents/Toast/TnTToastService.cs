@@ -9,13 +9,7 @@ internal class TnTToastService : ITnTToastService {
 
     public event ITnTToastService.OnOpenCallback? OnOpen;
 
-    internal DotNetObjectReference<TnTToastService> Reference { get; private set; }
-
-    public TnTToastService() {
-        Reference = DotNetObjectReference.Create(this);
-    }
-
-    public async Task CloseAsync(ITnTToast snackbar) => await (OnClose?.Invoke(snackbar) ?? Task.CompletedTask);
+    public async Task CloseAsync(ITnTToast toast) => await (OnClose?.Invoke(toast) ?? Task.CompletedTask);
 
     public async Task ShowAsync(string title, string? message = null, int timeout = 10, bool showClose = true, TnTColor backgroundColor = TnTColor.SurfaceVariant, TnTColor textColor = TnTColor.OnSurfaceVariant, TnTBorderRadius? borderRadius = null, int elevation = 2) =>
             await (OnOpen?.Invoke(new TnTToastImplementation() {

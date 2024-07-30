@@ -17,7 +17,11 @@ public class TnTToast : ComponentBase, IDisposable {
 
     private Func<Task>? _incrementAction = null;
 
+    private CancellationTokenSource _tokenSource = new();
+
     public void Dispose() {
+        _tokenSource.Cancel();
+        _tokenSource.Dispose();
         _service.OnClose -= OnClose;
         _service.OnOpen -= OnOpen;
         GC.SuppressFinalize(this);
@@ -80,13 +84,12 @@ public class TnTToast : ComponentBase, IDisposable {
                         builder.AddAttribute(200, "style", $"background-color:var(--tnt-color-{toast.TextColor.ToCssClassName()})");
 
                         var startTime = pair.Value;
-                        var endTime = pair.Value.Add(new TimeSpan(0, 0, (int)(toast.Timeout + 1)));
-                        var currentTime = TimeOnly.FromDateTime(DateTime.UtcNow);
-                        var elapsedTime = (currentTime - startTime).TotalMilliseconds;
+                        var endTime = pair.Value.Add(new TimeSpan(0, 0, (int)(toast.Timeout)));
 
-                        if (currentTime >= endTime) {
-                            //_ = _service.CloseAsync(toast);
-                        }
+                        Task.Run(async () => {
+                            await Task.Delay((int)toast.Timeout * 1000);
+                            await _service.CloseAsync(toast);
+                        }, _tokenSource.Token);
 
                         builder.CloseElement();
                     }
@@ -112,8 +115,8 @@ public class TnTToast : ComponentBase, IDisposable {
     private async Task OnClose(ITnTToast toast) {
         var impl = toast as TnTToastImplementation;
         impl!.Closing = true;
-        await Task.Delay(250);
         StateHasChanged();
+        await Task.Delay(250);
 
         _toasts.Remove(toast, out var _);
 
