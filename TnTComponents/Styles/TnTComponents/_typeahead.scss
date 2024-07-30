@@ -1,11 +1,13 @@
 ﻿.tnt-typeahead {
     .tnt-typeahead-box {
         position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 60px;
 
         progress.tnt-components {
             position: absolute;
-            top: 0.5rem;
-            right: 0;
+            top: 16px;
         }
     }
 
@@ -19,6 +21,9 @@
         margin: 0.25rem 0.25rem 1rem 0.25rem;
         z-index: 10;
         position: absolute;
+        background-color: $tnt-color-surface-variant;
+        @extend .tnt-border-radius-2;
+        @extend .tnt-elevation-1;
 
         ul {
             margin: 0;

@@ -1,0 +1,50 @@
+﻿@using Microsoft.AspNetCore.Components.Rendering
+@using TnTComponents
+@using TnTComponents.Core
+@namespace TnTComponents
+@typeparam TItem
+@inherits TnTInteractableComponentBase
+
+<div @attributes="AdditionalAttributes"
+      class="@ElementClass"
+      style="@ElementStyle"
+      title="@ElementTitle"
+      lang="@ElementLang"
+      id="@ElementId"
+      name="@ElementName"
+      @ref="@Element">
+
+    <span class="tnt-typeahead-box">
+        <TnTInputText @bind-Value="_searchText" Appearance="@Appearance" Label="@Label" Placeholder="@Placeholder" BindOnInput="true" BindAfter="SearchAsync" Disabled="@Disabled" StartIcon="@(new MaterialIcon(MaterialIcon.Search))" />
+        @if (_searching) {
+            <TnTProgressIndicator ProgressColor="ProgressColor" Size="Size.Small" />
+        }
+    </span>
+    @if (_items.Any() || (!_items.Any() && !string.IsNullOrWhiteSpace(_searchText) && !_searching)) {
+
+        <div class="tnt-typeahead-content">
+            @if (_items.Any()) {
+                <ul class="tnt-typeahead-list">
+
+                    @foreach (var item in _items) {
+                        <li class="tnt-typeahead-list-item" @onclick="(() => ItemSelectedAsync(item))">
+                            @if (ResultTemplate is not null) {
+                                @ResultTemplate(item)
+                            }
+                            else {
+                                <span class="tnt-corner-radius-5 tnt-body-medium">
+                                    @item
+                                </span>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+            else if (!_items.Any() && !string.IsNullOrWhiteSpace(_searchText) && !_searching) {
+                <div class="tnt-typeahead-no-results">
+                    No results found
+                </div>
+            }
+        </div>
+    }
+</div>

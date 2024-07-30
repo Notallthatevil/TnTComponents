@@ -4,7 +4,7 @@
 
 <h3>Typeahead</h3>
 
-<TnTTypeahead  ItemsLookupFunc="SearchFunc" Label="Typeahead" ItemSelected="@((Item item) => SelectedItems.Add(item))"/>
+<TnTTypeahead  ItemsLookupFunc="SearchFunc" Label="Typeahead" ItemSelectedCallback="@((Item item) => SelectedItems.Add(item))"/>
 
 @foreach(var item in SelectedItems) {
     <span>
@@ -13,7 +13,7 @@
 }
 
 
-<TnTTypeahead ItemsLookupFunc="SearchFunc"  ItemSelected="@((Item item) => SelectedItems.Add(item))" />
+<TnTTypeahead ItemsLookupFunc="SearchFunc" ItemSelectedCallback="@((Item item) => SelectedItems.Add(item))" />
 
 @foreach (var item in SelectedItems) {
     <span>
