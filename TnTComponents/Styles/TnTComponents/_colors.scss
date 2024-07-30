@@ -105,7 +105,7 @@ $color-classes-no-transparent: black, white, primary, surface-tint, on-primary, 
         }
     }
 
-    .tnt-tint-color-#{$colorClass}:not(:has(input)) {
+    .tnt-tint-color-#{$colorClass}:not(:has(input)):not(:has(select)) {
         &:not(disabled):not(.tnt-disabled) {
             &:hover {
                 &.tnt-filled {
@@ -133,7 +133,7 @@ $color-classes-no-transparent: black, white, primary, surface-tint, on-primary, 
         }
     }
 
-    .tnt-on-tint-color-#{$colorClass}:not(:has(input)) {
+    .tnt-on-tint-color-#{$colorClass}:not(:has(input)):not(:has(select)) {
         &:not(disabled):not(.tnt-disabled) {
             &:hover {
                 &.tnt-filled {
@@ -161,74 +161,3 @@ $color-classes-no-transparent: black, white, primary, surface-tint, on-primary, 
         }
     }
 }
-
-
-//@each $colorClass in $color-classes-no-transparent {
-//    .tnt-bg-color-#{$colorClass} {
-//        background-color: var(--tnt-color-#{$colorClass});
-//    }
-
-//    .tnt-actionable-bg-color-#{$colorClass} {
-//        @extend .tnt-bg-color-#{$colorClass};
-
-//        &:not(disabled), &:not(.tnt-disabled) {
-//            &:hover {
-//                background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 50%, $tnt-color-shadow);
-//            }
-
-//            &:not(.tnt-ripple):active {
-//                background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 30%, $tnt-color-shadow);
-//            }
-
-//            &.tnt-ripple:after {
-//                background-image: radial-gradient(circle, black 10%, transparent 10.01%);
-//            }
-//        }
-//    }
-
-//    .tnt-fg-color-#{$colorClass} {
-//        color: var(--tnt-color-#{$colorClass});
-
-//        &:is(input) {
-//            &:-webkit-autofill {
-//                -webkit-text-fill-color: var(--tnt-color-#{$colorClass});
-//            }
-//        }
-
-//        &:has(input) {
-//            input:-webkit-autofill {
-//                -webkit-text-fill-color: var(--tnt-color-#{$colorClass});
-//            }
-//        }
-//    }
-
-//    .tnt-accent-color-#{$colorClass} {
-//        color: var(--tnt-color-#{$colorClass});
-//    }
-//}
-
-//.tnt-bg-color-transparent {
-//    background-color: var(--tnt-color-transparent);
-//}
-
-//.tnt-actionable-bg-color-transparent {
-//    @extend .tnt-bg-color-transparent;
-
-//    &:not(disabled), &:not(.tnt-disabled) {
-//        &:hover {
-//            background-color: color-mix(in srgb, $tnt-color-background 50%, $tnt-color-shadow);
-//        }
-
-//        &:not(.tnt-ripple):active {
-//            background-color: color-mix(in srgb, $tnt-color-background 30%, $tnt-color-shadow);
-//        }
-
-//        &.tnt-ripple:after {
-//            background-image: radial-gradient(circle, black 10%, transparent 10.01%);
-//        }
-//    }
-//}
-
-//.tnt-outlined {
-//    outline: 1px solid $tnt-color-outline;
-//}

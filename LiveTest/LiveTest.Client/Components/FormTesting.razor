@@ -2,35 +2,37 @@
 @using TnTComponents
 
 @rendermode InteractiveAuto
-<h3>FormTesting</h3>
-<label>
-    Appearance
-    <input type="checkbox" @bind="_a" />
-</label>
-<label>
-    Readonly
-    <input type="checkbox" @bind="_readonly" />
-</label>
-<label>
-    Disable
-    <input type="checkbox" @bind="_disabled" />
-</label>
-<label>
-    Start Icon
-    <input type="checkbox" @bind="_b" />
-</label>
-<label>
-    End Icon
-    <input type="checkbox" @bind="_c" />
-</label>
-<label>
-    Placeholder
-    <input type="checkbox" @bind="_d" />
-</label>
-<label>
-    Label
-    <input type="checkbox" @bind="_e" />
-</label>
+<div style="position:sticky;top:0;background-color:var(--tnt-color-surface)">
+    <h3>FormTesting</h3>
+    <label>
+        Appearance
+        <input type="checkbox" @bind="_a" />
+    </label>
+    <label>
+        Readonly
+        <input type="checkbox" @bind="_readonly" />
+    </label>
+    <label>
+        Disable
+        <input type="checkbox" @bind="_disabled" />
+    </label>
+    <label>
+        Start Icon
+        <input type="checkbox" @bind="_b" />
+    </label>
+    <label>
+        End Icon
+        <input type="checkbox" @bind="_c" />
+    </label>
+    <label>
+        Placeholder
+        <input type="checkbox" @bind="_d" />
+    </label>
+    <label>
+        Label
+        <input type="checkbox" @bind="_e" />
+    </label>
+</div>
 
 <TnTForm Model="@Input" OnValidSubmit="ValidSubmit" OnInvalidSubmit="InvalidSubmit" Disabled="@_disabled" ReadOnly="@_readonly" FormName="Login" Appearance="@(_a ? FormAppearance.Filled : FormAppearance.Outlined)">
     <DataAnnotationsValidator />
@@ -128,6 +130,20 @@
             </TnTInputSelect>
         </TnTColumn>
     </TnTRow>
+
+    <TnTRow>
+        <h3>
+            Radio @Input.Radio
+        </h3>
+        <TnTColumn S="12">
+            <TnTInputRadioGroup @bind-Value="@Input.Radio" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon">
+                <TnTInputRadio Value="RadioEnum.One" Label="@RadioEnum.One.ToString()" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+                <TnTInputRadio Value="RadioEnum.Two" Label="@RadioEnum.Two.ToString()" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+                <TnTInputRadio Value="RadioEnum.Three" Label="@RadioEnum.Three.ToString()" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+                <TnTInputRadio Value="RadioEnum.Four" Label="@RadioEnum.Four.ToString()" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+            </TnTInputRadioGroup>
+        </TnTColumn>
+    </TnTRow>
 </TnTForm>
 
 
@@ -174,6 +190,9 @@
         [Required]
         public string[] Multi { get; set; } = [];
 
+        [Required]
+        public RadioEnum? Radio { get; set; }
+
     }
 
     [SupplyParameterFromForm]
@@ -202,5 +221,12 @@
 
     private async Task InvalidSubmit() {
         Console.WriteLine("Invalid Submit");
+    }
+
+    private enum RadioEnum {
+        One,
+        Two,
+        Three,
+        Four
     }
 }

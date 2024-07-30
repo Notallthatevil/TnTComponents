@@ -50,8 +50,10 @@ internal class CssClassBuilder {
         return this;
     }
 
-    public CssClassBuilder AddTnTInteractable(ITnTInteractable interactable, bool enableTint = true, bool enableOnTintColor = true) {
-        AddDisabled(interactable.Disabled);
+    public CssClassBuilder AddTnTInteractable(ITnTInteractable interactable, bool enableDisabled = true, bool enableTint = true, bool enableOnTintColor = true) {
+        if (enableDisabled) {
+            AddDisabled(interactable.Disabled);
+        }
         AddClass("tnt-interactable");
         AddRipple(interactable.EnableRipple);
         AddTintColor(enableTint ? interactable.TintColor : null);

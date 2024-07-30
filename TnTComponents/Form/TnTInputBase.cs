@@ -34,7 +34,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     [Parameter]
     public bool DisableValidationMessage { get; set; } = false;
 
-    public ElementReference Element { get; private set; }
+    public ElementReference Element { get; protected set; }
 
     public virtual string? ElementClass => CssClassBuilder.Create()
         .AddClass(CssClass)
@@ -45,7 +45,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
         .AddBackgroundColor(BackgroundColor)
         .AddForegroundColor(TextColor)
         .AddTintColor(TintColor)
-        .AddDisabled(_disabled)
+        .AddDisabled(FieldDisabled)
         .AddClass("tnt-placeholder", !string.IsNullOrEmpty(Placeholder))
         .Build();
 
@@ -88,9 +88,9 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public TnTColor? TintColor { get; set; } = TnTColor.Primary;
 
     public abstract InputType Type { get; }
-    private bool _disabled => _tntForm?.Disabled is not null ? _tntForm.Disabled : Disabled;
+    public bool FieldDisabled => _tntForm?.Disabled is not null ? _tntForm.Disabled : Disabled;
 
-    private bool _readOnly => _tntForm?.ReadOnly is not null ? _tntForm.ReadOnly : ReadOnly;
+    public bool FieldReadonly => _tntForm?.ReadOnly is not null ? _tntForm.ReadOnly : ReadOnly;
 
     [CascadingParameter]
     private ITnTForm? _tntForm { get; set; }
@@ -150,9 +150,9 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                     builder.AddAttribute(100, "value", CurrentValueAsString);
                 }
                 builder.AddAttribute(120, "style", ElementStyle);
-                builder.AddAttribute(130, "readonly", _readOnly);
+                builder.AddAttribute(130, "readonly", FieldReadonly);
                 builder.AddAttribute(140, "placeholder", string.IsNullOrEmpty(Placeholder) ? " " : Placeholder);
-                builder.AddAttribute(150, "disabled", _disabled || (Type == InputType.Select && _readOnly));
+                builder.AddAttribute(150, "disabled", FieldDisabled || (Type == InputType.Select && FieldReadonly));
                 builder.AddAttribute(160, "required", IsRequired());
                 builder.AddAttribute(170, "minlength", GetMinLength());
                 builder.AddAttribute(180, "maxlength", GetMaxLength());
