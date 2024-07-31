@@ -1,16 +1,21 @@
 ﻿@page "/Markdown"
+@using LiveTest.Client.Components
 @rendermode InteractiveAuto
 
-<TnTComponents.TnTMarkdownEditor @bind-Value="_value" @bind-RenderedHtml="_markdown" />
+<h3>
+    SSR
+</h3>
+<MarkdownComponent />
 
 
-<TnTComponents.TnTRow>
-    @_value
-</TnTComponents.TnTRow>
-<TnTComponents.TnTRow>
-    @_markdown
-</TnTComponents.TnTRow>
-@code {
-    private string? _value;
-    private MarkupString? _markdown;
-}
+<h3>
+    Server
+</h3>
+<MarkdownComponent @rendermode="InteractiveServer" />
+
+
+
+<h3>
+    WASM
+</h3>
+<MarkdownComponent @rendermode="InteractiveWebAssembly" />
