@@ -249,10 +249,20 @@ window.TnTComponents = {
             numbers += result.toString();
         }
 
+        let cultureCode = event.target.getAttribute('cultureCode');
+        if (!cultureCode) {
+            cultureCode = 'en-US';
+        }
+
+        let currencyCode = event.target.getAttribute('currencyCode');
+        if (!currencyCode) {
+            currencyCode = 'USD';
+        }
+
         // Create our number formatter.
-        const formatter = new Intl.NumberFormat('en-US', {
+        const formatter = new Intl.NumberFormat(cultureCode, {
             style: 'currency',
-            currency: 'USD',
+            currency: currencyCode,
         });
         let formatted = formatter.format(numbers);
         if (!event.target.value.includes('.')) {
@@ -369,7 +379,7 @@ window.TnTComponents = {
             if (nav && nav.querySelector) {
                 const toggler = nav.querySelector('.tnt-toggle-indicator');
                 if (toggler && toggler.classList) {
-                    if (toggler .classList.contains('tnt-toggle')) {
+                    if (toggler.classList.contains('tnt-toggle')) {
                         toggler.classList.remove('tnt-toggle');
                     }
                     else {
