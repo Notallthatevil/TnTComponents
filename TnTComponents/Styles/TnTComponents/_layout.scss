@@ -42,6 +42,7 @@
         padding: 16px;
         box-sizing: border-box;
         transition: 250ms ease-in-out;
+        overflow-y: auto;
 
         h1, h2, h3, h4, h5, h6 {
             @extend .tnt-title-small;
@@ -97,7 +98,7 @@
         .tnt-end-icon {
             float: right;
             transition: 250ms;
-            padding:8px;
+            padding: 8px;
         }
 
         & > a.tnt-side-nav-link {
@@ -121,9 +122,9 @@
         &:has( > .tnt-side-nav-group-toggle-indicator .tnt-toggle) {
             max-height: 100vh;
 
-            .tnt-side-nav-menu-group-button{
-                .tnt-end-icon{
-                    transform:rotateZ(180deg);
+            .tnt-side-nav-menu-group-button {
+                .tnt-end-icon {
+                    transform: rotateZ(180deg);
                 }
             }
 
