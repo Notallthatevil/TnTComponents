@@ -15,7 +15,7 @@ public class TnTProgressIndicator : TnTComponentBase {
     public RenderFragment ChildContent { get; set; } = default!;
 
     [Parameter]
-    public bool ShouldRender { get; set; }
+    public bool Show { get; set; } = true;
 
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
@@ -42,7 +42,7 @@ public class TnTProgressIndicator : TnTComponentBase {
     public double? Value { get; set; }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        if (ShouldRender) {
+        if (Show) {
             builder.OpenElement(0, "progress");
             builder.AddMultipleAttributes(10, AdditionalAttributes);
             builder.AddAttribute(20, "class", ElementClass);
