@@ -15,7 +15,15 @@
      @ref="@Element">
 
     <span class="tnt-typeahead-box">
-        <TnTInputText @bind-Value="_searchText" Appearance="@Appearance" Label="@Label" Placeholder="@Placeholder" BindOnInput="true" BindAfter="SearchAsync" Disabled="@Disabled" StartIcon="@(new MaterialIcon(MaterialIcon.Search))" />
+        <TnTInputText @bind-Value="_searchText"
+                      Appearance="@Appearance"
+                      Label="@Label"
+                      Placeholder="@Placeholder"
+                      BindOnInput="true"
+                      BindAfter="SearchAsync"
+                      Disabled="@Disabled"
+                      StartIcon="@(new MaterialIcon(MaterialIcon.Search))"
+                      @onkeydown="SelectOrShiftFocusAsync"/>
         <TnTProgressIndicator Show="@_searching" ProgressColor="ProgressColor" Size="Size.Small" />
     </span>
     @if (_items.Any() || (!_items.Any() && !string.IsNullOrWhiteSpace(_searchText) && !_searching)) {
@@ -23,9 +31,8 @@
         <div class="tnt-typeahead-content">
             @if (_items.Any()) {
                 <ul class="tnt-typeahead-list">
-
                     @foreach (var item in _items) {
-                        <li class="tnt-typeahead-list-item" @onclick="(() => ItemSelectedAsync(item))">
+                        <li class="@($"tnt-typeahead-list-item{(item!.Equals(_focusedItem) ? " tnt-focused" : string.Empty)}")" tabindex="-1" @onclick="(() => ItemSelectedAsync(item))">
                             @if (ResultTemplate is not null) {
                                 @ResultTemplate(item)
                             }
