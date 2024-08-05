@@ -48,4 +48,10 @@ public partial class TnTAccordion {
             StateHasChanged();
         }
     }
+
+    public async Task CloseAllAsync() {
+        foreach(var child in _children) {
+            await child.CloseAsync();
+        }
+    }
 }

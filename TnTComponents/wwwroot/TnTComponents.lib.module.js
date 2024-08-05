@@ -172,6 +172,11 @@ const isModifierKey = (event) => {
 
 window.TnTComponents = {
     customAttribute: "tntid",
+    addHidden: (element) => {
+        if (element && element.classList && !element.classList.contains('tnt-hidden')) {
+            element.classList.add('tnt-hidden');
+        }
+    },
     openDialog: (dialogId) => {
         console.log('openDialog');
         const dialog = document.getElementById(dialogId);

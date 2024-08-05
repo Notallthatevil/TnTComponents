@@ -38,7 +38,7 @@
                             </h3>
                             <MaterialIcon Icon="@MaterialIcon.ArrowDropDown" />
                         </div>
-                        <div class="@(contentBuilder.AddClass("tnt-hidden", !child.OpenByDefault || (LimitToOneExpanded && foundExpanded)).Build())">
+                        <div class="@(contentBuilder.AddClass("tnt-hidden", !child.OpenByDefault || (LimitToOneExpanded && foundExpanded)).Build())" @ref="child.Element">
                             @child.ChildContent
                         </div>
                     </div>
