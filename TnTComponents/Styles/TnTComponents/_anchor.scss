@@ -3,11 +3,14 @@
     overflow: hidden;
     display: inline-flex;
 
+    &:not(.tnt-underlined) {
+        text-decoration: none;
+    }
+
     &.tnt-filled, &.tnt-outlined {
         @extend .tnt-label-large;
         user-select: none;
         appearance: none;
-        text-decoration: none;
         min-height: 40px;
         min-width: 40px;
         padding: 0 16px;
