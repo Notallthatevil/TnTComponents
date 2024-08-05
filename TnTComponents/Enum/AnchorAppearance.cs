@@ -8,6 +8,7 @@ namespace TnTComponents;
 public enum AnchorAppearance {
     Underlined,
     Filled,
-    Outlined
+    Outlined,
+    None
 }
 
