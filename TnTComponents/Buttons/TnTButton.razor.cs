@@ -26,7 +26,7 @@ public partial class TnTButton {
     public ButtonType Type { get; set; }
 
     [Parameter]
-    public ButtonAppearance Appearance { get; set; }
+    public virtual ButtonAppearance Appearance { get; set; }
 
     [Parameter]
     public TnTColor BackgroundColor { get; set; } = TnTColor.Primary;
