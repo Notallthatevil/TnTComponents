@@ -105,7 +105,7 @@ $color-classes-no-transparent: black, white, primary, surface-tint, on-primary, 
         }
     }
 
-    .tnt-tint-color-#{$colorClass}:not(:has(input)):not(:has(select)) {
+    .tnt-tint-color-#{$colorClass}:not(:has(input)):not(:has(select)):not(:has(textarea)) {
         &:not(disabled):not(.tnt-disabled) {
             &:hover {
                 &.tnt-filled {
@@ -133,7 +133,7 @@ $color-classes-no-transparent: black, white, primary, surface-tint, on-primary, 
         }
     }
 
-    .tnt-on-tint-color-#{$colorClass}:not(:has(input)):not(:has(select)) {
+    .tnt-on-tint-color-#{$colorClass}:not(:has(input)):not(:has(select)):not(:has(textarea)) {
         &:not(disabled):not(.tnt-disabled) {
             &:hover {
                 &.tnt-filled {

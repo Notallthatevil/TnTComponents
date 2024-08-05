@@ -27,7 +27,7 @@
         -webkit-background-clip: text;
     }
 
-    input, select {
+    input, select, textarea {
         appearance: none;
         border: none;
         outline: none;
@@ -37,6 +37,8 @@
         width: 100%;
         @extend .tnt-body-large;
     }
+
+
 
     .tnt-label {
         position: absolute;
@@ -222,6 +224,19 @@
             option {
                 color: var(--tnt-color-#{$colorClass});
             }
+        }
+    }
+
+    &:has(textarea) {
+        height: fit-content;
+        padding-top: 4px;
+
+        .tnt-label {
+            top: 16px;
+        }
+
+        &.tnt-filled{
+            padding-top: 16px;
         }
     }
 
