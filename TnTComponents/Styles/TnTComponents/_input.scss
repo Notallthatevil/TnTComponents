@@ -576,3 +576,72 @@
         }
     }
 }
+
+.tnt-components.tnt-input-file input::file-selector-button {
+    button.tnt-components {
+        @extend .tnt-label-large;
+        appearance: none;
+        user-select: none;
+        min-height: 40px;
+        min-width: 40px;
+        padding: 0 16px;
+        box-sizing: border-box;
+        margin: 8px;
+        transition: 250ms;
+        position: relative;
+
+        &.tnt-ripple {
+            overflow: hidden;
+        }
+
+        &:not(.tnt-outlined) {
+            border: none;
+        }
+
+        &:not(:has(.tnt-icon)) {
+            padding: 0 24px;
+        }
+
+        .tnt-icon {
+            vertical-align: middle;
+            text-align: inherit;
+            font-size: 18px;
+            padding: 0 4px;
+            pointer-events: none;
+        }
+
+        &:not(.tnt-filled):not(.tnt-outlined) {
+            background-color: transparent;
+        }
+
+        &:has(> progress.tnt-components) {
+
+            & > progress.tnt-components {
+                position: absolute;
+
+                &:not(.tnt-alternative) {
+                    padding: 0;
+                    margin: 0;
+                    height: 32px;
+                    width: 32px;
+                    top: 4px;
+                    left: calc(50% - 16px);
+                }
+
+                &.tnt-alternative {
+                    left: 0;
+                }
+            }
+        }
+
+        &.tnt-image-button {
+            height: 40px;
+            width: 40px;
+            padding: 0;
+
+            .tnt-icon {
+                font-size: 24px;
+            }
+        }
+    }
+}
