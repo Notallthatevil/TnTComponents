@@ -44,11 +44,12 @@
                 align-items: center;
                 justify-content: end;
                 margin: 0;
-                padding: 0;
+                padding: 0 4px;
                 vertical-align: bottom;
                 width: -moz-fit-content;
                 width: -webkit-fit-content;
                 width: fit-content;
+                box-sizing:border-box;
 
                 &.tnt-active {
                     color: var(--active-text-color);
