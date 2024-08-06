@@ -9,7 +9,7 @@
                 TODAY
             </TnTButton>
             <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.ChevronRight))" OnClickCallback="NextPage" class="next-button" />
-            <TnTInputDateTime @bind-Value="_displayDate" Label="Date Picker" BindAfter="@((DateOnly? date) => UpdateDate(date))" />
+            <TnTInputDateTime @bind-Value="_displayDate" BackgroundColor="@BackgroundColor" Label="Date Picker" BindAfter="@((DateOnly? date) => UpdateDate(date))" />
         </div>
     }
     <CascadingValue Value="this" IsFixed="true">

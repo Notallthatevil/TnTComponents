@@ -107,6 +107,9 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
         builder.AddAttribute(20, "title", ElementTitle);
         builder.AddAttribute(30, "class", ElementClass);
         builder.AddAttribute(40, "id", ElementId);
+        if(AdditionalAttributes?.TryGetValue("style", out var style) == true) {
+            builder.AddAttribute(41, "style", style);
+        }
 
         {
             {
