@@ -40,6 +40,9 @@ public partial class TnTTypeahead<TItem> {
     [Parameter]
     public int DebounceMilliseconds { get; set; } = 300;
 
+    [Parameter]
+    public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerHighest;
+
     private TItem? _focusedItem { get; set; }
 
     private string? _searchText;
