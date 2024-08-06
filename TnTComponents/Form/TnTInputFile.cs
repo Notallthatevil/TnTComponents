@@ -7,7 +7,7 @@ using TnTComponents.Interfaces;
 
 namespace TnTComponents;
 
-public class TnTInputFile : InputFile {
+public class TnTInputFile : InputFile, ITnTInteractable {
 
     [Parameter]
     public FormAppearance Appearance { get; set; }
@@ -18,10 +18,20 @@ public class TnTInputFile : InputFile {
     [Parameter]
     public bool Disabled { get; set; }
 
+    [Parameter]
+    public string? ElementName { get; set; }
+    [Parameter]
+    public bool EnableRipple { get; set; }
+    [Parameter]
+    public TnTColor? TintColor { get; set; }
+    [Parameter]
+    public TnTColor? OnTintColor { get; set; }
+
     public string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes?.ToDictionary())
         .AddClass("tnt-input-file")
         .AddClass("tnt-input")
+        .AddTnTInteractable(this)
         .AddFilled(_tntForm?.Appearance is not null ? _tntForm.Appearance == FormAppearance.Filled : Appearance == FormAppearance.Filled)
         .AddOutlined(_tntForm?.Appearance is not null ? _tntForm.Appearance == FormAppearance.Outlined : Appearance == FormAppearance.Outlined)
         .Build();
@@ -54,6 +64,7 @@ public class TnTInputFile : InputFile {
 
     [CascadingParameter]
     private ITnTForm? _tntForm { get; set; }
+
 
     protected override void OnParametersSet() {
         base.OnParametersSet();
