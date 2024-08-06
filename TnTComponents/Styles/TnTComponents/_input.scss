@@ -89,8 +89,13 @@
             outline: 1px solid $tnt-color-outline;
         }
 
-        .tnt-label {
-            background-color: $tnt-color-background;
+
+        @each $colorClass in $color-classes {
+            &.tnt-bg-color-#{$colorClass} {
+                .tnt-label {
+                    background-color: var(--tnt-color-#{$colorClass});
+                }
+            }
         }
 
         &:not(:has(input[type=checkbox])):not(:has(select[multiple])):not(fieldset) {
