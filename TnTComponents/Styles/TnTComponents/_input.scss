@@ -27,6 +27,10 @@
         -webkit-background-clip: text;
     }
 
+    &:has(textarea) {
+        width: calc(100% - 16px);
+    }
+
     input, select, textarea {
         appearance: none;
         border: none;
@@ -189,14 +193,6 @@
                 }
             }
         }
-
-
-
-        &:not(:has(input[type=checkbox])) {
-            .tnt-label {
-                @extend .tnt-label-large;
-            }
-        }
     }
 
     &.invalid.modified {
@@ -235,7 +231,7 @@
         padding-top: 4px;
 
         .tnt-label {
-            top: 16px;
+            top: 8px;
         }
 
         &.tnt-filled {
