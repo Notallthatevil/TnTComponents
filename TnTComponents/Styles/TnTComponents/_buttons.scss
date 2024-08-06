@@ -69,6 +69,7 @@
     position: fixed;
     bottom: 16px;
     transition: 250ms;
+    right: 16px;
 
     button.tnt-components {
         height: 56px;
@@ -85,10 +86,11 @@ body:has(.tnt-footer) {
     .tnt-components.tnt-fab {
         bottom: calc($tnt-footer-height + 16px);
     }
-
-    @for $i from 1 through 5 {
-        .tnt-components.tnt-fab:nth-child(#{$i}) {
-            right: #{(128 * ($i - 1) + 16)}px;
-        }
-    }
 }
+
+
+//@for $i from 1 through 5 {
+//    .tnt-components.tnt-fab:nth-child(#{$i}) {
+//        right: #{(128 * ($i - 1) + 16)}px;
+//    }
+//}
