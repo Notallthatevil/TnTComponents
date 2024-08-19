@@ -1,23 +1,23 @@
-﻿@import 'Common/_materialIcons.scss';
+﻿@import 'TnTComponents/_materialIcons.scss';
 @import 'TnTComponents/_colors.scss';
+@import 'TnTComponents/_interactivity.scss';
 @import 'TnTComponents/_measurements.scss';
+@import 'TnTComponents/_progress.scss';
 
+@import 'TnTComponents/_buttons.scss';
 @import 'TnTComponents/_typeography.scss';
-@import 'TnTComponents/_elevation.scss';
 @import 'TnTComponents/_border-radius.scss';
 @import 'TnTComponents/_ripple.scss';
 @import 'TnTComponents/_flex.scss';
 @import 'TnTComponents/_layout.scss';
 
-@import 'TnTComponents/_buttons.scss';
 @import 'TnTComponents/_input.scss';
 @import 'TnTComponents/_anchor.scss';
-@import 'TnTComponents/_progress.scss';
 @import 'TnTComponents/_tabview.scss';
 @import 'TnTComponents/_accordion.scss';
 @import 'TnTComponents/_dialog.scss';
 @import 'TnTComponents/_skeleton.scss';
-@import 'TnTComponents/_snackbar.scss';
+@import 'TnTComponents/_toast.scss';
 @import 'TnTComponents/_datagrid.scss';
 @import 'TnTComponents/_chips.scss';
 @import 'TnTComponents/_typeahead.scss';
@@ -27,9 +27,21 @@
     font-family: 'Roboto', sans-serif;
 }
 
+.tnt-interactable:not(.tnt-disabled) {
+    cursor: pointer;
+}
+
+.tnt-disabled {
+    cursor: not-allowed;
+}
+
 body {
     margin: 0;
     background-color: $tnt-color-background;
+}
+
+.fa {
+    color: $tnt-color-on-background;
 }
 
 * {
@@ -93,6 +105,14 @@ tnt-theme-toggle {
 
         & > option {
             font-size: 1rem;
+        }
+    }
+}
+
+tnt-body {
+    .editor-toolbar {
+        i.fa {
+            color: $tnt-color-on-surface;
         }
     }
 }

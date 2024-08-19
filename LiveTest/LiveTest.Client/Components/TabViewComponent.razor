@@ -1,16 +1,16 @@
 @using TnTComponents
-<TnTTabView SecondaryTabView="Alternative">
+<TnTTabView Appearance="@(Alternative ? TabViewAppearance.Secondary : TabViewAppearance.Primary)">
     @for (var i = 0; i < TabCount; ++i) {
         var j = i;
         var header = $"Header{j + 1}";
-        <TnTTabChild Title="@header" Icon="@(new MaterialIcon(MaterialIcon.Flight))" Disabled="@((j % 5) == 0 || Disabled)">
+        <TnTTabChild Label="@header" Icon="@(new MaterialIcon(MaterialIcon.Flight))" Disabled="@((j % 5) == 0 || Disabled)">
             Content@(j + 1)
         </TnTTabChild>
 
     }
     @{
         var lastHeader = $"Header{TabCount + 1}";
-        <TnTTabChild Title="@lastHeader" Disabled="Disabled">
+        <TnTTabChild Label="@lastHeader" Disabled="Disabled">
             Content@(TabCount + 1)
         </TnTTabChild>
     }

@@ -1,0 +1,54 @@
+﻿@using TnTComponents.Core
+@inherits TnTComponentBase
+@namespace TnTComponents
+<CascadingValue IsFixed="true" Value="this">
+    <div @attributes="AdditionalAttributes"
+         class="@ElementClass"
+         style="@ElementStyle"
+         title="@ElementTitle"
+         id="@ElementId"
+         lang="@ElementLang"
+         autofocus="@AutoFocus"
+         tnt-one-expanded="@LimitToOneExpanded"
+         @ref="Element">
+        <DeferRendering>
+            @{
+
+                var headerBuilder = CssClassBuilder.Create()
+                    .AddClass("tnt-accordion-header")
+                    .AddRipple()
+                    .AddBackgroundColor(HeaderBodyColor)
+                    .AddForegroundColor(HeaderTextColor)
+                    .AddTintColor(HeaderTintColor)
+                    .AddFilled();
+
+                var contentBuilder = CssClassBuilder.Create()
+                    .AddClass("tnt-accordion-content")
+                    .AddBackgroundColor(ContentBodyColor)
+                    .AddForegroundColor(ContentTextColor)
+                    .AddFilled();
+
+                var foundExpanded = false;
+                @foreach (var child in _children) {
+                    <div class="tnt-accordion-child">
+                        <div class="@(headerBuilder.AddTnTInteractable(child).Build())"
+                             onclick="TnTComponents.toggleAccordion(event)">
+                            <h3>
+                                @child.Label
+                            </h3>
+                            <MaterialIcon Icon="@MaterialIcon.ArrowDropDown" />
+                        </div>
+                        <div class="@(contentBuilder.AddClass("tnt-hidden", !child.OpenByDefault || (LimitToOneExpanded && foundExpanded)).Build())" @ref="child.Element">
+                            @child.ChildContent
+                        </div>
+                    </div>
+
+                    if (child.OpenByDefault) {
+                        foundExpanded = true;
+                    }
+                }
+            }
+        </DeferRendering>
+        @ChildContent
+    </div>
+</CascadingValue>

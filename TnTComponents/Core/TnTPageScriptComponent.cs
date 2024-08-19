@@ -12,6 +12,16 @@ public abstract class TnTPageScriptComponent<TComponent> : TnTComponentBase, ITn
     [Inject]
     protected IJSRuntime JSRuntime { get; private set; } = default!;
 
+    protected RenderFragment PageScript;
+
+    protected TnTPageScriptComponent() {
+        PageScript = new RenderFragment(builder => {
+            builder.OpenComponent<TnTPageScript>(0);
+            builder.AddAttribute(1, "Src", JsModulePath);
+            builder.CloseComponent();
+        });
+    }
+
     public virtual async ValueTask DisposeAsync() {
         GC.SuppressFinalize(this);
         try {
@@ -37,13 +47,5 @@ public abstract class TnTPageScriptComponent<TComponent> : TnTComponentBase, ITn
         base.OnInitialized();
         var derived = this as TComponent;
         DotNetObjectRef = DotNetObjectReference.Create(derived!);
-    }
-
-    protected RenderFragment RenderPageScript() {
-        return new RenderFragment(builder => {
-            builder.OpenComponent<TnTPageScript>(0);
-            builder.AddAttribute(1, "Src", JsModulePath);
-            builder.CloseComponent();
-        });
     }
 }

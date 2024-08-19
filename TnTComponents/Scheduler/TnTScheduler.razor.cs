@@ -17,14 +17,14 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    public string? CssClass => CssClassBuilder.Create()
+    public string? ElementClass => CssClassBuilder.Create()
             .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-scheduler")
         .AddBackgroundColor(BackgroundColor)
         .AddForegroundColor(TextColor)
         .Build();
 
-    public string? CssStyle => CssStyleBuilder.Create()
+    public string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
@@ -38,7 +38,9 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
     public bool DisableDragAndDrop { get; set; }
 
     [Parameter]
+#pragma warning disable BL0007 // Component parameters should be auto properties
     public DateOnly DisplayedDate { get => _displayDate ?? DateOnly.FromDateTime(DateTime.Today); set => _displayDate = value; }
+#pragma warning restore BL0007 // Component parameters should be auto properties
 
     public ElementReference Element { get; private set; }
 

@@ -1,28 +1,42 @@
 ﻿.tnt-components.tnt-nav-link {
-    text-decoration: none;
-    min-height: 1rem;
-    cursor: pointer;
-    display: inline-block;
-    transition: background-color ease-in-out 200ms, color ease-in-out 200ms;
-    margin: 0;
-    padding: 0;
-    appearance: none;
+    box-sizing: border-box;
+    overflow: hidden;
+    display: inline-flex;
 
-    &:disabled {
-        cursor: not-allowed;
+    &:not(.tnt-underlined) {
+        text-decoration: none;
     }
 
-    span.tnt-icon {
+    &.tnt-filled, &.tnt-outlined {
+        @extend .tnt-label-large;
+        user-select: none;
+        appearance: none;
+        min-height: 40px;
+        min-width: 40px;
+        padding: 0 16px;
+        align-items: center;
         vertical-align: middle;
-        color: inherit;
-    }
-
-    &.tnt-flat, &.tnt-outlined {
-        padding: 0.5rem;
-        margin: 0.1rem;
     }
 
     &.tnt-underlined {
         text-decoration: underline;
+    }
+
+    &.active {
+        &.active-fg-color {
+            color: var(--active-fg-color);
+        }
+
+        &.active-bg-color {
+            background-color: var(--active-bg-color);
+        }
+    }
+
+    .tnt-icon {
+        vertical-align: middle;
+        text-align: inherit;
+        font-size: 18px;
+        padding: 0 4px;
+        pointer-events: none;
     }
 }

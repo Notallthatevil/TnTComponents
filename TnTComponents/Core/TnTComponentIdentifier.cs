@@ -34,12 +34,6 @@ public static class TnTComponentIdentifier {
         return TnTComponentIdentifierContext.Current.GenerateId();
     }
 
-    /// <summary>
-    /// Returns a new <see cref="TnTComponentIdentifierContext" /> where ID are sequential:
-    /// "tnt_00000000", "tnt_00000001", "tnt_00000002", ...
-    /// </summary>
-    /// <returns></returns>
-    public static TnTComponentIdentifierContext SequentialContext() => new((n) => $"{_identifierPrefix}{n:00000000}");
 }
 
 public class TnTComponentIdentifierContext : IDisposable {
@@ -66,6 +60,7 @@ public class TnTComponentIdentifierContext : IDisposable {
     }
 
     public void Dispose() {
+        GC.SuppressFinalize(this);
         _ = _threadScopeStack.Value?.TryPop(out _);
     }
 

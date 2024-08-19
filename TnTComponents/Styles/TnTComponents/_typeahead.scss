@@ -1,10 +1,23 @@
 ﻿.tnt-typeahead {
+    width: calc(100% - 16px);
+    box-sizing: border-box;
+    margin: 8px;
+    position: relative;
+
     .tnt-typeahead-box {
         position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        width: 100%;
+
+        label, input {
+            width: 100%;
+            margin: 0;
+        }
 
         progress.tnt-components {
             position: absolute;
-            top: 0.5rem;
+            top: 0;
             right: 0;
         }
     }
@@ -13,12 +26,15 @@
         width: -webkit-fit-content;
         width: -moz-fit-content;
         width: fit-content;
-        padding: 0.25rem;
+        padding: 4px;
         max-height: 50vh;
         overflow: auto;
-        margin: 0.25rem 0.25rem 1rem 0.25rem;
+        margin: 4px 4px 16px 4px;
         z-index: 10;
         position: absolute;
+        background-color: $tnt-color-surface-variant;
+        @extend .tnt-border-radius-2;
+        @extend .tnt-elevation-1;
 
         ul {
             margin: 0;
@@ -28,21 +44,21 @@
                 list-style: none;
                 border-top: 1px solid $tnt-color-outline;
                 cursor: pointer;
-                padding: 0.5rem;
+                padding: 8px;
+
+                &.tnt-focused, span:hover {
+                    background-color: color-mix(in srgb, $tnt-color-surface-tint 20%, transparent);
+                }
 
                 span {
                     transition: 200ms;
-                    margin: 0.25rem;
-                    padding: 0.5rem 1rem;
-
-                    &:hover {
-                        background-color: color-mix(in srgb, $tnt-color-surface-tint 20%, transparent);
-                    }
+                    margin: 4px;
+                    padding: 8px 16px;
                 }
             }
 
             li:first-child {
-                margin-top: 0.5rem;
+                margin-top: 8px;
                 border-top: none;
             }
         }

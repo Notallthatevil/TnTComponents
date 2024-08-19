@@ -17,12 +17,12 @@ public partial class TnTDataGridRow<TGridItem> : IHandleEvent {
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    public string? CssClass => CssClassBuilder.Create()
+    public string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-clickable", OnClick.HasDelegate)
         .Build();
 
-    public string? CssStyle => CssStyleBuilder.Create()
+    public string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 

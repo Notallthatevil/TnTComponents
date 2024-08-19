@@ -5,7 +5,7 @@
 @inherits ScheduleViewBase<TEventType>
 
 @if (Scheduler.IsViewSelected(this)) {
-    <div @attributes="AdditionalAttributes" class="@CssClass" style="@CssStyle" tntid="@Id" @ref="Element">
+    <div @attributes="AdditionalAttributes" class="@ElementClass" style="@ElementStyle" tntid="@ElementId" @ref="Element">
 
         @{
             @foreach (var (date, gridPosition) in _visibleDates) {

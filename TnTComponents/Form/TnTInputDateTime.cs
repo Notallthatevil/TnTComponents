@@ -5,146 +5,67 @@ using System.Globalization;
 
 namespace TnTComponents;
 
-public class TnTInputDateOnly : TnTInputBase<DateOnly?> {
+public class TnTInputDateTime<DateTimeType> : TnTInputBase<DateTimeType> {
 
     [Parameter]
-    public string Format { get; set; } = "MM/dd/yyyy hh:mm:ss";
+    public string Format { get; set; } = default!;
 
-    public override InputType Type => InputType.Date;
+    [Parameter]
+    public bool MonthOnly { get; set; }
 
-    protected override string? FormatValueAsString(DateOnly? value) => BindConverter.FormatValue(value, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+    public override InputType Type => _type;
+
+    private InputType _type;
+
+    protected override string? FormatValueAsString(DateTimeType? value) => (Nullable.GetUnderlyingType(typeof(DateTimeType)) ?? typeof(DateTimeType)) switch {
+        var t when t == typeof(DateTime) => BindConverter.FormatValue(value as DateTime?, _format, CultureInfo.InvariantCulture),
+        var t when t == typeof(DateTimeOffset) => BindConverter.FormatValue(value as DateTimeOffset?, _format, CultureInfo.InvariantCulture),
+        var t when t == typeof(TimeOnly) => BindConverter.FormatValue(value as TimeOnly?, _format, CultureInfo.InvariantCulture),
+        var t when t == typeof(DateOnly) => BindConverter.FormatValue(value as DateOnly?, _format, CultureInfo.InvariantCulture),
+        _ => throw new InvalidOperationException($"The type '{typeof(DateTimeType)}' is not a supported DateTime type.")
+    };
+
+    private string _format = default!;
 
     protected override void OnInitialized() {
         base.OnInitialized();
+
+        _format = (Nullable.GetUnderlyingType(typeof(DateTimeType)) ?? typeof(DateTimeType)) switch {
+            var t when t == typeof(DateTime) => "yyyy-MM-ddTHH:mm:ss",
+            var t when t == typeof(DateTimeOffset) => "yyyy-MM-ddTHH:mm:ss",
+            var t when t == typeof(TimeOnly) => "HH:mm:ss",
+            var t when t == typeof(DateOnly) => MonthOnly ? "yyyy-MM" : "yyyy-MM-dd",
+            _ => throw new InvalidOperationException($"The type '{typeof(DateTimeType)}' is not a supported DateTime type.")
+        };
+
+        _type = (Nullable.GetUnderlyingType(typeof(DateTimeType)) ?? typeof(DateTimeType)) switch {
+            var t when t == typeof(DateTime) => InputType.DateTime,
+            var t when t == typeof(DateTimeOffset) => InputType.DateTime,
+            var t when t == typeof(TimeOnly) => InputType.Time,
+            var t when t == typeof(DateOnly) => MonthOnly ? InputType.Month : InputType.Date,
+            _ => throw new InvalidOperationException($"The type '{typeof(DateTimeType)}' is not a supported DateTime type.")
+        };
+
         var attributes = AdditionalAttributes is null ? new Dictionary<string, object>() : new Dictionary<string, object>(AdditionalAttributes);
-        attributes.Add("format", "YYYY-MM-DDThh:mm");
+        attributes.Add("format", _format);
         AdditionalAttributes = attributes;
     }
 
-    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out DateOnly? result, [NotNullWhen(false)] out string? validationErrorMessage) {
+    protected override void OnParametersSet() {
+        base.OnParametersSet();
+        if (string.IsNullOrWhiteSpace(Format)) {
+            Format = _format;
+        }
+    }
+
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out DateTimeType result, [NotNullWhen(false)] out string? validationErrorMessage) {
         if (BindConverter.TryConvertTo(value, CultureInfo.InvariantCulture, out result)) {
             Debug.Assert(result != null);
             validationErrorMessage = null;
             return true;
         }
         else {
-            validationErrorMessage = $"Failed to parse {value} into a {typeof(DateOnly).Name}";
-            return false;
-        }
-    }
-}
-
-public class TnTInputDateTime : TnTInputBase<DateTime?> {
-
-    [Parameter]
-    public string Format { get; set; } = "MM/dd/yyyy hh:mm:ss";
-
-    public override InputType Type => InputType.DateTime;
-
-    protected override string? FormatValueAsString(DateTime? value) => BindConverter.FormatValue(value, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
-
-    protected override void OnInitialized() {
-        base.OnInitialized();
-        var attributes = AdditionalAttributes is null ? new Dictionary<string, object>() : new Dictionary<string, object>(AdditionalAttributes);
-        attributes.Add("format", "YYYY-MM-DDThh:mm");
-        AdditionalAttributes = attributes;
-    }
-
-    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out DateTime? result, [NotNullWhen(false)] out string? validationErrorMessage) {
-        if (BindConverter.TryConvertTo(value, CultureInfo.InvariantCulture, out result)) {
-            Debug.Assert(result != null);
-            validationErrorMessage = null;
-            return true;
-        }
-        else {
-            validationErrorMessage = $"Failed to parse {value} into a {typeof(DateTime).Name}";
-            return false;
-        }
-    }
-}
-
-public class TnTInputDateTimeOffset : TnTInputBase<DateTimeOffset?> {
-
-    [Parameter]
-    public string Format { get; set; } = "MM/dd/yyyy hh:mm:ss";
-
-    public override InputType Type => InputType.DateTime;
-
-    protected override string? FormatValueAsString(DateTimeOffset? value) => BindConverter.FormatValue(value, "yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
-
-    protected override void OnInitialized() {
-        base.OnInitialized();
-        var attributes = AdditionalAttributes is null ? new Dictionary<string, object>() : new Dictionary<string, object>(AdditionalAttributes);
-        attributes.Add("format", "YYYY-MM-DDThh:mm");
-        AdditionalAttributes = attributes;
-    }
-
-    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out DateTimeOffset? result, [NotNullWhen(false)] out string? validationErrorMessage) {
-        if (BindConverter.TryConvertTo(value, CultureInfo.InvariantCulture, out result)) {
-            Debug.Assert(result != null);
-            validationErrorMessage = null;
-            return true;
-        }
-        else {
-            validationErrorMessage = $"Failed to parse {value} into a {typeof(DateTime).Name}";
-            return false;
-        }
-    }
-}
-
-public class TnTInputTimeOnly : TnTInputBase<TimeOnly?> {
-
-    [Parameter]
-    public string Format { get; set; } = "MM/dd/yyyy hh:mm:ss";
-
-    public override InputType Type => InputType.Time;
-
-    protected override string? FormatValueAsString(TimeOnly? value) => BindConverter.FormatValue(value, "HH:mm:ss", CultureInfo.InvariantCulture);
-
-    protected override void OnInitialized() {
-        base.OnInitialized();
-        var attributes = AdditionalAttributes is null ? new Dictionary<string, object>() : new Dictionary<string, object>(AdditionalAttributes);
-        attributes.Add("format", "YYYY-MM-DDThh:mm");
-        AdditionalAttributes = attributes;
-    }
-
-    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TimeOnly? result, [NotNullWhen(false)] out string? validationErrorMessage) {
-        if (BindConverter.TryConvertTo(value, CultureInfo.InvariantCulture, out result)) {
-            Debug.Assert(result != null);
-            validationErrorMessage = null;
-            return true;
-        }
-        else {
-            validationErrorMessage = $"Failed to parse {value} into a {typeof(TimeOnly).Name}";
-            return false;
-        }
-    }
-}
-
-public class TnTInputMonth : TnTInputBase<DateOnly?> {
-
-    [Parameter]
-    public string Format { get; set; } = "MM/dd/yyyy hh:mm:ss";
-
-    public override InputType Type => InputType.Month;
-
-    protected override string? FormatValueAsString(DateOnly? value) => BindConverter.FormatValue(value, "yyyy-MM", CultureInfo.InvariantCulture);
-
-    protected override void OnInitialized() {
-        base.OnInitialized();
-        var attributes = AdditionalAttributes is null ? [] : new Dictionary<string, object>(AdditionalAttributes);
-        attributes.Add("format", "YYYY-MM-DDThh:mm");
-        AdditionalAttributes = attributes;
-    }
-
-    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out DateOnly? result, [NotNullWhen(false)] out string? validationErrorMessage) {
-        if (BindConverter.TryConvertTo(value, CultureInfo.InvariantCulture, out result)) {
-            Debug.Assert(result != null);
-            validationErrorMessage = null;
-            return true;
-        }
-        else {
-            validationErrorMessage = $"Failed to parse {value} into a {typeof(DateOnly).Name}";
+            validationErrorMessage = $"Failed to parse {value} into a {typeof(DateTimeType).Name}";
             return false;
         }
     }

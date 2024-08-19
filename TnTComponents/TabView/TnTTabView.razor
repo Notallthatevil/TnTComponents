@@ -3,33 +3,31 @@
 @inherits TnTPageScriptComponent<TnTTabView>
 @namespace TnTComponents
 
-<tnt-tab-view @attributes=AdditionalAttributes class="@CssClass" style="@CssStyle" @ref="Element">
+<tnt-tab-view @attributes=AdditionalAttributes class="@ElementClass" style="@ElementStyle" @ref="Element">
     <CascadingValue Value="this" IsFixed="true">
         <DeferRendering>
-            <div class="@(CssClassBuilder.Create().AddBackgroundColor(HeaderBackgroundColor).Build())">
-                <span class="@(CssClassBuilder.Create(string.Empty).AddForegroundColor(HeaderTextColor).Build())">
+            <div data-permanent 
+                class="@(CssClassBuilder.Create().AddClass("tnt-tab-view-header").AddFilled().AddForegroundColor(HeaderTextColor).AddBackgroundColor(HeaderBackgroundColor).Build())">
+                <span class="tnt-tab-view-header-buttons">
+
                     @foreach (var pair in _tabChildren.Select((child, index) => new { child, index })) {
                         var child = pair.child;
                         var index = pair.index;
-                        <button type="button" title="@child.Title" disabled="@child.Disabled" button-index="@index" class="@(CssClassBuilder.Create(string.Empty)
-                                                                                                                        .AddActionableBackgroundColor(!child.Disabled ? TnTColor.Transparent : null)
-                                                                                                                        .AddBackgroundColor(child.Disabled ? TnTColor.Transparent : null)
-                                                                                                                        .AddForegroundColor(HeaderTextColor)
-                                                                                                                        .SetDisabled(child.Disabled)
-                                                                                                                        .AddRipple()
-                                                                                                                        .Build())">
-                            @if (!SecondaryTabView) {
+                        <button type="button"
+                                title="@child.ElementTitle"
+                                class="@(CssClassBuilder.Create().AddClass("tnt-tab-view-button").AddClass("tnt-interactable").AddFilled().AddBackgroundColor(HeaderBackgroundColor).AddForegroundColor(HeaderTextColor).AddTintColor(TnTColor.SurfaceTint).AddRipple().AddDisabled(child.Disabled).Build())"
+                                disabled="@(child.Disabled ? true : null)">
+                            @if (Appearance == TabViewAppearance.Primary) {
                                 @child.Icon?.Render()
                             }
-                            @child.Title
+                            @child.Label
                         </button>
                     }
                 </span>
-                <span class="@(CssClassBuilder.Create().AddBackgroundColor(ActiveIndicatorColor).Build())"></span>
+                <span class="@(CssClassBuilder.Create().AddClass("tnt-tab-view-active-indicator").AddFilled().AddBackgroundColor(ActiveIndicatorColor).Build())"></span>
             </div>
         </DeferRendering>
         @ChildContent
     </CascadingValue>
 </tnt-tab-view>
-@RenderPageScript()
-
+@PageScript

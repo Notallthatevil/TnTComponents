@@ -1,0 +1,60 @@
+﻿@using TnTComponents
+<TnTRow>
+    <TnTColumn S="12">
+
+        <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.GppGood))" OnClickCallback="@OnClick" Appearance="ButtonAppearance.Filled">
+            Filled
+        </TnTImageButton>
+
+        <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.GppGood))" OnClickCallback="@OnClick" Appearance="ButtonAppearance.Outlined" TextColor="TnTColor.Primary">
+            Outlined
+        </TnTImageButton>
+
+        <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.GppGood))" OnClickCallback="@OnClick" Appearance="ButtonAppearance.Text" TextColor="TnTColor.Primary">
+            Text
+        </TnTImageButton>
+
+        <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.GppGood))" OnClickCallback="@OnClick" Elevation="0">
+            Elevation 0
+        </TnTImageButton>
+
+        <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.GppGood))" OnClickCallback="@OnClick" Elevation="2">
+            Elevation 2
+        </TnTImageButton>
+
+        <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.GppGood))" OnClickCallback="@OnClick" Elevation="5">
+            Elevation 5
+        </TnTImageButton>
+
+        <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.GppGood))" OnClickCallback="@OnClick" Elevation="10">
+            Elevation 10
+        </TnTImageButton>
+
+        <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.GppGood))" OnClickCallback="@OnClick" BorderRadius="new TnTComponents.Core.TnTBorderRadius(0)">
+            CornerRadius 0
+        </TnTImageButton>
+
+        <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.GppGood))" OnClickCallback="@OnClick" BorderRadius="new TnTComponents.Core.TnTBorderRadius(10)">
+            CornerRadius 10
+        </TnTImageButton>
+
+        <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.GppGood))" OnClickCallback="@OnClick" Disabled="true">
+            Disabled
+        </TnTImageButton>
+
+        <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.GppGood))" OnClickCallback="@OnClick" BackgroundColor="TnTColor.SecondaryContainer" TextColor="TnTColor.OnSecondaryContainer" TintColor="TnTColor.Secondary">
+            Colored
+        </TnTImageButton>
+
+        <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.GppGood))" OnClickCallback="@OnClick" BorderRadius="@(new TnTComponents.Core.TnTBorderRadius() {StartStart = 5, StartEnd = 2, EndEnd = 9, EndStart=3})">
+            Obscure Radius
+        </TnTImageButton>
+    </TnTColumn>
+</TnTRow>
+
+
+@code {
+    private void OnClick() {
+        Console.WriteLine("Button Clicked");
+    }
+}

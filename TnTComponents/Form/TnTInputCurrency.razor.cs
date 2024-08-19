@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.JSInterop;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -7,46 +8,52 @@ using TnTComponents.Ext;
 
 namespace TnTComponents;
 
-public partial class TnTInputCurrency<TCurrency> where TCurrency : struct, IFloatingPoint<TCurrency>, IParsable<TCurrency> {
-    public override InputType Type => InputType.Text;
+public partial class TnTInputCurrency : TnTInputBase<decimal?> {
+    public override InputType Type => InputType.Currency;
 
-    [Inject]
-    private IJSRuntime _jsRuntime { get; set; } = default!;
+    [Parameter]
+    public string CultureCode { get; set; } = "en-US";
 
-    private const string JsModulePath = "./_content/TnTComponents/Form/TnTInputCurrency.razor.js";
-    private DotNetObjectReference<TnTInputCurrency<TCurrency>>? _dotNetObjRef;
+    [Parameter]
+    public string CurrencyCode { get; set; } = "USD";
 
-    private IJSObjectReference? _isolatedJsModule;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender) {
-        await base.OnAfterRenderAsync(firstRender);
-        _dotNetObjRef ??= DotNetObjectReference.Create(this);
-        _isolatedJsModule ??= await _jsRuntime.ImportIsolatedJs(this, JsModulePath);
-        if (firstRender) {
-            await (_isolatedJsModule?.InvokeVoidAsync("onLoad", null, _dotNetObjRef) ?? ValueTask.CompletedTask);
+    private string? _value {
+        get {
+            return CurrentValue?.ToString("C");
         }
-
-        await (_isolatedJsModule?.InvokeVoidAsync("onUpdate", null, _dotNetObjRef) ?? ValueTask.CompletedTask);
+        set {
+            if (decimal.TryParse(value?.TrimStart('$'), NumberStyles.Currency, CultureInfo.GetCultureInfo(CultureCode), out var r)) {
+                CurrentValue = r;
+            }
+            else {
+                CurrentValue = null;
+            }
+        }
     }
 
-    protected override void OnInitialized() {
-        base.OnInitialized();
+    protected override void OnParametersSet() {
+        base.OnParametersSet();
 
         var dict = AdditionalAttributes is not null ? new Dictionary<string, object>(AdditionalAttributes) : [];
-        dict.TryAdd("tnt-input-currency", "");
-        dict.TryAdd("pattern", @"^\$?(([1-9](\d*|\d{0,2}(,(\d{1,3})?)*))|0)(\.(\d{1,2})?)?$");
+        dict["onkeydown"] = "TnTComponents.enforceCurrencyFormat(event)";
+        dict["onkeyup"] = "TnTComponents.formatToCurrency(event)";
+        dict["name"] = ElementName!;
+        dict["cultureCode"] = CultureCode;
+        dict["currencyCode"] = CurrencyCode;
+
         AdditionalAttributes = dict;
     }
 
-    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TCurrency? result, [NotNullWhen(false)] out string? validationErrorMessage) {
+
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out decimal? result, [NotNullWhen(false)] out string? validationErrorMessage) {
         validationErrorMessage = null;
         if (value is not null) {
-            if (TCurrency.TryParse(value, NumberStyles.Currency, CultureInfo.InvariantCulture, out var r)) {
+            if (decimal.TryParse(value, NumberStyles.Currency, CultureInfo.InvariantCulture, out var r)) {
                 result = r;
                 return true;
             }
             else if (value is null) {
-                result = default;
+                result = null;
                 return true;
             }
             else {
@@ -61,4 +68,11 @@ public partial class TnTInputCurrency<TCurrency> where TCurrency : struct, IFloa
             return true;
         }
     }
+
+    private async Task BindAfterFunc(string? _) {
+        if (BindAfter.HasDelegate) {
+            await BindAfter.InvokeAsync(Value);
+        }
+    }
+
 }

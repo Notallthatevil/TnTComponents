@@ -1,0 +1,49 @@
+﻿@using TnTComponents
+
+
+
+<TnTComponents.TnTButton OnClickCallback="ShowBasic">
+    Show Basic
+</TnTComponents.TnTButton>
+
+<TnTComponents.TnTButton OnClickCallback="ShowInfo">
+    Show Info
+</TnTComponents.TnTButton>
+
+<TnTComponents.TnTButton OnClickCallback="ShowSuccess">
+    Show Success
+</TnTComponents.TnTButton>
+
+<TnTComponents.TnTButton OnClickCallback="ShowWarning">
+    Show Warning
+</TnTComponents.TnTButton>
+
+<TnTComponents.TnTButton OnClickCallback="ShowError">
+    Show Error
+</TnTComponents.TnTButton>
+
+
+@code {
+    [Inject]
+    private ITnTToastService _service { get; set; } = default!;
+
+    private async Task ShowBasic() {
+        await _service.ShowAsync("My title", "My longer message description that takes up space My longer message description that takes up space My longer message description that takes up space My longer message description that takes up space");
+    }
+
+    private async Task ShowInfo() {
+        await _service.ShowInfoAsync("My title", "My longer message description that takes up space");
+    }
+
+    private async Task ShowSuccess() {
+        await _service.ShowSuccessAsync("My title", "My longer message description that takes up space");
+
+    }
+    private async Task ShowWarning() {
+        await _service.ShowWarningAsync("My title", "My longer message description that takes up space");
+
+    }
+    private async Task ShowError() {
+        await _service.ShowErrorAsync("My title", "My longer message description that takes up space");
+    }
+}

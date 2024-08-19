@@ -31,9 +31,9 @@ public partial class BasicConfirmationDialog {
     private ITnTDialog _dialog { get; set; } = default!;
 
     [Inject]
-    private TnTDialogService _dialogService { get; set; } = default!;
+    private ITnTDialogService _dialogService { get; set; } = default!;
 
-    public static async Task<DialogResult> OpenForResultAsync(TnTDialogService dialogService, string title, string body, string? confirmButtonText = "Confirm", string? cancelButtonText = "Cancel", EventCallback? confirmClickedCallback = null, EventCallback? cancelClickedCallback = null,
+    public static async Task<DialogResult> OpenForResultAsync(ITnTDialogService dialogService, string title, string body, string? confirmButtonText = "Confirm", string? cancelButtonText = "Cancel", EventCallback? confirmClickedCallback = null, EventCallback? cancelClickedCallback = null,
         TnTBorderRadius? borderRadius = null,
         TnTColor dialogBackgroundColor = TnTColor.SurfaceContainer,
         int elevation = 1,
@@ -46,14 +46,10 @@ public partial class BasicConfirmationDialog {
         var options = new TnTDialogOptions() {
             BorderRadius = borderRadius ?? new(3),
             CloseOnExternalClick = false,
-            ShowClose = false,
+            ShowCloseButton = false,
             Title = title,
-            DialogBackgroundColor = dialogBackgroundColor,
             Elevation = elevation,
-            OverlayBlur = overlayBlur,
-            OverlayColor = overlayColor,
-            OverlayOpacity = overlayOpacity,
-            Style = style,
+            ElementStyle = style,
             TextColor = textColor
         };
 

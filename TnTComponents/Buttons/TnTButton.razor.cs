@@ -1,70 +1,59 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using System.Reflection.Metadata;
 using TnTComponents.Core;
+using TnTComponents.Interfaces;
 
 namespace TnTComponents;
 
 public partial class TnTButton {
 
-    [Parameter]
-    public ButtonAppearance Appearance { get; set; }
+    /// <inheritdoc />
+    public override string? ElementClass => CssClassBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddOutlined(Appearance == ButtonAppearance.Outlined)
+        .AddFilled(Appearance == ButtonAppearance.Filled)
+        .AddTnTStyleable(this, enableElevation: Appearance != ButtonAppearance.Outlined && Appearance != ButtonAppearance.Text)
+        .AddTnTInteractable(this)
+        .Build();
+
+    /// <inheritdoc />
+    public override string? ElementStyle => CssStyleBuilder.Create()
+        .Build();
 
     [Parameter]
-    public TnTColor? BackgroundColor { get; set; } = TnTColor.Primary;
+    public ButtonType Type { get; set; }
+
+    [Parameter]
+    public virtual ButtonAppearance Appearance { get; set; }
+
+    [Parameter]
+    public TnTColor BackgroundColor { get; set; } = TnTColor.Primary;
+
+    [Parameter]
+    public override TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
+
+    [Parameter]
+    public TnTColor TextColor { get; set; } = TnTColor.OnPrimary;
+
+    [Parameter]
+    public TextAlign? TextAlignment { get; set; }
+
+    [Parameter]
+    public virtual int Elevation { get; set; } = 1;
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
     [Parameter]
-    public TnTBorderRadius CornerRadius { get; set; } = new(10);
-
-    public override string? CssClass => CssClassBuilder.Create()
-            .AddClass(AdditionalAttributes)
-        .AddElevation(Elevation)
-        .AddActionableBackgroundColor(Appearance == ButtonAppearance.Text || Appearance == ButtonAppearance.Outlined ? TnTColor.Transparent : BackgroundColor)
-        .AddForegroundColor(TextColor)
-        .AddBorderRadius(CornerRadius)
-        .AddOutlined(Appearance == ButtonAppearance.Outlined)
-        .MakeTextOnly(Appearance == ButtonAppearance.Text)
-        .AddClass("tnt-button")
-        .AddRipple()
-        .Build();
-
-    public override string? CssStyle => CssStyleBuilder.Create()
-       .AddFromAdditionalAttributes(AdditionalAttributes)
-       .Build();
-
-    [Parameter]
-    public int Elevation { get; set; } = 1;
+    public virtual TnTBorderRadius? BorderRadius { get; set; } = TnTBorderRadius.Full;
 
     public override string? JsModulePath => "./_content/TnTComponents/Buttons/TnTButton.razor.js";
 
     [Parameter]
-    public string? Name { get; set; }
-
-    [Parameter]
-    public EventCallback<MouseEventArgs> OnClick { get; set; }
+    public EventCallback<MouseEventArgs> OnClickCallback { get; set; }
 
     [Parameter]
     public bool StopPropagation { get; set; }
-
-    [Parameter]
-    public TnTColor? TextColor { get; set; } = TnTColor.OnPrimary;
-
-    [Parameter]
-    public ButtonType Type { get; set; }
-
-    protected override void OnInitialized() {
-        base.OnInitialized();
-        Name ??= ComponentIdentifier;
-    }
-}
-
-internal static class TnTButtonCssClassExt {
-
-    public static CssClassBuilder AddButtonAppearance(this CssClassBuilder builder, ButtonAppearance buttonAppearance) {
-        return builder.AddOutlined(buttonAppearance == ButtonAppearance.Outlined)
-            .AddNoBackground(buttonAppearance == ButtonAppearance.Text);
-    }
 }

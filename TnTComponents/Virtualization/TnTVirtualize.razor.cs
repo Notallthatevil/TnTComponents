@@ -9,12 +9,12 @@ namespace TnTComponents;
 
 public partial class TnTVirtualize<TItem> {
 
-    public override string? CssClass => CssClassBuilder.Create()
+    public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-virtualize-container")
         .Build();
 
-    public override string? CssStyle => CssStyleBuilder.Create()
+    public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 

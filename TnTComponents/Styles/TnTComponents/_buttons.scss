@@ -1,193 +1,96 @@
-﻿@use "sass:map";
-
-button[is=tnt-button] {
-    appearance: none;
-    border: none;
-    user-select: none;
-    min-height: 2.5rem;
-    min-width: 2.5rem;
-    padding: 0 1rem;
-    margin: 0.5rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    vertical-align: bottom;
-    cursor: pointer;
-
-    &:not(&.tnt-outlined) {
-        outline: none;
-    }
-
+﻿button.tnt-components {
     @extend .tnt-label-large;
-
-    &:not(:disabled) {
-        cursor: pointer;
-        transition: box-shadow linear 100ms, background-color linear 100ms;
-
-        &:hover {
-            @for $i from 0 through 9 {
-                &.tnt-elevation-#{$i} {
-                    box-shadow: map.get($elevation-shadows, $i + 1);
-                }
-            }
-        }
-    }
-
-    &:not(.tnt-fab) {
-        .tnt-icon:first-child {
-            padding-right: 0.5rem;
-        }
-
-        .tnt-icon:last-child {
-            padding-left: 0.5rem;
-        }
-    }
-
-    &.tnt-fab {
-        padding: 0.25rem;
-        position: fixed;
-        right: 2rem;
-        bottom: 2rem;
-        z-index: 1000;
-        transition: right ease-in-out 200ms;
-
-        @extend .tnt-elevation-1;
-    }
-}
-
-input::file-selector-button {
     appearance: none;
-    border: none;
     user-select: none;
-    min-height: 2.5rem;
-    min-width: 2.5rem;
-    padding: 0 1rem;
-    margin: 0.5rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    vertical-align: bottom;
-    cursor: pointer;
+    min-height: 40px;
+    min-width: 40px;
+    padding: 0 16px;
+    box-sizing: border-box;
+    margin: 8px;
+    transition: 250ms;
+    position: relative;
 
-    &:not(&.tnt-outlined) {
-        outline: none;
+    &.tnt-ripple {
+        overflow: hidden;
     }
 
-    @extend .tnt-label-large;
-
-    &:not(:disabled) {
-        cursor: pointer;
-        transition: box-shadow linear 100ms, background-color linear 100ms;
-
-        &:hover {
-            @for $i from 0 through 9 {
-                &.tnt-elevation-#{$i} {
-                    box-shadow: map.get($elevation-shadows, $i + 1);
-                }
-            }
-        }
+    &:not(.tnt-outlined) {
+        border: none;
     }
 
-    &:not(.tnt-fab) {
-        .tnt-icon:first-child {
-            padding-right: 0.5rem;
-        }
-
-        .tnt-icon:last-child {
-            padding-left: 0.5rem;
-        }
-    }
-}
-
-button.tnt-components {
-    &:disabled {
-        cursor: not-allowed;
-
-        &:not(:has( > progress.tnt-components)) {
-            opacity: 0.3;
-        }
-
-        &:has( > progress.tnt-components) {
-            @each $colorClass in $color-classes-no-transparent {
-                &.tnt-actionable-bg-color-#{$colorClass} {
-                    background-color: color-mix(in srgb, var(--tnt-color-#{$colorClass}) 30%, transparent);
-                }
-            }
-        }
-    }
-
-    & > progress.tnt-components {
-        position: absolute !important;
-        z-index: 5;
-        padding: 0 !important;
-        margin: 0;
-
-        &:not(.tnt-alternative) {
-            width: 2rem !important;
-            height: 2rem !important;
-        }
-    }
-
-    &.tnt-actionable-bg-color-primary:not(:disabled) {
-        & > progress.tnt-components {
-            &.tnt-alternative {
-                color: $tnt-color-on-primary;
-
-                &::-moz-progress-bar {
-                    background: $tnt-color-on-primary;
-                }
-
-                &::-webkit-progress-value {
-                    background: $tnt-color-on-primary;
-                }
-
-                &:indeterminate {
-                    &:before {
-                        background-color: $tnt-color-on-primary;
-                    }
-
-                    &:after {
-                        background-color: $tnt-color-on-primary;
-                    }
-                }
-            }
-
-            &:not(.tnt-alternative) {
-                color: $tnt-color-on-primary;
-
-                &:not(:indeterminate) {
-                    background-color: $tnt-color-on-primary;
-                    -webkit-mask: radial-gradient(circle, transparent 0 1.6rem, black 1.6rem 100%);
-                    mask: radial-gradient(circle, transparent 0 1.6rem, black 1.6rem 100%);
-                    transform: scale(0.8);
-                }
-            }
-        }
+    &:not(:has(.tnt-icon)) {
+        padding: 0 24px;
     }
 
     .tnt-icon {
-        padding: 0 0.25rem;
-        color: inherit;
+        vertical-align: middle;
+        text-align: inherit;
+        font-size: 18px;
+        padding: 0 4px;
+        pointer-events: none;
     }
 
-    &.tnt-text-only {
-        padding: 0 0.25rem;
-        margin: 0;
-        text-decoration: underline;
+    &:not(.tnt-filled):not(.tnt-outlined) {
         background-color: transparent;
-        min-height: revert;
-        min-width: revert;
+    }
+
+    &:has(> progress.tnt-components) {
+
+        & > progress.tnt-components {
+            position: absolute;
+
+            &:not(.tnt-alternative) {
+                padding: 0;
+                margin: 0;
+                height: 32px;
+                width: 32px;
+                top: 4px;
+                left: calc(50% - 16px);
+            }
+
+            &.tnt-alternative {
+                left: 0;
+            }
+        }
+    }
+
+    &.tnt-image-button {
+        height: 40px;
+        width: 40px;
+        padding: 0;
+
+        .tnt-icon {
+            font-size: 24px;
+        }
     }
 }
 
-tnt-layout:has(tnt-footer) {
-    .tnt-fab {
-        bottom: calc(2rem + $tnt-footer-height) !important;
+.tnt-components.tnt-fab {
+    position: fixed;
+    bottom: 16px;
+    transition: 250ms;
+    right: 16px;
+
+    button.tnt-components {
+        height: 56px;
+        min-width: 56px;
+        padding: 8px;
+    }
+
+    .tnt-icon {
+        font-size: 32px;
     }
 }
 
-body:has(.tnt-snackbar-container) {
-    .tnt-button.tnt-fab {
-        right: 24rem;
+body:has(.tnt-footer) {
+    .tnt-components.tnt-fab {
+        bottom: calc($tnt-footer-height + 16px);
     }
 }
+
+
+//@for $i from 1 through 5 {
+//    .tnt-components.tnt-fab:nth-child(#{$i}) {
+//        right: #{(128 * ($i - 1) + 16)}px;
+//    }
+//}

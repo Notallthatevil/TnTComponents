@@ -1,9 +1,25 @@
 ﻿@namespace TnTComponents
-@typeparam TCurrency
-@inherits TnTInputBase<TCurrency?>
+@inherits TnTInputBase<decimal?>
 
-@{
-    base.BuildRenderTree(__builder);
-}
-
-<TnTPageScript Src="@JsModulePath"/>
+<TnTInputText @bind-Value="_value"
+              AdditionalAttributes="@AdditionalAttributes"
+              Appearance="@Appearance"
+              AutoFocus="@AutoFocus"
+              BackgroundColor="@BackgroundColor"
+              BindAfter="@BindAfterFunc"
+              BindOnInput="@BindOnInput"
+              Disabled="@Disabled"
+              DisableValidationMessage="@DisableValidationMessage"
+              DisplayName="@DisplayName"
+              ElementId="@ElementId"
+              ElementLang="@ElementLang"
+              ElementTitle="@ElementTitle"
+              EndIcon="@EndIcon"
+              InputType="TextInputType.Text"
+              Label="@Label"
+              OnTintColor="@OnTintColor"
+              Placeholder="@Placeholder"
+              ReadOnly="@ReadOnly"
+              StartIcon="@StartIcon"
+              TextColor="@TextColor"
+              TintColor="@TintColor"/>

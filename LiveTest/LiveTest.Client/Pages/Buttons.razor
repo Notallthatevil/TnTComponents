@@ -1,23 +1,15 @@
-﻿@page "/Buttons"
+﻿@page "/ImageButtons"
 @using TnTComponents
 
 
-<LiveTest.Client.Components.ButtonsTesting />
-@*
-<LiveTest.Client.Components.ButtonsTesting @rendermode="@RenderMode.InteractiveServer" />
-<LiveTest.Client.Components.ButtonsTesting @rendermode="@RenderMode.InteractiveWebAssembly" />
-<LiveTest.Client.Components.ButtonsTesting @rendermode="@RenderMode.InteractiveAuto" />
-*@
+<LiveTest.Client.Components.ImageButtons/>
+<h3>
+    WASM
+</h3>
+<LiveTest.Client.Components.ImageButtons @rendermode="InteractiveWebAssembly" />
 
-<TnTNavLink Href="#" Appearance="TnTNavLinkAppearance.None">
-    Appearance None
-</TnTNavLink>
-<TnTNavLink Href="#" Appearance="TnTNavLinkAppearance.Outlined">
-    Appearance Outlined
-</TnTNavLink>
-<TnTNavLink Href="#" Appearance="TnTNavLinkAppearance.Flat">
-    Appearance Flat
-</TnTNavLink>
-<TnTNavLink Href="#" Appearance="TnTNavLinkAppearance.Underlined">
-    Appearance Underlined
-</TnTNavLink>
+<h3>
+    Server
+</h3>
+<LiveTest.Client.Components.ImageButtons @rendermode="InteractiveServer" />
+

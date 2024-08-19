@@ -1,6 +1,8 @@
 @using Microsoft.AspNetCore.Components.Rendering
 @using Microsoft.AspNetCore.Components.Web.Virtualization
+@using TnTComponents.Core
 @using TnTComponents.Grid.Infrastructure;
+@inherits TnTComponentBase
 @typeparam TGridItem
 @{
     InternalGridContext.Grid.AddColumn(this, InitialSortDirection, IsDefaultSortColumn);
@@ -12,7 +14,7 @@
             @HeaderCellItemTemplate(this)
         }
         else if (Sortable) {
-            <div class="tnt-header-content @(ShowSortIcon ? "tnt-sorted-on" : null)" @onclick="@(() => Grid.SortByColumnAsync(this))">
+            <div class="@(CssClassBuilder.Create().AddClass("tnt-header-content").AddClass("tnt-sorted-on", ShowSortIcon).AddTextAlign(HeaderAlignment).AddClass("tnt-interactable").AddRipple().Build())" @onclick="@(() => Grid.SortByColumnAsync(this))">
                 @Title
                 @if (ShowSortIcon) {
                     @if (Grid.SortByAscending == true) {
@@ -27,7 +29,7 @@
 
         }
         else {
-            <div class="tnt-header-content">
+            <div class="@(CssClassBuilder.Create().AddClass("tnt-header-content").AddTextAlign(HeaderAlignment).Build())">
                 @Title
             </div>
         }

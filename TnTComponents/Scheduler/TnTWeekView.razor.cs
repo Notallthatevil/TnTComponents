@@ -10,12 +10,12 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
     [Parameter]
     public bool HideDates { get; set; }
 
-    public override string? CssClass => CssClassBuilder.Create()
+    public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-week-view")
         .Build();
 
-    public override string? CssStyle => CssStyleBuilder.Create()
+    public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddStyle(GetGridTemplateColumns(), string.Empty)
         .Build();
@@ -184,17 +184,17 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         // TODO Fix this so that overlaps are only counted with overlapping events
         if (events.Any()) {
             return events.Count() - 1;
-            var overlaps = 0;
-            var currentEvent = events.First();
-            foreach (var @event in events.Skip(1)) {
-                if (@event.EventStart < currentEvent.EventEnd) {
-                    overlaps++;
-                }
-                else {
-                    currentEvent = @event;
-                }
-            }
-            return overlaps;
+            //var overlaps = 0;
+            //var currentEvent = events.First();
+            //foreach (var @event in events.Skip(1)) {
+            //    if (@event.EventStart < currentEvent.EventEnd) {
+            //        overlaps++;
+            //    }
+            //    else {
+            //        currentEvent = @event;
+            //    }
+            //}
+            //return overlaps;
         }
         return 0;
     }

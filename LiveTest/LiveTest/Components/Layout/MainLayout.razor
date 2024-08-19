@@ -10,90 +10,6 @@
         This is my header
     </TnTHeader>
 
-    <TnTSideNav Title="My Title">
-        <h3>
-            My First Headline
-        </h3>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Home))" Href="/" Match="NavLinkMatch.All" Status="100" Disabled="true">
-            Home
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.PermContactCalendar))" Href="/scheduler" Match="NavLinkMatch.All" Status="100">
-            Scheduler
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Error))" Href="/Buttons">
-            Buttons
-        </TnTSideNavMenuLink>    
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.MarkAsUnread))" Href="/Markdown">
-            Markdown
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Warning))" Href="/card">
-            Card Some really long content that should be cut off or wrapped
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Snooze))" Href="/snackbar">
-            Snackbar
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Href="/navlinks">
-            Nav Links
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuGroup Title="Group 1" Icon="@(new MaterialIcon(MaterialIcon.Business))">
-            <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Delete))" Href="/datagrid">
-                Data Grid
-            </TnTSideNavMenuLink>
-            <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Star))" Href="/progress">
-                Progress
-            </TnTSideNavMenuLink>
-            <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.MusicNote))" Href="/accordion">
-                Accordion
-            </TnTSideNavMenuLink>
-            <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Language))" Href="/dialog">
-                Dialog
-            </TnTSideNavMenuLink>
-        </TnTSideNavMenuGroup>
-        <TnTSideNavMenuGroup Title="Group 1" Icon="@(new MaterialIcon(MaterialIcon.Cached))" Disabled="true">
-            <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.AccountBalance))" Href="/datagrid">
-                Data Grid
-            </TnTSideNavMenuLink>
-            <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Backup))" Href="/progress">
-                Progress
-            </TnTSideNavMenuLink>
-        </TnTSideNavMenuGroup>
-        <TnTDivider />
-        <h3>
-            My Second Headline
-        </h3>
-        <TnTSideNavMenuGroup Title="Group 2" Icon="@(new MaterialIcon(MaterialIcon.Dock))" Expand="true">
-            <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Publish))" Href="/forms">
-                Forms
-            </TnTSideNavMenuLink>
-            <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.PanoramaHorizontal))" Href="/upload">
-                Upload
-            </TnTSideNavMenuLink>
-            <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Poll))" Href="/tabview">
-                Tabs
-            </TnTSideNavMenuLink>
-            <TnTSideNavMenuGroup Title="Group 2" Icon="@(new MaterialIcon(MaterialIcon.Face))" Expand="true">
-                <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Http))" Href="/forms">
-                    Forms
-                </TnTSideNavMenuLink>
-                <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Edit))" Href="/upload">
-                    Upload
-                </TnTSideNavMenuLink>
-                <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.ArrowDropDownCircle))" Href="/tabview">
-                    Tabs
-                </TnTSideNavMenuLink>
-            </TnTSideNavMenuGroup>
-        </TnTSideNavMenuGroup>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.ShoppingBasket))" Href="/skeleton">
-            Skeleton
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.MergeType))" Href="/typeahead">
-            Typeahead
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.ScreenLockLandscape))" Href="/InfiniteScroll">
-            Infinite Scroll
-        </TnTSideNavMenuLink>
-    </TnTSideNav>
-
     <TnTBody>
         @Body
     </TnTBody>
@@ -101,7 +17,156 @@
     <TnTFooter>
         Footer content
     </TnTFooter>
+
+    <TnTSideNav HideOnLargeScreens="true">
+        <h3>
+            My First Headline
+        </h3>
+        <TnTSideNavLink Label="Home" href="/" Match="NavLinkMatch.All" Disabled="true" />
+        <TnTSideNavLink Label="Accordion" href="/accordion" Icon="@(new MaterialIcon(MaterialIcon.MusicNote))" />
+        <TnTSideNavLink Label="Anchors" href="/navlinks" Icon="@(new MaterialIcon(MaterialIcon.Link))" />
+
+        <TnTSideNavMenuGroup Icon="@(new MaterialIcon(MaterialIcon.SmartButton))" Label="Buttons">
+            <TnTSideNavLink Label="Buttons" href="/buttons" />
+            <TnTSideNavLink Label="Image Buttons" href="/imagebuttons" Icon="@(new MaterialIcon(MaterialIcon.MusicNote))" />
+            <TnTSideNavLink Label="FABs" href="/fabbuttons" Icon="@(new MaterialIcon(MaterialIcon.Link))" />
+
+        </TnTSideNavMenuGroup>
+
+        <TnTSideNavLink Label="Chips" href="/chips" Icon="@(new MaterialIcon(MaterialIcon.BedroomChild))" />
+        <TnTSideNavLink Label="Dialogs" href="/dialog" Icon="@(new MaterialIcon(MaterialIcon.Diamond))" />
+
+        <TnTSideNavMenuGroup Icon="@(new MaterialIcon(MaterialIcon.EditNote))" ExpandByDefault="false" Label="Editors">
+            <TnTSideNavLink Label="Markdown Editor" href="/markdown" Icon="@(new MaterialIcon(MaterialIcon.MarkAsUnread))" />
+        </TnTSideNavMenuGroup>
+
+        <TnTSideNavLink Label="Forms" href="/forms" Icon="@(new MaterialIcon(MaterialIcon.FormatAlignCenter))" />
+        <TnTSideNavLink Label="Grid" href="/datagrid" Icon="@(new MaterialIcon(MaterialIcon.Grid4X4))" />
+        <TnTSideNavLink Label="Progress" href="/progress" Icon="@(new MaterialIcon(MaterialIcon.Propane))" />
+
+        <TnTSideNavMenuGroup Icon="@(new MaterialIcon(MaterialIcon.Schedule))" ExpandByDefault="false" Label="Scheduler">
+            <TnTSideNavLink Label="Weekly Scheduler" href="/scheduler" Icon="@(new MaterialIcon(MaterialIcon.ViewWeek))" />
+        </TnTSideNavMenuGroup>
+
+        <TnTSideNavLink Label="Skeleton" href="/skeleton" Icon="@(new MaterialIcon(MaterialIcon.ShoppingBasket))" />
+        <TnTSideNavLink Label="TabView" href="/tabview" />
+        <TnTSideNavLink Label="Toast" href="/toast" />
+        <TnTSideNavLink Label="Typeahead" href="/typeahead" />
+        <TnTSideNavLink Label="Virtualize" href="/InfiniteScroll" Icon="@(new MaterialIcon(MaterialIcon.InfoOutline))" />
+
+        @*
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Home))" Href="/" Match="NavLinkMatch.All" Status="100" Disabled="true">
+        Home
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.MusicNote))" Href="/accordion">
+        Accordion
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuGroup Title="Buttons" Icon="@(new MaterialIcon(MaterialIcon.SmartButton))">
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Error))" Href="/Buttons">
+        Buttons
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuLink Href="/FabButtons">
+        FabButton
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuLink Href="/ImageButtons">
+        Image Buttons
+        </TnTSideNavMenuLink>
+        </TnTSideNavMenuGroup>
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.ChildCare))" Href="/chips" Match="NavLinkMatch.All" Status="100">
+        Chips
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Language))" Href="/dialog">
+        Dialog
+        </TnTSideNavMenuLink>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.PermContactCalendar))" Href="/scheduler" Match="NavLinkMatch.All" Status="100">
+        Scheduler
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.MarkAsUnread))" Href="/Markdown">
+        Markdown
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Warning))" Href="/card">
+        Card Some really long content that should be cut off or wrapped
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Snooze))" Href="/snackbar">
+        Snackbar
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuLink Href="/navlinks">
+        Nav Links
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuGroup Title="Group 1" Icon="@(new MaterialIcon(MaterialIcon.Business))">
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Delete))" Href="/datagrid">
+        Data Grid
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Star))" Href="/progress">
+        Progress
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.MusicNote))" Href="/accordion">
+        Accordion
+        </TnTSideNavMenuLink>
+
+        </TnTSideNavMenuGroup>
+        <TnTSideNavMenuGroup Title="Group 1" Icon="@(new MaterialIcon(MaterialIcon.Cached))" Disabled="true">
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.AccountBalance))" Href="/datagrid">
+        Data Grid
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Backup))" Href="/progress">
+        Progress
+        </TnTSideNavMenuLink>
+        </TnTSideNavMenuGroup>
+        <TnTDivider />
+        <h3>
+        My Second Headline
+        </h3>
+        <TnTSideNavMenuGroup Title="Group 2" Icon="@(new MaterialIcon(MaterialIcon.Dock))" Expand="true">
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Publish))" Href="/forms">
+        Forms
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.PanoramaHorizontal))" Href="/upload">
+        Upload
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Poll))" Href="/tabview">
+        Tabs
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuGroup Title="Group 2" Icon="@(new MaterialIcon(MaterialIcon.Face))" Expand="true">
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Http))" Href="/forms">
+        Forms
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.Edit))" Href="/upload">
+        Upload
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.ArrowDropDownCircle))" Href="/tabview">
+        Tabs
+        </TnTSideNavMenuLink>
+        </TnTSideNavMenuGroup>
+        </TnTSideNavMenuGroup>
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.ShoppingBasket))" Href="/skeleton">
+        Skeleton
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.MergeType))" Href="/typeahead">
+        Typeahead
+        </TnTSideNavMenuLink>
+        <TnTSideNavMenuLink Icon="@(new MaterialIcon(MaterialIcon.ScreenLockLandscape))" Href="/InfiniteScroll">
+        Infinite Scroll
+        </TnTSideNavMenuLink>
+        *@
+    </TnTSideNav>
 </TnTLayout>
 
 <TnTDialog @rendermode="InteractiveAuto" />
-<TnTSnackbar @rendermode="InteractiveAuto" />
+<TnTToast @rendermode="InteractiveAuto" />

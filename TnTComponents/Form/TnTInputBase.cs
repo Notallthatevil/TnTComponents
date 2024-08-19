@@ -3,19 +3,24 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Reflection;
 using TnTComponents.Core;
 using TnTComponents.Form;
+using TnTComponents.Interfaces;
 
 namespace TnTComponents;
 
-public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, IFormField {
+public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, ITnTComponentBase, ITnTInteractable {
 
     [Parameter]
     public FormAppearance Appearance { get; set; }
 
     [Parameter]
-    public TnTColor? BackgroundColor { get; set; } = TnTColor.SurfaceContainer;
+    public bool? AutoFocus { get; set; }
+
+    [Parameter]
+    public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerHighest;
 
     [Parameter]
     public EventCallback<TInputType?> BindAfter { get; set; }
@@ -31,41 +36,41 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
 
     public ElementReference Element { get; protected set; }
 
-    [Parameter]
-    public TnTIcon? EndIcon { get; set; }
-
-    public virtual string FormCssClass => CssClassBuilder.Create()
+    public virtual string? ElementClass => CssClassBuilder.Create()
         .AddClass(CssClass)
         .AddClass("tnt-input")
-        .AddOutlined((ParentFormAppearance ?? Appearance) == FormAppearance.Outlined)
-        .AddFilled((ParentFormAppearance ?? Appearance) == FormAppearance.Filled)
-        .AddBackgroundColor((ParentFormAppearance ?? Appearance) == FormAppearance.Filled ? BackgroundColor : null)
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddFilled(_tntForm?.Appearance is not null ? _tntForm.Appearance == FormAppearance.Filled : Appearance == FormAppearance.Filled)
+        .AddOutlined(_tntForm?.Appearance is not null ? _tntForm.Appearance == FormAppearance.Outlined : Appearance == FormAppearance.Outlined)
+        .AddBackgroundColor(BackgroundColor)
         .AddForegroundColor(TextColor)
-        .AddClass("tnt-input-placeholder", !string.IsNullOrWhiteSpace(Placeholder))
-        .AddBorderRadius((ParentFormAppearance ?? Appearance) == FormAppearance.Filled ? new TnTBorderRadius() { StartStart = 1, StartEnd = 1 } : new TnTBorderRadius(1))
+        .AddTintColor(TintColor)
+        .AddDisabled(FieldDisabled)
+        .AddClass("tnt-placeholder", !string.IsNullOrEmpty(Placeholder))
         .Build();
 
-    public virtual string? FormCssStyle => CssStyleBuilder.Create()
+    [Parameter]
+    public string? ElementId { get; set; }
+
+    [Parameter]
+    public string? ElementLang { get; set; }
+
+    public string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
-    [CascadingParameter]
-    public TnTLabel? Label { get; set; }
+    [Parameter]
+    public string? ElementTitle { get; set; }
+
+    public bool EnableRipple => false;
 
     [Parameter]
-    public EventCallback<TInputType?> OnChanged { get; set; }
+    public TnTIcon? EndIcon { get; set; }
 
-    [CascadingParameter]
-    public TnTForm? ParentForm { get; set; }
+    [Parameter]
+    public string? Label { get; set; }
 
-    [CascadingParameter(Name = nameof(ParentFormAppearance))]
-    public FormAppearance? ParentFormAppearance { get; set; }
-
-    [CascadingParameter(Name = nameof(ParentFormDisabled))]
-    public bool? ParentFormDisabled { get; set; }
-
-    [CascadingParameter(Name = nameof(ParentFormReadOnly))]
-    public bool? ParentFormReadOnly { get; set; }
+    public string? ElementName => NameAttributeValue;
 
     [Parameter]
     public string? Placeholder { get; set; }
@@ -77,59 +82,99 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public TnTIcon? StartIcon { get; set; }
 
     [Parameter]
-    public TnTColor? TextColor { get; set; } = TnTColor.OnSurfaceVariant;
+    public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
+
+    [Parameter]
+    public TnTColor? TintColor { get; set; } = TnTColor.Primary;
 
     public abstract InputType Type { get; }
+    public bool FieldDisabled => _tntForm?.Disabled is not null ? _tntForm.Disabled : Disabled;
+
+    public bool FieldReadonly => _tntForm?.ReadOnly is not null ? _tntForm.ReadOnly : ReadOnly;
+
+    [CascadingParameter]
+    private ITnTForm? _tntForm { get; set; }
+    [Parameter]
+    public TnTColor? OnTintColor { get; set; }
 
     public ValueTask SetFocusAsync() {
         return Element.FocusAsync();
     }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        builder.OpenElement(0, "span");
-        builder.AddAttribute(10, "class", FormCssClass);
-        builder.AddAttribute(11, "style", FormCssStyle);
+        builder.OpenElement(0, "label");
+        builder.AddAttribute(10, "lang", ElementLang);
+        builder.AddAttribute(20, "title", ElementTitle);
+        builder.AddAttribute(30, "class", ElementClass);
+        builder.AddAttribute(40, "id", ElementId);
+        if(AdditionalAttributes?.TryGetValue("style", out var style) == true) {
+            builder.AddAttribute(41, "style", style);
+        }
+
         {
             {
                 if (StartIcon is not null) {
-                    StartIcon.AdditionalClass = "tnt-start";
-                    builder.AddContent(20, StartIcon.Render());
+                    StartIcon.AdditionalClass = "tnt-start-icon";
+                    builder.AddContent(50, StartIcon.Render());
                 }
             }
             {
                 if (Type == InputType.TextArea) {
-                    builder.OpenElement(100, "textarea");
+                    builder.OpenElement(60, "textarea");
+                }
+                else if (Type == InputType.Select) {
+                    builder.OpenElement(60, "select");
+                    builder.AddAttribute(70, "multiple", typeof(TInputType).IsArray || Nullable.GetUnderlyingType(typeof(TInputType))?.IsArray == true);
                 }
                 else {
-                    builder.OpenElement(100, "input");
-                    builder.AddAttribute(110, "type", Type.ToInputTypeString());
+                    builder.OpenElement(60, "input");
+                    builder.AddAttribute(70, "type", Type.ToInputTypeString());
                 }
-                builder.AddMultipleAttributes(120, AdditionalAttributes);
-                builder.AddAttribute(121, "name", NameAttributeValue);
+                builder.AddMultipleAttributes(80, AdditionalAttributes);
+                builder.AddAttribute(90, "name", ElementName);
 
-                if (CurrentValue is bool) {
-                    builder.AddAttribute(125, "value", bool.TrueString);
-                    builder.AddAttribute(126, "checked", BindConverter.FormatValue(CurrentValue));
+                if (Type == InputType.Tel) {
+                    builder.AddAttribute(91, "onkeydown", "TnTComponents.enforcePhoneFormat(event)");
+                    builder.AddAttribute(92, "onkeyup", "TnTComponents.formatToPhone(event)");
+                }
+                else if (Type == InputType.Currency) {
+                    builder.AddAttribute(91, "onkeydown", "TnTComponents.enforceCurrencyFormat(event)");
+                    builder.AddAttribute(92, "onkeyup", "TnTComponents.formatToCurrency(event)");
+                }
+
+                if (typeof(TInputType) == typeof(bool)) {
+                    builder.AddAttribute(100, "value", bool.TrueString);
+                    builder.AddAttribute(110, "checked", BindConverter.FormatValue(CurrentValue));
+                }
+                else if (Type == InputType.Select && (typeof(TInputType).IsArray || Nullable.GetUnderlyingType(typeof(TInputType))?.IsArray == true)) {
+                    builder.AddAttribute(210, "value", BindConverter.FormatValue(CurrentValue)?.ToString());
                 }
                 else {
-                    builder.AddAttribute(125, "value", CurrentValueAsString);
+                    builder.AddAttribute(100, "value", CurrentValueAsString);
                 }
-                builder.AddAttribute(140, "style", FormCssStyle);
-                builder.AddAttribute(150, "readonly", ParentFormReadOnly.HasValue ? ReadOnly || ParentFormReadOnly.Value : ReadOnly);
-                builder.AddAttribute(160, "placeholder", Placeholder);
-                builder.AddAttribute(170, "disabled", ParentFormDisabled.HasValue ? Disabled || ParentFormDisabled.Value : Disabled);
-                builder.AddAttribute(171, "required", IsRequired());
-                builder.AddAttribute(172, "minlength", GetMinLength());
-                builder.AddAttribute(173, "maxlength", GetMaxLength());
-                builder.AddAttribute(174, "min", GetMinValue());
-                builder.AddAttribute(175, "max", GetMaxValue());
-                if (BindOnInput) {
-                    builder.AddAttribute(180, "oninput", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
+                builder.AddAttribute(120, "style", ElementStyle);
+                builder.AddAttribute(130, "readonly", FieldReadonly);
+                builder.AddAttribute(140, "placeholder", string.IsNullOrEmpty(Placeholder) ? " " : Placeholder);
+                builder.AddAttribute(150, "disabled", FieldDisabled || (Type == InputType.Select && FieldReadonly));
+                builder.AddAttribute(160, "required", IsRequired());
+                builder.AddAttribute(170, "minlength", GetMinLength());
+                builder.AddAttribute(180, "maxlength", GetMaxLength());
+                builder.AddAttribute(190, "min", GetMinValue());
+                builder.AddAttribute(200, "max", GetMaxValue());
+
+                if (BindOnInput && Type != InputType.Select) {
+                    builder.AddAttribute(210, "oninput", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
                 }
                 else {
-                    builder.AddAttribute(180, "onchange", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
+                    if (Type == InputType.Select && (typeof(TInputType).IsArray || Nullable.GetUnderlyingType(typeof(TInputType))?.IsArray == true)) {
+                        builder.AddAttribute(210, "onchange", EventCallback.Factory.CreateBinder<string?[]?>(this, SetCurrentValueAsStringArray, default));
+                    }
+                    else {
+                        builder.AddAttribute(210, "onchange", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
+                    }
                 }
-                if (CurrentValue is bool) {
+
+                if (typeof(TInputType) == typeof(bool)) {
                     builder.SetUpdatesAttributeName("checked");
                 }
                 else {
@@ -137,44 +182,62 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                 }
 
                 if (EditContext is not null) {
-                    builder.AddAttribute(190, "onblur", EventCallback.Factory.Create<FocusEventArgs>(this, args => {
+                    builder.AddAttribute(220, "onblur", EventCallback.Factory.Create<FocusEventArgs>(this, args => {
                         EditContext.NotifyFieldChanged(FieldIdentifier);
                     }));
                 }
 
-                builder.AddElementReferenceCapture(200, e => Element = e);
+                builder.AddElementReferenceCapture(230, e => Element = e);
+
+                builder.OpenRegion(231);
+                RenderChildContent(builder);
+                builder.CloseRegion(); 
+                
                 builder.CloseElement();
 
+                builder.OpenRegion(235);
+                RenderCustomContent(builder);
+                builder.CloseRegion();
+
                 if (EditContext is not null && !DisableValidationMessage && ValueExpression is not null) {
-                    builder.OpenComponent<ValidationMessage<TInputType>>(210);
-                    builder.AddComponentParameter(220, nameof(ValidationMessage<TInputType>.For), ValueExpression);
-                    builder.AddAttribute(230, "class", "tnt-components tnt-validation-message tnt-body-small");
+                    builder.OpenComponent<ValidationMessage<TInputType>>(240);
+                    builder.AddComponentParameter(250, nameof(ValidationMessage<TInputType>.For), ValueExpression);
+                    builder.AddAttribute(260, "class", "tnt-components tnt-validation-message tnt-body-small");
                     builder.CloseComponent();
                 }
             }
             {
-                if (EndIcon is not null) {
-                    EndIcon.AdditionalClass = "tnt-end";
-                    builder.AddContent(240, EndIcon.Render());
+                if (!string.IsNullOrWhiteSpace(Label)) {
+                    builder.OpenElement(270, "span");
+                    builder.AddAttribute(280, "class", CssClassBuilder.Create().AddClass("tnt-label").Build());
+                    builder.AddContent(290, Label);
+                    builder.CloseElement();
                 }
             }
+            {
+                if (EndIcon is not null) {
+                    EndIcon.AdditionalClass = "tnt-end-icon";
+                    builder.AddContent(300, EndIcon.Render());
+                }
+            }
+
         }
 
         builder.CloseElement();
     }
 
-    protected bool IsRequired() {
-        return AdditionalAttributes?.TryGetValue("required", out var _) == true || GetCustomAttributeIfExists<RequiredAttribute>() is not null;
+    private void SetCurrentValueAsStringArray(string?[]? value) {
+        CurrentValue = BindConverter.TryConvertTo<TInputType>(value, CultureInfo.CurrentCulture, out var result)
+            ? result
+            : default;
     }
 
-    protected override void OnInitialized() {
-        base.OnInitialized();
+    protected virtual void RenderCustomContent(RenderTreeBuilder builder) { }
 
-        Label?.SetChildField(this);
+    protected virtual void RenderChildContent(RenderTreeBuilder builder) { }
 
-        if (string.IsNullOrWhiteSpace(Placeholder)) {
-            Placeholder = " ";
-        }
+    protected bool IsRequired() {
+        return AdditionalAttributes?.TryGetValue("required", out var _) == true || GetCustomAttributeIfExists<RequiredAttribute>() is not null;
     }
 
     private TCustomAttr? GetCustomAttributeIfExists<TCustomAttr>() where TCustomAttr : Attribute {

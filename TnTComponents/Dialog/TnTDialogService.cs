@@ -1,18 +1,15 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using TnTComponents.Core;
 using TnTComponents.Dialog.Infrastructure;
 
 namespace TnTComponents.Dialog;
 
-public class TnTDialogService {
+internal class TnTDialogService : ITnTDialogService {
 
-    public event OnCloseCallback? OnClose;
+    public event ITnTDialogService.OnCloseCallback? OnClose;
 
-    public delegate Task OnCloseCallback(ITnTDialog dialog);
-
-    public event OnOpenCallback? OnOpen;
-
-    public delegate Task OnOpenCallback(ITnTDialog dialog);
+    public event ITnTDialogService.OnOpenCallback? OnOpen;
 
     internal DotNetObjectReference<TnTDialogService> Reference { get; private set; }
 
@@ -58,7 +55,6 @@ public class TnTDialogService {
         }
     }
 
-
     public async Task<DialogResult> OpenForResultAsync(RenderFragment renderFragment, TnTDialogOptions? options = null) {
         ArgumentNullException.ThrowIfNull(renderFragment, nameof(renderFragment));
         return await OpenForResultAsync<DialogHelperComponent>(options, new Dictionary<string, object?> {
@@ -71,6 +67,7 @@ public class TnTDialogService {
         public TnTDialogOptions Options { get; init; } = default!;
         public IReadOnlyDictionary<string, object?>? Parameters { get; init; }
         public Type Type { get; init; } = default!;
+        public string ElementId { get; init; } = TnTComponentIdentifier.NewId();
 
         public Task CloseAsync() {
             return dialogService.CloseAsync(this);

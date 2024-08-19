@@ -43,7 +43,7 @@ public class TnTPropertyColumn<TGridItem, TProp> : TnTColumnBase<TGridItem>, IBi
     }
 
     private Func<TGridItem, string>? _cellTextFunc;
-    private Func<TGridItem, string?>? _cellTooltipTextFunc;
+    private readonly Func<TGridItem, string?>? _cellTooltipTextFunc = (item) => item?.ToString();
     private Expression<Func<TGridItem, TProp>>? _lastAssignedProperty;
     private TnTGridSort<TGridItem>? _sortBuilder;
 

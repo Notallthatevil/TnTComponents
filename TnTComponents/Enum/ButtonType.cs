@@ -8,7 +8,7 @@ public enum ButtonType {
 
 public static class ButtonTypeExt {
 
-    public static string ToHtmlType(this ButtonType buttonType) {
+    public static string ToHtmlAttribute(this ButtonType buttonType) {
         return buttonType switch {
             ButtonType.Button => "button",
             ButtonType.Submit => "submit",

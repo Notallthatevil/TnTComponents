@@ -15,10 +15,7 @@ namespace TnTComponents;
 /// </summary>
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
 [CascadingTypeParameter(nameof(TGridItem))]
-public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
-
-    [Parameter(CaptureUnmatchedValues = true)]
-    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+public partial class TnTDataGrid<TGridItem> {
 
     /// <summary>
     /// Gets or sets the child components of this instance. For example, you may define columns by
@@ -27,7 +24,8 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    public string? CssClass => CssClassBuilder.Create()
+    public override string? ElementClass => CssClassBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-datagrid")
         .AddClass("tnt-stripped", DataGridAppearance.HasFlag(DataGridAppearance.Stripped))
         .AddClass("tnt-compact", DataGridAppearance.HasFlag(DataGridAppearance.Compact))
@@ -35,13 +33,12 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
         .AddClass("tnt-loading", Loading)
         .Build();
 
-    public string? CssStyle => CssStyleBuilder.Create()
+    public override string? ElementStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
     [Parameter]
     public DataGridAppearance DataGridAppearance { get; set; }
-
-    public ElementReference Element { get; private set; }
 
     /// <summary>
     /// If specified, grids render this fragment when there is no content.
@@ -125,6 +122,15 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     public bool Resizable { get; set; }
 
     /// <summary>
+    /// Gets or sets a value that determines how many additional items will be rendered
+    /// before and after the visible region. This help to reduce the frequency of rendering
+    /// during scrolling. However, higher values mean that more elements will be present
+    /// in the page.
+    /// </summary>
+    [Parameter]
+    public int OverscanCount { get; set; } = 3;
+
+    /// <summary>
     /// Optionally defines a class to be applied to a rendered row.
     /// </summary>
     [Parameter]
@@ -153,12 +159,10 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     public bool Virtualize { get; set; }
 
     [Inject]
-    private IJSRuntime JSRuntime { get; set; } = default!;
-
-    [Inject]
     private IServiceProvider Services { get; set; } = default!;
 
-    private const string JsModulePath = "./_content/TnTComponents/Grid/TnTDataGrid.razor.js";
+    public override string? JsModulePath => "./_content/TnTComponents/Grid/TnTDataGrid.razor.js";
+
     private readonly List<TnTColumnBase<TGridItem>> _columns;
 
     // If the PaginationState mutates, it raises this event. We use it to trigger a re-render.
@@ -184,11 +188,7 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
     private bool _collectingColumns;
     private IReadOnlyCollection<TGridItem> _currentNonVirtualizedViewItems = Array.Empty<TGridItem>();
     private int _delay = 100;
-    private DotNetObjectReference<TnTDataGrid<TGridItem>>? _dotNetObjectRef;
     private bool _interactive;
-
-    // The associated ES6 module, which uses document-level event listeners
-    private IJSObjectReference? _jsModule;
 
     private object? _lastAssignedItemsOrProvider;
 
@@ -227,27 +227,6 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
         EventCallbackSubscriber<object?>? columnsFirstCollectedSubscriber = new(
             EventCallback.Factory.Create<object?>(this, RefreshDataCoreAsync));
         columnsFirstCollectedSubscriber.SubscribeOrMove(_internalGridContext.ColumnsFirstCollected);
-    }
-
-    /// <inheritdoc />
-    public async ValueTask DisposeAsync() {
-        _currentPageItemsChanged.Dispose();
-
-        try {
-            if (_jsModule is not null) {
-                await _jsModule.InvokeVoidAsync("onDispose", Element, _dotNetObjectRef);
-                await _jsModule.DisposeAsync();
-            }
-
-            if (_jsModule is not null) {
-                await _jsModule.DisposeAsync();
-            }
-        }
-        catch (Exception ex) when (ex is JSDisconnectedException ||
-                                   ex is OperationCanceledException) {
-            // The JSRuntime side may routinely be gone already if the reason we're disposing is
-            // that the client disconnected. This is not an error.
-        }
     }
 
     /// <summary>
@@ -294,18 +273,6 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
         }
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender) {
-        _dotNetObjectRef ??= DotNetObjectReference.Create(this);
-        _jsModule ??= await JSRuntime.ImportIsolatedJs(this, JsModulePath);
-        if (firstRender) {
-            _interactive = true;
-            StateHasChanged();
-            await (_jsModule?.InvokeVoidAsync("onLoad", Element, _dotNetObjectRef) ?? ValueTask.CompletedTask);
-        }
-
-        await (_jsModule?.InvokeVoidAsync("onUpdate", Element, _dotNetObjectRef) ?? ValueTask.CompletedTask);
-    }
-
     /// <inheritdoc />
     protected override Task OnParametersSetAsync() {
         // The associated pagination state may have been added/removed/replaced
@@ -329,6 +296,13 @@ public partial class TnTDataGrid<TGridItem> : IHandleEvent, IAsyncDisposable {
         // columns, because they might perform some action like setting the default sort order, so
         // it would be wasteful to have to re-query immediately
         return (_columns.Count > 0 && mustRefreshData) ? RefreshDataCoreAsync() : Task.CompletedTask;
+    }
+
+    protected override void OnAfterRender(bool firstRender) {
+        base.OnAfterRender(firstRender);
+        if (firstRender) {
+            _interactive = true;
+        }
     }
 
     private void FinishCollectingColumns() {

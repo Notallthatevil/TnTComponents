@@ -1,9 +1,0 @@
-﻿@using TnTComponents.Core
-@inherits TnTComponentBase
-@namespace TnTComponents
-
-<div @attributes="AdditionalAttributes" class="@CssClass" style="@CssStyle">
-    <TnTNavLink Href="@Href" Match="@Match" StartIcon="Icon" Disabled="Disabled" ActiveBackgroundColor="ActiveBackgroundColor" Ripple="Ripple" @onclick:stopPropagation>
-        @ChildContent
-    </TnTNavLink>
-</div>

@@ -53,9 +53,7 @@ function tntInitResizable(tableElement) {
         resizer.addEventListener('mousedown', mouseDownHandler);
     };
 
-    if (!tableElement.classList.contains('tnt-compact')) {
-        createResizableTable(tableElement);
-    }
+    createResizableTable(tableElement);
 }
 
 export function onLoad() {

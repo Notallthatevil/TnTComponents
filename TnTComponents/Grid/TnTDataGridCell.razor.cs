@@ -14,11 +14,11 @@ public partial class TnTDataGridCell<TGridItem> {
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    public string? CssClass => CssClassBuilder.Create()
+    public string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
-    public string? CssStyle => CssStyleBuilder.Create()
+    public string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 

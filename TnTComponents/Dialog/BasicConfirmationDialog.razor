@@ -7,12 +7,12 @@
 <TnTDivider style="margin: 1rem 0" />
 <div class="tnt-basic-confirmation-dialog-buttons">
     @if (ShowCancelButton) {
-        <TnTButton TextColor="@CancelButtonTextColor" Appearance="ButtonAppearance.Outlined" OnClick="@CancelClicked">
+        <TnTButton TextColor="@CancelButtonTextColor" Appearance="ButtonAppearance.Outlined" OnClickCallback="@CancelClicked">
             <MaterialIcon Icon="@MaterialIcon.Cancel"/>
             @CancelButtonText
         </TnTButton>
     }
-    <TnTButton OnClick="@ConfirmClicked">
+    <TnTButton OnClickCallback="@ConfirmClicked">
         <MaterialIcon Icon="@MaterialIcon.Check" />
         @ConfirmButtonText
     </TnTButton>

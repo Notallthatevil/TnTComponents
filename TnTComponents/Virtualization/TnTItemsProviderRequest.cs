@@ -41,7 +41,7 @@ public readonly record struct TnTItemsProviderRequest() {
             if (!string.IsNullOrWhiteSpace(countStr.FirstOrDefault()) && int.TryParse(countStr.FirstOrDefault(), out int countResult)) {
                 count = countResult;
             }
-            var sortOnProperties = query[nameof(SortOnProperties)].SelectMany(s => s.Split("],[").Select(t => t.Replace("[", string.Empty).Replace("]", string.Empty)))
+            var sortOnProperties = query[nameof(SortOnProperties)].SelectMany(s => s!.Split("],[").Select(t => t.Replace("[", string.Empty).Replace("]", string.Empty)))
                 .Where(s => !string.IsNullOrWhiteSpace(s))
                 .Select(s => {
                     var split = s.Split(',');

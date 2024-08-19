@@ -1,16 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
-using Microsoft.JSInterop;
-using TnTComponents.Ext;
+using TnTComponents.Interfaces;
 
 namespace TnTComponents.Core;
 
 /// <summary>
 /// Base component containing all common logic.
 /// </summary>
-/// <seealso cref="Microsoft.AspNetCore.Components.ComponentBase" />
-/// <seealso cref="TnTComponents.Core.ITnTComponentBase" />
-/// <seealso cref="System.IAsyncDisposable" />
+/// <seealso cref="ComponentBase" />
+/// <seealso cref="ITnTComponentBase" />
+/// <seealso cref="IAsyncDisposable" />
 public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
 
     [Parameter(CaptureUnmatchedValues = true)]
@@ -21,27 +19,36 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
     [Parameter]
     public bool? AutoFocus { get; set; }
 
-    public string ComponentIdentifier { get; } = TnTComponentIdentifier.NewId();
-    /// <inheritdoc />
-    public abstract string? CssClass { get; }
-    /// <inheritdoc />
-    public abstract string? CssStyle { get; }
-
-    [Parameter]
-    public bool Disabled { get; set; }
-
     public ElementReference Element { get; protected set; }
 
     /// <inheritdoc />
+    public abstract string? ElementClass { get; }
+
+    /// <inheritdoc />
     [Parameter]
-    public virtual string? Id { get; set; }
+    public virtual string? ElementId { get; set; }
 
     [Parameter]
-    public TextAlign? TextAlign { get; set; }
+    public string? ElementLang { get; set; }
+
+    /// <inheritdoc />
+    public abstract string? ElementStyle { get; }
+
+    [Parameter]
+    /// <inheritdoc />
+    public string? ElementTitle { get; set; }
+
 
     internal const string TnTCustomIdentifierAttribute = "tntid";
 
     protected bool Interactive { get; private set; }
+
+    [Inject]
+    private ITnTRenderContext _renderContext { get; set; } = default!;
+
+    public bool Prerendering => _renderContext.IsPrerendering;
+
+    public string ComponentIdentifier { get; } = TnTComponentIdentifier.NewId();
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         await base.OnAfterRenderAsync(firstRender);

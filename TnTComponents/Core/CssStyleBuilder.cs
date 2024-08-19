@@ -33,6 +33,15 @@ internal class CssStyleBuilder {
         }
     }
 
+    public CssStyleBuilder AddVariable(string varName, TnTColor color, bool enabled = true) {
+        if (enabled) {
+            return AddStyle($"--{varName}", $"var(--tnt-color-{color.ToCssClassName()})");
+        }
+        else {
+            return this;
+        }
+    }
+
     public string? Build() {
         var styles = _styles.Where(kv => !string.IsNullOrWhiteSpace(kv.Key));
         if (styles.Any()) {
