@@ -1,6 +1,6 @@
 ﻿.tnt-accordion {
     display: block;
-    margin: 0.5rem;
+    margin: 8px;
 
     .tnt-accordion-child {
         border-radius: inherit;
@@ -14,14 +14,14 @@
             align-items: center;
 
             h3 {
-                padding: 0.5rem;
+                padding: 8px;
                 margin: 0;
                 border-radius: inherit;
                 display: inline-block;
             }
 
             .tnt-icon {
-                padding: 0.5rem;
+                padding: 8px;
                 transition: 250ms;
                 user-select: none;
                 pointer-events: none;

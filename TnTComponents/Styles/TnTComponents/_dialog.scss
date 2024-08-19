@@ -5,7 +5,7 @@
     max-height: 90vh;
     border: none;
     outline: none;
-    padding: 1.5rem;
+    padding: 24px;
     background-color: $tnt-color-surface-container-highest;
     animation: dialogGrow 150ms ease-in-out;
     overflow-x: hidden;
@@ -27,7 +27,7 @@
 
         button.tnt-components {
             float: right;
-            top: -2rem;
+            top: -32px;
             background-color: transparent;
             color: inherit;
             box-shadow: none;

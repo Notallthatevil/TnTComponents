@@ -19,7 +19,7 @@ $medium-only: "only screen and (min-width : #{$small-screen-up}) and (max-width 
 
 // Grid
 $num-cols: 12 !default;
-$gutter-width: 1.5rem !default;
+$gutter-width: 24px !default;
 $element-top-margin: $gutter-width/3 !default;
 $element-bottom-margin: ($gutter-width*2)/3 !default;
 
@@ -187,10 +187,10 @@ $element-bottom-margin: ($gutter-width*2)/3 !default;
 
 @for $i from 1 through 16 {
     .tnt-padding-#{$i} {
-        padding: #{(0.25 * $i)}rem;
+        padding: #{(4 * $i)}px;
     }
 
     .tnt-margin-#{$i} {
-        margin: #{(0.25 * $i)}rem;
+        margin: #{(4 * $i)}px;
     }
 }

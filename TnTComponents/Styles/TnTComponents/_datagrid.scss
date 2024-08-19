@@ -100,7 +100,7 @@
 
             td {
                 box-sizing: border-box;
-                padding: 0.1rem 0.25rem;
+                padding: 0.16px 4px;
 
                 &:empty {
                     position: relative;
@@ -166,11 +166,11 @@
 
 //        tr.tnt-data-grid-header {
 //            th {
-//                padding: 0 2rem;
+//                padding: 0 32px;
 //                margin: 0;
 //                position: relative;
 //                user-select: none;
-//                min-width: 1rem;
+//                min-width: 16px;
 //                text-align: center;
 //                @extend .tnt-title-medium;
 
@@ -199,7 +199,7 @@
 //                        position: absolute;
 //                        color: inherit;
 //                        right: 0;
-//                        margin-right: 1rem;
+//                        margin-right: 16px;
 //                    }
 //                }
 //            }
@@ -242,7 +242,7 @@
 
 //            td {
 //                box-sizing: border-box;
-//                padding: 0.1rem 0.25rem;
+//                padding: 0.16px 4px;
 
 //                &:empty {
 //                    position: relative;

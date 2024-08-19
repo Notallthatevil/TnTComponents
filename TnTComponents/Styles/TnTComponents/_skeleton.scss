@@ -1,6 +1,6 @@
 ﻿.tnt-skeleton {
-    margin: 0.5rem;
-    height: 5rem;
+    margin: 8px;
+    height: 80px;
 
     &.tnt-animated {
         background: linear-gradient(to right, var(--bg-color) 33%, color-mix(in srgb, var(--bg-color) 60%, var(--tnt-color-background)) 50%, var(--bg-color) 66%);

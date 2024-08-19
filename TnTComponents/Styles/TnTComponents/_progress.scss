@@ -1,9 +1,9 @@
 ﻿progress.tnt-components {
     &.tnt-progress-linear {
-        width: calc(100% - 1rem);
+        width: calc(100% - 16px);
         background-color: $tnt-color-surface-container-highest;
-        height: 0.25rem;
-        margin: 0.5rem;
+        height: 4px;
+        margin: 8px;
         position: relative;
         overflow-x: hidden;
         color: var(--progress-color);
@@ -48,9 +48,9 @@
         box-sizing: border-box;
         border: none;
         border-radius: 50%;
-        padding: 0.25rem;
-        width: 4rem;
-        height: 4rem;
+        padding: 4px;
+        width: 64px;
+        height: 64px;
         color: var(--progress-color);
         background-color: transparent;
         font-size: 16px;
@@ -81,7 +81,7 @@
                 content: "";
                 display: block;
                 box-sizing: border-box;
-                margin-bottom: 1rem;
+                margin-bottom: 16px;
                 border: solid 4px transparent;
                 border-top-color: currentColor;
                 border-radius: 50%;
@@ -105,14 +105,14 @@
 
         &:not(:indeterminate) {
             background-color: var(--progress-color);
-            -webkit-mask: radial-gradient(circle, transparent 0 1.6rem, black 1.6rem 100%);
-            mask: radial-gradient(circle, transparent 0 1.6rem, black 1.6rem 100%);
+            -webkit-mask: radial-gradient(circle, transparent 0 26px, black 26px 100%);
+            mask: radial-gradient(circle, transparent 0 26px, black 26px 100%);
             transform: scale(0.8);
         }
 
         &.tnt-size-smallest {
-            width: 1.5rem;
-            height: 1.5rem;
+            width: 24px;
+            height: 24px;
 
             &:before, &::-webkit-progress-value {
                 border-width: 2px;
@@ -124,8 +124,8 @@
         }
 
         &.tnt-size-small {
-            width: 2.5rem;
-            height: 2.5rem;
+            width: 40px;
+            height: 40px;
 
             &:before, &::-webkit-progress-value {
                 border-width: 3px;
@@ -137,8 +137,8 @@
         }
 
         &.tnt-size-large {
-            width: 5.5rem;
-            height: 5.5rem;
+            width: 88px;
+            height: 88px;
 
             &:before, &::-webkit-progress-value {
                 border-width: 6px;
@@ -150,8 +150,8 @@
         }
 
         &.tnt-size-largest {
-            width: 8rem;
-            height: 8rem;
+            width: 128px;
+            height: 128px;
 
             &:before, &::-webkit-progress-value {
                 border-width: 10px;
