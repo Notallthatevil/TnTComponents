@@ -26,6 +26,8 @@ public partial class TnTDataGrid<TGridItem> {
 
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddBackgroundColor(BackgroundColor)
+        .AddFilled(BackgroundColor is not null)
         .AddClass("tnt-datagrid")
         .AddClass("tnt-stripped", DataGridAppearance.HasFlag(DataGridAppearance.Stripped))
         .AddClass("tnt-compact", DataGridAppearance.HasFlag(DataGridAppearance.Compact))
@@ -36,6 +38,9 @@ public partial class TnTDataGrid<TGridItem> {
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
+
+    [Parameter]
+    public TnTColor? BackgroundColor { get; set; } = TnTColor.Background;
 
     [Parameter]
     public DataGridAppearance DataGridAppearance { get; set; }
