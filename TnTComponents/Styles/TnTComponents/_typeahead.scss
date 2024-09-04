@@ -46,7 +46,7 @@
                 cursor: pointer;
                 padding: 8px;
 
-                &.tnt-focused, span:hover {
+                &.tnt-focused, span:hover, &:hover {
                     background-color: color-mix(in srgb, $tnt-color-surface-tint 20%, transparent);
                 }
 
