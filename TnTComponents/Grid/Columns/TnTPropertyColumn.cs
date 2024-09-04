@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System.Linq.Expressions;
 using System.Reflection;
+using TnTComponents.Ext;
 using TnTComponents.Grid;
 using TnTComponents.Grid.Columns;
 using TnTComponents.Grid.Infrastructure;
@@ -95,7 +96,7 @@ public class TnTPropertyColumn<TGridItem, TProp> : TnTColumnBase<TGridItem>, IBi
                     Title = daText;
                 }
                 else {
-                    Title = memberExpression.Member.Name;
+                    Title = memberExpression.Member.Name.SplitPascalCase();
                 }
             }
         }
