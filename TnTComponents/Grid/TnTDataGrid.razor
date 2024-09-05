@@ -131,7 +131,7 @@
             return;
         }
         <tr class="empty-content-row">
-            <td class="empty-content-cell">
+            <td class="empty-content-cell" colspan="1000">
                 @if (EmptyContent is null) {
                     @("No data to show!")
                 }
@@ -144,17 +144,18 @@
     }
 
     private void RenderLoadingContent(RenderTreeBuilder __builder) {
-        <TnTDataGridRow TGridItem="TGridItem" Class="loading-content-row">
-            <TnTDataGridCell Class="loading-content-cell">
                 @if (LoadingContent is null) {
-                    <div>
-                        <TnTProgressIndicator Appearance="ProgressAppearance.Ring" />
-                    </div>
+            @for(var i = 0; i < 10; ++i)
+            {
+                RenderPlaceholderRow(__builder, new PlaceholderContext(i, ItemSize));
+            }
                 }
                 else {
+            <TnTDataGridRow TGridItem="TGridItem" Class="loading-content-row">
+                <TnTDataGridCell Class="loading-content-cell">
                     @LoadingContent
-                }
             </TnTDataGridCell>
         </TnTDataGridRow>
     }
+}
 }
