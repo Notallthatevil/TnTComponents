@@ -65,6 +65,10 @@ public class TnTInputFile : InputFile, ITnTInteractable {
     [CascadingParameter]
     private ITnTForm? _tntForm { get; set; }
 
+    protected override void OnInitialized() {
+        base.OnInitialized();
+        OnChange = EventCallback.Factory.Create(this, async (InputFileChangeEventArgs args) => await OnUploadFilesHandlerAsync(args));
+    }
 
     protected override void OnParametersSet() {
         base.OnParametersSet();
