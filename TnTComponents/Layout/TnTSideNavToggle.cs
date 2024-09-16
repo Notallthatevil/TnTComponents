@@ -20,7 +20,7 @@ public class TnTSideNavToggle : TnTComponentBase, ITnTInteractable {
         .Build();
 
     [Parameter]
-    public TnTIcon Icon { get; set; } = new MaterialIcon(MaterialIcon.Menu);
+    public TnTIcon Icon { get; set; } = new MaterialIcon{ Icon = MaterialIcon.Menu };
 
     [Parameter]
     public bool Disabled { get; set; }
@@ -30,7 +30,7 @@ public class TnTSideNavToggle : TnTComponentBase, ITnTInteractable {
     [Parameter]
     public TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
     [Parameter]
-    public TnTColor? OnTintColor { get; set; }
+    public TnTColor? OnTintColor { get; set; }  
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "button");

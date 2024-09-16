@@ -82,7 +82,7 @@ public partial class TnTChip : TnTInteractableComponentBase {
 
         if (CloseButtonClicked.HasDelegate) {
             builder.OpenComponent<TnTImageButton>(170);
-            builder.AddComponentParameter(180, nameof(TnTImageButton.Icon), new MaterialIcon(MaterialIcon.Close));
+            builder.AddComponentParameter(180, nameof(TnTImageButton.Icon), new MaterialIcon { Icon = MaterialIcon.Close });
             builder.AddComponentParameter(190, nameof(TnTImageButton.OnClickCallback), CloseButtonClicked);
             builder.AddComponentParameter(200, nameof(TnTImageButton.BackgroundColor), TnTColor.Transparent);
             builder.AddComponentParameter(210, nameof(TnTImageButton.TextColor), TextColor);

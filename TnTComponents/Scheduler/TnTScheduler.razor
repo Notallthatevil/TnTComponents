@@ -4,11 +4,11 @@
 <div @attributes="AdditionalAttributes" class="@ElementClass" style="@ElementStyle" @ref="Element">
     @if (!HideDateControls) {
         <div class="date-controls">
-            <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.ChevronLeft))" OnClickCallback="PreviousPage" class="prev-button" />
+            <TnTImageButton Icon="@(new MaterialIcon{ Icon = MaterialIcon.ChevronLeft })" OnClickCallback="PreviousPage" class="prev-button" />
             <TnTButton Appearance="ButtonAppearance.Text" OnClickCallback="GoToToday" class="today-button" TextColor="TnTColor.OnSurface" Elevation="0">
                 TODAY
             </TnTButton>
-            <TnTImageButton Icon="@(new MaterialIcon(MaterialIcon.ChevronRight))" OnClickCallback="NextPage" class="next-button" />
+            <TnTImageButton Icon="@(new MaterialIcon{ Icon = MaterialIcon.ChevronRight })" OnClickCallback="NextPage" class="next-button" />
             <TnTInputDateTime @bind-Value="_displayDate" BackgroundColor="@BackgroundColor" Label="Date Picker" BindAfter="@((DateOnly? date) => UpdateDate(date))" />
         </div>
     }

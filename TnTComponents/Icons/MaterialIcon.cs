@@ -23,12 +23,6 @@ public sealed partial class MaterialIcon : TnTIcon {
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
-    public MaterialIcon() : base() {
-    }
-
-    public MaterialIcon(string icon) : base(icon) {
-    }
-
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         base.BuildRenderTree(builder);
     }
