@@ -29,6 +29,7 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-scheduler")
+        .AddFilled()
         .AddBackgroundColor(BackgroundColor)
         .AddForegroundColor(TextColor)
         .Build();
@@ -75,21 +76,15 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
         _scheduleViews.Remove(scheduleView.GetType());
     }
 
-    private async Task GoToToday() {
-        await UpdateDate(DateOnly.FromDateTime(DateTime.Today));
-    }
+    private Task GoToToday() => UpdateDate(DateOnly.FromDateTime(DateTimeOffset.Now.LocalDateTime));
 
-    private async Task NextPage() {
-        await UpdateDate(_selectedView?.IncrementPage(Date));
-    }
+    private Task NextPage() =>  UpdateDate(_selectedView?.IncrementPage(Date));
 
-    private async Task PreviousPage() {
-        await UpdateDate(_selectedView?.DecrementPage(Date));
-    }
+    private Task PreviousPage() => UpdateDate(_selectedView?.DecrementPage(Date));
 
     private async Task UpdateDate(DateOnly? date) {
         if (date.HasValue) {
-            StateHasChanged();
+            Date = date.Value;
             _selectedView?.Refresh();
             await DateChangedCallback.InvokeAsync();
         }
