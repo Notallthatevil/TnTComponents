@@ -8,25 +8,14 @@ namespace TnTComponents;
 [CascadingTypeParameter(nameof(TEventType))]
 public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
 
-    [Parameter(CaptureUnmatchedValues = true)]
-    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+    [Parameter]
+    public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerLow;
 
     [Parameter]
-    public TnTColor BackgroundColor { get; set; } = TnTColor.Surface;
+    public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
-
-    public string? ElementClass => CssClassBuilder.Create()
-            .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddClass("tnt-scheduler")
-        .AddBackgroundColor(BackgroundColor)
-        .AddForegroundColor(TextColor)
-        .Build();
-
-    public string? ElementStyle => CssStyleBuilder.Create()
-        .AddFromAdditionalAttributes(AdditionalAttributes)
-        .Build();
 
     [Parameter]
     public EventCallback DateChangedCallback { get; set; }
@@ -37,12 +26,16 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
     [Parameter]
     public bool DisableDragAndDrop { get; set; }
 
-    [Parameter]
-#pragma warning disable BL0007 // Component parameters should be auto properties
-    public DateOnly DisplayedDate { get => _displayDate ?? DateOnly.FromDateTime(DateTime.Today); set => _displayDate = value; }
-#pragma warning restore BL0007 // Component parameters should be auto properties
+    public override string? ElementClass => CssClassBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddClass("tnt-scheduler")
+        .AddBackgroundColor(BackgroundColor)
+        .AddForegroundColor(TextColor)
+        .Build();
 
-    public ElementReference Element { get; private set; }
+    public override string? ElementStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .Build();
 
     [Parameter, EditorRequired]
     public ICollection<TEventType> Events { get; set; } = [];
@@ -51,9 +44,10 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
     public bool HideDateControls { get; set; }
 
     [Parameter]
-    public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
+    public DateOnly Date { get; set; } = DateOnly.FromDateTime(DateTime.Today);
 
-    private DateOnly? _displayDate = DateOnly.FromDateTime(DateTime.Today);
+    public DayOfWeek DayOfWeek => Date.DayOfWeek;
+
 
     private IDictionary<Type, ScheduleViewBase<TEventType>> _scheduleViews = new Dictionary<Type, ScheduleViewBase<TEventType>>();
     private ScheduleViewBase<TEventType>? _selectedView;
@@ -86,16 +80,15 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
     }
 
     private async Task NextPage() {
-        await UpdateDate(_selectedView?.IncrementPage(DisplayedDate));
+        await UpdateDate(_selectedView?.IncrementPage(Date));
     }
 
     private async Task PreviousPage() {
-        await UpdateDate(_selectedView?.DecrementPage(DisplayedDate));
+        await UpdateDate(_selectedView?.DecrementPage(Date));
     }
 
     private async Task UpdateDate(DateOnly? date) {
         if (date.HasValue) {
-            DisplayedDate = date.Value;
             StateHasChanged();
             _selectedView?.Refresh();
             await DateChangedCallback.InvokeAsync();

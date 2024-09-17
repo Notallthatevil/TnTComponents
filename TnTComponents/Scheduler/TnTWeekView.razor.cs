@@ -33,18 +33,18 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
 
     public override IEnumerable<DateOnly> GetVisibleDates() {
         int diff;
-        if (StartViewOn > Scheduler.DisplayedDate.DayOfWeek) {
-            diff = 7 - (int)StartViewOn + (int)Scheduler.DisplayedDate.DayOfWeek;
+        if (StartViewOn > Scheduler.DayOfWeek) {
+            diff = 7 - (int)StartViewOn + (int)Scheduler.DayOfWeek;
         }
         else {
-            diff = Math.Abs((int)StartViewOn - (int)Scheduler.DisplayedDate.DayOfWeek);
+            diff = Math.Abs((int)StartViewOn - (int)Scheduler.DayOfWeek);
         }
 
         if (diff >= 7) {
             diff %= 7;
         }
 
-        var startDate = Scheduler.DisplayedDate.AddDays(-diff);
+        var startDate = Scheduler.Date.AddDays(-diff);
 
         for (int i = 0; i < 7; i++) {
             yield return startDate.AddDays(i);

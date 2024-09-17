@@ -114,7 +114,7 @@ public abstract class ScheduleViewBase<TEventType> : ComponentBase, ITnTComponen
     }
 
     protected bool IsDisabledSlot(DayOfWeek dayOfWeek, TimeOnly timeSlot) {
-        return Scheduler.DisabledDateTimes.Any(disabledDateTime => disabledDateTime.IsDisabledTimeSlot(dayOfWeek, timeSlot));
+        return Scheduler.DisabledDateTimes.Any(disabledDateTime => disabledDateTime.IsTimeSlotDisabled(dayOfWeek, timeSlot));
     }
 
     protected virtual async Task OnDropEvent(DateTimeOffset dateTimeOffset) {
