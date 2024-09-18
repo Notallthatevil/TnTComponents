@@ -4,69 +4,48 @@
 @typeparam TEventType
 @inherits ScheduleViewBase<TEventType>
 
-@if (Scheduler.IsViewSelected(this)) {
-    <div @attributes="AdditionalAttributes" class="@ElementClass" style="@ElementStyle" tntid="@ElementId" @ref="Element">
-
-        @{
-            @foreach (var (date, gridPosition) in _visibleDates) {
-                <div class="tnt-slot tnt-column-header tnt-label-large@(date == DateOnly.FromDateTime(DateTimeOffset.Now.Date) ? " today" : null)" style="@gridPosition.ToCssString()">
-                    @date.ToString("dddd")
-                    @if (!HideDates) {
-                        <div>
+@if (Scheduler.IsViewSelected(this))
+{
+    var today = DateOnly.FromDateTime(DateTimeOffset.Now.LocalDateTime);
+    <div @attributes="AdditionalAttributes" class="@ElementClass" style="@ElementStyle" id="@ElementId" title="@ElementTitle" lang="@ElementLang" @ref="Element">
+        <div class="tnt-date-header">
+            <div class="tnt-time-column">
+            </div>
+            <div class="tnt-dates">
+                @foreach (var date in _visibleDates)
+                {
+                    <h2 class="@($"tnt-date-header-item{(date == today ? " tnt-today" : string.Empty)}")">
+                        <div class="tnt-day-of-week tnt-label-small">
+                            @date.ToString("ddd").ToUpper()
+                        </div>
+                        <div class="tnt-date tnt-headline-small">
                             @date.ToString("dd")
                         </div>
-                    }
-                </div>
-            }
-
-            @foreach (var (time, timeGridPosition) in _timeSlots) {
-                var show = time.Minute % 30 == 0;
-                <div class="tnt-slot tnt-time-slot tnt-label-large" style="@timeGridPosition.ToCssString()">
-                    @if (show) {
-                        @time
-                    }
-                </div>
-
-                @foreach (var (date, dateGridPosition) in _visibleDates) {
-                    var gridPosition = new GridPosition() {
-                            ColumnIndex = dateGridPosition.ColumnIndex,
-                            RowIndex = timeGridPosition.RowIndex,
-                            ColumnSpan = dateGridPosition.ColumnSpan
-                        };
-
-                    @if (IsDisabledSlot(date.DayOfWeek, time)) {
-                        <div class="tnt-slot tnt-day-slot disabled@(show ? " tnt-slot-outline" : null) @(date == DateOnly.FromDateTime(DateTimeOffset.Now.Date) ? " today" : null)"
-                             style="@gridPosition.ToCssString()">
-                        </div>
-                    }
-                    else {
-                        <div class="tnt-slot tnt-day-slot@(show ? " tnt-slot-outline" : null) @(date == DateOnly.FromDateTime(DateTimeOffset.Now.Date) ? " today" : null) @(TimeSlotClickedCallback.HasDelegate ? " tnt-clickable" : null)"
-                             style="@gridPosition.ToCssString()"
-                             ondragover="event.preventDefault();this.style.fontWeight = '600';"
-                             ondragleave="this.style.fontWeight='100';"
-                             @ondrop:preventDefault="true"
-                             @ondrop="@(() => OnDropEvent(new DateTime(date, time)))"
-                             @onclick="@(() => TimeSlotClicked(new DateTime(date, time)))">
-                        </div>
-                    }
-                }
-            }
-        }
-        @foreach (var (@event, position) in _events) {
-            <div class="tnt-slot tnt-event tnt-label-medium"
-                 style="@position.ToCssString() @($"--background-color: var(--tnt-color-{@event.BackgroundColor.ToCssClassName()}); --foreground-color: var(--tnt-color-{@event.ForegroundColor.ToCssClassName()})")"
-                 draggable="@((!Scheduler.DisableDragAndDrop).ToString())"
-                 @ondragstart="@(() => DragEventStart(@event))"
-                 @ondragend="@DragEventEnd"
-                 @onclick="@(() => EventClicked(@event))">
-                @(@event.Title)
-                @if(!string.IsNullOrWhiteSpace(@event.Description)) {
-                    <p class="tnt-body-small">
-                        @(new MarkupString(@event.Description))
-                    </p>
+                    </h2>
                 }
             </div>
-
-        }
+        </div>
+        <div class="tnt-date-content">
+            <div class="tnt-time-column">
+                @{
+                    var startTime = TimeOnly.MinValue;
+                    do
+                    {
+                        <div class="tnt-time-row tnt-body-small">
+                            @startTime.ToString("h tt")
+                        </div>
+                        startTime = startTime.AddHours(1);
+                    }
+                    while (startTime != TimeOnly.MinValue);
+                }
+            </div>
+            <div class="tnt-event-columns">
+                @foreach (var date in _visibleDates)
+                {
+                    <div class="tnt-event-column">
+                    </div>
+                }
+            </div>
+        </div>
     </div>
 }

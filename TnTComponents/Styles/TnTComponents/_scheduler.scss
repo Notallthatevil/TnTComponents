@@ -1,13 +1,27 @@
-﻿.tnt-scheduler {
-    overflow-x: auto;
-    padding: 8px;
+﻿$header-height: 80px;
+$cell-min-width: 80px;
+$cell-height: 48px;
+$time-column-width: 36px;
+
+.tnt-scheduler {
     margin: 8px;
-    box-sizing:border-box;
+    box-sizing: border-box;
+    position: relative;
+    height: max-content;
+    overflow-x: auto;
+    height: 88%;
+    container-type: inline-size;
+    container-name: tnt-scheduler-container;
     @extend .tnt-border-radius-2;
 
     .date-controls {
         display: flex;
         align-items: center;
+        position: sticky;
+        background-color: inherit;
+        top: 0;
+        left: 0;
+        z-index: 5;
 
         .today-button {
             padding: 0 16px;
@@ -15,91 +29,146 @@
     }
 
     .tnt-week-view {
-        display: grid;
-        min-width: $small-screen-up;
+        display: flex;
+        flex-direction: column;
+        background-color: inherit;
+        position: relative;
 
-        .tnt-column-header {
-            text-align: center;
-            user-select: none;
-            -webkit-user-select: none;
+        .tnt-date-header {
+            background-color: inherit;
+            display: flex;
+            align-items: center;
+            height: $header-height;
+            position: sticky;
+            top: -8px;
+            z-index: 5;
 
-            &.today {
-                color: $tnt-color-primary;
+            &:after {
+                content: '';
+                width: calc(100cqw - 16px);
+                min-width: ($time-column-width + 7 * $cell-min-width);
+                position: absolute;
+                border-bottom: 1px solid $tnt-color-outline-variant;
+                bottom: 0;
+                left: 0;
+            }
+
+            .tnt-time-column {
+                min-width: $time-column-width;
+                height: 100%;
+            }
+
+            .tnt-dates {
                 display: flex;
-                flex-direction: column;
-                align-items: center;
+                flex: 1 1 auto;
+                height: 100%;
+                user-select: none;
+                background-color: inherit;
 
-                div {
-                    background-color: $tnt-color-primary;
-                    color: $tnt-color-on-primary;
-                    border-radius: 100%;
-                    width: 16px;
-                    height: 16px;
-                    aspect-ratio: 1/1;
-                    padding: 0.16px;
-                    vertical-align: middle;
-                    text-align: center;
+                .tnt-date-header-item {
+                    width: 100%;
+                    min-width: $cell-min-width;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    user-select: inherit;
+                    position: relative;
+                    border-left: 1px solid $tnt-color-outline-variant;
+                    box-sizing: border-box;
+
+                    .tnt-day-of-week {
+                        user-select: inherit;
+                    }
+
+                    .tnt-date {
+                        color: inherit;
+                        font-weight: 500;
+                        padding: 8px;
+                        user-select: inherit;
+                    }
+
+                    &.tnt-today {
+                        color: $tnt-color-on-primary;
+
+                        .tnt-day-of-week {
+                            color: $tnt-color-primary;
+                        }
+
+                        .tnt-date {
+                            background-color: $tnt-color-primary;
+                            border-radius: 50%;
+                            aspect-ratio: 1/1;
+                            text-align: center;
+                        }
+                    }
                 }
             }
         }
 
-        .tnt-slot {
-            grid-row-start: var(--row-index);
-            grid-column-start: var(--column-index);
-            grid-row-end: span var(--row-span);
-            grid-column-end: span var(--column-span);
+        .tnt-date-content {
+            display: flex;
+            background-color: inherit;
+            position: relative;
+            top: -12px;
 
-            &.tnt-day-slot {
-                border-left: 1px solid color-mix(in srgb, $tnt-color-outline-variant 30%, transparent);
-                border-right: 1px solid color-mix(in srgb, $tnt-color-outline-variant 30%, transparent);
-                background-color: $tnt-color-surface-container-lowest;
+            .tnt-time-column {
+                display: flex;
+                flex-direction: column;
+                background-color: inherit;
+                position: sticky;
+                left: 0;
+                z-index: 4;
+                border-right: 1px solid $tnt-color-outline-variant;
+                box-sizing: border-box;
 
-                &.disabled {
-                    background-color: $tnt-color-surface-container-highest;
-                }
+                .tnt-time-row {
+                    height: $cell-height;
+                    position: relative;
+                    text-align: right;
+                    font-size: 10px;
+                    background-color: inherit;
+                    padding-right: 4px;
+                    box-sizing: border-box;
+                    user-select: none;
+                    white-space: nowrap;
 
-                &.tnt-slot-outline {
-                    border: 1px solid color-mix(in srgb, $tnt-color-outline-variant 30%, transparent);
-                }
-
-                &.today {
-                    border-left: 1px solid $tnt-color-primary;
-                    border-right: 1px solid $tnt-color-primary;
-                }
-
-                &.tnt-clickable {
-                    cursor: pointer;
-
-                    &:hover {
-                        background-color: color-mix(in srgb, $tnt-color-surface-tint 30%, transparent);
+                    &:before {
+                        position: absolute;
+                        display: block;
+                        content: "";
+                        border-bottom: 1px solid $tnt-color-outline-variant;
+                        width: calc(100cqw - 51px);
+                        z-index: 2;
+                        top: 8px;
+                        left: $time-column-width;
                     }
                 }
             }
 
-            &.tnt-time-slot {
-                min-height: 1px;
-                text-align: right;
-                padding-right: 8px;
+            .tnt-event-columns {
+                display: flex;
+                flex: 1 1 auto;
                 user-select: none;
-                -webkit-user-select: none;
-            }
+                background-color: inherit;
+                position: relative;
 
-            &.tnt-event {
-                background-color: var(--background-color);
-                color: var(--foreground-color);
-                display: inline;
-                border-radius: 12px;
-                padding: 4px;
-                box-sizing: border-box;
-                margin: 0.16px;
-                user-select: none;
-                text-overflow: clip;
-                overflow: hidden;
-
-                &.tnt-grabbable {
-                    cursor: grab;
+                .tnt-event-column {
+                    width: 100%;
+                    position: relative;
+                    top: 12px;
+                    min-width: $cell-min-width;
+                    user-select: inherit;
+                    border-right: 1px solid $tnt-color-outline-variant;
+                    box-sizing: border-box;
                 }
             }
+        }
+    }
+
+    &:has(.date-controls) {
+        .tnt-week-view .tnt-date-header {
+            top: 72px;
         }
     }
 }

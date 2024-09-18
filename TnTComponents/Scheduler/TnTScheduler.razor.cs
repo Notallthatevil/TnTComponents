@@ -60,27 +60,15 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
         }
     }
 
-    public DateOnly? GetFirstVisibleDate() {
-        return _selectedView?.GetVisibleDates().First();
-    }
+    public bool IsViewSelected(ScheduleViewBase<TEventType> scheduleView) => _selectedView == scheduleView;
 
-    public DateOnly? GetLastVisibleDate() {
-        return _selectedView?.GetVisibleDates().Last();
-    }
-
-    public bool IsViewSelected(ScheduleViewBase<TEventType> scheduleView) {
-        return _selectedView == scheduleView;
-    }
-
-    public void RemoveScheduleView(ScheduleViewBase<TEventType> scheduleView) {
-        _scheduleViews.Remove(scheduleView.GetType());
-    }
+    public void RemoveScheduleView(ScheduleViewBase<TEventType> scheduleView) => _scheduleViews.Remove(scheduleView.GetType());
 
     private Task GoToToday() => UpdateDate(DateOnly.FromDateTime(DateTimeOffset.Now.LocalDateTime));
 
-    private Task NextPage() =>  UpdateDate(_selectedView?.IncrementPage(Date));
+    private Task NextPage() =>  UpdateDate(_selectedView?.IncrementDate(Date));
 
-    private Task PreviousPage() => UpdateDate(_selectedView?.DecrementPage(Date));
+    private Task PreviousPage() => UpdateDate(_selectedView?.DecrementDate(Date));
 
     private async Task UpdateDate(DateOnly? date) {
         if (date.HasValue) {
