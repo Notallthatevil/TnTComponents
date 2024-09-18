@@ -10,10 +10,10 @@ public record TnTEvent {
     public required DateTimeOffset EventStart { get; init; }
     public required DateTimeOffset EventEnd { get; init; }
 
-    public TimeOnly StartTime => TimeOnly.FromTimeSpan(EventStart.TimeOfDay);
-    public TimeOnly EndTime => TimeOnly.FromTimeSpan(EventEnd.TimeOfDay);
-    public DateOnly StartDate => DateOnly.FromDateTime(EventStart.Date);
-    public DateOnly EndDate => DateOnly.FromDateTime(EventEnd.Date);
+    public TimeOnly StartTime => TimeOnly.FromTimeSpan(EventStart.LocalDateTime.TimeOfDay);
+    public TimeOnly EndTime => TimeOnly.FromTimeSpan(EventEnd.LocalDateTime.TimeOfDay);
+    public DateOnly StartDate => DateOnly.FromDateTime(EventStart.LocalDateTime.Date);
+    public DateOnly EndDate => DateOnly.FromDateTime(EventEnd.LocalDateTime.Date);
 
     public TnTColor BackgroundColor { get; set; } = TnTColor.Tertiary;
     public TnTColor ForegroundColor { get; set; } = TnTColor.OnTertiary;

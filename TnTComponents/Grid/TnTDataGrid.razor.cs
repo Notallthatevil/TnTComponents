@@ -26,6 +26,8 @@ public partial class TnTDataGrid<TGridItem> {
 
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddBackgroundColor(BackgroundColor)
+        .AddFilled(BackgroundColor is not null)
         .AddClass("tnt-datagrid")
         .AddClass("tnt-stripped", DataGridAppearance.HasFlag(DataGridAppearance.Stripped))
         .AddClass("tnt-compact", DataGridAppearance.HasFlag(DataGridAppearance.Compact))
@@ -36,6 +38,9 @@ public partial class TnTDataGrid<TGridItem> {
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
+
+    [Parameter]
+    public TnTColor? BackgroundColor { get; set; } = TnTColor.Background;
 
     [Parameter]
     public DataGridAppearance DataGridAppearance { get; set; }
@@ -172,13 +177,10 @@ public partial class TnTDataGrid<TGridItem> {
     // _columns This happens on every render so that the column list can be updated dynamically
     private readonly TnTInternalGridContext<TGridItem> _internalGridContext;
 
-    // Caches of method->delegate conversions
-    private readonly RenderFragment _renderColumnHeaders;
-
     private readonly RenderFragment _renderEmptyContent;
     private readonly RenderFragment _renderLoadingContent;
     private readonly RenderFragment _renderNonVirtualizedRows;
-    private int _ariaBodyRowCount;
+    private int _ariaBodyRowCount = -1;
 
     // IQueryable only exposes synchronous query APIs. IAsyncQueryExecutor is an adapter that lets
     // us invoke any async query APIs that might be available. We have built-in support for using EF
@@ -208,6 +210,8 @@ public partial class TnTDataGrid<TGridItem> {
 
     private Virtualize<(int, TGridItem)>? _virtualizeComponent;
 
+    private bool _loading = true;
+
     /// <summary>
     /// Constructs an instance of <see cref="TnTDataGrid{TGridItem}" />.
     /// </summary>
@@ -215,7 +219,6 @@ public partial class TnTDataGrid<TGridItem> {
         _columns = [];
         _internalGridContext = new(this);
         _currentPageItemsChanged = new(EventCallback.Factory.Create<TnTPaginationState>(this, RefreshDataCoreAsync));
-        _renderColumnHeaders = RenderColumnHeaders;
         _renderNonVirtualizedRows = RenderNonVirtualizedRows;
         _renderEmptyContent = RenderEmptyContent;
         _renderLoadingContent = RenderLoadingContent;
@@ -279,7 +282,7 @@ public partial class TnTDataGrid<TGridItem> {
         _currentPageItemsChanged.SubscribeOrMove(Pagination?.CurrentPageItemsChanged);
 
         if (Items is not null && ItemsProvider is not null) {
-            throw new InvalidOperationException($"FluentDataGrid requires one of {nameof(Items)} or {nameof(ItemsProvider)}, but both were specified.");
+            throw new InvalidOperationException($"{nameof(TnTDataGrid<TGridItem>)} requires one of {nameof(Items)} or {nameof(ItemsProvider)}, but both were specified.");
         }
 
         // Perform a re-query only if the data source or something else has changed
@@ -403,6 +406,8 @@ public partial class TnTDataGrid<TGridItem> {
     // Normalizes all the different ways of configuring a data source so they have common
     // GridItemsProvider-shaped API
     private async ValueTask<TnTItemsProviderResult<TGridItem>> ResolveItemsRequestAsync(TnTGridItemsProviderRequest<TGridItem> request) {
+        _loading = true;
+        TnTItemsProviderResult<TGridItem> providerResult = new();
         if (ItemsProvider is not null) {
             if (Virtualize && request.Count is null) {
                 request = request with { Count = 1 };
@@ -411,7 +416,7 @@ public partial class TnTDataGrid<TGridItem> {
             if (gipr.Items is not null) {
                 Loading = false;
             }
-            return gipr;
+            providerResult = gipr;
         }
         else if (Items is not null) {
             var totalItemCount = _asyncQueryExecutor is null ? Items.Count() : await _asyncQueryExecutor.CountAsync(Items);
@@ -421,11 +426,10 @@ public partial class TnTDataGrid<TGridItem> {
                 result = result.Take(request.Count.Value);
             }
             var resultArray = _asyncQueryExecutor is null ? [.. result] : await _asyncQueryExecutor.ToArrayAsync(result);
-            return new TnTItemsProviderResult<TGridItem> { Items = resultArray, TotalItemCount = totalItemCount };
+            providerResult = new TnTItemsProviderResult<TGridItem> { Items = resultArray, TotalItemCount = totalItemCount };
         }
-        else {
-            return new TnTItemsProviderResult<TGridItem> { Items = [], TotalItemCount = 0 };
-        }
+        _loading = false;
+        return providerResult;
     }
 
     private void StartCollectingColumns() {

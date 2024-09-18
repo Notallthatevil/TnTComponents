@@ -98,7 +98,6 @@ export class TnTTabView extends HTMLElement {
     }
 
     async updateActiveIndicator() {
-        console.log('updating active indicator');
         const activeHeader = this.getActiveHeader();
         let activeIndicator = this.querySelector(":scope > .tnt-tab-view-header > .tnt-tab-view-active-indicator");
         if (!activeHeader || !activeIndicator) {
