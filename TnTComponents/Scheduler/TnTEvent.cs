@@ -14,6 +14,7 @@ public record TnTEvent {
     public TimeOnly EndTime => TimeOnly.FromTimeSpan(EventEnd.LocalDateTime.TimeOfDay);
     public DateOnly StartDate => DateOnly.FromDateTime(EventStart.LocalDateTime.Date);
     public DateOnly EndDate => DateOnly.FromDateTime(EventEnd.LocalDateTime.Date);
+    public TimeSpan Duration => EventEnd - EventStart;
 
     public TnTColor BackgroundColor { get; set; } = TnTColor.Tertiary;
     public TnTColor ForegroundColor { get; set; } = TnTColor.OnTertiary;

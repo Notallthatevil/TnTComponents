@@ -1,7 +1,12 @@
-﻿$header-height: 80px;
+﻿@use 'sass:color';
+
+$header-height: 80px;
 $cell-min-width: 80px;
 $cell-height: 48px;
 $time-column-width: 36px;
+$minute-offset: calc($cell-height / 60);
+$hour-offset: $cell-height;
+$overlap-offset: 8px;
 
 .tnt-scheduler {
     margin: 8px;
@@ -21,7 +26,7 @@ $time-column-width: 36px;
         background-color: inherit;
         top: 0;
         left: 0;
-        z-index: 5;
+        z-index: 7;
 
         .today-button {
             padding: 0 16px;
@@ -41,7 +46,7 @@ $time-column-width: 36px;
             height: $header-height;
             position: sticky;
             top: -8px;
-            z-index: 5;
+            z-index: 7;
 
             &:after {
                 content: '';
@@ -156,11 +161,41 @@ $time-column-width: 36px;
                 .tnt-event-column {
                     width: 100%;
                     position: relative;
-                    top: 12px;
+                    top: 8px;
                     min-width: $cell-min-width;
                     user-select: inherit;
                     border-right: 1px solid $tnt-color-outline-variant;
                     box-sizing: border-box;
+
+                    .tnt-event {
+                        position: absolute;
+                        top: calc(var(--tnt-event-start-hour) * $hour-offset + calc(var(--tnt-event-start-min) * $minute-offset));
+                        box-sizing: border-box;
+                        padding: 4px;
+                        bottom: calc(calc(24 * $cell-height) - calc(var(--tnt-event-end-hour) * $hour-offset + calc(var(--tnt-event-end-min) * $minute-offset)));
+                        background-color: var(--tnt-event-bg-color);
+                        color: var(--tnt-event-fg-color);
+                        z-index: 6;
+                        box-shadow: var(--tnt-color-on-surface) 0px 0px 1px 1px inset;
+                        width: 90%;
+                        left: 0;
+                        overflow: hidden;
+                        padding:8px;
+                        @extend .tnt-border-radius-2;
+
+                        &.tnt-header-overlap {
+                            width: calc(90% / var(--tnt-event-header-overlaps));
+                            left: calc(12px * var(--tnt-event-overlaps));
+                        }
+
+                        .tnt-event-title {
+                            line-height: 4px;
+                        }
+
+                        .tnt-event-time {
+                            white-space: nowrap;
+                        }
+                    }
                 }
             }
         }
