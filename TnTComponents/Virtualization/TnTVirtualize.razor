@@ -2,7 +2,6 @@
 @using TnTComponents.Core
 @typeparam TItem
 @inherits TnTPageScriptComponent<TnTVirtualize<TItem>>
-<div @attributes="AdditionalAttributes" class="@ElementClass" style="@ElementStyle" id="@ElementId">
     @foreach (var item in _items) {
         if (ItemTemplate is not null) {
             @ItemTemplate(item)
@@ -26,4 +25,3 @@
     <div style="@(_allItemsRetrieved ? "height:0;width:0" : "height:1px;width:1px;flex-shrink:0")" @ref="Element">
     </div>
 
-</div>

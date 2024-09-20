@@ -29,7 +29,7 @@ export function onNewItems(element) {
 export function onLoad(element, dotNetRef) {
     const options = {
         root: findClosestScrollContainer(element),
-        rootMargin: '0px',
+        rootMargin: '25%',
         threshold: 0,
     };
 

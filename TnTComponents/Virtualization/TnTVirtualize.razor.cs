@@ -41,6 +41,7 @@ public partial class TnTVirtualize<TItem> {
     private CancellationTokenSource? _loadItemsCts;
     private KeyValuePair<string, SortDirection>? _sortOnProperty;
 
+
     [DynamicDependency(nameof(LoadMoreItems))]
     public TnTVirtualize() { }
 
@@ -64,7 +65,7 @@ public partial class TnTVirtualize<TItem> {
                 SortOnProperties = _sortOnProperty.HasValue ? [_sortOnProperty.Value] : [],
                 CancellationToken = _loadItemsCts.Token
             });
-            if (!_loadItemsCts.IsCancellationRequested) {
+            if (!_loadItemsCts?.IsCancellationRequested == true) {
                 _items = _items.Concat(result.Items);
 
                 if (_items.Count() == result.TotalItemCount) {
@@ -102,7 +103,7 @@ public partial class TnTVirtualize<TItem> {
         _lastUsedProvider = ItemsProvider;
 
         if (SortOnProperty is not null) {
-            if(SortOnProperty.Body is UnaryExpression unaryExpression) {
+            if (SortOnProperty.Body is UnaryExpression unaryExpression) {
                 if (unaryExpression.Operand is MemberExpression memberExpression) {
                     _sortOnProperty = new KeyValuePair<string, SortDirection>(memberExpression.Member.Name, SortDirection.Ascending);
                 }
@@ -114,9 +115,14 @@ public partial class TnTVirtualize<TItem> {
     }
 
     private void DisposeCancellationToken() {
-        _loadItemsCts?.Cancel();
-        _loadItemsCts?.Dispose();
-        _loadItemsCts = null;
+        try {
+            _loadItemsCts?.Cancel();
+            _loadItemsCts?.Dispose();
+        }
+        catch (ObjectDisposedException ex) { }
+        finally {
+            _loadItemsCts = null;
+        }
     }
 
     private void Reset() {

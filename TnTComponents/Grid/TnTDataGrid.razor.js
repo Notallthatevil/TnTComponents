@@ -56,6 +56,17 @@ function tntInitResizable(tableElement) {
     createResizableTable(tableElement);
 }
 
+export function getBodyHeight(element) {
+    if (element) {
+        const container = element.parentElement;
+        if (container && container.getBoundingClientRect) {
+            return Math.round(container.getBoundingClientRect().height);
+        }
+    }
+
+    return -1;
+}
+
 export function onLoad() {
 }
 

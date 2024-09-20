@@ -182,6 +182,8 @@ public partial class TnTDataGrid<TGridItem> {
     private readonly RenderFragment _renderNonVirtualizedRows;
     private int _ariaBodyRowCount = -1;
 
+    private int _numberOfRowsToLoad = 5;
+
     // IQueryable only exposes synchronous query APIs. IAsyncQueryExecutor is an adapter that lets
     // us invoke any async query APIs that might be available. We have built-in support for using EF
     // Core's async query APIs.
@@ -208,7 +210,7 @@ public partial class TnTDataGrid<TGridItem> {
     // Columns might re-render themselves arbitrarily. We only want to capture them at a defined time.
     private TnTColumnBase<TGridItem>? _sortByColumn;
 
-    private Virtualize<(int, TGridItem)>? _virtualizeComponent;
+    private TnTVirtualize<(int, TGridItem)>? _virtualizeComponent;
 
     private bool _loading = true;
 
@@ -315,7 +317,7 @@ public partial class TnTDataGrid<TGridItem> {
 
     // Gets called both by RefreshDataCoreAsync and directly by the Virtualize child component
     // during scrolling
-    private async ValueTask<ItemsProviderResult<(int, TGridItem)>> ProvideVirtualizedItemsAsync(ItemsProviderRequest request) {
+    private async ValueTask<TnTItemsProviderResult<(int, TGridItem)>> ProvideVirtualizedItemsAsync(TnTVirtualizeItemsProviderRequest<(int, TGridItem)> request) {
         _lastRefreshedPaginationStateHash = Pagination?.GetHashCode();
         // Debounce the requests. This eliminates a lot of redundant queries at the cost of slight
         // lag after interactions.
@@ -325,14 +327,14 @@ public partial class TnTDataGrid<TGridItem> {
         if (_delay < 2000) {
             Interlocked.Add(ref _delay, 100);
         }
-        var result = default(ItemsProviderResult<(int, TGridItem)>);
+        var result = default(TnTItemsProviderResult<(int, TGridItem)>);
         if (!request.CancellationToken.IsCancellationRequested) {
             // Combine the query parameters from Virtualize with the ones from PaginationState
             var startIndex = request.StartIndex;
             var count = request.Count;
             if (Pagination is not null) {
                 startIndex += Pagination.CurrentPageIndex * Pagination.ItemsPerPage;
-                count = Math.Min(request.Count, Pagination.ItemsPerPage - request.StartIndex);
+                count = Math.Min(request.Count.GetValueOrDefault(1), Pagination.ItemsPerPage - request.StartIndex);
             }
 
             TnTGridItemsProviderRequest<TGridItem> providerRequest = new(startIndex, count, _sortByColumn, _sortByAscending, request.CancellationToken);
@@ -357,9 +359,9 @@ public partial class TnTDataGrid<TGridItem> {
                 // aria-rowindex, and we have to account for the virtualized start _index. It might
                 // be more performant just to have some _latestQueryRowStartIndex field, but we'd
                 // have to make sure it doesn't get out of sync with the rows being rendered.
-                result = new ItemsProviderResult<(int, TGridItem)>(
-                     items: providerResult.Items.Select((x, i) => ValueTuple.Create(i + request.StartIndex + 2, x)),
-                     totalItemCount: _ariaBodyRowCount);
+                result = new TnTItemsProviderResult<(int, TGridItem)>(
+                     items: providerResult.Items.Select((x, i) => ValueTuple.Create(i + request.StartIndex + 2, x)).ToList(),
+                     totalCount: _ariaBodyRowCount);
             }
 
             Interlocked.Exchange(ref _delay, 0); // Reset the debounce delay
@@ -410,7 +412,15 @@ public partial class TnTDataGrid<TGridItem> {
         TnTItemsProviderResult<TGridItem> providerResult = new();
         if (ItemsProvider is not null) {
             if (Virtualize && request.Count is null) {
-                request = request with { Count = 1 };
+                if (IsolatedJsModule is not null) {
+                    var bodyHeight = await IsolatedJsModule.InvokeAsync<int>("getBodyHeight", Element);
+
+                    if (bodyHeight >= 0) {
+                        _numberOfRowsToLoad = Math.Max(bodyHeight / (int)ItemSize, 5);
+                    }
+                }
+                Console.WriteLine($"Number of rows to load {_numberOfRowsToLoad + OverscanCount}");
+                request = request with { Count = _numberOfRowsToLoad + OverscanCount };
             }
             var gipr = await ItemsProvider(request);
             if (gipr.Items is not null) {
