@@ -60,7 +60,7 @@ public class TnTToast : ComponentBase, IDisposable {
 
                     if (toast.ShowClose) {
                         builder.OpenComponent<TnTImageButton>(90);
-                        builder.AddComponentParameter(100, nameof(TnTImageButton.Icon), new MaterialIcon(MaterialIcon.Close));
+                        builder.AddComponentParameter(100, nameof(TnTImageButton.Icon), new MaterialIcon{ Icon = MaterialIcon.Close });
                         builder.AddComponentParameter(110, nameof(TnTImageButton.OnClickCallback), EventCallback.Factory.Create<MouseEventArgs>(this, _ => _service.CloseAsync(toast)));
                         builder.AddComponentParameter(120, nameof(TnTImageButton.BackgroundColor), TnTColor.Transparent);
                         builder.AddComponentParameter(130, nameof(TnTImageButton.TextColor), TnTColor.Outline);

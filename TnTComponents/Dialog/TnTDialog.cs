@@ -87,7 +87,7 @@ public class TnTDialog : ComponentBase, IDisposable {
 
                     if (dialog.Options.ShowCloseButton) {
                         builder.OpenComponent<TnTImageButton>(40);
-                        builder.AddComponentParameter(50, nameof(TnTImageButton.Icon), new MaterialIcon(MaterialIcon.Close));
+                        builder.AddComponentParameter(50, nameof(TnTImageButton.Icon), new MaterialIcon{ Icon = MaterialIcon.Close });
                         builder.AddComponentParameter(60, nameof(TnTImageButton.OnClickCallback), EventCallback.Factory.Create<MouseEventArgs>(this, dialog.CloseAsync));
                         builder.CloseComponent();
                     }

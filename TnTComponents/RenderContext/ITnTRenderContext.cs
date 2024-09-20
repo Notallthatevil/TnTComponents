@@ -1,10 +1,11 @@
-﻿namespace TnTComponents;
+﻿using System.ComponentModel;
+
+namespace TnTComponents;
 
 /// <summary>
 /// Provide the render mode information in which the component is rendering.
 /// </summary>
 public interface ITnTRenderContext {
-
     /// <summary>
     /// Rendering from the Client project. Using HTTP request for connectivity.
     /// </summary>

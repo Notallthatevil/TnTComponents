@@ -41,10 +41,6 @@ public abstract class TnTIcon : ComponentBase {
     public ElementReference Element { get; private set; }
 
     protected TnTIcon() { }
-    protected TnTIcon(string icon) {
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(icon, nameof(icon));
-        Icon = icon;
-    }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "span");

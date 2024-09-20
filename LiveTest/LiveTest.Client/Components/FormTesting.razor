@@ -228,8 +228,8 @@
     private bool _d;
     private bool _e;
 
-    private TnTIcon? _startIcon => _b ? new MaterialIcon(MaterialIcon.SavedSearch) : null;
-    private TnTIcon? _endIcon => _c ? new MaterialIcon(MaterialIcon.QrCode) : null;
+    private TnTIcon? _startIcon => _b ? new MaterialIcon{ Icon = MaterialIcon.SavedSearch } : null;
+    private TnTIcon? _endIcon => _c ? new MaterialIcon{ Icon = MaterialIcon.QrCode } : null;
     private string? _placeholder => _d ? "Placeholder" : null;
     private string? _label => _e ? "Label" : null;
 

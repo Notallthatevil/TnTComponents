@@ -23,7 +23,7 @@
                       BindAfter="SearchAsync"
                       Disabled="@Disabled"
                       BackgroundColor="BackgroundColor"
-                      StartIcon="@(new MaterialIcon(MaterialIcon.Search))"
+                      StartIcon="@(new MaterialIcon{ Icon = MaterialIcon.Search })"
                       @onkeydown="SelectOrShiftFocusAsync"/>
         <TnTProgressIndicator Show="@_searching" ProgressColor="ProgressColor" Size="Size.Small" />
     </span>
