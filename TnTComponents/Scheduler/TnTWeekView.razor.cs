@@ -8,7 +8,7 @@ using TnTComponents.Scheduler;
 
 namespace TnTComponents;
 
-public partial class TnTWeekView<TEventType> where TEventType : TnTEvent, new() {
+public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
 
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
