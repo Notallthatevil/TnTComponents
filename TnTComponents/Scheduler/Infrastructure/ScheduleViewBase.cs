@@ -65,8 +65,6 @@ public abstract class ScheduleViewBase<TEventType> : TnTComponentBase, IDisposab
             DraggingEvent.EventStart = newStartTime;
             DraggingEvent.EventEnd = newStartTime.Add(duration);
             var e = Scheduler.Events.FirstOrDefault(e => e.Id == DraggingEvent.Id);
-            Console.WriteLine($"Event dropped: {e?.Title} - {e?.Id} - {e?.EventStart} - {e?.EventEnd}");
-            Console.WriteLine($"Dragged Event: {DraggingEvent?.Title} - {DraggingEvent?.Id} - {DraggingEvent?.EventStart} - {DraggingEvent?.EventEnd}");
             Refresh();
         }
         return Task.CompletedTask;
