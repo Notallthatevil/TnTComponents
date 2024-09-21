@@ -85,4 +85,9 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
             await DateChangedCallback.InvokeAsync();
         }
     }
+
+    public void Refresh() {
+        StateHasChanged();
+        _selectedView?.Refresh();
+    }
 }

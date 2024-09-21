@@ -16,12 +16,22 @@
                 @foreach (var date in _visibleDates)
                 {
                     <h2 class="@($"tnt-date-header-item{(date == today ? " tnt-today" : string.Empty)}")">
-                        <div class="tnt-day-of-week tnt-label-small">
-                            @date.ToString("ddd").ToUpper()
-                        </div>
-                        <div class="tnt-date tnt-headline-small">
-                            @date.ToString("dd")
-                        </div>
+
+                        @if (HideDates)
+                        {
+                            <div class="tnt-day-of-week tnt-label-large">
+                                @date.ToString("ddd").ToUpper()
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="tnt-day-of-week tnt-label-small">
+                                @date.ToString("ddd").ToUpper()
+                            </div>
+                            <div class="tnt-date tnt-headline-small">
+                                @date.ToString("dd")
+                            </div>
+                        }
                     </h2>
                 }
             </div>
@@ -45,7 +55,8 @@
                 {
                     <div class="@($"tnt-event-column{(Scheduler.EventSlotClickedCallback.HasDelegate ? " tnt-interactable" : null)}")"
                          ondragover="event.preventDefault()"
-                         @ondrop="@((args => OnDropAsync(args, CalculateDateTimeOffset(args.OffsetY, date))))">
+                         @ondrop="@((args => OnDropAsync(args, CalculateDateTimeOffset(args.OffsetY, date))))"
+                         @onclick="@((args) => EventSlotClickedAsync(CalculateDateTimeOffset(args.OffsetY, date)))">
                         @if (_events.TryGetValue(date, out var eventList))
                         {
                             @foreach (var @event in eventList)
@@ -88,7 +99,7 @@
                                      ondragover="event.preventDefault()"
                                      ondrop="event.preventDefault()"
                                      @onclick="@(() => EventClickedAsync(@event.Event))"
-                                     @onclick:preventDefault="true"
+                                     @onclick:stopPropagation="true"
                                      @ondragstart="@((args) => OnDragStartAsync(args, @event.Event))"
                                      @ondragend="OnDragEndAsync">
                                     <div class="tnt-event-title tnt-label-medium">

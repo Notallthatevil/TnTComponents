@@ -15,11 +15,6 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent, new() 
         .AddClass("tnt-week-view")
         .Build();
 
-    private const int _headerHeight = 80;
-    private const int _cellMinWidth = 80;
-    private const int _cellHeight = 48;
-    private const int _timeColumnWidth = 36;
-    private const int _hourOffset = _cellHeight;
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddVariable("header-height", $"{_headerHeight}px")
@@ -30,8 +25,16 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent, new() 
         .Build();
 
     [Parameter]
+    public bool HideDates { get; set; }
+
+    [Parameter]
     public DayOfWeek StartViewOn { get; set; } = DayOfWeek.Sunday;
 
+    private const int _cellHeight = 48;
+    private const int _cellMinWidth = 80;
+    private const int _headerHeight = 80;
+    private const int _hourOffset = _cellHeight;
+    private const int _timeColumnWidth = 36;
     private Dictionary<DateOnly, SortedSet<WeekViewTnTEvent>> _events = [];
     private ImmutableSortedSet<DateOnly> _visibleDates = [];
 
@@ -43,6 +46,11 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent, new() 
         UpdateVisibleDates();
         UpdateEventsList();
         StateHasChanged();
+    }
+
+    protected override DateTimeOffset CalculateDateTimeOffset(double pointerYOffset, DateOnly date) {
+        var time = TimeOnly.FromTimeSpan(TimeSpan.FromHours(pointerYOffset / _cellHeight));
+        return Floor(new DateTimeOffset(date, time, TimeZoneInfo.Local.GetUtcOffset(DateTimeOffset.UtcNow)), TimeSpan.FromMinutes(15));
     }
 
     protected override void OnInitialized() {
@@ -91,11 +99,6 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent, new() 
         }
     }
 
-    protected override DateTimeOffset CalculateDateTimeOffset(double pointerYOffset, DateOnly date) {
-        var time = TimeOnly.FromTimeSpan(TimeSpan.FromHours(pointerYOffset / _cellHeight));
-        return Floor(new DateTimeOffset(date, time, TimeZoneInfo.Local.GetUtcOffset(DateTimeOffset.UtcNow)), TimeSpan.FromMinutes(15));
-    }
-
     private void UpdateVisibleDates() {
         var diff = (7 + (Scheduler.Date.DayOfWeek - StartViewOn)) % 7;
         var startOfWeek = Scheduler.Date.AddDays(-1 * diff);
@@ -113,11 +116,14 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent, new() 
         public HeaderOverlapCount? HeaderOverlapCount { get; set; }
         public required TEventType Event { get; init; }
 
-
         public TimeOnly StartTime => TimeOnly.FromTimeSpan(WeekViewEventStart.LocalDateTime.TimeOfDay);
         public TimeOnly EndTime => TimeOnly.FromTimeSpan(WeekViewEventEnd.LocalDateTime.TimeOfDay);
         public DateOnly StartDate => DateOnly.FromDateTime(WeekViewEventStart.LocalDateTime.Date);
         public DateOnly EndDate => DateOnly.FromDateTime(WeekViewEventEnd.LocalDateTime.Date);
+    }
+
+    private sealed class HeaderOverlapCount {
+        public int Count { get; set; }
     }
 
     private class WeekViewTnTEventComparer : IComparer<WeekViewTnTEvent> {
@@ -129,9 +135,5 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent, new() 
             }
             return result.GetValueOrDefault() == 0 ? 1 : result.GetValueOrDefault(1);
         }
-    }
-
-    private sealed class HeaderOverlapCount {
-        public int Count { get; set; }
     }
 }
