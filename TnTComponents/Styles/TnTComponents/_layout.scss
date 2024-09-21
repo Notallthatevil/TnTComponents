@@ -56,6 +56,10 @@
             padding-left: 48px;
             @extend .tnt-label-large;
 
+            & > span, & > span > span {
+                pointer-events: none;
+            }
+
             &:has(.tnt-icon) {
                 padding-left: 16px;
             }

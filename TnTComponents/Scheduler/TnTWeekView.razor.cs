@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.Extensions.Logging;
 using System.Collections.Immutable;
 using System.Text;
 using TnTComponents.Core;
@@ -6,15 +8,25 @@ using TnTComponents.Scheduler;
 
 namespace TnTComponents;
 
-public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
+public partial class TnTWeekView<TEventType> where TEventType : TnTEvent, new() {
 
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-week-view")
         .Build();
 
-    public override string? ElementStyle => CssClassBuilder.Create()
+    private const int _headerHeight = 80;
+    private const int _cellMinWidth = 80;
+    private const int _cellHeight = 48;
+    private const int _timeColumnWidth = 36;
+    private const int _hourOffset = _cellHeight;
+    public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddVariable("header-height", $"{_headerHeight}px")
+        .AddVariable("cell-min-width", $"{_cellMinWidth}px")
+        .AddVariable("cell-height", $"{_cellHeight}px")
+        .AddVariable("time-column-width", $"{_timeColumnWidth}px")
+        .AddVariable("hour-offset", $"{_hourOffset}px")
         .Build();
 
     [Parameter]
@@ -48,20 +60,14 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
             do {
                 var entryEnd = new DateTimeOffset(Math.Min(eventEnd.Ticks, new DateTimeOffset(DateOnly.FromDateTime(eventStart.LocalDateTime), TimeOnly.MaxValue, eventStart.Offset).Ticks), eventStart.Offset);
                 var entry = new WeekViewTnTEvent {
-                    BackgroundColor = @event.BackgroundColor,
-                    Description = @event.Description,
-                    EventEnd = entryEnd,
-                    EventStart = eventStart,
-                    ForegroundColor = @event.ForegroundColor,
-                    Id = @event.Id,
-                    OriginalEventEnd = @event.EventEnd,
-                    OriginalEventStart = @event.EventStart,
-                    Title = @event.Title
+                    WeekViewEventEnd = entryEnd,
+                    WeekViewEventStart = eventStart,
+                    Event = @event
                 };
 
                 if (_events.TryGetValue(entry.StartDate, out var sortedList)) {
                     var lastEvent = sortedList.Last();
-                    if (lastEvent.Overlaps(entry)) {
+                    if (lastEvent.Event.Overlaps(entry.Event)) {
                         entry.OverlapCount = lastEvent.OverlapCount + 1;
 
                         if (Math.Abs((entry.StartTime - lastEvent.StartTime).Ticks) <= TimeSpan.FromMinutes(30).Ticks) {
@@ -85,6 +91,11 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         }
     }
 
+    protected override DateTimeOffset CalculateDateTimeOffset(double pointerYOffset, DateOnly date) {
+        var time = TimeOnly.FromTimeSpan(TimeSpan.FromHours(pointerYOffset / _cellHeight));
+        return Floor(new DateTimeOffset(date, time, TimeZoneInfo.Local.GetUtcOffset(DateTimeOffset.UtcNow)), TimeSpan.FromMinutes(15));
+    }
+
     private void UpdateVisibleDates() {
         var diff = (7 + (Scheduler.Date.DayOfWeek - StartViewOn)) % 7;
         var startOfWeek = Scheduler.Date.AddDays(-1 * diff);
@@ -94,20 +105,27 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
             .ToImmutableSortedSet();
     }
 
-    private sealed record WeekViewTnTEvent : TnTEvent {
-        public required DateTimeOffset OriginalEventStart { get; init; }
-        public required DateTimeOffset OriginalEventEnd { get; init; }
+    private sealed record WeekViewTnTEvent {
+        public required DateTimeOffset WeekViewEventStart { get; init; }
+        public required DateTimeOffset WeekViewEventEnd { get; init; }
         public int OverlapCount { get; set; }
         public int? HeaderOverlapIndex { get; set; }
         public HeaderOverlapCount? HeaderOverlapCount { get; set; }
+        public required TEventType Event { get; init; }
+
+
+        public TimeOnly StartTime => TimeOnly.FromTimeSpan(WeekViewEventStart.LocalDateTime.TimeOfDay);
+        public TimeOnly EndTime => TimeOnly.FromTimeSpan(WeekViewEventEnd.LocalDateTime.TimeOfDay);
+        public DateOnly StartDate => DateOnly.FromDateTime(WeekViewEventStart.LocalDateTime.Date);
+        public DateOnly EndDate => DateOnly.FromDateTime(WeekViewEventEnd.LocalDateTime.Date);
     }
 
     private class WeekViewTnTEventComparer : IComparer<WeekViewTnTEvent> {
 
         public int Compare(WeekViewTnTEvent? x, WeekViewTnTEvent? y) {
-            var result = x?.StartTime.CompareTo(y?.StartTime);
+            var result = x?.Event.StartTime.CompareTo(y?.Event.StartTime);
             if (result == 0) {
-                result = x?.Duration.CompareTo(y?.Duration);
+                result = x?.Event.Duration.CompareTo(y?.Event.Duration);
             }
             return result.GetValueOrDefault() == 0 ? 1 : result.GetValueOrDefault(1);
         }

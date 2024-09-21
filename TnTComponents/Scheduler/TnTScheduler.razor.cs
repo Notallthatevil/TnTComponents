@@ -21,12 +21,6 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
     public EventCallback DateChangedCallback { get; set; }
 
     [Parameter]
-    public IEnumerable<TnTDisabledDateTime> DisabledDateTimes { get; set; } = [];
-
-    [Parameter]
-    public bool AllowNewEvents { get; set; } = true;
-
-    [Parameter]
     public bool DisableDragAndDrop { get; set; }
 
     public override string? ElementClass => CssClassBuilder.Create()
@@ -50,8 +44,19 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
     [Parameter]
     public DateOnly Date { get; set; } = DateOnly.FromDateTime(DateTime.Today);
 
-    public DayOfWeek DayOfWeek => Date.DayOfWeek;
+    [Parameter]
+    public EventCallback<TEventType> EventClickedCallback { get; set; }
 
+    [Parameter]
+    public EventCallback<DateTimeOffset> EventSlotClickedCallback { get; set; }
+
+    [Parameter]
+    public bool AllowDraggingEvents { get; set; } = true;
+
+    [Inject]
+    private ITnTDialogService _dialogService { get; set; } = default!;
+
+    public DayOfWeek DayOfWeek => Date.DayOfWeek;
 
     private IDictionary<Type, ScheduleViewBase<TEventType>> _scheduleViews = new Dictionary<Type, ScheduleViewBase<TEventType>>();
     private ScheduleViewBase<TEventType>? _selectedView;
@@ -69,7 +74,7 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
 
     private Task GoToToday() => UpdateDate(DateOnly.FromDateTime(DateTimeOffset.Now.LocalDateTime));
 
-    private Task NextPage() =>  UpdateDate(_selectedView?.IncrementDate(Date));
+    private Task NextPage() => UpdateDate(_selectedView?.IncrementDate(Date));
 
     private Task PreviousPage() => UpdateDate(_selectedView?.DecrementDate(Date));
 

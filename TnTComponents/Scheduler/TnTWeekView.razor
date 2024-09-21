@@ -43,7 +43,9 @@
             <div class="tnt-event-columns">
                 @foreach (var date in _visibleDates)
                 {
-                    <div class="tnt-event-column">
+                    <div class="@($"tnt-event-column{(Scheduler.EventSlotClickedCallback.HasDelegate ? " tnt-interactable" : null)}")"
+                         ondragover="event.preventDefault()"
+                         @ondrop="@((args => OnDropAsync(args, CalculateDateTimeOffset(args.OffsetY, date))))">
                         @if (_events.TryGetValue(date, out var eventList))
                         {
                             @foreach (var @event in eventList)
@@ -63,22 +65,37 @@
                                 }
 
                                 var style = CssStyleBuilder.Create()
-                                    .AddVariable("tnt-event-start-hour", @event.StartTime.Hour.ToString())
-                                    .AddVariable("tnt-event-end-hour", @event.EndTime.Hour.ToString())
-                                    .AddVariable("tnt-event-start-min", @event.StartTime.Minute.ToString())
-                                    .AddVariable("tnt-event-end-min", @event.EndTime.Minute.ToString())
-                                    .AddVariable("tnt-event-bg-color", @event.BackgroundColor)
-                                    .AddVariable("tnt-event-fg-color", @event.ForegroundColor)
-                                    .AddStyle("left", left.ToString() + "%")
-                                    .AddStyle("width", width.ToString() + "%");
+                                .AddVariable("tnt-event-start-hour", @event.StartTime.Hour.ToString())
+                                .AddVariable("tnt-event-end-hour", @event.EndTime.Hour.ToString())
+                                .AddVariable("tnt-event-start-min", @event.StartTime.Minute.ToString())
+                                .AddVariable("tnt-event-end-min", @event.EndTime.Minute.ToString())
+                                .AddVariable("tnt-event-bg-color", @event.Event.BackgroundColor)
+                                .AddVariable("tnt-event-fg-color", @event.Event.ForegroundColor)
+                                .AddStyle("left", left.ToString() + "%")
+                                .AddStyle("width", width.ToString() + "%");
 
+                                var @class = CssClassBuilder.Create()
+                                .AddClass("tnt-event")
+                                .AddClass("tnt-interactable", Scheduler.EventClickedCallback.HasDelegate)
+                                .AddClass("tnt-dragging", DraggingEvent == @event.Event)
+                                .AddRipple(Scheduler.EventClickedCallback.HasDelegate)
+                                .AddTintColor(Scheduler.EventClickedCallback.HasDelegate ? @event.Event.TintColor : null)
+                                .AddOnTintColor(Scheduler.EventClickedCallback.HasDelegate ? @event.Event.OnTintColor : null);
 
-                                <div class="tnt-event" style="@style.Build()">
+                                <div class="@(@class.Build())"
+                                     style="@style.Build()"
+                                     draggable="@(Scheduler.AllowDraggingEvents ? "true" : "false")"
+                                     ondragover="event.preventDefault()"
+                                     ondrop="event.preventDefault()"
+                                     @onclick="@(() => EventClickedAsync(@event.Event))"
+                                     @onclick:preventDefault="true"
+                                     @ondragstart="@((args) => OnDragStartAsync(args, @event.Event))"
+                                     @ondragend="OnDragEndAsync">
                                     <div class="tnt-event-title tnt-label-medium">
-                                        @(@event.Title)
+                                        @(@event.Event.Title)
                                     </div>
                                     <div class="tnt-event-time tnt-body-small">
-                                        @(TimeOnly.FromDateTime(@event.OriginalEventStart.LocalDateTime).ToString("t")) - @(TimeOnly.FromDateTime(@event.OriginalEventEnd.LocalDateTime).ToString("t"))
+                                        @(TimeOnly.FromDateTime(@event.Event.EventStart.LocalDateTime).ToString("t")) - @(TimeOnly.FromDateTime(@event.Event.EventEnd.LocalDateTime).ToString("t"))
                                     </div>
                                 </div>
                             }

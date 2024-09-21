@@ -19,6 +19,7 @@ public class TnTSideNavMenuGroup : TnTInteractableComponentBase, ITnTStyleable {
         .Build();
 
     public override string? ElementStyle { get; }
+
     [Parameter]
     public TextAlign? TextAlignment { get; set; }
     [Parameter]

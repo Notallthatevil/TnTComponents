@@ -6,7 +6,6 @@ $cell-height: 48px;
 $time-column-width: 36px;
 $minute-offset: calc($cell-height / 60);
 $hour-offset: $cell-height;
-$overlap-offset: 8px;
 
 .tnt-scheduler {
     margin: 8px;
@@ -180,8 +179,12 @@ $overlap-offset: 8px;
                         width: 90%;
                         left: 0;
                         overflow: hidden;
-                        padding:8px;
+                        padding: 8px;
                         @extend .tnt-border-radius-2;
+
+                        &.tnt-dragging:active {
+                            cursor: grabbing;
+                        }
 
                         &.tnt-header-overlap {
                             width: calc(90% / var(--tnt-event-header-overlaps));

@@ -7,14 +7,12 @@
 <h3>Scheduler</h3>
 
 
-<TnTScheduler FirstDate="today"
-              TEventType="TnTEvent"
+<TnTScheduler TEventType="TnTEvent"
               Events="TasksList.ToArray()"
-              DisabledDateTimes="[TnTDisabledDateTime.DisabledDayOfWeek(TnTDayOfWeekFlag.Sunday | TnTDayOfWeekFlag.Saturday | TnTDayOfWeekFlag.Wednesday, new TimeOnly(0, 0), new TimeOnly(12, 0))]">
-    <TnTWeekView StartViewOn="DayOfWeek.Monday"
-                 DropEventCallback="@((TnTDropEventArgs<TnTEvent> args) => DropEvent(args))" />
+              EventClickedCallback="OnEventClicked"
+              EventSlotClickedCallback="OnEventSlotClicked">
+    <TnTWeekView StartViewOn="DayOfWeek.Monday" />
 </TnTScheduler>
 
 <br />
-<div class="console">@fakeConsole</div>
 

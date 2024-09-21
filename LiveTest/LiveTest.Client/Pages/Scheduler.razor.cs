@@ -6,7 +6,6 @@ public partial class Scheduler {
     private DateTime today = DateTime.Today;
     private int months = 12;
     private List<TnTEvent> TasksList;
-    private string fakeConsole = "";
     private bool draggable = true;
 
     protected override void OnInitialized() {
@@ -28,26 +27,11 @@ public partial class Scheduler {
         ];
     }
 
-    private void ChangeFirstDate(string value) {
-        if (string.IsNullOrEmpty(value))
-            return;
-        today = DateTime.Parse(value.ToString());
+    private void OnEventClicked(TnTEvent @event) {
+       Console.WriteLine($"Event clicked: {@event.Title} - {@event.Id}");
     }
 
-    private void GoToday() {
-        today = DateTime.Today;
-    }
-
-    private void ClicMonthNavigate(int daysToAdd) {
-        today = today.AddDays(daysToAdd);
-    }
-
-    private void DropEvent(TnTDropEventArgs<TnTEvent> args) {
-        var @event = TasksList.Find(a => a.Id == args.Event.Id);
-        TasksList.Remove(@event);
-
-        @event = @event with { EventStart = args.DroppedDateTimeOffset.DateTime, EventEnd = args.DroppedDateTimeOffset.DateTime.Add(@event.EventEnd - @event.EventStart) };
-        TasksList.Add(@event);
-
+    private void OnEventSlotClicked(DateTimeOffset dateTimeOffset) {
+        Console.WriteLine($"Event slot clicked: {dateTimeOffset}");
     }
 }
