@@ -51,12 +51,12 @@
                                 var width = 90;
                                 var left = 0;
 
-                                if(@event.HeaderOverlapIndex.HasValue)
+                                if (@event.HeaderOverlapIndex.HasValue)
                                 {
                                     width /= @event.HeaderOverlapCount!.Count;
                                     left = width * @event.HeaderOverlapIndex.Value;
                                 }
-                                else if(@event.OverlapCount > 0)
+                                else if (@event.OverlapCount > 0)
                                 {
                                     left = @event.OverlapCount * 2;
                                     width -= @event.OverlapCount * 2;
@@ -73,18 +73,16 @@
                                     .AddStyle("width", width.ToString() + "%");
 
 
-
                                 <div class="tnt-event" style="@style.Build()">
                                     <div class="tnt-event-title tnt-label-medium">
                                         @(@event.Title)
                                     </div>
                                     <div class="tnt-event-time tnt-body-small">
-                                        @(TimeOnly.FromDateTime(@event.OriginalEventStart.LocalDateTime).ToString("t")) - @(TimeOnly.FromDateTime(@event.OriginalEventEnd.LocalDateTime).ToString("t"))    
+                                        @(TimeOnly.FromDateTime(@event.OriginalEventStart.LocalDateTime).ToString("t")) - @(TimeOnly.FromDateTime(@event.OriginalEventEnd.LocalDateTime).ToString("t"))
                                     </div>
                                 </div>
                             }
                         }
-
                     </div>
                 }
             </div>

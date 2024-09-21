@@ -8,14 +8,6 @@ namespace TnTComponents;
 
 public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
 
-    [Parameter]
-    public DayOfWeek StartViewOn { get; set; } = DayOfWeek.Sunday;
-
-    private ImmutableSortedSet<DateOnly> _visibleDates = [];
-
-    private Dictionary<DateOnly, SortedSet<WeekViewTnTEvent>> _events = [];
-
-
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-week-view")
@@ -25,8 +17,21 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
+    [Parameter]
+    public DayOfWeek StartViewOn { get; set; } = DayOfWeek.Sunday;
+
+    private Dictionary<DateOnly, SortedSet<WeekViewTnTEvent>> _events = [];
+    private ImmutableSortedSet<DateOnly> _visibleDates = [];
+
     public override DateOnly DecrementDate(DateOnly src) => src.AddDays(-7);
+
     public override DateOnly IncrementDate(DateOnly src) => src.AddDays(7);
+
+    public override void Refresh() {
+        UpdateVisibleDates();
+        UpdateEventsList();
+        StateHasChanged();
+    }
 
     protected override void OnInitialized() {
         base.OnInitialized();
@@ -34,18 +39,9 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         UpdateEventsList();
     }
 
-    private void UpdateVisibleDates() {
-        var diff = (7 + (Scheduler.Date.DayOfWeek - StartViewOn)) % 7;
-        var startOfWeek = Scheduler.Date.AddDays(-1 * diff);
-
-        _visibleDates = Enumerable.Range(0, 7)
-            .Select(startOfWeek.AddDays)
-            .ToImmutableSortedSet();
-    }
-
     private void UpdateEventsList() {
         _events.Clear();
-        foreach (var @event in Scheduler.Events.Where(e => e.StartDate <= _visibleDates.Last() && e.EndDate >= _visibleDates.First()).OrderBy(e=>e.EventStart)) {
+        foreach (var @event in Scheduler.Events.Where(e => e.StartDate <= _visibleDates.Last() && e.EndDate >= _visibleDates.First()).OrderBy(e => e.EventStart)) {
             var eventStart = @event.StartDate >= _visibleDates.First() ? @event.EventStart : new DateTimeOffset(_visibleDates.First(), TimeOnly.MinValue, @event.EventStart.Offset);
             var eventEnd = @event.EndDate <= _visibleDates.Last() ? @event.EventEnd : new DateTimeOffset(_visibleDates.Last(), TimeOnly.MaxValue, @event.EventEnd.Offset);
 
@@ -80,7 +76,7 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
                     sortedList.Add(entry);
                 }
                 else {
-                    _events.Add(entry.StartDate, new SortedSet<WeekViewTnTEvent>(new DuplicateKeyComparer()) {  entry  });
+                    _events.Add(entry.StartDate, new SortedSet<WeekViewTnTEvent>(new WeekViewTnTEventComparer()) { entry });
                 }
 
                 eventStart = new DateTimeOffset(DateOnly.FromDateTime(eventStart.LocalDateTime), TimeOnly.MinValue, eventStart.Offset).AddDays(1);
@@ -89,12 +85,14 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         }
     }
 
-    public override void Refresh() {
-        UpdateVisibleDates();
-        UpdateEventsList();
-        StateHasChanged();
-    }
+    private void UpdateVisibleDates() {
+        var diff = (7 + (Scheduler.Date.DayOfWeek - StartViewOn)) % 7;
+        var startOfWeek = Scheduler.Date.AddDays(-1 * diff);
 
+        _visibleDates = Enumerable.Range(0, 7)
+            .Select(startOfWeek.AddDays)
+            .ToImmutableSortedSet();
+    }
 
     private sealed record WeekViewTnTEvent : TnTEvent {
         public required DateTimeOffset OriginalEventStart { get; init; }
@@ -104,22 +102,18 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         public HeaderOverlapCount? HeaderOverlapCount { get; set; }
     }
 
-    private sealed class HeaderOverlapCount {
-        public int Count { get; set; }
-    }
+    private class WeekViewTnTEventComparer : IComparer<WeekViewTnTEvent> {
 
-    /// <summary>
-    /// Comparer for comparing two keys, handling equality as beeing greater
-    /// Use this Comparer e.g. with SortedLists or SortedDictionaries, that don't allow duplicate keys
-    /// </summary>
-    /// <typeparam name="TKey"></typeparam>
-    private class DuplicateKeyComparer : IComparer<WeekViewTnTEvent> {
         public int Compare(WeekViewTnTEvent? x, WeekViewTnTEvent? y) {
             var result = x?.StartTime.CompareTo(y?.StartTime);
-            if(result == 0) {
+            if (result == 0) {
                 result = x?.Duration.CompareTo(y?.Duration);
             }
             return result.GetValueOrDefault() == 0 ? 1 : result.GetValueOrDefault(1);
         }
+    }
+
+    private sealed class HeaderOverlapCount {
+        public int Count { get; set; }
     }
 }

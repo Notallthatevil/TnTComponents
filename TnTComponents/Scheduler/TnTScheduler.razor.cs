@@ -24,6 +24,9 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
     public IEnumerable<TnTDisabledDateTime> DisabledDateTimes { get; set; } = [];
 
     [Parameter]
+    public bool AllowNewEvents { get; set; } = true;
+
+    [Parameter]
     public bool DisableDragAndDrop { get; set; }
 
     public override string? ElementClass => CssClassBuilder.Create()
