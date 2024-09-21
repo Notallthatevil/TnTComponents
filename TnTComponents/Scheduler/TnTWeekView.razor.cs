@@ -30,6 +30,9 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent, new() 
     [Parameter]
     public DayOfWeek StartViewOn { get; set; } = DayOfWeek.Sunday;
 
+    [Parameter]
+    public bool HideEventDates { get; set; }
+
     private const int _cellHeight = 48;
     private const int _cellMinWidth = 80;
     private const int _headerHeight = 80;

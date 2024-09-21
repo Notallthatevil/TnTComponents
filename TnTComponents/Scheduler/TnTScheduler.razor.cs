@@ -18,7 +18,7 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
     public RenderFragment ChildContent { get; set; } = default!;
 
     [Parameter]
-    public EventCallback DateChangedCallback { get; set; }
+    public EventCallback<DateOnly> DateChangedCallback { get; set; }
 
     [Parameter]
     public bool DisableDragAndDrop { get; set; }
@@ -82,7 +82,7 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
         if (date.HasValue) {
             Date = date.Value;
             _selectedView?.Refresh();
-            await DateChangedCallback.InvokeAsync();
+            await DateChangedCallback.InvokeAsync(date.Value);
         }
     }
 

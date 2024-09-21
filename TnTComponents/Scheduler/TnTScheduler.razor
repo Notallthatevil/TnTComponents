@@ -13,7 +13,7 @@
                 TODAY
             </TnTButton>
             <TnTImageButton Icon="@(new MaterialIcon{ Icon = MaterialIcon.ChevronRight })" OnClickCallback="NextPage" class="next-button" TextColor="@TextColor" />
-            <TnTInputDateTime @bind-Value:get="@Date" @bind-Value:set="@((DateOnly date) => Date = date)" BackgroundColor="@BackgroundColor" Label="Date Picker" />
+            <TnTInputDateTime @bind-Value:get="@Date" @bind-Value:set="@((DateOnly date) => UpdateDate(date))" BackgroundColor="@BackgroundColor" Label="Date Picker" />
         </div>
     }
     <CascadingValue Value="this" IsFixed="true">

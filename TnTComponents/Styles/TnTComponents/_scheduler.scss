@@ -29,6 +29,10 @@ $hour-offset: $cell-height;
 
         .today-button {
             padding: 0 16px;
+
+            @media #{$small-and-down} {
+                padding: 0 4px;
+            }
         }
     }
 
@@ -193,6 +197,7 @@ $hour-offset: $cell-height;
 
                         .tnt-event-title {
                             line-height: 4px;
+                            white-space: nowrap;
                         }
 
                         .tnt-event-time {

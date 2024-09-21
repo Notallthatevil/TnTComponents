@@ -105,9 +105,12 @@
                                     <div class="tnt-event-title tnt-label-medium">
                                         @(@event.Event.Title)
                                     </div>
-                                    <div class="tnt-event-time tnt-body-small">
-                                        @(TimeOnly.FromDateTime(@event.Event.EventStart.LocalDateTime).ToString("t")) - @(TimeOnly.FromDateTime(@event.Event.EventEnd.LocalDateTime).ToString("t"))
-                                    </div>
+                                    @if (!HideEventDates)
+                                    {
+                                        <div class="tnt-event-time tnt-body-small">
+                                            @(TimeOnly.FromDateTime(@event.Event.EventStart.LocalDateTime).ToString("t")) - @(TimeOnly.FromDateTime(@event.Event.EventEnd.LocalDateTime).ToString("t"))
+                                        </div>
+                                    }
                                 </div>
                             }
                         }
