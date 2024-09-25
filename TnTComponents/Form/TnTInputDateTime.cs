@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -17,13 +18,19 @@ public class TnTInputDateTime<DateTimeType> : TnTInputBase<DateTimeType> {
 
     private InputType _type;
 
-    protected override string? FormatValueAsString(DateTimeType? value) => (Nullable.GetUnderlyingType(typeof(DateTimeType)) ?? typeof(DateTimeType)) switch {
-        var t when t == typeof(DateTime) => BindConverter.FormatValue(value as DateTime?, _format, CultureInfo.InvariantCulture),
-        var t when t == typeof(DateTimeOffset) => BindConverter.FormatValue(value as DateTimeOffset?, _format, CultureInfo.InvariantCulture),
-        var t when t == typeof(TimeOnly) => BindConverter.FormatValue(value as TimeOnly?, _format, CultureInfo.InvariantCulture),
-        var t when t == typeof(DateOnly) => BindConverter.FormatValue(value as DateOnly?, _format, CultureInfo.InvariantCulture),
-        _ => throw new InvalidOperationException($"The type '{typeof(DateTimeType)}' is not a supported DateTime type.")
-    };
+    private DateTimeType _value;
+
+    protected override string? FormatValueAsString(DateTimeType? value) {
+        var result = value switch {
+            DateTime dateTimeValue => BindConverter.FormatValue(dateTimeValue, _format, CultureInfo.InvariantCulture),
+            DateTimeOffset dateTimeOffsetValue => BindConverter.FormatValue(dateTimeOffsetValue, _format, CultureInfo.InvariantCulture),
+            DateOnly dateOnlyValue => BindConverter.FormatValue(dateOnlyValue, _format, CultureInfo.InvariantCulture),
+            TimeOnly timeOnlyValue => BindConverter.FormatValue(timeOnlyValue, _format, CultureInfo.InvariantCulture),
+            _ => string.Empty, // Handles null for Nullable<DateTime>, etc.
+        };
+
+        return result;
+    }
 
     private string _format = default!;
 
@@ -59,8 +66,8 @@ public class TnTInputDateTime<DateTimeType> : TnTInputBase<DateTimeType> {
     }
 
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out DateTimeType result, [NotNullWhen(false)] out string? validationErrorMessage) {
+        Console.WriteLine("Try Parse Value From String");
         if (BindConverter.TryConvertTo(value, CultureInfo.InvariantCulture, out result)) {
-            Debug.Assert(result != null);
             validationErrorMessage = null;
             return true;
         }
