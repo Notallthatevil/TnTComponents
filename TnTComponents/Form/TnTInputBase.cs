@@ -170,10 +170,10 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                         builder.AddAttribute(210, "onchange", EventCallback.Factory.CreateBinder<string?[]?>(this, SetCurrentValueAsStringArray, default));
                     }
                     else if (typeof(TInputType) == typeof(bool)) {
-                        builder.AddAttribute(210, "onchange", EventCallback.Factory.CreateBinder(this, __value => CurrentValue = __value, CurrentValue));
+                        builder.AddAttribute(210, "onchange", EventCallback.Factory.CreateBinder(this, __value => { CurrentValue = __value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
                     }
                     else {
-                        builder.AddAttribute(210, "onchange", EventCallback.Factory.CreateBinder<string?>(this, __value => CurrentValueAsString = __value, CurrentValueAsString));
+                        builder.AddAttribute(210, "onchange", EventCallback.Factory.CreateBinder<string?>(this, __value => { CurrentValueAsString = __value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValueAsString));
                     }
                 }
 
