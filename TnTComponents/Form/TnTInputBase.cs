@@ -107,7 +107,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
         builder.AddAttribute(20, "title", ElementTitle);
         builder.AddAttribute(30, "class", ElementClass);
         builder.AddAttribute(40, "id", ElementId);
-        if(AdditionalAttributes?.TryGetValue("style", out var style) == true) {
+        if (AdditionalAttributes?.TryGetValue("style", out var style) == true) {
             builder.AddAttribute(41, "style", style);
         }
 
@@ -169,8 +169,11 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                     if (Type == InputType.Select && (typeof(TInputType).IsArray || Nullable.GetUnderlyingType(typeof(TInputType))?.IsArray == true)) {
                         builder.AddAttribute(210, "onchange", EventCallback.Factory.CreateBinder<string?[]?>(this, SetCurrentValueAsStringArray, default));
                     }
+                    else if (typeof(TInputType) == typeof(bool)) {
+                        builder.AddAttribute(210, "onchange", EventCallback.Factory.CreateBinder(this, __value => CurrentValue = __value, CurrentValue));
+                    }
                     else {
-                        builder.AddAttribute(210, "onchange", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
+                        builder.AddAttribute(210, "onchange", EventCallback.Factory.CreateBinder<string?>(this, __value => CurrentValueAsString = __value, CurrentValueAsString));
                     }
                 }
 
@@ -191,8 +194,8 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
 
                 builder.OpenRegion(231);
                 RenderChildContent(builder);
-                builder.CloseRegion(); 
-                
+                builder.CloseRegion();
+
                 builder.CloseElement();
 
                 builder.OpenRegion(235);
