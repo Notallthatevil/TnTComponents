@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
 using TnTComponents.Ext;
@@ -29,6 +30,9 @@ public class TnTPropertyColumn<TGridItem, TProp> : TnTColumnBase<TGridItem>, IBi
     /// </summary>
     [Parameter]
     public string? Format { get; set; }
+
+    [Parameter]
+    public CultureInfo FormatCulture { get; set; } = CultureInfo.CurrentCulture;
 
     /// <summary>
     /// Defines the value to be displayed in this column's cells.
@@ -74,7 +78,7 @@ public class TnTPropertyColumn<TGridItem, TProp> : TnTColumnBase<TGridItem>, IBi
                 }
 
                 _cellTextFunc = item => {
-                    var result = ((IFormattable?)compiledPropertyExpression!(item))?.ToString(Format, null);
+                    var result = ((IFormattable?)compiledPropertyExpression!(item))?.ToString(Format, FormatCulture);
                     return !string.IsNullOrEmpty(result) ? result : " ";
                 };
             }
