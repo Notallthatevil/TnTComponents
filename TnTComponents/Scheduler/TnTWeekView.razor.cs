@@ -33,6 +33,9 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
     [Parameter]
     public bool HideEventDates { get; set; }
 
+    [Parameter]
+    public bool ShowDescription { get; set; }
+
     private const int _cellHeight = 48;
     private const int _cellMinWidth = 80;
     private const int _headerHeight = 80;

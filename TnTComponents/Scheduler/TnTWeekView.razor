@@ -111,6 +111,13 @@
                                             @(TimeOnly.FromDateTime(@event.Event.EventStart.LocalDateTime).ToString("t")) - @(TimeOnly.FromDateTime(@event.Event.EventEnd.LocalDateTime).ToString("t"))
                                         </div>
                                     }
+
+                                    @if (ShowDescription)
+                                    {
+                                        <div class="tnt-body-small">
+                                            @(@event.Event.Description)
+                                        </div>
+                                    }
                                 </div>
                             }
                         }
