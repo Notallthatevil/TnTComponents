@@ -62,6 +62,8 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         UpdateEventsList();
     }
 
+    public override DateOnly GetFirstVisibleDate() => _visibleDates.First();
+    public override DateOnly GetLastVisibleDate() => _visibleDates.Last();
     private void UpdateEventsList() {
         _events.Clear();
         foreach (var @event in Scheduler.Events.Where(e => e.StartDate <= _visibleDates.Last() && e.EndDate >= _visibleDates.First()).OrderBy(e => e.EventStart)) {
