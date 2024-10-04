@@ -15,6 +15,8 @@
     margin: 12px 8px 24px 8px;
     transition: 150ms ease-in-out;
     min-width: fit-content;
+    user-select: none;
+    cursor: text;
 
     input:-webkit-autofill,
     input:-webkit-autofill:hover,

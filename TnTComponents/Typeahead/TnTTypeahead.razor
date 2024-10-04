@@ -24,7 +24,8 @@
                       Disabled="@Disabled"
                       BackgroundColor="BackgroundColor"
                       StartIcon="@(new MaterialIcon{ Icon = MaterialIcon.Search })"
-                      @onkeydown="SelectOrShiftFocusAsync"/>
+                      @onkeydown="SelectOrShiftFocusAsync"
+                      @ref="_inputBox"/>
         <TnTProgressIndicator Show="@_searching" ProgressColor="ProgressColor" Size="Size.Small" />
     </span>
     @if (_items.Any() || (!_items.Any() && !string.IsNullOrWhiteSpace(_searchText) && !_searching)) {

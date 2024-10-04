@@ -47,6 +47,7 @@ public partial class TnTTypeahead<TItem> {
 
     private string? _searchText;
     private bool _searching;
+    private TnTInputText _inputBox = default!;
 
     private IEnumerable<TItem> _items = [];
     private async Task SearchAsync(string? searchValue) {
@@ -67,6 +68,7 @@ public partial class TnTTypeahead<TItem> {
         _searching = false;
         _focusedItem = default;
         await ItemSelectedCallback.InvokeAsync(item);
+        await _inputBox.SetFocusAsync();
     }
 
     private async Task SelectOrShiftFocusAsync(KeyboardEventArgs args) {
