@@ -23,8 +23,6 @@ export class TnTTabView extends HTMLElement {
             }
             tabViewsByIdentifier.set(newValue, this);
             this.update().then(() => {
-                this.classList.add('tnt-ready');
-
                 if (this.resizeObserver) {
                     this.resizeObserver.disconnect();
                 }
@@ -55,7 +53,6 @@ export class TnTTabView extends HTMLElement {
         let self = this;
 
         this.querySelectorAll(':scope > .tnt-tab-view-header > .tnt-tab-view-header-buttons > .tnt-tab-view-button').forEach((button, index) => {
-
             function setActiveTab(e) {
                 if (self) {
                     const headerButtons = self.querySelectorAll(":scope > .tnt-tab-view-header > .tnt-tab-view-header-buttons > .tnt-tab-view-button");
