@@ -49,7 +49,7 @@ public class TnTTabChild : TnTInteractableComponentBase {
         builder.AddMultipleAttributes(10, AdditionalAttributes);
         builder.AddAttribute(20, "class", ElementClass);
         builder.AddAttribute(30, "style", ElementStyle);
-        builder.AddAttribute(40, "title", ElementTitle ?? Label);
+        builder.AddAttribute(40, "title", ElementTitle);
         builder.AddAttribute(50, "id", ElementId);
         builder.AddAttribute(60, "lang", ElementLang);
         builder.AddAttribute(70, "name", ElementName);
