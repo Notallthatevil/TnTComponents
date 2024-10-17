@@ -58,10 +58,10 @@ public partial class TnTChip : TnTInteractableComponentBase {
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "label");
-        builder.AddAttribute(10, "class", ElementClass);
-        builder.AddAttribute(20, "style", ElementStyle);
-        builder.AddAttribute(30, "id", ElementId);
-        builder.AddMultipleAttributes(40, AdditionalAttributes);
+        builder.AddMultipleAttributes(10, AdditionalAttributes);
+        builder.AddAttribute(20, "class", ElementClass);
+        builder.AddAttribute(30, "style", ElementStyle);
+        builder.AddAttribute(40, "id", ElementId);
 
         if (StartIcon is not null) {
             StartIcon.AdditionalClass = "tnt-start-icon";
