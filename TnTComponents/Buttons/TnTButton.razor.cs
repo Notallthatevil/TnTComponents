@@ -20,6 +20,7 @@ public partial class TnTButton {
 
     /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
     [Parameter]
