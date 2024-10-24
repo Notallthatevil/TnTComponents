@@ -35,12 +35,15 @@ public abstract class TnTPageScriptComponent<TComponent> : TnTComponentBase, ITn
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         await base.OnAfterRenderAsync(firstRender);
-        if (firstRender) {
-            IsolatedJsModule = await JSRuntime.ImportIsolatedJs(this, JsModulePath);
-            await (IsolatedJsModule?.InvokeVoidAsync("onLoad", Element, DotNetObjectRef) ?? ValueTask.CompletedTask);
-        }
+        try {
+            if (firstRender) {
+                IsolatedJsModule = await JSRuntime.ImportIsolatedJs(this, JsModulePath);
+                await (IsolatedJsModule?.InvokeVoidAsync("onLoad", Element, DotNetObjectRef) ?? ValueTask.CompletedTask);
+            }
 
-        await (IsolatedJsModule?.InvokeVoidAsync("onUpdate", Element, DotNetObjectRef) ?? ValueTask.CompletedTask);
+            await (IsolatedJsModule?.InvokeVoidAsync("onUpdate", Element, DotNetObjectRef) ?? ValueTask.CompletedTask);
+        }
+        catch (JSDisconnectedException) { }
     }
 
     protected override void OnInitialized() {
