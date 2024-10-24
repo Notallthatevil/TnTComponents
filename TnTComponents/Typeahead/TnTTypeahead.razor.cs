@@ -99,6 +99,12 @@ public partial class TnTTypeahead<TItem> {
                         }
                         break;
                     }
+                case "Escape": {
+                        _items = [];
+                        _searching = false;
+                        _searchText = null;
+                    }
+                    break;
                 default:
                     break;
             }
