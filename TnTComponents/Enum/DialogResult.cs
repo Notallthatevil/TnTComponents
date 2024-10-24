@@ -11,6 +11,7 @@ public enum DialogResult {
     Closed,
     Cancelled = Closed,
     Confirmed,
-    Succeeded = Confirmed
+    Succeeded = Confirmed,
+    Deleted
 }
 
