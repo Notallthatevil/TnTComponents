@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System;
 
 namespace TnTComponents.Ext;
 
 public static class NavigationManagerExt {
-
-    public static string UpdateOrReplaceParameters(this NavigationManager navManager, IReadOnlyDictionary<string, object?> parameters) {
-        return navManager.UpdateOrReplaceParameters(navManager.Uri, parameters);
+    public static string UpdateOrReplaceParameters(this NavigationManager navManager, params KeyValuePair<string, object?>[] keyValuePairs) {
+        return navManager.UpdateOrReplaceParameters(navManager.Uri, new Dictionary<string, object?>(keyValuePairs));
     }
 
     public static string UpdateOrReplaceParameters(this NavigationManager navManager, string uri, IReadOnlyDictionary<string, object?> parameters) {
@@ -27,5 +27,20 @@ public static class NavigationManagerExt {
         }
 
         return navManager.GetUriWithQueryParameters(uri, dictionary);
+    }
+
+
+    public static void UpdateUriWithQueryParameters(this NavigationManager navManager, string uri, IReadOnlyDictionary<string, object?> parameters) {
+        var newUri = navManager.UpdateOrReplaceParameters(uri, parameters);
+        if (!newUri.Equals(uri, StringComparison.OrdinalIgnoreCase)) {
+            navManager.NavigateTo(newUri, replace: true);
+        }
+    }
+
+    public static void UpdateUriWithQueryParameters(this NavigationManager navManager, params KeyValuePair<string, object?>[] keyValuePairs) {
+        var newUri = navManager.UpdateOrReplaceParameters(keyValuePairs);
+        if (!newUri.Equals(navManager.Uri, StringComparison.OrdinalIgnoreCase)) {
+            navManager.NavigateTo(newUri, replace: true);
+        }
     }
 }

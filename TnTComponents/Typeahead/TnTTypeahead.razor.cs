@@ -35,7 +35,7 @@ public partial class TnTTypeahead<TItem> {
     [Parameter, EditorRequired]
     public Func<string?, CancellationToken, Task<IEnumerable<TItem>>> ItemsLookupFunc { get; set; } = default!;
 
-    private TnTDebouncer _debouncer = new();
+    private TnTDebouncer _debouncer = default!;
 
     [Parameter]
     public int DebounceMilliseconds { get; set; } = 300;
@@ -50,11 +50,16 @@ public partial class TnTTypeahead<TItem> {
     private TnTInputText _inputBox = default!;
 
     private IEnumerable<TItem> _items = [];
+
+    protected override void OnParametersSet() {
+        base.OnParametersSet();
+        _debouncer = new TnTDebouncer(DebounceMilliseconds);
+    }
     private async Task SearchAsync(string? searchValue) {
         _searching = true;
         _items = [];
         _focusedItem = default;
-        await _debouncer.DebounceAsync(DebounceMilliseconds, async token => {
+        await _debouncer.DebounceAsync(async token => {
             var result = await ItemsLookupFunc.Invoke(searchValue, token);
             _items = result;
             _focusedItem = _items.FirstOrDefault();
