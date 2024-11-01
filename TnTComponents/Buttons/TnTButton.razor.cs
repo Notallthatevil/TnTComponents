@@ -57,4 +57,29 @@ public partial class TnTButton {
 
     [Parameter]
     public bool StopPropagation { get; set; }
+
+    private RenderFragment Button => b => {
+        b.OpenElement(0, "button");
+        b.AddMultipleAttributes(10, AdditionalAttributes);
+        b.AddAttribute(20, "class", ElementClass);
+        b.AddAttribute(30, "style", ElementStyle);
+        b.AddAttribute(40, "type", Type.ToHtmlAttribute());
+        b.AddAttribute(50, "name", ElementName);
+        b.AddAttribute(60, "disabled", Disabled);
+        b.AddAttribute(70, "autofocus", AutoFocus);
+        b.AddAttribute(80, "title", ElementTitle);
+        b.AddAttribute(90, "id", ElementId);
+        b.AddElementReferenceCapture(100, __value => Element = __value);
+        if (OnClickCallback.HasDelegate) {
+            b.AddAttribute(110, "onclick", EventCallback.Factory.Create<MouseEventArgs>(this, OnClickCallback));
+        }
+
+        if (StopPropagation) {
+            b.AddAttribute(120, "onclick:stopPropagation", true);
+        }
+
+        b.AddContent(130, ChildContent);
+
+        b.CloseElement();
+    };
 }
