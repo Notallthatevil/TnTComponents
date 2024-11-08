@@ -1,0 +1,11 @@
+﻿@using TnTComponents.Core
+@implements IAsyncDisposable
+
+<div @ref="_element">
+    @if (_beginLoad)
+    {
+        @ChildContent
+    }
+</div>
+
+<TnTPageScript Src="@_jsModulePath" />
