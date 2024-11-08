@@ -3,10 +3,10 @@
 @inherits TnTPageScriptComponent<TnTTabView>
 @namespace TnTComponents
 
-<tnt-tab-view @attributes=AdditionalAttributes class="@ElementClass" style="@ElementStyle" @ref="Element">
+<tnt-tab-view @attributes=AdditionalAttributes class="@ElementClass" style="@ElementStyle" @ref="Element" data-permanent>
     <CascadingValue Value="this" IsFixed="true">
         <DeferRendering>
-            <div data-permanent 
+            <div 
                 class="@(CssClassBuilder.Create().AddClass("tnt-tab-view-header").AddFilled().AddForegroundColor(HeaderTextColor).AddBackgroundColor(HeaderBackgroundColor).Build())">
                 <span class="tnt-tab-view-header-buttons">
 
