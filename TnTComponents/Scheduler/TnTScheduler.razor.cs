@@ -86,6 +86,9 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
         }
     }
 
+    public DateOnly? GetFirstVisibleDate() => _selectedView?.GetFirstVisibleDate();
+    public DateOnly? GetLastVisibleDate() => _selectedView?.GetLastVisibleDate();
+
     public void Refresh() {
         StateHasChanged();
         _selectedView?.Refresh();

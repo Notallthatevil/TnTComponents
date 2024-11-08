@@ -22,7 +22,7 @@ public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
     public bool AllowPlaceholderSelection { get; set; } = true;
 
     [Parameter]
-    public TInputType? PlaceholderValue { get; set; } = default;
+    public object? PlaceholderValue { get; set; }
 
     protected override void RenderChildContent(RenderTreeBuilder builder) {
         if (!string.IsNullOrWhiteSpace(Placeholder)) {

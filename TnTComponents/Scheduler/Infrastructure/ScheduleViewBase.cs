@@ -49,6 +49,8 @@ public abstract class ScheduleViewBase<TEventType> : TnTComponentBase, IDisposab
 
     protected Task EventSlotClickedAsync(DateTimeOffset slot) => Scheduler.EventSlotClickedCallback.InvokeAsync(slot);
 
+    public abstract DateOnly GetFirstVisibleDate();
+    public abstract DateOnly GetLastVisibleDate();
     protected virtual Task OnDragStartAsync(DragEventArgs args, TEventType @event) {
         DraggingEvent = @event;
         return Task.CompletedTask;

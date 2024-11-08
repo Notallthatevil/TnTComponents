@@ -145,7 +145,9 @@ function ripple(e) {
     ripple.classList.add('tnt-rippling');
 
     setTimeout(() => {
-        this.removeChild(ripple);
+        if (this.contains(ripple)) {
+            this.removeChild(ripple);
+        }
     }, 500);
 
 }

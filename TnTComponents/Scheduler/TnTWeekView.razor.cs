@@ -33,6 +33,9 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
     [Parameter]
     public bool HideEventDates { get; set; }
 
+    [Parameter]
+    public bool ShowDescription { get; set; }
+
     private const int _cellHeight = 48;
     private const int _cellMinWidth = 80;
     private const int _headerHeight = 80;
@@ -62,11 +65,13 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         UpdateEventsList();
     }
 
+    public override DateOnly GetFirstVisibleDate() => _visibleDates.First();
+    public override DateOnly GetLastVisibleDate() => _visibleDates.Last();
     private void UpdateEventsList() {
         _events.Clear();
         foreach (var @event in Scheduler.Events.Where(e => e.StartDate <= _visibleDates.Last() && e.EndDate >= _visibleDates.First()).OrderBy(e => e.EventStart)) {
-            var eventStart = @event.StartDate >= _visibleDates.First() ? @event.EventStart : new DateTimeOffset(_visibleDates.First(), TimeOnly.MinValue, @event.EventStart.Offset);
-            var eventEnd = @event.EndDate <= _visibleDates.Last() ? @event.EventEnd : new DateTimeOffset(_visibleDates.Last(), TimeOnly.MaxValue, @event.EventEnd.Offset);
+            var eventStart = (@event.StartDate >= _visibleDates.First() ? @event.EventStart : new DateTimeOffset(_visibleDates.First(), TimeOnly.MinValue, @event.EventStart.Offset)).ToLocalTime();
+            var eventEnd = (@event.EndDate <= _visibleDates.Last() ? @event.EventEnd : new DateTimeOffset(_visibleDates.Last(), TimeOnly.MaxValue, @event.EventEnd.Offset)).ToLocalTime();
 
             do {
                 var entryEnd = new DateTimeOffset(Math.Min(eventEnd.Ticks, new DateTimeOffset(DateOnly.FromDateTime(eventStart.LocalDateTime), TimeOnly.MaxValue, eventStart.Offset).Ticks), eventStart.Offset);
@@ -96,7 +101,7 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
                     _events.Add(entry.StartDate, new SortedSet<WeekViewTnTEvent>(new WeekViewTnTEventComparer()) { entry });
                 }
 
-                eventStart = new DateTimeOffset(DateOnly.FromDateTime(eventStart.LocalDateTime), TimeOnly.MinValue, eventStart.Offset).AddDays(1);
+                eventStart = new DateTimeOffset(DateOnly.FromDateTime(eventStart.Date), TimeOnly.MinValue, eventStart.Offset).AddDays(1);
             }
             while (eventStart < eventEnd);
         }

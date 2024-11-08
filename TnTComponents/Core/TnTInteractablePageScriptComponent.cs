@@ -27,7 +27,7 @@ public abstract class TnTInteractablePageScriptComponent<TComponent> : TnTCompon
     public bool EnableRipple { get; set; } = true;
     [Parameter]
     public virtual TnTColor? TintColor { get; set; }
-    [Parameter] 
+    [Parameter]
     public virtual TnTColor? OnTintColor { get; set; }
 
     protected RenderFragment PageScript = default!;
@@ -45,12 +45,16 @@ public abstract class TnTInteractablePageScriptComponent<TComponent> : TnTCompon
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         await base.OnAfterRenderAsync(firstRender);
-        if (firstRender) {
-            IsolatedJsModule = await JSRuntime.ImportIsolatedJs(this, JsModulePath);
-            await (IsolatedJsModule?.InvokeVoidAsync("onLoad", Element, DotNetObjectRef) ?? ValueTask.CompletedTask);
-        }
+        try {
 
-        await (IsolatedJsModule?.InvokeVoidAsync("onUpdate", Element, DotNetObjectRef) ?? ValueTask.CompletedTask);
+            if (firstRender) {
+                IsolatedJsModule = await JSRuntime.ImportIsolatedJs(this, JsModulePath);
+                await (IsolatedJsModule?.InvokeVoidAsync("onLoad", Element, DotNetObjectRef) ?? ValueTask.CompletedTask);
+            }
+
+            await (IsolatedJsModule?.InvokeVoidAsync("onUpdate", Element, DotNetObjectRef) ?? ValueTask.CompletedTask);
+        }
+        catch (JSDisconnectedException) { }
     }
 
     protected override void OnInitialized() {

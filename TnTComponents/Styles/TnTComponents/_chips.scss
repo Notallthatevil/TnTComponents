@@ -49,7 +49,7 @@
         position: absolute;
     }
 
-    &:has(input:checked) {
+    &.tnt-togglable:has(input:checked) {
         @each $colorClass in $color-classes {
             &.tnt-tint-color-#{$colorClass} {
                 background-color: var(--tnt-color-#{$colorClass});

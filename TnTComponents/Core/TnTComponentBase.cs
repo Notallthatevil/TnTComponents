@@ -43,11 +43,6 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
 
     protected bool Interactive { get; private set; }
 
-    [Inject]
-    private ITnTRenderContext _renderContext { get; set; } = default!;
-
-    public bool Prerendering => _renderContext.IsPrerendering;
-
     public string ComponentIdentifier { get; } = TnTComponentIdentifier.NewId();
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {

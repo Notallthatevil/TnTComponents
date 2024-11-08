@@ -203,6 +203,10 @@ $hour-offset: $cell-height;
                         .tnt-event-time {
                             white-space: nowrap;
                         }
+
+                        .tnt-event-description {
+                            white-space: pre-wrap;
+                        }
                     }
                 }
             }

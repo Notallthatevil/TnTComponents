@@ -26,7 +26,7 @@ public class TnTDialog : ComponentBase, IDisposable {
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         foreach (var dialog in _dialogs) {
             builder.OpenElement(0, "dialog");
-            builder.AddAttribute(10, "class", CssClassBuilder.Create().AddTnTStyleable(dialog.Options).AddClass("tnt-closing", dialog.Options.Closing).AddClass(dialog.Options.ElementClass).AddClass("tnt-dialog").Build());
+            builder.AddAttribute(10, "class", CssClassBuilder.Create().AddTnTStyleable(dialog.Options).AddFilled().AddClass("tnt-closing", dialog.Options.Closing).AddClass(dialog.Options.ElementClass).AddClass("tnt-dialog").Build());
             builder.AddAttribute(20, "style", CssStyleBuilder.Create().AddStyle(dialog.Options.ElementStyle, string.Empty).Build());
             builder.AddAttribute(30, "id", dialog.ElementId);
             builder.AddAttribute(40, "oncancel", EventCallback.Factory.Create<EventArgs>(this, dialog.CloseAsync));

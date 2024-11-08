@@ -12,9 +12,11 @@
     align-items: center;
     padding: 0 16px;
     box-sizing: border-box;
-    margin: 12px 8px 24px 8px;
+    margin: 8px 8px 16px;
     transition: 150ms ease-in-out;
     min-width: fit-content;
+    user-select: none;
+    cursor: text;
 
     input:-webkit-autofill,
     input:-webkit-autofill:hover,

@@ -12,6 +12,7 @@ public partial class TnTChip : TnTInteractableComponentBase {
         .AddTnTInteractable(this)
         .AddBackgroundColor(BackgroundColor)
         .AddForegroundColor(TextColor)
+        .AddClass("tnt-togglable", !DisableToggle)
         .AddClass("tnt-chip")
         .Build();
 
@@ -26,7 +27,6 @@ public partial class TnTChip : TnTInteractableComponentBase {
     [Parameter, EditorRequired]
     public string Label { get; set; } = default!;
 
-
     [Parameter]
     public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerLow;
 
@@ -37,6 +37,9 @@ public partial class TnTChip : TnTInteractableComponentBase {
 
     [Parameter]
     public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
+
+    [Parameter]
+    public bool DisableToggle { get; set; }
 
     [CascadingParameter]
     private ITnTForm? _form { get; set; }
@@ -55,10 +58,10 @@ public partial class TnTChip : TnTInteractableComponentBase {
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "label");
-        builder.AddAttribute(10, "class", ElementClass);
-        builder.AddAttribute(20, "style", ElementStyle);
-        builder.AddAttribute(30, "id", ElementId);
-        builder.AddMultipleAttributes(40, AdditionalAttributes);
+        builder.AddMultipleAttributes(10, AdditionalAttributes);
+        builder.AddAttribute(20, "class", ElementClass);
+        builder.AddAttribute(30, "style", ElementStyle);
+        builder.AddAttribute(40, "id", ElementId);
 
         if (StartIcon is not null) {
             StartIcon.AdditionalClass = "tnt-start-icon";
@@ -75,9 +78,11 @@ public partial class TnTChip : TnTInteractableComponentBase {
         builder.AddAttribute(120, "title", ElementTitle);
         builder.AddAttribute(130, "lang", ElementLang);
         builder.AddAttribute(140, "value", bool.TrueString);
-        builder.AddAttribute(150, "checked", BindConverter.FormatValue(Value));
-        builder.AddAttribute(160, "onchange", EventCallback.Factory.CreateBinder(this, value => { Value = value; BindAfter.InvokeAsync(Value); }, Value));
-        builder.SetUpdatesAttributeName("checked");
+        if (!DisableToggle) {
+            builder.AddAttribute(150, "checked", BindConverter.FormatValue(Value));
+            builder.AddAttribute(160, "onchange", EventCallback.Factory.CreateBinder(this, value => { Value = value; BindAfter.InvokeAsync(Value); }, Value));
+            builder.SetUpdatesAttributeName("checked");
+        }
         builder.CloseElement();
 
         if (CloseButtonClicked.HasDelegate) {
