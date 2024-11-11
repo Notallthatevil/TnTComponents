@@ -11,31 +11,33 @@ public class TnTItemsProviderRequestBinder : IModelBinder {
     public Task BindModelAsync(ModelBindingContext bindingContext) {
         ArgumentNullException.ThrowIfNull(bindingContext, nameof(bindingContext));
 
-        var query = bindingContext.HttpContext?.Request?.Query;
-        if (query is not null && query.TryGetValue(nameof(ITnTItemsProviderRequest.StartIndex), out var startIndexes) && !string.IsNullOrWhiteSpace(startIndexes.FirstOrDefault()) && int.TryParse(startIndexes.FirstOrDefault(), out var startIndex)) {
-            int? count = null;
-            var countStr = query[nameof(ITnTItemsProviderRequest.Count)];
-            if (!string.IsNullOrWhiteSpace(countStr.FirstOrDefault()) && int.TryParse(countStr.FirstOrDefault(), out var countResult)) {
-                count = countResult;
+        if (bindingContext.BindingSource == BindingSource.Query) {
+            var query = bindingContext.HttpContext?.Request?.Query;
+            if (query is not null && query.TryGetValue(nameof(ITnTItemsProviderRequest.StartIndex), out var startIndexes) && !string.IsNullOrWhiteSpace(startIndexes.FirstOrDefault()) && int.TryParse(startIndexes.FirstOrDefault(), out var startIndex)) {
+                int? count = null;
+                var countStr = query[nameof(ITnTItemsProviderRequest.Count)];
+                if (!string.IsNullOrWhiteSpace(countStr.FirstOrDefault()) && int.TryParse(countStr.FirstOrDefault(), out var countResult)) {
+                    count = countResult;
+                }
+                var sortOnProperties = query[nameof(ITnTItemsProviderRequest.SortOnProperties)].SelectMany(s => s!.Split("],[").Select(t => t.Replace("[", string.Empty).Replace("]", string.Empty)))
+                    .Where(s => !string.IsNullOrWhiteSpace(s))
+                    .Select(s => {
+                        var split = s.Split(',');
+                        return new KeyValuePair<string, SortDirection>(split.First(), Enum.Parse<SortDirection>(split.LastOrDefault() ?? SortDirection.Auto.ToString()));
+                    })
+                    .ToList();
+
+                ITnTItemsProviderRequest result = new BindableTnTItemsProviderRequest {
+                    StartIndex = startIndex,
+                    Count = count,
+                    SortOnProperties = sortOnProperties
+                };
+
+                bindingContext.Result = ModelBindingResult.Success(result);
             }
-            var sortOnProperties = query[nameof(ITnTItemsProviderRequest.SortOnProperties)].SelectMany(s => s!.Split("],[").Select(t => t.Replace("[", string.Empty).Replace("]", string.Empty)))
-                .Where(s => !string.IsNullOrWhiteSpace(s))
-                .Select(s => {
-                    var split = s.Split(',');
-                    return new KeyValuePair<string, SortDirection>(split.First(), Enum.Parse<SortDirection>(split.LastOrDefault() ?? SortDirection.Auto.ToString()));
-                })
-                .ToList();
-
-            ITnTItemsProviderRequest result = new BindableTnTItemsProviderRequest {
-                StartIndex = startIndex,
-                Count = count,
-                SortOnProperties = sortOnProperties
-            };
-
-            bindingContext.Result = ModelBindingResult.Success(result);
-        }
-        else {
-            bindingContext.Result = ModelBindingResult.Failed();
+            else {
+                bindingContext.Result = ModelBindingResult.Failed();
+            }
         }
         return Task.CompletedTask;
     }
