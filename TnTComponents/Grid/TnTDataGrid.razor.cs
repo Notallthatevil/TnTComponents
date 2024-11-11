@@ -317,7 +317,7 @@ public partial class TnTDataGrid<TGridItem> {
 
     // Gets called both by RefreshDataCoreAsync and directly by the Virtualize child component
     // during scrolling
-    private async ValueTask<TnTItemsProviderResult<(int, TGridItem)>> ProvideVirtualizedItemsAsync(TnTVirtualizeItemsProviderRequest<(int, TGridItem)> request) {
+    private async ValueTask<TnTItemsProviderResult<(int, TGridItem)>> ProvideVirtualizedItemsAsync(ITnTCancellableItemsProviderRequest request) {
         _lastRefreshedPaginationStateHash = Pagination?.GetHashCode();
         // Debounce the requests. This eliminates a lot of redundant queries at the cost of slight
         // lag after interactions.
@@ -456,4 +456,4 @@ public partial class TnTDataGrid<TGridItem> {
 /// <returns>
 /// A <see cref="T:ValueTask{TnTGridItemsProviderResult{TResult}}" /> that gives the data to be displayed.
 /// </returns>
-public delegate ValueTask<TnTItemsProviderResult<TGridItem>> TnTGridItemsProvider<TGridItem>(TnTGridItemsProviderRequest<TGridItem> request);
+public delegate ValueTask<TnTItemsProviderResult<TGridItem>> TnTGridItemsProvider<TGridItem>(ITnTCancellableItemsProviderRequest request);

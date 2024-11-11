@@ -132,28 +132,12 @@ public partial class TnTVirtualize<TItem> {
     }
 }
 
-public class TnTVirtualizeItemsProviderRequest<TItem> {
+
+internal class TnTVirtualizeItemsProviderRequest<TItem> : ITnTCancellableItemsProviderRequest {
     public CancellationToken CancellationToken { get; init; }
     public int? Count { get; set; }
-    public IReadOnlyCollection<KeyValuePair<string, SortDirection>> SortOnProperties { get; init; } = [];
+    public IEnumerable<KeyValuePair<string, SortDirection>> SortOnProperties { get; init; } = [];
     public int StartIndex { get; init; }
-
-    public static implicit operator TnTItemsProviderRequest(TnTVirtualizeItemsProviderRequest<TItem> request) {
-        return new TnTItemsProviderRequest {
-            StartIndex = request.StartIndex,
-            SortOnProperties = request.SortOnProperties,
-            Count = request.Count
-        };
-    }
-
-    public static implicit operator TnTVirtualizeItemsProviderRequest<TItem>(TnTItemsProviderRequest request) {
-        return new TnTVirtualizeItemsProviderRequest<TItem> {
-            Count = request.Count,
-            SortOnProperties = request.SortOnProperties.ToList(),
-            StartIndex = request.StartIndex,
-            CancellationToken = default
-        };
-    }
 }
 
 /// <summary>
@@ -164,4 +148,4 @@ public class TnTVirtualizeItemsProviderRequest<TItem> {
 /// <returns>
 /// A <see cref="ValueTask{TnTItemsProviderResult{TGridItem}}" /> that gives the data to be displayed.
 /// </returns>
-public delegate ValueTask<TnTItemsProviderResult<TItem>> TnTVirtualizeItemsProvider<TItem>(TnTVirtualizeItemsProviderRequest<TItem> request);
+public delegate ValueTask<TnTItemsProviderResult<TItem>> TnTVirtualizeItemsProvider<TItem>(ITnTCancellableItemsProviderRequest request);

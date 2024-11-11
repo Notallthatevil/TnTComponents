@@ -5,7 +5,7 @@ namespace TnTComponents.Ext;
 
 public static class IQueryableExt {
 
-    public static IQueryable<T> Apply<T>(this IQueryable<T> query, TnTItemsProviderRequest request) {
+    public static IQueryable<T> Apply<T>(this IQueryable<T> query, ITnTItemsProviderRequest request) {
         if (request.SortOnProperties?.Any() == true) {
             query = query.OrderBy(request.SortOnProperties);
         }
