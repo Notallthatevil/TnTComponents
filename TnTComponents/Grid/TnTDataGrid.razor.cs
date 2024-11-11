@@ -419,7 +419,6 @@ public partial class TnTDataGrid<TGridItem> {
                         _numberOfRowsToLoad = Math.Max(bodyHeight / (int)ItemSize, 5);
                     }
                 }
-                Console.WriteLine($"Number of rows to load {_numberOfRowsToLoad + OverscanCount}");
                 request = request with { Count = _numberOfRowsToLoad + OverscanCount };
             }
             var gipr = await ItemsProvider(request);
