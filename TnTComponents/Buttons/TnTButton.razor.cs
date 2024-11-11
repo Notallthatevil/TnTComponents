@@ -69,15 +69,15 @@ public partial class TnTButton {
         b.AddAttribute(70, "autofocus", AutoFocus);
         b.AddAttribute(80, "title", ElementTitle);
         b.AddAttribute(90, "id", ElementId);
-        b.AddElementReferenceCapture(100, __value => Element = __value);
         if (OnClickCallback.HasDelegate) {
-            b.AddAttribute(110, "onclick", EventCallback.Factory.Create<MouseEventArgs>(this, OnClickCallback));
+            b.AddAttribute(100, "onclick", EventCallback.Factory.Create<MouseEventArgs>(this, OnClickCallback));
         }
 
         if (StopPropagation) {
-            b.AddAttribute(120, "onclick:stopPropagation", true);
+            b.AddAttribute(110, "onclick:stopPropagation", true);
         }
 
+        b.AddElementReferenceCapture(120, __value => Element = __value);
         b.AddContent(130, ChildContent);
 
         b.CloseElement();
