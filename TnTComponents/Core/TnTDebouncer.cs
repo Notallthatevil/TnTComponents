@@ -27,33 +27,32 @@ namespace TnTComponents.Core;
 /// Debouncer helps you to debounce asynchronous actions. You can use it in your callbacks to
 /// prevent multiple calls of the same action in a short period of time.
 /// </summary>
-public class TnTDebouncer : IDisposable {
+public class TnTDebouncer(int millisecondsDelay = 300) : IDisposable {
     private CancellationTokenSource _debounceCancellationTokenSource = new();
 
-    public Task CancelAsync() {
-        return _debounceCancellationTokenSource.CancelAsync();
-    }
+    private readonly int _millisecondsDelay = millisecondsDelay;
+
+    public Task CancelAsync() => _debounceCancellationTokenSource.CancelAsync();
 
     /// <summary>
     /// Starts the debouncing.
     /// </summary>
-    /// <param name="millisecondsDelay">The delay in milliseconds for debouncing.</param>
     /// <param name="actionAsync">
     /// The asynchronous action to be executed. The <see cref="CancellationToken" /> gets canceled
     /// if the method is called again.
     /// </param>
-    public async Task DebounceAsync(int millisecondsDelay, Func<CancellationToken, Task> actionAsync) {
+    public async Task DebounceAsync(Func<CancellationToken, Task> actionAsync) {
         try {
-            await DebounceAsync(millisecondsDelay);
+            await DebounceAsync();
 
             await actionAsync(_debounceCancellationTokenSource.Token);
         }
         catch (TaskCanceledException) { }
     }
 
-    public async Task<T> DebounceForResultAsync<T>(int millisecondsDelay, Func<CancellationToken, Task<T>> funcAsync) {
+    public async Task<T> DebounceForResultAsync<T>(Func<CancellationToken, Task<T>> funcAsync) {
         try {
-            await DebounceAsync(millisecondsDelay);
+            await DebounceAsync();
 
             return await funcAsync(_debounceCancellationTokenSource.Token);
         }
@@ -67,11 +66,11 @@ public class TnTDebouncer : IDisposable {
         _debounceCancellationTokenSource.Dispose();
     }
 
-    private async Task DebounceAsync(int millisecondsDelay) {
+    private async Task DebounceAsync() {
         await _debounceCancellationTokenSource.CancelAsync();
         _debounceCancellationTokenSource.Dispose();
         _debounceCancellationTokenSource = new();
 
-        await Task.Delay(millisecondsDelay, _debounceCancellationTokenSource.Token);
+        await Task.Delay(_millisecondsDelay, _debounceCancellationTokenSource.Token);
     }
 }

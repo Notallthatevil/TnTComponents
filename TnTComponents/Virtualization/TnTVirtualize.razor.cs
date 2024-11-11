@@ -119,7 +119,7 @@ public partial class TnTVirtualize<TItem> {
             _loadItemsCts?.Cancel();
             _loadItemsCts?.Dispose();
         }
-        catch (ObjectDisposedException ex) { }
+        catch (ObjectDisposedException) { }
         finally {
             _loadItemsCts = null;
         }
