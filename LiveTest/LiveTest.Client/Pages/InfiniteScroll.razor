@@ -11,9 +11,11 @@
 
 
 @code {
-    async ValueTask<TnTItemsProviderResult<int>> GetItems(TnTVirtualizeItemsProviderRequest<int> request) {
+    async ValueTask<TnTItemsProviderResult<int>> GetItems(ITnTCancellableItemsProviderRequest request)
+    {
         await Task.Delay(1000); // Simulate async loading
-        return new TnTItemsProviderResult<int>() {
+        return new TnTItemsProviderResult<int>()
+            {
                 Items = Enumerable.Range(request.StartIndex, 50).ToList(),
                 TotalItemCount = 1000
             };
