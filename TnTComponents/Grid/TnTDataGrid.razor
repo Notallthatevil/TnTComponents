@@ -37,7 +37,7 @@
                         var CellId = TnTComponentIdentifier.NewId();
                         col.ShowSortIcon = _sortByColumn == col;
                         <TnTDataGridHeaderCell class="@($"{col.ElementClass}{(col.Sortable && _interactive ? " tnt-col-sortable" : null)}")"
-                                               style="@col.ElementStyle"
+                                               style="@(col.ElementStyle + (_ariaBodyRowCount == 0 ? $" width: {100 / _columns.Count}%" : string.Empty))"
                                                aria-sort="@(_sortByColumn == col? (_sortByAscending ? "ascending" : "descending"): null)"
                                                title="@col.Title"
                                                @key="@col" scope="col"
