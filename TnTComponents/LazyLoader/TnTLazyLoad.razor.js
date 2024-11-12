@@ -1,25 +1,35 @@
+const observerMap = new Map();
 
+function intersectCallback(entries, ob) {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const value = observerMap.get(entry.target);
+            if (value && value.dotNetRef) {
+                value.dotNetRef.invokeMethodAsync("BeginLoad");
+            }
+            ob.unobserve(entry.target);
+            console.log(`loading ${entry.target}`);
+        }
+    });
+
+}
 
 export function onLoad(element, dotNetRef) {
-    if (element) {
+    if (element && dotNetRef) {
         const options = {
-            root: element,
             rootMargin: "32px",
             threshold: 1.0,
         };
 
-        function intersectCallback(entries, _) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    dotNetRef.invokeMethodAsync("BeginLoad");
-                }
+        if (!observerMap.get(element)) {
+            const observer = new IntersectionObserver(intersectCallback, options);
+            observerMap.set(element, {
+                observer: observer,
+                dotNetRef: dotNetRef
             });
 
-            observer.disconnect();
+            observer.observe(element);
         }
-
-        const observer = new IntersectionObserver(intersectCallback, options);
-        observer.observe(element);
     }
 }
 
@@ -27,5 +37,11 @@ export function onUpdate(element, dotNetRef) {
 }
 
 export function onDispose(element, dotNetRef) {
-
+    if (element) {
+        const observerValue = observerMap.get(element);
+        if (observerValue) {
+            observerValue.observer.disconnect();
+            observerMap.delete(element);
+        }
+    }
 }

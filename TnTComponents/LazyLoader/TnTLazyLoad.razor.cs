@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
 using TnTComponents.Ext;
 
-namespace TnTComponents.LazyLoader;
+namespace TnTComponents;
 public partial class TnTLazyLoad {
 
     public DotNetObjectReference<TnTLazyLoad>? DotNetObjectRef { get; set; }
@@ -20,6 +21,12 @@ public partial class TnTLazyLoad {
 
     private bool _beginLoad = false;
 
+    [Parameter]
+    public RenderFragment? LoadingContent { get; set; }
+
+    [DynamicDependency(nameof(BeginLoad))]
+    public TnTLazyLoad() { }
+
     public async ValueTask DisposeAsync() {
         GC.SuppressFinalize(this);
         try {
@@ -27,6 +34,7 @@ public partial class TnTLazyLoad {
                 await IsolatedJsModule.InvokeVoidAsync("onDispose", _element, DotNetObjectRef);
                 await IsolatedJsModule.DisposeAsync();
             }
+            DotNetObjectRef?.Dispose();
         }
         catch (JSDisconnectedException) { }
     }
@@ -49,7 +57,7 @@ public partial class TnTLazyLoad {
         DotNetObjectRef = DotNetObjectReference.Create(this);
     }
 
-    [JSInvokable(nameof(BeginLoad))]
+    [JSInvokable]
     public void BeginLoad() {
         _beginLoad = true;
         StateHasChanged();

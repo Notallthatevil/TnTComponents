@@ -39,6 +39,7 @@ public abstract class TnTInteractablePageScriptComponent<TComponent> : TnTCompon
                 await IsolatedJsModule.InvokeVoidAsync("onDispose", Element, DotNetObjectRef);
                 await IsolatedJsModule.DisposeAsync();
             }
+            DotNetObjectRef?.Dispose();
         }
         catch (JSDisconnectedException) { }
     }
