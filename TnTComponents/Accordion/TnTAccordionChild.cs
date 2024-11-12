@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System.Runtime.InteropServices;
 using TnTComponents.Core;
 using TnTComponents.Interfaces;
 
@@ -127,6 +128,10 @@ public class TnTAccordionChild : ComponentBase, ITnTComponentBase, ITnTInteracta
                 builder.AddAttribute(160, "class", CssClassBuilder.Create()
                     .AddClass("tnt-expanded", (OpenByDefault && _parent.LimitToOneExpanded && !_parent.FoundExpanded) || (OpenByDefault && !_parent.LimitToOneExpanded))
                     .Build());
+
+                if(OpenByDefault) {
+                    _parent.FoundExpanded = true;
+                }
 
                 builder.AddContent(170, ChildContent);
 

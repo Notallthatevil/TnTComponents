@@ -13,13 +13,9 @@
             justify-content: space-between;
             align-items: center;
             margin: 0;
-
-            h3 {
-                padding: 8px;
-                margin: 0;
-                border-radius: inherit;
-                display: inline-block;
-            }
+            padding: 0 8px;
+            box-sizing: border-box;
+            transition: border-radius 250ms linear;
 
             .tnt-icon {
                 padding: 8px;
@@ -43,25 +39,26 @@
             }
         }
 
-
-        &:first-child {
-            border-start-start-radius: 8px;
-            border-start-end-radius: 8px;
-        }
-
-        &:last-child {
-            &:has(div:last-child.tnt-expanded) {
-                border-radius: 0 0 8px 8px;
-
-                & > h3:first-child {
-                    border-end-start-radius: 0;
-                    border-end-end-radius: 0;
-                }
+        &:has(.tnt-expanded) {
+            .tnt-icon {
+                transform: rotateZ(180deg);
             }
+        }
+    }
 
-            &:has(div:last-child:not(.tnt-expanded)) {
-                border-end-start-radius: 8px;
-                border-end-end-radius: 8px;
+    & > div:first-child {
+        border-radius: 8px 8px 0 0;
+    }
+
+    & > div:last-child {
+        border-radius: 0 0 8px 8px;
+    }
+
+    &:has(.tnt-accordion-child:last-child .tnt-expanded) {
+        & > div:last-child {
+            h3 {
+                border-end-start-radius: 0;
+                border-end-end-radius: 0;
             }
         }
     }
