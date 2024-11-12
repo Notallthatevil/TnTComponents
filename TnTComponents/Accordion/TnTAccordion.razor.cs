@@ -15,6 +15,7 @@ public partial class TnTAccordion {
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-accordion")
+        .AddClass("tnt-limit-one-expanded", LimitToOneExpanded)
         .Build();
 
     public override string? ElementStyle => CssStyleBuilder.Create()
@@ -32,6 +33,8 @@ public partial class TnTAccordion {
     public TnTColor ContentTextColor { get; set; } = TnTColor.OnSurfaceVariant;
     [Parameter]
     public TnTColor ContentBodyColor { get; set; } = TnTColor.SurfaceVariant;
+
+    internal bool FoundExpanded { get; set; }
 
     private readonly List<TnTAccordionChild> _children = [];
 

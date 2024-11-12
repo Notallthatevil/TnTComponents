@@ -11,7 +11,7 @@
 
 
 @code {
-    async ValueTask<TnTItemsProviderResult<int>> GetItems(ITnTCancellableItemsProviderRequest request)
+    async ValueTask<TnTItemsProviderResult<int>> GetItems(TnTVirtualizeItemsProviderRequest<int> request)
     {
         await Task.Delay(1000); // Simulate async loading
         return new TnTItemsProviderResult<int>()

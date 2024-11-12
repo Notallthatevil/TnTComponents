@@ -410,5 +410,5 @@ window.TnTComponents = {
                 }
             }
         }
-    }
+    },
 }
