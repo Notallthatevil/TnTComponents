@@ -62,7 +62,7 @@ export class TnTAccordion extends HTMLElement {
 
 
     update() {
-        this.accordionChildren = this.querySelectorAll('.tnt-accordion-child');
+        this.accordionChildren = this.querySelectorAll('> .tnt-accordion-child');
         this.accordionChildren.forEach((child) => {
             const header = child.firstElementChild;
 
