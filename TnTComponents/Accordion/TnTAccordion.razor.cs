@@ -42,6 +42,8 @@ public partial class TnTAccordion {
 
     private readonly List<TnTAccordionChild> _children = [];
 
+    public override string? JsModulePath => "./_content/TnTComponents/Accordion/TnTAccordion.razor.js";
+
     public void RegisterChild(TnTAccordionChild child) {
         if (child is not null) {
             _children.Add(child);

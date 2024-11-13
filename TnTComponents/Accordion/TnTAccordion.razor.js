@@ -123,6 +123,9 @@ export function onLoad(element, dotNetRef) {
 }
 
 export function onUpdate(element, dotNetRef) {
+    if (element && element.update) {
+        element.update();
+    }
 }
 
 export function onDispose(element, dotNetRef) {

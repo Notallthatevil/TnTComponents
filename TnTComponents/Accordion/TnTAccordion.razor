@@ -1,5 +1,5 @@
 ﻿@using TnTComponents.Core
-@inherits TnTComponentBase
+@inherits TnTPageScriptComponent<TnTAccordion>
 @namespace TnTComponents
 <CascadingValue IsFixed="true" Value="this">
     <tnt-accordion @attributes="AdditionalAttributes"
@@ -19,5 +19,4 @@
         @ChildContent
     </tnt-accordion>
 </CascadingValue>
-
-<TnTPageScript Src="./_content/TnTComponents/Accordion/TnTAccordion.razor.js" />
+@PageScript
