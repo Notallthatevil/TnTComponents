@@ -12,6 +12,9 @@ public partial class TnTAccordion {
     [Parameter]
     public bool LimitToOneExpanded { get; set; }
 
+    [CascadingParameter]
+    private TnTAccordion? _parentAccordion { get; set; }
+
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-accordion")
@@ -34,6 +37,7 @@ public partial class TnTAccordion {
     [Parameter]
     public TnTColor ContentBodyColor { get; set; } = TnTColor.SurfaceVariant;
 
+    internal bool AllowOpenByDefault => _parentAccordion is null;
     internal bool FoundExpanded { get; set; }
 
     private readonly List<TnTAccordionChild> _children = [];
@@ -53,7 +57,7 @@ public partial class TnTAccordion {
     }
 
     public async Task CloseAllAsync() {
-        foreach(var child in _children) {
+        foreach (var child in _children) {
             await child.CloseAsync();
         }
     }

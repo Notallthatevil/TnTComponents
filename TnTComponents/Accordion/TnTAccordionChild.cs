@@ -126,7 +126,7 @@ public class TnTAccordionChild : ComponentBase, ITnTComponentBase, ITnTInteracta
             {
                 builder.OpenElement(150, "div");
                 builder.AddAttribute(160, "class", CssClassBuilder.Create()
-                    .AddClass("tnt-expanded", (OpenByDefault && _parent.LimitToOneExpanded && !_parent.FoundExpanded) || (OpenByDefault && !_parent.LimitToOneExpanded))
+                    .AddClass("tnt-expanded", _parent.AllowOpenByDefault && ((OpenByDefault && _parent.LimitToOneExpanded && !_parent.FoundExpanded) || (OpenByDefault && !_parent.LimitToOneExpanded)))
                     .Build());
 
                 if(OpenByDefault) {

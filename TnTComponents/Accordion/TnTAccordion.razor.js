@@ -1,6 +1,7 @@
 
 const accordionByIdentifier = new Map();
 
+
 function toggleAccordionHeader(e) {
     const target = e.target;
     const accordion = target.closest('tnt-accordion');
@@ -9,7 +10,19 @@ function toggleAccordionHeader(e) {
         if (accordion.allowOnlyOneOpen && !content.classList.contains('tnt-expanded')) {
             accordion.closeChildren(target.parentElement);
         }
-        content.classList.toggle('tnt-expanded');
+        if (content.classList.contains('tnt-expanded')) {
+            content.classList.remove('tnt-expanded');
+            content.classList.add('tnt-collapsed');
+
+            const nestedAccordion = content.querySelectorAll('tnt-accordion');
+            nestedAccordion.forEach((accordion) => {
+                accordion.resetChildren();
+            });
+        }
+        else {
+            content.classList.remove('tnt-collapsed');
+            content.classList.add('tnt-expanded');
+        }
         updateChild(content);
     }
 }
@@ -20,6 +33,7 @@ function updateChild(content) {
         content.resizeObserver = undefined;
     }
     if (content.classList.contains('tnt-expanded')) {
+
         content.style.setProperty('--content-height', content.scrollHeight + 'px');
 
         content.resizeObserver = new ResizeObserver((entries) => {
@@ -39,6 +53,7 @@ export class TnTAccordion extends HTMLElement {
         super();
         this.allowOnlyOneOpen = false;
         this.accordionChildren = [];
+        this.identifier = '';
     }
 
     disconnectedCallback() {
@@ -54,6 +69,7 @@ export class TnTAccordion extends HTMLElement {
                 accordionByIdentifier.delete(oldValue);
             }
             accordionByIdentifier.set(newValue, this);
+            this.identifier = newValue;
 
             this.allowOnlyOneOpen = this.classList.contains('tnt-limit-one-expanded');
             this.update();
@@ -62,7 +78,7 @@ export class TnTAccordion extends HTMLElement {
 
 
     update() {
-        this.accordionChildren = this.querySelectorAll('> .tnt-accordion-child');
+        this.accordionChildren = this.querySelectorAll(':scope > .tnt-accordion-child');
         this.accordionChildren.forEach((child) => {
             const header = child.firstElementChild;
 
@@ -77,7 +93,24 @@ export class TnTAccordion extends HTMLElement {
     closeChildren(exclude) {
         this.accordionChildren.forEach((child) => {
             if (child !== exclude) {
-                child.lastElementChild.classList.remove('tnt-expanded');
+                if (child.lastElementChild.classList.contains('tnt-expanded')) {
+                    child.lastElementChild.classList.remove('tnt-expanded');
+                    child.lastElementChild.classList.add('tnt-collapsed');
+                }
+            }
+        });
+    }
+
+    resetChildren() {
+        this.accordionChildren.forEach((child) => {
+            child.lastElementChild.classList.remove('tnt-expanded');
+            child.lastElementChild.classList.remove('tnt-collapsed');
+
+            const nestedAccordion = child.querySelectorAll('tnt-accordion');
+            if (nestedAccordion) {
+                nestedAccordion.forEach((accordion) => {
+                    accordion.resetChildren();
+                });
             }
         });
     }
