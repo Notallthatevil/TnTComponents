@@ -16,12 +16,21 @@
             padding: 0 8px;
             box-sizing: border-box;
             transition: border-radius 250ms linear;
+            z-index: 100;
+            position: sticky;
+            top: 0;
 
             .tnt-icon {
                 padding: 8px;
                 transition: 250ms;
                 user-select: none;
                 pointer-events: none;
+            }
+        }
+
+        &:has(.tnt-accordion) {
+            .tnt-accordion-child > h3:first-child{
+                z-index:101;
             }
         }
 
