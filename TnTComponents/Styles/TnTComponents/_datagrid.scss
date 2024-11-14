@@ -141,4 +141,10 @@
             }
         }
     }
+
+    tr {
+        td:not(:first-child), th:not(:first-child) {
+            border-left: 1px solid color-mix(in srgb, $tnt-color-outline 20%, $tnt-color-surface);
+        }
+    }
 }
