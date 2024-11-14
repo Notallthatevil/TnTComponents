@@ -124,7 +124,7 @@
         }
 
         &:has( > .tnt-side-nav-group-toggle-indicator .tnt-toggle) {
-            max-height: 100vh;
+            max-height: unset;
 
             .tnt-side-nav-menu-group-button {
                 .tnt-end-icon {
