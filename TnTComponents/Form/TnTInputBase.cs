@@ -173,7 +173,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                         builder.AddAttribute(210, "onchange", EventCallback.Factory.CreateBinder(this, __value => { CurrentValue = __value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
                     }
                     else {
-                        builder.AddAttribute(210, "onchange", EventCallback.Factory.CreateBinder<string?>(this, __value => { CurrentValueAsString = __value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValueAsString));
+                        builder.AddAttribute(210, "onchange", EventCallback.Factory.CreateBinder<string?>(this, OnChangeAsync, CurrentValueAsString));
                     }
                 }
 
@@ -313,5 +313,10 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
         }
 
         return null;
+    }
+
+    private async Task OnChangeAsync(string? value) {
+        CurrentValueAsString = value;
+        await BindAfter.InvokeAsync(CurrentValue);
     }
 }
