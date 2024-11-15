@@ -2,7 +2,7 @@ let externalClickCallbacks = {};
 export function externalClickCallbackRegister(element, dotNetObjectRef) {
     if (dotNetObjectRef) {
         function callback(event) {
-            if (!element.contains(event.target)) {
+            if (element && element.contains && !element.contains(event.target)) {
                 dotNetObjectRef.invokeMethodAsync('OnClick')
             }
         };

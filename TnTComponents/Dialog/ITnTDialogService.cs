@@ -28,7 +28,7 @@ public static class ITnTDialogServiceExt {
         string confirmButtonText = "Confirm",
         string body = "Are you sure?",
         string cancelButtonText = "Cancel",
-        TnTColor cancelButtonTextColor = TnTColor.Surface,
+        TnTColor cancelButtonTextColor = TnTColor.OnSurface,
         EventCallback cancellationCallback = default,
         bool showCancelButton = true,
         TnTDialogOptions? options = null) =>
@@ -47,7 +47,7 @@ public static class ITnTDialogServiceExt {
         string confirmButtonText = "Confirm",
         string body = "Are you sure?",
         string cancelButtonText = "Cancel",
-        TnTColor cancelButtonTextColor = TnTColor.Surface,
+        TnTColor cancelButtonTextColor = TnTColor.OnSurface,
         EventCallback cancellationCallback = default,
         bool showCancelButton = true,
         TnTDialogOptions? options = null) =>
