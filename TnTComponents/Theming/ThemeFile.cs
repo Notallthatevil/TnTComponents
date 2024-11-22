@@ -78,7 +78,11 @@ internal class Scheme {
         Warning = "#656015",
         OnWarning = "#FFFFFF",
         WarningContainer = "#ECE68D",
-        OnWarningContainer = "#1E1C00"
+        OnWarningContainer = "#1E1C00",
+        Assert = "#5d5791",
+        OnAssert = "#ffffff",
+        AssertContainer = "#e4dfff",
+        OnAssertContainer = "#191249"
     };
     public ColorScheme? Dark { get; set; } = new() {
         Primary = "#FFB5A0",
@@ -141,7 +145,11 @@ internal class Scheme {
         Warning = "#656015",
         OnWarning = "#FFFFFF",
         WarningContainer = "#ECE68D",
-        OnWarningContainer = "#1E1C00"
+        OnWarningContainer = "#1E1C00",
+        Assert = "#c7bfff",
+        OnAssert = "#2f295f",
+        AssertContainer = "#454077",
+        OnAssertContainer = "#e4dfff"
     };
 }
 
@@ -207,5 +215,8 @@ internal class ColorScheme {
     public string? OnWarning { get; set; } = "#FFFFFF";
     public string? WarningContainer { get; set; } = "#ECE68D";
     public string? OnWarningContainer { get; set; } = "#1E1C00";
-
+    public string? Assert { get; set; } = "#5d5791";
+    public string? OnAssert { get; set; } = "#ffffff";
+    public string? AssertContainer { get; set; } = "#e4dfff";
+    public string? OnAssertContainer { get; set; } = "#191249";
 }
