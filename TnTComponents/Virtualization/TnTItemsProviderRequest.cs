@@ -12,20 +12,14 @@ public readonly record struct TnTItemsProviderRequest() {
     /// <summary>
     /// Gets or sets the start index of the requested items.
     /// </summary>
-    public required readonly int StartIndex { get; init; }
+    public readonly int StartIndex { get; init; } 
 
     /// <summary>
     /// Gets or sets the properties to sort on and their sort directions.
     /// </summary>
-    public required readonly IEnumerable<KeyValuePair<string, SortDirection>> SortOnProperties { get; init;} = [];
+    public readonly IEnumerable<KeyValuePair<string, SortDirection>> SortOnProperties { get; init; } = [];
     /// <summary>
     /// Gets or sets the maximum number of items to retrieve.
     /// </summary>
-    public required readonly int? Count { get; init; }
-
-    public static TnTItemsProviderRequest Default = new() {
-        StartIndex = 0,
-        SortOnProperties = [],
-        Count = 10
-    };
+    public readonly int? Count { get; init; }
 }
