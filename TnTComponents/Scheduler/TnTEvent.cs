@@ -6,7 +6,7 @@ public record TnTEvent {
     private static int _id = 0;
     public int Id { get; internal set; } = Interlocked.Increment(ref _id);
     public string Title { get; init; } = default!;
-    public string? Description { get; set; }
+    public virtual string? Description { get; set; }
     public DateTimeOffset EventStart { get; set; }
     public DateTimeOffset EventEnd { get; set; }
     public virtual TimeOnly StartTime => TimeOnly.FromTimeSpan(EventStart.LocalDateTime.TimeOfDay);
