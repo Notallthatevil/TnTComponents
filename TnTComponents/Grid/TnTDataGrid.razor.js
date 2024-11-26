@@ -60,7 +60,7 @@ export function getBodyHeight(element) {
     if (element) {
         const container = element.parentElement;
         if (container && container.getBoundingClientRect) {
-            return Math.round(container.getBoundingClientRect().height);
+            return Math.round(Math.min(window.innerHeight, container.getBoundingClientRect().height));
         }
     }
 

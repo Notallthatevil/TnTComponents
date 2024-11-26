@@ -29,8 +29,8 @@ export function onNewItems(element) {
 export function onLoad(element, dotNetRef) {
     const options = {
         root: findClosestScrollContainer(element),
-        rootMargin: '25%',
-        threshold: 0,
+        rootMargin: '64px',
+        threshold: 0
     };
 
     if (isValidTableElement(element.parentElement)) {
