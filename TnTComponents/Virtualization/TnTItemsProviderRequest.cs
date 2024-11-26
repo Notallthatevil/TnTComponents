@@ -22,4 +22,10 @@ public readonly record struct TnTItemsProviderRequest() {
     /// Gets or sets the maximum number of items to retrieve.
     /// </summary>
     public required readonly int? Count { get; init; }
+
+    public static TnTItemsProviderRequest Default = new() {
+        StartIndex = 0,
+        SortOnProperties = [],
+        Count = 10
+    };
 }
