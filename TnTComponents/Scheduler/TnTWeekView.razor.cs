@@ -59,8 +59,8 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         return Floor(new DateTimeOffset(date, time, TimeZoneInfo.Local.GetUtcOffset(DateTimeOffset.UtcNow)), TimeSpan.FromMinutes(15));
     }
 
-    protected override void OnInitialized() {
-        base.OnInitialized();
+    protected override void OnParametersSet() {
+        base.OnParametersSet();
         UpdateVisibleDates();
         UpdateEventsList();
     }
