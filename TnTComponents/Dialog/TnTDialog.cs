@@ -42,6 +42,9 @@ public class TnTDialog : ComponentBase, IDisposable {
                 builder.AddContent(60, RenderDialogContent(dialog));
             }
 
+            builder.OpenComponent<TnTToast>(70);
+            builder.CloseComponent();
+
             builder.CloseElement();
         }
     }

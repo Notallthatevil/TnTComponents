@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using System.Collections.Concurrent;
 using TnTComponents.Core;
 using TnTComponents.Toast;
@@ -18,7 +19,8 @@ public class TnTToast : ComponentBase, IDisposable {
     private Func<Task>? _incrementAction = null;
 
     private CancellationTokenSource _tokenSource = new();
-
+    private ElementReference _element;
+    
     public void Dispose() {
         _tokenSource.Cancel();
         _tokenSource.Dispose();
@@ -60,7 +62,7 @@ public class TnTToast : ComponentBase, IDisposable {
 
                     if (toast.ShowClose) {
                         builder.OpenComponent<TnTImageButton>(90);
-                        builder.AddComponentParameter(100, nameof(TnTImageButton.Icon), new MaterialIcon{ Icon = MaterialIcon.Close });
+                        builder.AddComponentParameter(100, nameof(TnTImageButton.Icon), new MaterialIcon { Icon = MaterialIcon.Close });
                         builder.AddComponentParameter(110, nameof(TnTImageButton.OnClickCallback), EventCallback.Factory.Create<MouseEventArgs>(this, _ => _service.CloseAsync(toast)));
                         builder.AddComponentParameter(120, nameof(TnTImageButton.BackgroundColor), TnTColor.Transparent);
                         builder.AddComponentParameter(130, nameof(TnTImageButton.TextColor), TnTColor.Outline);
@@ -97,6 +99,8 @@ public class TnTToast : ComponentBase, IDisposable {
 
                 builder.CloseElement();
             }
+
+            builder.AddElementReferenceCapture(300, e => _element = e);
 
             builder.CloseElement();
         }
