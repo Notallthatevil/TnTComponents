@@ -116,6 +116,55 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
             .ToImmutableSortedSet();
     }
 
+    private bool _mouseOverPicker;
+    private TnTEvent? _addEventPlaceholder;
+    private bool _mouseOverEvent;
+
+    private void CreatePlaceholderEvent(DateOnly date, MouseEventArgs e) {
+        if (_mouseOverPicker && e.OffsetY >= 0) {
+            var time = CalculateDateTimeOffset(e.OffsetY, date);
+            var existingEvent = _addEventPlaceholder;
+            if (existingEvent is not null) {
+                existingEvent.EventStart = time;
+                existingEvent.EventEnd = time.AddMinutes(30);
+                _addEventPlaceholder = existingEvent;
+            }
+            else {
+                _addEventPlaceholder = new TnTEvent() {
+                    BackgroundColor = Scheduler.PlaceholderBackgroundColor,
+                    ForegroundColor = Scheduler.PlaceholderTextColor,
+                    Title = "New Event",
+                    EventStart = time,
+                    EventEnd = time.AddMinutes(30),
+                };
+            }
+        }
+    }
+
+    private string? CreateEventClass(TnTEvent @event) {
+        return CssClassBuilder.Create()
+            .AddClass("tnt-event")
+            .AddClass("tnt-interactable", Scheduler.EventClickedCallback.HasDelegate)
+            .AddClass("tnt-dragging", DraggingEvent == @event)
+            .AddRipple(Scheduler.EventClickedCallback.HasDelegate)
+            .AddTintColor(Scheduler.EventClickedCallback.HasDelegate ? @event.TintColor : null)
+            .AddOnTintColor(Scheduler.EventClickedCallback.HasDelegate ? @event.OnTintColor : null)
+            .Build();
+    }
+
+    private string? CreateEventStyle(TnTEvent @event, int left, int width) {
+        return CssStyleBuilder.Create()
+            .AddVariable("tnt-event-start-hour", @event.StartTime.Hour.ToString())
+            .AddVariable("tnt-event-end-hour", @event.EndTime.Hour.ToString())
+            .AddVariable("tnt-event-start-min", @event.StartTime.Minute.ToString())
+            .AddVariable("tnt-event-end-min", @event.EndTime.Minute.ToString())
+            .AddVariable("tnt-event-bg-color", @event.BackgroundColor)
+            .AddVariable("tnt-event-fg-color", @event.ForegroundColor)
+            .AddStyle("left", left.ToString() + "%")
+            .AddStyle("width", width.ToString() + "%")
+            .Build();
+    }
+
     private sealed record WeekViewTnTEvent {
         public required DateTimeOffset WeekViewEventStart { get; init; }
         public required DateTimeOffset WeekViewEventEnd { get; init; }

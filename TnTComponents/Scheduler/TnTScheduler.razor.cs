@@ -20,9 +20,6 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
     [Parameter]
     public EventCallback<DateOnly> DateChangedCallback { get; set; }
 
-    [Parameter]
-    public bool DisableDragAndDrop { get; set; }
-
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-scheduler")
@@ -55,6 +52,11 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
 
     [Inject]
     private ITnTDialogService _dialogService { get; set; } = default!;
+
+    [Parameter]
+    public TnTColor PlaceholderBackgroundColor { get; set; } = TnTColor.SecondaryContainer;
+    [Parameter]
+    public TnTColor PlaceholderTextColor { get; set; } = TnTColor.OnSecondaryContainer;
 
     public DayOfWeek DayOfWeek => Date.DayOfWeek;
 

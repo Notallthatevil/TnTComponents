@@ -150,6 +150,7 @@ $hour-offset: $cell-height;
                         z-index: 2;
                         top: 8px;
                         left: $time-column-width;
+                        pointer-events: none;
                     }
                 }
             }
@@ -179,12 +180,15 @@ $hour-offset: $cell-height;
                         background-color: var(--tnt-event-bg-color);
                         color: var(--tnt-event-fg-color);
                         z-index: 6;
-                        box-shadow: var(--tnt-color-on-surface) 0px 0px 1px 1px inset;
                         width: 90%;
                         left: 0;
                         overflow: hidden;
                         padding: 8px;
                         @extend .tnt-border-radius-2;
+
+                        &:not(.tnt-placeholder-event) {
+                            box-shadow: var(--tnt-color-on-surface) 0px 0px 1px 1px inset;
+                        }
 
                         &.tnt-dragging:active {
                             cursor: grabbing;
@@ -207,6 +211,12 @@ $hour-offset: $cell-height;
                         .tnt-event-description {
                             white-space: pre-wrap;
                         }
+                    }
+
+                    .tnt-placeholder-event {
+                        pointer-events: none;
+                        padding: 4px;
+                        @extend .tnt-elevation-2;
                     }
                 }
             }

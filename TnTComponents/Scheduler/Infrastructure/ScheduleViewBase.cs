@@ -52,17 +52,21 @@ public abstract class ScheduleViewBase<TEventType> : TnTComponentBase, IDisposab
     public abstract DateOnly GetFirstVisibleDate();
     public abstract DateOnly GetLastVisibleDate();
     protected virtual Task OnDragStartAsync(DragEventArgs args, TEventType @event) {
-        DraggingEvent = @event;
+        if (Scheduler.AllowDraggingEvents) {
+            DraggingEvent = @event;
+        }
         return Task.CompletedTask;
     }
 
     protected virtual Task OnDragEndAsync(DragEventArgs args) {
-        DraggingEvent = null;
+        if (Scheduler.AllowDraggingEvents) {
+            DraggingEvent = null;
+        }
         return Task.CompletedTask;
     }
 
     protected virtual Task OnDropAsync(DragEventArgs args, DateTimeOffset newStartTime) {
-        if (DraggingEvent is not null) {
+        if (DraggingEvent is not null && Scheduler.AllowDraggingEvents) {
             var duration = DraggingEvent.Duration;
             DraggingEvent.EventStart = newStartTime;
             DraggingEvent.EventEnd = newStartTime.Add(duration);

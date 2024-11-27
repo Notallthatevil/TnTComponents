@@ -1,5 +1,6 @@
 ﻿@using System.Globalization
 @using TnTComponents.Core
+@using TnTComponents.Scheduler
 @using TnTComponents.Scheduler.Infrastructure
 @namespace TnTComponents
 @typeparam TEventType
@@ -50,11 +51,12 @@
                     while (startTime != TimeOnly.MinValue);
                 }
             </div>
-            <div class="tnt-event-columns">
+            <div class="tnt-event-columns" @onmouseleave="@(_ => _mouseOverPicker = false)" @onmouseover="@(_ => _mouseOverPicker = true)">
                 @foreach (var date in _visibleDates)
                 {
                     <div class="@($"tnt-event-column{(Scheduler.EventSlotClickedCallback.HasDelegate ? " tnt-interactable" : null)}")"
                          ondragover="event.preventDefault()"
+                         @onmousemove="@(e => CreatePlaceholderEvent(date, e))"
                          @ondrop="@((args => OnDropAsync(args, CalculateDateTimeOffset(args.OffsetY, date))))"
                          @onclick="@((args) => EventSlotClickedAsync(CalculateDateTimeOffset(args.OffsetY, date)))">
                         @if (_events.TryGetValue(date, out var eventList))
@@ -75,33 +77,18 @@
                                     width -= @event.OverlapCount * 2;
                                 }
 
-                                var style = CssStyleBuilder.Create()
-                                .AddVariable("tnt-event-start-hour", @event.StartTime.Hour.ToString())
-                                .AddVariable("tnt-event-end-hour", @event.EndTime.Hour.ToString())
-                                .AddVariable("tnt-event-start-min", @event.StartTime.Minute.ToString())
-                                .AddVariable("tnt-event-end-min", @event.EndTime.Minute.ToString())
-                                .AddVariable("tnt-event-bg-color", @event.Event.BackgroundColor)
-                                .AddVariable("tnt-event-fg-color", @event.Event.ForegroundColor)
-                                .AddStyle("left", left.ToString() + "%")
-                                .AddStyle("width", width.ToString() + "%");
 
-                                var @class = CssClassBuilder.Create()
-                                .AddClass("tnt-event")
-                                .AddClass("tnt-interactable", Scheduler.EventClickedCallback.HasDelegate)
-                                .AddClass("tnt-dragging", DraggingEvent == @event.Event)
-                                .AddRipple(Scheduler.EventClickedCallback.HasDelegate)
-                                .AddTintColor(Scheduler.EventClickedCallback.HasDelegate ? @event.Event.TintColor : null)
-                                .AddOnTintColor(Scheduler.EventClickedCallback.HasDelegate ? @event.Event.OnTintColor : null);
-
-                                <div class="@(@class.Build())"
-                                     style="@style.Build()"
+                                <div class="@(CreateEventClass(@event.Event))"
+                                     style="@(CreateEventStyle(@event.Event, left, width))"
                                      draggable="@(Scheduler.AllowDraggingEvents ? "true" : "false")"
                                      ondragover="event.preventDefault()"
                                      ondrop="event.preventDefault()"
                                      @onclick="@(() => EventClickedAsync(@event.Event))"
                                      @onclick:stopPropagation="true"
                                      @ondragstart="@((args) => OnDragStartAsync(args, @event.Event))"
-                                     @ondragend="OnDragEndAsync">
+                                     @ondragend="OnDragEndAsync"
+                                     @onmousemove="@(_ => _mouseOverEvent = true)"
+                                     @onmouseleave="@(_ => _mouseOverEvent = false)">
                                     <div class="tnt-event-title tnt-label-medium">
                                         @(@event.Event.Title)
                                     </div>
@@ -121,9 +108,34 @@
                                 </div>
                             }
                         }
+
+
+                        @if (_addEventPlaceholder is not null && _addEventPlaceholder.StartDate == date)
+                        {
+
+                            var @class = CssClassBuilder.Create()
+                            .AddClass("tnt-event")
+                            .AddClass("tnt-placeholder-event")
+                            .AddClass("tnt-interactable", Scheduler.EventClickedCallback.HasDelegate)
+                            .AddRipple()
+                            .AddTintColor(_addEventPlaceholder.TintColor)
+                            .AddOnTintColor(_addEventPlaceholder.OnTintColor);
+
+                            <div class="@(@class.Build())"
+                                 style="@(CreateEventStyle(_addEventPlaceholder, 0, 100))">
+                                <div class="tnt-event-title tnt-label-medium">
+                                    @(_addEventPlaceholder.Title)
+                                </div>
+                                    <div class="tnt-event-time tnt-body-small">
+                                    @(TimeOnly.FromDateTime(_addEventPlaceholder.EventStart.LocalDateTime).ToString("t")) - @(TimeOnly.FromDateTime(_addEventPlaceholder.EventEnd.LocalDateTime).ToString("t"))
+                                    </div>
+                            </div>
+                        }
+
                     </div>
                 }
             </div>
         </div>
     </div>
 }
+
