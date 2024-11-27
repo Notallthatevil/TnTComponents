@@ -110,7 +110,7 @@
                         }
 
 
-                        @if (_addEventPlaceholder is not null && _addEventPlaceholder.StartDate == date)
+                        @if (_mouseOverPicker && !_mouseOverEvent && _addEventPlaceholder is not null && _addEventPlaceholder.StartDate == date)
                         {
 
                             var @class = CssClassBuilder.Create()

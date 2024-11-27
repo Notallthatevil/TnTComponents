@@ -36,6 +36,9 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
     [Parameter]
     public bool ShowDescription { get; set; }
 
+    [Parameter]
+    public TimeSpan DefaultAppointmentTime { get; set; } = TimeSpan.FromMinutes(30);
+
     private const int _cellHeight = 48;
     private const int _cellMinWidth = 80;
     private const int _headerHeight = 80;
@@ -126,7 +129,7 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
             var existingEvent = _addEventPlaceholder;
             if (existingEvent is not null) {
                 existingEvent.EventStart = time;
-                existingEvent.EventEnd = time.AddMinutes(30);
+                existingEvent.EventEnd = time.Add(DefaultAppointmentTime);
                 _addEventPlaceholder = existingEvent;
             }
             else {
@@ -135,7 +138,7 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
                     ForegroundColor = Scheduler.PlaceholderTextColor,
                     Title = "New Event",
                     EventStart = time,
-                    EventEnd = time.AddMinutes(30),
+                    EventEnd = time.Add(DefaultAppointmentTime),
                 };
             }
         }
