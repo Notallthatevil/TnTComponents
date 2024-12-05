@@ -74,7 +74,7 @@ public partial class TnTButton {
         }
 
         if (StopPropagation) {
-            b.AddAttribute(110, "onclick:stopPropagation", true);
+            b.AddEventStopPropagationAttribute(110, "onclick", true);
         }
 
         b.AddElementReferenceCapture(120, __value => Element = __value);
