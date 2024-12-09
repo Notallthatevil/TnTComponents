@@ -2,10 +2,11 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
 using TnTComponents.Core;
+using TnTComponents.Interfaces;
 
 namespace TnTComponents;
 
-public partial class TnTChip : TnTInteractableComponentBase {
+public partial class TnTChip : TnTComponentBase, ITnTInteractable {
 
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
@@ -31,9 +32,9 @@ public partial class TnTChip : TnTInteractableComponentBase {
     public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerLow;
 
     [Parameter]
-    public override TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
+    public TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
     [Parameter]
-    public override TnTColor? OnTintColor { get; set; } = TnTColor.OnPrimary;
+    public TnTColor? OnTintColor { get; set; } = TnTColor.OnPrimary;
 
     [Parameter]
     public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
@@ -55,6 +56,15 @@ public partial class TnTChip : TnTInteractableComponentBase {
 
     [Parameter]
     public EventCallback<MouseEventArgs> CloseButtonClicked { get; set; }
+
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    [Parameter]
+    public string? ElementName { get; set; }
+
+    [Parameter]
+    public bool EnableRipple { get; set; }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "label");
@@ -100,51 +110,4 @@ public partial class TnTChip : TnTInteractableComponentBase {
 
         builder.CloseElement();
     }
-
-    //[Parameter]
-    //public TnTColor ActiveColor { get; set; } = TnTColor.Primary;
-
-    //[Parameter]
-    //public TnTColor ActiveTextColor { get; set; } = TnTColor.OnPrimary;
-
-    //[Parameter]
-    //public TnTBorderRadius? BorderRadius { get; set; } = new TnTBorderRadius(2);
-
-    //[Parameter]
-    //public RenderFragment ChildContent { get; set; } = default!;
-
-    //public override string? ElementClass => CssClassBuilder.Create()
-    //    .AddFromAdditionalAttributes(AdditionalAttributes)
-    //    .AddClass("tnt-chip")
-    //    .AddBorderRadius(BorderRadius)
-    //    .Build();
-
-    //public override string? ElementStyle => CssStyleBuilder.Create()
-    //    .AddFromAdditionalAttributes(AdditionalAttributes)
-    //    .AddVariable("active-color", $"var(--tnt-color-{ActiveColor.ToCssClassName()})")
-    //    .AddVariable("active-text-color", $"var(--tnt-color-{ActiveTextColor.ToCssClassName()})")
-    //    .AddVariable("inactive-text-color", $"var(--tnt-color-{InactiveTextColor.ToCssClassName()})")
-    //    .Build();
-
-    //[Parameter]
-    //public TnTColor InactiveTextColor { get; set; } = TnTColor.Primary;
-
-    //[Parameter]
-    //public TnTIcon? StartIcon { get; set; }
-
-    //[Parameter]
-    //public bool Value { get; set; }
-
-    //[Parameter]
-    //public EventCallback<bool> ValueChanged { get; set; }
-
-    ////protected override string? JsModulePath => "./_content/TnTComponents/Chips/TnTChip.razor.js";
-
-    //protected override void OnParametersSet() {
-    //    base.OnParametersSet();
-    //    if (StartIcon is not null) {
-    //        StartIcon.AdditionalClass = "tnt-start";
-    //    }
-    //}
-
 }
