@@ -6,29 +6,33 @@ using TnTComponents.Interfaces;
 
 namespace TnTComponents;
 
-public class TnTAccordionChild : ComponentBase, ITnTComponentBase, ITnTInteractable, IDisposable {
+/// <summary>
+///     Represents a child item within a TnTAccordion component.
+/// </summary>
+public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable {
 
-    [Parameter(CaptureUnmatchedValues = true)]
-    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
-
-    [Parameter]
-    public bool? AutoFocus { get; set; }
-
+    /// <summary>
+    ///     Gets or sets the content to be rendered inside the accordion child.
+    /// </summary>
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
+    /// <summary>
+    ///     Gets or sets the body color of the content.
+    /// </summary>
     [Parameter]
     public TnTColor? ContentBodyColor { get; set; }
 
+    /// <summary>
+    ///     Gets or sets the text color of the content.
+    /// </summary>
     [Parameter]
     public TnTColor? ContentTextColor { get; set; }
 
     [Parameter]
     public bool Disabled { get; set; }
 
-    public ElementReference Element { get; internal set; }
-
-    public string? ElementClass => CssClassBuilder.Create()
+    public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-accordion-child")
         .AddBackgroundColor(ContentBodyColor ?? _parent.ContentBodyColor)
@@ -37,37 +41,45 @@ public class TnTAccordionChild : ComponentBase, ITnTComponentBase, ITnTInteracta
         .Build();
 
     [Parameter]
-    public string? ElementId { get; set; }
-
-    [Parameter]
-    public string? ElementLang { get; set; }
-
-    [Parameter]
     public string? ElementName { get; set; }
 
-    public string? ElementStyle => CssStyleBuilder.Create().Build();
-
-    [Parameter]
-    public string? ElementTitle { get; set; }
+    public override string? ElementStyle => CssStyleBuilder.Create()
+            .AddFromAdditionalAttributes(AdditionalAttributes)
+        .Build();
 
     [Parameter]
     public bool EnableRipple { get; set; }
 
+    /// <summary>
+    ///     Gets or sets the body color of the header.
+    /// </summary>
     [Parameter]
     public TnTColor? HeaderBodyColor { get; set; }
 
+    /// <summary>
+    ///     Gets or sets the text color of the header.
+    /// </summary>
     [Parameter]
     public TnTColor? HeaderTextColor { get; set; }
 
+    /// <summary>
+    ///     Gets or sets the tint color of the header.
+    /// </summary>
     [Parameter]
     public TnTColor? HeaderTintColor { get; set; }
 
+    /// <summary>
+    ///     Gets or sets the label of the accordion child.
+    /// </summary>
     [Parameter, EditorRequired]
     public string Label { get; set; } = default!;
 
     [Parameter]
     public TnTColor? OnTintColor { get; set; }
 
+    /// <summary>
+    ///     Gets or sets a value indicating whether the accordion child is open by default.
+    /// </summary>
     [Parameter]
     public bool OpenByDefault { get; set; }
 
@@ -80,15 +92,23 @@ public class TnTAccordionChild : ComponentBase, ITnTComponentBase, ITnTInteracta
     [CascadingParameter]
     private TnTAccordion _parent { get; set; } = default!;
 
-    public async Task CloseAsync() {
-        await _jsRuntime.InvokeVoidAsync("TnTComponents.addHidden", Element);
-    }
+    /// <summary>
+    ///     Closes the accordion child asynchronously.
+    /// </summary>
+    public async Task CloseAsync() => await _jsRuntime.InvokeVoidAsync("TnTComponents.addHidden", Element);
 
+    /// <summary>
+    ///     Disposes the accordion child.
+    /// </summary>
     public void Dispose() {
         GC.SuppressFinalize(this);
         _parent.RemoveChild(this);
     }
 
+    /// <summary>
+    ///     Renders the child content.
+    /// </summary>
+    /// <returns>A <see cref="RenderFragment" /> representing the child content.</returns>
     public RenderFragment RenderChild() {
         return new RenderFragment(builder => {
             builder.OpenElement(0, "div");
@@ -129,7 +149,7 @@ public class TnTAccordionChild : ComponentBase, ITnTComponentBase, ITnTInteracta
                     .AddClass("tnt-expanded", _parent.AllowOpenByDefault && ((OpenByDefault && _parent.LimitToOneExpanded && !_parent.FoundExpanded) || (OpenByDefault && !_parent.LimitToOneExpanded)))
                     .Build());
 
-                if(OpenByDefault) {
+                if (OpenByDefault) {
                     _parent.FoundExpanded = true;
                 }
 
