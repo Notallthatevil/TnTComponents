@@ -16,11 +16,11 @@ public class TnTToast : ComponentBase, IDisposable {
 
     private readonly ConcurrentDictionary<ITnTToast, TimeOnly> _toasts = [];
 
-    private Func<Task>? _incrementAction = null;
-
-    private CancellationTokenSource _tokenSource = new();
     private ElementReference _element;
-    
+    private Func<Task>? _incrementAction;
+
+    private readonly CancellationTokenSource _tokenSource = new();
+
     public void Dispose() {
         _tokenSource.Cancel();
         _tokenSource.Dispose();
@@ -50,7 +50,6 @@ public class TnTToast : ComponentBase, IDisposable {
                 builder.SetKey(toast);
 
                 {
-
                     builder.OpenElement(50, "div");
                     builder.AddAttribute(60, "class", "tnt-toast-header");
 
@@ -110,10 +109,6 @@ public class TnTToast : ComponentBase, IDisposable {
         base.OnInitialized();
         _service.OnOpen += OnOpen;
         _service.OnClose += OnClose;
-    }
-
-    private void AddReadyToast(ITnTToast toast) {
-
     }
 
     private async Task OnClose(ITnTToast toast) {
