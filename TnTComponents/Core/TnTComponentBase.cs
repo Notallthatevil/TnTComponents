@@ -19,6 +19,7 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
     [Parameter]
     public bool? AutoFocus { get; set; }
 
+    /// <inheritdoc />
     public ElementReference Element { get; protected set; }
 
     /// <inheritdoc />
@@ -29,6 +30,7 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
     public virtual string? ElementId { get; set; }
 
     [Parameter]
+    /// <inheritdoc />
     public string? ElementLang { get; set; }
 
     /// <inheritdoc />
@@ -38,19 +40,9 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
     /// <inheritdoc />
     public string? ElementTitle { get; set; }
 
-
     internal const string TnTCustomIdentifierAttribute = "tntid";
 
-    protected bool Interactive { get; private set; }
-
     public string ComponentIdentifier { get; } = TnTComponentIdentifier.NewId();
-
-    protected override async Task OnAfterRenderAsync(bool firstRender) {
-        await base.OnAfterRenderAsync(firstRender);
-        if (firstRender) {
-            Interactive = true;
-        }
-    }
 
     protected override void OnParametersSet() {
         base.OnParametersSet();
