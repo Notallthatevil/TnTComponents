@@ -11,7 +11,7 @@ using TnTComponents.Interfaces;
 
 namespace TnTComponents;
 
-public class TnTInputRadio<TInputType> : TnTInteractableComponentBase {
+public class TnTInputRadio<TInputType> :TnTComponentBase, ITnTInteractable{
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddTnTInteractable(this, enableDisabled: false)
@@ -43,6 +43,21 @@ public class TnTInputRadio<TInputType> : TnTInteractableComponentBase {
     public TnTInputRadioGroup<TInputType> _group { get; set; } = default!;
 
     private bool _readOnly => _group.FieldReadonly || ReadOnly;
+    [Parameter]
+    public bool Disabled { get; set; }
+    [Parameter]
+
+    public string? ElementName { get; set; }
+    [Parameter]
+
+    public bool EnableRipple { get; set; }
+    [Parameter]
+
+    public TnTColor? OnTintColor { get; set; }
+    [Parameter]
+
+    public TnTColor? TintColor { get; set; }
+
     private bool _trueValueToggle;
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
