@@ -10,8 +10,11 @@ namespace TnTComponents;
 
 public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
 
+    [Parameter]
+    public TimeSpan DefaultAppointmentTime { get; set; } = TimeSpan.FromMinutes(30);
+
     public override string? ElementClass => CssClassBuilder.Create()
-        .AddFromAdditionalAttributes(AdditionalAttributes)
+            .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-week-view")
         .Build();
 
@@ -28,26 +31,30 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
     public bool HideDates { get; set; }
 
     [Parameter]
-    public DayOfWeek StartViewOn { get; set; } = DayOfWeek.Sunday;
-
-    [Parameter]
     public bool HideEventDates { get; set; }
 
     [Parameter]
     public bool ShowDescription { get; set; }
 
     [Parameter]
-    public TimeSpan DefaultAppointmentTime { get; set; } = TimeSpan.FromMinutes(30);
+    public DayOfWeek StartViewOn { get; set; } = DayOfWeek.Sunday;
 
     private const int _cellHeight = 48;
     private const int _cellMinWidth = 80;
     private const int _headerHeight = 80;
     private const int _hourOffset = _cellHeight;
     private const int _timeColumnWidth = 36;
+    private TnTEvent? _addEventPlaceholder;
     private Dictionary<DateOnly, SortedSet<WeekViewTnTEvent>> _events = [];
+    private bool _mouseOverEvent;
+    private bool _mouseOverPicker;
     private ImmutableSortedSet<DateOnly> _visibleDates = [];
 
     public override DateOnly DecrementDate(DateOnly src) => src.AddDays(-7);
+
+    public override DateOnly GetFirstVisibleDate() => _visibleDates.First();
+
+    public override DateOnly GetLastVisibleDate() => _visibleDates.Last();
 
     public override DateOnly IncrementDate(DateOnly src) => src.AddDays(7);
 
@@ -68,8 +75,51 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         UpdateEventsList();
     }
 
-    public override DateOnly GetFirstVisibleDate() => _visibleDates.First();
-    public override DateOnly GetLastVisibleDate() => _visibleDates.Last();
+    private string? CreateEventClass(TnTEvent @event) {
+        return CssClassBuilder.Create()
+            .AddClass("tnt-event")
+            .AddClass("tnt-interactable", Scheduler.EventClickedCallback.HasDelegate)
+            .AddClass("tnt-dragging", DraggingEvent == @event)
+            .AddRipple(Scheduler.EventClickedCallback.HasDelegate)
+            .AddTintColor(Scheduler.EventClickedCallback.HasDelegate ? @event.TintColor : null)
+            .AddOnTintColor(Scheduler.EventClickedCallback.HasDelegate ? @event.OnTintColor : null)
+            .Build();
+    }
+
+    private string? CreateEventStyle(TnTEvent @event, int left, int width) {
+        return CssStyleBuilder.Create()
+            .AddVariable("tnt-event-start-hour", @event.StartTime.Hour.ToString())
+            .AddVariable("tnt-event-end-hour", @event.EndTime.Hour.ToString())
+            .AddVariable("tnt-event-start-min", @event.StartTime.Minute.ToString())
+            .AddVariable("tnt-event-end-min", @event.EndTime.Minute.ToString())
+            .AddVariable("tnt-event-bg-color", @event.BackgroundColor)
+            .AddVariable("tnt-event-fg-color", @event.ForegroundColor)
+            .AddStyle("left", left.ToString() + "%")
+            .AddStyle("width", width.ToString() + "%")
+            .Build();
+    }
+
+    private void CreatePlaceholderEvent(DateOnly date, MouseEventArgs e) {
+        if (_mouseOverPicker && e.OffsetY >= 0) {
+            var time = CalculateDateTimeOffset(e.OffsetY, date);
+            var existingEvent = _addEventPlaceholder;
+            if (existingEvent is not null) {
+                existingEvent.EventStart = time;
+                existingEvent.EventEnd = time.Add(DefaultAppointmentTime);
+                _addEventPlaceholder = existingEvent;
+            }
+            else {
+                _addEventPlaceholder = new TnTEvent() {
+                    BackgroundColor = Scheduler.PlaceholderBackgroundColor,
+                    ForegroundColor = Scheduler.PlaceholderTextColor,
+                    Title = "New Event",
+                    EventStart = time,
+                    EventEnd = time.Add(DefaultAppointmentTime),
+                };
+            }
+        }
+    }
+
     private void UpdateEventsList() {
         _events.Clear();
         foreach (var @event in Scheduler.Events.Where(e => e.StartDate <= _visibleDates.Last() && e.EndDate >= _visibleDates.First()).OrderBy(e => e.EventStart)) {
@@ -117,55 +167,6 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         _visibleDates = Enumerable.Range(0, 7)
             .Select(startOfWeek.AddDays)
             .ToImmutableSortedSet();
-    }
-
-    private bool _mouseOverPicker;
-    private TnTEvent? _addEventPlaceholder;
-    private bool _mouseOverEvent;
-
-    private void CreatePlaceholderEvent(DateOnly date, MouseEventArgs e) {
-        if (_mouseOverPicker && e.OffsetY >= 0) {
-            var time = CalculateDateTimeOffset(e.OffsetY, date);
-            var existingEvent = _addEventPlaceholder;
-            if (existingEvent is not null) {
-                existingEvent.EventStart = time;
-                existingEvent.EventEnd = time.Add(DefaultAppointmentTime);
-                _addEventPlaceholder = existingEvent;
-            }
-            else {
-                _addEventPlaceholder = new TnTEvent() {
-                    BackgroundColor = Scheduler.PlaceholderBackgroundColor,
-                    ForegroundColor = Scheduler.PlaceholderTextColor,
-                    Title = "New Event",
-                    EventStart = time,
-                    EventEnd = time.Add(DefaultAppointmentTime),
-                };
-            }
-        }
-    }
-
-    private string? CreateEventClass(TnTEvent @event) {
-        return CssClassBuilder.Create()
-            .AddClass("tnt-event")
-            .AddClass("tnt-interactable", Scheduler.EventClickedCallback.HasDelegate)
-            .AddClass("tnt-dragging", DraggingEvent == @event)
-            .AddRipple(Scheduler.EventClickedCallback.HasDelegate)
-            .AddTintColor(Scheduler.EventClickedCallback.HasDelegate ? @event.TintColor : null)
-            .AddOnTintColor(Scheduler.EventClickedCallback.HasDelegate ? @event.OnTintColor : null)
-            .Build();
-    }
-
-    private string? CreateEventStyle(TnTEvent @event, int left, int width) {
-        return CssStyleBuilder.Create()
-            .AddVariable("tnt-event-start-hour", @event.StartTime.Hour.ToString())
-            .AddVariable("tnt-event-end-hour", @event.EndTime.Hour.ToString())
-            .AddVariable("tnt-event-start-min", @event.StartTime.Minute.ToString())
-            .AddVariable("tnt-event-end-min", @event.EndTime.Minute.ToString())
-            .AddVariable("tnt-event-bg-color", @event.BackgroundColor)
-            .AddVariable("tnt-event-fg-color", @event.ForegroundColor)
-            .AddStyle("left", left.ToString() + "%")
-            .AddStyle("width", width.ToString() + "%")
-            .Build();
     }
 
     private sealed record WeekViewTnTEvent {

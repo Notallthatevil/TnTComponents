@@ -9,16 +9,21 @@ namespace TnTComponents;
 public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
 
     [Parameter]
-    public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerLow;
+    public bool AllowDraggingEvents { get; set; } = true;
 
     [Parameter]
-    public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
+    public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerLow;
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
     [Parameter]
+    public DateOnly Date { get; set; } = DateOnly.FromDateTime(DateTime.Today);
+
+    [Parameter]
     public EventCallback<DateOnly> DateChangedCallback { get; set; }
+
+    public DayOfWeek DayOfWeek => Date.DayOfWeek;
 
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
@@ -32,33 +37,29 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
-    [Parameter, EditorRequired]
-    public ICollection<TEventType> Events { get; set; } = [];
-
-    [Parameter]
-    public bool HideDateControls { get; set; }
-
-    [Parameter]
-    public DateOnly Date { get; set; } = DateOnly.FromDateTime(DateTime.Today);
-
     [Parameter]
     public EventCallback<TEventType> EventClickedCallback { get; set; }
+
+    [Parameter, EditorRequired]
+    public ICollection<TEventType> Events { get; set; } = [];
 
     [Parameter]
     public EventCallback<DateTimeOffset> EventSlotClickedCallback { get; set; }
 
     [Parameter]
-    public bool AllowDraggingEvents { get; set; } = true;
-
-    [Inject]
-    private ITnTDialogService _dialogService { get; set; } = default!;
+    public bool HideDateControls { get; set; }
 
     [Parameter]
     public TnTColor PlaceholderBackgroundColor { get; set; } = TnTColor.SecondaryContainer;
+
     [Parameter]
     public TnTColor PlaceholderTextColor { get; set; } = TnTColor.OnSecondaryContainer;
 
-    public DayOfWeek DayOfWeek => Date.DayOfWeek;
+    [Parameter]
+    public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
+
+    [Inject]
+    private ITnTDialogService _dialogService { get; set; } = default!;
 
     private IDictionary<Type, ScheduleViewBase<TEventType>> _scheduleViews = new Dictionary<Type, ScheduleViewBase<TEventType>>();
     private ScheduleViewBase<TEventType>? _selectedView;
@@ -70,7 +71,16 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
         }
     }
 
+    public DateOnly? GetFirstVisibleDate() => _selectedView?.GetFirstVisibleDate();
+
+    public DateOnly? GetLastVisibleDate() => _selectedView?.GetLastVisibleDate();
+
     public bool IsViewSelected(ScheduleViewBase<TEventType> scheduleView) => _selectedView == scheduleView;
+
+    public void Refresh() {
+        StateHasChanged();
+        _selectedView?.Refresh();
+    }
 
     public void RemoveScheduleView(ScheduleViewBase<TEventType> scheduleView) => _scheduleViews.Remove(scheduleView.GetType());
 
@@ -86,13 +96,5 @@ public partial class TnTScheduler<TEventType> where TEventType : TnTEvent {
             _selectedView?.Refresh();
             await DateChangedCallback.InvokeAsync(date.Value);
         }
-    }
-
-    public DateOnly? GetFirstVisibleDate() => _selectedView?.GetFirstVisibleDate();
-    public DateOnly? GetLastVisibleDate() => _selectedView?.GetLastVisibleDate();
-
-    public void Refresh() {
-        StateHasChanged();
-        _selectedView?.Refresh();
     }
 }
