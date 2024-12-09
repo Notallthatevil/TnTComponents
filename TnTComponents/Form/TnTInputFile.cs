@@ -65,6 +65,10 @@ public class TnTInputFile : InputFile, ITnTInteractable {
     [CascadingParameter]
     private ITnTForm? _tntForm { get; set; }
 
+    IReadOnlyDictionary<string, object>? ITnTComponentBase.AdditionalAttributes { get => base.AdditionalAttributes?.ToDictionary(); set => base.AdditionalAttributes = value is null ? null : new Dictionary<string, object>(value!); }
+
+    ElementReference ITnTComponentBase.Element => base.Element ?? default;
+
     protected override void OnInitialized() {
         base.OnInitialized();
         OnChange = EventCallback.Factory.Create(this, async (InputFileChangeEventArgs args) => await OnUploadFilesHandlerAsync(args));
