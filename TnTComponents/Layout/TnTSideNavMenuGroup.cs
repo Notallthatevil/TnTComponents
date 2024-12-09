@@ -7,7 +7,7 @@ using TnTComponents.Interfaces;
 
 namespace TnTComponents;
 
-public class TnTSideNavMenuGroup : TnTInteractableComponentBase, ITnTStyleable {
+public class TnTSideNavMenuGroup : TnTComponentBase, ITnTInteractable, ITnTStyleable {
     [Parameter]
     public bool ExpandByDefault { get; set; } = true;
 
@@ -31,7 +31,7 @@ public class TnTSideNavMenuGroup : TnTInteractableComponentBase, ITnTStyleable {
     [Parameter]
     public TnTBorderRadius? BorderRadius { get; set; } = new(10);
     [Parameter]
-    public override TnTColor? TintColor { get; set; }
+    public TnTColor? TintColor { get; set; }
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
@@ -42,6 +42,17 @@ public class TnTSideNavMenuGroup : TnTInteractableComponentBase, ITnTStyleable {
     [Parameter, EditorRequired]
     public string Label { get; set; } = default!;
 
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    [Parameter]
+    public string? ElementName { get; set; }
+
+    [Parameter]
+    public bool EnableRipple { get; set; }
+
+    [Parameter]
+    public TnTColor? OnTintColor { get; set; }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "div");
