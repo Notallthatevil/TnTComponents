@@ -48,79 +48,75 @@
                 </tr>
             </thead>
             <tbody>
-                @if (_loading && _ariaBodyRowCount <= 0)
+                @if (_ariaBodyRowCount <= 0)
                 {
                     @_renderLoadingContent
                 }
                 else if (Virtualize)
                 {
-                    if (_ariaBodyRowCount == 0)
-                    {
-                        @_renderEmptyContent
-                    }
-                    else
-                    {
-                        <TnTVirtualize @ref="_virtualizeComponent"
-                                       TItem="(int RowIndex, TGridItem Data)"
-                                       ItemsProvider="@ProvideVirtualizedItemsAsync">
-                            <LoadingTemplate>
-                                @if (LoadingContent is null)
+                    <TnTVirtualize @ref="_virtualizeComponent"
+                                   TItem="(int RowIndex, TGridItem Data)"
+                                   ItemsProvider="@ProvideVirtualizedItemsAsync">
+                        <LoadingTemplate>
+                            @if (LoadingContent is null)
+                            {
+                                @for (var i = 0; i < _numberOfRowsToLoad; ++i)
                                 {
-                                    @for (var i = 0; i < _numberOfRowsToLoad; ++i)
-                                    {
-                                        string? _rowsDataSize = $"height: {ItemSize}px";
+                                    string? _rowsDataSize = $"height: {ItemSize}px";
 
-                                        <TnTDataGridRow aria-rowindex="@(i + 1)" style="@_rowsDataSize" TGridItem="TGridItem">
-                                            @for (var colIndex = 0; colIndex < _columns.Count; colIndex++)
-                                            {
-                                                var col = _columns[colIndex];
-
-                                                <TnTDataGridCell class="grid-cell-placeholder" @key="@col" GridColumn=@(colIndex+1) TGridItem="TGridItem">
-                                                    @((RenderFragment)(b => col.RenderPlaceholderContent(b, new PlaceholderContext(i, ItemSize))))
-                                                </TnTDataGridCell>
-                                            }
-                                        </TnTDataGridRow>
-                                    }
-                                }
-                                else
-                                {
-                                    <TnTDataGridRow TGridItem="TGridItem" Class="loading-content-row">
-                                        <TnTDataGridCell Class="loading-content-cell">
-                                            @LoadingContent
-                                        </TnTDataGridCell>
-                                    </TnTDataGridRow>
-                                }
-                            </LoadingTemplate>
-
-                            <ItemTemplate>
-                                @if (context.Data != null)
-                                {
-
-                                    var rowClass = RowClass?.Invoke(context.Data) ?? null;
-                                    var rowStyle = CssStyleBuilder.Create().AddStyle(RowStyle?.Invoke(context.Data) ?? null, null).AddStyle("height", $"{ItemSize}px").Build();
-
-                                    <TnTDataGridRow @key="@(ItemKey(context.Data))"
-                                                    aria-rowindex="@context.RowIndex"
-                                                    class="@rowClass"
-                                                    style="@rowStyle"
-                                                    Item="@context.Data"
-                                                    TGridItem="TGridItem"
-                                                    OnClick="@OnRowClicked">
-
+                                    <TnTDataGridRow aria-rowindex="@(i + 1)" style="@_rowsDataSize" TGridItem="TGridItem">
                                         @for (var colIndex = 0; colIndex < _columns.Count; colIndex++)
                                         {
                                             var col = _columns[colIndex];
-                                            <TnTDataGridCell @key="@col" class="@col.ElementClass" style="@col.ElementStyle" TGridItem="TGridItem" Item="@context.Data">
-                                                @((RenderFragment)(b => col.CellContent(b, context.Data)))
+
+                                            <TnTDataGridCell class="grid-cell-placeholder" @key="@col" GridColumn=@(colIndex+1) TGridItem="TGridItem">
+                                                @((RenderFragment)(b => col.RenderPlaceholderContent(b, new PlaceholderContext(i, ItemSize))))
                                             </TnTDataGridCell>
                                         }
                                     </TnTDataGridRow>
                                 }
-                            </ItemTemplate>
+                            }
+                            else
+                            {
+                                <TnTDataGridRow TGridItem="TGridItem" Class="loading-content-row">
+                                    <TnTDataGridCell Class="loading-content-cell">
+                                        @LoadingContent
+                                    </TnTDataGridCell>
+                                </TnTDataGridRow>
+                            }
+                        </LoadingTemplate>
 
+                        <ItemTemplate>
+                            @if (context.Data != null)
+                            {
 
-                        </TnTVirtualize>
-                    }
+                                var rowClass = RowClass?.Invoke(context.Data) ?? null;
+                                var rowStyle = CssStyleBuilder.Create().AddStyle(RowStyle?.Invoke(context.Data) ?? null, null).AddStyle("height", $"{ItemSize}px").Build();
+
+                                <TnTDataGridRow @key="@(ItemKey(context.Data))"
+                                                aria-rowindex="@context.RowIndex"
+                                                class="@rowClass"
+                                                style="@rowStyle"
+                                                Item="@context.Data"
+                                                TGridItem="TGridItem"
+                                                OnClick="@OnRowClicked">
+
+                                    @for (var colIndex = 0; colIndex < _columns.Count; colIndex++)
+                                    {
+                                        var col = _columns[colIndex];
+                                        <TnTDataGridCell @key="@col" class="@col.ElementClass" style="@col.ElementStyle" TGridItem="TGridItem" Item="@context.Data">
+                                            @((RenderFragment)(b => col.CellContent(b, context.Data)))
+                                        </TnTDataGridCell>
+                                    }
+                                </TnTDataGridRow>
+                            }
+                        </ItemTemplate>
+
+                        <EmptyTemplate>
+                            @_renderEmptyContent
+                        </EmptyTemplate>
+
+                    </TnTVirtualize>
                 }
                 else
                 {

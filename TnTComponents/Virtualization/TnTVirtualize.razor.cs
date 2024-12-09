@@ -49,6 +49,12 @@ public partial class TnTVirtualize<TItem> {
     public RenderFragment? LoadingTemplate { get; set; }
 
     /// <summary>
+    /// Gets or sets the template for rendering when there are no items.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? EmptyTemplate { get; set; }
+
+    /// <summary>
     /// Gets or sets the property to sort on.
     /// </summary>
     [Parameter]

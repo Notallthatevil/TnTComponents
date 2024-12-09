@@ -11,21 +11,27 @@ using TnTComponents.Virtualization;
 namespace TnTComponents;
 
 /// <summary>
-/// A component that displays a grid.
+///     A component that displays a grid.
 /// </summary>
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
 [CascadingTypeParameter(nameof(TGridItem))]
 public partial class TnTDataGrid<TGridItem> {
 
+    [Parameter]
+    public TnTColor? BackgroundColor { get; set; } = TnTColor.Background;
+
     /// <summary>
-    /// Gets or sets the child components of this instance. For example, you may define columns by
-    /// adding components derived from the <see cref="TnTColumnBase{TGridItem}" /> base class.
+    ///     Gets or sets the child components of this instance. For example, you may define columns
+    ///     by adding components derived from the <see cref="TnTColumnBase{TGridItem}" /> base class.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
+    [Parameter]
+    public DataGridAppearance DataGridAppearance { get; set; }
+
     public override string? ElementClass => CssClassBuilder.Create()
-        .AddFromAdditionalAttributes(AdditionalAttributes)
+            .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddBackgroundColor(BackgroundColor)
         .AddFilled(BackgroundColor is not null)
         .AddClass("tnt-datagrid")
@@ -39,69 +45,68 @@ public partial class TnTDataGrid<TGridItem> {
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
-    [Parameter]
-    public TnTColor? BackgroundColor { get; set; } = TnTColor.Background;
-
-    [Parameter]
-    public DataGridAppearance DataGridAppearance { get; set; }
-
     /// <summary>
-    /// If specified, grids render this fragment when there is no content.
+    ///     If specified, grids render this fragment when there is no content.
     /// </summary>
     [Parameter]
     public RenderFragment? EmptyContent { get; set; }
 
     /// <summary>
-    /// Gets or sets the value that gets applied to the css gridTemplateColumns attribute of child rows.
+    ///     Gets or sets the value that gets applied to the css gridTemplateColumns attribute of
+    ///     child rows.
     /// </summary>
     [Parameter]
     public string? GridTemplateColumns { get; set; } = null;
 
     /// <summary>
-    /// Optionally defines a value for @key on each rendered row. Typically this should be used to
-    /// specify a unique identifier, such as a primary key value, for each data item. /// This
-    /// allows the grid to preserve the association between row elements and data items based on
-    /// their unique identifiers, even when the <typeparamref name="TGridItem" /> instances are
-    /// replaced by new copies (for example, after a new query against the underlying data store).
-    /// /// If not set, the @key will be the <typeparamref name="TGridItem" /> instance itself.
+    ///     Optionally defines a value for @key on each rendered row. Typically this should be used
+    ///     to specify a unique identifier, such as a primary key value, for each data item. ///
+    ///     This allows the grid to preserve the association between row elements and data items
+    ///     based on their unique identifiers, even when the <typeparamref name="TGridItem" />
+    ///     instances are replaced by new copies (for example, after a new query against the
+    ///     underlying data store). /// If not set, the @key will be the
+    ///     <typeparamref name="TGridItem" /> instance itself.
     /// </summary>
     [Parameter]
     public Func<TGridItem, object> ItemKey { get; set; } = x => x!;
 
     /// <summary>
-    /// Gets or sets a queryable source of data for the grid. /// This could be in-memory data
-    /// converted to queryable using the <see
-    /// cref="System.Linq.Queryable.AsQueryable(System.Collections.IEnumerable)" /> extension
-    /// method, or an EntityFramework DataSet or an <see cref="IQueryable" /> derived from it. ///
-    /// You should supply either <see cref="Items" /> or <see cref="ItemsProvider" />, but not both.
+    ///     Gets or sets a queryable source of data for the grid. /// This could be in-memory data
+    ///     converted to queryable using the
+    ///     <see cref="System.Linq.Queryable.AsQueryable(System.Collections.IEnumerable)" />
+    ///     extension method, or an EntityFramework DataSet or an <see cref="IQueryable" /> derived
+    ///     from it. /// You should supply either <see cref="Items" /> or
+    ///     <see cref="ItemsProvider" />, but not both.
     /// </summary>
     [Parameter]
     public IQueryable<TGridItem>? Items { get; set; }
 
     /// <summary>
-    /// This is applicable only when using <see cref="Virtualize" />. It defines an expected height
-    /// in pixels for each row, allowing the virtualization mechanism to fetch the correct number of
-    /// items to match the display size and to ensure accurate scrolling.
+    ///     This is applicable only when using <see cref="Virtualize" />. It defines an expected
+    ///     height in pixels for each row, allowing the virtualization mechanism to fetch the
+    ///     correct number of items to match the display size and to ensure accurate scrolling.
     /// </summary>
     [Parameter]
     public float ItemSize { get; set; } = 32;
 
     /// <summary>
-    /// Gets or sets a callback that supplies data for the rid. /// You should supply either <see
-    /// cref="Items" /> or <see cref="ItemsProvider" />, but not both.
+    ///     Gets or sets a callback that supplies data for the rid. /// You should supply either
+    ///     <see cref="Items" /> or <see cref="ItemsProvider" />, but not both.
     /// </summary>
     [Parameter]
     public TnTGridItemsProvider<TGridItem>? ItemsProvider { get; set; }
 
+    public override string? JsModulePath => "./_content/TnTComponents/Grid/TnTDataGrid.razor.js";
+
     /// <summary>
-    /// Gets or sets a value indicating whether the grid is in a loading data state.
+    ///     Gets or sets a value indicating whether the grid is in a loading data state.
     /// </summary>
     [Parameter]
     public bool Loading { get; set; }
 
     /// <summary>
-    /// Gets or sets the content to render when <see cref="Loading" /> is true. A default fragment
-    /// is used if loading content is not specified.
+    ///     Gets or sets the content to render when <see cref="Loading" /> is true. A default
+    ///     fragment is used if loading content is not specified.
     /// </summary>
     [Parameter]
     public RenderFragment? LoadingContent { get; set; }
@@ -110,41 +115,40 @@ public partial class TnTDataGrid<TGridItem> {
     public EventCallback<TGridItem?> OnRowClicked { get; set; }
 
     /// <summary>
-    /// Optionally links this <see cref="TnTDataGrid{TGridItem}" /> instance with a <see
-    /// cref="TnTPaginationState" /> model, causing the grid to fetch and render only the current
-    /// page of data. /// This is normally used in conjunction with a <see cref="FluentPaginator" />
-    /// component or some other UI logic that displays and updates the supplied <see
-    /// cref="TnTPaginationState" /> instance.
-    /// </summary>
-    [Parameter]
-    public TnTPaginationState? Pagination { get; set; }
-
-    /// <summary>
-    /// If true, renders draggable handles around the column headers, allowing the user to resize
-    /// the columns manually. Size changes are not persisted.
-    /// </summary>
-    [Parameter]
-    public bool Resizable { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value that determines how many additional items will be rendered
-    /// before and after the visible region. This help to reduce the frequency of rendering
-    /// during scrolling. However, higher values mean that more elements will be present
-    /// in the page.
+    ///     Gets or sets a value that determines how many additional items will be rendered before
+    ///     and after the visible region. This help to reduce the frequency of rendering during
+    ///     scrolling. However, higher values mean that more elements will be present in the page.
     /// </summary>
     [Parameter]
     public int OverscanCount { get; set; } = 3;
 
     /// <summary>
-    /// Optionally defines a class to be applied to a rendered row.
+    ///     Optionally links this <see cref="TnTDataGrid{TGridItem}" /> instance with a
+    ///     <see cref="TnTPaginationState" /> model, causing the grid to fetch and render only the
+    ///     current page of data. /// This is normally used in conjunction with a
+    ///     <see cref="FluentPaginator" /> component or some other UI logic that displays and
+    ///     updates the supplied <see cref="TnTPaginationState" /> instance.
+    /// </summary>
+    [Parameter]
+    public TnTPaginationState? Pagination { get; set; }
+
+    /// <summary>
+    ///     If true, renders draggable handles around the column headers, allowing the user to
+    ///     resize the columns manually. Size changes are not persisted.
+    /// </summary>
+    [Parameter]
+    public bool Resizable { get; set; }
+
+    /// <summary>
+    ///     Optionally defines a class to be applied to a rendered row.
     /// </summary>
     [Parameter]
     public Func<TGridItem, string>? RowClass { get; set; }
 
     /// <summary>
-    /// Optionally defines a style to be applied to a rendered row. Do not use to dynamically update
-    /// a row style after rendering as this will interfere with the script that use this attribute.
-    /// Use <see cref="RowClass" /> instead.
+    ///     Optionally defines a style to be applied to a rendered row. Do not use to dynamically
+    ///     update a row style after rendering as this will interfere with the script that use this
+    ///     attribute. Use <see cref="RowClass" /> instead.
     /// </summary>
     [Parameter]
     public Func<TGridItem, string>? RowStyle { get; set; }
@@ -152,21 +156,19 @@ public partial class TnTDataGrid<TGridItem> {
     public bool SortByAscending => _sortByAscending;
 
     /// <summary>
-    /// If true, the grid will be rendered with virtualization. This is normally used in conjunction
-    /// with scrolling and causes the grid to fetch and render only the data around the current
-    /// scroll viewport. This can greatly improve the performance when scrolling through large data
-    /// sets. /// If you use <see cref="Virtualize" />, you should supply a value for <see
-    /// cref="ItemSize" /> and must ensure that every row renders with the same constant height. ///
-    /// Generally it's preferable not to use <see cref="Virtualize" /> if the amount of data being
-    /// rendered is small or if you are using pagination.
+    ///     If true, the grid will be rendered with virtualization. This is normally used in
+    ///     conjunction with scrolling and causes the grid to fetch and render only the data around
+    ///     the current scroll viewport. This can greatly improve the performance when scrolling
+    ///     through large data sets. If you use <see cref="Virtualize" />, you should supply a value
+    ///     for <see cref="ItemSize" /> and must ensure that every row renders with the same
+    ///     constant height. Generally it's preferable not to use <see cref="Virtualize" /> if the
+    ///     amount of data being rendered is small or if you are using pagination.
     /// </summary>
     [Parameter]
     public bool Virtualize { get; set; }
 
     [Inject]
     private IServiceProvider Services { get; set; } = default!;
-
-    public override string? JsModulePath => "./_content/TnTComponents/Grid/TnTDataGrid.razor.js";
 
     private readonly List<TnTColumnBase<TGridItem>> _columns;
 
@@ -182,8 +184,6 @@ public partial class TnTDataGrid<TGridItem> {
     private readonly RenderFragment _renderNonVirtualizedRows;
     private int _ariaBodyRowCount = -1;
 
-    private int _numberOfRowsToLoad = 5;
-
     // IQueryable only exposes synchronous query APIs. IAsyncQueryExecutor is an adapter that lets
     // us invoke any async query APIs that might be available. We have built-in support for using EF
     // Core's async query APIs.
@@ -193,7 +193,6 @@ public partial class TnTDataGrid<TGridItem> {
     private IReadOnlyCollection<TGridItem> _currentNonVirtualizedViewItems = Array.Empty<TGridItem>();
     private int _delay = 100;
     private bool _interactive;
-
     private object? _lastAssignedItemsOrProvider;
 
     // We try to minimize the number of times we query the items provider, since queries may be
@@ -204,6 +203,7 @@ public partial class TnTDataGrid<TGridItem> {
     private int? _lastRefreshedPaginationStateHash;
 
     private bool _manualGrid;
+    private int _numberOfRowsToLoad = 5;
     private CancellationTokenSource? _pendingDataLoadCancellationTokenSource;
     private bool _sortByAscending;
 
@@ -212,10 +212,31 @@ public partial class TnTDataGrid<TGridItem> {
 
     private TnTVirtualize<(int, TGridItem)>? _virtualizeComponent;
 
-    private bool _loading = true;
+    protected override void Dispose(bool disposing) {
+        if (disposing) {
+            _currentPageItemsChanged?.Dispose();
+            _pendingDataLoadCancellationTokenSource?.Cancel();
+            _pendingDataLoadCancellationTokenSource?.Dispose();
+            _pendingDataLoadCancellationTokenSource = null;
+
+            _virtualizeComponent?.Dispose();
+            _virtualizeComponent = null;
+        }
+
+        base.Dispose(disposing);
+    }
+
+    protected override async ValueTask DisposeAsyncCore() {
+        if(_virtualizeComponent is not null) {
+            await _virtualizeComponent.DisposeAsync().ConfigureAwait(false);
+            _virtualizeComponent = null;
+        }
+
+        await base.DisposeAsyncCore().ConfigureAwait(false);
+    }
 
     /// <summary>
-    /// Constructs an instance of <see cref="TnTDataGrid{TGridItem}" />.
+    ///     Constructs an instance of <see cref="TnTDataGrid{TGridItem}" />.
     /// </summary>
     public TnTDataGrid() {
         _columns = [];
@@ -235,8 +256,8 @@ public partial class TnTDataGrid<TGridItem> {
     }
 
     /// <summary>
-    /// Instructs the grid to re-fetch and render the current data from the supplied data source
-    /// (either <see cref="Items" /> or <see cref="ItemsProvider" />).
+    ///     Instructs the grid to re-fetch and render the current data from the supplied data source
+    ///     (either <see cref="Items" /> or <see cref="ItemsProvider" />).
     /// </summary>
     /// <returns>A <see cref="Task" /> that represents the completion of the operation.</returns>
     public async Task RefreshDataAsync() {
@@ -244,12 +265,12 @@ public partial class TnTDataGrid<TGridItem> {
     }
 
     /// <summary>
-    /// Sets the grid's current sort column to the specified <paramref name="column" />.
+    ///     Sets the grid's current sort column to the specified <paramref name="column" />.
     /// </summary>
     /// <param name="column">The column that defines the new sort order.</param>
     /// <param name="direction">
-    /// The direction of sorting. If the value is <see cref="SortDirection.Auto" />, then it will
-    /// toggle the direction on each call.
+    ///     The direction of sorting. If the value is <see cref="SortDirection.Auto" />, then it
+    ///     will toggle the direction on each call.
     /// </param>
     /// <returns>A <see cref="Task" /> representing the completion of the operation.</returns>
     public Task SortByColumnAsync(TnTColumnBase<TGridItem> column, SortDirection direction = SortDirection.Auto) {
@@ -278,6 +299,13 @@ public partial class TnTDataGrid<TGridItem> {
         }
     }
 
+    protected override void OnAfterRender(bool firstRender) {
+        base.OnAfterRender(firstRender);
+        if (firstRender) {
+            _interactive = true;
+        }
+    }
+
     /// <inheritdoc />
     protected override Task OnParametersSetAsync() {
         // The associated pagination state may have been added/removed/replaced
@@ -301,13 +329,6 @@ public partial class TnTDataGrid<TGridItem> {
         // columns, because they might perform some action like setting the default sort order, so
         // it would be wasteful to have to re-query immediately
         return (_columns.Count > 0 && mustRefreshData) ? RefreshDataCoreAsync() : Task.CompletedTask;
-    }
-
-    protected override void OnAfterRender(bool firstRender) {
-        base.OnAfterRender(firstRender);
-        if (firstRender) {
-            _interactive = true;
-        }
     }
 
     private void FinishCollectingColumns() {
@@ -375,6 +396,7 @@ public partial class TnTDataGrid<TGridItem> {
     private async Task RefreshDataCoreAsync() {
         // Move into a "loading" state, cancelling any earlier-but-still-pending load
         _pendingDataLoadCancellationTokenSource?.Cancel();
+        _pendingDataLoadCancellationTokenSource?.Dispose();
         var thisLoadCts = _pendingDataLoadCancellationTokenSource = new CancellationTokenSource();
 
         if (_virtualizeComponent is not null) {
@@ -408,7 +430,6 @@ public partial class TnTDataGrid<TGridItem> {
     // Normalizes all the different ways of configuring a data source so they have common
     // GridItemsProvider-shaped API
     private async ValueTask<TnTItemsProviderResult<TGridItem>> ResolveItemsRequestAsync(TnTGridItemsProviderRequest<TGridItem> request) {
-        _loading = true;
         TnTItemsProviderResult<TGridItem> providerResult = new();
         if (ItemsProvider is not null) {
             if (Virtualize && request.Count is null) {
@@ -437,7 +458,6 @@ public partial class TnTDataGrid<TGridItem> {
             var resultArray = _asyncQueryExecutor is null ? [.. result] : await _asyncQueryExecutor.ToArrayAsync(result);
             providerResult = new TnTItemsProviderResult<TGridItem> { Items = resultArray, TotalItemCount = totalItemCount };
         }
-        _loading = false;
         return providerResult;
     }
 
@@ -448,11 +468,11 @@ public partial class TnTDataGrid<TGridItem> {
 }
 
 /// <summary>
-/// A callback that provides data for a <see cref="TnTDataGrid{TGridItem}" />.
+///     A callback that provides data for a <see cref="TnTDataGrid{TGridItem}" />.
 /// </summary>
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
 /// <param name="request">Parameters describing the data being requested.</param>
 /// <returns>
-/// A <see cref="T:ValueTask{TnTGridItemsProviderResult{TResult}}" /> that gives the data to be displayed.
+///     A <see cref="T:ValueTask{TnTGridItemsProviderResult{TResult}}" /> that gives the data to be displayed.
 /// </returns>
 public delegate ValueTask<TnTItemsProviderResult<TGridItem>> TnTGridItemsProvider<TGridItem>(TnTGridItemsProviderRequest<TGridItem> request);
