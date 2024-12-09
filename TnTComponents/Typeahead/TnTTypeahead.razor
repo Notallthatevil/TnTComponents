@@ -1,9 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Components.Rendering
 @using TnTComponents
 @using TnTComponents.Core
+@using TnTComponents.Interfaces
 @namespace TnTComponents
 @typeparam TItem
-@inherits TnTInteractableComponentBase
+@inherits TnTComponentBase
+@implements ITnTInteractable
 
 <div @attributes="AdditionalAttributes"
      class="@ElementClass"
