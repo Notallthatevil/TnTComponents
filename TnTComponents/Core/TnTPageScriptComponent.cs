@@ -5,7 +5,7 @@ using TnTComponents.Interfaces;
 
 namespace TnTComponents.Core;
 
-public abstract class TnTPageScriptComponent<TComponent> : TnTComponentBase, ITnTPageScriptComponent<TComponent>, IAsyncDisposable where TComponent : ComponentBase {
+public abstract class TnTPageScriptComponent<TComponent> : TnTComponentBase, ITnTPageScriptComponent<TComponent> where TComponent : ComponentBase {
     public DotNetObjectReference<TComponent>? DotNetObjectRef { get; set; }
     public IJSObjectReference? IsolatedJsModule { get; private set; }
     public abstract string? JsModulePath { get; }
@@ -15,6 +15,8 @@ public abstract class TnTPageScriptComponent<TComponent> : TnTComponentBase, ITn
 
     protected RenderFragment PageScript;
 
+    private bool _disposed;
+
     protected TnTPageScriptComponent() {
         PageScript = new RenderFragment(builder => {
             builder.OpenComponent<TnTPageScript>(0);
@@ -23,17 +25,49 @@ public abstract class TnTPageScriptComponent<TComponent> : TnTComponentBase, ITn
         });
     }
 
-    public virtual async ValueTask DisposeAsync() {
+    public void Dispose() {
+        Dispose(disposing: true);
         GC.SuppressFinalize(this);
-        try {
-            if (IsolatedJsModule is not null) {
-                await IsolatedJsModule.InvokeVoidAsync("onDispose", Element, DotNetObjectRef);
-                await IsolatedJsModule.DisposeAsync();
-            }
+    }
 
+    public async ValueTask DisposeAsync() {
+        await DisposeAsyncCore().ConfigureAwait(false);
+        Dispose(disposing: false);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing) {
+        if (disposing) {
+            DotNetObjectRef?.Dispose();
+            DotNetObjectRef = null;
+
+            if (IsolatedJsModule is IDisposable disposable) {
+                disposable.Dispose();
+                IsolatedJsModule = null;
+            }
+        }
+
+        _disposed = true;
+    }
+
+    protected virtual async ValueTask DisposeAsyncCore() {
+        if (IsolatedJsModule is not null) {
+            try {
+                await IsolatedJsModule.InvokeVoidAsync("onUnload", Element, DotNetObjectRef);
+                await IsolatedJsModule.DisposeAsync().ConfigureAwait(false);
+            }
+            catch (JSDisconnectedException) { }
+        }
+
+        if (DotNetObjectRef is IAsyncDisposable asyncDisposable) {
+            await asyncDisposable.DisposeAsync().ConfigureAwait(false);
+        }
+        else {
             DotNetObjectRef?.Dispose();
         }
-        catch (JSDisconnectedException) { }
+
+        IsolatedJsModule = null;
+        DotNetObjectRef = null;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
