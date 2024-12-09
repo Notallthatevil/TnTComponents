@@ -40,14 +40,20 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
     /// <inheritdoc />
     public string? ElementTitle { get; set; }
 
+    /// <summary>
+    /// Custom identifier attribute for the component.
+    /// </summary>
     internal const string TnTCustomIdentifierAttribute = "tntid";
 
+    /// <summary>
+    /// Unique identifier for the component.
+    /// </summary>
     public string ComponentIdentifier { get; } = TnTComponentIdentifier.NewId();
 
     protected override void OnParametersSet() {
         base.OnParametersSet();
 
-        var dict = AdditionalAttributes is not null ? AdditionalAttributes.ToDictionary() : [];
+        var dict = AdditionalAttributes is not null ? AdditionalAttributes.ToDictionary() : new Dictionary<string, object>();
         dict.TryAdd(TnTCustomIdentifierAttribute, ComponentIdentifier);
         AdditionalAttributes = dict;
     }
