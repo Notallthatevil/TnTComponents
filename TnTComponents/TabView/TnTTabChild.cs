@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using TnTComponents.Core;
+using TnTComponents.Interfaces;
 
 namespace TnTComponents;
 
-public class TnTTabChild : TnTInteractableComponentBase {
+public class TnTTabChild : TnTComponentBase, ITnTInteractable {
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
@@ -30,7 +31,20 @@ public class TnTTabChild : TnTInteractableComponentBase {
 
     [CascadingParameter]
     private TnTTabView _context { get; set; } = default!;
+    [Parameter]
+    public bool Disabled { get; set; }
+    [Parameter]
 
+    public string? ElementName { get; set; }
+    [Parameter]
+
+    public bool EnableRipple { get; set; }
+    [Parameter]
+
+    public TnTColor? OnTintColor { get; set; }
+    [Parameter]
+
+    public TnTColor? TintColor { get; set; }
 
     protected override void OnAfterRender(bool firstRender) {
         base.OnAfterRender(firstRender);
