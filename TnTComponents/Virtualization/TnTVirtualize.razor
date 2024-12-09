@@ -2,26 +2,33 @@
 @using TnTComponents.Core
 @typeparam TItem
 @inherits TnTPageScriptComponent<TnTVirtualize<TItem>>
-    @foreach (var item in _items) {
-        if (ItemTemplate is not null) {
-            @ItemTemplate(item)
-        }
-        else {
-            <div>
-                @item
-            </div>
-        }
+    
+@foreach (var item in _items)
+{
+    if (ItemTemplate is not null)
+    {
+        @ItemTemplate(item)
     }
-
-    @if (_loadItemsCts is not null) {
-        if (LoadingTemplate is not null) {
-            @LoadingTemplate
-        }
-        else {
-            <TnTProgressIndicator Appearance="ProgressAppearance.Linear" />
-        }
+    else
+    {
+        <div>
+            @item
+        </div>
     }
+}
 
-    <div style="@(_allItemsRetrieved ? "height:0;width:0" : "height:1px;width:1px;flex-shrink:0")" @ref="Element">
-    </div>
+@if (_loadItemsCts is not null)
+{
+    if (LoadingTemplate is not null)
+    {
+        @LoadingTemplate
+    }
+    else
+    {
+        <TnTProgressIndicator Appearance="ProgressAppearance.Linear" />
+    }
+}
+
+<div style="@(_allItemsRetrieved ? "height:0;width:0" : "height:1px;width:1px;flex-shrink:0")" @ref="Element">
+</div>
 
