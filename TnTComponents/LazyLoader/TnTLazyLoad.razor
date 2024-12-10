@@ -1,10 +1,10 @@
 ﻿@using TnTComponents.Core
-@implements IAsyncDisposable
 @namespace TnTComponents
+@inherits TnTPageScriptComponent<TnTLazyLoad>
 
 @if (!_beginLoad)
 {
-    <div @ref="_element">
+    <div @ref="Element">
         @LoadingContent
     </div>
 }
@@ -13,5 +13,4 @@
 {
     @ChildContent
 }
-
-<TnTPageScript Src="@_jsModulePath" />
+@PageScript
