@@ -23,7 +23,7 @@ public class TnTInputRadio<TInputType> :TnTComponentBase, ITnTInteractable{
         .Build();
 
     [Parameter]
-    public RenderFragment<TnTIcon>? EndIcon { get; set; }
+    public TnTIcon? EndIcon { get; set; }
 
     [Parameter]
     public string? Label { get; set; }
@@ -32,7 +32,7 @@ public class TnTInputRadio<TInputType> :TnTComponentBase, ITnTInteractable{
     public bool ReadOnly { get; set; }
 
     [Parameter]
-    public RenderFragment<TnTIcon>? StartIcon { get; set; }
+    public TnTIcon? StartIcon { get; set; }
 
     [Parameter, EditorRequired]
     public object Value { get; set; } = default!;
@@ -72,7 +72,7 @@ public class TnTInputRadio<TInputType> :TnTComponentBase, ITnTInteractable{
 
 
         if (StartIcon is not null) {
-            builder.AddContent(90, StartIcon);
+            builder.AddContent(90, StartIcon.Render());
         }
 
         builder.OpenElement(100, "div");
@@ -108,7 +108,7 @@ public class TnTInputRadio<TInputType> :TnTComponentBase, ITnTInteractable{
         }
 
         if (EndIcon is not null) {
-            builder.AddContent(270, EndIcon);
+            builder.AddContent(270, EndIcon.Render());
         }
 
         builder.CloseElement();

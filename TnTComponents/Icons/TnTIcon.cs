@@ -52,7 +52,7 @@ public abstract class TnTIcon : TnTComponentBase {
         builder.CloseElement();
     }
 
-    public RenderFragment Render() => new RenderFragment(BuildRenderTree);
+    public RenderFragment Render() => new(BuildRenderTree);
 
     public static implicit operator string(TnTIcon icon) => icon.Icon;
 }
