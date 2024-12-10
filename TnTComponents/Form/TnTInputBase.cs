@@ -12,13 +12,13 @@ using TnTComponents.Interfaces;
 namespace TnTComponents;
 
 /// <summary>
-/// Base class for TnT input components.
+///     Base class for TnT input components.
 /// </summary>
 /// <typeparam name="TInputType">The type of the input value.</typeparam>
 public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, ITnTComponentBase, ITnTInteractable {
 
     /// <summary>
-    /// Gets or sets the appearance of the form.
+    ///     Gets or sets the appearance of the form.
     /// </summary>
     [Parameter]
     public FormAppearance Appearance { get; set; }
@@ -27,19 +27,19 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public bool? AutoFocus { get; set; }
 
     /// <summary>
-    /// Gets or sets the background color of the input.
+    ///     Gets or sets the background color of the input.
     /// </summary>
     [Parameter]
     public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerHighest;
 
     /// <summary>
-    /// Gets or sets the event callback to be invoked after binding.
+    ///     Gets or sets the event callback to be invoked after binding.
     /// </summary>
     [Parameter]
     public EventCallback<TInputType?> BindAfter { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether to bind on input.
+    ///     Gets or sets a value indicating whether to bind on input.
     /// </summary>
     [Parameter]
     public bool BindOnInput { get; set; }
@@ -48,7 +48,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public bool Disabled { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether to disable the validation message.
+    ///     Gets or sets a value indicating whether to disable the validation message.
     /// </summary>
     [Parameter]
     public bool DisableValidationMessage { get; set; } = false;
@@ -74,8 +74,10 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     [Parameter]
     public string? ElementLang { get; set; }
 
+    public string? ElementName => NameAttributeValue;
+
     public string? ElementStyle => CssStyleBuilder.Create()
-        .AddFromAdditionalAttributes(AdditionalAttributes)
+            .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
     [Parameter]
@@ -84,78 +86,76 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public bool EnableRipple => false;
 
     /// <summary>
-    /// Gets or sets the end icon of the input.
+    ///     Gets or sets the end icon of the input.
     /// </summary>
     [Parameter]
     public TnTIcon? EndIcon { get; set; }
 
     /// <summary>
-    /// Gets or sets the label of the input.
-    /// </summary>
-    [Parameter]
-    public string? Label { get; set; }
-
-    public string? ElementName => NameAttributeValue;
-
-    /// <summary>
-    /// Gets or sets the placeholder text of the input.
-    /// </summary>
-    [Parameter]
-    public string? Placeholder { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether the input is read-only.
-    /// </summary>
-    [Parameter]
-    public bool ReadOnly { get; set; }
-
-    /// <summary>
-    /// Gets or sets the start icon of the input.
-    /// </summary>
-    [Parameter]
-    public TnTIcon? StartIcon { get; set; }
-
-    /// <summary>
-    /// Gets or sets the text color of the input.
-    /// </summary>
-    [Parameter]
-    public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
-
-    /// <summary>
-    /// Gets or sets the tint color of the input.
-    /// </summary>
-    [Parameter]
-    public TnTColor? TintColor { get; set; } = TnTColor.Primary;
-
-    /// <summary>
-    /// Gets the type of the input.
-    /// </summary>
-    public abstract InputType Type { get; }
-
-    /// <summary>
-    /// Gets a value indicating whether the input field is disabled.
+    ///     Gets a value indicating whether the input field is disabled.
     /// </summary>
     public bool FieldDisabled => _tntForm?.Disabled is not null ? _tntForm.Disabled : Disabled;
 
     /// <summary>
-    /// Gets a value indicating whether the input field is read-only.
+    ///     Gets a value indicating whether the input field is read-only.
     /// </summary>
     public bool FieldReadonly => _tntForm?.ReadOnly is not null ? _tntForm.ReadOnly : ReadOnly;
 
     /// <summary>
-    /// Gets or sets the cascading parameter for the form.
+    ///     Gets or sets the label of the input.
     /// </summary>
-    [CascadingParameter]
-    private ITnTForm? _tntForm { get; set; }
+    [Parameter]
+    public string? Label { get; set; }
 
     /// <summary>
-    /// Gets or sets the on-tint color of the input.
+    ///     Gets or sets the on-tint color of the input.
     /// </summary>
     [Parameter]
     public TnTColor? OnTintColor { get; set; }
 
     /// <summary>
-    /// Sets the focus to the input element.
+    ///     Gets or sets the placeholder text of the input.
+    /// </summary>
+    [Parameter]
+    public string? Placeholder { get; set; }
+
+    /// <summary>
+    ///     Gets or sets a value indicating whether the input is read-only.
+    /// </summary>
+    [Parameter]
+    public bool ReadOnly { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the start icon of the input.
+    /// </summary>
+    [Parameter]
+    public TnTIcon? StartIcon { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the text color of the input.
+    /// </summary>
+    [Parameter]
+    public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
+
+    /// <summary>
+    ///     Gets or sets the tint color of the input.
+    /// </summary>
+    [Parameter]
+    public TnTColor? TintColor { get; set; } = TnTColor.Primary;
+
+    /// <summary>
+    ///     Gets the type of the input.
+    /// </summary>
+    public abstract InputType Type { get; }
+
+    /// <summary>
+    ///     Gets or sets the cascading parameter for the form.
+    /// </summary>
+    [CascadingParameter]
+    private ITnTForm? _tntForm { get; set; }
+
+    /// <summary>
+    ///     Sets the focus to the input element.
     /// </summary>
     /// <returns>A task that represents the asynchronous operation.</returns>
     public ValueTask SetFocusAsync() {
@@ -282,36 +282,13 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
                     builder.AddContent(300, EndIcon.Render());
                 }
             }
-
         }
 
         builder.CloseElement();
     }
 
     /// <summary>
-    /// Sets the current value as a string array.
-    /// </summary>
-    /// <param name="value">The value to set.</param>
-    private void SetCurrentValueAsStringArray(string?[]? value) {
-        CurrentValue = BindConverter.TryConvertTo<TInputType>(value, CultureInfo.CurrentCulture, out var result)
-            ? result
-            : default;
-    }
-
-    /// <summary>
-    /// Renders custom content for the input component.
-    /// </summary>
-    /// <param name="builder">The render tree builder.</param>
-    protected virtual void RenderCustomContent(RenderTreeBuilder builder) { }
-
-    /// <summary>
-    /// Renders child content for the input component.
-    /// </summary>
-    /// <param name="builder">The render tree builder.</param>
-    protected virtual void RenderChildContent(RenderTreeBuilder builder) { }
-
-    /// <summary>
-    /// Determines whether the input is required.
+    ///     Determines whether the input is required.
     /// </summary>
     /// <returns><c>true</c> if the input is required; otherwise, <c>false</c>.</returns>
     protected bool IsRequired() {
@@ -319,7 +296,19 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     }
 
     /// <summary>
-    /// Gets the custom attribute if it exists.
+    ///     Renders child content for the input component.
+    /// </summary>
+    /// <param name="builder">The render tree builder.</param>
+    protected virtual void RenderChildContent(RenderTreeBuilder builder) { }
+
+    /// <summary>
+    ///     Renders custom content for the input component.
+    /// </summary>
+    /// <param name="builder">The render tree builder.</param>
+    protected virtual void RenderCustomContent(RenderTreeBuilder builder) { }
+
+    /// <summary>
+    ///     Gets the custom attribute if it exists.
     /// </summary>
     /// <typeparam name="TCustomAttr">The type of the custom attribute.</typeparam>
     /// <returns>The custom attribute if it exists; otherwise, <c>null</c>.</returns>
@@ -334,7 +323,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     }
 
     /// <summary>
-    /// Gets the maximum length of the input.
+    ///     Gets the maximum length of the input.
     /// </summary>
     /// <returns>The maximum length of the input.</returns>
     private int? GetMaxLength() {
@@ -357,7 +346,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     }
 
     /// <summary>
-    /// Gets the maximum value of the input.
+    ///     Gets the maximum value of the input.
     /// </summary>
     /// <returns>The maximum value of the input.</returns>
     private string? GetMaxValue() {
@@ -373,7 +362,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     }
 
     /// <summary>
-    /// Gets the minimum length of the input.
+    ///     Gets the minimum length of the input.
     /// </summary>
     /// <returns>The minimum length of the input.</returns>
     private int? GetMinLength() {
@@ -396,7 +385,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     }
 
     /// <summary>
-    /// Gets the minimum value of the input.
+    ///     Gets the minimum value of the input.
     /// </summary>
     /// <returns>The minimum value of the input.</returns>
     private string? GetMinValue() {
@@ -412,12 +401,22 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     }
 
     /// <summary>
-    /// Handles the change event asynchronously.
+    ///     Handles the change event asynchronously.
     /// </summary>
     /// <param name="value">The new value.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
     private async Task OnChangeAsync(string? value) {
         CurrentValueAsString = value;
         await BindAfter.InvokeAsync(CurrentValue);
+    }
+
+    /// <summary>
+    ///     Sets the current value as a string array.
+    /// </summary>
+    /// <param name="value">The value to set.</param>
+    private void SetCurrentValueAsStringArray(string?[]? value) {
+        CurrentValue = BindConverter.TryConvertTo<TInputType>(value, CultureInfo.CurrentCulture, out var result)
+            ? result
+            : default;
     }
 }
