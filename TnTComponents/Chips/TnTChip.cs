@@ -23,7 +23,7 @@ public partial class TnTChip : TnTComponentBase, ITnTInteractable {
 
 
     [Parameter]
-    public TnTIcon? StartIcon { get; set; }
+    public RenderFragment<TnTIcon>? StartIcon { get; set; }
 
     [Parameter, EditorRequired]
     public string Label { get; set; } = default!;
@@ -74,8 +74,7 @@ public partial class TnTChip : TnTComponentBase, ITnTInteractable {
         builder.AddAttribute(40, "id", ElementId);
 
         if (StartIcon is not null) {
-            StartIcon.AdditionalClass = "tnt-start-icon";
-            builder.AddContent(50, StartIcon.Render());
+            builder.AddContent(50, StartIcon);
         }
 
         builder.AddContent(60, Label);
@@ -97,7 +96,7 @@ public partial class TnTChip : TnTComponentBase, ITnTInteractable {
 
         if (CloseButtonClicked.HasDelegate) {
             builder.OpenComponent<TnTImageButton>(170);
-            builder.AddComponentParameter(180, nameof(TnTImageButton.Icon), new MaterialIcon { Icon = MaterialIcon.Close });
+            builder.AddComponentParameter(180, nameof(TnTImageButton.Icon), MaterialIcon.Close );
             builder.AddComponentParameter(190, nameof(TnTImageButton.OnClickCallback), CloseButtonClicked);
             builder.AddComponentParameter(200, nameof(TnTImageButton.BackgroundColor), TnTColor.Transparent);
             builder.AddComponentParameter(210, nameof(TnTImageButton.TextColor), TextColor);

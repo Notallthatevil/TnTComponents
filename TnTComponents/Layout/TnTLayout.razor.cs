@@ -16,4 +16,6 @@ public partial class TnTLayout {
     public override string? ElementStyle => CssStyleBuilder.Create()
        .AddFromAdditionalAttributes(AdditionalAttributes)
        .Build();
+
+    public override string? JsModulePath => "./_content/TnTComponents/Layout/TnTLayout.razor.js";
 }

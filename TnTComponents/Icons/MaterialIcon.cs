@@ -16,14 +16,14 @@ public sealed partial class MaterialIcon : TnTIcon {
         .AddClass("mi-medium", Size == IconSize.Medium)
         .AddClass("mi-large", Size == IconSize.Large)
         .AddClass("mi-extra-large", Size == IconSize.ExtraLarge)
-        .AddClass(AdditionalClass, AdditionalClass is not null)
         .Build();
 
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
-    protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        base.BuildRenderTree(builder);
-    }
+    public MaterialIcon() { }
+    internal MaterialIcon(string icon) : base(icon) { }
+
+    public static implicit operator string(MaterialIcon icon) => icon.Icon;
 }

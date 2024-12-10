@@ -26,43 +26,43 @@
                       BindAfter="SearchAsync"
                       Disabled="@Disabled"
                       BackgroundColor="BackgroundColor"
-                      StartIcon="@(new MaterialIcon{ Icon = MaterialIcon.Search })"
                       @onkeydown="SelectOrShiftFocusAsync"
-                      @ref="_inputBox"/>
+                      @ref="_inputBox">
+                  <StartIcon>
+                      <MaterialIcon Icon="@MaterialIcon.Search" />
+                  </StartIcon>
+        </TnTInputText>
         <TnTProgressIndicator Show="@_searching" ProgressColor="ProgressColor" Size="Size.Small" />
     </span>
     @if (_items.Any() || (!_items.Any() && !string.IsNullOrWhiteSpace(_searchText) && !_searching))
     {
-
-            <div class="tnt-typeahead-content">
-            @if (_items.Any())
+    <div class="tnt-typeahead-content">
+        @if (_items.Any())
+        {
+        <ul class="tnt-typeahead-list">
+            @foreach (var item in _items)
             {
-                        <ul class="tnt-typeahead-list">
-                    @foreach (var item in _items)
-                    {
-                                    <li class="@($"tnt-typeahead-list-item{(item!.Equals(_focusedItem) ? " tnt-focused" : string.Empty)}")" tabindex="-1" @onclick="(() => ItemSelectedAsync(item))">
-                            @if (ResultTemplate is not null)
-                            {
-                                @ResultTemplate(item)
-                            }
-
-                            else
-                            {
-                                                <span class="tnt-corner-radius-5 tnt-body-medium">
-                                    @item
-                                                </span>
-                            }
-                                    </li>
-                    }
-                        </ul>
+            <li class="@($"tnt-typeahead-list-item{(item!.Equals(_focusedItem) ? " tnt-focused" : string.Empty)}")" tabindex="-1" @onclick="(() => ItemSelectedAsync(item))">
+                @if (ResultTemplate is not null)
+                {
+                    @ResultTemplate(item)
+                }
+                else
+                {
+                    <span class="tnt-corner-radius-5 tnt-body-medium">
+                        @item
+                    </span>
+                }
+            </li>
             }
-
-            else if (!_items.Any() && !string.IsNullOrWhiteSpace(_searchText) && !_searching)
-            {
-                        <div class="tnt-typeahead-no-results">
-                            No results found
-                        </div>
-            }
+        </ul>
+        }
+        else if (!_items.Any() && !string.IsNullOrWhiteSpace(_searchText) && !_searching)
+        {
+            <div class="tnt-typeahead-no-results">
+                No results found
             </div>
+        }
+    </div>
     }
 </div>

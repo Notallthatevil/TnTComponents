@@ -44,8 +44,7 @@ public class TnTInputRadioGroup<TInputType> : TnTInputBase<TInputType> {
         builder.AddElementReferenceCapture(90, e => Element = e);
 
         if (StartIcon is not null) {
-            StartIcon.AdditionalClass = "tnt-start-icon";
-            builder.AddContent(100, StartIcon.Render());
+            builder.AddContent(100, StartIcon);
         }
 
         if(!string.IsNullOrWhiteSpace(Label)){
@@ -70,8 +69,7 @@ public class TnTInputRadioGroup<TInputType> : TnTInputBase<TInputType> {
         }
 
         if (EndIcon is not null) {
-            EndIcon.AdditionalClass = "tnt-end-icon";
-            builder.AddContent(200, EndIcon.Render());
+            builder.AddContent(200, EndIcon);
         }
 
         builder.CloseElement();

@@ -65,7 +65,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public bool EnableRipple => false;
 
     [Parameter]
-    public TnTIcon? EndIcon { get; set; }
+    public RenderFragment<TnTIcon>? EndIcon { get; set; }
 
     [Parameter]
     public string? Label { get; set; }
@@ -79,7 +79,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public bool ReadOnly { get; set; }
 
     [Parameter]
-    public TnTIcon? StartIcon { get; set; }
+    public RenderFragment<TnTIcon>? StartIcon { get; set; }
 
     [Parameter]
     public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
@@ -114,8 +114,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
         {
             {
                 if (StartIcon is not null) {
-                    StartIcon.AdditionalClass = "tnt-start-icon";
-                    builder.AddContent(50, StartIcon.Render());
+                    builder.AddContent(50, StartIcon);
                 }
             }
             {
@@ -219,8 +218,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
             }
             {
                 if (EndIcon is not null) {
-                    EndIcon.AdditionalClass = "tnt-end-icon";
-                    builder.AddContent(300, EndIcon.Render());
+                    builder.AddContent(300, EndIcon);
                 }
             }
 

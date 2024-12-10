@@ -14,9 +14,6 @@ public class TnTProgressIndicator : TnTComponentBase {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    [Parameter]
-    public bool Show { get; set; } = true;
-
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-progress-linear", Appearance == ProgressAppearance.Linear)
@@ -34,6 +31,9 @@ public class TnTProgressIndicator : TnTComponentBase {
 
     [Parameter]
     public TnTColor ProgressColor { get; set; } = TnTColor.Primary;
+
+    [Parameter]
+    public bool Show { get; set; } = true;
 
     [Parameter]
     public Size Size { get; set; } = Size.Default;
