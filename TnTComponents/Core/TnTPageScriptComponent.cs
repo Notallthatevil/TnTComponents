@@ -75,7 +75,7 @@ public abstract class TnTPageScriptComponent<TComponent> : TnTComponentBase, ITn
     protected virtual async ValueTask DisposeAsyncCore() {
         if (IsolatedJsModule is not null) {
             try {
-                await IsolatedJsModule.InvokeVoidAsync("onUnload", Element, DotNetObjectRef);
+                await IsolatedJsModule.InvokeVoidAsync("onDispose", Element, DotNetObjectRef);
                 await IsolatedJsModule.DisposeAsync().ConfigureAwait(false);
             }
             catch (JSDisconnectedException) { }
