@@ -90,8 +90,14 @@ body:has(.tnt-footer) {
 }
 
 
-//@for $i from 1 through 5 {
-//    .tnt-components.tnt-fab:nth-child(#{$i}) {
-//        right: #{(128 * ($i - 1) + 16)}px;
-//    }
-//}
+@for $i from 1 through 10 {
+    .tnt-components.tnt-fab:nth-child(#{$i}) {
+        transform: translateY(calc(-64px * ($i - 1)));
+    }
+
+    .tnt-tab-child {
+        *:nth-child(#{$i} of .tnt-fab) {
+            transform: translateY(calc(-64px * ($i - 1))) !important;
+        }
+    }
+}
