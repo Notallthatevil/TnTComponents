@@ -89,6 +89,12 @@ body:has(.tnt-footer) {
     }
 }
 
+body:has(.tnt-toast-container) {
+    .tnt-components.tnt-fab {
+        right: 360px;
+    }
+}
+
 
 @for $i from 1 through 10 {
     .tnt-components.tnt-fab:nth-child(#{$i}) {
