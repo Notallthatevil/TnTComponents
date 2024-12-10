@@ -48,11 +48,7 @@
                 </tr>
             </thead>
             <tbody>
-                @if (_ariaBodyRowCount <= 0)
-                {
-                    @_renderLoadingContent
-                }
-                else if (Virtualize)
+                @if (Virtualize)
                 {
                     <TnTVirtualize @ref="_virtualizeComponent"
                                    TItem="(int RowIndex, TGridItem Data)"
@@ -89,7 +85,6 @@
                         <ItemTemplate>
                             @if (context.Data != null)
                             {
-
                                 var rowClass = RowClass?.Invoke(context.Data) ?? null;
                                 var rowStyle = CssStyleBuilder.Create().AddStyle(RowStyle?.Invoke(context.Data) ?? null, null).AddStyle("height", $"{ItemSize}px").Build();
 
@@ -117,6 +112,9 @@
                         </EmptyTemplate>
 
                     </TnTVirtualize>
+                }
+                else if(_ariaBodyRowCount <= 0) {
+                    @_renderLoadingContent
                 }
                 else
                 {
@@ -195,7 +193,7 @@
             return;
         }
         <tr class="empty-content-row">
-            <td class="empty-content-cell" colspan="1000">
+            <td class="empty-content-cell" colspan="@_columns.Count">
                 @if (EmptyContent is null)
                 {
                     @("No data to show!")

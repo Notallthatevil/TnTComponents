@@ -397,7 +397,7 @@ public partial class TnTDataGrid<TGridItem> {
         // Move into a "loading" state, cancelling any earlier-but-still-pending load
         _pendingDataLoadCancellationTokenSource?.Cancel();
         _pendingDataLoadCancellationTokenSource?.Dispose();
-        var thisLoadCts = _pendingDataLoadCancellationTokenSource = new CancellationTokenSource();
+        _pendingDataLoadCancellationTokenSource = new CancellationTokenSource();
 
         if (_virtualizeComponent is not null) {
             // If we're using Virtualize, we have to go through its RefreshDataAsync API otherwise:
@@ -412,10 +412,10 @@ public partial class TnTDataGrid<TGridItem> {
             _lastRefreshedPaginationStateHash = Pagination?.GetHashCode();
 
             var startIndex = Pagination is null ? 0 : (Pagination.CurrentPageIndex * Pagination.ItemsPerPage);
-            var request = new TnTGridItemsProviderRequest<TGridItem>(startIndex, Pagination?.ItemsPerPage, _sortByColumn, _sortByAscending, thisLoadCts.Token);
+            var request = new TnTGridItemsProviderRequest<TGridItem>(startIndex, Pagination?.ItemsPerPage, _sortByColumn, _sortByAscending, _pendingDataLoadCancellationTokenSource.Token);
 
             var result = await ResolveItemsRequestAsync(request);
-            if (!thisLoadCts.IsCancellationRequested) {
+            if (!_pendingDataLoadCancellationTokenSource.IsCancellationRequested) {
                 _currentNonVirtualizedViewItems = result.Items;
                 _ariaBodyRowCount = _currentNonVirtualizedViewItems.Count;
                 Pagination?.SetTotalItemCountAsync(result.TotalItemCount);

@@ -21,19 +21,7 @@
         }
     }
 }
-
-@if (_loadItemsCts is not null)
-{
-    if (LoadingTemplate is not null)
-    {
-        @LoadingTemplate
-    }
-    else
-    {
-        <TnTProgressIndicator Appearance="ProgressAppearance.Linear" />
-    }
-}
-else if(!_items.Any())
+else if(!_loading)
 {
     if(EmptyTemplate is not null)
     {
@@ -42,6 +30,18 @@ else if(!_items.Any())
     else
     {
         <text>No items to show</text>
+    }
+}
+
+@if (_loading)
+{
+    if (LoadingTemplate is not null)
+    {
+        @LoadingTemplate
+    }
+    else
+    {
+        <TnTProgressIndicator Appearance="ProgressAppearance.Linear" />
     }
 }
 

@@ -65,7 +65,7 @@ public partial class TnTVirtualize<TItem> {
     private TnTVirtualizeItemsProvider<TItem>? _lastUsedProvider;
     private CancellationTokenSource? _loadItemsCts;
     private KeyValuePair<string, SortDirection>? _sortOnProperty;
-
+    private bool _loading;
     /// <summary>
     /// Initializes a new instance of the <see cref="TnTVirtualize{TItem}"/> class.
     /// </summary>
@@ -80,9 +80,9 @@ public partial class TnTVirtualize<TItem> {
         if (_loadItemsCts is not null || ItemsProvider is null) {
             return;
         }
-        var cts = new CancellationTokenSource();
-        var token = cts.Token;
-        _loadItemsCts = cts;
+        _loading = true;
+        _loadItemsCts = new CancellationTokenSource();
+        var token = _loadItemsCts.Token;
         StateHasChanged(); // Allow the UI to display the loading indicator
         try {
             var result = await ItemsProvider(new TnTVirtualizeItemsProviderRequest<TItem> {
@@ -104,9 +104,8 @@ public partial class TnTVirtualize<TItem> {
         catch (OperationCanceledException oce) when (oce.CancellationToken == _loadItemsCts.Token) {
             // No-op; we canceled the operation, so it's fine to suppress this exception.
         }
-
+        _loading = false;
         DisposeCancellationToken();
-
         StateHasChanged(); // Display the new items and hide the loading indicator
     }
 
@@ -169,6 +168,7 @@ public partial class TnTVirtualize<TItem> {
     private void Reset() {
         _items = [];
         _allItemsRetrieved = false;
+        _loading = false;
         DisposeCancellationToken();
     }
 }
