@@ -1,6 +1,4 @@
-
 const accordionByIdentifier = new Map();
-
 
 function toggleAccordionHeader(e) {
     const target = e.target;
@@ -33,7 +31,6 @@ function updateChild(content) {
         content.resizeObserver = undefined;
     }
     if (content.classList.contains('tnt-expanded')) {
-
         content.style.setProperty('--content-height', content.scrollHeight + 'px');
 
         content.resizeObserver = new ResizeObserver((entries) => {
@@ -75,7 +72,6 @@ export class TnTAccordion extends HTMLElement {
             this.update();
         }
     }
-
 
     update() {
         this.accordionChildren = this.querySelectorAll(':scope > .tnt-accordion-child');
