@@ -26,9 +26,6 @@ public static class JSRuntimeExt {
         return jsRuntime.InvokeAsync<string>("TnTComponents.getCurrentLocation");
     }
 
-    internal static async Task<BoundingClientRect?> GetBoundingClientRect(this IJSRuntime jsRuntime, ElementReference element) {
-        return await jsRuntime.InvokeAsync<BoundingClientRect?>("TnTComponents.getBoundingClientRect", element);
-    }
 
     internal static async ValueTask HideElement(this IJSRuntime jsRuntime, ElementReference element) {
         await jsRuntime.InvokeVoidAsync("TnTComponents.hideElement", element);
@@ -49,10 +46,6 @@ public static class JSRuntimeExt {
             path = $"./_content/{string.Join('/', @namespace)}/{name}.razor.js";
         }
         return await jsRuntime.Import(path);
-    }
-
-    internal static async ValueTask SetBoundingClientRectAsync(this IJSRuntime jsRuntime, ElementReference element, BoundingClientRect boundingClientRect) {
-        await jsRuntime.InvokeVoidAsync("TnTComponents.setBoundingClientRect", element, boundingClientRect);
     }
 
     internal static async ValueTask SetOpacity(this IJSRuntime jsRuntime, ElementReference element, float opacity) {
