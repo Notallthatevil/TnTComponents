@@ -6,10 +6,37 @@ using TnTComponents.Interfaces;
 
 namespace TnTComponents;
 
+/// <summary>
+///     Represents a chip component with various customizable properties and events.
+/// </summary>
 public partial class TnTChip : TnTComponentBase, ITnTInteractable {
 
+    [Parameter]
+    public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerLow;
+
+    /// <summary>
+    ///     Gets or sets the event callback to be invoked after the value is bound.
+    /// </summary>
+    [Parameter]
+    public EventCallback<bool> BindAfter { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the event callback to be invoked when the close button is clicked.
+    /// </summary>
+    [Parameter]
+    public EventCallback<MouseEventArgs> CloseButtonClicked { get; set; }
+
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    /// <summary>
+    ///     Gets or sets a value indicating whether the toggle functionality is disabled.
+    /// </summary>
+    [Parameter]
+    public bool DisableToggle { get; set; }
+
     public override string? ElementClass => CssClassBuilder.Create()
-        .AddFromAdditionalAttributes(AdditionalAttributes)
+                            .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddTnTInteractable(this)
         .AddBackgroundColor(BackgroundColor)
         .AddForegroundColor(TextColor)
@@ -17,54 +44,61 @@ public partial class TnTChip : TnTComponentBase, ITnTInteractable {
         .AddClass("tnt-chip")
         .Build();
 
+    [Parameter]
+    public string? ElementName { get; set; }
+
     public override string? ElementStyle => CssStyleBuilder.Create()
-        .AddFromAdditionalAttributes(AdditionalAttributes)
+            .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
-
     [Parameter]
-    public RenderFragment<TnTIcon>? StartIcon { get; set; }
+    public bool EnableRipple { get; set; }
 
+    /// <summary>
+    ///     Gets or sets the label of the chip.
+    /// </summary>
     [Parameter, EditorRequired]
     public string Label { get; set; } = default!;
 
     [Parameter]
-    public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerLow;
-
-    [Parameter]
-    public TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
-    [Parameter]
     public TnTColor? OnTintColor { get; set; } = TnTColor.OnPrimary;
 
+    /// <summary>
+    ///     Gets or sets a value indicating whether the chip is read-only.
+    /// </summary>
+    [Parameter]
+    public bool ReadOnly { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the start icon of the chip.
+    /// </summary>
+    [Parameter]
+    public RenderFragment<TnTIcon>? StartIcon { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the text color of the chip.
+    /// </summary>
     [Parameter]
     public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
 
     [Parameter]
-    public bool DisableToggle { get; set; }
+    public TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
 
-    [CascadingParameter]
-    private ITnTForm? _form { get; set; }
-
-    [Parameter]
-    public bool ReadOnly { get; set; }
-
+    /// <summary>
+    ///     Gets or sets the value of the chip.
+    /// </summary>
     public bool Value { get; set; }
 
+    /// <summary>
+    ///     Gets or sets the event callback to be invoked when the value changes.
+    /// </summary>
     public EventCallback<bool> ValueChanged { get; set; }
-    [Parameter]
-    public EventCallback<bool> BindAfter { get; set; }
 
-    [Parameter]
-    public EventCallback<MouseEventArgs> CloseButtonClicked { get; set; }
-
-    [Parameter]
-    public bool Disabled { get; set; }
-
-    [Parameter]
-    public string? ElementName { get; set; }
-
-    [Parameter]
-    public bool EnableRipple { get; set; }
+    /// <summary>
+    ///     Gets or sets the cascading parameter for the form.
+    /// </summary>
+    [CascadingParameter]
+    private ITnTForm? _form { get; set; }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "label");
@@ -96,7 +130,7 @@ public partial class TnTChip : TnTComponentBase, ITnTInteractable {
 
         if (CloseButtonClicked.HasDelegate) {
             builder.OpenComponent<TnTImageButton>(170);
-            builder.AddComponentParameter(180, nameof(TnTImageButton.Icon), MaterialIcon.Close );
+            builder.AddComponentParameter(180, nameof(TnTImageButton.Icon), MaterialIcon.Close);
             builder.AddComponentParameter(190, nameof(TnTImageButton.OnClickCallback), CloseButtonClicked);
             builder.AddComponentParameter(200, nameof(TnTImageButton.BackgroundColor), TnTColor.Transparent);
             builder.AddComponentParameter(210, nameof(TnTImageButton.TextColor), TextColor);
