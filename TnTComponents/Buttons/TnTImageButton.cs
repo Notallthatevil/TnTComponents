@@ -5,8 +5,7 @@ using TnTComponents.Core;
 namespace TnTComponents;
 
 public class TnTImageButton : TnTButton {
-    [Parameter, EditorRequired]
-    public TnTIcon Icon { get; set; } = default!;
+
     [Parameter]
     public override ButtonAppearance Appearance { get; set; } = ButtonAppearance.Text;
 
@@ -14,6 +13,8 @@ public class TnTImageButton : TnTButton {
         .AddClass("tnt-image-button")
         .Build();
 
+    [Parameter, EditorRequired]
+    public TnTIcon Icon { get; set; } = default!;
 
     protected override void OnParametersSet() {
         base.OnParametersSet();
