@@ -8,24 +8,24 @@ using TnTComponents.Interfaces;
 namespace TnTComponents;
 
 /// <summary>
-/// Represents a navigation link component with customizable styles and behaviors.
+///     Represents a navigation link component with customizable styles and behaviors.
 /// </summary>
 public class TnTNavLink : NavLink, ITnTComponentBase, ITnTInteractable, ITnTStyleable {
 
     /// <summary>
-    /// Gets or sets the background color when the link is active.
+    ///     Gets or sets the background color when the link is active.
     /// </summary>
     [Parameter]
     public virtual TnTColor? ActiveBackgroundColor { get; set; }
 
     /// <summary>
-    /// Gets or sets the text color when the link is active.
+    ///     Gets or sets the text color when the link is active.
     /// </summary>
     [Parameter]
     public virtual TnTColor? ActiveTextColor { get; set; }
 
     /// <summary>
-    /// Gets or sets the appearance of the anchor.
+    ///     Gets or sets the appearance of the anchor.
     /// </summary>
     [Parameter]
     public AnchorAppearance Appearance { get; set; }
@@ -41,6 +41,7 @@ public class TnTNavLink : NavLink, ITnTComponentBase, ITnTInteractable, ITnTStyl
 
     [Parameter]
     public bool Disabled { get; set; }
+
     public ElementReference Element { get; protected set; }
 
     public virtual string? ElementClass => CssClassBuilder.Create()
@@ -79,6 +80,9 @@ public class TnTNavLink : NavLink, ITnTComponentBase, ITnTInteractable, ITnTStyl
 
     public bool EnableRipple => true;
 
+    /// <summary>
+    ///     Gets or sets the on-tint color of the link.
+    /// </summary>
     [Parameter]
     public TnTColor? OnTintColor { get; set; }
 
@@ -88,8 +92,12 @@ public class TnTNavLink : NavLink, ITnTComponentBase, ITnTInteractable, ITnTStyl
     [Parameter]
     public virtual TnTColor TextColor { get; set; } = TnTColor.OnBackground;
 
+    /// <summary>
+    ///     Gets or sets the tint color of the link.
+    /// </summary>
     [Parameter]
     public TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
+
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "a");
         builder.AddMultipleAttributes(10, AdditionalAttributes);
