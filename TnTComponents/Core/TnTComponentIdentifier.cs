@@ -11,12 +11,12 @@ public static class TnTComponentIdentifier {
     private static readonly Random _rnd = new();
 
     /// <summary>
-    /// Returns a new small Id. HTML id must start with a letter.
-    /// Example: f127d9edf14385adb
+    ///     Returns a new small Id. HTML id must start with a letter.
+    ///     Example: f127d9edf14385adb
     /// </summary>
     /// <remarks>
-    /// You can use a <see cref="IdentifierContext" /> instance to customize the Generation process,
-    /// for example in Unit Tests.
+    ///     You can use a <see cref="IdentifierContext" /> instance to customize the Generation
+    ///     process, for example in Unit Tests.
     /// </remarks>
     /// <returns>A new id</returns>
     public static string NewId(int length = 8) {
@@ -33,7 +33,6 @@ public static class TnTComponentIdentifier {
 
         return TnTComponentIdentifierContext.Current.GenerateId();
     }
-
 }
 
 public class TnTComponentIdentifierContext : IDisposable {
