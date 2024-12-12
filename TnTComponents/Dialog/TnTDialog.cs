@@ -7,16 +7,28 @@ using TnTComponents.Dialog;
 
 namespace TnTComponents;
 
+/// <summary>
+///     Represents a dialog component that can be used to display modal dialogs.
+/// </summary>
 public class TnTDialog : ComponentBase, IDisposable {
 
-    [Inject]
-    private ITnTDialogService _service { get; set; } = default!;
-
-    private readonly List<ITnTDialog> _dialogs = [];
-
+    /// <summary>
+    ///     Gets or sets the JavaScript runtime used to invoke JavaScript functions.
+    /// </summary>
     [Inject]
     private IJSRuntime _jsRuntime { get; set; } = default!;
 
+    /// <summary>
+    ///     Gets or sets the dialog service used to manage dialogs.
+    /// </summary>
+    [Inject]
+    private ITnTDialogService _service { get; set; } = default!;
+
+    private readonly List<ITnTDialog> _dialogs = new();
+
+    /// <summary>
+    ///     Disposes the dialog component and unsubscribes from events.
+    /// </summary>
     public void Dispose() {
         _service.OnClose -= OnClose;
         _service.OnOpen -= OnOpen;
@@ -49,12 +61,6 @@ public class TnTDialog : ComponentBase, IDisposable {
         }
     }
 
-    protected override void OnInitialized() {
-        base.OnInitialized();
-        _service.OnOpen += OnOpen;
-        _service.OnClose += OnClose;
-    }
-
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         await base.OnAfterRenderAsync(firstRender);
         foreach (var dialog in _dialogs) {
@@ -62,6 +68,17 @@ public class TnTDialog : ComponentBase, IDisposable {
         }
     }
 
+    protected override void OnInitialized() {
+        base.OnInitialized();
+        _service.OnOpen += OnOpen;
+        _service.OnClose += OnClose;
+    }
+
+    /// <summary>
+    ///     Handles the close event for a dialog.
+    /// </summary>
+    /// <param name="dialog">The dialog to close.</param>
+    /// <returns>A task that represents the asynchronous close operation.</returns>
     private async Task OnClose(ITnTDialog dialog) {
         dialog.Options.Closing = true;
         StateHasChanged();
@@ -70,12 +87,22 @@ public class TnTDialog : ComponentBase, IDisposable {
         StateHasChanged();
     }
 
+    /// <summary>
+    ///     Handles the open event for a dialog.
+    /// </summary>
+    /// <param name="dialog">The dialog to open.</param>
+    /// <returns>A task that represents the asynchronous open operation.</returns>
     private Task OnOpen(ITnTDialog dialog) {
         _dialogs.Add(dialog);
         StateHasChanged();
         return Task.CompletedTask;
     }
 
+    /// <summary>
+    ///     Renders the content of a dialog.
+    /// </summary>
+    /// <param name="dialog">The dialog to render content for.</param>
+    /// <returns>A render fragment that represents the content of the dialog.</returns>
     private RenderFragment RenderDialogContent(ITnTDialog dialog) {
         return new RenderFragment(builder => {
             if (dialog.Options.Title is not null || dialog.Options.ShowCloseButton) {
@@ -90,7 +117,7 @@ public class TnTDialog : ComponentBase, IDisposable {
 
                     if (dialog.Options.ShowCloseButton) {
                         builder.OpenComponent<TnTImageButton>(40);
-                        builder.AddComponentParameter(50, nameof(TnTImageButton.Icon), MaterialIcon.Close );
+                        builder.AddComponentParameter(50, nameof(TnTImageButton.Icon), MaterialIcon.Close);
                         builder.AddComponentParameter(60, nameof(TnTImageButton.OnClickCallback), EventCallback.Factory.Create<MouseEventArgs>(this, dialog.CloseAsync));
                         builder.CloseComponent();
                     }
