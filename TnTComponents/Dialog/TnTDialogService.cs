@@ -1,21 +1,27 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using TnTComponents.Core;
-using TnTComponents.Dialog.Infrastructure;
 
 namespace TnTComponents.Dialog;
 
+/// <summary>
+///     Service for managing dialogs in the application.
+/// </summary>
 internal class TnTDialogService : ITnTDialogService {
 
     public event ITnTDialogService.OnCloseCallback? OnClose;
 
     public event ITnTDialogService.OnOpenCallback? OnOpen;
 
+    /// <summary>
+    ///     Gets the reference to the current instance of the dialog service.
+    /// </summary>
     internal DotNetObjectReference<TnTDialogService> Reference { get; private set; }
 
-    public TnTDialogService() {
-        Reference = DotNetObjectReference.Create(this);
-    }
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="TnTDialogService" /> class.
+    /// </summary>
+    public TnTDialogService() => Reference = DotNetObjectReference.Create(this);
 
     public async Task CloseAsync(ITnTDialog dialog) => await (OnClose?.Invoke(dialog) ?? Task.CompletedTask);
 
@@ -32,8 +38,8 @@ internal class TnTDialogService : ITnTDialogService {
 
     public async Task<ITnTDialog> OpenAsync(RenderFragment renderFragment, TnTDialogOptions? options = null) {
         ArgumentNullException.ThrowIfNull(renderFragment, nameof(renderFragment));
-        return await OpenAsync<DialogHelperComponent>(options, new Dictionary<string, object?> {
-            { nameof(DialogHelperComponent.ChildContent), renderFragment }
+        return await OpenAsync<DeferRendering>(options, new Dictionary<string, object?> {
+            { nameof(DeferRendering.ChildContent), renderFragment }
         });
     }
 
@@ -57,20 +63,25 @@ internal class TnTDialogService : ITnTDialogService {
 
     public async Task<DialogResult> OpenForResultAsync(RenderFragment renderFragment, TnTDialogOptions? options = null) {
         ArgumentNullException.ThrowIfNull(renderFragment, nameof(renderFragment));
-        return await OpenForResultAsync<DialogHelperComponent>(options, new Dictionary<string, object?> {
-            { nameof(DialogHelperComponent.ChildContent), renderFragment }
+        return await OpenForResultAsync<DeferRendering>(options, new Dictionary<string, object?> {
+            { nameof(DeferRendering.ChildContent), renderFragment }
         });
     }
 
+    /// <summary>
+    ///     Implementation of the <see cref="ITnTDialog" /> interface.
+    /// </summary>
     private class DialogImpl(TnTDialogService dialogService) : ITnTDialog {
         public DialogResult DialogResult { get; set; }
-        public TnTDialogOptions Options { get; init; } = default!;
-        public IReadOnlyDictionary<string, object?>? Parameters { get; init; }
-        public Type Type { get; init; } = default!;
+
         public string ElementId { get; init; } = TnTComponentIdentifier.NewId();
 
-        public Task CloseAsync() {
-            return dialogService.CloseAsync(this);
-        }
+        public TnTDialogOptions Options { get; init; } = default!;
+
+        public IReadOnlyDictionary<string, object?>? Parameters { get; init; }
+
+        public Type Type { get; init; } = default!;
+
+        public Task CloseAsync() => dialogService.CloseAsync(this);
     }
 }
