@@ -4,21 +4,40 @@ using TnTComponents.Core;
 
 namespace TnTComponents;
 
+/// <summary>
+///     Represents a divider component with customizable color, margin, and orientation.
+/// </summary>
 public class TnTDivider : TnTComponentBase {
 
+    /// <summary>
+    ///     Gets or sets the color of the divider.
+    /// </summary>
     [Parameter]
     public TnTColor? Color { get; set; } = TnTColor.OutlineVariant;
 
     public override string? ElementClass => CssClassBuilder.Create()
-        .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddClass($"tnt-divider-{Orientation.ToString().ToLower()}")
-        .Build();
+            .AddFromAdditionalAttributes(AdditionalAttributes)
+            .AddClass($"tnt-divider-{Orientation.ToString().ToLower()}")
+            .Build();
 
     public override string? ElementStyle => CssStyleBuilder.Create()
-        .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddVariable("divider-color", $"var(--tnt-color-{Color.ToCssClassName()})", Color.HasValue)
-        .Build();
+            .AddStyle("margin-top", $"{Margin}px", Margin is not null && Orientation == Orientation.Horizontal)
+            .AddStyle("margin-bottom", $"{Margin}px", Margin is not null && Orientation == Orientation.Horizontal)
+            .AddStyle("margin-left", $"{Margin}px", Margin is not null && Orientation == Orientation.Vertical)
+            .AddStyle("margin-right", $"{Margin}px", Margin is not null && Orientation == Orientation.Vertical)
+            .AddFromAdditionalAttributes(AdditionalAttributes)
+            .AddVariable("divider-color", $"var(--tnt-color-{Color.ToCssClassName()})", Color.HasValue)
+            .Build();
 
+    /// <summary>
+    ///     Gets or sets the margin of the divider in pixels.
+    /// </summary>
+    [Parameter]
+    public int? Margin { get; set; } = 8;
+
+    /// <summary>
+    ///     Gets or sets the orientation of the divider.
+    /// </summary>
     public Orientation Orientation { get; set; } = Orientation.Horizontal;
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
