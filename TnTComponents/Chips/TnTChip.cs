@@ -73,7 +73,7 @@ public partial class TnTChip : TnTComponentBase, ITnTInteractable {
     ///     Gets or sets the start icon of the chip.
     /// </summary>
     [Parameter]
-    public RenderFragment<TnTIcon>? StartIcon { get; set; }
+    public TnTIcon? StartIcon { get; set; }
 
     /// <summary>
     ///     Gets or sets the text color of the chip.
@@ -108,7 +108,7 @@ public partial class TnTChip : TnTComponentBase, ITnTInteractable {
         builder.AddAttribute(40, "id", ElementId);
 
         if (StartIcon is not null) {
-            builder.AddContent(50, StartIcon);
+            builder.AddContent(50, StartIcon.Render());
         }
 
         builder.AddContent(60, Label);
