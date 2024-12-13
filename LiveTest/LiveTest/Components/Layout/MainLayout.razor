@@ -9,7 +9,6 @@
         <TnTThemeToggle />
         This is my header
     </TnTHeader>
-
     <TnTBody>
         @Body
     </TnTBody>
@@ -17,155 +16,41 @@
     <TnTFooter>
         Footer content
     </TnTFooter>
-
     <TnTSideNav HideOnLargeScreens="true">
         <h3>
             My First Headline
         </h3>
         <TnTSideNavLink Label="Home" href="/" Match="NavLinkMatch.All" Disabled="true" />
-        <TnTSideNavLink Label="Accordion" href="/accordion" Icon="@(new MaterialIcon{ Icon = MaterialIcon.MusicNote })" />
-        <TnTSideNavLink Label="Anchors" href="/navlinks" Icon="@(new MaterialIcon{ Icon = MaterialIcon.Link })" />
+        <TnTSideNavLink Label="Accordion" href="/accordion" Icon="@MaterialIcon.MusicNote" />
+        <TnTSideNavLink Label="Anchors" href="/navlinks" Icon="@MaterialIcon.Link" />
 
-        <TnTSideNavMenuGroup Icon="@(new MaterialIcon{ Icon = MaterialIcon.SmartButton })" Label="Buttons">
+        <TnTSideNavMenuGroup Icon="@MaterialIcon.SmartButton" Label="Buttons">
             <TnTSideNavLink Label="Buttons" href="/buttons" />
-            <TnTSideNavLink Label="Image Buttons" href="/imagebuttons" Icon="@(new MaterialIcon{ Icon = MaterialIcon.MusicNote })" />
-            <TnTSideNavLink Label="FABs" href="/fabbuttons" Icon="@(new MaterialIcon{ Icon = MaterialIcon.Link })" />
+            <TnTSideNavLink Label="Image Buttons" href="/imagebuttons" Icon="@MaterialIcon.MusicNote" />
+            <TnTSideNavLink Label="FABs" href="/fabbuttons" Icon="@MaterialIcon.Link" />
+        </TnTSideNavMenuGroup>
+        <TnTSideNavLink Label="Chips" href="/chips" Icon="@MaterialIcon.BedroomChild" />
+        <TnTSideNavLink Label="Dialogs" href="/dialog" Icon="@MaterialIcon.Diamond" />
 
+        <TnTSideNavMenuGroup Icon="@MaterialIcon.EditNote" ExpandByDefault="false" Label="Editors">
+            <TnTSideNavLink Label="Markdown Editor" href="/markdown" Icon="@MaterialIcon.MarkAsUnread" />
         </TnTSideNavMenuGroup>
 
-        <TnTSideNavLink Label="Chips" href="/chips" Icon="@(new MaterialIcon{ Icon = MaterialIcon.BedroomChild })" />
-        <TnTSideNavLink Label="Dialogs" href="/dialog" Icon="@(new MaterialIcon{ Icon = MaterialIcon.Diamond })" />
+        <TnTSideNavLink Label="Forms" href="/forms" Icon="@MaterialIcon.FormatAlignCenter" />
+        <TnTSideNavLink Label="Grid" href="/datagrid" Icon="@MaterialIcon.Grid4X4" />
+        <TnTSideNavLink Label="Progress" href="/progress" Icon="@MaterialIcon.Propane" />
 
-        <TnTSideNavMenuGroup Icon="@(new MaterialIcon{ Icon = MaterialIcon.EditNote })" ExpandByDefault="false" Label="Editors">
-            <TnTSideNavLink Label="Markdown Editor" href="/markdown" Icon="@(new MaterialIcon{ Icon = MaterialIcon.MarkAsUnread })" />
+        <TnTSideNavMenuGroup Icon="@MaterialIcon.Schedule" ExpandByDefault="false" Label="Scheduler">
+            <TnTSideNavLink Label="Weekly Scheduler" href="/scheduler" Icon="@MaterialIcon.ViewWeek" />
         </TnTSideNavMenuGroup>
 
-        <TnTSideNavLink Label="Forms" href="/forms" Icon="@(new MaterialIcon{ Icon = MaterialIcon.FormatAlignCenter })" />
-        <TnTSideNavLink Label="Grid" href="/datagrid" Icon="@(new MaterialIcon{ Icon = MaterialIcon.Grid4X4 })" />
-        <TnTSideNavLink Label="Progress" href="/progress" Icon="@(new MaterialIcon{ Icon = MaterialIcon.Propane })" />
-
-        <TnTSideNavMenuGroup Icon="@(new MaterialIcon{ Icon = MaterialIcon.Schedule })" ExpandByDefault="false" Label="Scheduler">
-            <TnTSideNavLink Label="Weekly Scheduler" href="/scheduler" Icon="@(new MaterialIcon{ Icon = MaterialIcon.ViewWeek })" />
-        </TnTSideNavMenuGroup>
-
-        <TnTSideNavLink Label="Skeleton" href="/skeleton" Icon="@(new MaterialIcon{ Icon = MaterialIcon.ShoppingBasket })" />
+        <TnTSideNavLink Label="Skeleton" href="/skeleton" Icon="@MaterialIcon.ShoppingBasket" />
         <TnTSideNavLink Label="TabView" href="/tabview" />
         <TnTSideNavLink Label="Toast" href="/toast" />
         <TnTSideNavLink Label="Typeahead" href="/typeahead" />
-        <TnTSideNavLink Label="Virtualize" href="/InfiniteScroll" Icon="@(new MaterialIcon{ Icon = MaterialIcon.Info })" />
-
-        @*
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.Home })" Href="/" Match="NavLinkMatch.All" Status="100" Disabled="true">
-        Home
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.MusicNote })" Href="/accordion">
-        Accordion
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuGroup Title="Buttons" Icon="@(new MaterialIcon{ Icon = MaterialIcon.SmartButton })">
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.Error })" Href="/Buttons">
-        Buttons
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Href="/FabButtons">
-        FabButton
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Href="/ImageButtons">
-        Image Buttons
-        </TnTSideNavMenuLink>
-        </TnTSideNavMenuGroup>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.ChildCare })" Href="/chips" Match="NavLinkMatch.All" Status="100">
-        Chips
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.Language })" Href="/dialog">
-        Dialog
-        </TnTSideNavMenuLink>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.PermContactCalendar })" Href="/scheduler" Match="NavLinkMatch.All" Status="100">
-        Scheduler
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.MarkAsUnread })" Href="/Markdown">
-        Markdown
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.Warning })" Href="/card">
-        Card Some really long content that should be cut off or wrapped
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.Snooze })" Href="/snackbar">
-        Snackbar
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Href="/navlinks">
-        Nav Links
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuGroup Title="Group 1" Icon="@(new MaterialIcon{ Icon = MaterialIcon.Business })">
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.Delete })" Href="/datagrid">
-        Data Grid
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.Star })" Href="/progress">
-        Progress
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.MusicNote })" Href="/accordion">
-        Accordion
-        </TnTSideNavMenuLink>
-
-        </TnTSideNavMenuGroup>
-        <TnTSideNavMenuGroup Title="Group 1" Icon="@(new MaterialIcon{ Icon = MaterialIcon.Cached })" Disabled="true">
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.AccountBalance })" Href="/datagrid">
-        Data Grid
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.Backup })" Href="/progress">
-        Progress
-        </TnTSideNavMenuLink>
-        </TnTSideNavMenuGroup>
-        <TnTDivider />
-        <h3>
-        My Second Headline
-        </h3>
-        <TnTSideNavMenuGroup Title="Group 2" Icon="@(new MaterialIcon{ Icon = MaterialIcon.Dock })" Expand="true">
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.Publish })" Href="/forms">
-        Forms
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.PanoramaHorizontal })" Href="/upload">
-        Upload
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.Poll })" Href="/tabview">
-        Tabs
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuGroup Title="Group 2" Icon="@(new MaterialIcon{ Icon = MaterialIcon.Face })" Expand="true">
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.Http })" Href="/forms">
-        Forms
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.Edit })" Href="/upload">
-        Upload
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.ArrowDropDownCircle })" Href="/tabview">
-        Tabs
-        </TnTSideNavMenuLink>
-        </TnTSideNavMenuGroup>
-        </TnTSideNavMenuGroup>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.ShoppingBasket })" Href="/skeleton">
-        Skeleton
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.MergeType })" Href="/typeahead">
-        Typeahead
-        </TnTSideNavMenuLink>
-        <TnTSideNavMenuLink Icon="@(new MaterialIcon{ Icon = MaterialIcon.ScreenLockLandscape })" Href="/InfiniteScroll">
-        Infinite Scroll
-        </TnTSideNavMenuLink>
-        *@
+        <TnTSideNavLink Label="Virtualize" href="/InfiniteScroll" Icon="@MaterialIcon.Info" />
     </TnTSideNav>
+
 </TnTLayout>
 
 <TnTDialog @rendermode="InteractiveAuto" />

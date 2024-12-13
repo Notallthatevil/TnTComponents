@@ -84,7 +84,7 @@ public class TnTSideNavMenuGroup : TnTComponentBase, ITnTInteractable, ITnTStyle
         builder.CloseElement();
 
         builder.OpenComponent<MaterialIcon>(150);
-        builder.AddComponentParameter(160, nameof(MaterialIcon.Icon), MaterialIcon.ArrowDropDown);
+        builder.AddComponentParameter(160, nameof(MaterialIcon.Icon), MaterialIcon.ArrowDropDown.Icon);
         builder.AddAttribute(161, "class", "tnt-end-icon");
         builder.CloseComponent();
 

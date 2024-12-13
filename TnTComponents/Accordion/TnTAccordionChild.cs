@@ -137,7 +137,7 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
 
                 {
                     builder.OpenComponent<MaterialIcon>(130);
-                    builder.AddComponentParameter(144, nameof(MaterialIcon.Icon), MaterialIcon.ArrowDropDown);
+                    builder.AddComponentParameter(144, nameof(MaterialIcon.Icon), MaterialIcon.ArrowDropDown.Icon);
                     builder.CloseComponent();
                 }
                 builder.CloseElement();
