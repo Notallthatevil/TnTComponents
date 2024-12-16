@@ -11,8 +11,7 @@
                    autofocus="@AutoFocus"
                    @ref="Element">
         <DeferRendering>
-            @foreach (var child in _children)
-            {
+            @foreach (var child in _children.OrderBy(c => c.Order)) {
                 @child.RenderChild()
             }
         </DeferRendering>

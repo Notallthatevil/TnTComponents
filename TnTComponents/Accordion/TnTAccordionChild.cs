@@ -86,6 +86,9 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
     [Parameter]
     public TnTColor? TintColor { get; set; }
 
+    [Parameter]
+    public int? Order { get; set; }
+
     [Inject]
     private IJSRuntime _jsRuntime { get; set; } = default!;
 
@@ -120,6 +123,7 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
             builder.AddAttribute(60, "title", ElementTitle);
             builder.AddAttribute(70, "name", ElementName);
             builder.AddAttribute(80, "disabled", Disabled);
+            builder.SetKey(this);
 
             {
                 builder.OpenElement(90, "h3");
