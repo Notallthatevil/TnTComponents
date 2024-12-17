@@ -1,0 +1,34 @@
+name: Deploy to NuGet
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '9.x'
+
+    - name: Restore dependencies
+      run: dotnet restore TnTComponents/TnTComponents.csproj
+
+    - name: Build project
+      run: dotnet build TnTComponents/TnTComponents.csproj --configuration Release
+
+    - name: Set up NuGet
+      run: dotnet nuget add source https://api.nuget.org/v3/index.json --name nuget
+
+    - name: Publish to NuGet
+      env:
+        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      run: dotnet pack TnTComponents/TnTComponents.csproj --configuration Release --output ./nupkg
+    - run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
