@@ -125,15 +125,21 @@ public partial class TnTTypeahead<TItem> {
     /// </summary>
     /// <param name="searchValue">The search value.</param>
     private async Task SearchAsync(string? searchValue) {
-        _searching = true;
-        _items = [];
-        _focusedItem = default;
-        await _debouncer.DebounceAsync(async token => {
-            var result = await ItemsLookupFunc.Invoke(searchValue, token);
-            _items = result;
-            _focusedItem = _items.FirstOrDefault();
+        if (string.IsNullOrWhiteSpace(searchValue)) {
             _searching = false;
-        });
+            _items = [];
+        }
+        else {
+            _searching = true;
+            _items = [];
+            _focusedItem = default;
+            await _debouncer.DebounceAsync(async token => {
+                var result = await ItemsLookupFunc.Invoke(searchValue, token);
+                _items = result;
+                _focusedItem = _items.FirstOrDefault();
+                _searching = false;
+            });
+        }
     }
 
     /// <summary>
