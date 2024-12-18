@@ -417,7 +417,7 @@ public partial class TnTDataGrid<TGridItem> {
             var result = await ResolveItemsRequestAsync(request);
             if (!_pendingDataLoadCancellationTokenSource.IsCancellationRequested) {
                 _currentNonVirtualizedViewItems = result.Items;
-                _ariaBodyRowCount = _currentNonVirtualizedViewItems.Count;
+                _ariaBodyRowCount = _currentNonVirtualizedViewItems?.Count ?? -1;
                 Pagination?.SetTotalItemCountAsync(result.TotalItemCount);
                 _pendingDataLoadCancellationTokenSource = null;
             }
