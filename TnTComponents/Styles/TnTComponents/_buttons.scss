@@ -97,13 +97,7 @@ body:has(.tnt-toast-container) {
 
 
 @for $i from 1 through 10 {
-    .tnt-components.tnt-fab:nth-child(#{$i}) {
-        transform: translateY(calc(-64px * ($i - 1)));
-    }
-
-    .tnt-tab-child {
-        *:nth-child(#{$i} of .tnt-fab) {
-            transform: translateY(calc(-64px * ($i - 1))) !important;
-        }
+    *:nth-child(#{$i} of .tnt-fab) {
+        transform: translateY(calc(-64px * ($i - 1))) !important;
     }
 }
