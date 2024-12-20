@@ -12,39 +12,76 @@ using TnTComponents.Theming;
 
 namespace TnTComponents;
 
+/// <summary>
+///     Represents the theme design component for TnT.
+/// </summary>
 public class TnTThemeDesign : IComponent {
 
-    [Parameter, EditorRequired]
-    public string ThemeFile { get; set; } = default!;
-
+    /// <summary>
+    ///     Gets or sets a value indicating whether color mode toggle is allowed.
+    /// </summary>
     [Parameter]
     public bool AllowColorModeToggle { get; set; } = true;
 
+    /// <summary>
+    ///     Gets the black color.
+    /// </summary>
+    public Color Black => Color.Black;
+
+    /// <summary>
+    ///     Gets or sets the footer height.
+    /// </summary>
     [Parameter]
     public double FooterHeight { get; set; } = 64;
 
+    /// <summary>
+    ///     Gets or sets the header height.
+    /// </summary>
     [Parameter]
     public double HeaderHeight { get; set; } = 64;
 
+    /// <summary>
+    ///     Gets or sets the side navigation width.
+    /// </summary>
     [Parameter]
     public double SideNavWidth { get; set; } = 256;
 
+    /// <summary>
+    ///     Gets or sets the theme.
+    /// </summary>
     [Parameter]
     public Theme Theme { get; set; }
 
+    /// <summary>
+    ///     Gets or sets the theme file path.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public string ThemeFile { get; set; } = default!;
+
+    /// <summary>
+    ///     Gets the transparent color.
+    /// </summary>
+    public Color Transparent => Color.Transparent;
+
+    /// <summary>
+    ///     Gets the white color.
+    /// </summary>
+    public Color White => Color.White;
+
+    /// <summary>
+    ///     Gets or sets the logger.
+    /// </summary>
     [Inject]
     private ILogger<TnTThemeDesign> _logger { get; set; } = default!;
 
-    public Color Transparent => Color.Transparent;
-
-    public Color White => Color.White;
-    public Color Black => Color.Black;
-    private ThemeFile? _themeFile;
-
-    private RenderHandle _renderHandle;
-
+    /// <summary>
+    ///     Gets or sets the service provider.
+    /// </summary>
     [Inject]
     private IServiceProvider _serviceProvider { get; set; } = default!;
+
+    private RenderHandle _renderHandle;
+    private ThemeFile? _themeFile;
 
     public void Attach(RenderHandle renderHandle) {
         _renderHandle = renderHandle;
@@ -71,7 +108,6 @@ public class TnTThemeDesign : IComponent {
 
                 if (httpClient is not null) {
                     try {
-
                         var content = await httpClient.GetStreamAsync(ThemeFile);
                         _themeFile = await JsonSerializer.DeserializeAsync<ThemeFile>(content, new JsonSerializerOptions() {
                             PropertyNameCaseInsensitive = true
@@ -159,6 +195,5 @@ public class TnTThemeDesign : IComponent {
             builder.AddContent(9, lightTheme.ToString());
             builder.CloseElement();
         }));
-
     }
 }

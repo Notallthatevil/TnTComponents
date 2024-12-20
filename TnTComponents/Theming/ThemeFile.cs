@@ -1,22 +1,68 @@
 ﻿
 namespace TnTComponents.Theming;
 
+/// <summary>
+/// Represents a theme file containing theme details.
+/// </summary>
 internal class ThemeFile {
+    /// <summary>
+    /// Gets or sets the description of the theme file.
+    /// </summary>
     public string? Description { get; set; } = "TYPE: CUSTOM\nMaterial Theme Builder export 2024-07-03 09:43:27";
+
+    /// <summary>
+    /// Gets or sets the seed color for the theme.
+    /// </summary>
     public string? Seed { get; set; } = "#B33B15";
+
+    /// <summary>
+    /// Gets or sets the core colors of the theme.
+    /// </summary>
     public CoreColors? CoreColors { get; set; }
+
+    /// <summary>
+    /// Gets or sets the color schemes of the theme.
+    /// </summary>
     public Scheme? Schemes { get; set; } = new();
 }
 
+/// <summary>
+/// Represents the core colors of a theme.
+/// </summary>
 internal class CoreColors {
+    /// <summary>
+    /// Gets or sets the primary color.
+    /// </summary>
     public string? Primary { get; set; } = "#B33B15";
+
+    /// <summary>
+    /// Gets or sets the secondary color.
+    /// </summary>
     public string? Secondary { get; set; }
+
+    /// <summary>
+    /// Gets or sets the tertiary color.
+    /// </summary>
     public string? Tertiary { get; set; }
+
+    /// <summary>
+    /// Gets or sets the neutral color.
+    /// </summary>
     public string? Neutral { get; set; }
+
+    /// <summary>
+    /// Gets or sets the neutral variant color.
+    /// </summary>
     public string? NeutralVariant { get; set; }
 }
 
+/// <summary>
+/// Represents the color schemes for light and dark themes.
+/// </summary>
 internal class Scheme {
+    /// <summary>
+    /// Gets or sets the light color scheme.
+    /// </summary>
     public ColorScheme? Light { get; set; } = new() {
         Primary = "#8F4C38",
         SurfaceTint = "#8F4C38",
@@ -84,6 +130,10 @@ internal class Scheme {
         AssertContainer = "#e4dfff",
         OnAssertContainer = "#191249"
     };
+
+    /// <summary>
+    /// Gets or sets the dark color scheme.
+    /// </summary>
     public ColorScheme? Dark { get; set; } = new() {
         Primary = "#FFB5A0",
         SurfaceTint = "#FFB5A0",
