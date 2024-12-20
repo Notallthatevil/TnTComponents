@@ -3,24 +3,38 @@ using System.Text.Json;
 
 namespace TnTComponents.Storage;
 
+/// <summary>
+///     Service for interacting with local storage.
+/// </summary>
 internal class LocalStorageService(IJSRuntime jsRuntime) : StorageService(jsRuntime), ILocalStorageService {
     internal override StorageType StorageType => StorageType.LocalStorage;
 }
 
+/// <summary>
+///     Service for interacting with session storage.
+/// </summary>
 internal class SessionStorageService(IJSRuntime jsRuntime) : StorageService(jsRuntime), ISessionStorageService {
     internal override StorageType StorageType => StorageType.SessionStorage;
 }
 
+/// <summary>
+///     Abstract base class for storage services.
+/// </summary>
 internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService {
 
+    /// <inheritdoc />
     public event EventHandler<ChangedEventArgs> Changed = default!;
 
+    /// <inheritdoc />
     public event EventHandler<ChangingEventArgs> Changing = default!;
 
+    /// <inheritdoc />
     internal abstract StorageType StorageType { get; }
+
     private string _storageType => StorageType.GetStorageType();
     private const string StorageNotAvailableMessage = "Unable to access the browser storage. This is most likely due to the browser settings.";
 
+    /// <inheritdoc />
     public async ValueTask ClearAsync(CancellationToken cancellationToken = default) {
         try {
             await _jsRuntime.InvokeVoidAsync($"{_storageType}.clear", cancellationToken);
@@ -34,6 +48,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
         }
     }
 
+    /// <inheritdoc />
     public async ValueTask<bool> ContainKeyAsync(string key, CancellationToken cancellationToken = default) {
         try {
             return await _jsRuntime.InvokeAsync<bool>($"{_storageType}.hasOwnProperty", cancellationToken, key);
@@ -47,6 +62,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
         }
     }
 
+    /// <inheritdoc />
     public ValueTask<string?> GetItemAsStringAsync(string key, CancellationToken cancellationToken = default) {
         if (string.IsNullOrWhiteSpace(key)) {
             throw new ArgumentNullException(nameof(key));
@@ -55,6 +71,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
         return GetItemAsync<string>(key, cancellationToken);
     }
 
+    /// <inheritdoc />
     public async ValueTask<T?> GetItemAsync<T>(string key, CancellationToken cancellationToken = default) {
         if (string.IsNullOrWhiteSpace(key)) {
             throw new ArgumentNullException(nameof(key));
@@ -84,6 +101,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
         }
     }
 
+    /// <inheritdoc />
     public async ValueTask<string> KeyAsync(int index, CancellationToken cancellationToken = default) {
         try {
             return await _jsRuntime.InvokeAsync<string>($"{_storageType}.key", cancellationToken, index);
@@ -96,6 +114,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
         }
     }
 
+    /// <inheritdoc />
     public async ValueTask<IEnumerable<string>> KeysAsync(CancellationToken cancellationToken = default) {
         try {
             return await _jsRuntime.InvokeAsync<IEnumerable<string>>("eval", cancellationToken, $"Object.keys({_storageType})");
@@ -109,6 +128,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
         }
     }
 
+    /// <inheritdoc />
     public async ValueTask<int> LengthAsync(CancellationToken cancellationToken = default) {
         try {
             return await _jsRuntime.InvokeAsync<int>("eval", cancellationToken, $"{_storageType}.length");
@@ -122,6 +142,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
         }
     }
 
+    /// <inheritdoc />
     public async ValueTask RemoveItemAsync(string key, CancellationToken cancellationToken = default) {
         if (string.IsNullOrWhiteSpace(key)) {
             throw new ArgumentNullException(nameof(key));
@@ -139,6 +160,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
         }
     }
 
+    /// <inheritdoc />
     public async ValueTask RemoveItemsAsync(IEnumerable<string> keys, CancellationToken cancellationToken = default) {
         try {
             foreach (var key in keys) {
@@ -154,6 +176,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
         }
     }
 
+    /// <inheritdoc />
     public async ValueTask SetItemAsStringAsync(string key, string data, CancellationToken cancellationToken = default) {
         if (string.IsNullOrWhiteSpace(key)) {
             throw new ArgumentNullException(nameof(key));
@@ -183,6 +206,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
         Changed?.Invoke(this, new ChangedEventArgs { Key = key, OldValue = changingArgs.OldValue, NewValue = data });
     }
 
+    /// <inheritdoc />
     public async ValueTask SetItemAsync<T>(string key, T data, CancellationToken cancellationToken = default) {
         if (string.IsNullOrWhiteSpace(key)) {
             throw new ArgumentNullException(nameof(key));
@@ -210,6 +234,13 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
         }
     }
 
+    /// <summary>
+    ///     Determines whether the exception is caused by storage being disabled.
+    /// </summary>
+    /// <param name="exception">The exception to check.</param>
+    /// <returns>
+    ///     <c>true</c> if the exception is caused by storage being disabled; otherwise, <c>false</c>.
+    /// </returns>
     private bool IsStorageDisabledException(Exception exception)
         => exception.Message.Contains($"Failed to read the '{StorageType}' property from 'Window'");
 }
