@@ -32,7 +32,6 @@ export class TnTTabView extends HTMLElement {
                 this.resizeObserver.observe(this);
             });
         }
-
     }
 
     async update() {

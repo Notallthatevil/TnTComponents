@@ -6,8 +6,7 @@
 <tnt-tab-view @attributes=AdditionalAttributes class="@ElementClass" style="@ElementStyle" @ref="Element" data-permanent>
     <CascadingValue Value="this" IsFixed="true">
         <DeferRendering>
-            <div 
-                class="@(CssClassBuilder.Create().AddClass("tnt-tab-view-header").AddFilled().AddForegroundColor(HeaderTextColor).AddBackgroundColor(HeaderBackgroundColor).Build())">
+            <div class="@(CssClassBuilder.Create().AddClass("tnt-tab-view-header").AddFilled().AddForegroundColor(HeaderTextColor).AddBackgroundColor(HeaderBackgroundColor).Build())">
                 <span class="tnt-tab-view-header-buttons">
 
                     @foreach (var pair in _tabChildren.Select((child, index) => new { child, index })) {
