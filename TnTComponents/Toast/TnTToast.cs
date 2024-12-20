@@ -9,18 +9,25 @@ using static TnTComponents.Toast.TnTToastService;
 
 namespace TnTComponents;
 
+/// <summary>
+///     Represents a toast notification component that can display multiple toasts.
+/// </summary>
 public class TnTToast : ComponentBase, IDisposable {
 
+    /// <summary>
+    ///     Gets or sets the toast service used to manage toasts.
+    /// </summary>
     [Inject]
     private ITnTToastService _service { get; set; } = default!;
 
-    private readonly ConcurrentDictionary<ITnTToast, TimeOnly> _toasts = [];
-
-    private ElementReference _element;
-    private Func<Task>? _incrementAction;
+    private readonly ConcurrentDictionary<ITnTToast, TimeOnly> _toasts = new();
 
     private readonly CancellationTokenSource _tokenSource = new();
+    private Func<Task>? _incrementAction;
 
+    /// <summary>
+    ///     Disposes the resources used by the component.
+    /// </summary>
     public void Dispose() {
         _tokenSource.Cancel();
         _tokenSource.Dispose();
@@ -99,8 +106,6 @@ public class TnTToast : ComponentBase, IDisposable {
                 builder.CloseElement();
             }
 
-            builder.AddElementReferenceCapture(300, e => _element = e);
-
             builder.CloseElement();
         }
     }
@@ -111,6 +116,11 @@ public class TnTToast : ComponentBase, IDisposable {
         _service.OnClose += OnClose;
     }
 
+    /// <summary>
+    ///     Handles the close event for a toast.
+    /// </summary>
+    /// <param name="toast">The toast to close.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     private async Task OnClose(ITnTToast toast) {
         var impl = toast as TnTToastImplementation;
         impl!.Closing = true;
@@ -126,6 +136,11 @@ public class TnTToast : ComponentBase, IDisposable {
         StateHasChanged();
     }
 
+    /// <summary>
+    ///     Handles the open event for a toast.
+    /// </summary>
+    /// <param name="toast">The toast to open.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     private Task OnOpen(ITnTToast toast) {
         _toasts.TryAdd(toast, TimeOnly.FromDateTime(DateTime.UtcNow));
         StateHasChanged();
