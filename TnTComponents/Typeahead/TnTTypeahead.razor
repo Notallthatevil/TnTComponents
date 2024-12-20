@@ -31,35 +31,29 @@
                       @ref="_inputBox" />
         <TnTProgressIndicator Show="@_searching" ProgressColor="ProgressColor" Size="Size.Small" />
     </span>
-    @if (_items.Any() || (!_items.Any() && !string.IsNullOrWhiteSpace(_searchText) && !_searching))
-    {
-    <div class="tnt-typeahead-content">
-        @if (_items.Any())
-        {
-        <ul class="tnt-typeahead-list">
-            @foreach (var item in _items)
-            {
-            <li class="@($"tnt-typeahead-list-item{(item!.Equals(_focusedItem) ? " tnt-focused" : string.Empty)}")" tabindex="-1" @onclick="(() => ItemSelectedAsync(item))">
-                @if (ResultTemplate is not null)
-                {
-                    @ResultTemplate(item)
-                }
-                else
-                {
-                    <span class="tnt-corner-radius-5 tnt-body-medium">
-                        @item
-                    </span>
-                }
-            </li>
+    @if (_items.Any() || (!_items.Any() && !string.IsNullOrWhiteSpace(_searchText) && !_searching)) {
+        <div class="tnt-typeahead-content">
+            @if (_items.Any()) {
+                <ul class="tnt-typeahead-list">
+                    @foreach (var item in _items) {
+                        <li class="@($"tnt-typeahead-list-item{(item!.Equals(_focusedItem) ? " tnt-focused" : string.Empty)}")" tabindex="-1" @onclick="(() => ItemSelectedAsync(item))">
+                            @if (ResultTemplate is not null) {
+                                @ResultTemplate(item)
+                            }
+                            else {
+                                <span class="tnt-corner-radius-5 tnt-body-medium">
+                                    @item
+                                </span>
+                            }
+                        </li>
+                    }
+                </ul>
             }
-        </ul>
-        }
-        else if (!_items.Any() && !string.IsNullOrWhiteSpace(_searchText) && !_searching)
-        {
-            <div class="tnt-typeahead-no-results">
-                No results found
-            </div>
-        }
-    </div>
+            else if (!_items.Any() && !string.IsNullOrWhiteSpace(_searchText) && !_searching) {
+                <div class="tnt-typeahead-no-results">
+                    No results found
+                </div>
+            }
+        </div>
     }
 </div>

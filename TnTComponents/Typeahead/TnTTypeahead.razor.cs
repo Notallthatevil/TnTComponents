@@ -23,7 +23,7 @@ public partial class TnTTypeahead<TItem> {
     ///     Gets or sets the debounce delay in milliseconds.
     /// </summary>
     [Parameter]
-    public int DebounceMilliseconds { get; set; } = 300;
+    public int DebounceMilliseconds { get; set; } = 500;
 
     [Parameter]
     public bool Disabled { get; set; }
@@ -157,22 +157,12 @@ public partial class TnTTypeahead<TItem> {
 
                 case "ArrowDown": {
                         var index = _items.ToList().IndexOf(_focusedItem);
-                        if (index < _items.Count() - 1) {
-                            _focusedItem = _items.ElementAt(index + 1);
-                        }
-                        else {
-                            _focusedItem = _items.FirstOrDefault();
-                        }
+                        _focusedItem = index < _items.Count() - 1 ? _items.ElementAt(index + 1) : _items.FirstOrDefault();
                         break;
                     }
                 case "ArrowUp": {
                         var index = _items.ToList().IndexOf(_focusedItem);
-                        if (index > 0) {
-                            _focusedItem = _items.ElementAt(index - 1);
-                        }
-                        else {
-                            _focusedItem = _items.LastOrDefault();
-                        }
+                        _focusedItem = index > 0 ? _items.ElementAt(index - 1) : _items.LastOrDefault();
                         break;
                     }
                 case "Escape": {
