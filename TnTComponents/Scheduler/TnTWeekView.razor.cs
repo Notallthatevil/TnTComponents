@@ -8,16 +8,25 @@ using TnTComponents.Scheduler;
 
 namespace TnTComponents;
 
+/// <summary>
+///     Represents a week view component for displaying events in a scheduler.
+/// </summary>
+/// <typeparam name="TEventType">The type of the event.</typeparam>
 public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
 
+    /// <summary>
+    ///     Gets or sets the default appointment time.
+    /// </summary>
     [Parameter]
     public TimeSpan DefaultAppointmentTime { get; set; } = TimeSpan.FromMinutes(30);
 
+    /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
             .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-week-view")
         .Build();
 
+    /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddVariable("header-height", $"{_headerHeight}px")
@@ -27,15 +36,27 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         .AddVariable("hour-offset", $"{_hourOffset}px")
         .Build();
 
+    /// <summary>
+    ///     Gets or sets a value indicating whether to hide dates.
+    /// </summary>
     [Parameter]
     public bool HideDates { get; set; }
 
+    /// <summary>
+    ///     Gets or sets a value indicating whether to hide event dates.
+    /// </summary>
     [Parameter]
     public bool HideEventDates { get; set; }
 
+    /// <summary>
+    ///     Gets or sets a value indicating whether to show descriptions.
+    /// </summary>
     [Parameter]
     public bool ShowDescription { get; set; }
 
+    /// <summary>
+    ///     Gets or sets the day of the week to start the view on.
+    /// </summary>
     [Parameter]
     public DayOfWeek StartViewOn { get; set; } = DayOfWeek.Sunday;
 
@@ -50,31 +71,43 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
     private bool _mouseOverPicker;
     private ImmutableSortedSet<DateOnly> _visibleDates = [];
 
+    /// <inheritdoc />
     public override DateOnly DecrementDate(DateOnly src) => src.AddDays(-7);
 
+    /// <inheritdoc />
     public override DateOnly GetFirstVisibleDate() => _visibleDates.First();
 
+    /// <inheritdoc />
     public override DateOnly GetLastVisibleDate() => _visibleDates.Last();
 
+    /// <inheritdoc />
     public override DateOnly IncrementDate(DateOnly src) => src.AddDays(7);
 
+    /// <inheritdoc />
     public override void Refresh() {
         UpdateVisibleDates();
         UpdateEventsList();
         StateHasChanged();
     }
 
+    /// <inheritdoc />
     protected override DateTimeOffset CalculateDateTimeOffset(double pointerYOffset, DateOnly date) {
         var time = TimeOnly.FromTimeSpan(TimeSpan.FromHours(pointerYOffset / _cellHeight));
         return Floor(new DateTimeOffset(date, time, TimeZoneInfo.Local.GetUtcOffset(DateTimeOffset.UtcNow)), TimeSpan.FromMinutes(15));
     }
 
+    /// <inheritdoc />
     protected override void OnParametersSet() {
         base.OnParametersSet();
         UpdateVisibleDates();
         UpdateEventsList();
     }
 
+    /// <summary>
+    ///     Creates the CSS class for an event.
+    /// </summary>
+    /// <param name="event">The event.</param>
+    /// <returns>The CSS class.</returns>
     private string? CreateEventClass(TnTEvent @event) {
         return CssClassBuilder.Create()
             .AddClass("tnt-event")
@@ -86,6 +119,13 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
             .Build();
     }
 
+    /// <summary>
+    ///     Creates the CSS style for an event.
+    /// </summary>
+    /// <param name="event">The event.</param>
+    /// <param name="left"> The left position.</param>
+    /// <param name="width">The width.</param>
+    /// <returns>The CSS style.</returns>
     private string? CreateEventStyle(TnTEvent @event, int left, int width) {
         return CssStyleBuilder.Create()
             .AddVariable("tnt-event-start-hour", @event.StartTime.Hour.ToString())
@@ -99,6 +139,11 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
             .Build();
     }
 
+    /// <summary>
+    ///     Creates a placeholder event.
+    /// </summary>
+    /// <param name="date">The date.</param>
+    /// <param name="e">   The mouse event arguments.</param>
     private void CreatePlaceholderEvent(DateOnly date, MouseEventArgs e) {
         if (_mouseOverPicker && e.OffsetY >= 0) {
             var time = CalculateDateTimeOffset(e.OffsetY, date);
@@ -120,6 +165,9 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         }
     }
 
+    /// <summary>
+    ///     Updates the events list.
+    /// </summary>
     private void UpdateEventsList() {
         _events.Clear();
         foreach (var @event in Scheduler.Events.Where(e => e.StartDate <= _visibleDates.Last() && e.EndDate >= _visibleDates.First()).OrderBy(e => e.EventStart)) {
@@ -160,6 +208,9 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
         }
     }
 
+    /// <summary>
+    ///     Updates the visible dates.
+    /// </summary>
     private void UpdateVisibleDates() {
         var diff = (7 + (Scheduler.Date.DayOfWeek - StartViewOn)) % 7;
         var startOfWeek = Scheduler.Date.AddDays(-1 * diff);
@@ -169,26 +220,70 @@ public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
             .ToImmutableSortedSet();
     }
 
+    /// <summary>
+    ///     Represents an event in the week view.
+    /// </summary>
     private sealed record WeekViewTnTEvent {
+        /// <summary>
+        ///     Gets or sets the start time of the event in the week view.
+        /// </summary>
         public required DateTimeOffset WeekViewEventStart { get; init; }
+        /// <summary>
+        ///     Gets or sets the end time of the event in the week view.
+        /// </summary>
         public required DateTimeOffset WeekViewEventEnd { get; init; }
+        /// <summary>
+        ///     Gets or sets the overlap count of the event.
+        /// </summary>
         public int OverlapCount { get; set; }
+        /// <summary>
+        ///     Gets or sets the header overlap index of the event.
+        /// </summary>
         public int? HeaderOverlapIndex { get; set; }
+        /// <summary>
+        ///     Gets or sets the header overlap count of the event.
+        /// </summary>
         public HeaderOverlapCount? HeaderOverlapCount { get; set; }
+        /// <summary>
+        ///     Gets or sets the event.
+        /// </summary>
         public required TEventType Event { get; init; }
 
+        /// <summary>
+        ///     Gets the start time of the event.
+        /// </summary>
         public TimeOnly StartTime => TimeOnly.FromTimeSpan(WeekViewEventStart.LocalDateTime.TimeOfDay);
+        /// <summary>
+        ///     Gets the end time of the event.
+        /// </summary>
         public TimeOnly EndTime => TimeOnly.FromTimeSpan(WeekViewEventEnd.LocalDateTime.TimeOfDay);
+        /// <summary>
+        ///     Gets the start date of the event.
+        /// </summary>
         public DateOnly StartDate => DateOnly.FromDateTime(WeekViewEventStart.LocalDateTime.Date);
+        /// <summary>
+        ///     Gets the end date of the event.
+        /// </summary>
         public DateOnly EndDate => DateOnly.FromDateTime(WeekViewEventEnd.LocalDateTime.Date);
     }
 
+    /// <summary>
+    ///     Represents the header overlap count.
+    /// </summary>
     private sealed class HeaderOverlapCount {
+
+        /// <summary>
+        ///     Gets or sets the count.
+        /// </summary>
         public int Count { get; set; }
     }
 
+    /// <summary>
+    ///     Compares two week view events.
+    /// </summary>
     private class WeekViewTnTEventComparer : IComparer<WeekViewTnTEvent> {
 
+        /// <inheritdoc />
         public int Compare(WeekViewTnTEvent? x, WeekViewTnTEvent? y) {
             var result = x?.Event.StartTime.CompareTo(y?.Event.StartTime);
             if (result == 0) {

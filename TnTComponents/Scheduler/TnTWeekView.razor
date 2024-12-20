@@ -6,26 +6,22 @@
 @typeparam TEventType
 @inherits ScheduleViewBase<TEventType>
 
-@if (Scheduler.IsViewSelected(this))
-{
+@if (Scheduler.IsViewSelected(this)) {
     var today = DateOnly.FromDateTime(DateTimeOffset.Now.LocalDateTime);
     <div @attributes="AdditionalAttributes" class="@ElementClass" style="@ElementStyle" id="@ElementId" title="@ElementTitle" lang="@ElementLang" @ref="Element">
         <div class="tnt-date-header">
             <div class="tnt-time-column">
             </div>
             <div class="tnt-dates">
-                @foreach (var date in _visibleDates)
-                {
+                @foreach (var date in _visibleDates) {
                     <h2 class="@($"tnt-date-header-item{(date == today ? " tnt-today" : string.Empty)}")">
 
-                        @if (HideDates)
-                        {
+                        @if (HideDates) {
                             <div class="tnt-day-of-week tnt-label-large">
                                 @date.ToString("ddd").ToUpper()
                             </div>
                         }
-                        else
-                        {
+                        else {
                             <div class="tnt-day-of-week tnt-label-small">
                                 @date.ToString("ddd").ToUpper()
                             </div>
@@ -41,8 +37,7 @@
             <div class="tnt-time-column">
                 @{
                     var startTime = TimeOnly.MinValue;
-                    do
-                    {
+                    do {
                         <div class="tnt-time-row tnt-body-small">
                             @startTime.ToString("h tt")
                         </div>
@@ -52,27 +47,22 @@
                 }
             </div>
             <div class="tnt-event-columns" @onmouseleave="@(_ => _mouseOverPicker = false)" @onmouseover="@(_ => _mouseOverPicker = true)">
-                @foreach (var date in _visibleDates)
-                {
+                @foreach (var date in _visibleDates) {
                     <div class="@($"tnt-event-column{(Scheduler.EventSlotClickedCallback.HasDelegate ? " tnt-interactable" : null)}")"
                          ondragover="event.preventDefault()"
                          @onmousemove="@(e => CreatePlaceholderEvent(date, e))"
                          @ondrop="@((args => OnDropAsync(args, CalculateDateTimeOffset(args.OffsetY, date))))"
                          @onclick="@((args) => EventSlotClickedAsync(CalculateDateTimeOffset(args.OffsetY, date)))">
-                        @if (_events.TryGetValue(date, out var eventList))
-                        {
-                            @foreach (var @event in eventList)
-                            {
+                        @if (_events.TryGetValue(date, out var eventList)) {
+                            @foreach (var @event in eventList) {
                                 var width = 90;
                                 var left = 0;
 
-                                if (@event.HeaderOverlapIndex.HasValue)
-                                {
+                                if (@event.HeaderOverlapIndex.HasValue) {
                                     width /= @event.HeaderOverlapCount!.Count;
                                     left = width * @event.HeaderOverlapIndex.Value;
                                 }
-                                else if (@event.OverlapCount > 0)
-                                {
+                                else if (@event.OverlapCount > 0) {
                                     left = @event.OverlapCount * 2;
                                     width -= @event.OverlapCount * 2;
                                 }
@@ -92,15 +82,13 @@
                                     <div class="tnt-event-title tnt-label-medium">
                                         @(@event.Event.Title)
                                     </div>
-                                    @if (!HideEventDates)
-                                    {
+                                    @if (!HideEventDates) {
                                         <div class="tnt-event-time tnt-body-small">
                                             @(TimeOnly.FromDateTime(@event.Event.EventStart.LocalDateTime).ToString("t")) - @(TimeOnly.FromDateTime(@event.Event.EventEnd.LocalDateTime).ToString("t"))
                                         </div>
                                     }
 
-                                    @if (ShowDescription)
-                                    {
+                                    @if (ShowDescription) {
                                         <div class="tnt-event-description tnt-body-small">
                                             @(@event.Event.Description)
                                         </div>
@@ -110,8 +98,7 @@
                         }
 
 
-                        @if (_mouseOverPicker && !_mouseOverEvent && _addEventPlaceholder is not null && _addEventPlaceholder.StartDate == date)
-                        {
+                        @if (_mouseOverPicker && !_mouseOverEvent && _addEventPlaceholder is not null && _addEventPlaceholder.StartDate == date) {
 
                             var @class = CssClassBuilder.Create()
                             .AddClass("tnt-event")
@@ -126,9 +113,9 @@
                                 <div class="tnt-event-title tnt-label-medium">
                                     @(_addEventPlaceholder.Title)
                                 </div>
-                                    <div class="tnt-event-time tnt-body-small">
+                                <div class="tnt-event-time tnt-body-small">
                                     @(TimeOnly.FromDateTime(_addEventPlaceholder.EventStart.LocalDateTime).ToString("t")) - @(TimeOnly.FromDateTime(_addEventPlaceholder.EventEnd.LocalDateTime).ToString("t"))
-                                    </div>
+                                </div>
                             </div>
                         }
 

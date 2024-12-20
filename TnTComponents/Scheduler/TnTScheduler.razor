@@ -5,8 +5,7 @@
 @inherits TnTComponentBase
 
 <div @attributes="AdditionalAttributes" class="@ElementClass" style="@ElementStyle" id="@ElementId" title="@ElementTitle" lang="@ElementLang" @ref="Element">
-    @if (!HideDateControls)
-    {
+    @if (!HideDateControls) {
         <div class="date-controls">
             <TnTImageButton Icon="@(new MaterialIcon{ Icon = MaterialIcon.ChevronLeft })" OnClickCallback="PreviousPage" TextColor="@TextColor" class="prev-button" />
             <TnTButton Appearance="ButtonAppearance.Text" OnClickCallback="GoToToday" class="today-button" TextColor="@TextColor" Elevation="0">
