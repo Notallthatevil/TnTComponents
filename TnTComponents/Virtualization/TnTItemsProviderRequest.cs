@@ -5,21 +5,21 @@ namespace TnTComponents.Virtualization;
 /// </summary> <remarks> To pass this object as a query parameter, use the following format: <code>
 /// app.MapGet("/endpoint", (TnTItemsProviderRequest request) => ...); </code> This endpoint accepts
 /// the following query parameters:
-/// https://example.com?StartIndex=0&SortOnProperties=%5BPropertyName%2CAscending%5D%2C%5Bb%2C%20Descending%5D&Count=10 
-/// Decoded = https://example.com?StartIndex=0&SortOnProperties=[PropertyName,Ascending],[PropertyName2,Descending]&Count=10 
-/// </remarks>
+/// https://example.com?StartIndex=0&SortOnProperties=%5BPropertyName%2CAscending%5D%2C%5Bb%2C%20Descending%5D&Count=10
+/// Decoded =
+/// https://example.com?StartIndex=0&SortOnProperties=[PropertyName,Ascending],[PropertyName2,Descending]&Count=10 </remarks>
 public readonly record struct TnTItemsProviderRequest() {
     /// <summary>
-    /// Gets or sets the start index of the requested items.
+    ///     Gets or sets the start index of the requested items.
     /// </summary>
-    public readonly int StartIndex { get; init; } 
+    public readonly int StartIndex { get; init; }
 
     /// <summary>
-    /// Gets or sets the properties to sort on and their sort directions.
+    ///     Gets or sets the properties to sort on and their sort directions.
     /// </summary>
     public readonly IEnumerable<KeyValuePair<string, SortDirection>> SortOnProperties { get; init; } = [];
     /// <summary>
-    /// Gets or sets the maximum number of items to retrieve.
+    ///     Gets or sets the maximum number of items to retrieve.
     /// </summary>
     public readonly int? Count { get; init; }
 }

@@ -8,7 +8,7 @@ using TnTComponents.Virtualization;
 namespace TnTComponents;
 
 /// <summary>
-/// A component that provides virtualization for a list of items.
+///     A component that provides virtualization for a list of items.
 /// </summary>
 /// <typeparam name="TItem">The type of the items to be virtualized.</typeparam>
 public partial class TnTVirtualize<TItem> {
@@ -23,19 +23,25 @@ public partial class TnTVirtualize<TItem> {
         .Build();
 
     /// <summary>
-    /// Gets or sets a value indicating whether infinite scroll is enabled.
+    ///     Gets or sets the template for rendering when there are no items.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? EmptyTemplate { get; set; }
+
+    /// <summary>
+    ///     Gets or sets a value indicating whether infinite scroll is enabled.
     /// </summary>
     [Parameter]
     public bool InfiniteScroll { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets the items provider.
+    ///     Gets or sets the items provider.
     /// </summary>
     [Parameter, EditorRequired]
     public TnTVirtualizeItemsProvider<TItem>? ItemsProvider { get; set; }
 
     /// <summary>
-    /// Gets or sets the template for rendering each item.
+    ///     Gets or sets the template for rendering each item.
     /// </summary>
     [Parameter]
     public RenderFragment<TItem>? ItemTemplate { get; set; }
@@ -43,19 +49,13 @@ public partial class TnTVirtualize<TItem> {
     public override string? JsModulePath => "./_content/TnTComponents/Virtualization/TnTVirtualize.razor.js";
 
     /// <summary>
-    /// Gets or sets the template for rendering the loading indicator.
+    ///     Gets or sets the template for rendering the loading indicator.
     /// </summary>
     [Parameter]
     public RenderFragment? LoadingTemplate { get; set; }
 
     /// <summary>
-    /// Gets or sets the template for rendering when there are no items.
-    /// </summary>
-    [Parameter]
-    public RenderFragment? EmptyTemplate { get; set; }
-
-    /// <summary>
-    /// Gets or sets the property to sort on.
+    ///     Gets or sets the property to sort on.
     /// </summary>
     [Parameter]
     public Expression<Func<TItem, object>>? SortOnProperty { get; set; }
@@ -63,17 +63,18 @@ public partial class TnTVirtualize<TItem> {
     private bool _allItemsRetrieved;
     private IEnumerable<TItem> _items = [];
     private TnTVirtualizeItemsProvider<TItem>? _lastUsedProvider;
+    private bool _loading;
     private CancellationTokenSource? _loadItemsCts;
     private KeyValuePair<string, SortDirection>? _sortOnProperty;
-    private bool _loading;
+
     /// <summary>
-    /// Initializes a new instance of the <see cref="TnTVirtualize{TItem}"/> class.
+    ///     Initializes a new instance of the <see cref="TnTVirtualize{TItem}" /> class.
     /// </summary>
     [DynamicDependency(nameof(LoadMoreItems))]
     public TnTVirtualize() { }
 
     /// <summary>
-    /// Loads more items asynchronously.
+    ///     Loads more items asynchronously.
     /// </summary>
     [JSInvokable]
     public async Task LoadMoreItems() {
@@ -110,7 +111,7 @@ public partial class TnTVirtualize<TItem> {
     }
 
     /// <summary>
-    /// Refreshes the data asynchronously.
+    ///     Refreshes the data asynchronously.
     /// </summary>
     public async Task RefreshDataAsync() {
         Reset();
@@ -149,7 +150,7 @@ public partial class TnTVirtualize<TItem> {
     }
 
     /// <summary>
-    /// Disposes the cancellation token.
+    ///     Disposes the cancellation token.
     /// </summary>
     private void DisposeCancellationToken() {
         try {
@@ -163,7 +164,7 @@ public partial class TnTVirtualize<TItem> {
     }
 
     /// <summary>
-    /// Resets the component state.
+    ///     Resets the component state.
     /// </summary>
     private void Reset() {
         _items = [];
@@ -174,24 +175,28 @@ public partial class TnTVirtualize<TItem> {
 }
 
 /// <summary>
-/// Represents a request for items in a virtualized list.
+///     Represents a request for items in a virtualized list.
 /// </summary>
 /// <typeparam name="TItem">The type of the items being requested.</typeparam>
 public struct TnTVirtualizeItemsProviderRequest<TItem>() {
+
     /// <summary>
-    /// Gets or sets the cancellation token for the request.
+    ///     Gets or sets the cancellation token for the request.
     /// </summary>
     public CancellationToken CancellationToken { get; init; }
+
     /// <summary>
-    /// Gets or sets the maximum number of items to retrieve.
+    ///     Gets or sets the maximum number of items to retrieve.
     /// </summary>
     public int? Count { get; set; }
+
     /// <summary>
-    /// Gets or sets the properties to sort on and their sort directions.
+    ///     Gets or sets the properties to sort on and their sort directions.
     /// </summary>
     public IReadOnlyCollection<KeyValuePair<string, SortDirection>> SortOnProperties { get; init; } = [];
+
     /// <summary>
-    /// Gets or sets the start index of the requested items.
+    ///     Gets or sets the start index of the requested items.
     /// </summary>
     public int StartIndex { get; init; }
 
@@ -214,11 +219,11 @@ public struct TnTVirtualizeItemsProviderRequest<TItem>() {
 }
 
 /// <summary>
-/// A callback that provides data for a <see cref="TnTDataGrid{TGridItem}" />.
+///     A callback that provides data for a <see cref="TnTDataGrid{TGridItem}" />.
 /// </summary>
 /// <typeparam name="TItem">The type of data represented by each row in the grid.</typeparam>
 /// <param name="request">Parameters describing the data being requested.</param>
 /// <returns>
-/// A <see cref="ValueTask{TnTItemsProviderResult{TGridItem}}" /> that gives the data to be displayed.
+///     A <see cref="ValueTask{TnTItemsProviderResult{TGridItem}}" /> that gives the data to be displayed.
 /// </returns>
 public delegate ValueTask<TnTItemsProviderResult<TItem>> TnTVirtualizeItemsProvider<TItem>(TnTVirtualizeItemsProviderRequest<TItem> request);
