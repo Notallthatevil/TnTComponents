@@ -2,15 +2,13 @@
 @namespace TnTComponents
 @inherits TnTPageScriptComponent<TnTLazyLoad>
 
-@if (!_beginLoad)
-{
+@if (!_beginLoad) {
     <div @ref="Element">
         @LoadingContent
     </div>
 }
 
-@if (_beginLoad)
-{
+@if (_beginLoad) {
     @ChildContent
 }
 @PageScript

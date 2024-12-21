@@ -11,7 +11,6 @@ function intersectCallback(entries, ob) {
             console.log(`loading ${entry.target}`);
         }
     });
-
 }
 
 export function onLoad(element, dotNetRef) {
