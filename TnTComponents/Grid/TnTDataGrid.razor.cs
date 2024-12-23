@@ -64,19 +64,19 @@ public partial class TnTDataGrid<TGridItem> {
     ///     This allows the grid to preserve the association between row elements and data items
     ///     based on their unique identifiers, even when the <typeparamref name="TGridItem" />
     ///     instances are replaced by new copies (for example, after a new query against the
-    ///     underlying data store). /// If not set, the @key will be the
-    ///     <typeparamref name="TGridItem" /> instance itself.
+    ///     underlying data store). /// If not set, the @key will be the <typeparamref
+    ///     name="TGridItem" /> instance itself.
     /// </summary>
     [Parameter]
     public Func<TGridItem, object> ItemKey { get; set; } = x => x!;
 
     /// <summary>
     ///     Gets or sets a queryable source of data for the grid. /// This could be in-memory data
-    ///     converted to queryable using the
-    ///     <see cref="System.Linq.Queryable.AsQueryable(System.Collections.IEnumerable)" />
-    ///     extension method, or an EntityFramework DataSet or an <see cref="IQueryable" /> derived
-    ///     from it. /// You should supply either <see cref="Items" /> or
-    ///     <see cref="ItemsProvider" />, but not both.
+    ///     converted to queryable using the <see
+    ///     cref="System.Linq.Queryable.AsQueryable(System.Collections.IEnumerable)" /> extension
+    ///     method, or an EntityFramework DataSet or an <see cref="IQueryable" /> derived from it.
+    ///     /// You should supply either <see cref="Items" /> or <see cref="ItemsProvider" />, but
+    ///     not both.
     /// </summary>
     [Parameter]
     public IQueryable<TGridItem>? Items { get; set; }
@@ -123,11 +123,11 @@ public partial class TnTDataGrid<TGridItem> {
     public int OverscanCount { get; set; } = 3;
 
     /// <summary>
-    ///     Optionally links this <see cref="TnTDataGrid{TGridItem}" /> instance with a
-    ///     <see cref="TnTPaginationState" /> model, causing the grid to fetch and render only the
-    ///     current page of data. /// This is normally used in conjunction with a
-    ///     <see cref="FluentPaginator" /> component or some other UI logic that displays and
-    ///     updates the supplied <see cref="TnTPaginationState" /> instance.
+    ///     Optionally links this <see cref="TnTDataGrid{TGridItem}" /> instance with a <see
+    ///     cref="TnTPaginationState" /> model, causing the grid to fetch and render only the
+    ///     current page of data. /// This is normally used in conjunction with a <see
+    ///     cref="FluentPaginator" /> component or some other UI logic that displays and updates the
+    ///     supplied <see cref="TnTPaginationState" /> instance.
     /// </summary>
     [Parameter]
     public TnTPaginationState? Pagination { get; set; }
@@ -212,29 +212,6 @@ public partial class TnTDataGrid<TGridItem> {
 
     private TnTVirtualize<(int, TGridItem)>? _virtualizeComponent;
 
-    protected override void Dispose(bool disposing) {
-        if (disposing) {
-            _currentPageItemsChanged?.Dispose();
-            _pendingDataLoadCancellationTokenSource?.Cancel();
-            _pendingDataLoadCancellationTokenSource?.Dispose();
-            _pendingDataLoadCancellationTokenSource = null;
-
-            _virtualizeComponent?.Dispose();
-            _virtualizeComponent = null;
-        }
-
-        base.Dispose(disposing);
-    }
-
-    protected override async ValueTask DisposeAsyncCore() {
-        if(_virtualizeComponent is not null) {
-            await _virtualizeComponent.DisposeAsync().ConfigureAwait(false);
-            _virtualizeComponent = null;
-        }
-
-        await base.DisposeAsyncCore().ConfigureAwait(false);
-    }
-
     /// <summary>
     ///     Constructs an instance of <see cref="TnTDataGrid{TGridItem}" />.
     /// </summary>
@@ -267,7 +244,7 @@ public partial class TnTDataGrid<TGridItem> {
     /// <summary>
     ///     Sets the grid's current sort column to the specified <paramref name="column" />.
     /// </summary>
-    /// <param name="column">The column that defines the new sort order.</param>
+    /// <param name="column">   The column that defines the new sort order.</param>
     /// <param name="direction">
     ///     The direction of sorting. If the value is <see cref="SortDirection.Auto" />, then it
     ///     will toggle the direction on each call.
@@ -297,6 +274,29 @@ public partial class TnTDataGrid<TGridItem> {
                 _sortByAscending = initialSortDirection.Value != SortDirection.Descending;
             }
         }
+    }
+
+    protected override void Dispose(bool disposing) {
+        if (disposing) {
+            _currentPageItemsChanged?.Dispose();
+            _pendingDataLoadCancellationTokenSource?.Cancel();
+            _pendingDataLoadCancellationTokenSource?.Dispose();
+            _pendingDataLoadCancellationTokenSource = null;
+
+            _virtualizeComponent?.Dispose();
+            _virtualizeComponent = null;
+        }
+
+        base.Dispose(disposing);
+    }
+
+    protected override async ValueTask DisposeAsyncCore() {
+        if (_virtualizeComponent is not null) {
+            await _virtualizeComponent.DisposeAsync().ConfigureAwait(false);
+            _virtualizeComponent = null;
+        }
+
+        await base.DisposeAsyncCore().ConfigureAwait(false);
     }
 
     protected override void OnAfterRender(bool firstRender) {

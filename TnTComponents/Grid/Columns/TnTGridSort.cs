@@ -4,7 +4,7 @@ using TnTComponents.Core;
 namespace TnTComponents.Grid;
 
 /// <summary>
-/// Represents a sort order specification used within <see cref="TnTDataGrid{TGridItem}" />.
+///     Represents a sort order specification used within <see cref="TnTDataGrid{TGridItem}" />.
 /// </summary>
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
 public sealed class TnTGridSort<TGridItem> {
@@ -25,56 +25,60 @@ public sealed class TnTGridSort<TGridItem> {
     }
 
     /// <summary>
-    /// Produces a <see cref="TnTGridSort{T}" /> instance that sorts according to the specified
-    /// <paramref name="expression" />, ascending.
+    ///     Produces a <see cref="TnTGridSort{T}" /> instance that sorts according to the specified
+    ///     <paramref name="expression" />, ascending.
     /// </summary>
     /// <typeparam name="U">The type of the expression's value.</typeparam>
     /// <param name="expression">
-    /// An expression defining how a set of <typeparamref name="TGridItem" /> instances are to be sorted.
+    ///     An expression defining how a set of <typeparamref name="TGridItem" /> instances are to
+    ///     be sorted.
     /// </param>
     /// <returns>
-    /// A <see cref="TnTGridSort{T}" /> instance representing the specified sorting rule.
+    ///     A <see cref="TnTGridSort{T}" /> instance representing the specified sorting rule.
     /// </returns>
     public static TnTGridSort<TGridItem> ByAscending<U>(Expression<Func<TGridItem, U>> expression) => new((queryable, asc) => asc ? queryable.OrderBy(expression) : queryable.OrderByDescending(expression), (expression, true));
 
     /// <summary>
-    /// Produces a <see cref="TnTGridSort{T}" /> instance that sorts according to the specified
-    /// <paramref name="expression" /> using the specified <paramref name="comparer" />, ascending.
+    ///     Produces a <see cref="TnTGridSort{T}" /> instance that sorts according to the specified
+    ///     <paramref name="expression" /> using the specified <paramref name="comparer" />, ascending.
     /// </summary>
     /// <typeparam name="U">The type of the expression's value.</typeparam>
     /// <param name="expression">
-    /// An expression defining how a set of <typeparamref name="TGridItem" /> instances are to be sorted.
+    ///     An expression defining how a set of <typeparamref name="TGridItem" /> instances are to
+    ///     be sorted.
     /// </param>
-    /// <param name="comparer">
-    /// Defines how a items in a set of <typeparamref name="TGridItem" /> instances are to be compared.
+    /// <param name="comparer">  
+    ///     Defines how a items in a set of <typeparamref name="TGridItem" /> instances are to be compared.
     /// </param>
     /// <returns>
-    /// A <see cref="TnTGridSort{T}" /> instance representing the specified sorting rule.
+    ///     A <see cref="TnTGridSort{T}" /> instance representing the specified sorting rule.
     /// </returns>
     public static TnTGridSort<TGridItem> ByAscending<U>(Expression<Func<TGridItem, U>> expression, IComparer<U> comparer) => new((queryable, asc) => asc ? queryable.OrderBy(expression, comparer) : queryable.OrderByDescending(expression, comparer), (expression, true));
 
     /// <summary>
-    /// Produces a <see cref="TnTGridSort{T}" /> instance that sorts according to the specified
-    /// <paramref name="expression" />, descending.
+    ///     Produces a <see cref="TnTGridSort{T}" /> instance that sorts according to the specified
+    ///     <paramref name="expression" />, descending.
     /// </summary>
     /// <typeparam name="U">The type of the expression's value.</typeparam>
     /// <param name="expression">
-    /// An expression defining how a set of <typeparamref name="TGridItem" /> instances are to be sorted.
+    ///     An expression defining how a set of <typeparamref name="TGridItem" /> instances are to
+    ///     be sorted.
     /// </param>
     /// <returns>
-    /// A <see cref="TnTGridSort{T}" /> instance representing the specified sorting rule.
+    ///     A <see cref="TnTGridSort{T}" /> instance representing the specified sorting rule.
     /// </returns>
     public static TnTGridSort<TGridItem> ByDescending<U>(Expression<Func<TGridItem, U>> expression) => new((queryable, asc) => asc ? queryable.OrderByDescending(expression) : queryable.OrderBy(expression), (expression, false));
 
     /// <summary>
-    /// Updates a <see cref="TnTGridSort{T}" /> instance by appending a further sorting rule.
+    ///     Updates a <see cref="TnTGridSort{T}" /> instance by appending a further sorting rule.
     /// </summary>
     /// <typeparam name="U">The type of the expression's value.</typeparam>
     /// <param name="expression">
-    /// An expression defining how a set of <typeparamref name="TGridItem" /> instances are to be sorted.
+    ///     An expression defining how a set of <typeparamref name="TGridItem" /> instances are to
+    ///     be sorted.
     /// </param>
     /// <returns>
-    /// A <see cref="TnTGridSort{T}" /> instance representing the specified sorting rule.
+    ///     A <see cref="TnTGridSort{T}" /> instance representing the specified sorting rule.
     /// </returns>
     public TnTGridSort<TGridItem> ThenAscending<U>(Expression<Func<TGridItem, U>> expression) {
         _then ??= [];
@@ -87,14 +91,15 @@ public sealed class TnTGridSort<TGridItem> {
     }
 
     /// <summary>
-    /// Updates a <see cref="TnTGridSort{T}" /> instance by appending a further sorting rule.
+    ///     Updates a <see cref="TnTGridSort{T}" /> instance by appending a further sorting rule.
     /// </summary>
     /// <typeparam name="U">The type of the expression's value.</typeparam>
     /// <param name="expression">
-    /// An expression defining how a set of <typeparamref name="TGridItem" /> instances are to be sorted.
+    ///     An expression defining how a set of <typeparamref name="TGridItem" /> instances are to
+    ///     be sorted.
     /// </param>
     /// <returns>
-    /// A <see cref="TnTGridSort{T}" /> instance representing the specified sorting rule.
+    ///     A <see cref="TnTGridSort{T}" /> instance representing the specified sorting rule.
     /// </returns>
     public TnTGridSort<TGridItem> ThenDescending<U>(Expression<Func<TGridItem, U>> expression) {
         _then ??= [];
