@@ -11,10 +11,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F4F5CA92-1A58-4C80-9862-040E79F81501}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		README.md = README.md
 		.github\workflows\TnTComponentsToNuget.yml = .github\workflows\TnTComponentsToNuget.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TnTComponents.AspNetCore", "TnTComponents.AspNetCore\TnTComponents.AspNetCore.csproj", "{4CB02CE8-EB7F-4D2D-8918-04B4BC25C023}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TnTComponents.Tests", "TnTComponents.Tests\TnTComponents.Tests.csproj", "{46FFA132-2CA3-4BF5-8353-C54731E9E0C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +41,10 @@ Global
 		{4CB02CE8-EB7F-4D2D-8918-04B4BC25C023}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CB02CE8-EB7F-4D2D-8918-04B4BC25C023}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CB02CE8-EB7F-4D2D-8918-04B4BC25C023}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46FFA132-2CA3-4BF5-8353-C54731E9E0C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46FFA132-2CA3-4BF5-8353-C54731E9E0C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46FFA132-2CA3-4BF5-8353-C54731E9E0C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46FFA132-2CA3-4BF5-8353-C54731E9E0C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
