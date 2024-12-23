@@ -4,6 +4,10 @@
         <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <Authors>Nate Tripp</Authors>
+        <Company>Tripp'N Technology LLC</Company>
+        <PackageProjectUrl>https://github.com/Notallthatevil/TnTComponents</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Notallthatevil/TnTComponents</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
