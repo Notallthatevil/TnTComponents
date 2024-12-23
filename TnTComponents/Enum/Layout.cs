@@ -1,5 +1,8 @@
 ﻿namespace TnTComponents;
 
+/// <summary>
+///     Specifies the alignment of content within a flex container.
+/// </summary>
 public enum AlignContent {
     Normal,
     Center,
@@ -10,6 +13,9 @@ public enum AlignContent {
     Stretch
 }
 
+/// <summary>
+///     Specifies the alignment of items within a flex container.
+/// </summary>
 public enum AlignItems {
     Normal,
     Center,
@@ -19,6 +25,9 @@ public enum AlignItems {
     Baseline
 }
 
+/// <summary>
+///     Specifies the direction of the flex container's main axis.
+/// </summary>
 public enum FlexDirection {
     Row,
     Column,
@@ -26,6 +35,9 @@ public enum FlexDirection {
     ColumnReverse
 }
 
+/// <summary>
+///     Specifies the alignment of flex items along the main axis of the container.
+/// </summary>
 public enum JustifyContent {
     Normal,
     Center,
@@ -36,6 +48,9 @@ public enum JustifyContent {
     SpaceEvenly
 }
 
+/// <summary>
+///     Specifies the alignment of a single flex item along the main axis of the container.
+/// </summary>
 public enum JustifySelf {
     Start,
     End,
@@ -43,14 +58,25 @@ public enum JustifySelf {
     Stretch
 }
 
+/// <summary>
+///     Specifies whether flex items are forced into a single line or can be wrapped onto multiple lines.
+/// </summary>
 public enum WrapStyle {
     Unspecified,
     NoWrap,
     Wrap
 }
 
+/// <summary>
+///     Provides extension methods for converting enum values to CSS strings and styles.
+/// </summary>
 public static class EnumExt {
 
+    /// <summary>
+    ///     Converts an <see cref="AlignItems" /> value to its corresponding CSS string.
+    /// </summary>
+    /// <param name="alignItems">The <see cref="AlignItems" /> value.</param>
+    /// <returns>The corresponding CSS string.</returns>
     public static string ToCssString(this AlignItems alignItems) {
         return alignItems switch {
             AlignItems.Normal => "normal",
@@ -63,6 +89,11 @@ public static class EnumExt {
         };
     }
 
+    /// <summary>
+    ///     Converts a <see cref="JustifyContent" /> value to its corresponding CSS string.
+    /// </summary>
+    /// <param name="justifyContent">The <see cref="JustifyContent" /> value.</param>
+    /// <returns>The corresponding CSS string.</returns>
     public static string ToCssString(this JustifyContent justifyContent) {
         return justifyContent switch {
             JustifyContent.Normal => "normal",
@@ -76,6 +107,11 @@ public static class EnumExt {
         };
     }
 
+    /// <summary>
+    ///     Converts an <see cref="AlignContent" /> value to its corresponding CSS string.
+    /// </summary>
+    /// <param name="alignContent">The <see cref="AlignContent" /> value.</param>
+    /// <returns>The corresponding CSS string.</returns>
     public static string ToCssString(this AlignContent alignContent) {
         return alignContent switch {
             AlignContent.Normal => "normal",
@@ -89,6 +125,11 @@ public static class EnumExt {
         };
     }
 
+    /// <summary>
+    ///     Converts a <see cref="FlexDirection" /> value to its corresponding CSS style.
+    /// </summary>
+    /// <param name="Direction">The <see cref="FlexDirection" /> value.</param>
+    /// <returns>The corresponding CSS style.</returns>
     public static string ToStyle(this FlexDirection Direction) {
         return "flex-direction: " + Direction switch {
             FlexDirection.Row => "row;",
@@ -99,6 +140,11 @@ public static class EnumExt {
         };
     }
 
+    /// <summary>
+    ///     Converts a <see cref="WrapStyle" /> value to its corresponding CSS style.
+    /// </summary>
+    /// <param name="Wrap">The <see cref="WrapStyle" /> value.</param>
+    /// <returns>The corresponding CSS style.</returns>
     public static string ToStyle(this WrapStyle Wrap) {
         if (Wrap == WrapStyle.Unspecified) {
             return string.Empty;
@@ -110,6 +156,11 @@ public static class EnumExt {
         };
     }
 
+    /// <summary>
+    ///     Converts an <see cref="AlignContent" /> value to its corresponding CSS style.
+    /// </summary>
+    /// <param name="AlignContent">The <see cref="AlignContent" /> value.</param>
+    /// <returns>The corresponding CSS style.</returns>
     public static string ToStyle(this AlignContent AlignContent) {
         if (AlignContent == AlignContent.Normal) {
             return string.Empty;
@@ -125,6 +176,11 @@ public static class EnumExt {
         };
     }
 
+    /// <summary>
+    ///     Converts a <see cref="JustifyContent" /> value to its corresponding CSS style.
+    /// </summary>
+    /// <param name="JustifyContent">The <see cref="JustifyContent" /> value.</param>
+    /// <returns>The corresponding CSS style.</returns>
     public static string ToStyle(this JustifyContent JustifyContent) {
         if (JustifyContent == JustifyContent.Normal) {
             return string.Empty;
@@ -140,6 +196,11 @@ public static class EnumExt {
         };
     }
 
+    /// <summary>
+    ///     Converts an <see cref="AlignItems" /> value to its corresponding CSS style.
+    /// </summary>
+    /// <param name="AlignItems">The <see cref="AlignItems" /> value.</param>
+    /// <returns>The corresponding CSS style.</returns>
     public static string ToStyle(this AlignItems AlignItems) {
         if (AlignItems == AlignItems.Normal) {
             return string.Empty;
@@ -154,6 +215,11 @@ public static class EnumExt {
         };
     }
 
+    /// <summary>
+    ///     Converts a <see cref="JustifySelf" /> value to its corresponding CSS style.
+    /// </summary>
+    /// <param name="justifySelf">The <see cref="JustifySelf" /> value.</param>
+    /// <returns>The corresponding CSS style.</returns>
     public static string ToStyle(this JustifySelf justifySelf) {
         return "justify-self: " + justifySelf switch {
             JustifySelf.Start => "start;",
