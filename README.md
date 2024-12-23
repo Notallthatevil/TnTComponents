@@ -26,6 +26,14 @@ dotnet restore
 ```bash
 dotnet build
 ```
+### Usage
+In your program.cs file add the following code for both ASP.NET apps and WASM applications.
+
+```csharp
+builder.AddTnTComponents();
+```
+
+If you are using an ASP.NET application with an API, you will need to add the [TnTComponents.AspNetCore](https://www.nuget.org/packages/TnTComponents.AspNetCore/) package to your project. This package provides custom bindings for virtualization and pagination of the data grid.
 
 ### Theming
 Themes can be generated using Google's [Material 3 designer](https://material-foundation.github.io/material-theme-builder/). Export your theme as a json file and drop it in the `wwwroot` folder. 

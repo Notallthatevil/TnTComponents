@@ -19,15 +19,16 @@ jobs:
         dotnet-version: '9.x'
 
     - name: Restore dependencies
-      run: dotnet restore TnTComponents/TnTComponents.csproj
+      run: dotnet restore
 
     - name: Build project
-      run: dotnet build TnTComponents/TnTComponents.csproj --configuration Release
+      run: dotnet build --configuration Release
 
-    - name: Publish to NuGet
+    - name: Publish TnTComponents to NuGet
       env:
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
       run: |
         DATE=$(date +'%Y.%m.%d').${{github.run_number}}
         dotnet pack TnTComponents/TnTComponents.csproj --configuration Release --output ./nupkg /p:PackageVersion=$DATE
+        dotnet pack TnTComponents.AspNetCore/TnTComponents.AspNetCore.csproj --configuration Release --output ./nupkg /p:PackageVersion=$DATE
     - run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json

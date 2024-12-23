@@ -44,4 +44,8 @@
     <Target Name="CopyCss" BeforeTargets="Build">
         <Copy SourceFiles="Styles/style.css" DestinationFolder="wwwroot" />
     </Target>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
 </Project>
