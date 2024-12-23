@@ -1,38 +1,53 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
-using System.Xml;
-using System.Xml.Linq;
 using TnTComponents.Core;
 
 namespace TnTComponents;
+
+/// <summary>
+///     A Blazor component for editing Markdown content.
+/// </summary>
 public partial class TnTMarkdownEditor {
 
-    public override string? JsModulePath => "./_content/TnTComponents/Editors/TnTMarkdownEditor.razor.js";
-
+    /// <inheritdoc />
     public override string? ElementClass => string.Empty;
 
+    /// <inheritdoc />
     public override string? ElementStyle => string.Empty;
 
-    [Parameter]
-    public string? Value { get; set; }
+    /// <inheritdoc />
+    public override string? JsModulePath => "./_content/TnTComponents/Editors/TnTMarkdownEditor.razor.js";
 
-    [Parameter]
-    public EventCallback<string> ValueChanged { get; set; }
-
+    /// <summary>
+    ///     Gets or sets the rendered HTML content.
+    /// </summary>
     [Parameter]
     public MarkupString? RenderedHtml { get; set; }
 
+    /// <summary>
+    ///     Event callback for when the rendered HTML content changes.
+    /// </summary>
     [Parameter]
     public EventCallback<MarkupString?> RenderedHtmlChanged { get; set; }
 
-    protected override void OnInitialized() {
-        base.OnInitialized();
-        ElementId = TnTComponentIdentifier.NewId();
-    }
+    /// <summary>
+    ///     Gets or sets the Markdown content.
+    /// </summary>
+    [Parameter]
+    public string? Value { get; set; }
 
+    /// <summary>
+    ///     Event callback for when the Markdown content changes.
+    /// </summary>
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
 
+    /// <summary>
+    ///     Updates the Markdown content and the rendered HTML content.
+    /// </summary>
+    /// <param name="value">       The new Markdown content.</param>
+    /// <param name="renderedText">The rendered HTML content.</param>
     [JSInvokable]
     public async Task UpdateValue(string value, string renderedText) {
         Value = value;
@@ -43,5 +58,11 @@ public partial class TnTMarkdownEditor {
             await RenderedHtmlChanged.InvokeAsync(RenderedHtml);
         }
         StateHasChanged();
+    }
+
+    /// <inheritdoc />
+    protected override void OnInitialized() {
+        base.OnInitialized();
+        ElementId = TnTComponentIdentifier.NewId();
     }
 }
