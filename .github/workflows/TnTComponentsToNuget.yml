@@ -13,6 +13,15 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v3.1.1
+      with:
+        versionSpec: '6.0.x'
+
+    - name: Determine Version
+      id: version_step # step id used as reference for output values
+      uses: gittools/actions/gitversion/execute@v3.1.1
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
@@ -22,13 +31,12 @@ jobs:
       run: dotnet restore
 
     - name: Build project
-      run: dotnet build --configuration Release
+      run: dotnet build --configuration Release /p:AssemplyVersion=${{ steps.version_step.outputs.fullSemVer }} /p:FileVersion=${{ steps.version_step.outputs.fullSemVer }}
 
     - name: Publish TnTComponents to NuGet
       env:
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
       run: |
-        DATE=$(date +'%Y.%m.%d').${{github.run_number}}
-        dotnet pack TnTComponents/TnTComponents.csproj --configuration Release --output ./nupkg /p:PackageVersion=$DATE
-        dotnet pack TnTComponents.AspNetCore/TnTComponents.AspNetCore.csproj --configuration Release --output ./nupkg /p:PackageVersion=$DATE
-    - run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        dotnet pack TnTComponents/TnTComponents.csproj --configuration Release --output ./nupkg /p:PackageVersion=${{ steps.version_step.outputs.fullSemVer }}
+        dotnet pack TnTComponents.AspNetCore/TnTComponents.AspNetCore.csproj --configuration Release --output ./nupkg /p:PackageVersion=${{ steps.version_step.outputs.fullSemVer }}
+    #- run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json

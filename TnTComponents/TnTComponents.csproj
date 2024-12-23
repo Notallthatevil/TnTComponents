@@ -7,7 +7,6 @@
         <Title>TnTComponents</Title>
         <Authors>Nate Tripp</Authors>
         <Company>Tripp'N Technology LLC</Company>
-        <Description>Material 3 Blazor Components</Description>
         <PackageProjectUrl>https://github.com/Notallthatevil/TnTComponents</PackageProjectUrl>
         <RepositoryUrl>https://github.com/Notallthatevil/TnTComponents</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
