@@ -12,10 +12,6 @@
         <RepositoryUrl>https://github.com/Notallthatevil/TnTComponents</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>blazor</PackageTags>
-        <NeutralLanguage>af</NeutralLanguage>
-        <AssemblyVersion>0.1.0</AssemblyVersion>
-        <FileVersion>0.1.0</FileVersion>
-        <Version>0.1.0</Version>
     </PropertyGroup>
     <ItemGroup>
       <Content Remove="compilerconfig.json" />
@@ -45,7 +41,11 @@
         <Copy SourceFiles="Styles/style.css" DestinationFolder="wwwroot" />
     </Target>
 
+    <PropertyGroup>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
     <ItemGroup>
-        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="..\README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 </Project>
