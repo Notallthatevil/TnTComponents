@@ -6,19 +6,28 @@ using System.Globalization;
 
 namespace TnTComponents;
 
+/// <summary>
+///     A custom input component for handling various DateTime types.
+/// </summary>
+/// <typeparam name="DateTimeType">The type of the DateTime value.</typeparam>
 public class TnTInputDateTime<DateTimeType> : TnTInputBase<DateTimeType> {
 
+    /// <summary>
+    ///     Gets or sets the format string used to display the DateTime value.
+    /// </summary>
     [Parameter]
     public string Format { get; set; } = default!;
 
+    /// <summary>
+    ///     Gets or sets a value indicating whether to display only the month part of the DateTime value.
+    /// </summary>
     [Parameter]
     public bool MonthOnly { get; set; }
 
     public override InputType Type => _type;
 
+    private string _format = default!;
     private InputType _type;
-
-    private DateTimeType _value;
 
     protected override string? FormatValueAsString(DateTimeType? value) {
         var result = value switch {
@@ -31,8 +40,6 @@ public class TnTInputDateTime<DateTimeType> : TnTInputBase<DateTimeType> {
 
         return result;
     }
-
-    private string _format = default!;
 
     protected override void OnInitialized() {
         base.OnInitialized();

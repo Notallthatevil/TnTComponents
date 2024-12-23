@@ -8,15 +8,28 @@ using TnTComponents.Ext;
 
 namespace TnTComponents;
 
+/// <summary>
+///     Represents a currency input component.
+/// </summary>
 public partial class TnTInputCurrency : TnTInputBase<decimal?> {
-    public override InputType Type => InputType.Currency;
 
+    /// <summary>
+    ///     Gets or sets the culture code for formatting the currency.
+    /// </summary>
     [Parameter]
     public string CultureCode { get; set; } = "en-US";
 
+    /// <summary>
+    ///     Gets or sets the currency code.
+    /// </summary>
     [Parameter]
     public string CurrencyCode { get; set; } = "USD";
 
+    public override InputType Type => InputType.Currency;
+
+    /// <summary>
+    ///     Gets or sets the value of the input as a formatted currency string.
+    /// </summary>
     private string? _value {
         get {
             return CurrentValue?.ToString("C");
@@ -44,7 +57,6 @@ public partial class TnTInputCurrency : TnTInputBase<decimal?> {
         AdditionalAttributes = dict;
     }
 
-
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out decimal? result, [NotNullWhen(false)] out string? validationErrorMessage) {
         validationErrorMessage = null;
         if (value is not null) {
@@ -69,10 +81,14 @@ public partial class TnTInputCurrency : TnTInputBase<decimal?> {
         }
     }
 
+    /// <summary>
+    ///     Invokes the BindAfter event callback if it has been set.
+    /// </summary>
+    /// <param name="_">The parameter is not used.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     private async Task BindAfterFunc(string? _) {
         if (BindAfter.HasDelegate) {
             await BindAfter.InvokeAsync(Value);
         }
     }
-
 }
