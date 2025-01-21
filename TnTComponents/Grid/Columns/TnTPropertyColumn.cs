@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -95,7 +96,9 @@ public class TnTPropertyColumn<TGridItem, TProp> : TnTColumnBase<TGridItem>, IBi
         if (Property.Body is MemberExpression memberExpression) {
             if (Title is null) {
                 PropertyInfo = memberExpression.Member as PropertyInfo;
-                var daText = memberExpression.Member.DeclaringType?.GetDisplayAttributeString(memberExpression.Member.Name);
+                var displayAttribute = Attribute.GetCustomAttribute(memberExpression.Member, typeof(DisplayAttribute)) as DisplayAttribute;
+
+                var daText = displayAttribute?.Name;
                 if (!string.IsNullOrEmpty(daText)) {
                     Title = daText;
                 }
