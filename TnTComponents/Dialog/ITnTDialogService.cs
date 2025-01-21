@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System.Diagnostics.CodeAnalysis;
 using TnTComponents.Dialog;
 
 namespace TnTComponents;
@@ -44,7 +45,7 @@ public interface ITnTDialogService {
     /// <param name="options">The options for configuring the dialog.</param>
     /// <param name="parameters">The parameters to pass to the component.</param>
     /// <returns>A task that represents the asynchronous open operation. The task result contains the opened dialog.</returns>
-    Task<ITnTDialog> OpenAsync<TComponent>(TnTDialogOptions? options = null, IReadOnlyDictionary<string, object?>? parameters = null) where TComponent : IComponent;
+    Task<ITnTDialog> OpenAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TComponent>(TnTDialogOptions? options = null, IReadOnlyDictionary<string, object?>? parameters = null) where TComponent : IComponent;
 
     /// <summary>
     /// Asynchronously opens a dialog with the specified render fragment.
@@ -61,7 +62,7 @@ public interface ITnTDialogService {
     /// <param name="options">The options for configuring the dialog.</param>
     /// <param name="parameters">The parameters to pass to the component.</param>
     /// <returns>A task that represents the asynchronous open operation. The task result contains the dialog result.</returns>
-    Task<DialogResult> OpenForResultAsync<TComponent>(TnTDialogOptions? options = null, IReadOnlyDictionary<string, object?>? parameters = null) where TComponent : IComponent;
+    Task<DialogResult> OpenForResultAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TComponent>(TnTDialogOptions? options = null, IReadOnlyDictionary<string, object?>? parameters = null) where TComponent : IComponent;
 
     /// <summary>
     /// Asynchronously opens a dialog with the specified render fragment and returns the result.

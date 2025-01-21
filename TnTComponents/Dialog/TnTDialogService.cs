@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System.Diagnostics.CodeAnalysis;
 using TnTComponents.Core;
 
 namespace TnTComponents.Dialog;
@@ -25,7 +26,7 @@ internal class TnTDialogService : ITnTDialogService {
 
     public async Task CloseAsync(ITnTDialog dialog) => await (OnClose?.Invoke(dialog) ?? Task.CompletedTask);
 
-    public async Task<ITnTDialog> OpenAsync<TComponent>(TnTDialogOptions? options = null, IReadOnlyDictionary<string, object?>? parameters = null) where TComponent : IComponent {
+    public async Task<ITnTDialog> OpenAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TComponent>(TnTDialogOptions? options = null, IReadOnlyDictionary<string, object?>? parameters = null) where TComponent : IComponent {
         var dialog = new DialogImpl(this) {
             Options = options ?? new(),
             Parameters = parameters,
@@ -43,7 +44,7 @@ internal class TnTDialogService : ITnTDialogService {
         });
     }
 
-    public async Task<DialogResult> OpenForResultAsync<TComponent>(TnTDialogOptions? options = null, IReadOnlyDictionary<string, object?>? parameters = null) where TComponent : IComponent {
+    public async Task<DialogResult> OpenForResultAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TComponent>(TnTDialogOptions? options = null, IReadOnlyDictionary<string, object?>? parameters = null) where TComponent : IComponent {
         var dialog = new DialogImpl(this) {
             Options = options ?? new(),
             Parameters = parameters,
@@ -80,6 +81,7 @@ internal class TnTDialogService : ITnTDialogService {
 
         public IReadOnlyDictionary<string, object?>? Parameters { get; init; }
 
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
         public Type Type { get; init; } = default!;
 
         public Task CloseAsync() => dialogService.CloseAsync(this);
