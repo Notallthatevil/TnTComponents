@@ -9,7 +9,7 @@ public partial class TnTDataGridCell<TGridItem> {
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
     /// <summary>
-    /// Gets or sets the content to be rendered inside the component.
+    ///     Gets or sets the content to be rendered inside the component.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
@@ -23,7 +23,7 @@ public partial class TnTDataGridCell<TGridItem> {
         .Build();
 
     /// <summary>
-    /// Gets or sets the reference to the item that holds this cell's values.
+    ///     Gets or sets the reference to the item that holds this cell's values.
     /// </summary>
     [Parameter]
     public TGridItem? Item { get; set; }

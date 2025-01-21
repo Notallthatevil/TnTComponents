@@ -5,15 +5,31 @@ using TnTComponents.Form;
 
 namespace TnTComponents;
 
-
+/// <summary>
+///     Interface representing the properties and behavior of a TnTForm.
+/// </summary>
 public interface ITnTForm {
+
+    /// <summary>
+    ///     Gets the appearance of the form.
+    /// </summary>
     FormAppearance Appearance { get; }
 
+    /// <summary>
+    ///     Gets a value indicating whether the form is disabled.
+    /// </summary>
     bool Disabled { get; }
 
+    /// <summary>
+    ///     Gets a value indicating whether the form is read-only.
+    /// </summary>
     bool ReadOnly { get; }
 }
 
+/// <summary>
+///     Represents a form component that extends <see cref="EditForm" /> and implements <see
+///     cref="ITnTForm" />.
+/// </summary>
 public class TnTForm : EditForm, ITnTForm {
 
     [Parameter]

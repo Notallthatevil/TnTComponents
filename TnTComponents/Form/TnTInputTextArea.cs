@@ -10,9 +10,15 @@ using System.Threading.Tasks;
 
 namespace TnTComponents;
 
+/// <summary>
+///     Represents a text area input component.
+/// </summary>
 public class TnTInputTextArea : TnTInputBase<string?> {
+
+    /// <inheritdoc />
     public override InputType Type => InputType.TextArea;
 
+    /// <inheritdoc />
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out string? result, [NotNullWhen(false)] out string? validationErrorMessage) {
         result = value;
         validationErrorMessage = null;

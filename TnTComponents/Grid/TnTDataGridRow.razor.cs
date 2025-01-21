@@ -12,7 +12,7 @@ public partial class TnTDataGridRow<TGridItem> : IHandleEvent {
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
     /// <summary>
-    /// Gets or sets the content to be rendered inside the component.
+    ///     Gets or sets the content to be rendered inside the component.
     /// </summary>
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
@@ -27,7 +27,7 @@ public partial class TnTDataGridRow<TGridItem> : IHandleEvent {
         .Build();
 
     /// <summary>
-    /// Gets or sets the reference to the item that holds this row's values.
+    ///     Gets or sets the reference to the item that holds this row's values.
     /// </summary>
     [Parameter]
     public TGridItem? Item { get; set; }
@@ -36,7 +36,8 @@ public partial class TnTDataGridRow<TGridItem> : IHandleEvent {
     public EventCallback<TGridItem?> OnClick { get; set; }
 
     /// <summary>
-    /// Gets or sets the index of this row. When FluentDataGrid is virtualized, this value is not used.
+    ///     Gets or sets the index of this row. When FluentDataGrid is virtualized, this value is
+    ///     not used.
     /// </summary>
     [Parameter]
     public int? RowIndex { get; set; }

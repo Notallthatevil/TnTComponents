@@ -1,9 +1,9 @@
 ﻿@namespace TnTComponents.Grid
 @typeparam TGridItem
 @attribute [CascadingTypeParameter(nameof(TGridItem))]
-    <tr @attributes="AdditionalAttributes"
-        class="@ElementClass"
-        style="@ElementStyle"
-        @onclick="RowClicked">
-        @ChildContent
-    </tr>
+<tr @attributes="AdditionalAttributes"
+    class="@ElementClass"
+    style="@ElementStyle"
+    @onclick="RowClicked">
+    @ChildContent
+</tr>

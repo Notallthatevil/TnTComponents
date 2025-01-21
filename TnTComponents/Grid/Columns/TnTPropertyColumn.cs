@@ -11,22 +11,22 @@ using TnTComponents.Grid.Infrastructure;
 namespace TnTComponents;
 
 /// <summary>
-/// Represents a <see cref="TnTDataGrid{TGridItem}" /> column whose cells display a single value.
+///     Represents a <see cref="TnTDataGrid{TGridItem}" /> column whose cells display a single value.
 /// </summary>
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
 /// <typeparam name="TProp">The type of the value being displayed in the column's cells.</typeparam>
 public class TnTPropertyColumn<TGridItem, TProp> : TnTColumnBase<TGridItem>, IBindableColumn<TGridItem, TProp> {
 
     /// <summary>
-    /// Optionally specifies how to compare values in this column when sorting. /// Using this
-    /// requires the <typeparamref name="TProp" /> type to implement <see cref="IComparable{T}" />.
+    ///     Optionally specifies how to compare values in this column when sorting. /// Using this
+    ///     requires the <typeparamref name="TProp" /> type to implement <see cref="IComparable{T}" />.
     /// </summary>
     [Parameter]
     public IComparer<TProp>? Comparer { get; set; } = null;
 
     /// <summary>
-    /// Optionally specifies a format string for the value. /// Using this requires the
-    /// <typeparamref name="TProp" /> type to implement <see cref="IFormattable" />.
+    ///     Optionally specifies a format string for the value. /// Using this requires the
+    ///     <typeparamref name="TProp" /> type to implement <see cref="IFormattable" />.
     /// </summary>
     [Parameter]
     public string? Format { get; set; }
@@ -35,7 +35,7 @@ public class TnTPropertyColumn<TGridItem, TProp> : TnTColumnBase<TGridItem>, IBi
     public CultureInfo FormatCulture { get; set; } = CultureInfo.CurrentCulture;
 
     /// <summary>
-    /// Defines the value to be displayed in this column's cells.
+    ///     Defines the value to be displayed in this column's cells.
     /// </summary>
     [Parameter, EditorRequired]
     public Expression<Func<TGridItem, TProp>> Property { get; set; } = default!;
@@ -47,8 +47,8 @@ public class TnTPropertyColumn<TGridItem, TProp> : TnTColumnBase<TGridItem>, IBi
         set => throw new NotSupportedException($"PropertyColumn generates this member internally. For custom sorting rules, see '{typeof(TnTTemplateColumn<TGridItem>)}'.");
     }
 
-    private Func<TGridItem, string>? _cellTextFunc;
     private readonly Func<TGridItem, string?>? _cellTooltipTextFunc = (item) => item?.ToString();
+    private Func<TGridItem, string>? _cellTextFunc;
     private Expression<Func<TGridItem, TProp>>? _lastAssignedProperty;
     private TnTGridSort<TGridItem>? _sortBuilder;
 

@@ -1,35 +1,35 @@
 ﻿namespace TnTComponents.Grid.Infrastructure;
 
 /// <summary>
-/// Holds state to represent pagination in a <see cref="TnTDataGrid{TGridItem}" />.
+///     Holds state to represent pagination in a <see cref="TnTDataGrid{TGridItem}" />.
 /// </summary>
 public class TnTPaginationState {
 
     /// <summary>
-    /// An event that is raised when the total item count has changed.
+    ///     An event that is raised when the total item count has changed.
     /// </summary>
     public event EventHandler<int?>? TotalItemCountChanged;
 
     /// <summary>
-    /// Gets the current zero-based page index. To set it, call <see
-    /// cref="SetCurrentPageIndexAsync(int)" />.
+    ///     Gets the current zero-based page index. To set it, call <see
+    ///     cref="SetCurrentPageIndexAsync(int)" />.
     /// </summary>
     public int CurrentPageIndex { get; private set; }
 
     /// <summary>
-    /// Gets or sets the number of items on each page.
+    ///     Gets or sets the number of items on each page.
     /// </summary>
     public int ItemsPerPage { get; set; } = 10;
 
     /// <summary>
-    /// Gets the zero-based index of the last page, if known. The value will be null until <see
-    /// cref="TotalItemCount" /> is known.
+    ///     Gets the zero-based index of the last page, if known. The value will be null until <see
+    ///     cref="TotalItemCount" /> is known.
     /// </summary>
     public int? LastPageIndex => (TotalItemCount - 1) / ItemsPerPage;
 
     /// <summary>
-    /// Gets the total number of items across all pages, if known. The value will be null until an
-    /// associated <see cref="FluentDataGrid{TGridItem}" /> assigns a value after loading data.
+    ///     Gets the total number of items across all pages, if known. The value will be null until
+    ///     an associated <see cref="FluentDataGrid{TGridItem}" /> assigns a value after loading data.
     /// </summary>
     public int? TotalItemCount { get; private set; }
 
@@ -41,8 +41,8 @@ public class TnTPaginationState {
         => HashCode.Combine(ItemsPerPage, CurrentPageIndex, TotalItemCount);
 
     /// <summary>
-    /// Sets the current page index, and notifies any associated <see
-    /// cref="FluentDataGrid{TGridItem}" /> to fetch and render updated data.
+    ///     Sets the current page index, and notifies any associated <see
+    ///     cref="FluentDataGrid{TGridItem}" /> to fetch and render updated data.
     /// </summary>
     /// <param name="pageIndex">The new, zero-based page index.</param>
     /// <returns>A <see cref="Task" /> representing the completion of the operation.</returns>

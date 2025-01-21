@@ -28,7 +28,7 @@ namespace TnTComponents.Grid.Infrastructure;
 // think about exceptions.
 
 /// <summary>
-/// For internal use only. Do not use.
+///     For internal use only. Do not use.
 /// </summary>
 /// <typeparam name="TGridItem">For internal use only. Do not use.</typeparam>
 [EditorBrowsable(EditorBrowsableState.Never)]

@@ -36,6 +36,11 @@ public readonly record struct TnTItemsProviderServerRequest() {
         };
     }
 
+    /// <summary>
+    /// Binds the HTTP context query parameters to a <see cref="TnTItemsProviderServerRequest"/> instance.
+    /// </summary>
+    /// <param name="context">The HTTP context containing the query parameters.</param>
+    /// <returns>A task that represents the asynchronous bind operation. The task result contains the bound <see cref="TnTItemsProviderServerRequest"/> instance or null if binding failed.</returns>
     public static ValueTask<TnTItemsProviderServerRequest?> BindAsync(HttpContext context) {
         var query = context.Request.Query;
         if (query.TryGetValue(nameof(StartIndex), out var startIndexes) && !string.IsNullOrWhiteSpace(startIndexes.FirstOrDefault()) && int.TryParse(startIndexes.FirstOrDefault(), out int startIndex)) {

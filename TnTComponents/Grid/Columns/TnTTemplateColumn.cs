@@ -6,13 +6,13 @@ using TnTComponents.Grid.Columns;
 namespace TnTComponents;
 
 /// <summary>
-/// Represents a <see cref="TnTDataGrid{TGridItem}" /> column whose cells render a supplied template.
+///     Represents a <see cref="TnTDataGrid{TGridItem}" /> column whose cells render a supplied template.
 /// </summary>
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
 public class TnTTemplateColumn<TGridItem> : TnTColumnBase<TGridItem> {
 
     /// <summary>
-    /// Gets or sets the content to be rendered for each row in the table.
+    ///     Gets or sets the content to be rendered for each row in the table.
     /// </summary>
     [Parameter]
     public RenderFragment<TGridItem> ChildContent { get; set; } = EmptyChildContent;
