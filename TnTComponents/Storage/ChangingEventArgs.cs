@@ -13,7 +13,7 @@ public class ChangingEventArgs {
     /// <summary>
     ///     Gets the key associated with the change.
     /// </summary>
-    public string Key { get; init; }
+    public required string Key { get; init; }
 
     /// <summary>
     ///     Gets the new value associated with the change.
