@@ -12,7 +12,7 @@ namespace TnTComponents;
 ///     Represents a custom input select component.
 /// </summary>
 /// <typeparam name="TInputType">The type of the input value.</typeparam>
-public class TnTInputSelect<TInputType> : TnTInputBase<TInputType> {
+public class TnTInputSelect<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TInputType> : TnTInputBase<TInputType> {
 
     /// <summary>
     ///     Gets or sets a value indicating whether the placeholder selection is allowed.
