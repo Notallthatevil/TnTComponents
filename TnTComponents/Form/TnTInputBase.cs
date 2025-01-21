@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq.Expressions;
 using System.Reflection;
 using TnTComponents.Core;
 using TnTComponents.Form;
@@ -15,7 +17,7 @@ namespace TnTComponents;
 ///     Base class for TnT input components.
 /// </summary>
 /// <typeparam name="TInputType">The type of the input value.</typeparam>
-public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, ITnTComponentBase, ITnTInteractable {
+public abstract partial class TnTInputBase<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TInputType> : InputBase<TInputType>, ITnTComponentBase, ITnTInteractable {
 
     /// <summary>
     ///     Gets or sets the appearance of the form.
@@ -314,9 +316,21 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     /// <returns>The custom attribute if it exists; otherwise, <c>null</c>.</returns>
     private TCustomAttr? GetCustomAttributeIfExists<TCustomAttr>() where TCustomAttr : Attribute {
         if (ValueExpression is not null) {
-            var property = FieldIdentifier.Model.GetType().GetProperty(FieldIdentifier.FieldName);
-            if (property is not null) {
-                return property.GetCustomAttribute<TCustomAttr>();
+            var body = ValueExpression.Body;
+
+            // Unwrap casts to object
+            if (body is UnaryExpression unaryExpression
+                && unaryExpression.NodeType == ExpressionType.Convert
+                && unaryExpression.Type == typeof(object)) {
+                body = unaryExpression.Operand;
+            }
+
+            switch (body) {
+                case MemberExpression memberExpression:
+                    return Attribute.GetCustomAttribute(memberExpression.Member, typeof(TCustomAttr)) as TCustomAttr;
+
+                case MethodCallExpression methodCallExpression:
+                    return Attribute.GetCustomAttribute(methodCallExpression.Method, typeof(TCustomAttr)) as TCustomAttr;
             }
         }
         return null;
