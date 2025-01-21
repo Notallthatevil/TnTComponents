@@ -10,7 +10,7 @@ namespace TnTComponents;
 ///     A custom input component for handling various DateTime types.
 /// </summary>
 /// <typeparam name="DateTimeType">The type of the DateTime value.</typeparam>
-public class TnTInputDateTime<DateTimeType> : TnTInputBase<DateTimeType> {
+public class TnTInputDateTime<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] DateTimeType> : TnTInputBase<DateTimeType> {
 
     /// <summary>
     ///     Gets or sets the format string used to display the DateTime value.
