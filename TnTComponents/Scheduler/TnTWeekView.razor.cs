@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Logging;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using TnTComponents.Core;
 using TnTComponents.Scheduler;
@@ -12,7 +13,7 @@ namespace TnTComponents;
 ///     Represents a week view component for displaying events in a scheduler.
 /// </summary>
 /// <typeparam name="TEventType">The type of the event.</typeparam>
-public partial class TnTWeekView<TEventType> where TEventType : TnTEvent {
+public partial class TnTWeekView<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TEventType> where TEventType : TnTEvent {
 
     /// <summary>
     ///     Gets or sets the default appointment time.
