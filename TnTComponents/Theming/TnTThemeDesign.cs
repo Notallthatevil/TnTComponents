@@ -89,19 +89,17 @@ public class TnTThemeDesign : IComponent {
 
     public async Task SetParametersAsync(ParameterView parameters) {
         foreach (var entry in parameters) {
-            GetType().GetProperties().FirstOrDefault(p => p.Name == entry.Name)?.SetValue(this, entry.Value);
+            typeof(TnTThemeDesign).GetProperties().FirstOrDefault(p => p.Name == entry.Name)?.SetValue(this, entry.Value);
         }
 
-        var allProperties = GetType().GetProperties().Select(p => new KeyValuePair<string, object?>(p.Name, p.GetValue(this)));
+        var allProperties = typeof(TnTThemeDesign).GetProperties().Select(p => new KeyValuePair<string, object?>(p.Name, p.GetValue(this)));
 
         if (!string.IsNullOrWhiteSpace(ThemeFile)) {
             var themeFile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", ThemeFile);
 
             if (File.Exists(themeFile)) {
                 await using var fs = File.OpenRead(themeFile);
-                _themeFile = await JsonSerializer.DeserializeAsync<ThemeFile>(fs, new JsonSerializerOptions() {
-                    PropertyNameCaseInsensitive = true
-                });
+                _themeFile = await JsonSerializer.DeserializeAsync(fs, ThemeFileSerializerContext.Default.ThemeFile);
             }
             else {
                 HttpClient httpClient = (HttpClient?)_serviceProvider.GetService(typeof(HttpClient)) ?? new HttpClient();
@@ -109,9 +107,7 @@ public class TnTThemeDesign : IComponent {
                 if (httpClient is not null) {
                     try {
                         var content = await httpClient.GetStreamAsync(ThemeFile);
-                        _themeFile = await JsonSerializer.DeserializeAsync<ThemeFile>(content, new JsonSerializerOptions() {
-                            PropertyNameCaseInsensitive = true
-                        });
+                        _themeFile = await JsonSerializer.DeserializeAsync(content, ThemeFileSerializerContext.Default.ThemeFile);
                     }
                     catch { }
                 }
@@ -129,11 +125,11 @@ public class TnTThemeDesign : IComponent {
         if (_themeFile is not null) {
             if (_themeFile.Schemes is not null) {
                 if (_themeFile.Schemes.Light is not null) {
-                    properties = properties.Concat(_themeFile.Schemes.Light.GetType().GetProperties().Select(p => new KeyValuePair<string, object?>($"{themeColor}{p.Name}Light", p.GetValue(_themeFile.Schemes.Light))));
+                    properties = properties.Concat(typeof(ColorScheme).GetProperties().Select(p => new KeyValuePair<string, object?>($"{themeColor}{p.Name}Light", p.GetValue(_themeFile.Schemes.Light))));
                 }
 
                 if (_themeFile.Schemes.Dark is not null) {
-                    properties = properties.Concat(_themeFile.Schemes.Dark.GetType().GetProperties().Select(p => new KeyValuePair<string, object?>($"{themeColor}{p.Name}Dark", p.GetValue(_themeFile.Schemes.Dark))));
+                    properties = properties.Concat(typeof(ColorScheme).GetProperties().Select(p => new KeyValuePair<string, object?>($"{themeColor}{p.Name}Dark", p.GetValue(_themeFile.Schemes.Dark))));
                 }
             }
         }
@@ -197,3 +193,7 @@ public class TnTThemeDesign : IComponent {
         }));
     }
 }
+
+[JsonSourceGenerationOptions(PropertyNameCaseInsensitive = true)]
+[JsonSerializable(typeof(ThemeFile))]
+internal partial class ThemeFileSerializerContext : JsonSerializerContext { }
