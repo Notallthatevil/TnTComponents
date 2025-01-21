@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.AspNetCore.Components.Web;
 using System.Diagnostics.CodeAnalysis;
 using TnTComponents.Core;
 using TnTComponents.Scheduler;
@@ -202,14 +203,14 @@ public partial class TnTScheduler<[DynamicallyAccessedMembers(DynamicallyAccesse
             {
                 builder.OpenComponent<TnTImageButton>(100);
                 builder.AddComponentParameter(110, nameof(TnTImageButton.Icon), (object)MaterialIcon.ChevronLeft);
-                builder.AddComponentParameter(120, nameof(TnTImageButton.OnClickCallback), EventCallback.Factory.Create(this, PreviousPage));
+                builder.AddComponentParameter(120, nameof(TnTImageButton.OnClickCallback), EventCallback.Factory.Create<MouseEventArgs>(this, PreviousPage));
                 builder.AddComponentParameter(130, nameof(TnTImageButton.TextColor), TextColor);
                 builder.AddAttribute(140, "class", "prev-button");
                 builder.CloseComponent();
 
                 builder.OpenComponent<TnTButton>(150);
                 builder.AddComponentParameter(160, nameof(TnTButton.Appearance), (object)ButtonAppearance.Text);
-                builder.AddComponentParameter(170, nameof(TnTButton.OnClickCallback), EventCallback.Factory.Create(this, GoToToday));
+                builder.AddComponentParameter(170, nameof(TnTButton.OnClickCallback), EventCallback.Factory.Create<MouseEventArgs>(this, GoToToday));
                 builder.AddAttribute(180, "class", "today-button");
                 builder.AddComponentParameter(190, nameof(TnTButton.TextColor), TextColor);
                 builder.AddComponentParameter(200, nameof(TnTButton.Elevation), 0);
@@ -218,7 +219,7 @@ public partial class TnTScheduler<[DynamicallyAccessedMembers(DynamicallyAccesse
 
                 builder.OpenComponent<TnTImageButton>(220);
                 builder.AddComponentParameter(230, nameof(TnTImageButton.Icon), (object)MaterialIcon.ChevronRight);
-                builder.AddComponentParameter(240, nameof(TnTImageButton.OnClickCallback), EventCallback.Factory.Create(this, NextPage));
+                builder.AddComponentParameter(240, nameof(TnTImageButton.OnClickCallback), EventCallback.Factory.Create<MouseEventArgs>(this, NextPage));
                 builder.AddAttribute(250, "class", "next-button");
                 builder.AddComponentParameter(260, nameof(TnTImageButton.TextColor), TextColor);
                 builder.CloseComponent();
