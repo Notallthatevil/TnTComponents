@@ -7,11 +7,11 @@
 <div @attributes="AdditionalAttributes" class="@ElementClass" style="@ElementStyle" id="@ElementId" title="@ElementTitle" lang="@ElementLang" @ref="Element">
     @if (!HideDateControls) {
         <div class="date-controls">
-            <TnTImageButton Icon="@(new MaterialIcon{ Icon = MaterialIcon.ChevronLeft })" OnClickCallback="PreviousPage" TextColor="@TextColor" class="prev-button" />
+            <TnTImageButton Icon="@MaterialIcon.ChevronLeft" OnClickCallback="PreviousPage" TextColor="@TextColor" class="prev-button" />
             <TnTButton Appearance="ButtonAppearance.Text" OnClickCallback="GoToToday" class="today-button" TextColor="@TextColor" Elevation="0">
                 TODAY
             </TnTButton>
-            <TnTImageButton Icon="@(new MaterialIcon{ Icon = MaterialIcon.ChevronRight })" OnClickCallback="NextPage" class="next-button" TextColor="@TextColor" />
+            <TnTImageButton Icon="@MaterialIcon.ChevronRight" OnClickCallback="NextPage" class="next-button" TextColor="@TextColor" />
             <TnTInputDateTime @bind-Value:get="@Date" @bind-Value:set="@((DateOnly date) => UpdateDate(date))" BackgroundColor="@BackgroundColor" Label="Date Picker" />
         </div>
     }
