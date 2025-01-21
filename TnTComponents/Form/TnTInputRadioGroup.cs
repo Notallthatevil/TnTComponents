@@ -12,7 +12,7 @@ namespace TnTComponents;
 /// </summary>
 /// <typeparam name="TInputType">The type of the input value.</typeparam>
 [CascadingTypeParameter(nameof(TInputType))]
-public class TnTInputRadioGroup<TInputType> : TnTInputBase<TInputType> {
+public class TnTInputRadioGroup<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TInputType> : TnTInputBase<TInputType> {
 
     /// <summary>
     ///     Gets or sets the child content to be rendered inside the radio group.
