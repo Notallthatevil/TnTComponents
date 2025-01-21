@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
+using System.Diagnostics.CodeAnalysis;
 using TnTComponents.Core;
 using TnTComponents.Ext;
 using TnTComponents.Interfaces;
@@ -12,7 +13,7 @@ namespace TnTComponents.Scheduler.Infrastructure;
 ///     Represents the base class for schedule views in the scheduler component.
 /// </summary>
 /// <typeparam name="TEventType">The type of the event.</typeparam>
-public abstract class ScheduleViewBase<TEventType> : TnTComponentBase, IDisposable where TEventType : TnTEvent {
+public abstract class ScheduleViewBase<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TEventType> : TnTComponentBase, IDisposable where TEventType : TnTEvent {
 
     /// <summary>
     ///     Gets the event that is currently being dragged.
