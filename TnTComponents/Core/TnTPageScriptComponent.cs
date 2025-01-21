@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System.Diagnostics.CodeAnalysis;
 using TnTComponents.Ext;
 using TnTComponents.Interfaces;
 
@@ -9,7 +10,7 @@ namespace TnTComponents.Core;
 ///     Represents a base class for components that have an isolated JavaScript module.
 /// </summary>
 /// <typeparam name="TComponent">The type of the component.</typeparam>
-public abstract class TnTPageScriptComponent<TComponent> : TnTComponentBase, ITnTPageScriptComponent<TComponent> where TComponent : ComponentBase {
+public abstract class TnTPageScriptComponent<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TComponent> : TnTComponentBase, ITnTPageScriptComponent<TComponent> where TComponent : ComponentBase {
     public DotNetObjectReference<TComponent>? DotNetObjectRef { get; set; }
 
     public IJSObjectReference? IsolatedJsModule { get; private set; }
@@ -23,8 +24,6 @@ public abstract class TnTPageScriptComponent<TComponent> : TnTComponentBase, ITn
     ///     Gets the render fragment for the page script.
     /// </summary>
     protected RenderFragment PageScript;
-
-    private bool _disposed;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="TnTPageScriptComponent{TComponent}" /> class.
@@ -64,8 +63,6 @@ public abstract class TnTPageScriptComponent<TComponent> : TnTComponentBase, ITn
                 IsolatedJsModule = null;
             }
         }
-
-        _disposed = true;
     }
 
     /// <summary>
