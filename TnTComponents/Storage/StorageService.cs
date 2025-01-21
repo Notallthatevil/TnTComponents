@@ -1,5 +1,7 @@
 ﻿using Microsoft.JSInterop;
+using System.Numerics;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace TnTComponents.Storage;
 
@@ -68,11 +70,11 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
             throw new ArgumentNullException(nameof(key));
         }
 
-        return GetItemAsync<string>(key, cancellationToken);
+        return GetItemAsync<string>(key, DefaultJsonSerializerContext.Default, cancellationToken);
     }
 
     /// <inheritdoc />
-    public async ValueTask<T?> GetItemAsync<T>(string key, CancellationToken cancellationToken = default) {
+    public async ValueTask<T?> GetItemAsync<T>(string key, JsonSerializerContext? serializerContext = null, CancellationToken cancellationToken = default) {
         if (string.IsNullOrWhiteSpace(key)) {
             throw new ArgumentNullException(nameof(key));
         }
@@ -84,7 +86,10 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
                 return default;
             }
             try {
-                return JsonSerializer.Deserialize<T>(serializedData);
+                serializerContext ??= DefaultJsonSerializerContext.Default;
+
+                var result = JsonSerializer.Deserialize(serializedData, typeof(T), serializerContext);
+                return (T?)result;
             }
             catch (JsonException e) when (e.Path == "$" && typeof(T) == typeof(string)) {
                 // For backward compatibility return the plain string. On the next save a correct
@@ -207,7 +212,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
     }
 
     /// <inheritdoc />
-    public async ValueTask SetItemAsync<T>(string key, T data, CancellationToken cancellationToken = default) {
+    public async ValueTask SetItemAsync<T>(string key, T data, JsonSerializerContext? serializerContext = null, CancellationToken cancellationToken = default) {
         if (string.IsNullOrWhiteSpace(key)) {
             throw new ArgumentNullException(nameof(key));
         }
@@ -220,7 +225,9 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
             return;
         }
 
-        var serializedData = JsonSerializer.Serialize(data);
+        serializerContext ??= DefaultJsonSerializerContext.Default;
+
+        var serializedData = JsonSerializer.Serialize(data, typeof(T), serializerContext);
         try {
             await _jsRuntime.InvokeVoidAsync($"{_storageType}.setItem", cancellationToken, key, serializedData);
             Changed?.Invoke(this, new ChangedEventArgs { Key = key, OldValue = changingArgs.OldValue, NewValue = serializedData });
@@ -244,3 +251,18 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
     private bool IsStorageDisabledException(Exception exception)
         => exception.Message.Contains($"Failed to read the '{StorageType}' property from 'Window'");
 }
+
+[JsonSerializable(typeof(string))]
+[JsonSerializable(typeof(char))]
+[JsonSerializable(typeof(byte))]
+[JsonSerializable(typeof(short))]
+[JsonSerializable(typeof(ushort))]
+[JsonSerializable(typeof(int))]
+[JsonSerializable(typeof(uint))]
+[JsonSerializable(typeof(long))]
+[JsonSerializable(typeof(ulong))]
+[JsonSerializable(typeof(BigInteger))]
+[JsonSerializable(typeof(float))]
+[JsonSerializable(typeof(double))]
+[JsonSerializable(typeof(decimal))]
+internal partial class DefaultJsonSerializerContext : JsonSerializerContext;

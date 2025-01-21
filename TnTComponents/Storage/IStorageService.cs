@@ -1,4 +1,6 @@
-﻿namespace TnTComponents.Storage;
+﻿using System.Text.Json.Serialization;
+
+namespace TnTComponents.Storage;
 /*
 This implementation was heavliy influenced by Blazored.LocalStorage and Blazored.SessionStorage
 
@@ -23,153 +25,112 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- */
+*/
 
+/// <summary>
+/// Interface for storage service to handle storage operations.
+/// </summary>
 public interface IStorageService {
 
+    /// <summary>
+    /// Event triggered when a storage item is changed.
+    /// </summary>
     event EventHandler<ChangedEventArgs> Changed;
 
+    /// <summary>
+    /// Event triggered when a storage item is about to change.
+    /// </summary>
     event EventHandler<ChangingEventArgs> Changing;
 
     /// <summary>
-    ///     Clears all data from session storage.
+    /// Clears all items in the storage.
     /// </summary>
-    /// <returns>A <see cref="ValueTask" /> representing the completion of the operation.</returns>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>A task that represents the asynchronous clear operation.</returns>
     ValueTask ClearAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    ///     Checks if the <paramref name="key" /> exists in session storage, but does not check its value.
+    /// Checks if a key exists in the storage.
     /// </summary>
-    /// <param name="key">              
-    ///     A <see cref="string" /> value specifying the name of the storage slot to use
-    /// </param>
-    /// <param name="cancellationToken">
-    ///     A cancellation token to signal the cancellation of the operation. Specifying this
-    ///     parameter will override any default cancellations such as due to timeouts ( <see
-    ///     cref="JSRuntime.DefaultAsyncTimeout" />) from being applied.
-    /// </param>
-    /// <returns>A <see cref="ValueTask" /> representing the completion of the operation.</returns>
+    /// <param name="key">The key to check.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains true if the key exists; otherwise, false.</returns>
     ValueTask<bool> ContainKeyAsync(string key, CancellationToken cancellationToken = default);
 
     /// <summary>
-    ///     Retrieve the specified data from session storage as a <see cref="string" />.
+    /// Gets an item from the storage as a string.
     /// </summary>
-    /// <param name="key">              
-    ///     A <see cref="string" /> value specifying the name of the storage slot to use
-    /// </param>
-    /// <param name="cancellationToken">
-    ///     A cancellation token to signal the cancellation of the operation. Specifying this
-    ///     parameter will override any default cancellations such as due to timeouts ( <see
-    ///     cref="JSRuntime.DefaultAsyncTimeout" />) from being applied.
-    /// </param>
-    /// <returns>A <see cref="ValueTask" /> representing the completion of the operation.</returns>
+    /// <param name="key">The key of the item to get.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the item as a string.</returns>
     ValueTask<string?> GetItemAsStringAsync(string key, CancellationToken cancellationToken = default);
 
     /// <summary>
-    ///     Retrieve the specified data from session storage and deseralise it to the specfied type.
+    /// Gets an item from the storage.
     /// </summary>
-    /// <param name="key">              
-    ///     A <see cref="string" /> value specifying the name of the session storage slot to use
-    /// </param>
-    /// <param name="cancellationToken">
-    ///     A cancellation token to signal the cancellation of the operation. Specifying this
-    ///     parameter will override any default cancellations such as due to timeouts ( <see
-    ///     cref="JSRuntime.DefaultAsyncTimeout" />) from being applied.
-    /// </param>
-    /// <returns>A <see cref="ValueTask" /> representing the completion of the operation.</returns>
-    ValueTask<T?> GetItemAsync<T>(string key, CancellationToken cancellationToken = default);
+    /// <typeparam name="T">The type of the item to get.</typeparam>
+    /// <param name="key">The key of the item to get.</param>
+    /// <param name="serializerContext">The serializer context. This is required if trying to deserialize a custom type, other then a primitive. This is due to AOT and trimming. <see href="https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/source-generation"/></param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the item.</returns>
+    ValueTask<T?> GetItemAsync<T>(string key, JsonSerializerContext? serializerContext = null, CancellationToken cancellationToken = default);
 
     /// <summary>
-    ///     Return the name of the key at the specified <paramref name="index" />.
+    /// Gets the key at the specified index.
     /// </summary>
-    /// <param name="index">            </param>
-    /// <param name="cancellationToken">
-    ///     A cancellation token to signal the cancellation of the operation. Specifying this
-    ///     parameter will override any default cancellations such as due to timeouts ( <see
-    ///     cref="JSRuntime.DefaultAsyncTimeout" />) from being applied.
-    /// </param>
-    /// <returns>A <see cref="ValueTask" /> representing the completion of the operation.</returns>
+    /// <param name="index">The index of the key to get.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the key.</returns>
     ValueTask<string> KeyAsync(int index, CancellationToken cancellationToken = default);
 
     /// <summary>
-    ///     Returns a collection of strings representing the names of the keys in the Session storage.
+    /// Gets all keys in the storage.
     /// </summary>
-    /// <param name="cancellationToken">
-    ///     A cancellation token to signal the cancellation of the operation. Specifying this
-    ///     parameter will override any default cancellations such as due to timeouts ( <see
-    ///     cref="JSRuntime.DefaultAsyncTimeout" />) from being applied.
-    /// </param>
-    /// <returns>A <see cref="ValueTask" /> representing the completion of the operation.</returns>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the keys.</returns>
     ValueTask<IEnumerable<string>> KeysAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    ///     The number of items stored in session storage.
+    /// Gets the number of items in the storage.
     /// </summary>
-    /// <param name="cancellationToken">
-    ///     A cancellation token to signal the cancellation of the operation. Specifying this
-    ///     parameter will override any default cancellations such as due to timeouts ( <see
-    ///     cref="JSRuntime.DefaultAsyncTimeout" />) from being applied.
-    /// </param>
-    /// <returns>A <see cref="ValueTask" /> representing the completion of the operation.</returns>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the number of items.</returns>
     ValueTask<int> LengthAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    ///     Remove the data with the specified <paramref name="key" />.
+    /// Removes an item from the storage.
     /// </summary>
-    /// <param name="key">              
-    ///     A <see cref="string" /> value specifying the name of the storage slot to use
-    /// </param>
-    /// <param name="cancellationToken">
-    ///     A cancellation token to signal the cancellation of the operation. Specifying this
-    ///     parameter will override any default cancellations such as due to timeouts ( <see
-    ///     cref="JSRuntime.DefaultAsyncTimeout" />) from being applied.
-    /// </param>
-    /// <returns>A <see cref="ValueTask" /> representing the completion of the operation.</returns>
+    /// <param name="key">The key of the item to remove.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     ValueTask RemoveItemAsync(string key, CancellationToken cancellationToken = default);
 
     /// <summary>
-    ///     Removes a collection of <paramref name="keys" />.
+    /// Removes multiple items from the storage.
     /// </summary>
-    /// <param name="keys">             
-    ///     A IEnumerable collection of strings specifying the name of the storage slot to remove
-    /// </param>
-    /// <param name="cancellationToken">
-    ///     A cancellation token to signal the cancellation of the operation. Specifying this
-    ///     parameter will override any default cancellations such as due to timeouts ( <see
-    ///     cref="JSRuntime.DefaultAsyncTimeout" />) from being applied.
-    /// </param>
-    /// <returns>A <see cref="ValueTask" /> representing the completion of the operation.</returns>
+    /// <param name="keys">The keys of the items to remove.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     ValueTask RemoveItemsAsync(IEnumerable<string> keys, CancellationToken cancellationToken = default);
 
     /// <summary>
-    ///     Sets or updates the <paramref name="data" /> in session storage with the specified
-    ///     <paramref name="key" />. Does not serialize the value before storing.
+    /// Sets an item in the storage as a string.
     /// </summary>
-    /// <param name="key">              
-    ///     A <see cref="string" /> value specifying the name of the storage slot to use
-    /// </param>
-    /// <param name="data">             The string to be saved</param>
-    /// <param name="cancellationToken">
-    ///     A cancellation token to signal the cancellation of the operation. Specifying this
-    ///     parameter will override any default cancellations such as due to timeouts ( <see
-    ///     cref="JSRuntime.DefaultAsyncTimeout" />) from being applied.
-    /// </param>
-    /// <returns>A <see cref="ValueTask" /> representing the completion of the operation.</returns>
+    /// <param name="key">The key of the item to set.</param>
+    /// <param name="data">The data to set.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     ValueTask SetItemAsStringAsync(string key, string data, CancellationToken cancellationToken = default);
 
     /// <summary>
-    ///     Sets or updates the <paramref name="data" /> in session storage with the specified
-    ///     <paramref name="key" />.
+    /// Sets an item in the storage.
     /// </summary>
-    /// <param name="key">              
-    ///     A <see cref="string" /> value specifying the name of the storage slot to use
-    /// </param>
-    /// <param name="data">             The data to be saved</param>
-    /// <param name="cancellationToken">
-    ///     A cancellation token to signal the cancellation of the operation. Specifying this
-    ///     parameter will override any default cancellations such as due to timeouts ( <see
-    ///     cref="JSRuntime.DefaultAsyncTimeout" />) from being applied.
-    /// </param>
-    /// <returns>A <see cref="ValueTask" /> representing the completion of the operation.</returns>
-    ValueTask SetItemAsync<T>(string key, T data, CancellationToken cancellationToken = default);
+    /// <typeparam name="T">The type of the item to set.</typeparam>
+    /// <param name="key">The key of the item to set.</param>
+    /// <param name="data">The data to set.</param>
+    /// <param name="serializerContext">The serializer context. This is required if trying to deserialize a custom type, other then a primitive. 
+    /// This is due to AOT and trimming. <see href="https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/source-generation"/></param></param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    ValueTask SetItemAsync<T>(string key, T data, JsonSerializerContext? serializerContext = null, CancellationToken cancellationToken = default);
 }
