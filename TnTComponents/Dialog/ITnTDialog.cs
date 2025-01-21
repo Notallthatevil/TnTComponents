@@ -1,4 +1,6 @@
-﻿namespace TnTComponents.Dialog;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace TnTComponents.Dialog;
 
 /// <summary>
 ///     Represents a dialog interface with various properties and methods for managing dialog behavior.
@@ -28,7 +30,7 @@ public interface ITnTDialog {
     /// <summary>
     ///     Gets the type of the dialog.
     /// </summary>
-    Type Type { get; init; }
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type Type { get; init; }
 
     /// <summary>
     ///     Asynchronously closes the dialog.
