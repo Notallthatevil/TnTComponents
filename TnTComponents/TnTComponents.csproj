@@ -3,33 +3,12 @@
         <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-        <Title>TnTComponents</Title>
-        <Authors>Nate Tripp</Authors>
-        <Company>Tripp'N Technology LLC</Company>
-        <PackageProjectUrl>https://github.com/Notallthatevil/TnTComponents</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/Notallthatevil/TnTComponents</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PackageTags>blazor</PackageTags>
+        <IsAotCompatible>True</IsAotCompatible>
+        <IsTrimmable>True</IsTrimmable>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'">
-      <IsAotCompatible>True</IsAotCompatible>
-      <IsTrimmable>True</IsTrimmable>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0|AnyCPU'">
-      <IsAotCompatible>True</IsAotCompatible>
-      <IsTrimmable>True</IsTrimmable>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|AnyCPU'">
-      <IsAotCompatible>True</IsAotCompatible>
-      <IsTrimmable>True</IsTrimmable>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0|AnyCPU'">
-      <IsAotCompatible>True</IsAotCompatible>
-      <IsTrimmable>True</IsTrimmable>
-    </PropertyGroup>
+
     <ItemGroup>
-      <Content Remove="compilerconfig.json" />
+        <Content Remove="compilerconfig.json" />
     </ItemGroup>
 
     <ItemGroup>
@@ -58,9 +37,31 @@
 
     <PropertyGroup>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <GenerateDocumentationFile>False</GenerateDocumentationFile>
+        <Title>TnTComponents</Title>
+        <Company>NT Technologies</Company>
+        <PackageProjectUrl>https://github.com/Notallthatevil/TnTComponents</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Notallthatevil/TnTComponents</RepositoryUrl>
+        <PackageTags>Blazor;Web;UI;.NET8;.NET9;Material</PackageTags>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'">
+      <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0|AnyCPU'">
+      <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|AnyCPU'">
+      <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0|AnyCPU'">
+      <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="..\README.md" Pack="true" PackagePath="\"/>
+        <None Include="..\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 </Project>
