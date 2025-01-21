@@ -15,7 +15,7 @@ namespace TnTComponents;
 ///     Represents a radio input component.
 /// </summary>
 /// <typeparam name="TInputType">The type of the input value.</typeparam>
-public class TnTInputRadio<TInputType> : TnTComponentBase, ITnTInteractable {
+public class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TInputType> : TnTComponentBase, ITnTInteractable {
 
     /// <summary>
     ///     Gets or sets the cascading parameter for the radio group.
