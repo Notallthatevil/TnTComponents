@@ -17,6 +17,7 @@
 
     <ItemGroup>
         <PackageReference Include="DartSassBuilder" Version="1.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.0" />
         <PackageReference Include="System.Text.Encodings.Web" Version="9.0.0" />
     </ItemGroup>

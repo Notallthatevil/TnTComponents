@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+
 namespace TnTComponents.Virtualization;
 
 /// <summary> Represents an item request. This struct is http query parameter binding friendly.
@@ -22,4 +24,36 @@ public readonly record struct TnTItemsProviderRequest() {
     ///     Gets or sets the maximum number of items to retrieve.
     /// </summary>
     public readonly int? Count { get; init; }
+
+
+    /// <summary>
+    /// Binds the HTTP context query parameters to a <see cref="TnTItemsProviderServerRequest"/> instance.
+    /// </summary>
+    /// <param name="context">The HTTP context containing the query parameters.</param>
+    /// <returns>A task that represents the asynchronous bind operation. The task result contains the bound <see cref="TnTItemsProviderServerRequest"/> instance or null if binding failed.</returns>
+    public static ValueTask<TnTItemsProviderRequest?> BindAsync(HttpContext context) {
+        var query = context.Request.Query;
+        if (query.TryGetValue(nameof(StartIndex), out var startIndexes) && !string.IsNullOrWhiteSpace(startIndexes.FirstOrDefault()) && int.TryParse(startIndexes.FirstOrDefault(), out int startIndex)) {
+            int? count = null;
+            var countStr = query[nameof(Count)];
+            if (!string.IsNullOrWhiteSpace(countStr.FirstOrDefault()) && int.TryParse(countStr.FirstOrDefault(), out int countResult)) {
+                count = countResult;
+            }
+            var sortOnProperties = query[nameof(SortOnProperties)].SelectMany(s => s!.Split("],[").Select(t => t.Replace("[", string.Empty).Replace("]", string.Empty)))
+                .Where(s => !string.IsNullOrWhiteSpace(s))
+                .Select(s => {
+                    var split = s.Split(',');
+                    return new KeyValuePair<string, SortDirection>(split.First(), Enum.Parse<SortDirection>(split.LastOrDefault() ?? SortDirection.Auto.ToString()));
+                })
+                .ToList();
+
+            return ValueTask.FromResult<TnTItemsProviderRequest?>(new TnTItemsProviderRequest {
+                StartIndex = startIndex,
+                Count = count,
+                SortOnProperties = sortOnProperties
+            });
+        }
+
+        return ValueTask.FromResult((TnTItemsProviderRequest?)null);
+    }
 }
