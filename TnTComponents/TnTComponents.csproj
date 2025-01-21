@@ -5,6 +5,14 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <IsAotCompatible>True</IsAotCompatible>
         <IsTrimmable>True</IsTrimmable>
+        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <GenerateDocumentationFile>False</GenerateDocumentationFile>
+        <Title>TnTComponents</Title>
+        <Company>NT Technologies</Company>
+        <PackageProjectUrl>https://github.com/Notallthatevil/TnTComponents</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Notallthatevil/TnTComponents</RepositoryUrl>
+        <PackageTags>Blazor;Web;UI;.NET8;.NET9;Material</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
@@ -35,32 +43,6 @@
     <Target Name="CopyCss" BeforeTargets="Build">
         <Copy SourceFiles="Styles/style.css" DestinationFolder="wwwroot" />
     </Target>
-
-    <PropertyGroup>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <GenerateDocumentationFile>False</GenerateDocumentationFile>
-        <Title>TnTComponents</Title>
-        <Company>NT Technologies</Company>
-        <PackageProjectUrl>https://github.com/Notallthatevil/TnTComponents</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/Notallthatevil/TnTComponents</RepositoryUrl>
-        <PackageTags>Blazor;Web;UI;.NET8;.NET9;Material</PackageTags>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'">
-      <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0|AnyCPU'">
-      <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|AnyCPU'">
-      <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0|AnyCPU'">
-      <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-    </PropertyGroup>
 
     <ItemGroup>
         <None Include="..\README.md" Pack="true" PackagePath="\" />

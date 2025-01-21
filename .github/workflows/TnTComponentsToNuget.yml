@@ -41,4 +41,5 @@ jobs:
       run: |
         dotnet pack TnTComponents/TnTComponents.csproj --configuration Release --output ./nupkg /p:PackageVersion=${{ steps.version_step.outputs.MajorMinorPatch }}
         dotnet pack TnTComponents.AspNetCore/TnTComponents.AspNetCore.csproj --configuration Release --output ./nupkg /p:PackageVersion=${{ steps.version_step.outputs.MajorMinorPatch }}
+        dotnet pack TnTComponents.Extensions/TnTComponents.Extensions.csproj --configuration Release --output ./nupkg /p:PackageVersion=${{ steps.version_step.outputs.MajorMinorPatch }}
     - run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json

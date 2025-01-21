@@ -4,7 +4,20 @@
     <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Authors>NT Technologies</Authors>
+    <Company>NT Technologies</Company>
+    <PackageProjectUrl>https://github.com/Notallthatevil/TnTComponents</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/Notallthatevil/TnTComponents</RepositoryUrl>
+    <PackageTags>Blazor;Components;.NET8;.NET9</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TnTComponents\TnTComponents.csproj" />

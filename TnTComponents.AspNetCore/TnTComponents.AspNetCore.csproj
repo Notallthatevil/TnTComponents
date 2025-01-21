@@ -8,6 +8,10 @@
         <Company>NT Technologies</Company>
         <PackageProjectUrl>https://github.com/Notallthatevil/TnTComponents</PackageProjectUrl>
         <RepositoryUrl>https://github.com/Notallthatevil/TnTComponents</RepositoryUrl>
+        <IsTrimmable>True</IsTrimmable>
+        <IsAotCompatible>True</IsAotCompatible>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageTags>Blazor;Components;AspNetCore;.NET8;.NET9</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,26 +21,6 @@
     <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
-    <PropertyGroup>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageTags>Blazor;Components;AspNetCore;.NET8;.NET9</PackageTags>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'">
-      <IsTrimmable>True</IsTrimmable>
-      <IsAotCompatible>True</IsAotCompatible>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0|AnyCPU'">
-      <IsTrimmable>True</IsTrimmable>
-      <IsAotCompatible>True</IsAotCompatible>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|AnyCPU'">
-      <IsTrimmable>True</IsTrimmable>
-      <IsAotCompatible>True</IsAotCompatible>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0|AnyCPU'">
-      <IsTrimmable>True</IsTrimmable>
-      <IsAotCompatible>True</IsAotCompatible>
-    </PropertyGroup>
 
     <ItemGroup>
         <None Include="..\README.md" Pack="true" PackagePath="\" />
