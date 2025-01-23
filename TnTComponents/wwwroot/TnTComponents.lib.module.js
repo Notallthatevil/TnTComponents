@@ -62,7 +62,6 @@ function onEnhancedLoad() {
     for (const { module } of pageScriptInfoBySrc.values()) {
         module?.onUpdate?.();
     }
-    TnTComponents.setupRipple();
 }
 function setupPageScriptElement() {
     customElements.define('tnt-page-script', class extends HTMLElement {
@@ -89,7 +88,6 @@ function setupPageScriptElement() {
 export function afterWebStarted(blazor) {
     setupPageScriptElement();
     blazor.addEventListener('enhancedload', onEnhancedLoad);
-    TnTComponents.setupRipple();
 }
 function getCoords(elem) { // crossbrowser version
     var box = elem.getBoundingClientRect();
@@ -110,46 +108,7 @@ function getCoords(elem) { // crossbrowser version
 }
 
 function ripple(e) {
-
-    // Setup
-    let posX = this.offsetLeft;
-    let posY = this.offsetTop;
-    let buttonWidth = this.offsetWidth;
-    let buttonHeight = this.offsetHeight;
-
-    // Add the element
-    let ripple = document.createElement('span');
-
-    this.appendChild(ripple);
-    ripple.style.pointerEvents = 'none';
-
-
-    // Make it round!
-    if (buttonWidth >= buttonHeight) {
-        buttonHeight = buttonWidth;
-    } else {
-        buttonWidth = buttonHeight;
-    }
-
-    // Get the center of the element
-    const coords = getCoords(e.target);
-    var x = e.pageX - coords.left - buttonWidth / 2;
-    var y = e.pageY - coords.top - buttonHeight / 2;
-
-
-    ripple.style.width = `${buttonWidth}px`;
-    ripple.style.height = `${buttonHeight}px`;
-    ripple.style.top = `${y}px`;
-    ripple.style.left = `${x}px`;
-
-    ripple.classList.add('tnt-rippling');
-
-    setTimeout(() => {
-        if (this.contains(ripple)) {
-            this.removeChild(ripple);
-        }
-    }, 500);
-
+    TnTComponents.rippleEffect(e);
 }
 
 const isNumericInput = (event) => {
@@ -330,8 +289,7 @@ window.TnTComponents = {
         const elements = document.querySelectorAll('.tnt-ripple');
 
         elements.forEach(element => {
-            element.removeEventListener('click', ripple);
-            element.addEventListener('click', ripple, false);
+            element.appendChild(document.createElement('tnt-ripple-effect'));
         });
     },
     toggleAccordion: (event) => {
@@ -410,5 +368,46 @@ window.TnTComponents = {
                 }
             }
         }
+    },
+    rippleEffect: (e) => {
+        console.log('rippleEffect');
+        // Setup
+        let posX = e.target.offsetLeft;
+        let posY = e.target.offsetTop;
+        let buttonWidth = e.target.offsetWidth;
+        let buttonHeight = e.target.offsetHeight;
+
+        // Add the element
+        let ripple = document.createElement('span');
+
+        e.target.appendChild(ripple);
+        ripple.style.pointerEvents = 'none';
+
+
+        // Make it round!
+        if (buttonWidth >= buttonHeight) {
+            buttonHeight = buttonWidth;
+        } else {
+            buttonWidth = buttonHeight;
+        }
+
+        // Get the center of the element
+        const coords = getCoords(e.target);
+        var x = e.pageX - coords.left - buttonWidth / 2;
+        var y = e.pageY - coords.top - buttonHeight / 2;
+
+
+        ripple.style.width = `${buttonWidth}px`;
+        ripple.style.height = `${buttonHeight}px`;
+        ripple.style.top = `${y}px`;
+        ripple.style.left = `${x}px`;
+
+        ripple.classList.add('tnt-rippling');
+
+        setTimeout(() => {
+            if (e.target.contains(ripple)) {
+                e.target.removeChild(ripple);
+            }
+        }, 500);
     }
 }

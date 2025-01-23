@@ -60,7 +60,7 @@ public class TnTButton : TnTComponentBase, ITnTStyleable, ITnTInteractable {
     public virtual int Elevation { get; set; } = 1;
 
     [Parameter]
-    public bool EnableRipple { get; set; }
+    public bool EnableRipple { get; set; } = true;
 
     /// <summary>
     ///     Gets or sets the callback to be invoked when the button is clicked.
@@ -111,8 +111,13 @@ public class TnTButton : TnTComponentBase, ITnTStyleable, ITnTInteractable {
             builder.AddEventStopPropagationAttribute(110, "onclick", true);
         }
 
-        builder.AddElementReferenceCapture(120, __value => Element = __value);
-        builder.AddContent(130, ChildContent);
+        if (EnableRipple) {
+            builder.OpenComponent<TnTRippleEffect>(120);
+            builder.CloseComponent();
+        }
+
+        builder.AddElementReferenceCapture(130, __value => Element = __value);
+        builder.AddContent(140, ChildContent);
 
         builder.CloseElement();
     }
