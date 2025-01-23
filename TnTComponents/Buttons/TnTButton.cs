@@ -81,7 +81,7 @@ public class TnTButton : TnTComponentBase, ITnTStyleable, ITnTInteractable {
     public TextAlign? TextAlignment { get; set; }
 
     [Parameter]
-    public TnTColor TextColor { get; set; } = TnTColor.OnPrimary;
+    public virtual TnTColor TextColor { get; set; } = TnTColor.OnPrimary;
 
     [Parameter]
     public TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;

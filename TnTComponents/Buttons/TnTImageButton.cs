@@ -16,8 +16,17 @@ public class TnTImageButton : TnTButton {
     [Parameter, EditorRequired]
     public TnTIcon Icon { get; set; } = default!;
 
+    [Parameter]
+    public RenderFragment<TnTBadge>? Badge { get; set; }
+
+    public override TnTColor TextColor { get; set; } = TnTColor.OnSurface;
+
     protected override void OnParametersSet() {
         base.OnParametersSet();
-        ChildContent = Icon.Render();
+        ChildContent = new RenderFragment(b => {
+            b.AddContent(0, Icon.Render());
+            b.AddContent(1, Badge);
+        });
+
     }
 }

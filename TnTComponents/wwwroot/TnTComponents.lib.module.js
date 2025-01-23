@@ -380,7 +380,13 @@ window.TnTComponents = {
         // Add the element
         let ripple = document.createElement('span');
 
-        e.target.appendChild(ripple);
+        let target = e.target;
+        const rippleEffect = e.target.querySelector(':scope > tnt-ripple-effect');
+        if (rippleEffect) {
+            target = rippleEffect;
+        }
+
+        target.appendChild(ripple);
         ripple.style.pointerEvents = 'none';
 
 
@@ -405,9 +411,9 @@ window.TnTComponents = {
         ripple.classList.add('tnt-rippling');
 
         setTimeout(() => {
-            if (e.target.contains(ripple)) {
-                e.target.removeChild(ripple);
+            if (target.contains(ripple)) {
+                target.removeChild(ripple);
             }
-        }, 500);
+        }, 1000);
     }
 }

@@ -14,9 +14,8 @@
         <RepositoryUrl>https://github.com/Notallthatevil/TnTComponents</RepositoryUrl>
         <PackageTags>Blazor;Web;UI;.NET8;.NET9;Material</PackageTags>
     </PropertyGroup>
-
     <ItemGroup>
-        <Content Remove="compilerconfig.json" />
+      <Content Remove="compilerconfig.json" />
     </ItemGroup>
 
     <ItemGroup>
@@ -46,5 +45,6 @@
 
     <ItemGroup>
         <None Include="..\README.md" Pack="true" PackagePath="\" />
+        <None Include="compilerconfig.json" />
     </ItemGroup>
 </Project>

@@ -1,0 +1,9 @@
+﻿@using TnTComponents.Core
+@using TnTComponents.Interfaces
+@namespace TnTComponents
+@inherits TnTComponentBase
+@implements ITnTStyleable
+
+<span @attributes="AdditionalAttributes" class="@ElementClass" style="@ElementStyle" title="@ElementTitle" id="@ElementId" lang="@ElementLang" @ref="Element">
+    @ChildContent
+</span>

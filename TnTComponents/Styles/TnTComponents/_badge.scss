@@ -1,0 +1,9 @@
+.tnt-badge {
+    pointer-events: none;
+    padding: 4px;
+    min-width: 16px;
+    min-height: 16px;
+    box-sizing:border-box;
+    padding:0 4px;
+    @extend .tnt-label-medium;
+}

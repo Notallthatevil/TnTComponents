@@ -49,6 +49,20 @@
         <TnTImageButton Icon="@(new MaterialIcon{ Icon = MaterialIcon.GppGood })" OnClickCallback="@OnClick" BorderRadius="@(new TnTComponents.Core.TnTBorderRadius() {StartStart = 5, StartEnd = 2, EndEnd = 9, EndStart=3})">
             Obscure Radius
         </TnTImageButton>
+
+        <TnTImageButton Icon="@(new MaterialIcon{ Icon = MaterialIcon.GppGood })" OnClickCallback="@OnClick">
+            <Badge>
+                5
+            </Badge>
+        </TnTImageButton>
+
+        <TnTImageButton Icon="@(new MaterialIcon{ Icon = MaterialIcon.GppGood })" OnClickCallback="@OnClick">
+            <Badge>
+                This is a long badge
+            </Badge>
+        </TnTImageButton>
+
+
     </TnTColumn>
 </TnTRow>
 

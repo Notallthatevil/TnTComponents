@@ -133,6 +133,20 @@
         <TnTButton OnClickCallback="@OnClick" BorderRadius="@(new TnTComponents.Core.TnTBorderRadius() {StartStart = 5, StartEnd = 2, EndEnd = 9, EndStart=3})">
             Obscure Radius
         </TnTButton>
+
+        <TnTButton OnClickCallback="@OnClick">
+            With Badge
+            <TnTComponents.TnTBadge>
+                5
+            </TnTComponents.TnTBadge>
+        </TnTButton>
+        
+        <TnTButton OnClickCallback="@OnClick">
+            With Long Badge
+            <TnTComponents.TnTBadge>
+                This is a really long badge
+            </TnTComponents.TnTBadge>
+        </TnTButton>
     </TnTColumn>
 </TnTRow>
 

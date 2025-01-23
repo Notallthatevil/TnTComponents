@@ -10,10 +10,6 @@
     transition: 250ms;
     position: relative;
 
-    &.tnt-ripple {
-        overflow: hidden;
-    }
-
     &:not(.tnt-outlined) {
         border: none;
     }
@@ -54,6 +50,7 @@
         }
     }
 
+
     &.tnt-image-button {
         height: 40px;
         width: 40px;
@@ -62,6 +59,13 @@
         .tnt-icon {
             font-size: 24px;
         }
+    }
+
+    & > .tnt-badge {
+        position: absolute;
+        top: 0;
+        right:0;
+        transform: translate(50%, -50%);
     }
 }
 
