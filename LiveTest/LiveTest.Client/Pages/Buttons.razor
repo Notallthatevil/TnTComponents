@@ -1,15 +1,15 @@
-﻿@page "/ImageButtons"
+﻿@page "/Buttons"
 @using TnTComponents
 
 
-<LiveTest.Client.Components.ImageButtons/>
+<LiveTest.Client.Components.ButtonsComponent />
 <h3>
     WASM
 </h3>
-<LiveTest.Client.Components.ImageButtons @rendermode="InteractiveWebAssembly" />
+<LiveTest.Client.Components.ButtonsComponent @rendermode="InteractiveWebAssembly" />
 
 <h3>
     Server
 </h3>
-<LiveTest.Client.Components.ImageButtons @rendermode="InteractiveServer" />
+<LiveTest.Client.Components.ButtonsComponent @rendermode="InteractiveServer" />
 
