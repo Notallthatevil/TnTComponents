@@ -139,7 +139,6 @@ window.TnTComponents = {
         }
     },
     openDialog: (dialogId) => {
-        console.log('openDialog');
         const dialog = document.getElementById(dialogId);
         if (dialog) {
             dialog.show();
@@ -370,7 +369,6 @@ window.TnTComponents = {
         }
     },
     rippleEffect: (e) => {
-        console.log('rippleEffect');
         // Setup
         let posX = e.target.offsetLeft;
         let posY = e.target.offsetTop;

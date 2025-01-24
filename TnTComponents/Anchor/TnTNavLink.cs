@@ -78,7 +78,8 @@ public class TnTNavLink : NavLink, ITnTComponentBase, ITnTInteractable, ITnTStyl
     [Parameter]
     public int Elevation { get; set; }
 
-    public bool EnableRipple => true;
+    [Parameter]
+    public bool EnableRipple { get; set; } = true;
 
     /// <summary>
     ///     Gets or sets the on-tint color of the link.
@@ -109,6 +110,12 @@ public class TnTNavLink : NavLink, ITnTComponentBase, ITnTInteractable, ITnTStyl
         builder.AddAttribute(80, "autofocus", AutoFocus);
         builder.AddElementReferenceCapture(90, e => Element = e);
         builder.AddContent(100, ChildContent);
+
+        if (EnableRipple) {
+            builder.OpenComponent<TnTRippleEffect>(110);
+            builder.CloseComponent();
+        }
+
         builder.CloseElement();
     }
 

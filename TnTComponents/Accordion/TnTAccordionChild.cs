@@ -48,7 +48,7 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
         .Build();
 
     [Parameter]
-    public bool EnableRipple { get; set; }
+    public bool EnableRipple { get; set; } = true;
 
     /// <summary>
     ///     Gets or sets the body color of the header.
@@ -138,6 +138,12 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
                         .Build());
                 builder.AddAttribute(110, "data-permanent", true);
                 builder.AddContent(120, Label);
+
+                if(EnableRipple) {
+                    builder.OpenComponent<TnTRippleEffect>(125);
+                    builder.CloseComponent();
+                }
+
 
                 {
                     builder.OpenComponent<MaterialIcon>(130);

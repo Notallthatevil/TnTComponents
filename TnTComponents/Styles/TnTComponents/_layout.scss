@@ -79,6 +79,10 @@
                     background-color: var(--active-bg-color);
                 }
             }
+
+            &:has(> tnt-ripple-effect) {
+                position: relative;
+            }
         }
     }
 

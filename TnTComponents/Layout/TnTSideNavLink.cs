@@ -55,6 +55,12 @@ public class TnTSideNavLink : TnTNavLink {
 
         builder.AddContent(110, Label);
 
+
+        if (EnableRipple) {
+            builder.OpenComponent<TnTRippleEffect>(120);
+            builder.CloseComponent();
+        }
+
         builder.CloseElement();
     }
 

@@ -8,7 +8,6 @@ function intersectCallback(entries, ob) {
                 value.dotNetRef.invokeMethodAsync("BeginLoad");
             }
             ob.unobserve(entry.target);
-            console.log(`loading ${entry.target}`);
         }
     });
 }
