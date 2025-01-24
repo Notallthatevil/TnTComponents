@@ -52,7 +52,7 @@ public partial class TnTChip : TnTComponentBase, ITnTInteractable {
         .Build();
 
     [Parameter]
-    public bool EnableRipple { get; set; }
+    public bool EnableRipple { get; set; } = true;
 
     /// <summary>
     ///     Gets or sets the label of the chip.
@@ -138,6 +138,11 @@ public partial class TnTChip : TnTComponentBase, ITnTInteractable {
             builder.AddComponentParameter(230, nameof(TnTImageButton.Elevation), 0);
             builder.AddComponentParameter(240, nameof(TnTImageButton.StopPropagation), true);
             builder.AddComponentParameter(250, "class", "tnt-chip-close-button");
+            builder.CloseComponent();
+        }
+
+        if (EnableRipple) {
+            builder.OpenComponent<TnTRippleEffect>(260);
             builder.CloseComponent();
         }
 
