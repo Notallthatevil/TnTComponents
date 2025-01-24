@@ -20,17 +20,18 @@ public class TnTSideNavToggle : TnTComponentBase, ITnTInteractable {
         .Build();
 
     [Parameter]
-    public TnTIcon Icon { get; set; } = new MaterialIcon{ Icon = MaterialIcon.Menu };
+    public TnTIcon Icon { get; set; } = new MaterialIcon { Icon = MaterialIcon.Menu };
 
     [Parameter]
     public bool Disabled { get; set; }
     [Parameter]
     public string? ElementName { get; set; }
-    public bool EnableRipple => true;
+    [Parameter]
+    public bool EnableRipple { get; set; } = true;
     [Parameter]
     public TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
     [Parameter]
-    public TnTColor? OnTintColor { get; set; }  
+    public TnTColor? OnTintColor { get; set; }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "button");
@@ -43,6 +44,12 @@ public class TnTSideNavToggle : TnTComponentBase, ITnTInteractable {
         builder.AddAttribute(70, "onclick", "TnTComponents.toggleSideNav(event)");
         builder.AddElementReferenceCapture(80, e => Element = e);
         builder.AddContent(90, Icon.Render());
+
+        if (EnableRipple) {
+            builder.OpenComponent<TnTRippleEffect>(100);
+            builder.CloseComponent();
+        }
+
         builder.CloseElement();
     }
 }

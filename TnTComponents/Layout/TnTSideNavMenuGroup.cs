@@ -49,7 +49,7 @@ public class TnTSideNavMenuGroup : TnTComponentBase, ITnTInteractable, ITnTStyle
     public string? ElementName { get; set; }
 
     [Parameter]
-    public bool EnableRipple { get; set; }
+    public bool EnableRipple { get; set; } = true;
 
     [Parameter]
     public TnTColor? OnTintColor { get; set; }
@@ -83,6 +83,12 @@ public class TnTSideNavMenuGroup : TnTComponentBase, ITnTInteractable, ITnTStyle
         builder.AddContent(140, Label);
         builder.CloseElement();
 
+        if (EnableRipple) {
+            builder.OpenComponent<TnTRippleEffect>(145);
+            builder.CloseComponent();
+        }
+
+
         builder.OpenComponent<MaterialIcon>(150);
         builder.AddComponentParameter(160, nameof(MaterialIcon.Icon), MaterialIcon.ArrowDropDown.Icon);
         builder.AddAttribute(161, "class", "tnt-end-icon");
@@ -105,6 +111,8 @@ public class TnTSideNavMenuGroup : TnTComponentBase, ITnTInteractable, ITnTStyle
         }
 
         builder.AddContent(230, ChildContent);
+
+
 
         builder.CloseElement();
     }
