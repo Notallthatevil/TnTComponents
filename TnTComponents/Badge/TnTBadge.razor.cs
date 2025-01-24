@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
+using System.Security.Cryptography.X509Certificates;
 using TnTComponents.Core;
 
 namespace TnTComponents;
@@ -23,7 +25,6 @@ public partial class TnTBadge {
 
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddStyle("border", $"1px solid tnt-color-{TextColor.ToCssClassName()}")
         .Build();
 
     [Parameter]
@@ -34,4 +35,32 @@ public partial class TnTBadge {
 
     [Parameter]
     public TnTColor TextColor { get; set; } = TnTColor.OnError;
+
+    public static TnTBadge CreateBadge(string content, TnTColor backgroundColor = TnTColor.Error, int elevation = 2, TextAlign? textAlignment = TextAlign.Center, TnTColor textColor = TnTColor.OnError, string? cssClass = null, string? cssStyle = null) {
+        return CreateBadge(content, TnTBorderRadius.Full, backgroundColor, elevation, textAlignment, textColor, cssClass, cssStyle);
+
+    }
+    public static TnTBadge CreateBadge(string content, TnTBorderRadius? borderRadius, TnTColor backgroundColor = TnTColor.Error, int elevation = 2, TextAlign? textAlignment = TextAlign.Center, TnTColor textColor = TnTColor.OnError, string? cssClass = null, string? cssStyle = null) {
+        Dictionary<string, object> additionalAttributes = [];
+        if (!string.IsNullOrWhiteSpace(cssClass)) {
+            additionalAttributes.Add("class", cssClass);
+        }
+
+        if (!string.IsNullOrWhiteSpace(cssStyle)) {
+            additionalAttributes.Add("style", cssStyle);
+        }
+        return new TnTBadge {
+            BackgroundColor = backgroundColor,
+            BorderRadius = borderRadius,
+            ChildContent = new RenderFragment(builder => {
+                builder.AddContent(0, content);
+            }),
+            Elevation = elevation,
+            TextAlignment = textAlignment,
+            TextColor = textColor,
+            AdditionalAttributes = additionalAttributes
+        };
+    }
+
+    internal RenderFragment Render => BuildRenderTree;
 }

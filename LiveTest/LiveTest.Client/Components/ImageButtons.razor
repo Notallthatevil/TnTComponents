@@ -50,16 +50,10 @@
             Obscure Radius
         </TnTImageButton>
 
-        <TnTImageButton Icon="@(new MaterialIcon{ Icon = MaterialIcon.GppGood })" OnClickCallback="@OnClick">
-            <Badge>
-                5
-            </Badge>
+        <TnTImageButton Icon="@(new MaterialIcon{ Icon = MaterialIcon.GppGood })" OnClickCallback="@OnClick" Badge="@TnTBadge.CreateBadge("5")">
         </TnTImageButton>
 
-        <TnTImageButton Icon="@(new MaterialIcon{ Icon = MaterialIcon.GppGood })" OnClickCallback="@OnClick">
-            <Badge>
-                This is a long badge
-            </Badge>
+        <TnTImageButton Icon="@(new MaterialIcon{ Icon = MaterialIcon.GppGood })" OnClickCallback="@OnClick" Badge="@TnTBadge.CreateBadge("This is a long badge that should be ellipses")">
         </TnTImageButton>
 
 

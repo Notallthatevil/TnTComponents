@@ -17,7 +17,7 @@ public class TnTImageButton : TnTButton {
     public TnTIcon Icon { get; set; } = default!;
 
     [Parameter]
-    public RenderFragment<TnTBadge>? Badge { get; set; }
+    public TnTBadge? Badge { get; set; }
 
     public override TnTColor TextColor { get; set; } = TnTColor.OnSurface;
 
@@ -25,7 +25,11 @@ public class TnTImageButton : TnTButton {
         base.OnParametersSet();
         ChildContent = new RenderFragment(b => {
             b.AddContent(0, Icon.Render());
-            b.AddContent(1, Badge);
+            if (Badge is not null) {
+                b.OpenRegion(1);
+                b.AddContent(0, Badge.Render);
+                b.CloseRegion();
+            }
         });
 
     }

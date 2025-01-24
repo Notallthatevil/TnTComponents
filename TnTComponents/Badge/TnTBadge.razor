@@ -5,5 +5,7 @@
 @implements ITnTStyleable
 
 <span @attributes="AdditionalAttributes" class="@ElementClass" style="@ElementStyle" title="@ElementTitle" id="@ElementId" lang="@ElementLang" @ref="Element">
-    @ChildContent
+    <span class="tnt-badge-content">
+        @ChildContent
+    </span>
 </span>

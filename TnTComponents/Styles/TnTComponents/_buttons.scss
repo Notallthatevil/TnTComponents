@@ -59,13 +59,11 @@
         .tnt-icon {
             font-size: 24px;
         }
-    }
 
-    & > .tnt-badge {
-        position: absolute;
-        top: 0;
-        right:0;
-        transform: translate(50%, -50%);
+        & > .tnt-badge {
+            top: -2px;
+            left: calc(100% - 24px);
+        }
     }
 }
 
@@ -85,6 +83,10 @@
     .tnt-icon {
         font-size: 32px;
     }
+
+    &:has(.tnt-badge){
+        transform: translateX(-128px);
+    }
 }
 
 body:has(.tnt-footer) {
@@ -103,5 +105,9 @@ body:has(.tnt-toast-container) {
 @for $i from 1 through 10 {
     *:nth-child(#{$i} of .tnt-fab) {
         transform: translateY(calc(-64px * ($i - 1))) !important;
+
+        &:has(.tnt-badge) {
+            transform: translate(-128px, calc(-64px * ($i - 1))) !important;
+        }
     }
 }
