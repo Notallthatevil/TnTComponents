@@ -414,6 +414,6 @@ window.TnTComponents = {
             if (target.contains(ripple)) {
                 target.removeChild(ripple);
             }
-        }, 1000);
+        }, 500);
     }
 }
