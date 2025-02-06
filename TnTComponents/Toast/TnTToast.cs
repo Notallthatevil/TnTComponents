@@ -149,7 +149,7 @@ public class TnTToast : ComponentBase, IDisposable {
             _incrementAction = async () => {
                 while (_toasts.Count != 0) {
                     await Task.Delay(100);
-                    StateHasChanged();
+                    await InvokeAsync(StateHasChanged);
                 }
             };
 
