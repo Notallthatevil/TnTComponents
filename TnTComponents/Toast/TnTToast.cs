@@ -124,7 +124,7 @@ public class TnTToast : ComponentBase, IDisposable {
     private async Task OnClose(ITnTToast toast) {
         var impl = toast as TnTToastImplementation;
         impl!.Closing = true;
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
         await Task.Delay(250);
 
         _toasts.Remove(toast, out var _);
@@ -141,9 +141,9 @@ public class TnTToast : ComponentBase, IDisposable {
     /// </summary>
     /// <param name="toast">The toast to open.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    private Task OnOpen(ITnTToast toast) {
+    private async Task OnOpen(ITnTToast toast) {
         _toasts.TryAdd(toast, TimeOnly.FromDateTime(DateTime.UtcNow));
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
 
         if (_incrementAction is null) {
             _incrementAction = async () => {
@@ -153,8 +153,7 @@ public class TnTToast : ComponentBase, IDisposable {
                 }
             };
 
-            _incrementAction.Invoke();
+           await _incrementAction.Invoke();
         }
-        return Task.CompletedTask;
     }
 }
