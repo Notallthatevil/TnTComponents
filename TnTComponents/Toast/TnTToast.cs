@@ -36,6 +36,7 @@ public class TnTToast : ComponentBase, IDisposable {
         GC.SuppressFinalize(this);
     }
 
+    /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         if (_toasts.Any()) {
             builder.OpenElement(0, "div");
