@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
+using System.Collections.Concurrent;
 using TnTComponents.Core;
 using TnTComponents.Dialog;
 
@@ -24,7 +25,13 @@ public class TnTDialog : ComponentBase, IDisposable {
     [Inject]
     private ITnTDialogService _service { get; set; } = default!;
 
-    private readonly List<ITnTDialog> _dialogs = new();
+    private readonly HashSet<ITnTDialog> _dialogs = new();
+
+#if NET9_0_OR_GREATER
+    private Lock _lock = new();
+#else
+    private object _lock = new();
+#endif
 
     /// <summary>
     ///     Disposes the dialog component and unsubscribes from events.
@@ -36,6 +43,10 @@ public class TnTDialog : ComponentBase, IDisposable {
     }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
+        ITnTDialog[] dialogs;
+        lock (_lock) {
+            dialogs = _dialogs.ToArray();
+        }
         foreach (var dialog in _dialogs) {
             builder.OpenElement(0, "dialog");
             builder.AddAttribute(10, "class", CssClassBuilder.Create().AddTnTStyleable(dialog.Options).AddFilled().AddClass("tnt-closing", dialog.Options.Closing).AddClass(dialog.Options.ElementClass).AddClass("tnt-dialog").Build());
@@ -63,7 +74,11 @@ public class TnTDialog : ComponentBase, IDisposable {
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         await base.OnAfterRenderAsync(firstRender);
-        foreach (var dialog in _dialogs) {
+        ITnTDialog[] dialogs;
+        lock (_lock) {
+            dialogs = _dialogs.ToArray();
+        }
+        foreach (var dialog in dialogs) {
             await _jsRuntime.InvokeVoidAsync("TnTComponents.openModalDialog", dialog.ElementId);
         }
     }
@@ -81,10 +96,12 @@ public class TnTDialog : ComponentBase, IDisposable {
     /// <returns>A task that represents the asynchronous close operation.</returns>
     private async Task OnClose(ITnTDialog dialog) {
         dialog.Options.Closing = true;
-        await InvokeAsync(StateHasChanged);
+        StateHasChanged();
         await Task.Delay(150);
-        _dialogs.Remove(dialog);
-        await InvokeAsync(StateHasChanged);
+        lock (_lock) {
+            _dialogs.Remove(dialog);
+        }
+        StateHasChanged();
     }
 
     /// <summary>
@@ -92,9 +109,12 @@ public class TnTDialog : ComponentBase, IDisposable {
     /// </summary>
     /// <param name="dialog">The dialog to open.</param>
     /// <returns>A task that represents the asynchronous open operation.</returns>
-    private async Task OnOpen(ITnTDialog dialog) {
-        _dialogs.Add(dialog);
-        await InvokeAsync(StateHasChanged);
+    private Task OnOpen(ITnTDialog dialog) {
+        lock (_lock) {
+            _dialogs.Add(dialog);
+        }
+        StateHasChanged();
+        return Task.CompletedTask;
     }
 
     /// <summary>
