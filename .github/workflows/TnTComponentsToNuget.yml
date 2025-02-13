@@ -54,3 +54,4 @@ jobs:
       uses: rickstaa/action-create-tag@v1.7.2
       with: 
           tag: 'v${{ steps.version_step.outputs.MajorMinorPatch }}'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
