@@ -50,8 +50,9 @@ jobs:
         dotnet pack TnTComponents.Extensions/TnTComponents.Extensions.csproj --configuration Release --output ./nupkg /p:PackageVersion=${{ steps.version_step.outputs.MajorMinorPatch }}
     - run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
 
-    - name: Create/Update tag
-      uses: rickstaa/action-create-tag@v1.7.2
-      with: 
-          tag: 'v${{ steps.version_step.outputs.MajorMinorPatch }}'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Bump version and push tag
+      uses: anothrNick/github-tag-action@v1.71.0 # Don't use @master or @v1 unless you're happy to test the latest version
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
+        WITH_V: false
+        CUSTOM_TAG: 'v${{ steps.version_step.outputs.MajorMinorPatch }}'
