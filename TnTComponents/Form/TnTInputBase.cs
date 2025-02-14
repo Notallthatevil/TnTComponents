@@ -204,6 +204,7 @@ public abstract partial class TnTInputBase<[DynamicallyAccessedMembers(Dynamical
                     builder.AddAttribute(92, "onkeyup", "TnTComponents.formatToCurrency(event)");
                 }
 
+                builder.AddAttribute(93, "autofocus", AutoFocus);
                 if (typeof(TInputType) == typeof(bool)) {
                     builder.AddAttribute(100, "value", bool.TrueString);
                     builder.AddAttribute(110, "checked", BindConverter.FormatValue(CurrentValue));
