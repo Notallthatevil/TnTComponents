@@ -11,7 +11,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F4F5CA92-1A58-4C80-9862-040E79F81501}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		.github\workflows\TnTComponentsToNuget.yml = .github\workflows\TnTComponentsToNuget.yml
+		.github\workflows\CreateRelease.yml = .github\workflows\CreateRelease.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TnTComponents.AspNetCore", "TnTComponents.AspNetCore\TnTComponents.AspNetCore.csproj", "{4CB02CE8-EB7F-4D2D-8918-04B4BC25C023}"
