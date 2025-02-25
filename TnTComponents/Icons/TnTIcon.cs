@@ -44,7 +44,7 @@ public abstract class TnTIcon : TnTComponentBase {
         builder.AddAttribute(20, "class", ElementClass);
         builder.AddAttribute(30, "style", ElementStyle);
         builder.AddAttribute(40, "id", ElementId);
-        builder.AddAttribute(50, "title", Icon);
+        builder.AddAttribute(50, "title", ElementTitle ?? Icon);
         builder.AddElementReferenceCapture(60, e => Element = e);
 
         builder.AddContent(70, Icon);
