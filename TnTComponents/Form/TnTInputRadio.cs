@@ -83,7 +83,7 @@ public class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccessedMember
     ///     Gets or sets the value of the radio input.
     /// </summary>
     [Parameter, EditorRequired]
-    public object Value { get; set; } = default!;
+    public TInputType Value { get; set; } = default!;
 
     private bool _disabled => _group.FieldDisabled || Disabled;
     private bool _readOnly => _group.FieldReadonly || ReadOnly;
@@ -118,7 +118,7 @@ public class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccessedMember
         builder.AddAttribute(190, "disabled", _disabled);
         builder.AddAttribute(200, "value", BindConverter.FormatValue(Value?.ToString()));
         builder.AddAttribute(210, "checked", _group.InternalCurrentValue?.Equals(Value) == true ? GetToggledTrueValue() : null);
-        builder.AddAttribute(220, "onchange", _group.UpdateValue);
+        builder.AddAttribute(220, "onchange",EventCallback.Factory.Create(_group, () => _group.InternalCurrentValue = Value));
         builder.SetUpdatesAttributeName("checked");
 
         if (_group.InternalEditContext is not null) {
@@ -146,7 +146,9 @@ public class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccessedMember
     /// <inheritdoc />
     protected override void OnParametersSet() {
         base.OnParametersSet();
-        ArgumentNullException.ThrowIfNull(_group, nameof(_group));
+        if(_group is null) {
+            throw new ArgumentNullException($"{nameof(TnTInputRadio<TInputType>)} must be a child of {nameof(TnTInputRadioGroup<TInputType>)}. If you still receive this error, try explicitly setting the {nameof(TInputType)} of {nameof(TnTInputRadio<TInputType>)} to a Nullable type. This is likely the cause if {nameof(TInputType)} is struct or enum, as {nameof(TnTInputRadioGroup<TInputType>)} could be using the Nullable version ({nameof(TInputType)}?).");
+        }
     }
 
     private string GetToggledTrueValue() {
