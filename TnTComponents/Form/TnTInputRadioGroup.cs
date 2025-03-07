@@ -76,7 +76,7 @@ public class TnTInputRadioGroup<[DynamicallyAccessedMembers(DynamicallyAccessedM
         builder.AddAttribute(50, "id", ElementId);
         builder.AddAttribute(70, "title", ElementTitle);
         builder.AddAttribute(80, "lang", ElementLang);
-        builder.AddAttribute(82, "disabled", Disabled || ReadOnly);
+        builder.AddAttribute(82, "disabled", FieldDisabled || FieldReadonly);
         builder.AddElementReferenceCapture(90, e => Element = e);
 
         if (StartIcon is not null) {
