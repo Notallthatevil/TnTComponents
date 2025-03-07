@@ -118,7 +118,10 @@ public class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccessedMember
         builder.AddAttribute(190, "disabled", _disabled);
         builder.AddAttribute(200, "value", BindConverter.FormatValue(Value?.ToString()));
         builder.AddAttribute(210, "checked", _group.InternalCurrentValue?.Equals(Value) == true ? GetToggledTrueValue() : null);
-        builder.AddAttribute(220, "onchange",EventCallback.Factory.Create(_group, () => _group.InternalCurrentValue = Value));
+        builder.AddAttribute(220, "onchange",EventCallback.Factory.Create(_group, async () => {
+            _group.InternalCurrentValue = Value;
+            await _group.BindAfter.InvokeAsync(Value);
+        }));
         builder.SetUpdatesAttributeName("checked");
 
         if (_group.InternalEditContext is not null) {
