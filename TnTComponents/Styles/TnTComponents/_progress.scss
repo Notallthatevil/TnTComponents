@@ -12,6 +12,10 @@
             background: var(--progress-color);
         }
 
+        &::-webkit-progress-bar {
+            background-color: $tnt-color-surface-container-highest;
+        }
+
         &::-webkit-progress-value {
             background: var(--progress-color);
         }
