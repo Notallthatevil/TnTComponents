@@ -77,6 +77,12 @@ public partial class TnTTypeahead<TItem> {
     public TnTColor ProgressColor { get; set; } = TnTColor.Primary;
 
     /// <summary>
+    ///     Causes the typeahead box to be receive focus after an item is selected.
+    /// </summary>
+    [Parameter]
+    public bool RefocusAfterSelect { get; set; } = true;
+
+    /// <summary>
     ///     Gets or sets the template for rendering each result item.
     /// </summary>
     [Parameter]
@@ -117,7 +123,9 @@ public partial class TnTTypeahead<TItem> {
         _searching = false;
         _focusedItem = default;
         await ItemSelectedCallback.InvokeAsync(item);
-        await _inputBox.SetFocusAsync();
+        if (RefocusAfterSelect) {
+            await _inputBox.SetFocusAsync();
+        }
     }
 
     /// <summary>
