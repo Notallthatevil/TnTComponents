@@ -85,7 +85,12 @@ internal class LRUCache<TKey, TValue>(int capacity) : IDictionary<TKey, TValue> 
     }
 
     public bool ContainsKey(TKey key) => _cacheMap.ContainsKey(key);
-    public bool Remove(TKey key) => _cacheMap.Remove(key);
+    public bool Remove(TKey key) {
+        if (_cacheMap.TryGetValue(key, out var node)) {
+            _lruList.Remove(node);
+        }
+        return _cacheMap.Remove(key);
+    }
     public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value) {
         var result = Get(key);
         if (result.Item1) {
@@ -114,6 +119,6 @@ internal class LRUCache<TKey, TValue>(int capacity) : IDictionary<TKey, TValue> 
         }
         return false;
     }
-    public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => _cacheMap.Select(kv => new KeyValuePair<TKey, TValue>(kv.Key, kv.Value.Value.Value)).GetEnumerator(); 
+    public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => _cacheMap.Select(kv => new KeyValuePair<TKey, TValue>(kv.Key, kv.Value.Value.Value)).GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
