@@ -1,6 +1,6 @@
 ﻿@page "/accordion"
 @using TnTComponents
-
+@rendermode InteractiveAuto
 
 <TnTAccordion>
     <TnTAccordionChild Label="Title 1" OpenByDefault="true">
@@ -10,9 +10,16 @@
         <TnTButton ElementTitle="Button 2">
             Button 2
         </TnTButton>
-        <TnTButton ElementTitle="Button 3">
+        <TnTButton ElementTitle="Button 3" OnClickCallback="@(() => {
+    Console.WriteLine("Incrementing Count");
+_count++;})">
             Button 3
         </TnTButton>
+        @for(var i = 0; i < _count; ++i){
+            <div>
+                I am count @(i + 1)
+            </div>
+        }
     </TnTAccordionChild>
     <TnTAccordionChild Label="Title 2" OpenByDefault="true">
         <TnTProgressIndicator Appearance="ProgressAppearance.Ring"></TnTProgressIndicator>
@@ -63,5 +70,5 @@
 </TnTAccordion>
 
 @code {
-
+    private int _count = 0;
 }

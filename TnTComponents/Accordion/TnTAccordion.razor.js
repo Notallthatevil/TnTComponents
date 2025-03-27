@@ -30,6 +30,12 @@ function updateChild(content) {
         content.resizeObserver.disconnect();
         content.resizeObserver = undefined;
     }
+
+    if (content.mutationObserer) {
+        content.mutationObserer.disconnect();
+        content.mutationObserer = undefined
+    }
+
     if (content.classList.contains('tnt-expanded')) {
         content.style.setProperty('--content-height', content.scrollHeight + 'px');
 
@@ -37,7 +43,16 @@ function updateChild(content) {
             content.style.setProperty('--content-height', content.scrollHeight + 'px');
         });
 
+        content.mutationObserer = new MutationObserver((mutationList) => {
+            for (const mutation of mutationList) {
+                if (mutation.type === 'childList') {
+                    content.style.setProperty('--content-height', content.scrollHeight + 'px');
+                }
+            }
+        });
+
         content.resizeObserver.observe(document.body);
+        content.mutationObserer.observe(content, { childList: true, subtree: true });
     }
     else {
         content.style.height = null;
