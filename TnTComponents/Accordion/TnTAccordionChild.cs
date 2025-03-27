@@ -95,6 +95,10 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
     [CascadingParameter]
     private TnTAccordion _parent { get; set; } = default!;
 
+    internal int _elementId = int.MinValue;
+
+    internal bool _open;
+
     /// <summary>
     ///     Closes the accordion child asynchronously.
     /// </summary>
@@ -123,6 +127,7 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
             builder.AddAttribute(60, "title", ElementTitle);
             builder.AddAttribute(70, "name", ElementName);
             builder.AddAttribute(80, "disabled", Disabled);
+            builder.AddAttribute(90, "element-key", _elementId);
             builder.SetKey(this);
 
             {
@@ -163,7 +168,13 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
                     _parent.FoundExpanded = true;
                 }
 
+#if NET9_0_OR_GREATER
+                if(!RendererInfo.IsInteractive || (RendererInfo.IsInteractive && _open)) {
+                    builder.AddContent(170, ChildContent);
+                }
+#else
                 builder.AddContent(170, ChildContent);
+#endif
 
                 builder.CloseElement();
             }
@@ -175,5 +186,6 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
     protected override void OnInitialized() {
         base.OnInitialized();
         _parent.RegisterChild(this);
+        _open = _parent.AllowOpenByDefault && ((OpenByDefault && _parent.LimitToOneExpanded && !_parent.FoundExpanded) || (OpenByDefault && !_parent.LimitToOneExpanded));
     }
 }

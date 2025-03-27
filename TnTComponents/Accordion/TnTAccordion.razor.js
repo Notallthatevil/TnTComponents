@@ -66,6 +66,7 @@ export class TnTAccordion extends HTMLElement {
         this.allowOnlyOneOpen = false;
         this.accordionChildren = [];
         this.identifier = '';
+        this.dotNetRef = null;
     }
 
     disconnectedCallback() {
@@ -90,11 +91,22 @@ export class TnTAccordion extends HTMLElement {
 
     update() {
         this.accordionChildren = this.querySelectorAll(':scope > .tnt-accordion-child');
+        let self = this;
         this.accordionChildren.forEach((child) => {
             const header = child.firstElementChild;
-
+            
             if (!header.classList.contains('tnt-disabled')) {
-                header.addEventListener('click', toggleAccordionHeader)
+                header.addEventListener('click', toggleAccordionHeader);
+                header.addEventListener('click', () => {
+                    if(self.dotNetRef) {
+                        if(child.lastElementChild.classList.contains('tnt-expanded')) {
+                            self.dotNetRef.invokeMethodAsync("SetAsOpened", parseInt(child.getAttribute('element-key')));                    
+                        }
+                        else {
+                            self.dotNetRef.invokeMethodAsync("SetAsClosed", parseInt(child.getAttribute('element-key')));
+                        }
+                    }
+                });
             }
 
             updateChild(child.lastElementChild);
@@ -136,6 +148,7 @@ export function onLoad(element, dotNetRef) {
 export function onUpdate(element, dotNetRef) {
     if (element && element.update) {
         element.update();
+        element.dotNetRef = dotNetRef;
     }
 }
 

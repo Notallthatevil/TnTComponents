@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using TnTComponents.Core;
+using System.Diagnostics.CodeAnalysis;
 
 namespace TnTComponents;
 
@@ -79,14 +80,19 @@ public partial class TnTAccordion {
     [CascadingParameter]
     private TnTAccordion? _parentAccordion { get; set; }
 
-    private readonly List<TnTAccordionChild> _children = [];
+    private readonly Dictionary<int,TnTAccordionChild> _children = [];
+    private static int _elementId = 0;
+
+    [DynamicDependency(nameof(SetAsOpened))]
+    [DynamicDependency(nameof(SetAsClosed))]
+    public TnTAccordion(){}
 
     /// <summary>
     ///     Closes all child accordion items asynchronously.
     /// </summary>
     /// <returns>A task that represents the asynchronous operation.</returns>
     public async Task CloseAllAsync() {
-        foreach (var child in _children) {
+        foreach (var (_, child) in _children) {
             await child.CloseAsync();
         }
     }
@@ -97,7 +103,11 @@ public partial class TnTAccordion {
     /// <param name="child">The child accordion item to register.</param>
     public void RegisterChild(TnTAccordionChild child) {
         if (child is not null) {
-            _children.Add(child);
+            if(child._elementId == int.MinValue) {
+                child._elementId = _elementId;
+                Interlocked.Increment(ref _elementId);
+            }
+            _children.TryAdd(child._elementId, child);
             StateHasChanged();
         }
     }
@@ -108,8 +118,35 @@ public partial class TnTAccordion {
     /// <param name="child">The child accordion item to remove.</param>
     public void RemoveChild(TnTAccordionChild child) {
         if (child is not null) {
-            _children.Remove(child);
+            _children.Remove(child._elementId);
             StateHasChanged();
         }
+    }
+
+    [JSInvokable]
+    public async Task SetAsOpened(int elementId)  {
+        if(_children.TryGetValue(elementId, out var child)) {
+            if(!child._open) {
+                if(LimitToOneExpanded) {
+                    await CloseAllAsync();
+                }
+                child._open = true;
+            }
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    
+    [JSInvokable]
+    public async Task SetAsClosed(int elementId)  {
+        if(_children.TryGetValue(elementId, out var child)) {
+            if(child._open) {
+                if(LimitToOneExpanded) {
+                    await CloseAllAsync();
+                }
+                child._open = false;
+            }        
+        }
+        await InvokeAsync(StateHasChanged);
     }
 }
