@@ -92,6 +92,12 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
     [Inject]
     private IJSRuntime _jsRuntime { get; set; } = default!;
 
+    [Parameter]
+    public EventCallback OnCloseCallback { get; set; }
+
+    [Parameter]
+    public EventCallback OnOpenCallback { get; set; }
+
     [CascadingParameter]
     private TnTAccordion _parent { get; set; } = default!;
 

@@ -125,13 +125,12 @@ public partial class TnTAccordion {
 
     [JSInvokable]
     public async Task SetAsOpened(int elementId)  {
-        if(_children.TryGetValue(elementId, out var child)) {
-            if(!child._open) {
-                if(LimitToOneExpanded) {
-                    await CloseAllAsync();
-                }
-                child._open = true;
+        if(_children.TryGetValue(elementId, out var child) && child?._open == false) {
+            if(LimitToOneExpanded) {
+                await CloseAllAsync();
             }
+            child._open = true;
+            await child.OnOpenCallback.InvokeAsync();
         }
         await InvokeAsync(StateHasChanged);
     }
@@ -139,13 +138,12 @@ public partial class TnTAccordion {
     
     [JSInvokable]
     public async Task SetAsClosed(int elementId)  {
-        if(_children.TryGetValue(elementId, out var child)) {
-            if(child._open) {
-                if(LimitToOneExpanded) {
-                    await CloseAllAsync();
-                }
-                child._open = false;
-            }        
+        if(_children.TryGetValue(elementId, out var child) && child?._open == true) {
+            if(LimitToOneExpanded) {
+                await CloseAllAsync();
+            }
+            child._open = false;
+            await child.OnCloseCallback.InvokeAsync();
         }
         await InvokeAsync(StateHasChanged);
     }
