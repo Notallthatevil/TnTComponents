@@ -101,6 +101,9 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
     [CascadingParameter]
     private TnTAccordion _parent { get; set; } = default!;
 
+    [Parameter]
+    public bool KeepLoaded{ get; set; } = true;
+
     internal int _elementId = int.MinValue;
 
     internal bool _open;
@@ -175,7 +178,7 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
                 }
 
 #if NET9_0_OR_GREATER
-                if(!RendererInfo.IsInteractive || (RendererInfo.IsInteractive && _open)) {
+                if(!RendererInfo.IsInteractive || KeepLoaded || (RendererInfo.IsInteractive && _open)) {
                     builder.AddContent(170, ChildContent);
                 }
 #else

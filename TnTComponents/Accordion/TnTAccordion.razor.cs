@@ -125,7 +125,7 @@ public partial class TnTAccordion {
 
     [JSInvokable]
     public async Task SetAsOpened(int elementId)  {
-        if(_children.TryGetValue(elementId, out var child) && child?._open == false) {
+        if(_children.TryGetValue(elementId, out var child) && child?._open == false && !child.KeepLoaded) {
             if(LimitToOneExpanded) {
                 await CloseAllAsync();
             }
@@ -138,7 +138,7 @@ public partial class TnTAccordion {
     
     [JSInvokable]
     public async Task SetAsClosed(int elementId)  {
-        if(_children.TryGetValue(elementId, out var child) && child?._open == true) {
+        if(_children.TryGetValue(elementId, out var child) && child?._open == true && !child.KeepLoaded) {
             if(LimitToOneExpanded) {
                 await CloseAllAsync();
             }
