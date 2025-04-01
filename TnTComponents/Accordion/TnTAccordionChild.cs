@@ -190,7 +190,7 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
                 }
 
 #if NET9_0_OR_GREATER
-                if(!RendererInfo.IsInteractive || (RendererInfo.IsInteractive && _open && RemoveContentOnClose)) {
+                if(!RendererInfo.IsInteractive || !RemoveContentOnClose || (RendererInfo.IsInteractive && _open)) {
                     builder.AddContent(170, ChildContent);
                 }
 #else
