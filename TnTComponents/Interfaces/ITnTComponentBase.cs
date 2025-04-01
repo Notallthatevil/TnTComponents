@@ -4,8 +4,7 @@ using System.Text;
 namespace TnTComponents.Interfaces;
 
 /// <summary>
-///     Simple interface that represents a TnTComponent. Each TnTComponent can be thought of as a
-///     single Html Element.
+///     Simple interface that represents a TnTComponent. Each TnTComponent can be thought of as a single Html Element.
 /// </summary>
 public interface ITnTComponentBase {
 
@@ -25,27 +24,27 @@ public interface ITnTComponentBase {
     ElementReference Element { get; }
 
     /// <summary>
-    ///     The base css class that should be provided to this component. <see cref="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/class" />
+    ///     The base css class that should be provided to the root element of this component. <see cref="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/class" />
     /// </summary>
     string? ElementClass { get; }
 
     /// <summary>
-    ///     If set, applies this Id to the main html tag for this component. <see cref="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id" />
+    ///     If set, applies this Id to the root html tag for this component. <see cref="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id" />
     /// </summary>
     string? ElementId { get; }
 
     /// <summary>
-    ///     Gets or sets the language of the main html tag for this component. <see cref="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/lang" />
+    ///     The language of the root html tag for this component. <see cref="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/lang" />
     /// </summary>
     string? ElementLang { get; }
 
     /// <summary>
-    ///     Additional styles that can be applied to this component. <see cref="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/style" />
+    ///     Additional styles that can be applied to the root element for this component. <see cref="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/style" />
     /// </summary>
     string? ElementStyle { get; }
 
     /// <summary>
-    ///     Gets or sets the title of the main html tag for this component. <see cref="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/title" />
+    ///     The title of the root html tag for this component. <see cref="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/title" />
     /// </summary>
     string? ElementTitle { get; }
 }

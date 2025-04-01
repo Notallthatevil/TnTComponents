@@ -24,12 +24,9 @@
 namespace TnTComponents.Core;
 
 /// <summary>
-///     Debouncer helps you to debounce asynchronous actions. You can use it in your callbacks to
-///     prevent multiple calls of the same action in a short period of time.
+///     Debouncer helps you to debounce asynchronous actions. You can use it in your callbacks to prevent multiple calls of the same action in a short period of time.
 /// </summary>
-/// <param name="millisecondsDelay">
-///     The delay in milliseconds to wait before executing the action.
-/// </param>
+/// <param name="millisecondsDelay">The delay in milliseconds to wait before executing the action.</param>
 public class TnTDebouncer(int millisecondsDelay = 300) : IDisposable {
     private readonly int _millisecondsDelay = millisecondsDelay;
     private CancellationTokenSource _debounceCancellationTokenSource = new();
@@ -43,10 +40,7 @@ public class TnTDebouncer(int millisecondsDelay = 300) : IDisposable {
     /// <summary>
     ///     Starts the debouncing.
     /// </summary>
-    /// <param name="actionAsync">
-    ///     The asynchronous action to be executed. The <see cref="CancellationToken" /> gets
-    ///     canceled if the method is called again.
-    /// </param>
+    /// <param name="actionAsync">The asynchronous action to be executed. The <see cref="CancellationToken" /> gets canceled if the method is called again.</param>
     /// <returns>A task that represents the asynchronous debouncing operation.</returns>
     public async Task DebounceAsync(Func<CancellationToken, Task> actionAsync) {
         try {
@@ -61,14 +55,8 @@ public class TnTDebouncer(int millisecondsDelay = 300) : IDisposable {
     ///     Starts the debouncing and returns a result.
     /// </summary>
     /// <typeparam name="T">The type of the result.</typeparam>
-    /// <param name="funcAsync">
-    ///     The asynchronous function to be executed. The <see cref="CancellationToken" /> gets
-    ///     canceled if the method is called again.
-    /// </param>
-    /// <returns>
-    ///     A task that represents the asynchronous debouncing operation, containing the result of
-    ///     type <typeparamref name="T" />.
-    /// </returns>
+    /// <param name="funcAsync">The asynchronous function to be executed. The <see cref="CancellationToken" /> gets canceled if the method is called again.</param>
+    /// <returns>A task that represents the asynchronous debouncing operation, containing the result of type <typeparamref name="T" />.</returns>
     public async Task<T> DebounceForResultAsync<T>(Func<CancellationToken, Task<T>> funcAsync) {
         try {
             await DebounceAsync();
@@ -89,8 +77,7 @@ public class TnTDebouncer(int millisecondsDelay = 300) : IDisposable {
     }
 
     /// <summary>
-    ///     Handles the debouncing logic by canceling the previous action and waiting for the
-    ///     specified delay.
+    ///     Handles the debouncing logic by canceling the previous action and waiting for the specified delay.
     /// </summary>
     /// <returns>A task that represents the asynchronous debouncing operation.</returns>
     private async Task DebounceAsync() {

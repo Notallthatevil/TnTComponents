@@ -7,7 +7,8 @@ namespace TnTComponents.Core;
 /// <summary>
 ///     A component that handles external click events.
 /// </summary>
-public partial class TnTExternalClickHandler {
+[method: DynamicDependency(nameof(OnClick))]
+public partial class TnTExternalClickHandler() : TnTPageScriptComponent<TnTExternalClickHandler> {
 
     /// <summary>
     ///     Gets or sets the child content to be rendered inside this component.
@@ -15,11 +16,13 @@ public partial class TnTExternalClickHandler {
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
+    /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddClass("tnt-external-click-handler")
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
+    /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
@@ -30,13 +33,8 @@ public partial class TnTExternalClickHandler {
     [Parameter, EditorRequired]
     public EventCallback ExternalClickCallback { get; set; }
 
+    /// <inheritdoc />
     public override string? JsModulePath => "./_content/TnTComponents/Core/TnTExternalClickHandler.razor.js";
-
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="TnTExternalClickHandler" /> class.
-    /// </summary>
-    [DynamicDependency(nameof(OnClick))]
-    public TnTExternalClickHandler() { }
 
     /// <summary>
     ///     Invoked by JavaScript to handle an external click event.
@@ -44,10 +42,7 @@ public partial class TnTExternalClickHandler {
     [JSInvokable]
     public async Task OnClick() => await ExternalClickCallback.InvokeAsync();
 
-    /// <summary>
-    ///     Disposes the component and deregisters the external click callback.
-    /// </summary>
-    /// <returns>A <see cref="ValueTask" /> representing the asynchronous operation.</returns>
+    /// <inheritdoc />
     protected override async ValueTask DisposeAsyncCore() {
         if (IsolatedJsModule is not null) {
             await IsolatedJsModule.InvokeVoidAsync("externalClickCallbackDeregister", DotNetObjectRef).ConfigureAwait(false);
@@ -55,11 +50,7 @@ public partial class TnTExternalClickHandler {
         await base.DisposeAsyncCore().ConfigureAwait(false);
     }
 
-    /// <summary>
-    ///     Called after the component has been rendered.
-    /// </summary>
-    /// <param name="firstRender">True if this is the first time the component is being rendered.</param>
-    /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
+    /// <inheritdoc />
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         await base.OnAfterRenderAsync(firstRender);
         if (firstRender && IsolatedJsModule is not null) {

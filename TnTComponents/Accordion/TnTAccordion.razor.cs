@@ -5,90 +5,88 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace TnTComponents;
 
-/// <summary>
-///     Represents an accordion component that can contain multiple child items.
-/// </summary>
-public partial class TnTAccordion {
+[method: DynamicDependency(nameof(SetAsOpened))]
+[method: DynamicDependency(nameof(SetAsClosed))]
+public partial class TnTAccordion() {
 
     /// <summary>
-    ///     Gets or sets the content to be rendered inside the accordion.
+    /// The content for this accordion container. Should contain one or more <see cref="TnTAccordionChild"/> components.
     /// </summary>
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
     /// <summary>
-    ///     Gets or sets the body color of the accordion content.
+    /// The body color of the content.
     /// </summary>
     [Parameter]
     public TnTColor ContentBodyColor { get; set; } = TnTColor.SurfaceVariant;
 
     /// <summary>
-    ///     Gets or sets the text color of the accordion content.
+    /// The text color of the content.
     /// </summary>
     [Parameter]
     public TnTColor ContentTextColor { get; set; } = TnTColor.OnSurfaceVariant;
 
+    /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
             .AddFromAdditionalAttributes(AdditionalAttributes)
             .AddClass("tnt-accordion")
             .AddClass("tnt-limit-one-expanded", LimitToOneExpanded)
             .Build();
 
+    /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
             .AddFromAdditionalAttributes(AdditionalAttributes)
             .Build();
 
     /// <summary>
-    ///     Gets or sets the body color of the accordion header.
+    /// The body color of the header.
     /// </summary>
     [Parameter]
     public TnTColor HeaderBodyColor { get; set; } = TnTColor.PrimaryContainer;
 
     /// <summary>
-    ///     Gets or sets the text color of the accordion header.
+    /// The text color of the header.
     /// </summary>
     [Parameter]
     public TnTColor HeaderTextColor { get; set; } = TnTColor.OnPrimaryContainer;
 
     /// <summary>
-    ///     Gets or sets the tint color of the accordion header.
+    /// The color of the ripple effect when the accordion is interacted with.
     /// </summary>
     [Parameter]
     public TnTColor HeaderTintColor { get; set; } = TnTColor.SurfaceTint;
 
+    /// <inheritdoc />
     public override string? JsModulePath => "./_content/TnTComponents/Accordion/TnTAccordion.razor.js";
 
     /// <summary>
-    ///     Gets or sets a value indicating whether only one child can be expanded at a time.
+    /// When set, limits only one child to be expanded at a time, closing the others automatically.
     /// </summary>
     [Parameter]
     public bool LimitToOneExpanded { get; set; }
 
     /// <summary>
-    ///     Gets a value indicating whether the accordion can be opened by default.
+    /// Used internally to determine if the accordion is allowed to be open by default.
     /// </summary>
     internal bool AllowOpenByDefault => _parentAccordion is null;
 
     /// <summary>
-    ///     Gets or sets a value indicating whether an expanded child has been found.
+    /// Used internally to track whether an expanded child has been found.
     /// </summary>
-    internal bool FoundExpanded { get; set; }
+    internal bool FoundExpanded;
 
     /// <summary>
-    ///     Gets or sets the parent accordion if this accordion is nested inside another accordion.
+    /// Gets or sets the parent accordion.
     /// </summary>
     [CascadingParameter]
     private TnTAccordion? _parentAccordion { get; set; }
 
-    private readonly Dictionary<int,TnTAccordionChild> _children = [];
+    private readonly Dictionary<int, TnTAccordionChild> _children = new();
     private static int _elementId = 0;
 
-    [DynamicDependency(nameof(SetAsOpened))]
-    [DynamicDependency(nameof(SetAsClosed))]
-    public TnTAccordion(){}
-
     /// <summary>
-    ///     Closes all child accordion items asynchronously.
+    /// Closes all child accordion items asynchronously.
     /// </summary>
     /// <returns>A task that represents the asynchronous operation.</returns>
     public async Task CloseAllAsync() {
@@ -98,12 +96,12 @@ public partial class TnTAccordion {
     }
 
     /// <summary>
-    ///     Registers a child accordion item.
+    /// Registers a child accordion item.
     /// </summary>
     /// <param name="child">The child accordion item to register.</param>
     public void RegisterChild(TnTAccordionChild child) {
         if (child is not null) {
-            if(child._elementId == int.MinValue) {
+            if (child._elementId == int.MinValue) {
                 child._elementId = _elementId;
                 Interlocked.Increment(ref _elementId);
             }
@@ -113,7 +111,7 @@ public partial class TnTAccordion {
     }
 
     /// <summary>
-    ///     Removes a child accordion item.
+    /// Removes a child accordion item.
     /// </summary>
     /// <param name="child">The child accordion item to remove.</param>
     public void RemoveChild(TnTAccordionChild child) {
@@ -123,10 +121,14 @@ public partial class TnTAccordion {
         }
     }
 
+    /// <summary>
+    /// Sets the specified child accordion item as opened.
+    /// </summary>
+    /// <param name="elementId">The element ID of the child accordion item to open.</param>
     [JSInvokable]
-    public async Task SetAsOpened(int elementId)  {
-        if(_children.TryGetValue(elementId, out var child) && child?._open == false) {
-            if(LimitToOneExpanded) {
+    public async Task SetAsOpened(int elementId) {
+        if (_children.TryGetValue(elementId, out var child) && child?._open == false) {
+            if (LimitToOneExpanded) {
                 await CloseAllAsync();
             }
             child._open = true;
@@ -135,11 +137,14 @@ public partial class TnTAccordion {
         await InvokeAsync(StateHasChanged);
     }
 
-    
+    /// <summary>
+    /// Sets the specified child accordion item as closed.
+    /// </summary>
+    /// <param name="elementId">The element ID of the child accordion item to close.</param>
     [JSInvokable]
-    public async Task SetAsClosed(int elementId)  {
-        if(_children.TryGetValue(elementId, out var child) && child?._open == true) {
-            if(LimitToOneExpanded) {
+    public async Task SetAsClosed(int elementId) {
+        if (_children.TryGetValue(elementId, out var child) && child?._open == true) {
+            if (LimitToOneExpanded) {
                 await CloseAllAsync();
             }
             child._open = false;

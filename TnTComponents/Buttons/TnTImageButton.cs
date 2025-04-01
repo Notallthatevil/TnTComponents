@@ -4,23 +4,38 @@ using TnTComponents.Core;
 
 namespace TnTComponents;
 
+/// <summary>
+///     Represents an image button component with customizable icon and optional badge.
+/// </summary>
 public class TnTImageButton : TnTButton {
 
+    /// <inheritdoc />
     [Parameter]
     public override ButtonAppearance Appearance { get; set; } = ButtonAppearance.Text;
 
+    /// <summary>
+    ///     The optional badge to be displayed with the icon.
+    /// </summary>
+    [Parameter]
+    public TnTBadge? Badge { get; set; }
+
+    /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create(base.ElementClass!)
         .AddClass("tnt-image-button")
         .Build();
 
+    /// <summary>
+    ///     The icon to be displayed in the button.
+    /// </summary>
     [Parameter, EditorRequired]
     public TnTIcon Icon { get; set; } = default!;
 
-    [Parameter]
-    public TnTBadge? Badge { get; set; }
-
+    /// <inheritdoc />
     public override TnTColor TextColor { get; set; } = TnTColor.OnSurface;
 
+    /// <summary>
+    ///     Sets the parameters for the component and updates the child content with the icon and badge.
+    /// </summary>
     protected override void OnParametersSet() {
         base.OnParametersSet();
         ChildContent = new RenderFragment(b => {
@@ -31,6 +46,5 @@ public class TnTImageButton : TnTButton {
                 b.CloseRegion();
             }
         });
-
     }
 }

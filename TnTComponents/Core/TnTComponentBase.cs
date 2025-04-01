@@ -4,13 +4,14 @@ using TnTComponents.Interfaces;
 namespace TnTComponents.Core;
 
 /// <summary>
-///     Base component containing all common logic.
+///     Base component for all TnTComponents.
 /// </summary>
 /// <seealso cref="ComponentBase" />
 /// <seealso cref="ITnTComponentBase" />
 /// <seealso cref="IAsyncDisposable" />
 public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
 
+    /// <inheritdoc />
     [Parameter(CaptureUnmatchedValues = true)]
     public virtual IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
@@ -33,6 +34,7 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
     [Parameter]
     public virtual string? ElementId { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public string? ElementLang { get; set; }
 
@@ -47,6 +49,7 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
     /// </summary>
     internal const string TnTCustomIdentifierAttribute = "tntid";
 
+    /// <inheritdoc />
     protected override void OnParametersSet() {
         base.OnParametersSet();
 

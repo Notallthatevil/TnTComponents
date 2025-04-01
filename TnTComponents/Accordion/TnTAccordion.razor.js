@@ -152,5 +152,4 @@ export function onUpdate(element, dotNetRef) {
     }
 }
 
-export function onDispose(element, dotNetRef) {
-}
+export function onDispose(element, dotNetRef) {}

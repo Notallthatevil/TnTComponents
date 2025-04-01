@@ -12,26 +12,28 @@ namespace TnTComponents;
 public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable {
 
     /// <summary>
-    ///     Gets or sets the content to be rendered inside the accordion child.
+    ///     The content to be rendered inside the accordion child.
     /// </summary>
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
     /// <summary>
-    ///     Gets or sets the body color of the content.
+    ///     The body color of the content.
     /// </summary>
     [Parameter]
     public TnTColor? ContentBodyColor { get; set; }
 
     /// <summary>
-    ///     Gets or sets the text color of the content.
+    ///     The text color of the content.
     /// </summary>
     [Parameter]
     public TnTColor? ContentTextColor { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public bool Disabled { get; set; }
 
+    /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-accordion-child")
@@ -40,40 +42,56 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
         .AddFilled()
         .Build();
 
+    /// <inheritdoc />
     [Parameter]
     public string? ElementName { get; set; }
 
+    /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
             .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
+    /// <inheritdoc />
     [Parameter]
     public bool EnableRipple { get; set; } = true;
 
     /// <summary>
-    ///     Gets or sets the body color of the header.
+    ///     The body color of the header.
     /// </summary>
     [Parameter]
     public TnTColor? HeaderBodyColor { get; set; }
 
     /// <summary>
-    ///     Gets or sets the text color of the header.
+    ///     The text color of the header.
     /// </summary>
     [Parameter]
     public TnTColor? HeaderTextColor { get; set; }
 
     /// <summary>
-    ///     Gets or sets the tint color of the header.
+    ///     The tint color of the header.
     /// </summary>
     [Parameter]
     public TnTColor? HeaderTintColor { get; set; }
 
     /// <summary>
-    ///     Gets or sets the label of the accordion child.
+    ///     The label of the accordion child.
     /// </summary>
     [Parameter, EditorRequired]
     public string Label { get; set; } = default!;
 
+    /// <summary>
+    ///     Callback invoked after the accordion has closed.
+    /// </summary>
+    [Parameter]
+    public EventCallback OnCloseCallback { get; set; }
+
+    /// <summary>
+    ///     Callback invoked after the accordion has opened.
+    /// </summary>
+    [Parameter]
+    public EventCallback OnOpenCallback { get; set; }
+
+    /// <inheritdoc />
     [Parameter]
     public TnTColor? OnTintColor { get; set; }
 
@@ -84,38 +102,33 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
     public bool OpenByDefault { get; set; }
 
     [Parameter]
-    public TnTColor? TintColor { get; set; }
-
-    [Parameter]
     public int? Order { get; set; }
 
-    [Inject]
-    private IJSRuntime _jsRuntime { get; set; } = default!;
-
-    [Parameter]
-    public EventCallback OnCloseCallback { get; set; }
-
-    [Parameter]
-    public EventCallback OnOpenCallback { get; set; }
-
-    [CascadingParameter]
-    private TnTAccordion _parent { get; set; } = default!;
-
+    /// <summary>
+    ///     When set, removes the child content from the DOM when the accordion is closed. When opened, the content is added back to the DOM. Only applies in interactive mode.
+    /// </summary>
     [Parameter]
     public bool RemoveContentOnClose { get; set; }
+
+    [Parameter]
+    public TnTColor? TintColor { get; set; }
 
     internal int _elementId = int.MinValue;
 
     internal bool _open;
+
+    [Inject]
+    private IJSRuntime _jsRuntime { get; set; } = default!;
+
+    [CascadingParameter]
+    private TnTAccordion _parent { get; set; } = default!;
 
     /// <summary>
     ///     Closes the accordion child asynchronously.
     /// </summary>
     public async Task CloseAsync() => await _jsRuntime.InvokeVoidAsync("TnTComponents.addHidden", Element);
 
-    /// <summary>
-    ///     Disposes the accordion child.
-    /// </summary>
+    /// <inheritdoc />
     public void Dispose() {
         GC.SuppressFinalize(this);
         _parent.RemoveChild(this);
@@ -153,11 +166,10 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
                 builder.AddAttribute(110, "data-permanent", true);
                 builder.AddContent(120, Label);
 
-                if(EnableRipple) {
+                if (EnableRipple) {
                     builder.OpenComponent<TnTRippleEffect>(125);
                     builder.CloseComponent();
                 }
-
 
                 {
                     builder.OpenComponent<MaterialIcon>(130);
@@ -192,6 +204,7 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
         });
     }
 
+    /// <inheritdoc />
     protected override void OnInitialized() {
         base.OnInitialized();
         _parent.RegisterChild(this);

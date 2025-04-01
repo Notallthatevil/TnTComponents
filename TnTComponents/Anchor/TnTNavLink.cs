@@ -8,42 +8,44 @@ using TnTComponents.Interfaces;
 namespace TnTComponents;
 
 /// <summary>
-///     Represents a navigation link component with customizable styles and behaviors.
+///     Represents a navigation link (anchor) component with customizable styles and behaviors.
 /// </summary>
 public class TnTNavLink : NavLink, ITnTComponentBase, ITnTInteractable, ITnTStyleable {
 
-    /// <summary>
-    ///     Gets or sets the background color when the link is active.
-    /// </summary>
+    /// <inheritdoc />
     [Parameter]
     public virtual TnTColor? ActiveBackgroundColor { get; set; }
 
-    /// <summary>
-    ///     Gets or sets the text color when the link is active.
-    /// </summary>
+    /// <inheritdoc />
     [Parameter]
     public virtual TnTColor? ActiveTextColor { get; set; }
 
     /// <summary>
-    ///     Gets or sets the appearance of the anchor.
+    ///     The appearance of the anchor.
     /// </summary>
     [Parameter]
     public AnchorAppearance Appearance { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public bool? AutoFocus { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public virtual TnTColor BackgroundColor { get; set; } = TnTColor.Primary;
 
+    /// <inheritdoc />
     [Parameter]
     public virtual TnTBorderRadius? BorderRadius { get; set; } = new(2);
 
+    /// <inheritdoc />
     [Parameter]
     public bool Disabled { get; set; }
 
+    /// <inheritdoc />
     public ElementReference Element { get; protected set; }
 
+    /// <inheritdoc />
     public virtual string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass(CssClass)
@@ -57,48 +59,54 @@ public class TnTNavLink : NavLink, ITnTComponentBase, ITnTInteractable, ITnTStyl
         .AddClass("active-bg-color", ActiveBackgroundColor.HasValue)
         .Build();
 
+    /// <inheritdoc />
     [Parameter]
     public string? ElementId { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public string? ElementLang { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public string? ElementName { get; set; }
 
+    /// <inheritdoc />
     public string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddVariable("active-bg-color", ActiveBackgroundColor.GetValueOrDefault(), ActiveBackgroundColor.HasValue)
         .AddVariable("active-fg-color", ActiveTextColor.GetValueOrDefault(), ActiveTextColor.HasValue)
         .Build();
 
+    /// <inheritdoc />
     [Parameter]
     public string? ElementTitle { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public int Elevation { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public bool EnableRipple { get; set; } = true;
 
-    /// <summary>
-    ///     Gets or sets the on-tint color of the link.
-    /// </summary>
+    /// <inheritdoc />
     [Parameter]
     public TnTColor? OnTintColor { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public TextAlign? TextAlignment { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public virtual TnTColor TextColor { get; set; } = TnTColor.OnBackground;
 
-    /// <summary>
-    ///     Gets or sets the tint color of the link.
-    /// </summary>
+    /// <inheritdoc />
     [Parameter]
     public TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
 
+    /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "a");
         builder.AddMultipleAttributes(10, AdditionalAttributes);
@@ -119,6 +127,7 @@ public class TnTNavLink : NavLink, ITnTComponentBase, ITnTInteractable, ITnTStyl
         builder.CloseElement();
     }
 
+    /// <inheritdoc />
     protected override void OnParametersSet() {
         base.OnParametersSet();
         if (Disabled && AdditionalAttributes?.ContainsKey("href") == true) {

@@ -3,7 +3,7 @@
 /// <summary>
 ///     Represents the border radius for a component, allowing for different radii on each corner.
 /// </summary>
-public struct TnTBorderRadius {
+public readonly struct TnTBorderRadius {
 
     /// <summary>
     ///     Gets a <see cref="TnTBorderRadius" /> with a full radius of 10 for all corners.
@@ -46,8 +46,7 @@ public struct TnTBorderRadius {
     public int StartStart { get; init; }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="TnTBorderRadius" /> struct with the same
-    ///     radius for all corners.
+    ///     Initializes a new instance of the <see cref="TnTBorderRadius" /> struct with the same radius for all corners.
     /// </summary>
     /// <param name="radius">The radius for all corners.</param>
     public TnTBorderRadius(int radius) {

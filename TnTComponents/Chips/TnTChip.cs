@@ -15,17 +15,18 @@ public partial class TnTChip : TnTComponentBase, ITnTInteractable {
     public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerLow;
 
     /// <summary>
-    ///     Gets or sets the event callback to be invoked after the value is bound.
+    ///     The event callback to be invoked after the value is bound.
     /// </summary>
     [Parameter]
     public EventCallback<bool> BindAfter { get; set; }
 
     /// <summary>
-    ///     Gets or sets the event callback to be invoked when the close button is clicked.
+    ///     The event callback to be invoked when the close button is clicked.
     /// </summary>
     [Parameter]
     public EventCallback<MouseEventArgs> CloseButtonClicked { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public bool Disabled { get; set; }
 
@@ -35,6 +36,7 @@ public partial class TnTChip : TnTComponentBase, ITnTInteractable {
     [Parameter]
     public bool DisableToggle { get; set; }
 
+    /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
                             .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddTnTInteractable(this)
@@ -44,22 +46,26 @@ public partial class TnTChip : TnTComponentBase, ITnTInteractable {
         .AddClass("tnt-chip")
         .Build();
 
+    /// <inheritdoc />
     [Parameter]
     public string? ElementName { get; set; }
 
+    /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
             .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
+    /// <inheritdoc />
     [Parameter]
     public bool EnableRipple { get; set; } = true;
 
     /// <summary>
-    ///     Gets or sets the label of the chip.
+    ///     The label of the chip.
     /// </summary>
     [Parameter, EditorRequired]
     public string Label { get; set; } = default!;
 
+    /// <inheritdoc />
     [Parameter]
     public TnTColor? OnTintColor { get; set; } = TnTColor.OnPrimary;
 
@@ -70,36 +76,38 @@ public partial class TnTChip : TnTComponentBase, ITnTInteractable {
     public bool ReadOnly { get; set; }
 
     /// <summary>
-    ///     Gets or sets the start icon of the chip.
+    ///     The start icon of the chip.
     /// </summary>
     [Parameter]
     public TnTIcon? StartIcon { get; set; }
 
     /// <summary>
-    ///     Gets or sets the text color of the chip.
+    ///     The text color of the chip.
     /// </summary>
     [Parameter]
     public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
 
+    /// <inheritdoc />
     [Parameter]
     public TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
 
     /// <summary>
-    ///     Gets or sets the value of the chip.
+    ///     The value of the chip.
     /// </summary>
     public bool Value { get; set; }
 
     /// <summary>
-    ///     Gets or sets the event callback to be invoked when the value changes.
+    ///     The event callback to be invoked when the value changes.
     /// </summary>
     public EventCallback<bool> ValueChanged { get; set; }
 
     /// <summary>
-    ///     Gets or sets the cascading parameter for the form.
+    ///     The cascading parameter for the form.
     /// </summary>
     [CascadingParameter]
     private ITnTForm? _form { get; set; }
 
+    /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "label");
         builder.AddMultipleAttributes(10, AdditionalAttributes);

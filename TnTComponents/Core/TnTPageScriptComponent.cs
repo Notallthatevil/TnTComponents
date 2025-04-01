@@ -11,10 +11,14 @@ namespace TnTComponents.Core;
 /// </summary>
 /// <typeparam name="TComponent">The type of the component.</typeparam>
 public abstract class TnTPageScriptComponent<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TComponent> : TnTComponentBase, ITnTPageScriptComponent<TComponent> where TComponent : ComponentBase {
+
+    /// <inheritdoc />
     public DotNetObjectReference<TComponent>? DotNetObjectRef { get; set; }
 
+    /// <inheritdoc />
     public IJSObjectReference? IsolatedJsModule { get; private set; }
 
+    /// <inheritdoc />
     public abstract string? JsModulePath { get; }
 
     [Inject]
@@ -36,23 +40,20 @@ public abstract class TnTPageScriptComponent<[DynamicallyAccessedMembers(Dynamic
         });
     }
 
+    /// <inheritdoc />
     public void Dispose() {
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
 
+    /// <inheritdoc />
     public async ValueTask DisposeAsync() {
         await DisposeAsyncCore().ConfigureAwait(false);
         Dispose(disposing: false);
         GC.SuppressFinalize(this);
     }
 
-    /// <summary>
-    ///     Disposes the component.
-    /// </summary>
-    /// <param name="disposing">
-    ///     A value indicating whether the method is called from the Dispose method.
-    /// </param>
+    /// <inheritdoc />
     protected virtual void Dispose(bool disposing) {
         if (disposing) {
             DotNetObjectRef?.Dispose();
@@ -65,10 +66,7 @@ public abstract class TnTPageScriptComponent<[DynamicallyAccessedMembers(Dynamic
         }
     }
 
-    /// <summary>
-    ///     Asynchronously disposes the core resources of the component.
-    /// </summary>
-    /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <inheritdoc />
     protected virtual async ValueTask DisposeAsyncCore() {
         if (IsolatedJsModule is not null) {
             try {
@@ -89,6 +87,7 @@ public abstract class TnTPageScriptComponent<[DynamicallyAccessedMembers(Dynamic
         DotNetObjectRef = null;
     }
 
+    /// <inheritdoc />
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         await base.OnAfterRenderAsync(firstRender);
         try {
@@ -102,6 +101,7 @@ public abstract class TnTPageScriptComponent<[DynamicallyAccessedMembers(Dynamic
         catch (JSDisconnectedException) { }
     }
 
+    /// <inheritdoc />
     protected override void OnInitialized() {
         base.OnInitialized();
         var derived = this as TComponent;
