@@ -43,6 +43,9 @@ public partial class TnTMarkdownEditor {
     [Parameter]
     public EventCallback<string> ValueChanged { get; set; }
 
+    [Parameter]
+    public string? InitialValue { get; set; }
+
     /// <summary>
     ///     Updates the Markdown content and the rendered HTML content.
     /// </summary>

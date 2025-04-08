@@ -7,7 +7,12 @@
 </HeadContent>
 
 <tnt-markdown-editor @attributes="AdditionalAttributes" @ref="Element">
-    <textarea style="display:hidden;" />
+    <textarea style="display:none;" />
+    @if(!string.IsNullOrWhiteSpace(InitialValue)) {
+    <div class="initial-value" style="display:none">
+        @InitialValue
+    </div>
+    }
 </tnt-markdown-editor>
 
 @PageScript
