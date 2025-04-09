@@ -164,6 +164,17 @@ public abstract partial class TnTInputBase<[DynamicallyAccessedMembers(Dynamical
         return Element.FocusAsync();
     }
 
+    protected override void OnParametersSet() {
+        base.OnParametersSet();
+        if(StartIcon is not null) {
+            StartIcon.AdditionalClass = "tnt-start-icon";
+        }
+
+        if(EndIcon is not null) {
+            EndIcon.AdditionalClass = "tnt-end-icon";
+        }
+    }
+
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "label");
         builder.AddAttribute(10, "lang", ElementLang);
