@@ -1,0 +1,42 @@
+﻿@page "/Wizard"
+@using System.ComponentModel.DataAnnotations
+@using TnTComponents
+@rendermode InteractiveAuto
+<h3>
+    Wizard
+</h3>
+
+<TnTComponents.TnTWizard>
+    <TnTComponents.TnTWizardFormStep Model="@_model1" Title="Step 1" SubTitle="My subtitle" Icon="@MaterialIcon.Search">
+        <TnTInputText @bind-Value="_model1.Name" Label="Name" Placeholder="Enter your name" />
+    </TnTComponents.TnTWizardFormStep>
+    <TnTComponents.TnTWizardFormStep Model="@_model2" Title="Step 2">
+        <TnTInputNumeric @bind-Value="_model2.Age" Label="Age" Placeholder="Enter your age" />
+    </TnTComponents.TnTWizardFormStep>
+
+    <TnTComponents.TnTWizardStep Title="Step 3">
+        I am just content
+    </TnTComponents.TnTWizardStep>
+</TnTComponents.TnTWizard>
+
+@code {
+    private Model1 _model1 = new();
+    private Model2 _model2 = new();
+    private Model3 _model3 = new();
+
+    private sealed class Model1 
+    {
+        [Required]
+        public string Name { get; set; } = string.Empty;
+    }
+
+    private sealed class Model2
+    {
+        public int Age { get; set; } 
+    }
+
+    private sealed class Model3
+    {
+        public bool Valid { get; set; } 
+    }
+}
