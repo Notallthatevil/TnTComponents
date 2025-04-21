@@ -56,4 +56,9 @@ public static class JSRuntimeExt {
     internal static async ValueTask ShowElementAsync(this IJSRuntime jsRuntime, ElementReference element) {
         await jsRuntime.InvokeVoidAsync("TnTComponents.showElement", element);
     }
+
+    public static async ValueTask UpdateUriAsync(this IJSRuntime jsRuntime, Uri newUri) {
+        ArgumentNullException.ThrowIfNull(newUri, nameof(newUri));
+        await jsRuntime.InvokeVoidAsync("history.pushState", new object(), "", newUri.ToString());
+    }
 }
