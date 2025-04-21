@@ -1,0 +1,55 @@
+﻿@using TnTComponents.Core
+@using TnTComponents.Wizard
+@namespace TnTComponents
+@inherits TnTComponentBase
+
+<div @attributes="AdditionalAttributes" class="@ElementClass" style="@ElementStyle" id="@ElementId" title="@ElementTitle" @ref="Element">
+    <ol class="tnt-wizard-steps">
+        @foreach (var (step, i) in _steps.Select((s, i) => new KeyValuePair<TnTWizardStepBase, int>(s, i))) {
+            <li class="@($"tnt-wizard-step-indicator{(_stepIndex == i ? " current-step" : string.Empty)}{(_stepIndex > i ? " completed-step" : string.Empty)}")">
+                <div class="tnt-wizard-step-title">
+                    <span class="tnt-wizard-step-index">
+                        @(i + 1)
+                    </span>
+                    @step.Icon?.Render()
+                    @(step.Title ?? $"Step {i + 1}")
+                </div>
+                @if (!string.IsNullOrWhiteSpace(step.SubTitle)) {
+                    <div class="tnt-wizard-step-subtitle">
+                        @step.SubTitle
+                    </div>
+                }
+            </li>
+        }
+    </ol>
+    <div class="tnt-wizard-content">
+        @if (_currentStep is not null) {
+            @_currentStep.Render()
+        }
+        else {
+            <text>No step provided</text>
+        }
+    </div>
+    <div class="tnt-wizard-buttons">
+        @if (_stepIndex > 0) {
+            <TnTButton Appearance="ButtonAppearance.Outlined" TextColor="TnTColor.OnSurface" OnClickCallback="@(() => _stepIndex--)" Disabled="@PreviousButtonDisabled">
+                <MaterialIcon Icon="@MaterialIcon.KeyboardArrowLeft" />
+                PreviousStep
+            </TnTButton>
+        }
+        @if (_stepIndex + 1 == _steps.Count) {
+            <TnTButton OnClickCallback="@SubmitClickedAsync" BackgroundColor="TnTColor.Success" TextColor="TnTColor.OnSuccess" TintColor="TnTColor.SuccessContainer" OnTintColor="TnTColor.OnSuccessContainer" Disabled="@SubmitButtonDisabled">
+                Submit
+            </TnTButton>
+        }
+        else {
+            <TnTButton OnClickCallback="@NextStepAsync" Disabled="@NextButtonDisabled">
+                Next Step
+                <MaterialIcon Icon="@MaterialIcon.KeyboardArrowRight" />
+            </TnTButton>
+        }
+    </div>
+    <CascadingValue Value="this" IsFixed="true">
+        @ChildContent
+    </CascadingValue>
+</div>

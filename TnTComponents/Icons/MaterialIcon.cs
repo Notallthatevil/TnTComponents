@@ -16,6 +16,7 @@ public sealed partial class MaterialIcon : TnTIcon {
         .AddClass("mi-medium", Size == IconSize.Medium)
         .AddClass("mi-large", Size == IconSize.Large)
         .AddClass("mi-extra-large", Size == IconSize.ExtraLarge)
+        .AddClass(AdditionalClass, !string.IsNullOrWhiteSpace(AdditionalClass))
         .Build();
 
     public override string? ElementStyle => CssStyleBuilder.Create()

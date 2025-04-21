@@ -23,6 +23,7 @@
 @import 'TnTComponents/_typeahead.scss';
 @import 'TnTComponents/_scheduler.scss';
 @import 'TnTComponents/_badge.scss';
+@import 'TnTComponents/_wizard.scss';
 
 .tnt-components {
     font-family: 'Roboto', sans-serif;
@@ -116,4 +117,8 @@ tnt-body {
             color: $tnt-color-on-surface;
         }
     }
+}
+
+tnt-markdown-editor .initial-value {
+    display: none;
 }

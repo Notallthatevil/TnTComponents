@@ -54,6 +54,7 @@ public class TnTToast : ComponentBase, IDisposable {
                 }
 
                 builder.OpenElement(20, "div");
+                builder.AddAttribute(25, "id", metadata.Id);
                 builder.AddAttribute(30, "class", CssClassBuilder.Create()
                     .AddClass("tnt-toast")
                     .AddTnTStyleable(toast)
@@ -64,6 +65,15 @@ public class TnTToast : ComponentBase, IDisposable {
                 if (toast.Timeout > 0) {
                     builder.AddAttribute(40, "style", $"--timeout: {toast.Timeout}s;");
                 }
+#if NET9_0_OR_GREATER
+                if (toast.Timeout > 0 && !RendererInfo.IsInteractive) {
+                    builder.OpenElement(41, "script");
+                    builder.AddAttribute(42, "type", "text/javascript");
+                    builder.AddMarkupContent(43, $"setTimeout(() => {{ document.querySelector('#{metadata.Id}').classList.add('tnt-closing'); setTimeout(() => document.querySelector('#{metadata.Id}').remove(), 500); }}, {toast.Timeout * 1000});");
+                    builder.CloseElement();
+                }
+#endif
+
                 builder.SetKey(toast);
 
                 {
@@ -79,7 +89,16 @@ public class TnTToast : ComponentBase, IDisposable {
                     if (toast.ShowClose) {
                         builder.OpenComponent<TnTImageButton>(90);
                         builder.AddComponentParameter(100, nameof(TnTImageButton.Icon), new MaterialIcon { Icon = MaterialIcon.Close });
+#if NET9_0_OR_GREATER
+                        if (!RendererInfo.IsInteractive) {
+                            builder.AddAttribute(110, "onclick", "(e => { e.target.closest('.tnt-toast').classList.add('tnt-closing'); setTimeout(() => e.target.closest('.tnt-toast').remove(), 500); })(arguments[0])");
+                        }
+                        else {
+                            builder.AddComponentParameter(115, nameof(TnTImageButton.OnClickCallback), EventCallback.Factory.Create<MouseEventArgs>(this, _ => _service.CloseAsync(toast)));
+                        }
+#else 
                         builder.AddComponentParameter(110, nameof(TnTImageButton.OnClickCallback), EventCallback.Factory.Create<MouseEventArgs>(this, _ => _service.CloseAsync(toast)));
+#endif
                         builder.AddComponentParameter(120, nameof(TnTImageButton.BackgroundColor), TnTColor.Transparent);
                         builder.AddComponentParameter(130, nameof(TnTImageButton.TextColor), TnTColor.Outline);
                         builder.AddComponentParameter(140, nameof(TnTImageButton.Elevation), 0);
@@ -140,7 +159,7 @@ public class TnTToast : ComponentBase, IDisposable {
     /// <param name="toast">The toast to open.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
     private Task OnOpen(ITnTToast toast) {
-        _toasts.TryAdd(toast, new ToastMetadata() { CreatedTime = DateTimeOffset.Now, Task = null });
+        _toasts.TryAdd(toast, new ToastMetadata() { CreatedTime = DateTimeOffset.Now, Task = null, Id = TnTComponentIdentifier.NewId() });
         StateHasChanged();
 
         return Task.CompletedTask;
@@ -149,5 +168,6 @@ public class TnTToast : ComponentBase, IDisposable {
     private struct ToastMetadata {
         public required DateTimeOffset CreatedTime { get; set; }
         public required Task? Task { get; set; }
+        public required string Id { get; set; }
     }
 }

@@ -1,0 +1,139 @@
+﻿$wizard-title-height: 24px;
+$wizard-subtitle-height: 20px;
+$wizard-title-gap-size: 4px;
+
+.tnt-wizard.tnt-components {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: 1fr auto;
+    width: 100%;
+    box-sizing: border-box;
+    height: 100%;
+
+    .tnt-wizard-steps {
+        display: flex;
+        flex-direction: column;
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        margin: 0;
+        padding: 8px;
+
+        .tnt-wizard-step-indicator {
+            list-style-type: none;
+            position: relative;
+            gap: $wizard-title-gap-size;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            color: $tnt-color-outline;
+
+            .tnt-wizard-step-title {
+                @extend .tnt-title-medium;
+                display: flex;
+                align-items: center;
+                height: $wizard-title-height;
+
+                .tnt-wizard-step-index {
+                    @extend .tnt-border-radius-10;
+                    box-sizing: border-box;
+                    border: 2px solid $tnt-color-outline;
+                    color: inherit;
+                    height: 100%;
+                    aspect-ratio: 1/1;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin-right: 8px;
+                    padding: 0;
+                }
+
+                .tnt-icon {
+                    padding: 0;
+                    margin: 0 4px 0 0;
+                }
+            }
+
+            .tnt-wizard-step-subtitle {
+                @extend .tnt-title-small;
+                margin-left: calc($wizard-title-height + 8px);
+                height: $wizard-subtitle-height;
+                color: inherit;
+            }
+
+            &:has(.tnt-icon) {
+                .tnt-wizard-step-subtitle {
+                    margin-left: calc($wizard-title-height + $wizard-title-height + 12px);
+                }
+            }
+
+            &:not(:last-child) {
+                &:after {
+                    content: '';
+                    position: absolute;
+                    top: calc($wizard-title-height + 8px);
+                    width: 4px;
+                    background-color: $tnt-color-outline-variant;
+                    border-radius: 8px;
+                    bottom: 8px;
+                    left: calc($wizard-title-height / 2 - 2px);
+                }
+
+                &.current-step {
+                    &:after {
+                        background-color: $tnt-color-primary;
+                    }
+                }
+            }
+
+            &.current-step {
+                color: $tnt-color-primary;
+
+                .tnt-wizard-step-title {
+                    .tnt-wizard-step-index {
+                        border: none;
+                        background-color: $tnt-color-primary;
+                        color: $tnt-color-on-primary;
+                    }
+                }
+
+                .tnt-wizard-step-subtitle {
+                    color: $tnt-color-secondary;
+                }
+            }
+
+            &.completed-step {
+                color: $tnt-color-secondary;
+
+                .tnt-wizard-step-title {
+                    .tnt-wizard-step-index {
+                        border: none;
+                        background-color: $tnt-color-secondary;
+                        color: $tnt-color-on-secondary;
+                    }
+                }
+
+                .tnt-wizard-step-subtitle {
+                    color: inherit;
+                }
+
+                &:not(:last-child) {
+                    &:after {
+                        background-color: $tnt-color-secondary;
+                    }
+                }
+            }
+        }
+    }
+
+    .tnt-wizard-content {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .tnt-wizard-buttons {
+        grid-column: 2;
+        grid-row: 2;
+        text-align-last: end;
+    }
+}

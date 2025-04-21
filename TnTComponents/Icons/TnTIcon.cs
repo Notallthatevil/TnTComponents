@@ -32,6 +32,8 @@ public abstract class TnTIcon : TnTComponentBase {
     [Parameter, EditorRequired]
     public string Icon { get; set; } = default!;
 
+    internal string? AdditionalClass { get; set; }
+
     protected TnTIcon() { }
 
     internal TnTIcon(string icon) {
