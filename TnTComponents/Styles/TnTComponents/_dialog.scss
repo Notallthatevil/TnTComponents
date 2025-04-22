@@ -25,7 +25,8 @@
         }
 
         button.tnt-components {
-            float: right;
+            position: absolute;
+            right: 0;
             top: -32px;
             background-color: transparent;
             color: inherit;
