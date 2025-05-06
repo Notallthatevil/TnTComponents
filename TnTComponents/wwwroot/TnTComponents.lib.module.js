@@ -88,6 +88,38 @@ function setupPageScriptElement() {
 export function afterWebStarted(blazor) {
     setupPageScriptElement();
     blazor.addEventListener('enhancedload', onEnhancedLoad);
+
+    let body = document.querySelector('.tnt-body');
+    if (body) {
+        const bodyPadding = parseInt(getComputedStyle(body).paddingBottom, 10);
+        const resizeObserver = new ResizeObserver(entries => {
+            const hasFooter = document.querySelector('.tnt-footer');
+            const fillRemaining = document.querySelectorAll('.tnt-fill-remaining');
+
+            for (const fills of fillRemaining) {
+                if (entries[0].target.scrollHeight > entries[0].target.clientHeight) {
+                    break;
+                }
+
+                var rect = fills.getBoundingClientRect();
+                const style = getComputedStyle(fills);
+                let height = window.innerHeight - rect.top - bodyPadding;
+
+                const margin = style.marginBottom;
+                if (margin) {
+                    height = height - parseInt(margin, 10);
+                }
+
+                if (hasFooter) {
+                    height = height - hasFooter.getBoundingClientRect().height;
+                }
+
+                fills.style.height = `${height}px`
+            }
+
+        });
+        resizeObserver.observe(body);
+    }
 }
 function getCoords(elem) { // crossbrowser version
     var box = elem.getBoundingClientRect();
