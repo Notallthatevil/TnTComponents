@@ -10,38 +10,56 @@ using TnTComponents.Interfaces;
 
 namespace TnTComponents.Layout;
 
+/// <summary>
+///     A base layout class
+/// </summary>
+
 public abstract class TnTLayoutComponent : TnTComponentBase, ITnTStyleable {
 
+    /// <inheritdoc />
     [Parameter]
     public virtual TnTColor BackgroundColor { get; set; } = TnTColor.Background;
 
+    /// <inheritdoc />
     [Parameter]
     public TnTBorderRadius? BorderRadius { get; set; }
 
+    /// <summary>
+    ///     The child content to be rendered inside the component.
+    /// </summary>
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddTnTStyleable(this)
         .AddFilled()
         .Build();
 
+    /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
+    /// <inheritdoc />
     [Parameter]
     public virtual int Elevation { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public TextAlign? TextAlignment { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public virtual TnTColor TextColor { get; set; } = TnTColor.OnBackground;
 
-    [Parameter]
-    public RenderFragment ChildContent { get; set; } = default!;
-
+    /// <summary>
+    ///     Indicates that the data is permanent and should not be removed from the DOM when the component is removed.
+    /// </summary>
     protected virtual bool DataPermanent => false;
 
+    /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         if (DataPermanent) {
             builder.OpenElement(0, "div");

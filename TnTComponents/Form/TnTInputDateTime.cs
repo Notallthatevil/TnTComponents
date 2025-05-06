@@ -24,11 +24,13 @@ public class TnTInputDateTime<[DynamicallyAccessedMembers(DynamicallyAccessedMem
     [Parameter]
     public bool MonthOnly { get; set; }
 
+    /// <inheritdoc />
     public override InputType Type => _type;
 
     private string _format = default!;
     private InputType _type;
 
+    /// <inheritdoc />
     protected override string? FormatValueAsString(DateTimeType? value) {
         var result = value switch {
             DateTime dateTimeValue => BindConverter.FormatValue(dateTimeValue, _format, CultureInfo.InvariantCulture),
@@ -41,6 +43,7 @@ public class TnTInputDateTime<[DynamicallyAccessedMembers(DynamicallyAccessedMem
         return result;
     }
 
+    /// <inheritdoc />
     protected override void OnInitialized() {
         base.OnInitialized();
 
@@ -65,6 +68,7 @@ public class TnTInputDateTime<[DynamicallyAccessedMembers(DynamicallyAccessedMem
         AdditionalAttributes = attributes;
     }
 
+    /// <inheritdoc />
     protected override void OnParametersSet() {
         base.OnParametersSet();
         if (string.IsNullOrWhiteSpace(Format)) {
@@ -72,6 +76,7 @@ public class TnTInputDateTime<[DynamicallyAccessedMembers(DynamicallyAccessedMem
         }
     }
 
+    /// <inheritdoc />
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out DateTimeType result, [NotNullWhen(false)] out string? validationErrorMessage) {
         if (BindConverter.TryConvertTo(value, CultureInfo.InvariantCulture, out result)) {
             validationErrorMessage = null;

@@ -7,9 +7,9 @@ namespace TnTComponents.Virtualization;
 /// </summary> <remarks> To pass this object as a query parameter, use the following format: <code>
 /// app.MapGet("/endpoint", (TnTItemsProviderRequest request) => ...); </code> This endpoint accepts
 /// the following query parameters:
-/// https://example.com?StartIndex=0&SortOnProperties=%5BPropertyName%2CAscending%5D%2C%5Bb%2C%20Descending%5D&Count=10
+/// https://example.com?StartIndex=0&amp;SortOnProperties=%5BPropertyName%2CAscending%5D%2C%5Bb%2C%20Descending%5D&amp;Count=10
 /// Decoded =
-/// https://example.com?StartIndex=0&SortOnProperties=[PropertyName,Ascending],[PropertyName2,Descending]&Count=10 </remarks>
+/// https://example.com?StartIndex=0&amp;SortOnProperties=[PropertyName,Ascending],[PropertyName2,Descending]&amp;Count=10 </remarks>
 public readonly record struct TnTItemsProviderRequest() {
     /// <summary>
     ///     Gets or sets the start index of the requested items.
@@ -27,10 +27,10 @@ public readonly record struct TnTItemsProviderRequest() {
 
 
     /// <summary>
-    /// Binds the HTTP context query parameters to a <see cref="TnTItemsProviderServerRequest"/> instance.
+    /// Binds the HTTP context query parameters to a <see cref="TnTItemsProviderRequest"/> instance.
     /// </summary>
     /// <param name="context">The HTTP context containing the query parameters.</param>
-    /// <returns>A task that represents the asynchronous bind operation. The task result contains the bound <see cref="TnTItemsProviderServerRequest"/> instance or null if binding failed.</returns>
+    /// <returns>A task that represents the asynchronous bind operation. The task result contains the bound <see cref="TnTItemsProviderRequest"/> instance or null if binding failed.</returns>
     public static ValueTask<TnTItemsProviderRequest?> BindAsync(HttpContext context) {
         var query = context.Request.Query;
         if (query.TryGetValue(nameof(StartIndex), out var startIndexes) && !string.IsNullOrWhiteSpace(startIndexes.FirstOrDefault()) && int.TryParse(startIndexes.FirstOrDefault(), out int startIndex)) {

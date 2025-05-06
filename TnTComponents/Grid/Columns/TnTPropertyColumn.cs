@@ -32,6 +32,9 @@ public class TnTPropertyColumn<TGridItem, TProp> : TnTColumnBase<TGridItem>, IBi
     [Parameter]
     public string? Format { get; set; }
 
+    /// <summary>
+    /// The culture to use when formatting the value. This is only used if <see cref="Format"/> is set.
+    /// </summary>
     [Parameter]
     public CultureInfo FormatCulture { get; set; } = CultureInfo.CurrentCulture;
 
@@ -41,8 +44,14 @@ public class TnTPropertyColumn<TGridItem, TProp> : TnTColumnBase<TGridItem>, IBi
     [Parameter, EditorRequired]
     public Expression<Func<TGridItem, TProp>> Property { get; set; } = default!;
 
+    /// <summary>
+    /// The property info for the property being displayed in this column's cells.
+    /// </summary>
     public PropertyInfo? PropertyInfo { get; private set; }
 
+    /// <summary>
+    /// Not supported. This property is generated internally by the framework.
+    /// </summary>
     public override TnTGridSort<TGridItem>? SortBy {
         get => _sortBuilder;
         set => throw new NotSupportedException($"PropertyColumn generates this member internally. For custom sorting rules, see '{typeof(TnTTemplateColumn<TGridItem>)}'.");
@@ -56,6 +65,7 @@ public class TnTPropertyColumn<TGridItem, TProp> : TnTColumnBase<TGridItem>, IBi
     /// <inheritdoc />
     protected internal override void CellContent(RenderTreeBuilder builder, TGridItem item) => builder.AddContent(0, _cellTextFunc?.Invoke(item));
 
+    /// <inheritdoc />
     protected internal override string? RawCellContent(TGridItem item) => _cellTooltipTextFunc?.Invoke(item);
 
     /// <inheritdoc />

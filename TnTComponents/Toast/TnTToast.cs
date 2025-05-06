@@ -130,6 +130,7 @@ public class TnTToast : ComponentBase, IDisposable {
         }
     }
 
+    /// <inheritdoc />
     protected override void OnInitialized() {
         base.OnInitialized();
         _service.OnOpen += OnOpen;

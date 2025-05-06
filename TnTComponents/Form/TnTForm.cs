@@ -27,20 +27,29 @@ public interface ITnTForm {
 }
 
 /// <summary>
-///     Represents a form component that extends <see cref="EditForm" /> and implements <see
-///     cref="ITnTForm" />.
+///     Represents a form component that extends <see cref="EditForm" /> and implements <see cref="ITnTForm" />.
 /// </summary>
 public class TnTForm : EditForm, ITnTForm {
 
+    /// <summary>
+    ///     The visual appearance of the form.
+    /// </summary>
     [Parameter]
     public FormAppearance Appearance { get; set; }
 
+    /// <summary>
+    ///     Indicates whether the form is disabled.
+    /// </summary>
     [Parameter]
     public bool Disabled { get; set; }
 
+    /// <summary>
+    ///     Indicates whether the form is read-only.
+    /// </summary>
     [Parameter]
     public bool ReadOnly { get; set; }
 
+    /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenComponent<CascadingValue<ITnTForm>>(0);
         builder.AddComponentParameter(10, nameof(CascadingValue<ITnTForm>.Value), this);

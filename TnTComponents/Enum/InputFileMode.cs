@@ -11,15 +11,13 @@ public enum InputFileMode {
     SaveToTemporaryFolder,
 
     /// <summary>
-    ///     Files are read into a buffer. Use <see cref="Forms.TnTInputFileEventArgs.Buffer" /> to
-    ///     retrieve bytes.
+    ///     Files are read into a buffer. to retrieve bytes.
     /// </summary>
     Buffer,
 
     /// <summary>
-    ///     In Blazor Server, file data is streamed over the SignalR connection into .NET code on
-    ///     the server as the file is read. In Blazor WebAssembly, file data is streamed directly
-    ///     into the .NET code within the browser.
+    ///     In Blazor Server, file data is streamed over the SignalR connection into .NET code on the server as the file is read. In Blazor WebAssembly, file data is streamed directly into the .NET
+    ///     code within the browser.
     /// </summary>
     Stream,
 }

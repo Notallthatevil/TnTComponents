@@ -16,6 +16,9 @@ public partial class TnTTypeahead<TItem> {
     [Parameter]
     public FormAppearance Appearance { get; set; }
 
+    /// <summary>
+    ///     The background color of the typeahead component.
+    /// </summary>
     [Parameter]
     public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerHighest;
 
@@ -25,21 +28,26 @@ public partial class TnTTypeahead<TItem> {
     [Parameter]
     public int DebounceMilliseconds { get; set; } = 500;
 
+    /// <inheritdoc />
     [Parameter]
     public bool Disabled { get; set; }
 
+    /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-typeahead")
         .Build();
 
+    /// <inheritdoc />
     [Parameter]
     public string? ElementName { get; set; }
 
+    /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
+    /// <inheritdoc />
     [Parameter]
     public bool EnableRipple { get; set; }
 
@@ -61,6 +69,7 @@ public partial class TnTTypeahead<TItem> {
     [Parameter]
     public string? Label { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public TnTColor? OnTintColor { get; set; }
 
@@ -101,6 +110,7 @@ public partial class TnTTypeahead<TItem> {
     private bool _searching;
     private string? _searchText;
 
+    /// <inheritdoc />
     public void Dispose() {
         _debouncer?.Dispose();
         _debouncer = null!;
@@ -108,6 +118,7 @@ public partial class TnTTypeahead<TItem> {
         GC.SuppressFinalize(this);
     }
 
+    /// <inheritdoc />
     protected override void OnParametersSet() {
         base.OnParametersSet();
         _debouncer = new TnTDebouncer(DebounceMilliseconds);

@@ -129,7 +129,7 @@ public interface IStorageService {
     /// <param name="key">The key of the item to set.</param>
     /// <param name="data">The data to set.</param>
     /// <param name="serializerContext">The serializer context. This is required if trying to deserialize a custom type, other then a primitive. 
-    /// This is due to AOT and trimming. <see href="https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/source-generation"/></param></param>
+    /// This is due to AOT and trimming. <see href="https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/source-generation"/></param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
     ValueTask SetItemAsync<T>(string key, T data, JsonSerializerContext? serializerContext = null, CancellationToken cancellationToken = default);

@@ -83,10 +83,12 @@ public class TnTThemeDesign : IComponent {
     private RenderHandle _renderHandle;
     private ThemeFile? _themeFile;
 
+    /// <inheritdoc />
     public void Attach(RenderHandle renderHandle) {
         _renderHandle = renderHandle;
     }
 
+    /// <inheritdoc />
     public async Task SetParametersAsync(ParameterView parameters) {
         foreach (var entry in parameters) {
             typeof(TnTThemeDesign).GetProperties().FirstOrDefault(p => p.Name == entry.Name)?.SetValue(this, entry.Value);

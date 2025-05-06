@@ -27,6 +27,7 @@ public class TnTTemplateColumn<TGridItem> : TnTColumnBase<TGridItem> {
     protected internal override void CellContent(RenderTreeBuilder builder, TGridItem item)
         => builder.AddContent(0, ChildContent(item));
 
+    /// <inheritdoc />
     protected internal override string? RawCellContent(TGridItem item) {
         return "Not implemented";
     }

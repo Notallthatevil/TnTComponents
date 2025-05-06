@@ -5,34 +5,46 @@ using TnTComponents.Interfaces;
 
 namespace TnTComponents;
 
+/// <summary>
+///     Represents a container component.
+/// </summary>
 public class TnTContainer : TnTComponentBase, ITnTComponentBase, ITnTFlexBox {
 
+    /// <inheritdoc />
     [Parameter]
     public AlignContent? AlignContent { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public AlignItems? AlignItems { get; set; }
 
+    /// <summary>
+    ///     The content to be rendered inside the container.
+    /// </summary>
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
+    /// <inheritdoc />
+    [Parameter]
+    public LayoutDirection? Direction { get; set; }
+
+    /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddFlexBox(this)
         .AddClass("tnt-container")
         .Build();
 
+    /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
-    [Parameter]
-    public LayoutDirection? Direction { get; set; }
-
+    /// <inheritdoc />
     [Parameter]
     public JustifyContent? JustifyContent { get; set; }
 
-
+    /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "div");
         builder.AddMultipleAttributes(10, AdditionalAttributes);

@@ -15,11 +15,13 @@ public class TnTDivider : TnTComponentBase {
     [Parameter]
     public TnTColor? Color { get; set; } = TnTColor.OutlineVariant;
 
+    /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
             .AddFromAdditionalAttributes(AdditionalAttributes)
             .AddClass($"tnt-divider-{Orientation.ToString().ToLower()}")
             .Build();
 
+    /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
             .AddStyle("margin-top", $"{Margin}px", Margin is not null && Orientation == Orientation.Horizontal)
             .AddStyle("margin-bottom", $"{Margin}px", Margin is not null && Orientation == Orientation.Horizontal)
@@ -40,6 +42,7 @@ public class TnTDivider : TnTComponentBase {
     /// </summary>
     public Orientation Orientation { get; set; } = Orientation.Horizontal;
 
+    /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "div");
         builder.AddMultipleAttributes(10, AdditionalAttributes);

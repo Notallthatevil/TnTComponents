@@ -7,6 +7,9 @@ namespace TnTComponents.Grid.Infrastructure;
 ///     A column that can bind to a property of model
 /// </summary>
 public interface IBindableColumn {
+    /// <summary>
+    /// Returns the property info for the property being displayed in this column's cells.
+    /// </summary>
     PropertyInfo? PropertyInfo { get; }
 }
 

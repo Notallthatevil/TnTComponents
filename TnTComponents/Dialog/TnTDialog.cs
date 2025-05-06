@@ -42,6 +42,7 @@ public class TnTDialog : ComponentBase, IDisposable {
         GC.SuppressFinalize(this);
     }
 
+    /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         ITnTDialog[] dialogs;
         lock (_lock) {
@@ -72,6 +73,7 @@ public class TnTDialog : ComponentBase, IDisposable {
         }
     }
 
+    /// <inheritdoc />
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         await base.OnAfterRenderAsync(firstRender);
         ITnTDialog[] dialogs;
@@ -83,6 +85,7 @@ public class TnTDialog : ComponentBase, IDisposable {
         }
     }
 
+    /// <inheritdoc />
     protected override void OnInitialized() {
         base.OnInitialized();
         _service.OnOpen += OnOpen;

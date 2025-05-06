@@ -186,6 +186,7 @@ public partial class TnTScheduler<[DynamicallyAccessedMembers(DynamicallyAccesse
         }
     }
 
+    /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "div");
         builder.AddMultipleAttributes(10, AdditionalAttributes);

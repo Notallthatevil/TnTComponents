@@ -7,10 +7,24 @@ using TnTComponents.Interfaces;
 
 namespace TnTComponents;
 
+/// <summary>
+/// A collapsible navigation group component for side navigation menus.
+/// </summary>
+/// <remarks>
+/// Provides a toggleable group of navigation items with an expandable/collapsible section.
+/// </remarks>
 public class TnTSideNavMenuGroup : TnTComponentBase, ITnTInteractable, ITnTStyleable {
+    /// <summary>
+    /// Gets or sets a value indicating whether the group is expanded by default.
+    /// </summary>
+    /// <value>
+    /// <c>true</c> if the group should be expanded when initially rendered; otherwise, <c>false</c>.
+    /// Default is <c>true</c>.
+    /// </value>
     [Parameter]
     public bool ExpandByDefault { get; set; } = true;
 
+    /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-side-nav-menu-group")
@@ -18,42 +32,81 @@ public class TnTSideNavMenuGroup : TnTComponentBase, ITnTInteractable, ITnTStyle
         .AddDisabled(Disabled)
         .Build();
 
+    /// <inheritdoc />
     public override string? ElementStyle { get; }
 
+    /// <inheritdoc />
     [Parameter]
     public TextAlign? TextAlignment { get; set; }
+    
+    /// <inheritdoc />
     [Parameter]
     public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceVariant;
+    
+    /// <inheritdoc />
     [Parameter]
     public TnTColor TextColor { get; set; } = TnTColor.OnSurfaceVariant;
+    
+    /// <inheritdoc />
     [Parameter]
     public int Elevation { get; set; }
+    
+    /// <inheritdoc />
     [Parameter]
     public TnTBorderRadius? BorderRadius { get; set; } = new(10);
+    
+    /// <inheritdoc />
     [Parameter]
     public TnTColor? TintColor { get; set; }
 
+    /// <summary>
+    /// Gets or sets the content of the navigation group.
+    /// </summary>
+    /// <value>
+    /// The child elements to be rendered inside the navigation group.
+    /// </value>
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
+    /// <summary>
+    /// Gets or sets the icon displayed alongside the label.
+    /// </summary>
+    /// <value>
+    /// The icon to display, or <c>null</c> if no icon should be shown.
+    /// </value>
     [Parameter]
     public TnTIcon? Icon { get; set; }
 
+    /// <summary>
+    /// Gets or sets the text label for the navigation group.
+    /// </summary>
+    /// <value>
+    /// The text to display for the navigation group header.
+    /// </value>
     [Parameter, EditorRequired]
     public string Label { get; set; } = default!;
 
+    /// <inheritdoc />
     [Parameter]
     public bool Disabled { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public string? ElementName { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public bool EnableRipple { get; set; } = true;
 
+    /// <inheritdoc />
     [Parameter]
     public TnTColor? OnTintColor { get; set; }
 
+    /// <summary>
+    /// Builds the component's render tree.
+    /// </summary>
+    /// <param name="builder">The <see cref="RenderTreeBuilder"/> to populate with content.</param>
+    /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "div");
         builder.AddMultipleAttributes(10, AdditionalAttributes);
@@ -112,9 +165,6 @@ public class TnTSideNavMenuGroup : TnTComponentBase, ITnTInteractable, ITnTStyle
 
         builder.AddContent(230, ChildContent);
 
-
-
         builder.CloseElement();
     }
-
 }

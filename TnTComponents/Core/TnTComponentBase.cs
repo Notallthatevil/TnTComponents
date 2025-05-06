@@ -41,6 +41,7 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
     /// <inheritdoc />
     public abstract string? ElementStyle { get; }
 
+    /// <inheritdoc />
     [Parameter]
     public string? ElementTitle { get; set; }
 

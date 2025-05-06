@@ -5,11 +5,16 @@ using TnTComponents.Layout;
 
 namespace TnTComponents;
 
+/// <summary>
+/// Represents the body of a TnT layout component, typically used to contain the main content area.
+/// </summary>
 public class TnTBody : TnTLayoutComponent {
+    /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create(base.ElementClass!)
         .AddClass("tnt-body")
         .Build();
 
+    /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "div");
         builder.AddMultipleAttributes(10, AdditionalAttributes);

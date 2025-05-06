@@ -4,8 +4,12 @@ using TnTComponents.Core;
 
 namespace TnTComponents;
 
+/// <summary>
+/// MaterialIcon component for displaying Material Design icons.
+/// </summary>
 public sealed partial class MaterialIcon : TnTIcon {
 
+    /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-icon")
@@ -19,12 +23,20 @@ public sealed partial class MaterialIcon : TnTIcon {
         .AddClass(AdditionalClass, !string.IsNullOrWhiteSpace(AdditionalClass))
         .Build();
 
+    /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
+    /// <summary>
+    /// Base constructor for MaterialIcon.
+    /// </summary>
     public MaterialIcon() { }
     internal MaterialIcon(string icon) : base(icon) { }
 
+    /// <summary>
+    /// Implicit conversion from string to MaterialIcon.
+    /// </summary>
+    /// <param name="icon"></param>
     public static implicit operator string(MaterialIcon icon) => icon.Icon;
 }

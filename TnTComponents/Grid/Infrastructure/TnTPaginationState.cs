@@ -29,7 +29,7 @@ public class TnTPaginationState {
 
     /// <summary>
     ///     Gets the total number of items across all pages, if known. The value will be null until
-    ///     an associated <see cref="FluentDataGrid{TGridItem}" /> assigns a value after loading data.
+    ///     an associated <see cref="TnTDataGrid{TGridItem}" /> assigns a value after loading data.
     /// </summary>
     public int? TotalItemCount { get; private set; }
 
@@ -42,7 +42,7 @@ public class TnTPaginationState {
 
     /// <summary>
     ///     Sets the current page index, and notifies any associated <see
-    ///     cref="FluentDataGrid{TGridItem}" /> to fetch and render updated data.
+    ///     cref="TnTDataGrid{TGridItem}" /> to fetch and render updated data.
     /// </summary>
     /// <param name="pageIndex">The new, zero-based page index.</param>
     /// <returns>A <see cref="Task" /> representing the completion of the operation.</returns>
@@ -51,6 +51,10 @@ public class TnTPaginationState {
         return CurrentPageItemsChanged.InvokeCallbacksAsync(this);
     }
 
+    /// <summary>
+    /// Sets the total item count, and notifies any associated <see cref="TnTDataGrid{TGridItem}" /> to update the pagination UI.
+    /// </summary>
+    /// <param name="totalItemCount">The new count</param>
     public Task SetTotalItemCountAsync(int totalItemCount) {
         if (totalItemCount == TotalItemCount) {
             return Task.CompletedTask;

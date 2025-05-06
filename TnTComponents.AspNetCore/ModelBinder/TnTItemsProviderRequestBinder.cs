@@ -2,8 +2,13 @@
 using TnTComponents.Virtualization;
 
 namespace TnTComponents.AspNetCore.ModelBinder;
+
+/// <summary>
+///     Binder for <see cref="TnTItemsProviderRequest" />. This class is used to bind the HTTP context query parameters to a <see cref="TnTItemsProviderRequest" /> instance.
+/// </summary>
 public class TnTItemsProviderRequestBinder : IModelBinder {
 
+    /// <inheritdoc />
     public Task BindModelAsync(ModelBindingContext bindingContext) {
         ArgumentNullException.ThrowIfNull(bindingContext, nameof(bindingContext));
 

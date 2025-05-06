@@ -21,6 +21,9 @@ public abstract class TnTPageScriptComponent<[DynamicallyAccessedMembers(Dynamic
     /// <inheritdoc />
     public abstract string? JsModulePath { get; }
 
+    /// <summary>
+    /// The JSRuntime instance used for JavaScript interop.
+    /// </summary>
     [Inject]
     protected IJSRuntime JSRuntime { get; private set; } = default!;
 

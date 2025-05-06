@@ -7,32 +7,50 @@ using TnTComponents.Interfaces;
 
 namespace TnTComponents;
 
+/// <summary>
+///     Toggle button for the side navigation component.
+/// </summary>
 public class TnTSideNavToggle : TnTComponentBase, ITnTInteractable {
 
+    /// <inheritdoc />
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-side-nav-toggle")
         .AddTnTInteractable(this)
         .Build();
 
+    /// <inheritdoc />
+    [Parameter]
+    public string? ElementName { get; set; }
+
+    /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
+    /// <inheritdoc />
+    [Parameter]
+    public bool EnableRipple { get; set; } = true;
+
+    /// <summary>
+    ///     The icon to be displayed in the toggle button.
+    /// </summary>
     [Parameter]
     public TnTIcon Icon { get; set; } = new MaterialIcon { Icon = MaterialIcon.Menu };
 
-    [Parameter]
-    public bool Disabled { get; set; }
-    [Parameter]
-    public string? ElementName { get; set; }
-    [Parameter]
-    public bool EnableRipple { get; set; } = true;
-    [Parameter]
-    public TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
+    /// <inheritdoc />
     [Parameter]
     public TnTColor? OnTintColor { get; set; }
 
+    /// <inheritdoc />
+    [Parameter]
+    public TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
+
+    /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "button");
         builder.AddMultipleAttributes(10, AdditionalAttributes);

@@ -4,12 +4,40 @@
 ///     Specifies the alignment of content within a flex container.
 /// </summary>
 public enum AlignContent {
+
+    /// <summary>
+    ///     Represents the default alignment value where items are packed in their default position.
+    /// </summary>
     Normal,
+
+    /// <summary>
+    ///     Centers items along the cross-axis with equal space before and after them.
+    /// </summary>
     Center,
+
+    /// <summary>
+    ///     Places items at the start of the cross-axis.
+    /// </summary>
     Start,
+
+    /// <summary>
+    ///     Places items at the end of the cross-axis.
+    /// </summary>
     End,
+
+    /// <summary>
+    ///     Distributes items evenly with equal space around each line.
+    /// </summary>
     SpaceAround,
+
+    /// <summary>
+    ///     Distributes items evenly with the first item at the start and the last item at the end.
+    /// </summary>
     SpaceBetween,
+
+    /// <summary>
+    ///     Stretches items to fill the container along the cross-axis.
+    /// </summary>
     Stretch
 }
 
@@ -17,11 +45,35 @@ public enum AlignContent {
 ///     Specifies the alignment of items within a flex container.
 /// </summary>
 public enum AlignItems {
+
+    /// <summary>
+    ///     Represents the default alignment value where items are packed in their default position.
+    /// </summary>
     Normal,
+
+    /// <summary>
+    ///     Centers items along the cross-axis with equal space before and after them.
+    /// </summary>
     Center,
+
+    /// <summary>
+    ///     Places items at the start of the cross-axis.
+    /// </summary>
     Start,
+
+    /// <summary>
+    ///     Places items at the end of the cross-axis.
+    /// </summary>
     End,
+
+    /// <summary>
+    ///     Stretches items to fill the container along the cross-axis.
+    /// </summary>
     Stretch,
+
+    /// <summary>
+    ///     Aligns items such that their baselines align.
+    /// </summary>
     Baseline
 }
 
@@ -29,9 +81,25 @@ public enum AlignItems {
 ///     Specifies the direction of the flex container's main axis.
 /// </summary>
 public enum FlexDirection {
+
+    /// <summary>
+    ///     The main axis of the flex container is defined to be the same as the text direction (left to right). The main start and end points correspond to the start and end of the writing mode.
+    /// </summary>
     Row,
+
+    /// <summary>
+    ///     The main axis of the flex container is defined to be vertical (top to bottom). The main start and end points correspond to the start and end of the vertical direction.
+    /// </summary>
     Column,
+
+    /// <summary>
+    ///     Same as Row but in the opposite direction (right to left). The main start and end points are swapped from the Row direction.
+    /// </summary>
     RowReverse,
+
+    /// <summary>
+    ///     Same as Column but in the opposite direction (bottom to top). The main start and end points are swapped from the Column direction.
+    /// </summary>
     ColumnReverse
 }
 
@@ -39,12 +107,40 @@ public enum FlexDirection {
 ///     Specifies the alignment of flex items along the main axis of the container.
 /// </summary>
 public enum JustifyContent {
+
+    /// <summary>
+    ///     Represents the default alignment value where items are packed in their default position.
+    /// </summary>
     Normal,
+
+    /// <summary>
+    ///     Centers items along the cross-axis with equal space before and after them.
+    /// </summary>
     Center,
+
+    /// <summary>
+    ///     Places items at the start of the cross-axis.
+    /// </summary>
     Start,
+
+    /// <summary>
+    ///     Places items at the end of the cross-axis.
+    /// </summary>
     End,
+
+    /// <summary>
+    ///     Distributes items evenly with equal space around each line.
+    /// </summary>
     SpaceAround,
+
+    /// <summary>
+    ///     Distributes items evenly with the first item at the start and the last item at the end.
+    /// </summary>
     SpaceBetween,
+
+    /// <summary>
+    ///     Distributes items evenly with equal space between them.
+    /// </summary>
     SpaceEvenly
 }
 
@@ -52,9 +148,25 @@ public enum JustifyContent {
 ///     Specifies the alignment of a single flex item along the main axis of the container.
 /// </summary>
 public enum JustifySelf {
+
+    /// <summary>
+    ///     Places the item at the start of the main axis.
+    /// </summary>
     Start,
+
+    /// <summary>
+    ///     Places the item at the end of the main axis.
+    /// </summary>
     End,
+
+    /// <summary>
+    ///     Centers the item along the main axis.
+    /// </summary>
     Center,
+
+    /// <summary>
+    ///     Stretches the item to fill the container along the main axis.
+    /// </summary>
     Stretch
 }
 
@@ -62,8 +174,20 @@ public enum JustifySelf {
 ///     Specifies whether flex items are forced into a single line or can be wrapped onto multiple lines.
 /// </summary>
 public enum WrapStyle {
+
+    /// <summary>
+    ///     Default value indicating that no specific wrap style has been specified.
+    /// </summary>
     Unspecified,
+
+    /// <summary>
+    ///     Specifies that flex items are laid out in a single line and will not wrap.
+    /// </summary>
     NoWrap,
+
+    /// <summary>
+    ///     Specifies that flex items will wrap onto multiple lines if needed.
+    /// </summary>
     Wrap
 }
 

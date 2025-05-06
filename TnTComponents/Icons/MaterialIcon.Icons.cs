@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TnTComponents;
+#pragma warning disable CS1591
 public partial class MaterialIcon {
     public static MaterialIcon _10K => new("10k");
     public static MaterialIcon _10Mp => new("10mp");

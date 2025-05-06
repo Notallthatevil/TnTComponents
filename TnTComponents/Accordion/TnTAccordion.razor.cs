@@ -5,6 +5,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace TnTComponents;
 
+/// <summary>
+/// Represents an accordion component that can contain multiple child items. Each child item can be expanded or collapsed independently.
+/// </summary>
 [method: DynamicDependency(nameof(SetAsOpened))]
 [method: DynamicDependency(nameof(SetAsClosed))]
 public partial class TnTAccordion() {

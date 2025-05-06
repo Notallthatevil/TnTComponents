@@ -25,6 +25,7 @@ public partial class TnTInputCurrency : TnTInputBase<decimal?> {
     [Parameter]
     public string CurrencyCode { get; set; } = "USD";
 
+    /// <inheritdoc />
     public override InputType Type => InputType.Currency;
 
     /// <summary>
@@ -44,6 +45,7 @@ public partial class TnTInputCurrency : TnTInputBase<decimal?> {
         }
     }
 
+    /// <inheritdoc />
     protected override void OnParametersSet() {
         base.OnParametersSet();
 
@@ -57,6 +59,7 @@ public partial class TnTInputCurrency : TnTInputBase<decimal?> {
         AdditionalAttributes = dict;
     }
 
+    /// <inheritdoc />
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out decimal? result, [NotNullWhen(false)] out string? validationErrorMessage) {
         validationErrorMessage = null;
         if (value is not null) {

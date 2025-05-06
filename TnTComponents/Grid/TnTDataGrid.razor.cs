@@ -17,6 +17,9 @@ namespace TnTComponents;
 [CascadingTypeParameter(nameof(TGridItem))]
 public partial class TnTDataGrid<TGridItem> {
 
+    /// <summary>
+    /// The background color of the data grid.
+    /// </summary>
     [Parameter]
     public TnTColor? BackgroundColor { get; set; } = TnTColor.Background;
 
@@ -27,9 +30,13 @@ public partial class TnTDataGrid<TGridItem> {
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
+    /// <summary>
+    /// The appearance of the data grid.
+    /// </summary>
     [Parameter]
     public DataGridAppearance DataGridAppearance { get; set; }
 
+    /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
             .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddBackgroundColor(BackgroundColor)
@@ -41,6 +48,7 @@ public partial class TnTDataGrid<TGridItem> {
         .AddClass("tnt-loading", Loading)
         .Build();
 
+    /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
@@ -96,6 +104,7 @@ public partial class TnTDataGrid<TGridItem> {
     [Parameter]
     public TnTGridItemsProvider<TGridItem>? ItemsProvider { get; set; }
 
+    /// <inheritdoc />
     public override string? JsModulePath => "./_content/TnTComponents/Grid/TnTDataGrid.razor.js";
 
     /// <summary>
@@ -111,6 +120,9 @@ public partial class TnTDataGrid<TGridItem> {
     [Parameter]
     public RenderFragment? LoadingContent { get; set; }
 
+    /// <summary>
+    /// Callback that is invoked when a row is clicked. The callback receives the clicked item as a parameter.
+    /// </summary>
     [Parameter]
     public EventCallback<TGridItem?> OnRowClicked { get; set; }
 
@@ -125,9 +137,7 @@ public partial class TnTDataGrid<TGridItem> {
     /// <summary>
     ///     Optionally links this <see cref="TnTDataGrid{TGridItem}" /> instance with a <see
     ///     cref="TnTPaginationState" /> model, causing the grid to fetch and render only the
-    ///     current page of data. /// This is normally used in conjunction with a <see
-    ///     cref="FluentPaginator" /> component or some other UI logic that displays and updates the
-    ///     supplied <see cref="TnTPaginationState" /> instance.
+    ///     current page of data. 
     /// </summary>
     [Parameter]
     public TnTPaginationState? Pagination { get; set; }
@@ -153,6 +163,9 @@ public partial class TnTDataGrid<TGridItem> {
     [Parameter]
     public Func<TGridItem, string>? RowStyle { get; set; }
 
+    /// <summary>
+    /// Indicates if the grid is sorted by the specified column in ascending order.
+    /// </summary>
     public bool SortByAscending => _sortByAscending;
 
     /// <summary>
@@ -276,6 +289,7 @@ public partial class TnTDataGrid<TGridItem> {
         }
     }
 
+    /// <inheritdoc />
     protected override void Dispose(bool disposing) {
         if (disposing) {
             _currentPageItemsChanged?.Dispose();
@@ -290,6 +304,7 @@ public partial class TnTDataGrid<TGridItem> {
         base.Dispose(disposing);
     }
 
+    /// <inheritdoc />
     protected override async ValueTask DisposeAsyncCore() {
         if (_virtualizeComponent is not null) {
             await _virtualizeComponent.DisposeAsync().ConfigureAwait(false);
@@ -299,6 +314,7 @@ public partial class TnTDataGrid<TGridItem> {
         await base.DisposeAsyncCore().ConfigureAwait(false);
     }
 
+    /// <inheritdoc />
     protected override void OnAfterRender(bool firstRender) {
         base.OnAfterRender(firstRender);
         if (firstRender) {

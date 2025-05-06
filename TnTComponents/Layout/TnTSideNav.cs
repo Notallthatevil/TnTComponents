@@ -5,20 +5,32 @@ using TnTComponents.Layout;
 
 namespace TnTComponents;
 
+/// <summary>
+///     Represents a side navigation component in the TnT layout system.
+/// </summary>
 public class TnTSideNav : TnTLayoutComponent {
-    [Parameter]
-    public bool HideOnLargeScreens { get; set; }
-    public override string? ElementClass => CssClassBuilder.Create(base.ElementClass!)
-        .AddClass("tnt-side-nav")
-        .AddClass("tnt-side-nav-hide-on-large", HideOnLargeScreens)
-        .Build();
 
+    /// <inheritdoc />
     [Parameter]
     public override TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerLow;
 
+    /// <inheritdoc />
+    public override string? ElementClass => CssClassBuilder.Create(base.ElementClass!)
+          .AddClass("tnt-side-nav")
+          .AddClass("tnt-side-nav-hide-on-large", HideOnLargeScreens)
+          .Build();
+
+    /// <summary>
+    ///     Indicates whether the side navigation should be hidden on large screens.
+    /// </summary>
+    [Parameter]
+    public bool HideOnLargeScreens { get; set; }
+
+    /// <inheritdoc />
     [Parameter]
     public override TnTColor TextColor { get; set; } = TnTColor.OnSurfaceVariant;
 
+    /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenComponent<CascadingValue<TnTSideNav>>(0);
         builder.AddAttribute(10, nameof(CascadingValue<TnTSideNav>.Value), this);

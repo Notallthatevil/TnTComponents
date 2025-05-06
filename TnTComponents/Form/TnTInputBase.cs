@@ -25,6 +25,7 @@ public abstract partial class TnTInputBase<[DynamicallyAccessedMembers(Dynamical
     [Parameter]
     public FormAppearance Appearance { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public bool? AutoFocus { get; set; }
 
@@ -46,6 +47,7 @@ public abstract partial class TnTInputBase<[DynamicallyAccessedMembers(Dynamical
     [Parameter]
     public bool BindOnInput { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public bool Disabled { get; set; }
 
@@ -55,8 +57,10 @@ public abstract partial class TnTInputBase<[DynamicallyAccessedMembers(Dynamical
     [Parameter]
     public bool DisableValidationMessage { get; set; } = false;
 
+    /// <inheritdoc />
     public ElementReference Element { get; protected set; }
 
+    /// <inheritdoc />
     public virtual string? ElementClass => CssClassBuilder.Create()
         .AddClass(CssClass)
         .AddClass("tnt-input")
@@ -70,21 +74,27 @@ public abstract partial class TnTInputBase<[DynamicallyAccessedMembers(Dynamical
         .AddClass("tnt-placeholder", !string.IsNullOrEmpty(Placeholder))
         .Build();
 
+    /// <inheritdoc />
     [Parameter]
     public string? ElementId { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public string? ElementLang { get; set; }
 
+    /// <inheritdoc />
     public string? ElementName => NameAttributeValue;
 
+    /// <inheritdoc />
     public string? ElementStyle => CssStyleBuilder.Create()
             .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
+    /// <inheritdoc />
     [Parameter]
     public string? ElementTitle { get; set; }
 
+    /// <inheritdoc />
     public bool EnableRipple => false;
 
     /// <summary>
@@ -109,9 +119,7 @@ public abstract partial class TnTInputBase<[DynamicallyAccessedMembers(Dynamical
     [Parameter]
     public string? Label { get; set; }
 
-    /// <summary>
-    ///     Gets or sets the on-tint color of the input.
-    /// </summary>
+    /// <inheritdoc />
     [Parameter]
     public TnTColor? OnTintColor { get; set; }
 
@@ -139,15 +147,11 @@ public abstract partial class TnTInputBase<[DynamicallyAccessedMembers(Dynamical
     [Parameter]
     public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
 
-    /// <summary>
-    ///     Gets or sets the tint color of the input.
-    /// </summary>
+    /// <inheritdoc />
     [Parameter]
     public TnTColor? TintColor { get; set; } = TnTColor.Primary;
 
-    /// <summary>
-    ///     Gets the type of the input.
-    /// </summary>
+    /// <inheritdoc />
     public abstract InputType Type { get; }
 
     /// <summary>
@@ -164,17 +168,7 @@ public abstract partial class TnTInputBase<[DynamicallyAccessedMembers(Dynamical
         return Element.FocusAsync();
     }
 
-    protected override void OnParametersSet() {
-        base.OnParametersSet();
-        if(StartIcon is not null) {
-            StartIcon.AdditionalClass = "tnt-start-icon";
-        }
-
-        if(EndIcon is not null) {
-            EndIcon.AdditionalClass = "tnt-end-icon";
-        }
-    }
-
+    /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "label");
         builder.AddAttribute(10, "lang", ElementLang);
@@ -307,6 +301,18 @@ public abstract partial class TnTInputBase<[DynamicallyAccessedMembers(Dynamical
     /// <returns><c>true</c> if the input is required; otherwise, <c>false</c>.</returns>
     protected bool IsRequired() {
         return AdditionalAttributes?.TryGetValue("required", out var _) == true || GetCustomAttributeIfExists<RequiredAttribute>() is not null;
+    }
+
+    /// <inheritdoc />
+    protected override void OnParametersSet() {
+        base.OnParametersSet();
+        if (StartIcon is not null) {
+            StartIcon.AdditionalClass = "tnt-start-icon";
+        }
+
+        if (EndIcon is not null) {
+            EndIcon.AdditionalClass = "tnt-end-icon";
+        }
     }
 
     /// <summary>

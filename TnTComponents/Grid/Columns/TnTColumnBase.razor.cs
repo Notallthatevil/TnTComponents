@@ -12,21 +12,23 @@ namespace TnTComponents.Grid.Columns;
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
 public abstract partial class TnTColumnBase<TGridItem> {
 
-    /// <summary>
-    ///     If specified, indicates that this column has this associated options UI. A button to
-    ///     display this UI will be included in the header cell by default. /// If <see
-    ///     cref="HeaderCellItemTemplate" /> is used, it is left up to that template to render any
-    ///     relevant "show options" UI and invoke the grid's <see
-    ///     cref="TnTDataGrid{TGridItem}.ShowColumnOptionsAsync(TnTColumnBase{TGridItem})" />).
-    /// </summary>
-    [Parameter]
-    public RenderFragment? ColumnOptions { get; set; }
+    ///// <summary>
+    /////     If specified, indicates that this column has this associated options UI. A button to
+    /////     display this UI will be included in the header cell by default. /// If <see
+    /////     cref="HeaderCellItemTemplate" /> is used, it is left up to that template to render any
+    /////     relevant "show options" UI and invoke the grid's <see
+    /////     cref="TnTDataGrid{TGridItem}.ShowColumnOptionsAsync(TnTColumnBase{TGridItem})" />).
+    ///// </summary>
+    //[Parameter]
+    //public RenderFragment? ColumnOptions { get; set; }
 
+    /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddTextAlign(TextAlign)
         .Build();
 
+    /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
             .AddFromAdditionalAttributes(AdditionalAttributes)
             .Build();
@@ -36,6 +38,9 @@ public abstract partial class TnTColumnBase<TGridItem> {
     /// </summary>
     public TnTDataGrid<TGridItem> Grid => InternalGridContext.Grid;
 
+    /// <summary>
+    /// The alignment of the header content. This is used to align the header content within the cell.
+    /// </summary>
     [Parameter]
     public TextAlign HeaderAlignment { get; set; } = TnTComponents.TextAlign.Center;
 
@@ -66,6 +71,9 @@ public abstract partial class TnTColumnBase<TGridItem> {
     [Parameter]
     public RenderFragment<PlaceholderContext>? PlaceholderTemplate { get; set; }
 
+    /// <summary>
+    /// Indicates whether the sort icon should be shown in the header cell. 
+    /// </summary>
     public bool ShowSortIcon { get; set; }
 
     /// <summary>
@@ -82,6 +90,9 @@ public abstract partial class TnTColumnBase<TGridItem> {
     /// </summary>
     public abstract TnTGridSort<TGridItem>? SortBy { get; set; }
 
+    /// <summary>
+    /// The alignment of the cell content. 
+    /// </summary>
     [Parameter]
     public TextAlign? TextAlign { get; set; }
 
@@ -104,7 +115,7 @@ public abstract partial class TnTColumnBase<TGridItem> {
     protected internal RenderFragment HeaderContent { get; protected set; }
 
     /// <summary>
-    ///     Constructs an instance of <see cref="ColumnBase{TGridItem}" />.
+    ///     Constructs an instance of <see cref="TnTColumnBase{TGridItem}" />.
     /// </summary>
     public TnTColumnBase() {
         HeaderContent = RenderDefaultHeaderContent;
@@ -125,8 +136,8 @@ public abstract partial class TnTColumnBase<TGridItem> {
 
     /// <summary>
     ///     Gets a value indicating whether this column should act as sortable if no value was set
-    ///     for the <see cref="ColumnBase{TGridItem}.Sortable" /> parameter. The default behavior is
-    ///     not to be sortable unless <see cref="ColumnBase{TGridItem}.Sortable" /> is true. ///
+    ///     for the <see cref="TnTColumnBase{TGridItem}.Sortable" /> parameter. The default behavior is
+    ///     not to be sortable unless <see cref="TnTColumnBase{TGridItem}.Sortable" /> is true. ///
     ///     Derived components may override this to implement alternative default sortability rules.
     /// </summary>
     /// <returns>True if the column should be sortable by default, otherwise false.</returns>

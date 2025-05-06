@@ -12,6 +12,7 @@
         <IsAotCompatible>True</IsAotCompatible>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageTags>Blazor;Components;AspNetCore;.NET8;.NET9</PackageTags>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>

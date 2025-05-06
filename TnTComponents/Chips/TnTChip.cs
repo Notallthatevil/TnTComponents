@@ -11,6 +11,7 @@ namespace TnTComponents;
 /// </summary>
 public partial class TnTChip : TnTComponentBase, ITnTInteractable {
 
+    /// <inheritdoc />
     [Parameter]
     public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerLow;
 

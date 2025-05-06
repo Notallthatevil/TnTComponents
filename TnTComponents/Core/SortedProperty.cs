@@ -1,4 +1,7 @@
 ﻿namespace TnTComponents.Core;
+/// <summary>
+///     Defines the direction of sorting for a property.
+/// </summary>
 public readonly record struct SortedProperty {
     /// <summary>
     ///     The name of the property to be sorted.

@@ -7,7 +7,11 @@ namespace TnTComponents;
 ///     Represents the options for configuring a TnT dialog component.
 /// </summary>
 public class TnTDialogOptions : ITnTStyleable {
+
+    /// <inheritdoc />
     public TnTColor BackgroundColor { get; init; } = TnTColor.SurfaceContainerHighest;
+
+    /// <inheritdoc />
     public TnTBorderRadius? BorderRadius { get; init; } = new(2);
 
     /// <summary>
@@ -25,6 +29,7 @@ public class TnTDialogOptions : ITnTStyleable {
     /// </summary>
     public string? ElementStyle { get; init; }
 
+    /// <inheritdoc />
     public int Elevation { get; init; } = 2;
 
     /// <summary>
@@ -32,7 +37,10 @@ public class TnTDialogOptions : ITnTStyleable {
     /// </summary>
     public bool ShowCloseButton { get; init; } = true;
 
+    /// <inheritdoc />
     public TextAlign? TextAlignment { get; }
+
+    /// <inheritdoc />
     public TnTColor TextColor { get; init; } = TnTColor.OnSurface;
 
     /// <summary>

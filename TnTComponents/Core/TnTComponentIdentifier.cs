@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace TnTComponents.Core;
 
+/// <summary>
+///     Generates unique identifiers for components in the TnTComponents library.
+/// </summary>
 public static class TnTComponentIdentifier {
     private const string _identifierPrefix = "tnt_";
     private static readonly Random _rnd = new();
@@ -14,10 +17,7 @@ public static class TnTComponentIdentifier {
     ///     Returns a new small Id. HTML id must start with a letter.
     ///     Example: f127d9edf14385adb
     /// </summary>
-    /// <remarks>
-    ///     You can use a <see cref="IdentifierContext" /> instance to customize the Generation
-    ///     process, for example in Unit Tests.
-    /// </remarks>
+    /// <remarks>You can use a <see cref="TnTComponentIdentifierContext" /> instance to customize the Generation process, for example in Unit Tests.</remarks>
     /// <returns>A new id</returns>
     public static string NewId(int length = 8) {
         if (TnTComponentIdentifierContext.Current == null) {
@@ -35,8 +35,14 @@ public static class TnTComponentIdentifier {
     }
 }
 
+/// <summary>
+///     Provides a context for generating unique identifiers for components in the TnTComponents library. ///
+/// </summary>
 public class TnTComponentIdentifierContext : IDisposable {
 
+    /// <summary>
+    ///     The current context for generating unique identifiers.
+    /// </summary>
     public static TnTComponentIdentifierContext? Current {
         get {
             if (_threadScopeStack.Value == null || _threadScopeStack.Value.Count == 0) {
@@ -52,12 +58,17 @@ public class TnTComponentIdentifierContext : IDisposable {
     private Func<uint, string> NewId { get; init; }
     private static readonly ThreadLocal<Stack<TnTComponentIdentifierContext>> _threadScopeStack = new(() => new Stack<TnTComponentIdentifierContext>());
 
+    /// <summary>
+    ///     Constructor for TnTComponentIdentifierContext.
+    /// </summary>
+    /// <param name="newId">A function for generating a new id</param>
     public TnTComponentIdentifierContext(Func<uint, string> newId) {
         _threadScopeStack.Value?.Push(this);
         NewId = newId;
         CurrentIndex = 0;
     }
 
+    /// <inheritdoc />
     public void Dispose() {
         GC.SuppressFinalize(this);
         _ = _threadScopeStack.Value?.TryPop(out _);

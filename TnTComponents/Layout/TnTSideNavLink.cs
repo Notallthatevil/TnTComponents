@@ -9,16 +9,28 @@ using System.Threading.Tasks;
 using TnTComponents.Core;
 
 namespace TnTComponents;
+/// <summary>
+/// Represents a navigation link (anchor) component specifically designed for side navigation menus.
+/// </summary>
 public class TnTSideNavLink : TnTNavLink {
 
+    /// <inheritdoc />
     [Parameter]
     public override TnTColor? ActiveBackgroundColor { get; set; } = TnTColor.SecondaryContainer;
+
+    /// <inheritdoc />
     [Parameter]
     public override TnTColor? ActiveTextColor { get; set; } = TnTColor.OnSecondaryContainer;
+
+    /// <inheritdoc />
     [Parameter]
     public override TnTColor BackgroundColor { get; set; } = TnTColor.Transparent;
+
+    /// <inheritdoc />
     [Parameter]
     public override TnTBorderRadius? BorderRadius { get; set; } = new(10);
+
+    /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass(CssClass)
@@ -29,15 +41,23 @@ public class TnTSideNavLink : TnTNavLink {
         .AddClass("active-bg-color", ActiveBackgroundColor.HasValue)
         .Build();
 
-    [Parameter]
-    public override TnTColor TextColor { get; set; } = TnTColor.OnSurfaceVariant;
-
+    /// <summary>
+    ///     An option Icon for the link
+    /// </summary>
     [Parameter]
     public TnTIcon? Icon { get; set; }
 
+    /// <summary>
+    ///     The label for the link.
+    /// </summary>
     [Parameter, EditorRequired]
     public string Label { get; set; } = default!;
 
+    /// <inheritdoc />
+    [Parameter]
+    public override TnTColor TextColor { get; set; } = TnTColor.OnSurfaceVariant;
+
+    /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "a");
         builder.AddMultipleAttributes(10, AdditionalAttributes);
@@ -49,12 +69,11 @@ public class TnTSideNavLink : TnTNavLink {
         builder.AddAttribute(80, "autofocus", AutoFocus);
         builder.AddElementReferenceCapture(90, e => Element = e);
 
-        if(Icon is not null) {
+        if (Icon is not null) {
             builder.AddContent(100, Icon.Render());
         }
 
         builder.AddContent(110, Label);
-
 
         if (EnableRipple) {
             builder.OpenComponent<TnTRippleEffect>(120);
@@ -63,8 +82,4 @@ public class TnTSideNavLink : TnTNavLink {
 
         builder.CloseElement();
     }
-
-
-
 }
-

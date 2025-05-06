@@ -16,6 +16,12 @@ public partial class TnTMarkdownEditor {
     /// <inheritdoc />
     public override string? ElementStyle => string.Empty;
 
+    /// <summary>
+    ///     The initial value of the Markdown content.
+    /// </summary>
+    [Parameter]
+    public string? InitialValue { get; set; }
+
     /// <inheritdoc />
     public override string? JsModulePath => "./_content/TnTComponents/Editors/TnTMarkdownEditor.razor.js";
 
@@ -42,9 +48,6 @@ public partial class TnTMarkdownEditor {
     /// </summary>
     [Parameter]
     public EventCallback<string> ValueChanged { get; set; }
-
-    [Parameter]
-    public string? InitialValue { get; set; }
 
     /// <summary>
     ///     Updates the Markdown content and the rendered HTML content.

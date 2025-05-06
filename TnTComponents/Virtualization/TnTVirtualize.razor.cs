@@ -13,11 +13,13 @@ namespace TnTComponents;
 /// <typeparam name="TItem">The type of the items to be virtualized.</typeparam>
 public partial class TnTVirtualize<TItem> {
 
+    /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-virtualize-container")
         .Build();
 
+    /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
@@ -46,6 +48,7 @@ public partial class TnTVirtualize<TItem> {
     [Parameter]
     public RenderFragment<TItem>? ItemTemplate { get; set; }
 
+    /// <inheritdoc />
     public override string? JsModulePath => "./_content/TnTComponents/Virtualization/TnTVirtualize.razor.js";
 
     /// <summary>
@@ -118,6 +121,7 @@ public partial class TnTVirtualize<TItem> {
         await LoadMoreItems();
     }
 
+    /// <inheritdoc />
     protected override void Dispose(bool disposing) {
         if (disposing) {
             DisposeCancellationToken();
@@ -125,6 +129,7 @@ public partial class TnTVirtualize<TItem> {
         base.Dispose(disposing);
     }
 
+    /// <inheritdoc />
     protected override void OnParametersSet() {
         base.OnParametersSet();
         if (!InfiniteScroll) {
@@ -200,6 +205,12 @@ public struct TnTVirtualizeItemsProviderRequest<TItem>() {
     /// </summary>
     public int StartIndex { get; init; }
 
+    /// <summary>
+    ///     Implicitly converts a <see cref="TnTVirtualizeItemsProviderRequest{TItem}" /> to a <see cref="TnTItemsProviderRequest" />.
+    /// </summary>
+    /// <param name="request">The virtualize items provider request to convert.</param>
+    /// <returns>A new <see cref="TnTItemsProviderRequest" /> with properties copied from the source request.</returns>
+    /// <remarks>This conversion enables interoperability between the virtualization-specific request type and the general-purpose items provider request type.</remarks>
     public static implicit operator TnTItemsProviderRequest(TnTVirtualizeItemsProviderRequest<TItem> request) {
         return new TnTItemsProviderRequest {
             StartIndex = request.StartIndex,
@@ -208,6 +219,15 @@ public struct TnTVirtualizeItemsProviderRequest<TItem>() {
         };
     }
 
+    /// <summary>
+    ///     Implicitly converts a <see cref="TnTItemsProviderRequest" /> to a <see cref="TnTVirtualizeItemsProviderRequest{TItem}" />.
+    /// </summary>
+    /// <param name="request">The items provider request to convert.</param>
+    /// <returns>A new <see cref="TnTVirtualizeItemsProviderRequest{TItem}" /> with properties copied from the source request.</returns>
+    /// <remarks>
+    ///     This conversion allows a general-purpose items provider request to be used in virtualization contexts. Note that the <see cref="CancellationToken" /> is set to the default value since it's
+    ///     not available in the source request.
+    /// </remarks>
     public static implicit operator TnTVirtualizeItemsProviderRequest<TItem>(TnTItemsProviderRequest request) {
         return new TnTVirtualizeItemsProviderRequest<TItem> {
             Count = request.Count,
@@ -223,7 +243,5 @@ public struct TnTVirtualizeItemsProviderRequest<TItem>() {
 /// </summary>
 /// <typeparam name="TItem">The type of data represented by each row in the grid.</typeparam>
 /// <param name="request">Parameters describing the data being requested.</param>
-/// <returns>
-///     A <see cref="ValueTask{TnTItemsProviderResult{TGridItem}}" /> that gives the data to be displayed.
-/// </returns>
+/// <returns>A <see cref="ValueTask{TnTItemsProviderResult}" /> that gives the data to be displayed.</returns>
 public delegate ValueTask<TnTItemsProviderResult<TItem>> TnTVirtualizeItemsProvider<TItem>(TnTVirtualizeItemsProviderRequest<TItem> request);

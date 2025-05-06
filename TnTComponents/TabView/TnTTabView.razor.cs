@@ -64,6 +64,10 @@ public partial class TnTTabView {
         _tabChildren.Add(tabChild);
     }
 
+    /// <summary>
+    ///     Removes a child tab from the tab view.
+    /// </summary>
+    /// <param name="tabChild">The child to remove</param>
     public void RemoveTabChild(TnTTabChild tabChild) {
         _tabChildren.Remove(tabChild);
     }

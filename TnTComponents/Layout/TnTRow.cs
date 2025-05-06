@@ -5,33 +5,44 @@ using TnTComponents.Interfaces;
 
 namespace TnTComponents;
 
+/// <summary>
+///     A component that represents a row
+/// </summary>
 public class TnTRow : TnTComponentBase, ITnTComponentBase, ITnTFlexBox {
 
+    /// <inheritdoc />
     [Parameter]
     public AlignContent? AlignContent { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public AlignItems? AlignItems { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
 
+    /// <inheritdoc />
+    [Parameter]
+    public LayoutDirection? Direction { get; set; }
+
+    /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-row")
         .AddFlexBox(this)
         .Build();
 
+    /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
-    [Parameter]
-    public LayoutDirection? Direction { get; set; }
-
+    /// <inheritdoc />
     [Parameter]
     public JustifyContent? JustifyContent { get; set; }
 
+    /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "div");
         builder.AddMultipleAttributes(10, AdditionalAttributes);

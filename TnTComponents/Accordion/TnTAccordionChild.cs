@@ -101,6 +101,9 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
     [Parameter]
     public bool OpenByDefault { get; set; }
 
+    /// <summary>
+    /// Specifies the sorting order of the accordion child. Lower numbers are rendered first.
+    /// </summary>
     [Parameter]
     public int? Order { get; set; }
 
@@ -110,6 +113,7 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
     [Parameter]
     public bool RemoveContentOnClose { get; set; }
 
+    /// <inheritdoc />
     [Parameter]
     public TnTColor? TintColor { get; set; }
 
