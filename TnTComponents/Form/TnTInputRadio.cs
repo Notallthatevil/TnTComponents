@@ -112,13 +112,13 @@ public class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccessedMember
         builder.AddAttribute(130, "title", ElementTitle);
         builder.AddAttribute(140, "type", _group.Type.ToInputTypeString());
         builder.AddMultipleAttributes(150, AdditionalAttributes);
-        builder.AddAttribute(160, "name", _group.RadioGroupName);
+        builder.AddAttribute(160, "name", _group.ElementName);
         builder.AddAttribute(170, "style", ElementStyle);
         builder.AddAttribute(180, "readonly", _readOnly);
         builder.AddAttribute(190, "disabled", _disabled);
         builder.AddAttribute(200, "value", BindConverter.FormatValue(Value?.ToString()));
         builder.AddAttribute(210, "checked", _group.InternalCurrentValue?.Equals(Value) == true ? GetToggledTrueValue() : null);
-        builder.AddAttribute(220, "onchange",EventCallback.Factory.Create(_group, async () => {
+        builder.AddAttribute(220, "onchange", EventCallback.Factory.Create(_group, async () => {
             _group.InternalCurrentValue = Value;
             await _group.BindAfter.InvokeAsync(Value);
         }));
@@ -149,7 +149,7 @@ public class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccessedMember
     /// <inheritdoc />
     protected override void OnParametersSet() {
         base.OnParametersSet();
-        if(_group is null) {
+        if (_group is null) {
             throw new ArgumentNullException($"{nameof(TnTInputRadio<TInputType>)} must be a child of {nameof(TnTInputRadioGroup<TInputType>)}. If you still receive this error, try explicitly setting the {nameof(TInputType)} of {nameof(TnTInputRadio<TInputType>)} to a Nullable type. This is likely the cause if {nameof(TInputType)} is struct or enum, as {nameof(TnTInputRadioGroup<TInputType>)} could be using the Nullable version ({nameof(TInputType)}?).");
         }
     }

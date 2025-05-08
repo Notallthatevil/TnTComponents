@@ -32,12 +32,6 @@ public class TnTInputRadioGroup<[DynamicallyAccessedMembers(DynamicallyAccessedM
     [Parameter]
     public LayoutDirection LayoutDirection { get; set; }
 
-    /// <summary>
-    ///     Gets or sets the name of the radio group.
-    /// </summary>
-    [Parameter]
-    public string RadioGroupName { get; set; } = TnTComponentIdentifier.NewId();
-
     /// <inheritdoc />
     public override InputType Type => InputType.Radio;
 
