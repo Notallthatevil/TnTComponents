@@ -122,7 +122,11 @@
         border-bottom: 1px solid $tnt-color-outline;
 
         &:not(fieldset) {
-            .tnt-icon, input, select {
+            .tnt-icon {
+                transform: translateY(4px);
+            }
+
+            input, select {
                 transform: translateY(8px);
             }
         }
@@ -147,7 +151,7 @@
         height: 192px;
 
         select {
-            height: 16px;
+            height: calc(100% - 28px);
         }
 
         &.tnt-filled {
@@ -313,6 +317,15 @@
                 }
             }
 
+            &:not(:has(.tnt-label)) {
+                &:not(:has(.tnt-start-icon)) {
+
+                    .tnt-end-icon {
+                        padding-left: 42px;
+                    }
+                }
+            }
+
             @each $colorClass in $color-classes {
                 &.tnt-fg-color-#{$colorClass} {
                     .tnt-checkbox:after {
@@ -348,6 +361,18 @@
                     left: 6px;
                     top: calc(50% / 2 - calc(12px / 8));
                     @extend .tnt-elevation-1;
+                }
+            }
+
+            &:not(:has(.tnt-label)) {
+                .tnt-end-icon {
+                    padding-left: 42px;
+                }
+
+                &:has(.tnt-start-icon) {
+                    .tnt-end-icon {
+                        padding-left: 32px;
+                    }
                 }
             }
         }
