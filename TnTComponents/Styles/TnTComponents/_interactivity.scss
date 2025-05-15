@@ -22,7 +22,7 @@ $elevation-shadows: ( //
 }
 
 .tnt-interactable {
-    &:hover:not(:active) {
+    &:hover:not(:active):not(.tnt-underlined.tnt-nav-link) {
         box-shadow: map.get($elevation-shadows, 1);
     }
 
