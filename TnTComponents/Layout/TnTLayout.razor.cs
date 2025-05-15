@@ -25,6 +25,4 @@ public partial class TnTLayout {
        .AddFromAdditionalAttributes(AdditionalAttributes)
        .Build();
 
-    /// <inheritdoc />
-    public override string? JsModulePath => "./_content/TnTComponents/Layout/TnTLayout.razor.js";
 }

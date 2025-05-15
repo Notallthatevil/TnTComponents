@@ -12,24 +12,9 @@
         <Company>NT Technologies</Company>
         <PackageProjectUrl>https://github.com/Notallthatevil/TnTComponents</PackageProjectUrl>
         <RepositoryUrl>https://github.com/Notallthatevil/TnTComponents</RepositoryUrl>
-        <PackageTags>Blazor;Web;UI;.NET8;.NET9;Material</PackageTags>
+        <PackageTags>Blazor;Web;UI;.NET8;.NET9;Material Design</PackageTags>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'">
-      <IsTrimmable>False</IsTrimmable>
-      <IsAotCompatible>False</IsAotCompatible>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0|AnyCPU'">
-      <IsTrimmable>False</IsTrimmable>
-      <IsAotCompatible>False</IsAotCompatible>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|AnyCPU'">
-      <IsTrimmable>False</IsTrimmable>
-      <IsAotCompatible>False</IsAotCompatible>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0|AnyCPU'">
-      <IsTrimmable>False</IsTrimmable>
-      <IsAotCompatible>False</IsAotCompatible>
+        <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
     </PropertyGroup>
     <ItemGroup>
       <Content Remove="compilerconfig.json" />

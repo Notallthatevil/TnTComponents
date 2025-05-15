@@ -38,6 +38,7 @@
 }
 
 body {
+    overflow-x: clip;
     margin: 0;
     background-color: $tnt-color-background;
 }
