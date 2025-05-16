@@ -188,12 +188,13 @@ internal class CssClassBuilder {
     /// <param name="enableDisabled">   Whether to enable the disabled state.</param>
     /// <param name="enableTint">       Whether to enable the tint color.</param>
     /// <param name="enableOnTintColor">Whether to enable the on-tint color.</param>
+    /// <param name="enable">           Whether to enable the tnt-interactable class</param>
     /// <returns>The current instance of <see cref="CssClassBuilder" />.</returns>
-    public CssClassBuilder AddTnTInteractable(ITnTInteractable interactable, bool enableDisabled = true, bool enableTint = true, bool enableOnTintColor = true) {
+    public CssClassBuilder AddTnTInteractable(ITnTInteractable interactable, bool enableDisabled = true, bool enableTint = true, bool enableOnTintColor = true, bool enable = true) {
         if (enableDisabled) {
             AddDisabled(interactable.Disabled);
         }
-        AddClass("tnt-interactable");
+        AddClass("tnt-interactable", enable);
         AddRipple(interactable.EnableRipple);
         AddTintColor(enableTint ? interactable.TintColor : null);
         AddOnTintColor(enableOnTintColor ? interactable.OnTintColor : null);

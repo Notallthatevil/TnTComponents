@@ -50,7 +50,7 @@ public class TnTNavLink : NavLink, ITnTComponentBase, ITnTInteractable, ITnTStyl
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass(CssClass)
         .AddClass("tnt-nav-link")
-        .AddTnTInteractable(this)
+        .AddTnTInteractable(this, enableTint: Appearance is AnchorAppearance.Filled or AnchorAppearance.Outlined, enable: Appearance is AnchorAppearance.Filled or AnchorAppearance.Outlined)
         .AddTnTStyleable(this, enableElevation: Appearance is AnchorAppearance.Filled or AnchorAppearance.Outlined)
         .AddFilled(Appearance == AnchorAppearance.Filled)
         .AddOutlined(Appearance == AnchorAppearance.Outlined)
