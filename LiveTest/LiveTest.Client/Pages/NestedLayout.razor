@@ -1,23 +1,15 @@
-﻿@using TnTComponents
-@inherits LayoutComponentBase
+﻿@page "/nestedLayout"
+@using TnTComponents
 
-<TnTLayout>
-    <TnTHeader>
-        <TnTSideNavToggle>
-            <MaterialIcon Icon="@MaterialIcon.Menu" />
-        </TnTSideNavToggle>
-        <TnTThemeToggle />
-        This is my header
-    </TnTHeader>
-    <TnTBody>
-        @Body
-    </TnTBody>
 
-    <TnTFooter>
-        Footer content
-    </TnTFooter>
-    <TnTSideNav HideOnLargeScreens="true">
-        <h3>
+<TnTComponents.TnTLayout>
+    <TnTComponents.TnTHeader>
+        Header Content
+        <TnTComponents.TnTSideNavToggle />
+    </TnTComponents.TnTHeader>
+
+    <TnTComponents.TnTSideNav>
+       <h3>
             My First Headline
         </h3>
         <TnTSideNavLink Label="Home" href="/" Match="NavLinkMatch.All" Disabled="true" />
@@ -51,9 +43,12 @@
         <TnTSideNavLink Label="Typeahead" href="/typeahead" />
         <TnTSideNavLink Label="Virtualize" href="/InfiniteScroll" Icon="@MaterialIcon.Info" />
         <TnTSideNavLink Label="Wizard" href="/Wizard" Icon="@MaterialIcon.Image" />
-    </TnTSideNav>
+    </TnTComponents.TnTSideNav>
 
-</TnTLayout>
-
-<TnTDialog @rendermode="InteractiveAuto" />
-<TnTToast @rendermode="InteractiveAuto" />
+    <TnTComponents.TnTBody>
+        Some body content
+    </TnTComponents.TnTBody>
+    <TnTComponents.TnTFooter>
+        Nested footer
+    </TnTComponents.TnTFooter>
+</TnTComponents.TnTLayout>
