@@ -23,7 +23,7 @@
     }
 
     &:has(> .tnt-side-nav):not(:has(> .tnt-header)):not(:has(> .tnt-footer)) {
-        grid-template-areas: "sidenav" "body";
+        grid-template-areas: "sidenav body";
     }
 
     &:has(> .tnt-header):has(> .tnt-side-nav):not(:has(> .tnt-footer)) {
