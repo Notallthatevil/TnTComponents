@@ -1,4 +1,7 @@
-﻿namespace TnTComponents.Grid.Infrastructure;
+﻿
+using TnTComponents.Grid.Infrastructure;
+
+namespace TnTComponents.Grid;
 
 /// <summary>
 ///     Holds state to represent pagination in a <see cref="TnTDataGrid{TGridItem}" />.

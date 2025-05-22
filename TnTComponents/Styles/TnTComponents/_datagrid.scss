@@ -149,6 +149,33 @@
     }
 }
 
+
+.tnt-components.tnt-pagination-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    margin: 8px;
+
+    .pagination-btn {
+        height: 24px;
+        width: 24px;
+        min-height: 24px;
+        min-width: 24px;
+        font-size: 12px;
+        padding: 0;
+        margin: 0;
+        border-radius: 0;
+
+        &.current-page {
+            opacity: 1;
+        }
+
+        .tnt-icon {
+            font-size: 18px;
+        }
+    }
+}
+
 @keyframes empty-grid-cell-animation {
     0% {
         background-position: 100%;

@@ -37,7 +37,11 @@
         </TnTSideNavMenuGroup>
 
         <TnTSideNavLink Label="Forms" href="/forms" Icon="@MaterialIcon.FormatAlignCenter" />
-        <TnTSideNavLink Label="Grid" href="/datagrid" Icon="@MaterialIcon.Grid4X4" />
+
+        <TnTSideNavMenuGroup Icon="@MaterialIcon.Grid4X4" ExpandByDefault="false" Label="Grids">
+            <TnTSideNavLink Label="Grid" href="/datagrid" Icon="@MaterialIcon.GridView" />
+            <TnTSideNavLink Label="Paginated Grid" href="/paginated" Icon="@MaterialIcon.GridOn" />
+        </TnTSideNavMenuGroup>
         <TnTSideNavLink Label="Nested Layout" href="/nestedLayout" Icon="@MaterialIcon.NestCamWiredStand" />
         <TnTSideNavLink Label="Progress" href="/progress" Icon="@MaterialIcon.Propane" />
 
