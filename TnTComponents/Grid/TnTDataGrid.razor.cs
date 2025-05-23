@@ -413,14 +413,14 @@ public partial class TnTDataGrid<TGridItem> {
         // Move into a "loading" state, cancelling any earlier-but-still-pending load
         _pendingDataLoadCancellationTokenSource?.Cancel();
         _pendingDataLoadCancellationTokenSource?.Dispose();
-        _pendingDataLoadCancellationTokenSource = new CancellationTokenSource();
-
+        var scopeCTS = new CancellationTokenSource();
+        var scopeToken = scopeCTS.Token;
+        _pendingDataLoadCancellationTokenSource = scopeCTS;
         if (_virtualizeComponent is not null) {
             // If we're using Virtualize, we have to go through its RefreshDataAsync API otherwise:
             // (1) It won't know to update its own internal state if the provider output has changed
             // (2) We won't know what slice of data to query for
             await _virtualizeComponent.RefreshDataAsync();
-            _pendingDataLoadCancellationTokenSource = null;
         }
         else {
             // If we're not using Virtualize, we build and execute a request against the items
@@ -428,14 +428,13 @@ public partial class TnTDataGrid<TGridItem> {
             _lastRefreshedPaginationStateHash = Pagination?.GetHashCode();
 
             var startIndex = Pagination is null ? 0 : (Pagination.CurrentPageIndex * Pagination.ItemsPerPage);
-            var request = new TnTGridItemsProviderRequest<TGridItem>(startIndex, Pagination?.ItemsPerPage, _sortByColumn, _sortByAscending, _pendingDataLoadCancellationTokenSource.Token);
+            var request = new TnTGridItemsProviderRequest<TGridItem>(startIndex, Pagination?.ItemsPerPage, _sortByColumn, _sortByAscending, scopeToken);
 
             var result = await ResolveItemsRequestAsync(request);
-            if (!_pendingDataLoadCancellationTokenSource.IsCancellationRequested) {
+            if (!scopeCTS.IsCancellationRequested) {
                 _currentNonVirtualizedViewItems = result.Items;
                 _ariaBodyRowCount = _currentNonVirtualizedViewItems?.Count ?? -1;
                 Pagination?.SetTotalItemCountAsync(result.TotalItemCount);
-                _pendingDataLoadCancellationTokenSource = null;
             }
             _internalGridContext.ResetRowIndexes(startIndex);
         }
