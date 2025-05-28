@@ -19,21 +19,19 @@ namespace TnTComponents;
 public class TnTPropertyColumn<TGridItem, TProp> : TnTColumnBase<TGridItem>, IBindableColumn<TGridItem, TProp> {
 
     /// <summary>
-    ///     Optionally specifies how to compare values in this column when sorting. /// Using this
-    ///     requires the <typeparamref name="TProp" /> type to implement <see cref="IComparable{T}" />.
+    ///     Optionally specifies how to compare values in this column when sorting. Using this requires the <typeparamref name="TProp" /> type to implement <see cref="IComparable{T}" />.
     /// </summary>
     [Parameter]
-    public IComparer<TProp>? Comparer { get; set; } = null;
+    public IComparer<TProp>? Comparer { get; set; }
 
     /// <summary>
-    ///     Optionally specifies a format string for the value. /// Using this requires the
-    ///     <typeparamref name="TProp" /> type to implement <see cref="IFormattable" />.
+    ///     Optionally specifies a format string for the value. Using this requires the <typeparamref name="TProp" /> type to implement <see cref="IFormattable" />.
     /// </summary>
     [Parameter]
     public string? Format { get; set; }
 
     /// <summary>
-    /// The culture to use when formatting the value. This is only used if <see cref="Format"/> is set.
+    ///     The culture to use when formatting the value. This is only used if <see cref="Format" /> is set.
     /// </summary>
     [Parameter]
     public CultureInfo FormatCulture { get; set; } = CultureInfo.CurrentCulture;
@@ -45,12 +43,12 @@ public class TnTPropertyColumn<TGridItem, TProp> : TnTColumnBase<TGridItem>, IBi
     public Expression<Func<TGridItem, TProp>> Property { get; set; } = default!;
 
     /// <summary>
-    /// The property info for the property being displayed in this column's cells.
+    ///     The property info for the property being displayed in this column's cells.
     /// </summary>
     public PropertyInfo? PropertyInfo { get; private set; }
 
     /// <summary>
-    /// Not supported. This property is generated internally by the framework.
+    ///     Not supported. This property is generated internally by the framework.
     /// </summary>
     public override TnTGridSort<TGridItem>? SortBy {
         get => _sortBuilder;
@@ -70,19 +68,12 @@ public class TnTPropertyColumn<TGridItem, TProp> : TnTColumnBase<TGridItem>, IBi
 
     /// <inheritdoc />
     protected override void OnParametersSet() {
-        // We have to do a bit of pre-processing on the lambda expression. Only do that if it's new
-        // or changed.
+        // We have to do a bit of pre-processing on the lambda expression. Only do that if it's new or changed.
         if (_lastAssignedProperty != Property) {
             _lastAssignedProperty = Property;
             var compiledPropertyExpression = Property.Compile();
 
             if (!string.IsNullOrEmpty(Format)) {
-                // TODO: Consider using reflection to avoid having to box every value just to call IFormattable.ToString
-                // For example, define a method "string Type<U>(Func<TGridItem, U> property) where
-                // U: IFormattable", and then construct the closed type here with U=TProp when we
-                // know TProp implements IFormattable
-
-                // If the type is nullable, we're interested in formatting the underlying type
                 var nullableUnderlyingTypeOrNull = Nullable.GetUnderlyingType(typeof(TProp));
                 if (!typeof(IFormattable).IsAssignableFrom(nullableUnderlyingTypeOrNull ?? typeof(TProp))) {
                     throw new InvalidOperationException($"A '{nameof(Format)}' parameter was supplied, but the type '{typeof(TProp)}' does not implement '{typeof(IFormattable)}'.");
@@ -103,18 +94,16 @@ public class TnTPropertyColumn<TGridItem, TProp> : TnTColumnBase<TGridItem>, IBi
             _sortBuilder = Comparer is not null ? TnTGridSort<TGridItem>.ByAscending(Property, Comparer) : TnTGridSort<TGridItem>.ByAscending(Property);
         }
 
-        if (Property.Body is MemberExpression memberExpression) {
-            if (Title is null) {
-                PropertyInfo = memberExpression.Member as PropertyInfo;
-                var displayAttribute = Attribute.GetCustomAttribute(memberExpression.Member, typeof(DisplayAttribute)) as DisplayAttribute;
+        if (Title is null && Property.Body is MemberExpression memberExpression) {
+            PropertyInfo = memberExpression.Member as PropertyInfo;
+            var displayAttribute = Attribute.GetCustomAttribute(memberExpression.Member, typeof(DisplayAttribute)) as DisplayAttribute;
 
-                var daText = displayAttribute?.Name;
-                if (!string.IsNullOrEmpty(daText)) {
-                    Title = daText;
-                }
-                else {
-                    Title = memberExpression.Member.Name.SplitPascalCase();
-                }
+            var daText = displayAttribute?.Name;
+            if (!string.IsNullOrEmpty(daText)) {
+                Title = daText;
+            }
+            else {
+                Title = memberExpression.Member.Name.SplitPascalCase();
             }
         }
     }
