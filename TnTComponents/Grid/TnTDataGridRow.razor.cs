@@ -63,24 +63,8 @@ public partial class TnTDataGridRow<TGridItem> : IHandleEvent {
     internal string RowId { get; set; } = string.Empty;
 
     /// <summary>
-    ///     Dictionary of cells contained within this row, keyed by their cell ID.
-    /// </summary>
-    private readonly Dictionary<string, TnTDataGridCell<TGridItem>> cells = [];
-
-    /// <summary>
-    ///     Implementation of IHandleEvent.HandleEventAsync that invokes the callback with the provided argument. This enables more efficient event handling within the component.
-    /// </summary>
-    /// <param name="callback">The event callback to invoke.</param>
-    /// <param name="arg">     The argument to pass to the callback.</param>
-    /// <returns>A task representing the asynchronous operation.</returns>
-    Task IHandleEvent.HandleEventAsync(EventCallbackWorkItem callback, object? arg) => callback.InvokeAsync(arg);
-
-    /// <summary>
     ///     Handles the click event on the row and invokes the OnClick callback with the current Item.
     /// </summary>
-    /// <param name="args">The mouse event arguments.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
-    private async Task RowClicked(MouseEventArgs args) {
-        await OnClick.InvokeAsync(Item);
-    }
+    private Task RowClicked() => OnClick.InvokeAsync(Item);
 }
