@@ -28,9 +28,7 @@ public class TnTTemplateColumn<TGridItem> : TnTColumnBase<TGridItem> {
         => builder.AddContent(0, ChildContent(item));
 
     /// <inheritdoc />
-    protected internal override string? RawCellContent(TGridItem item) {
-        return "Not implemented";
-    }
+    protected internal override string? RawCellContent(TGridItem item) => item?.ToString();
 
     /// <inheritdoc />
     protected override bool IsSortableByDefault() => SortBy is not null;
