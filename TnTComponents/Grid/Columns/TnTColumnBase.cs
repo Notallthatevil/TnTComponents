@@ -11,7 +11,7 @@ namespace TnTComponents.Grid.Columns;
 ///     An abstract base class for columns in a <see cref="TnTDataGrid{TGridItem}" />.
 /// </summary>
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
-public abstract class TnTColumnBase<TGridItem> : TnTComponentBase, IDisposable {
+public abstract class TnTColumnBase<TGridItem> : TnTComponentBase {
 
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
@@ -85,10 +85,10 @@ public abstract class TnTColumnBase<TGridItem> : TnTComponentBase, IDisposable {
     public string? Title { get; set; }
 
     /// <summary>
-    /// Cascading parameter that provides access to the enclosing <see cref="ITnTDataGrid{TGridItem}" /> instance.
+    /// Cascading parameter that provides access to the enclosing <see cref="TnTDataGrid{TGridItem}" /> instance.
     /// </summary>
     [CascadingParameter]
-    public ITnTDataGrid<TGridItem> Grid { get; private set; } = default!;
+    internal TnTInternalGridContext<TGridItem> Context { get; private set; } = default!;
 
     internal RenderFragment RenderDefaultHeaderContent() {
         if (HeaderCellItemTemplate is not null) {
@@ -105,12 +105,12 @@ public abstract class TnTColumnBase<TGridItem> : TnTComponentBase, IDisposable {
                     .AddRipple()
                     .Build());
 
-                b.AddAttribute(20, "onclick", EventCallback.Factory.Create(this, () => Grid.SortByColumnAsync(this)));
+                b.AddAttribute(20, "onclick", EventCallback.Factory.Create(this, () => Context.Grid.SortByColumnAsync(this)));
                 b.AddContent(30, Title);
 
                 if (ShowSortIcon) {
                     b.OpenComponent<MaterialIcon>(40);
-                    b.AddAttribute(50, "Icon", Grid.SortByAscending == true ? MaterialIcon.ArrowDropUp : MaterialIcon.ArrowDropDown);
+                    b.AddAttribute(50, "Icon", Context.Grid.SortByAscending == true ? MaterialIcon.ArrowDropUp : MaterialIcon.ArrowDropDown);
                     b.AddAttribute(60, "Class", "tnt-sort-icon");
                     b.CloseComponent();
                 }
@@ -156,7 +156,7 @@ public abstract class TnTColumnBase<TGridItem> : TnTComponentBase, IDisposable {
 
     /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        Grid.AddColumn(this);
+        Context.Grid.AddColumn(this, InitialSortDirection, IsDefaultSortColumn);
     }
 
     /// <summary>
@@ -166,9 +166,4 @@ public abstract class TnTColumnBase<TGridItem> : TnTComponentBase, IDisposable {
     /// <returns>True if the column should be sortable by default, otherwise false.</returns>
     protected virtual bool IsSortableByDefault() => false;
 
-    /// <inheritdoc />
-    public void Dispose() {
-        Grid.RemoveColumn(this);
-        GC.SuppressFinalize(this);
-    }
 }

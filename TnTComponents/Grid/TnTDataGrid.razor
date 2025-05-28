@@ -40,7 +40,7 @@
                                                title="@col.Title"
                                                @key="@col" scope="col"
                                                TGridItem="TGridItem">
-                            @col.HeaderContent
+                            @col.RenderDefaultHeaderContent()
                         </TnTDataGridHeaderCell>
                     }
                 </tr>
@@ -60,7 +60,7 @@
                                             var col = _columns[colIndex];
 
                                             <TnTDataGridCell class="grid-cell-placeholder" @key="@col" GridColumn=@(colIndex+1) TGridItem="TGridItem">
-                                                @((RenderFragment)(b => col.RenderPlaceholderContent(b, new PlaceholderContext(i, ItemSize))))
+                                                @col.RenderPlaceholderContent(new(i, ItemSize))
                                             </TnTDataGridCell>
                                         }
                                     </TnTDataGridRow>
@@ -161,7 +161,7 @@
                 var col = _columns[colIndex];
 
                 <TnTDataGridCell class="grid-cell-placeholder" @key="@col" GridColumn=@(colIndex+1) TGridItem="TGridItem">
-                    @((RenderFragment)(__builder => col.RenderPlaceholderContent(__builder, placeholderContext)))
+                    @col.RenderPlaceholderContent(placeholderContext)
                 </TnTDataGridCell>
             }
         </TnTDataGridRow>
