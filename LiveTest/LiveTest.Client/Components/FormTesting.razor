@@ -163,6 +163,16 @@
             <TnTInputTextArea @bind-Value="@Input.Area" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
     </TnTRow> 
+
+        <TnTRow>
+        <h3>
+            Input Area @Input.Area
+        </h3>
+
+        <TnTColumn S="6">
+            <TnTMarkdownEditor @bind-Value="@Input.Area" />
+        </TnTColumn>
+    </TnTRow> 
 </TnTForm>
 
 @code {

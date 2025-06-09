@@ -1,9 +1,28 @@
 import * as EasyMDEImport from "https://unpkg.com/easymde/dist/easymde.min.js";
 import * as HighlightImport from "https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js";
 
+const highlightJsCss = 'https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css';
+const easyMDECss = 'https://unpkg.com/easymde/dist/easymde.min.css';
+
 const markdownEditorsMap = new Map();
 const elementDotNetRefMap = new Map();
 export function onLoad(element, dotNetElementRef) {
+    const highlightLink = document.querySelector(`link[rel="stylesheet"][href*="${highlightJsCss}"]`);
+    if (!highlightLink) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = highlightJsCss;
+        document.head.appendChild(link);
+    }
+
+    const easyMDELink = document.querySelector(`link[rel="stylesheet"][href*="${easyMDECss}"]`);
+    if (!easyMDELink) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = easyMDECss;
+        document.head.appendChild(link);
+    }
+
     if (!customElements.get('tnt-markdown-editor')) {
         customElements.define('tnt-markdown-editor', class extends HTMLElement {
             static observedAttributes = [TnTComponents.customAttribute];
