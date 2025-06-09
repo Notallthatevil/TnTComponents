@@ -26,6 +26,15 @@ export function onNewItems(element) {
     }
 }
 
+export function resetScrollPosition(element) {
+    if (element) {
+        const root = findClosestScrollContainer(element);
+        if (root) {
+            root.scrollTop = 0;
+        }
+    }
+}
+
 export function onLoad(element, dotNetRef) {
     const options = {
         root: findClosestScrollContainer(element),

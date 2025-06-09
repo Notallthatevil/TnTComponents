@@ -88,29 +88,29 @@ public partial class TnTVirtualize<TItem>() {
         _loadItemsCts?.Cancel();
         _loadItemsCts?.Dispose();
         var scopeCts = new CancellationTokenSource();
+        var token = scopeCts.Token;
+        _loadItemsCts = scopeCts;
         try {
-            _loadItemsCts = scopeCts;
-
             Loading = true;
 
             StateHasChanged(); // Allow the UI to display the loading indicator
             var result = await ItemsProvider(new TnTVirtualizeItemsProviderRequest<TItem> {
                 StartIndex = _items.Count(),
                 SortOnProperties = _sortOnProperty.HasValue ? [_sortOnProperty.Value] : [],
-                CancellationToken = scopeCts.Token
+                CancellationToken = token
             });
-            if (!scopeCts.Token.IsCancellationRequested) {
+            if (!token.IsCancellationRequested) {
                 _items = _items.Concat(result.Items);
 
                 if (_items.Count() == result.TotalItemCount) {
                     _allItemsRetrieved = true;
                 }
                 else if (IsolatedJsModule is not null) {
-                    await IsolatedJsModule.InvokeVoidAsync("onNewItems", scopeCts.Token, Element);
+                    await IsolatedJsModule.InvokeVoidAsync("onNewItems", token, Element);
                 }
             }
         }
-        catch (OperationCanceledException oce) when (oce.CancellationToken == scopeCts.Token) { }
+        catch (OperationCanceledException oce) when (oce.CancellationToken == token) { }
         Loading = false;
         _loadItemsCts = null;
         StateHasChanged(); // Display the new items and hide the loading indicator
@@ -119,9 +119,12 @@ public partial class TnTVirtualize<TItem>() {
     /// <summary>
     ///     Refreshes the data asynchronously.
     /// </summary>
-    public Task RefreshDataAsync() {
+    public async Task RefreshDataAsync() {
         Reset();
-        return Task.CompletedTask;
+        if (IsolatedJsModule is not null) {
+            await IsolatedJsModule.InvokeVoidAsync("resetScrollPosition", Element);
+        }
+        await LoadMoreItems();
     }
 
     /// <inheritdoc />
