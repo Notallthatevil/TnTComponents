@@ -1,51 +1,45 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
-using TnTComponents.Form;
 
 namespace TnTComponents;
 
 /// <summary>
-///     Interface representing the properties and behavior of a TnTForm.
+///     Defines the contract for a TnT form, exposing appearance, disabled, and read-only state. Implementations provide metadata for form rendering and state management in TnTComponents.
 /// </summary>
 public interface ITnTForm {
 
     /// <summary>
-    ///     Gets the appearance of the form.
+    ///     Gets the visual appearance of the form, which controls its style and layout.
     /// </summary>
     FormAppearance Appearance { get; }
 
     /// <summary>
-    ///     Gets a value indicating whether the form is disabled.
+    ///     Gets a value indicating whether the form is disabled. When true, user input is blocked.
     /// </summary>
     bool Disabled { get; }
 
     /// <summary>
-    ///     Gets a value indicating whether the form is read-only.
+    ///     Gets a value indicating whether the form is read-only. When true, input fields cannot be edited but may be copied.
     /// </summary>
     bool ReadOnly { get; }
 }
 
 /// <summary>
-///     Represents a form component that extends <see cref="EditForm" /> and implements <see cref="ITnTForm" />.
+///     A Blazor form component that extends <see cref="EditForm" /> and implements <see cref="ITnTForm" />. Provides additional parameters for appearance, disabled, and read-only state, and supplies
+///     itself as a cascading value for child components to access form metadata and state. This class is sealed for performance as it is not intended to be inherited.
 /// </summary>
-public class TnTForm : EditForm, ITnTForm {
+public sealed class TnTForm : EditForm, ITnTForm {
 
-    /// <summary>
-    ///     The visual appearance of the form.
-    /// </summary>
+    /// <inheritdoc />
     [Parameter]
     public FormAppearance Appearance { get; set; }
 
-    /// <summary>
-    ///     Indicates whether the form is disabled.
-    /// </summary>
+    /// <inheritdoc />
     [Parameter]
     public bool Disabled { get; set; }
 
-    /// <summary>
-    ///     Indicates whether the form is read-only.
-    /// </summary>
+    /// <inheritdoc />
     [Parameter]
     public bool ReadOnly { get; set; }
 

@@ -17,7 +17,7 @@ namespace TnTComponents;
 ///     Base class for TnT input components.
 /// </summary>
 /// <typeparam name="TInputType">The type of the input value.</typeparam>
-public abstract partial class TnTInputBase<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TInputType> : InputBase<TInputType>, ITnTComponentBase, ITnTInteractable {
+public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, ITnTComponentBase, ITnTInteractable {
 
     /// <summary>
     ///     Gets or sets the appearance of the form.
@@ -312,6 +312,12 @@ public abstract partial class TnTInputBase<[DynamicallyAccessedMembers(Dynamical
 
         if (EndIcon is not null) {
             EndIcon.AdditionalClass = "tnt-end-icon";
+        }
+
+        if (string.IsNullOrWhiteSpace(NameAttributeValue)) {
+            // Workaround, since for some reason NameValueAttribute is not being set when rendering in WebAssembly mode
+            var shouldGenerateName = typeof(InputBase<TInputType>).GetField("_shouldGenerateFieldNames", BindingFlags.Instance | BindingFlags.NonPublic);
+            shouldGenerateName?.SetValue(this, true);
         }
     }
 

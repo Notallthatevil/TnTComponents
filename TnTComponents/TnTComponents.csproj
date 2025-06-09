@@ -3,8 +3,6 @@
         <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <IsAotCompatible>True</IsAotCompatible>
-        <IsTrimmable>True</IsTrimmable>
         <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <GenerateDocumentationFile>False</GenerateDocumentationFile>
@@ -27,17 +25,17 @@
     <ItemGroup>
         <PackageReference Include="DartSassBuilder" Version="1.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.3" />
-        <PackageReference Include="System.Text.Encodings.Web" Version="9.0.3" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.5" />
+        <PackageReference Include="System.Text.Encodings.Web" Version="9.0.5" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.14" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.16" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly">
-            <Version>9.0.3</Version>
+            <Version>9.0.5</Version>
         </PackageReference>
     </ItemGroup>
 

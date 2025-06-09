@@ -21,7 +21,7 @@ public class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccessedMember
     ///     Gets or sets the cascading parameter for the radio group.
     /// </summary>
     [CascadingParameter]
-    public TnTInputRadioGroup<TInputType> _group { get; set; } = default!;
+    private TnTInputRadioGroup<TInputType> _group { get; set; } = default!;
 
     /// <inheritdoc />
     [Parameter]
