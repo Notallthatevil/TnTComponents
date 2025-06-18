@@ -170,6 +170,47 @@ window.TnTComponents = {
             element.classList.add('tnt-hidden');
         }
     },
+    /**
+     * Returns the color value for a given TnTColor enum variable name as a string.
+     * @param {string} colorName - The TnTColor enum variable name (e.g., 'Primary', 'OnPrimaryContainer').
+     * @returns {string|null} The color value as defined in CSS variables (e.g., 'var(--tnt-primary)'), or null if not found.
+     */
+    getColorValueFromEnumName: function(colorName) {
+        if (!colorName || typeof colorName !== 'string') return null;
+
+        // Convert PascalCase or camelCase to kebab-case (e.g., 'OnPrimaryContainer' -> 'on-primary-container')
+        const kebab = colorName.replace(/(?<=.)([A-Z])/g, '-$1').toLowerCase();
+        // Compose the CSS variable name
+        const cssVar = `--tnt-color-${kebab}`;
+        // Try to get the value from the root element
+        let value = getComputedStyle(document.documentElement).getPropertyValue(cssVar);
+        if (!value) return null;
+        value = value.trim();
+
+        // If value is in rgb(X, Y, Z) or rgba(X, Y, Z, A) format (commas or spaces), convert to hex
+        // Support both rgb(224,224,255) and rgb(224 224 255)
+        const rgbRegex = /^rgb\s*\(\s*(\d{1,3})[ ,]+(\d{1,3})[ ,]+(\d{1,3})\s*\)$/i;
+        const rgbaRegex = /^rgba\s*\(\s*(\d{1,3})[ ,]+(\d{1,3})[ ,]+(\d{1,3})[ ,]+(0|1|0?\.\d+)\s*\)$/i;
+        let match = value.match(rgbRegex);
+        if (match) {
+            // Convert rgb to hex
+            const r = parseInt(match[1], 10).toString(16).padStart(2, '0');
+            const g = parseInt(match[2], 10).toString(16).padStart(2, '0');
+            const b = parseInt(match[3], 10).toString(16).padStart(2, '0');
+            return `#${r}${g}${b}`;
+        }
+        match = value.match(rgbaRegex);
+        if (match) {
+            // Convert rgba to hex (ignore alpha for hex, or append as 2-digit hex if needed)
+            const r = parseInt(match[1], 10).toString(16).padStart(2, '0');
+            const g = parseInt(match[2], 10).toString(16).padStart(2, '0');
+            const b = parseInt(match[3], 10).toString(16).padStart(2, '0');
+            // Optionally include alpha as hex
+            // const a = Math.round(parseFloat(match[4]) * 255).toString(16).padStart(2, '0');
+            return `#${r}${g}${b}`;
+        }
+        return value;
+    },
     openDialog: (dialogId) => {
         const dialog = document.getElementById(dialogId);
         if (dialog) {
