@@ -127,3 +127,9 @@ tnt-markdown-editor .initial-value {
 .tnt-fill-remaining {
     overflow-y: auto;
 }
+
+:root {
+    --tnt-footer-height: 64px;
+    --tnt-header-height: 64px;
+    --tnt-side-nav-width: 256px;
+}

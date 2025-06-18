@@ -10,7 +10,7 @@ namespace TnTComponents;
 /// </summary>
 public enum Theme {
     /// <summary>
-    /// Use the system's theme setting.
+    /// Use the system's theme setting (follows the user's OS or browser preference).
     /// </summary>
     System,
 

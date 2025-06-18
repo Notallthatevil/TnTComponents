@@ -1,14 +1,50 @@
 ﻿@inherits TnTPageScriptComponent<TnTThemeToggle>
 @namespace TnTComponents
 @using TnTComponents.Core
-<tnt-theme-toggle @attributes="AdditionalAttributes">
-    <span class="tnt-icon material-symbols-outlined tnt-theme-toggle-icon">
-    </span>
-    <select title="Select Theme" class="tnt-theme-select">
-        <option value="LIGHT">Light</option>
-        <option value="DARK">Dark</option>
-        <option value="SYSTEM">System</option>
-    </select>
-</tnt-theme-toggle>
 
-@PageScript
+@if (AllowThemeSelection || AllowContrastSelection)
+{
+    <tnt-theme-toggle @attributes="AdditionalAttributes"
+        tnt-themes-root="@ThemesRoot"
+        tnt-light-default="@LightDefaultCss"
+        tnt-light-medium="@LightMediumCss"
+        tnt-light-high="@LightHighCss"
+        tnt-dark-default="@DarkDefaultCss"
+        tnt-dark-medium="@DarkMediumCss"
+        tnt-dark-high="@DarkHighCss"
+        data-permanent>
+        <span class="tnt-icon material-symbols-outlined tnt-theme-toggle-icon"></span>
+        <select title="Select Theme and Contrast" class="tnt-theme-select">
+            @{
+                var showBothOptions = AllowThemeSelection && AllowContrastSelection;
+                var showThemeOnly = AllowThemeSelection && !AllowContrastSelection;
+            }
+            @if (showBothOptions)
+            {
+                <option value="LIGHT-DEFAULT">Light - Default</option>
+                <option value="LIGHT-MEDIUM">Light - Medium</option>
+                <option value="LIGHT-HIGH">Light - High</option>
+                <option value="DARK-DEFAULT">Dark - Default</option>
+                <option value="DARK-MEDIUM">Dark - Medium</option>
+                <option value="DARK-HIGH">Dark - High</option>
+                <option value="SYSTEM-DEFAULT">System - Default</option>
+                <option value="SYSTEM-MEDIUM">System - Medium</option>
+                <option value="SYSTEM-HIGH">System - High</option>
+            }
+            else if (showThemeOnly)
+            {
+                <option value="LIGHT-DEFAULT">Light</option>
+                <option value="DARK-DEFAULT">Dark</option>
+                <option value="SYSTEM-DEFAULT">System</option>
+            }
+            else
+            {
+                <option value="LIGHT-DEFAULT">Default</option>
+                <option value="LIGHT-MEDIUM">Medium</option>
+                <option value="LIGHT-HIGH">High</option>
+            }
+        </select>
+    </tnt-theme-toggle>
+    @PageScript
+}
+
