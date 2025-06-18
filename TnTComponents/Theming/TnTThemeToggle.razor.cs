@@ -69,6 +69,12 @@ public partial class TnTThemeToggle {
     [Parameter]
     public string DarkHighCss { get; set; } = "dark-hc.css";
 
+    /// <summary>
+    /// If set to true, hides the theme toggle component from view.
+    /// </summary>
+    [Parameter]
+    public bool Hide { get; set; }
+
     /// <inheritdoc />
     public override string? ElementClass => string.Empty;
 
@@ -76,5 +82,5 @@ public partial class TnTThemeToggle {
     public override string? ElementStyle => string.Empty;
 
     /// <inheritdoc />
-    public override string? JsModulePath => "./_content/TnTComponents/Theming/TnTThemeToggle.razor.js";
+    public override string? JsModulePath => "./_content/TnTComponents/Theming/TnTThemeToggle.razor.js?v=2";
 }

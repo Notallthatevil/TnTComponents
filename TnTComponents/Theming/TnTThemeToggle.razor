@@ -12,7 +12,8 @@
         tnt-dark-default="@DarkDefaultCss"
         tnt-dark-medium="@DarkMediumCss"
         tnt-dark-high="@DarkHighCss"
-        data-permanent>
+        data-permanent
+    style="@(Hide ? "display:none" :null)">
         <span class="tnt-icon material-symbols-outlined tnt-theme-toggle-icon"></span>
         <select title="Select Theme and Contrast" class="tnt-theme-select">
             @{
