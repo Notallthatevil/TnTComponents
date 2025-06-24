@@ -47,4 +47,8 @@
         <None Include="..\README.md" Pack="true" PackagePath="\" />
         <None Include="compilerconfig.json" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Infrastructure\" />
+    </ItemGroup>
 </Project>
