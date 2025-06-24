@@ -37,8 +37,8 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-accordion-child")
-        .AddBackgroundColor(ContentBodyColor ?? _parent?.ContentBodyColor)
-        .AddForegroundColor(ContentTextColor ?? _parent?.ContentTextColor)
+        .AddBackgroundColor(ContentBodyColor ?? _parent.ContentBodyColor)
+        .AddForegroundColor(ContentTextColor ?? _parent.ContentTextColor)
         .AddFilled()
         .Build();
 
@@ -48,7 +48,7 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
 
     /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
-        .AddFromAdditionalAttributes(AdditionalAttributes)
+            .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
     /// <inheritdoc />
@@ -102,7 +102,7 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
     public bool OpenByDefault { get; set; }
 
     /// <summary>
-    ///     Specifies the sorting order of the accordion child. Lower numbers are rendered first.
+    /// Specifies the sorting order of the accordion child. Lower numbers are rendered first.
     /// </summary>
     [Parameter]
     public int? Order { get; set; }
@@ -134,7 +134,8 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
 
     /// <inheritdoc />
     public void Dispose() {
-        _parent?.RemoveChild(this);
+        GC.SuppressFinalize(this);
+        _parent.RemoveChild(this);
     }
 
     /// <summary>
@@ -143,10 +144,6 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
     /// <returns>A <see cref="RenderFragment" /> representing the child content.</returns>
     public RenderFragment RenderChild() {
         return new RenderFragment(builder => {
-            if (_parent == null) {
-                throw new InvalidOperationException("TnTAccordionChild must be used within a TnTAccordion parent.");
-            }
-
             builder.OpenElement(0, "div");
             builder.AddMultipleAttributes(10, AdditionalAttributes);
             builder.AddAttribute(20, "class", ElementClass);
@@ -157,85 +154,64 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
             builder.AddAttribute(70, "name", ElementName);
             builder.AddAttribute(80, "disabled", Disabled);
             builder.AddAttribute(90, "element-key", _elementId);
-            builder.SetKey(_elementId); // Use stable key for render optimization
+            builder.SetKey(this);
 
-            // Header with accessibility
-            builder.OpenElement(90, "h3");
-            builder.AddAttribute(100, "class", CssClassBuilder.Create()
-                .AddRipple()
-                .AddBackgroundColor(HeaderBodyColor ?? _parent.HeaderBodyColor)
-                .AddForegroundColor(HeaderTextColor ?? _parent.HeaderTextColor)
-                .AddTintColor(HeaderTintColor ?? _parent.HeaderTintColor)
-                .AddFilled()
-                .AddTnTInteractable(this)
-                .AddDisabled(Disabled)
-                .Build());
-            builder.AddAttribute(101, "tabindex", "-1");
-            builder.AddAttribute(102, "role", "button");
-            builder.AddAttribute(103, "aria-expanded", IsExpanded().ToString().ToLowerInvariant());
-            builder.AddAttribute(104, "aria-controls", $"panel-{_elementId}");
-            builder.AddAttribute(110, "data-permanent", true);
-            builder.AddContent(120, Label);
+            {
+                builder.OpenElement(90, "h3");
+                builder.AddAttribute(100, "class", CssClassBuilder.Create()
+                        .AddRipple()
+                        .AddBackgroundColor(HeaderBodyColor ?? _parent.HeaderBodyColor)
+                        .AddForegroundColor(HeaderTextColor ?? _parent.HeaderTextColor)
+                        .AddTintColor(HeaderTintColor ?? _parent.HeaderTintColor)
+                        .AddFilled()
+                        .AddTnTInteractable(this)
+                        .AddDisabled(Disabled)
+                        .Build());
+                builder.AddAttribute(110, "data-permanent", true);
+                builder.AddContent(120, Label);
 
-            if (EnableRipple) {
-                builder.OpenComponent<TnTRippleEffect>(125);
-                builder.CloseComponent();
+                if (EnableRipple) {
+                    builder.OpenComponent<TnTRippleEffect>(125);
+                    builder.CloseComponent();
+                }
+
+                {
+                    builder.OpenComponent<MaterialIcon>(130);
+                    builder.AddComponentParameter(144, nameof(MaterialIcon.Icon), MaterialIcon.ArrowDropDown.Icon);
+                    builder.CloseComponent();
+                }
+                builder.CloseElement();
             }
 
-            builder.OpenComponent<MaterialIcon>(130);
-            builder.AddComponentParameter(144, nameof(MaterialIcon.Icon), MaterialIcon.ArrowDropDown.Icon);
-            builder.CloseComponent();
-            builder.CloseElement();
+            {
+                builder.OpenElement(150, "div");
+                builder.AddAttribute(160, "class", CssClassBuilder.Create()
+                    .AddClass("tnt-expanded", _parent.AllowOpenByDefault && ((OpenByDefault && _parent.LimitToOneExpanded && !_parent.FoundExpanded) || (OpenByDefault && !_parent.LimitToOneExpanded)))
+                    .Build());
 
-            // Content with accessibility
-            builder.OpenElement(150, "div");
-            builder.AddAttribute(151, "id", $"panel-{_elementId}");
-            builder.AddAttribute(152, "role", "region");
-            builder.AddAttribute(160, "class", CssClassBuilder.Create()
-                .AddClass("tnt-expanded", IsExpanded())
-                .Build());
-
-            if (OpenByDefault) {
-                _parent.FoundExpanded = true;
-            }
+                if (OpenByDefault) {
+                    _parent.FoundExpanded = true;
+                }
 
 #if NET9_0_OR_GREATER
-            if (!RendererInfo.IsInteractive || !RemoveContentOnClose || (RendererInfo.IsInteractive && _open)) {
-                if (ChildContent != null) {
+                if(!RendererInfo.IsInteractive || !RemoveContentOnClose || (RendererInfo.IsInteractive && _open)) {
                     builder.AddContent(170, ChildContent);
                 }
-            }
 #else
-            if (ChildContent != null)
-            {
                 builder.AddContent(170, ChildContent);
-            }
 #endif
 
-            builder.CloseElement();
+                builder.CloseElement();
+            }
+
             builder.CloseElement();
         });
-    }
-
-    /// <summary>
-    ///     Determines if the accordion child should be expanded by default.
-    /// </summary>
-    private bool IsExpanded() {
-        if (_parent == null) {
-            return false;
-        }
-        // C# is the source of truth for open state
-        return _open;
     }
 
     /// <inheritdoc />
     protected override void OnInitialized() {
         base.OnInitialized();
-        if (_parent == null) {
-            throw new InvalidOperationException("TnTAccordionChild must be used within a TnTAccordion parent.");
-        }
-
         _parent.RegisterChild(this);
-        // Only the parent should set _open, to avoid state drift
+        _open = _parent.AllowOpenByDefault && ((OpenByDefault && _parent.LimitToOneExpanded && !_parent.FoundExpanded) || (OpenByDefault && !_parent.LimitToOneExpanded));
     }
 }

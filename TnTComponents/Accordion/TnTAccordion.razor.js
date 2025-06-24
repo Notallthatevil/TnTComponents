@@ -1,6 +1,5 @@
 const accordionByIdentifier = new Map();
 
-
 function toggleAccordionHeader(e) {
     const target = e.target;
     const accordion = target.closest('tnt-accordion');
@@ -17,7 +16,8 @@ function toggleAccordionHeader(e) {
             nestedAccordion.forEach((accordion) => {
                 accordion.resetChildren();
             });
-        } else {
+        }
+        else {
             content.classList.remove('tnt-collapsed');
             content.classList.add('tnt-expanded');
         }
@@ -25,26 +25,25 @@ function toggleAccordionHeader(e) {
     }
 }
 
-
 function updateChild(content) {
     if (content.resizeObserver) {
         content.resizeObserver.disconnect();
         content.resizeObserver = undefined;
     }
 
-    if (content.mutationObserver) {
-        content.mutationObserver.disconnect();
-        content.mutationObserver = undefined;
+    if (content.mutationObserer) {
+        content.mutationObserer.disconnect();
+        content.mutationObserer = undefined
     }
 
     if (content.classList.contains('tnt-expanded')) {
         content.style.setProperty('--content-height', content.scrollHeight + 'px');
 
-        content.resizeObserver = new ResizeObserver(() => {
+        content.resizeObserver = new ResizeObserver((entries) => {
             content.style.setProperty('--content-height', content.scrollHeight + 'px');
         });
 
-        content.mutationObserver = new MutationObserver((mutationList) => {
+        content.mutationObserer = new MutationObserver((mutationList) => {
             for (const mutation of mutationList) {
                 if (mutation.type === 'childList') {
                     content.style.setProperty('--content-height', content.scrollHeight + 'px');
@@ -52,10 +51,11 @@ function updateChild(content) {
             }
         });
 
-        content.resizeObserver.observe(content);
-        content.mutationObserver.observe(content, { childList: true, subtree: true });
-    } else {
-        content.style.removeProperty('--content-height');
+        content.resizeObserver.observe(document.body);
+        content.mutationObserer.observe(content, { childList: true, subtree: true });
+    }
+    else {
+        content.style.height = null;
     }
 }
 
@@ -91,27 +91,22 @@ export class TnTAccordion extends HTMLElement {
 
     update() {
         this.accordionChildren = this.querySelectorAll(':scope > .tnt-accordion-child');
-        const self = this;
+        let self = this;
         this.accordionChildren.forEach((child) => {
             const header = child.firstElementChild;
-
-            // Remove previous listeners to prevent duplicates
-            header.removeEventListener('click', toggleAccordionHeader);
-            header.removeEventListener('click', header._tntAccordionDotNetHandler);
-
+            
             if (!header.classList.contains('tnt-disabled')) {
                 header.addEventListener('click', toggleAccordionHeader);
-                // Use a named handler so it can be removed later
-                header._tntAccordionDotNetHandler = () => {
-                    if (self.dotNetRef) {
-                        if (child.lastElementChild.classList.contains('tnt-expanded')) {
-                            self.dotNetRef.invokeMethodAsync("SetAsOpened", parseInt(child.getAttribute('element-key')));
-                        } else {
+                header.addEventListener('click', () => {
+                    if(self.dotNetRef) {
+                        if(child.lastElementChild.classList.contains('tnt-expanded')) {
+                            self.dotNetRef.invokeMethodAsync("SetAsOpened", parseInt(child.getAttribute('element-key')));                    
+                        }
+                        else {
                             self.dotNetRef.invokeMethodAsync("SetAsClosed", parseInt(child.getAttribute('element-key')));
                         }
                     }
-                };
-                header.addEventListener('click', header._tntAccordionDotNetHandler);
+                });
             }
 
             updateChild(child.lastElementChild);
@@ -135,9 +130,11 @@ export class TnTAccordion extends HTMLElement {
             child.lastElementChild.classList.remove('tnt-collapsed');
 
             const nestedAccordion = child.querySelectorAll('tnt-accordion');
-            nestedAccordion.forEach((accordion) => {
-                accordion.resetChildren();
-            });
+            if (nestedAccordion) {
+                nestedAccordion.forEach((accordion) => {
+                    accordion.resetChildren();
+                });
+            }
         });
     }
 }
@@ -155,4 +152,4 @@ export function onUpdate(element, dotNetRef) {
     }
 }
 
-export function onDispose(element, dotNetRef) { }
+export function onDispose(element, dotNetRef) {}
