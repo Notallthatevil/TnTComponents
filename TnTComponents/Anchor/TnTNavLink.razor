@@ -1,0 +1,21 @@
+@namespace TnTComponents
+@using TnTComponents.Core
+@using TnTComponents.Interfaces
+@inherits NavLink
+@implements ITnTComponentBase
+@implements ITnTInteractable
+@implements ITnTStyleable
+
+<a @attributes="AdditionalAttributes"
+   class="@ElementClass"
+   style="@ElementStyle"
+   lang="@ElementLang"
+   id="@ElementId"
+   title="@ElementTitle"
+   autofocus="@AutoFocus"
+   @ref="Element">
+    @ChildContent
+    @if (EnableRipple) {
+        <TnTRippleEffect />
+    }
+</a>

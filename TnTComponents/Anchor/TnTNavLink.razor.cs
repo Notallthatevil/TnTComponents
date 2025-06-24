@@ -10,8 +10,7 @@ namespace TnTComponents;
 /// <summary>
 ///     Represents a navigation link (anchor) component with customizable styles and behaviors.
 /// </summary>
-public class TnTNavLink : NavLink, ITnTComponentBase, ITnTInteractable, ITnTStyleable {
-
+public partial class TnTNavLink {
     /// <inheritdoc />
     [Parameter]
     public virtual TnTColor? ActiveBackgroundColor { get; set; }
@@ -106,26 +105,7 @@ public class TnTNavLink : NavLink, ITnTComponentBase, ITnTInteractable, ITnTStyl
     [Parameter]
     public TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
 
-    /// <inheritdoc />
-    protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        builder.OpenElement(0, "a");
-        builder.AddMultipleAttributes(10, AdditionalAttributes);
-        builder.AddAttribute(20, "class", ElementClass);
-        builder.AddAttribute(30, "style", ElementStyle);
-        builder.AddAttribute(40, "lang", ElementLang);
-        builder.AddAttribute(50, "id", ElementId);
-        builder.AddAttribute(60, "title", ElementTitle);
-        builder.AddAttribute(80, "autofocus", AutoFocus);
-        builder.AddElementReferenceCapture(90, e => Element = e);
-        builder.AddContent(100, ChildContent);
-
-        if (EnableRipple) {
-            builder.OpenComponent<TnTRippleEffect>(110);
-            builder.CloseComponent();
-        }
-
-        builder.CloseElement();
-    }
+    // Render logic moved to TnTNavLink.razor
 
     /// <inheritdoc />
     protected override void OnParametersSet() {
