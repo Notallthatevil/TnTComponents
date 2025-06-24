@@ -5,7 +5,7 @@ namespace TnTComponents.Interfaces;
 /// <summary>
 ///     Simple interface that represents a TnTComponent. Each TnTComponent can be thought of as a single Html Element.
 /// </summary>
-public interface ITnTComponentBase {
+public interface ITnTComponentBase : IComponent {
 
     /// <summary>
     ///     Contains all additional attributes provided to this component that do not match a parameter.

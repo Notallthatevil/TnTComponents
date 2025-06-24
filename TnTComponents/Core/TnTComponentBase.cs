@@ -54,8 +54,19 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
     protected override void OnParametersSet() {
         base.OnParametersSet();
 
-        var dict = AdditionalAttributes is not null ? AdditionalAttributes.ToDictionary() : new Dictionary<string, object>();
-        dict.TryAdd(TnTCustomIdentifierAttribute, ComponentIdentifier);
+        // Only create a new dictionary if needed, and avoid unnecessary allocations
+        Dictionary<string, object> dict;
+        if (AdditionalAttributes is null) {
+            dict = new Dictionary<string, object>();
+        }
+        else if (!AdditionalAttributes.ContainsKey(TnTCustomIdentifierAttribute) || !Equals(AdditionalAttributes[TnTCustomIdentifierAttribute], ComponentIdentifier)) {
+            dict = new Dictionary<string, object>(AdditionalAttributes);
+        }
+        else {
+            // Already set and correct, no need to update
+            return;
+        }
+        dict[TnTCustomIdentifierAttribute] = ComponentIdentifier;
         AdditionalAttributes = dict;
     }
 }
