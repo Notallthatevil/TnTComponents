@@ -1,6 +1,7 @@
 ﻿@using TnTComponents.Core
 @inherits TnTPageScriptComponent<TnTAccordion>
 @namespace TnTComponents
+
 <CascadingValue IsFixed="true" Value="this">
     <tnt-accordion @attributes="AdditionalAttributes"
                    class="@ElementClass"
@@ -18,4 +19,5 @@
         @ChildContent
     </tnt-accordion>
 </CascadingValue>
+
 @PageScript

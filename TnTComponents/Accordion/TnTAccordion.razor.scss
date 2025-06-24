@@ -1,4 +1,6 @@
-﻿.tnt-accordion {
+﻿@import "../Styles/_Variables/_colors.scss";
+
+.tnt-accordion ::deep {
     display: block;
     margin: 8px;
 
@@ -29,8 +31,8 @@
         }
 
         &:has(.tnt-accordion) {
-            .tnt-accordion-child > h3:first-child{
-                z-index:101;
+            .tnt-accordion-child > h3:first-child {
+                z-index: 101;
             }
         }
 
