@@ -19,8 +19,8 @@ public class TnTPageScriptComponent_Tests : Bunit.TestContext {
     public async Task DisposeAsyncCore_DoesNotThrow_WhenNoJsModule() {
         var component = new TestScriptComponent();
         await component.DisposeAsync();
-        Assert.Null(component.DotNetObjectRef);
-        Assert.Null(component.IsolatedJsModule);
+        component.DotNetObjectRef.Should().BeNull();
+        component.IsolatedJsModule.Should().BeNull();
     }
 
     [Fact]
