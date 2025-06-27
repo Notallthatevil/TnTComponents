@@ -3,13 +3,10 @@
 @use '../Styles/_Variables/_typescale.scss' as typescale;
 @use '../Styles/_Variables/_interactable.scss' as interactable;
 @use '../Styles/_Variables/_elevation.scss' as elevation;
+
 .tnt-button {
     &.tnt-size-xs, &.tnt-size-s {
         background-color: transparent;
-        display: inline-flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
         min-height: 48px;
         cursor: pointer;
 
@@ -53,6 +50,10 @@
         aspect-ratio: 16/9;
     }
 
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
     border: none;
     box-sizing: border-box;
     padding: 8px;
@@ -160,6 +161,84 @@
 
         &.tnt-size-l, &.tnt-size-xl {
             border-radius: 16px;
+        }
+    }
+
+    &:has(.tnt-icon) {
+
+        &:not(.tnt-icon-at-end) {
+            &.tnt-size-xs .tnt-small-button-layer ::deep {
+
+                .tnt-icon {
+                    padding-right: 4px;
+                    font-size: 20px;
+                }
+            }
+
+            &.tnt-size-s .tnt-small-button-layer ::deep {
+                .tnt-icon {
+                    font-size: 20px;
+                    padding-right: 8px;
+                }
+            }
+
+            &.tnt-size-m ::deep {
+                .tnt-icon {
+                    font-size: 24px;
+                    padding-right: 8px;
+                }
+            }
+
+            &.tnt-size-l ::deep {
+                .tnt-icon {
+                    font-size: 32px;
+                    padding-right: 12px;
+                }
+            }
+
+            &.tnt-size-xl ::deep {
+                .tnt-icon {
+                    padding-right: 16px;
+                    font-size: 40px;
+                }
+            }
+        }
+
+        &.tnt-icon-at-end {
+            &.tnt-size-xs .tnt-small-button-layer ::deep {
+                .tnt-icon {
+                    font-size: 20px;
+                    padding-left: 4px;
+                }
+            }
+
+            &.tnt-size-s .tnt-small-button-layer ::deep {
+                .tnt-icon {
+                    font-size: 20px;
+                    padding-left: 8px;
+                }
+            }
+
+            &.tnt-size-m ::deep {
+                .tnt-icon {
+                    font-size: 24px;
+                    padding-left: 8px;
+                }
+            }
+
+            &.tnt-size-l ::deep {
+                .tnt-icon {
+                    font-size: 32px;
+                    padding-left: 12px;
+                }
+            }
+
+            &.tnt-size-xl ::deep {
+                .tnt-icon {
+                    font-size: 40px;
+                    padding-left: 16px;
+                }
+            }
         }
     }
     //@for $i from 1 through 10 {

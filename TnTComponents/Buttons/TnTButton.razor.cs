@@ -18,12 +18,6 @@ public partial class TnTButton {
     [Parameter]
     public virtual ButtonAppearance Appearance { get; set; }
 
-    /// <summary>
-    /// The shape of the button, which can be rounded or square
-    /// </summary>
-    [Parameter]
-    public ButtonShape Shape { get; set; } = ButtonShape.Round;
-
     /// <inheritdoc />
     [Parameter]
     public TnTColor BackgroundColor { get; set; } = TnTColor.Primary;
@@ -55,6 +49,7 @@ public partial class TnTButton {
         .AddClass("tnt-text", Appearance == ButtonAppearance.Text)
         .AddClass("tnt-elevated", Appearance == ButtonAppearance.Elevated)
         .AddClass("tnt-button-square", Shape == ButtonShape.Square)
+        .AddClass("tnt-icon-at-end", IconAtEnd)
         .AddSize(ButtonSize)
         .AddTnTInteractable(this)
         .Build();
@@ -68,10 +63,21 @@ public partial class TnTButton {
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
-
     /// <inheritdoc />
     [Parameter]
     public bool EnableRipple { get; set; } = true;
+
+    /// <summary>
+    ///     Optional icon to be displayed in the button.
+    /// </summary>
+    [Parameter]
+    public TnTIcon? Icon { get; set; }
+
+    /// <summary>
+    ///     If true, the icon will be placed at the end of the button instead of the start.
+    /// </summary>
+    [Parameter]
+    public bool IconAtEnd { get; set; }
 
     /// <inheritdoc />
     [Parameter]
@@ -80,6 +86,12 @@ public partial class TnTButton {
     /// <inheritdoc />
     [Parameter]
     public TnTColor? OnTintColor { get; set; }
+
+    /// <summary>
+    ///     The shape of the button, which can be rounded or square
+    /// </summary>
+    [Parameter]
+    public ButtonShape Shape { get; set; } = ButtonShape.Round;
 
     /// <summary>
     ///     When set, the click event will not propagate to parent elements.

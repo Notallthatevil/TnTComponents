@@ -1,15 +1,70 @@
 ﻿@page "/Buttons"
 @using TnTComponents
+@rendermode InteractiveAuto
+
+<select @bind="Appearance">
+    @foreach (var appearance in Enum.GetValues<ButtonAppearance>().Distinct()) {
+        <option value="@appearance">@appearance</option>
+    }
+</select>
+
+<select @bind="Shape">
+    @foreach (var shape in Enum.GetValues<ButtonShape>().Distinct()) {
+        <option value="@shape">@shape</option>
+    }
+</select>
+
+<label>
+    <input type="checkbox" @bind="Disabled" />
+    Disabled
+</label>
+
+<label>
+    <input type="checkbox" @bind="ShowIcon" />
+    Show Icon
+</label>
+
+<label>
+    <input type="checkbox" @bind="IconAtEnd" />
+    Icon At End
+</label>
+
+<TnTDivider style="margin-top:36px;margin-bottom:36px;" />
+<TnTRow>
+    <TnTColumn S="12">
+        <TnTButton ButtonSize="@Size.XS" Appearance="@Appearance" Shape="@Shape" Disabled="Disabled" TextColor="@(Appearance == ButtonAppearance.Filled || Appearance == ButtonAppearance.Elevated ? TnTColor.OnPrimary : TnTColor.OnSurface)" Icon="@(ShowIcon ? MaterialIcon.CloudySnowing : null)" IconAtEnd="@IconAtEnd">
+            Smallest
+        </TnTButton>
+
+        <TnTButton ButtonSize="@Size.Small" Appearance="@Appearance" Shape="@Shape" Disabled="Disabled" TextColor="@(Appearance == ButtonAppearance.Filled || Appearance == ButtonAppearance.Elevated ? TnTColor.OnPrimary : TnTColor.OnSurface)"Icon="@(ShowIcon ? MaterialIcon.CloudySnowing : null)" IconAtEnd="@IconAtEnd">
+            Small
+        </TnTButton>
+
+        <TnTButton ButtonSize="@Size.Medium" Appearance="@Appearance" Shape="@Shape" Disabled="Disabled" TextColor="@(Appearance == ButtonAppearance.Filled || Appearance == ButtonAppearance.Elevated ? TnTColor.OnPrimary : TnTColor.OnSurface)"Icon="@(ShowIcon ? MaterialIcon.CloudySnowing : null)" IconAtEnd="@IconAtEnd">
+            Medium
+        </TnTButton>
+
+        <TnTButton ButtonSize="@Size.Large" Appearance="@Appearance" Shape="@Shape" Disabled="Disabled" TextColor="@(Appearance == ButtonAppearance.Filled || Appearance == ButtonAppearance.Elevated ? TnTColor.OnPrimary : TnTColor.OnSurface)"Icon="@(ShowIcon ? MaterialIcon.CloudySnowing : null)" IconAtEnd="@IconAtEnd">
+            Large
+        </TnTButton>
+
+        <TnTButton ButtonSize="@Size.Largest" Appearance="@Appearance" Shape="@Shape" Disabled="Disabled" TextColor="@(Appearance == ButtonAppearance.Filled || Appearance == ButtonAppearance.Elevated ? TnTColor.OnPrimary : TnTColor.OnSurface)"Icon="@(ShowIcon ? MaterialIcon.CloudySnowing : null)" IconAtEnd="@IconAtEnd">
+            Largest
+        </TnTButton>
+    </TnTColumn>
+</TnTRow>
 
 
-<LiveTest.Client.Components.ButtonsComponent />
-<h3>
-    WASM
-</h3>
-<LiveTest.Client.Components.ButtonsComponent @rendermode="InteractiveWebAssembly" />
+@code {
 
-<h3>
-    Server
-</h3>
-<LiveTest.Client.Components.ButtonsComponent @rendermode="InteractiveServer" />
 
+    private ButtonAppearance Appearance { get; set; } = ButtonAppearance.Filled;
+
+    private ButtonShape Shape { get; set; } = ButtonShape.Round;
+
+    private bool Disabled { get; set; }
+
+    private bool ShowIcon { get; set; }
+
+    private bool IconAtEnd { get; set; }
+}

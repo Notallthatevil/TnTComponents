@@ -18,17 +18,29 @@
         @ref="Element">
     @if (ButtonSize == Size.Small || ButtonSize == Size.XS) {
         <div class="@($"tnt-small-button-layer {ElementClass}")">
+            @if (!IconAtEnd && Icon is not null) {
+                @Icon.Render()
+            }
             @if (EnableRipple) {
                 <TnTRippleEffect />
             }
             @ChildContent
+            @if (IconAtEnd && Icon is not null) {
+                @Icon.Render()
+            }
         </div>
     }
     else {
+        @if (!IconAtEnd && Icon is not null) {
+            @Icon.Render()
+        }
         @if (EnableRipple) {
             <TnTRippleEffect />
         }
         @ChildContent
+        @if (IconAtEnd && Icon is not null) {
+            @Icon.Render()
+        }
     }
 </button>
 
