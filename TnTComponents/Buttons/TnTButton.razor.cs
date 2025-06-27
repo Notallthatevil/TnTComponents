@@ -12,19 +12,27 @@ namespace TnTComponents;
 /// <summary>
 ///     Represents a customizable button component.
 /// </summary>
-public class TnTButton : TnTComponentBase, ITnTStyleable, ITnTInteractable {
+public partial class TnTButton {
 
     /// <inheritdoc />
     [Parameter]
     public virtual ButtonAppearance Appearance { get; set; }
 
+    /// <summary>
+    /// The shape of the button, which can be rounded or square
+    /// </summary>
+    [Parameter]
+    public ButtonShape Shape { get; set; } = ButtonShape.Round;
+
     /// <inheritdoc />
     [Parameter]
     public TnTColor BackgroundColor { get; set; } = TnTColor.Primary;
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     The size of the button.
+    /// </summary>
     [Parameter]
-    public virtual TnTBorderRadius? BorderRadius { get; set; } = TnTBorderRadius.Full;
+    public Size ButtonSize { get; set; } = Size.Small;
 
     /// <summary>
     ///     The content to be rendered inside the button.
@@ -38,10 +46,16 @@ public class TnTButton : TnTComponentBase, ITnTStyleable, ITnTInteractable {
 
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
-                            .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddOutlined(Appearance == ButtonAppearance.Outlined)
-        .AddFilled(Appearance == ButtonAppearance.Filled)
-        .AddTnTStyleable(this, enableElevation: Appearance != ButtonAppearance.Outlined && Appearance != ButtonAppearance.Text)
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddBackgroundColor(BackgroundColor)
+        .AddForegroundColor(TextColor)
+        .AddTextAlign(TextAlignment)
+        .AddClass("tnt-filled", Appearance == ButtonAppearance.Filled || Appearance == ButtonAppearance.Elevated)
+        .AddClass("tnt-outlined", Appearance == ButtonAppearance.Outlined)
+        .AddClass("tnt-text", Appearance == ButtonAppearance.Text)
+        .AddClass("tnt-elevated", Appearance == ButtonAppearance.Elevated)
+        .AddClass("tnt-button-square", Shape == ButtonShape.Square)
+        .AddSize(ButtonSize)
         .AddTnTInteractable(this)
         .Build();
 
@@ -51,12 +65,9 @@ public class TnTButton : TnTComponentBase, ITnTStyleable, ITnTInteractable {
 
     /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
-            .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
-    /// <inheritdoc />
-    [Parameter]
-    public virtual int Elevation { get; set; } = 1;
 
     /// <inheritdoc />
     [Parameter]
@@ -93,35 +104,4 @@ public class TnTButton : TnTComponentBase, ITnTStyleable, ITnTInteractable {
     /// </summary>
     [Parameter]
     public ButtonType Type { get; set; }
-
-    /// <inheritdoc />
-    protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        builder.OpenElement(0, "button");
-        builder.AddMultipleAttributes(10, AdditionalAttributes);
-        builder.AddAttribute(20, "class", ElementClass);
-        builder.AddAttribute(30, "style", ElementStyle);
-        builder.AddAttribute(40, "type", Type.ToHtmlAttribute());
-        builder.AddAttribute(50, "name", ElementName);
-        builder.AddAttribute(60, "disabled", Disabled);
-        builder.AddAttribute(70, "autofocus", AutoFocus);
-        builder.AddAttribute(80, "title", ElementTitle);
-        builder.AddAttribute(90, "id", ElementId);
-        if (OnClickCallback.HasDelegate) {
-            builder.AddAttribute(100, "onclick", EventCallback.Factory.Create<MouseEventArgs>(this, OnClickCallback));
-        }
-
-        if (StopPropagation) {
-            builder.AddEventStopPropagationAttribute(110, "onclick", true);
-        }
-
-        if (EnableRipple) {
-            builder.OpenComponent<TnTRippleEffect>(120);
-            builder.CloseComponent();
-        }
-
-        builder.AddElementReferenceCapture(130, __value => Element = __value);
-        builder.AddContent(140, ChildContent);
-
-        builder.CloseElement();
-    }
 }

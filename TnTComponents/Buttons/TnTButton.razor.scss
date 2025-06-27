@@ -1,0 +1,173 @@
+﻿@use '../Styles/_Variables/_colors.scss' as colors;
+@use '../Styles/_Variables/_textAlignments.scss' as textAlignments;
+@use '../Styles/_Variables/_typescale.scss' as typescale;
+@use '../Styles/_Variables/_interactable.scss' as interactable;
+@use '../Styles/_Variables/_elevation.scss' as elevation;
+.tnt-button {
+    &.tnt-size-xs, &.tnt-size-s {
+        background-color: transparent;
+        display: inline-flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        min-height: 48px;
+        cursor: pointer;
+
+        .tnt-small-button-layer {
+            @include interactable.tnt-interactable;
+
+            &.tnt-filled {
+                @include colors.tnt-default-background-colors;
+            }
+
+            @include typescale.tnt-typescale(500, 14px, 20px, 0.1px);
+            @include colors.tnt-default-foreground-colors;
+            @include textAlignments.tnt-text-alignments;
+            @include interactable.tnt-disabled;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            box-sizing: border-box;
+            transition: border-radius 250ms ease-in-out;
+            aspect-ratio: 16/9;
+
+            &.tnt-disabled {
+                cursor: not-allowed;
+            }
+        }
+    }
+
+    &.tnt-size-m, &.tnt-size-l, &.tnt-size-xl {
+        @include interactable.tnt-interactable;
+
+        &.tnt-filled {
+            @include colors.tnt-default-background-colors;
+        }
+
+        @include colors.tnt-default-foreground-colors;
+        @include textAlignments.tnt-text-alignments;
+        @include interactable.tnt-disabled;
+        transition: border-radius 250ms ease-in-out;
+        aspect-ratio: 16/9;
+    }
+
+    border: none;
+    box-sizing: border-box;
+    padding: 8px;
+    margin: 4px;
+
+    &.tnt-text, &.tnt-outlined {
+        background-color: transparent;
+
+        &.tnt-disabled {
+            opacity: 0.4;
+
+            &.tnt-size-xs .tnt-small-button-layer, &.tnt-size-s .tnt-small-button-layer {
+                opacity: 1;
+            }
+        }
+    }
+
+    &.tnt-outlined {
+        &.tnt-size-xs .tnt-small-button-layer,
+        &.tnt-size-s .tnt-small-button-layer,
+        &.tnt-size-m,
+        &.tnt-size-l,
+        &.tnt-size-xl {
+            outline: 1px solid colors.$tnt-color-outline-variant;
+        }
+    }
+
+    &.tnt-elevated {
+        &.tnt-size-xs .tnt-small-button-layer,
+        &.tnt-size-s .tnt-small-button-layer,
+        &.tnt-size-m,
+        &.tnt-size-l,
+        &.tnt-size-xl {
+            @include elevation.tnt-elevation(1, true);
+        }
+    }
+
+    &.tnt-size-xs {
+        .tnt-small-button-layer {
+            border-radius: 32px / 100%;
+            padding: 0px 12px;
+            height: 32px;
+
+            &.tnt-button-square {
+                border-radius: 12px;
+            }
+        }
+    }
+
+    &.tnt-size-s {
+        .tnt-small-button-layer {
+            border-radius: 40px / 100%;
+            padding: 0px 16px;
+            height: 40px;
+
+            &.tnt-button-square {
+                border-radius: 12px;
+            }
+        }
+    }
+
+    &.tnt-size-m {
+        @include typescale.tnt-typescale(500, 16px, 24px, 0.15px);
+        border-radius: 56px / 100%;
+        padding: 0px 24px;
+        height: 56px;
+
+        &.tnt-button-square {
+            border-radius: 16px;
+        }
+    }
+
+    &.tnt-size-l {
+        @include typescale.tnt-typescale(400, 24px, 32px, 0);
+        border-radius: 96px / 100%;
+        padding: 0px 48px;
+        height: 96px;
+
+        &.tnt-button-square {
+            border-radius: 28px;
+        }
+    }
+
+    &.tnt-size-xl {
+        @include typescale.tnt-typescale(400, 32px, 40px, 0);
+        border-radius: 136px / 100%;
+        padding: 0px 64px;
+        height: 136px;
+
+        &.tnt-button-square {
+            border-radius: 28px;
+        }
+    }
+
+    &:active, &:focus {
+        &.tnt-size-xs, &.tnt-size-s {
+            .tnt-small-button-layer {
+                border-radius: 8px;
+            }
+        }
+
+        &.tnt-size-m {
+            border-radius: 12px;
+        }
+
+        &.tnt-size-l, &.tnt-size-xl {
+            border-radius: 16px;
+        }
+    }
+    //@for $i from 1 through 10 {
+    //    *:nth-child(#{$i} of .tnt-fab) {
+    //        transform: translateY(calc(-64px * ($i - 1))) !important;
+    //        &:has(.tnt-badge) {
+    //            transform: translate(-128px, calc(-64px * ($i - 1))) !important;
+    //        }
+    //    }
+    //}
+}

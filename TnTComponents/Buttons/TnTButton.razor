@@ -1,0 +1,34 @@
+﻿@namespace TnTComponents
+@using TnTComponents.Core
+@using TnTComponents.Interfaces
+@inherits TnTComponentBase
+@implements ITnTInteractable
+
+<button @attributes="AdditionalAttributes"
+        class="@($"tnt-button {ElementClass}")"
+        style="@ElementStyle"
+        type="@Type.ToHtmlAttribute()"
+        name="@ElementName"
+        disabled="@Disabled"
+        autofocus="@AutoFocus"
+        title="@ElementTitle"
+        id="@ElementId"
+        @onclick="OnClickCallback"
+        @onclick:stopPropagation="StopPropagation"
+        @ref="Element">
+    @if (ButtonSize == Size.Small || ButtonSize == Size.XS) {
+        <div class="@($"tnt-small-button-layer {ElementClass}")">
+            @if (EnableRipple) {
+                <TnTRippleEffect />
+            }
+            @ChildContent
+        </div>
+    }
+    else {
+        @if (EnableRipple) {
+            <TnTRippleEffect />
+        }
+        @ChildContent
+    }
+</button>
+
