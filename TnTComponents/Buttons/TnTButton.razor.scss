@@ -96,9 +96,14 @@
             border-radius: 32px / 100%;
             padding: 0px 12px;
             height: 32px;
+            gap: 4px;
 
             &.tnt-button-square {
                 border-radius: 12px;
+            }
+
+            ::deep .tnt-icon {
+                font-size: 20px;
             }
         }
     }
@@ -108,9 +113,14 @@
             border-radius: 40px / 100%;
             padding: 0px 16px;
             height: 40px;
+            gap: 8px;
 
             &.tnt-button-square {
                 border-radius: 12px;
+            }
+
+            ::deep .tnt-icon {
+                font-size: 20px;
             }
         }
     }
@@ -120,9 +130,14 @@
         border-radius: 56px / 100%;
         padding: 0px 24px;
         height: 56px;
+        gap: 8px;
 
         &.tnt-button-square {
             border-radius: 16px;
+        }
+
+        ::deep .tnt-icon {
+            font-size: 24px;
         }
     }
 
@@ -131,9 +146,14 @@
         border-radius: 96px / 100%;
         padding: 0px 48px;
         height: 96px;
+        gap: 12px;
 
         &.tnt-button-square {
             border-radius: 28px;
+        }
+
+        ::deep .tnt-icon {
+            font-size: 32px;
         }
     }
 
@@ -142,9 +162,14 @@
         border-radius: 136px / 100%;
         padding: 0px 64px;
         height: 136px;
+        gap: 16px;
 
         &.tnt-button-square {
             border-radius: 28px;
+        }
+
+        ::deep .tnt-icon {
+            font-size: 40px;
         }
     }
 
@@ -164,81 +189,20 @@
         }
     }
 
-    &:has(.tnt-icon) {
 
-        &:not(.tnt-icon-at-end) {
-            &.tnt-size-xs .tnt-small-button-layer ::deep {
+    .tnt-button-content {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+        height: 100%;
+    }
 
-                .tnt-icon {
-                    padding-right: 4px;
-                    font-size: 20px;
-                }
-            }
-
-            &.tnt-size-s .tnt-small-button-layer ::deep {
-                .tnt-icon {
-                    font-size: 20px;
-                    padding-right: 8px;
-                }
-            }
-
-            &.tnt-size-m ::deep {
-                .tnt-icon {
-                    font-size: 24px;
-                    padding-right: 8px;
-                }
-            }
-
-            &.tnt-size-l ::deep {
-                .tnt-icon {
-                    font-size: 32px;
-                    padding-right: 12px;
-                }
-            }
-
-            &.tnt-size-xl ::deep {
-                .tnt-icon {
-                    padding-right: 16px;
-                    font-size: 40px;
-                }
-            }
-        }
-
-        &.tnt-icon-at-end {
-            &.tnt-size-xs .tnt-small-button-layer ::deep {
-                .tnt-icon {
-                    font-size: 20px;
-                    padding-left: 4px;
-                }
-            }
-
-            &.tnt-size-s .tnt-small-button-layer ::deep {
-                .tnt-icon {
-                    font-size: 20px;
-                    padding-left: 8px;
-                }
-            }
-
-            &.tnt-size-m ::deep {
-                .tnt-icon {
-                    font-size: 24px;
-                    padding-left: 8px;
-                }
-            }
-
-            &.tnt-size-l ::deep {
-                .tnt-icon {
-                    font-size: 32px;
-                    padding-left: 12px;
-                }
-            }
-
-            &.tnt-size-xl ::deep {
-                .tnt-icon {
-                    font-size: 40px;
-                    padding-left: 16px;
-                }
-            }
+    ::deep {
+        tnt-page-script {
+            position: absolute;
         }
     }
     //@for $i from 1 through 10 {

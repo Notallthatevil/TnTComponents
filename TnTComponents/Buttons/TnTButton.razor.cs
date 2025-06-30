@@ -49,7 +49,6 @@ public partial class TnTButton {
         .AddClass("tnt-text", Appearance == ButtonAppearance.Text)
         .AddClass("tnt-elevated", Appearance == ButtonAppearance.Elevated)
         .AddClass("tnt-button-square", Shape == ButtonShape.Square)
-        .AddClass("tnt-icon-at-end", IconAtEnd)
         .AddSize(ButtonSize)
         .AddTnTInteractable(this)
         .Build();
@@ -66,18 +65,6 @@ public partial class TnTButton {
     /// <inheritdoc />
     [Parameter]
     public bool EnableRipple { get; set; } = true;
-
-    /// <summary>
-    ///     Optional icon to be displayed in the button.
-    /// </summary>
-    [Parameter]
-    public TnTIcon? Icon { get; set; }
-
-    /// <summary>
-    ///     If true, the icon will be placed at the end of the button instead of the start.
-    /// </summary>
-    [Parameter]
-    public bool IconAtEnd { get; set; }
 
     /// <inheritdoc />
     [Parameter]
