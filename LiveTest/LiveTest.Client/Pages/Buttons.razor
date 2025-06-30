@@ -20,36 +20,66 @@
 </label>
 
 <label>
-    <input type="checkbox" @bind="ShowIcon" />
-    Show Icon
+    <input type="checkbox" @bind="StartIcon" />
+    Start Icon
 </label>
 
 <label>
-    <input type="checkbox" @bind="IconAtEnd" />
-    Icon At End
+    <input type="checkbox" @bind="EndIcon" />
+    End Icon
 </label>
 
 <TnTDivider style="margin-top:36px;margin-bottom:36px;" />
 <TnTRow>
     <TnTColumn S="12">
-        <TnTButton ButtonSize="@Size.XS" Appearance="@Appearance" Shape="@Shape" Disabled="Disabled" TextColor="@(Appearance == ButtonAppearance.Filled || Appearance == ButtonAppearance.Elevated ? TnTColor.OnPrimary : TnTColor.OnSurface)" Icon="@(ShowIcon ? MaterialIcon.CloudySnowing : null)" IconAtEnd="@IconAtEnd">
+        <TnTButton ButtonSize="@Size.XS" Appearance="@Appearance" Shape="@Shape" Disabled="Disabled" TextColor="@(Appearance == ButtonAppearance.Filled || Appearance == ButtonAppearance.Elevated ? TnTColor.OnPrimary : TnTColor.OnSurface)">
+            @if (StartIcon) {
+                <MaterialIcon Icon="@MaterialIcon.CloudySnowing" />
+            }
             Smallest
+            @if (EndIcon) {
+                <MaterialIcon Icon="@MaterialIcon.SunnySnowing" />
+            }
         </TnTButton>
 
-        <TnTButton ButtonSize="@Size.Small" Appearance="@Appearance" Shape="@Shape" Disabled="Disabled" TextColor="@(Appearance == ButtonAppearance.Filled || Appearance == ButtonAppearance.Elevated ? TnTColor.OnPrimary : TnTColor.OnSurface)"Icon="@(ShowIcon ? MaterialIcon.CloudySnowing : null)" IconAtEnd="@IconAtEnd">
+        <TnTButton ButtonSize="@Size.Small" Appearance="@Appearance" Shape="@Shape" Disabled="Disabled" TextColor="@(Appearance == ButtonAppearance.Filled || Appearance == ButtonAppearance.Elevated ? TnTColor.OnPrimary : TnTColor.OnSurface)">
+            @if (StartIcon) {
+                <MaterialIcon Icon="@MaterialIcon.CloudySnowing" />
+            }
             Small
+            @if (EndIcon) {
+                <MaterialIcon Icon="@MaterialIcon.SunnySnowing" />
+            }
         </TnTButton>
 
-        <TnTButton ButtonSize="@Size.Medium" Appearance="@Appearance" Shape="@Shape" Disabled="Disabled" TextColor="@(Appearance == ButtonAppearance.Filled || Appearance == ButtonAppearance.Elevated ? TnTColor.OnPrimary : TnTColor.OnSurface)"Icon="@(ShowIcon ? MaterialIcon.CloudySnowing : null)" IconAtEnd="@IconAtEnd">
+        <TnTButton ButtonSize="@Size.Medium" Appearance="@Appearance" Shape="@Shape" Disabled="Disabled" TextColor="@(Appearance == ButtonAppearance.Filled || Appearance == ButtonAppearance.Elevated ? TnTColor.OnPrimary : TnTColor.OnSurface)">
+            @if (StartIcon) {
+                <MaterialIcon Icon="@MaterialIcon.CloudySnowing" />
+            }
             Medium
+            @if (EndIcon) {
+                <MaterialIcon Icon="@MaterialIcon.SunnySnowing" />
+            }
         </TnTButton>
 
-        <TnTButton ButtonSize="@Size.Large" Appearance="@Appearance" Shape="@Shape" Disabled="Disabled" TextColor="@(Appearance == ButtonAppearance.Filled || Appearance == ButtonAppearance.Elevated ? TnTColor.OnPrimary : TnTColor.OnSurface)"Icon="@(ShowIcon ? MaterialIcon.CloudySnowing : null)" IconAtEnd="@IconAtEnd">
+        <TnTButton ButtonSize="@Size.Large" Appearance="@Appearance" Shape="@Shape" Disabled="Disabled" TextColor="@(Appearance == ButtonAppearance.Filled || Appearance == ButtonAppearance.Elevated ? TnTColor.OnPrimary : TnTColor.OnSurface)">
+            @if (StartIcon) {
+                <MaterialIcon Icon="@MaterialIcon.CloudySnowing" />
+            }
             Large
+            @if (EndIcon) {
+                <MaterialIcon Icon="@MaterialIcon.SunnySnowing" />
+            }
         </TnTButton>
 
-        <TnTButton ButtonSize="@Size.Largest" Appearance="@Appearance" Shape="@Shape" Disabled="Disabled" TextColor="@(Appearance == ButtonAppearance.Filled || Appearance == ButtonAppearance.Elevated ? TnTColor.OnPrimary : TnTColor.OnSurface)"Icon="@(ShowIcon ? MaterialIcon.CloudySnowing : null)" IconAtEnd="@IconAtEnd">
+        <TnTButton ButtonSize="@Size.Largest" Appearance="@Appearance" Shape="@Shape" Disabled="Disabled" TextColor="@(Appearance == ButtonAppearance.Filled || Appearance == ButtonAppearance.Elevated ? TnTColor.OnPrimary : TnTColor.OnSurface)">
+            @if (StartIcon) {
+                <MaterialIcon Icon="@MaterialIcon.CloudySnowing" />
+            }
             Largest
+            @if (EndIcon) {
+                <MaterialIcon Icon="@MaterialIcon.SunnySnowing" />
+            }
         </TnTButton>
     </TnTColumn>
 </TnTRow>
@@ -64,7 +94,7 @@
 
     private bool Disabled { get; set; }
 
-    private bool ShowIcon { get; set; }
+    private bool StartIcon { get; set; }
 
-    private bool IconAtEnd { get; set; }
+    private bool EndIcon { get; set; }
 }
