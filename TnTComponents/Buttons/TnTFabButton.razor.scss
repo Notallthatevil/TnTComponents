@@ -1,0 +1,96 @@
+﻿@use '../Styles/_Variables/_colors.scss' as colors;
+@use '../Styles/_Variables/_textAlignments.scss' as textAlignments;
+@use '../Styles/_Variables/_typescale.scss' as typescale;
+@use '../Styles/_Variables/_interactable.scss' as interactable;
+@use '../Styles/_Variables/_elevation.scss' as elevation;
+
+.tnt-fab-button-container {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+
+    .tnt-fab-button {
+        outline: none;
+        border: none;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        transition: 250ms ease-in-out;
+        box-sizing: border-box;
+
+        @include interactable.tnt-interactable;
+        @include colors.tnt-default-background-colors;
+        @include colors.tnt-default-foreground-colors;
+        @include textAlignments.tnt-text-alignments;
+        @include interactable.tnt-disabled;
+        @include elevation.tnt-elevation(3);
+
+        &.tnt-size-xs, &.tnt-size-s {
+            height: 56px;
+            min-width: 56px;
+            border-radius: 16px;
+            gap: 8px;
+            padding: 8px;
+
+            @include typescale.tnt-typescale(500, 14px, 20px, 0.1px);
+
+            ::deep {
+
+
+                .tnt-icon {
+                    font-size: 24px;
+                }
+            }
+        }
+
+        &.tnt-size-m {
+            height: 80px;
+            min-width: 80px;
+            border-radius: 20px;
+            gap: 12px;
+            padding: 12px;
+            @include typescale.tnt-typescale(500, 16px, 24px, 0.15px);
+
+            ::deep {
+
+                .tnt-icon {
+                    font-size: 28px;
+                }
+            }
+        }
+
+        &.tnt-size-l, &.tnt-size-xl {
+            height: 96px;
+            min-width: 96px;
+            border-radius: 28px;
+            gap: 16px;
+            padding: 16px;
+            @include typescale.tnt-typescale(400, 24px, 32px, 0);
+
+            ::deep {
+
+                .tnt-icon {
+                    font-size: 36px;
+                }
+            }
+        }
+
+        &:focus, &:active {
+            @include elevation.tnt-elevation(3, false);
+        }
+
+        ::deep {
+
+            tnt-page-script, tnt-ripple-effect {
+                position: absolute;
+            }
+        }
+    }
+}
+
+body:has(.tnt-footer) {
+    .tnt-fab-button-container {
+        bottom: calc(var(--tnt-footer-height) + 16px);
+    }
+}
