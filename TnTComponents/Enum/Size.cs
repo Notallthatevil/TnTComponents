@@ -7,36 +7,42 @@ using System.Threading.Tasks;
 namespace TnTComponents;
 
 /// <summary>
-/// Represents different sizes that can be used in the application.
+///     Represents different sizes that can be used in the application.
 /// </summary>
 public enum Size {
+
     /// <summary>
-    /// The smallest size.
+    ///     The smallest size.
     /// </summary>
     Smallest,
 
     /// <summary>
-    /// A small size.
+    ///     Alias for the smallest size.
+    /// </summary>
+    XS = Smallest,
+
+    /// <summary>
+    ///     A small size.
     /// </summary>
     Small,
 
     /// <summary>
-    /// A medium size.
+    ///     A medium size.
     /// </summary>
     Medium,
 
     /// <summary>
-    /// The default size, which is set to Medium.
-    /// </summary>
-    Default = Medium,
-
-    /// <summary>
-    /// A large size.
+    ///     A large size.
     /// </summary>
     Large,
 
     /// <summary>
-    /// The largest size.
+    ///     The largest size.
     /// </summary>
-    Largest
+    Largest,
+
+    /// <summary>
+    ///     Alias for the largest size.
+    /// </summary>
+    XL = Largest
 }

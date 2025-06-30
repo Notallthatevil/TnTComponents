@@ -1,0 +1,13 @@
+﻿@namespace TnTComponents
+@using TnTComponents.Layout
+@inherits TnTLayoutComponent
+
+<div @attributes="AdditionalAttributes"
+     class="@ElementClass"
+     style="@ElementStyle"
+     lang="@ElementLang"
+     id="@ElementId"
+     title="@ElementTitle"
+     @ref="Element">
+    @ChildContent
+</div>

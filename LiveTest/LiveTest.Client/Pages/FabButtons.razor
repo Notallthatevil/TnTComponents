@@ -3,7 +3,11 @@
 
 
 @rendermode InteractiveAuto
-
+<select @bind="Size">
+    @foreach (var appearance in Enum.GetValues<Size>().Distinct()) {
+        <option value="@appearance">@appearance</option>
+    }
+</select>
 <label>
     <input type="checkbox" @bind="ShowText" />
     ShowText
@@ -23,66 +27,16 @@
     End Icon
 </label>
 
+
 <TnTDivider style="margin-top:36px;margin-bottom:36px;" />
 <TnTRow>
     <TnTColumn S="12">
-        <TnTFabButton ButtonSize="Size.XS" Disabled="Disabled">
+        <TnTFabButton ButtonSize="@Size" Disabled="Disabled">
             @if (StartIcon) {
                 <MaterialIcon Icon="@MaterialIcon.CloudySnowing" />
             }
             @if (ShowText) {
-                <text>Smallest</text>
-            }
-            @if (EndIcon) {
-                <MaterialIcon Icon="@MaterialIcon.SunnySnowing" />
-            }
-        </TnTFabButton>
-
-        <TnTFabButton ButtonSize="Size.Small" Disabled="Disabled">
-            @if (StartIcon) {
-                <MaterialIcon Icon="@MaterialIcon.CloudySnowing" />
-            }
-            @if (ShowText) {
-                <text>Small</text>
-            }
-
-            @if (EndIcon) {
-                <MaterialIcon Icon="@MaterialIcon.SunnySnowing" />
-            }
-        </TnTFabButton>
-
-        <TnTFabButton ButtonSize="Size.Medium" Disabled="Disabled">
-            @if (StartIcon) {
-                <MaterialIcon Icon="@MaterialIcon.CloudySnowing" />
-            }
-            @if (ShowText) {
-                <text>Medium</text>
-            }
-
-            @if (EndIcon) {
-                <MaterialIcon Icon="@MaterialIcon.SunnySnowing" />
-            }
-        </TnTFabButton>
-
-        <TnTFabButton ButtonSize="Size.Large" Disabled="Disabled">
-            @if (StartIcon) {
-                <MaterialIcon Icon="@MaterialIcon.CloudySnowing" />
-            }
-            @if (ShowText) {
-                <text>Large</text>
-            }
-
-            @if (EndIcon) {
-                <MaterialIcon Icon="@MaterialIcon.SunnySnowing" />
-            }
-        </TnTFabButton>
-
-        <TnTFabButton ButtonSize="Size.Largest" Disabled="Disabled">
-            @if (StartIcon) {
-                <MaterialIcon Icon="@MaterialIcon.CloudySnowing" />
-            }
-            @if (ShowText) {
-                <text>Largest</text>
+                <text>Button Text</text>
             }
             @if (EndIcon) {
                 <MaterialIcon Icon="@MaterialIcon.SunnySnowing" />
@@ -93,11 +47,8 @@
 
 
 @code {
+    private Size Size { get; set; } = Size.Small;
 
-
-    private ButtonAppearance Appearance { get; set; } = ButtonAppearance.Filled;
-
-    private ButtonShape Shape { get; set; } = ButtonShape.Round;
 
     private bool Disabled { get; set; }
 

@@ -7,15 +7,18 @@ namespace TnTComponents;
 /// <summary>
 ///     The footer content to be rendered.
 /// </summary>
-public class TnTFooter : TnTLayoutComponent {
+public partial class TnTFooter {
 
     /// <inheritdoc />
     [Parameter]
-    public override TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainer;
+    public override TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceVariant;
 
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create(base.ElementClass!)
         .AddClass("tnt-footer")
+        .AddBackgroundColor(BackgroundColor)
+        .AddForegroundColor(TextColor)
+        .AddElevation(Elevation)
         .Build();
 
     /// <inheritdoc />
@@ -24,5 +27,5 @@ public class TnTFooter : TnTLayoutComponent {
 
     /// <inheritdoc />
     [Parameter]
-    public override TnTColor TextColor { get; set; } = TnTColor.OnSurface;
+    public override TnTColor TextColor { get; set; } = TnTColor.OnSurfaceVariant;
 }

@@ -18,5 +18,10 @@ public enum ButtonAppearance {
     /// <summary>
     ///     A text button.
     /// </summary>
-    Text
+    Text,
+
+    /// <summary>
+    ///     An elevated button.
+    /// </summary>
+    Elevated,
 }

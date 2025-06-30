@@ -13,7 +13,6 @@ namespace TnTComponents.Layout;
 /// <summary>
 ///     A base layout class
 /// </summary>
-
 public abstract class TnTLayoutComponent : TnTComponentBase, ITnTStyleable {
 
     /// <inheritdoc />
@@ -54,38 +53,33 @@ public abstract class TnTLayoutComponent : TnTComponentBase, ITnTStyleable {
     [Parameter]
     public virtual TnTColor TextColor { get; set; } = TnTColor.OnBackground;
 
-    /// <summary>
-    ///     Indicates that the data is permanent and should not be removed from the DOM when the component is removed.
-    /// </summary>
-    protected virtual bool DataPermanent => false;
+    ///// <inheritdoc />
+    //protected override void BuildRenderTree(RenderTreeBuilder builder) {
+    //    if (DataPermanent) {
+    //        builder.OpenElement(0, "div");
+    //        builder.AddAttribute(10, "data-permanent");
+    //        builder.OpenRegion(20);
 
-    /// <inheritdoc />
-    protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        if (DataPermanent) {
-            builder.OpenElement(0, "div");
-            builder.AddAttribute(10, "data-permanent");
-            builder.OpenRegion(20);
+    //        RenderContent(builder);
 
-            RenderContent(builder);
+    //        builder.CloseRegion();
+    //        builder.CloseElement();
+    //    }
+    //    else {
+    //        RenderContent(builder);
+    //    }
+    //}
 
-            builder.CloseRegion();
-            builder.CloseElement();
-        }
-        else {
-            RenderContent(builder);
-        }
-    }
-
-    private void RenderContent(RenderTreeBuilder builder) {
-        builder.OpenElement(0, "div");
-        builder.AddMultipleAttributes(10, AdditionalAttributes);
-        builder.AddAttribute(20, "class", ElementClass);
-        builder.AddAttribute(30, "style", ElementStyle);
-        builder.AddAttribute(40, "lang", ElementLang);
-        builder.AddAttribute(50, "id", ElementId);
-        builder.AddAttribute(60, "title", ElementTitle);
-        builder.AddElementReferenceCapture(70, e => Element = e);
-        builder.AddContent(80, ChildContent);
-        builder.CloseElement();
-    }
+    //private void RenderContent(RenderTreeBuilder builder) {
+    //    builder.OpenElement(0, "div");
+    //    builder.AddMultipleAttributes(10, AdditionalAttributes);
+    //    builder.AddAttribute(20, "class", ElementClass);
+    //    builder.AddAttribute(30, "style", ElementStyle);
+    //    builder.AddAttribute(40, "lang", ElementLang);
+    //    builder.AddAttribute(50, "id", ElementId);
+    //    builder.AddAttribute(60, "title", ElementTitle);
+    //    builder.AddElementReferenceCapture(70, e => Element = e);
+    //    builder.AddContent(80, ChildContent);
+    //    builder.CloseElement();
+    //}
 }

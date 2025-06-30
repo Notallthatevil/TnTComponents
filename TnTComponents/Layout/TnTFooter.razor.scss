@@ -1,0 +1,17 @@
+﻿@use '../Styles/_Variables/_colors.scss' as colors;
+@use '../Styles/_Variables/_typescale.scss' as typescale;
+@use '../Styles/_Variables/_elevation.scss' as elevation;
+.tnt-layout > .tnt-footer {
+    grid-area: footer;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    padding: 0 4px;
+    align-items: center;
+    transition: 250ms ease-in-out;
+    box-sizing: border-box;
+    @include colors.tnt-default-background-colors;
+    @include colors.tnt-default-foreground-colors;
+    @include typescale.tnt-title-large;
+    @include elevation.tnt-elevations;
+}
