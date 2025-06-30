@@ -27,7 +27,7 @@
             align-items: center;
             border: none;
             box-sizing: border-box;
-            transition: border-radius 250ms ease-in-out;
+            transition: 250ms ease-in-out;
             aspect-ratio: 16/9;
 
             &.tnt-disabled {
@@ -46,7 +46,7 @@
         @include colors.tnt-default-foreground-colors;
         @include textAlignments.tnt-text-alignments;
         @include interactable.tnt-disabled;
-        transition: border-radius 250ms ease-in-out;
+        transition: 250ms ease-in-out;
         aspect-ratio: 16/9;
     }
 
@@ -205,12 +205,4 @@
             position: absolute;
         }
     }
-    //@for $i from 1 through 10 {
-    //    *:nth-child(#{$i} of .tnt-fab) {
-    //        transform: translateY(calc(-64px * ($i - 1))) !important;
-    //        &:has(.tnt-badge) {
-    //            transform: translate(-128px, calc(-64px * ($i - 1))) !important;
-    //        }
-    //    }
-    //}
 }
