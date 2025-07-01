@@ -97,6 +97,10 @@
             tnt-page-script, tnt-ripple-effect {
                 position: absolute;
             }
+
+            .tnt-icon {
+                pointer-events: none;
+            }
         }
     }
 }

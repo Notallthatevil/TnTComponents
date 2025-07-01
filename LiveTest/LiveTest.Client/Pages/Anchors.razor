@@ -1,0 +1,110 @@
+﻿@page "/anchors"
+@page "/anchors/1"
+@using TnTComponents
+@rendermode InteractiveAuto
+
+<select @bind="Appearance">
+    @foreach (var appearance in Enum.GetValues<AnchorAppearance>()) {
+        <option value="@appearance">@appearance</option>
+    }
+</select>
+
+<select @bind="Shape">
+    @foreach (var shape in Enum.GetValues<AnchorShape>()) {
+        <option value="@shape">@shape</option>
+    }
+</select>
+
+<select @bind="Match">
+    @foreach (var match in Enum.GetValues<NavLinkMatch>()) {
+        <option value="@match">@match</option>
+    }
+</select>
+
+<select @bind="Href">
+    <option value="/anchors">/anchors</option>
+    <option value="/anchors/1">/anchors/1</option>
+    <option value="#">#</option>
+</select>
+
+<label>
+    <input type="checkbox" @bind="Disabled" />
+    Disabled
+</label>
+
+<label>
+    <input type="checkbox" @bind="StartIcon" />
+    Start Icon
+</label>
+
+<label>
+    <input type="checkbox" @bind="EndIcon" />
+    End Icon
+</label>
+
+<TnTRow>
+    <TnTColumn S="12">
+        <TnTNavLink Appearance="@Appearance" Shape="@Shape" Disabled="@Disabled" AnchorSize="@Size.XS" Match="@Match" href="@Href" ActiveBackgroundColor="TnTColor.Secondary" ActiveTextColor="TnTColor.Error" TextColor="TnTColor.Success">
+            @if (StartIcon) {
+                <MaterialIcon Icon="@MaterialIcon.Home" />
+            }
+            Extra Small
+            @if (EndIcon) {
+                <MaterialIcon Icon="@MaterialIcon.ArrowForward" />
+            }
+        </TnTNavLink>
+        <TnTNavLink Appearance="@Appearance" Shape="@Shape" Disabled="@Disabled" AnchorSize="@Size.Small" Match="@Match" href="@Href" ActiveBackgroundColor="TnTColor.Secondary" ActiveTextColor="TnTColor.Error" TextColor="TnTColor.Success">
+            @if (StartIcon) {
+                <MaterialIcon Icon="@MaterialIcon.Home" />
+            }
+            Small
+            @if (EndIcon) {
+                <MaterialIcon Icon="@MaterialIcon.ArrowForward" />
+            }
+        </TnTNavLink>
+        <TnTNavLink Appearance="@Appearance" Shape="@Shape" Disabled="@Disabled" AnchorSize="@Size.Medium" Match="@Match" href="@Href" ActiveBackgroundColor="TnTColor.Secondary" ActiveTextColor="TnTColor.Error" TextColor="TnTColor.Success">
+            @if (StartIcon) {
+                <MaterialIcon Icon="@MaterialIcon.Home" />
+            }
+            Medium
+            @if (EndIcon) {
+                <MaterialIcon Icon="@MaterialIcon.ArrowForward" />
+            }
+        </TnTNavLink>
+        <TnTNavLink Appearance="@Appearance" Shape="@Shape" Disabled="@Disabled" AnchorSize="@Size.Large" Match="@Match" href="@Href" ActiveBackgroundColor="TnTColor.Secondary" ActiveTextColor="TnTColor.Error" TextColor="TnTColor.Success">
+            @if (StartIcon) {
+                <MaterialIcon Icon="@MaterialIcon.Home" />
+            }
+            Large
+            @if (EndIcon) {
+                <MaterialIcon Icon="@MaterialIcon.ArrowForward" />
+            }
+        </TnTNavLink>
+        <TnTNavLink Appearance="@Appearance" Shape="@Shape" Disabled="@Disabled" AnchorSize="@Size.XL" Match="@Match" href="@Href" ActiveBackgroundColor="TnTColor.Secondary" ActiveTextColor="TnTColor.Error" TextColor="TnTColor.Success">
+            @if (StartIcon) {
+                <MaterialIcon Icon="@MaterialIcon.Home" />
+            }
+            Extra Large
+            @if (EndIcon) {
+                <MaterialIcon Icon="@MaterialIcon.ArrowForward" />
+            }
+        </TnTNavLink>
+    </TnTColumn>
+</TnTRow>
+
+@code {
+    private AnchorAppearance Appearance { get; set; } = AnchorAppearance.Filled;
+
+    private AnchorShape Shape { get; set; } = AnchorShape.Round;
+
+    private Size Size { get; set; } = Size.Small;
+
+    private bool Disabled { get; set; }
+
+    private NavLinkMatch Match { get; set; } = NavLinkMatch.Prefix;
+
+    private string Href { get; set; } = "/anchors";
+
+    private bool StartIcon { get; set; }
+    private bool EndIcon { get; set; } = true;
+}

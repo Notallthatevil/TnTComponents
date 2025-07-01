@@ -4,7 +4,6 @@
 @inherits NavLink
 @implements ITnTComponentBase
 @implements ITnTInteractable
-@implements ITnTStyleable
 
 <a @attributes="AdditionalAttributes"
    class="@ElementClass"
@@ -14,8 +13,19 @@
    title="@ElementTitle"
    autofocus="@AutoFocus"
    @ref="Element">
-    @ChildContent
-    @if (EnableRipple) {
-        <TnTRippleEffect />
+ @if (AnchorSize == Size.Small || AnchorSize == Size.XS) {
+        <div class="@($"tnt-small-anchor-layer {ElementClass}")">
+            @ChildContent
+            @if (EnableRipple) {
+                <TnTRippleEffect />
+            }
+        </div>
     }
+    else {
+        @ChildContent
+        @if (EnableRipple) {
+            <TnTRippleEffect />
+        }
+    }
+
 </a>

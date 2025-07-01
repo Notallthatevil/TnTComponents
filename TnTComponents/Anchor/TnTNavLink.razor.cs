@@ -25,6 +25,12 @@ public partial class TnTNavLink {
     [Parameter]
     public AnchorAppearance Appearance { get; set; }
 
+    /// <summary>
+    /// The size of the anchor, only applies if <see cref="Appearance"/> is <see cref="AnchorAppearance.Filled"/> or <see cref="AnchorAppearance.Outlined"/>.
+    /// </summary>
+    [Parameter]
+    public Size AnchorSize { get; set; } = Size.Small;
+
     /// <inheritdoc />
     [Parameter]
     public bool? AutoFocus { get; set; }
@@ -32,10 +38,6 @@ public partial class TnTNavLink {
     /// <inheritdoc />
     [Parameter]
     public virtual TnTColor BackgroundColor { get; set; } = TnTColor.Primary;
-
-    /// <inheritdoc />
-    [Parameter]
-    public virtual TnTBorderRadius? BorderRadius { get; set; } = new(2);
 
     /// <inheritdoc />
     [Parameter]
@@ -49,11 +51,14 @@ public partial class TnTNavLink {
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass(CssClass)
         .AddClass("tnt-nav-link")
+        .AddBackgroundColor(BackgroundColor)
+        .AddForegroundColor(TextColor)
+        .AddClass("tnt-filled", Appearance == AnchorAppearance.Filled)
+        .AddClass("tnt-outlined", Appearance == AnchorAppearance.Outlined)
+        .AddClass("tnt-underlined", Appearance == AnchorAppearance.Underlined)
+        .AddClass("tnt-anchor-square", Shape == AnchorShape.Square)
         .AddTnTInteractable(this, enableTint: Appearance is AnchorAppearance.Filled or AnchorAppearance.Outlined, enable: Appearance is AnchorAppearance.Filled or AnchorAppearance.Outlined)
-        .AddTnTStyleable(this, enableElevation: Appearance is AnchorAppearance.Filled or AnchorAppearance.Outlined)
-        .AddFilled(Appearance == AnchorAppearance.Filled)
-        .AddOutlined(Appearance == AnchorAppearance.Outlined)
-        .AddUnderlined(Appearance == AnchorAppearance.Underlined)
+        .AddSize(AnchorSize)
         .AddClass("active-fg-color", ActiveTextColor.HasValue)
         .AddClass("active-bg-color", ActiveBackgroundColor.HasValue)
         .Build();
@@ -83,10 +88,6 @@ public partial class TnTNavLink {
 
     /// <inheritdoc />
     [Parameter]
-    public int Elevation { get; set; }
-
-    /// <inheritdoc />
-    [Parameter]
     public bool EnableRipple { get; set; } = true;
 
     /// <inheritdoc />
@@ -105,6 +106,12 @@ public partial class TnTNavLink {
     [Parameter]
     public TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
 
+    /// <summary>
+    /// The shape of the anchor, which can be rounded or square. Only applies if appearance is set to Filled or Outlined.
+    /// </summary>
+    [Parameter]
+    public AnchorShape Shape { get; set; } = AnchorShape.Round;
+
     // Render logic moved to TnTNavLink.razor
 
     /// <inheritdoc />
@@ -116,4 +123,44 @@ public partial class TnTNavLink {
             AdditionalAttributes = attributes;
         }
     }
+}
+
+/// <summary>
+/// Specifies the shape of the anchor, which can be rounded or square.
+/// </summary>
+public enum AnchorShape {
+    /// <summary>
+    /// The anchor has rounded corners.
+    /// </summary>
+    Round,
+    /// <summary>
+    /// The anchor has square corners.
+    /// </summary>
+    Square
+}
+
+/// <summary>
+///     Specifies the appearance of an anchor element.
+/// </summary>
+public enum AnchorAppearance {
+
+    /// <summary>
+    ///     The anchor element is underlined.
+    /// </summary>
+    Underlined,
+
+    /// <summary>
+    ///     The anchor element is filled.
+    /// </summary>
+    Filled,
+
+    /// <summary>
+    ///     The anchor element is outlined.
+    /// </summary>
+    Outlined,
+
+    /// <summary>
+    ///     The anchor element has no special appearance.
+    /// </summary>
+    None
 }

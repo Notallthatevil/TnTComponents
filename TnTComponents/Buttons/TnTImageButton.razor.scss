@@ -260,5 +260,9 @@
         tnt-page-script {
             position: absolute;
         }
+
+        .tnt-icon {
+            pointer-events: none;
+        }
     }
 }
