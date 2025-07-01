@@ -175,7 +175,7 @@ window.TnTComponents = {
      * @param {string} colorName - The TnTColor enum variable name (e.g., 'Primary', 'OnPrimaryContainer').
      * @returns {string|null} The color value as defined in CSS variables (e.g., 'var(--tnt-primary)'), or null if not found.
      */
-    getColorValueFromEnumName: function(colorName) {
+    getColorValueFromEnumName: function (colorName) {
         if (!colorName || typeof colorName !== 'string') return null;
 
         // Convert PascalCase or camelCase to kebab-case (e.g., 'OnPrimaryContainer' -> 'on-primary-container')
@@ -411,64 +411,15 @@ window.TnTComponents = {
         }
     },
     toggleSideNavGroup: (event) => {
-        const indicator = event.target.parentElement.querySelector('.tnt-side-nav-group-toggle-indicator');
+        const toggler = event.target.parentElement.querySelector('.tnt-side-nav-menu-group-toggler');
 
-        if (indicator) {
-            const toggler = indicator.querySelector('.tnt-toggle-indicator');
-            if (toggler && toggler.classList) {
-                if (toggler.classList.contains('tnt-toggle')) {
-                    toggler.classList.remove('tnt-toggle');
-                }
-                else {
-                    toggler.classList.add('tnt-toggle');
-                }
+        if (toggler && toggler.classList) {
+            if (toggler.classList.contains('tnt-toggle')) {
+                toggler.classList.remove('tnt-toggle');
+            }
+            else {
+                toggler.classList.add('tnt-toggle');
             }
         }
-    },
-    rippleEffect: (e) => {
-        // Setup
-        let posX = e.target.offsetLeft;
-        let posY = e.target.offsetTop;
-        let buttonWidth = e.target.offsetWidth;
-        let buttonHeight = e.target.offsetHeight;
-
-        // Add the element
-        let ripple = document.createElement('span');
-
-        let target = e.target;
-        const rippleEffect = e.target.querySelector(':scope > tnt-ripple-effect');
-        if (rippleEffect) {
-            target = rippleEffect;
-        }
-
-        target.appendChild(ripple);
-        ripple.style.pointerEvents = 'none';
-
-
-        // Make it round!
-        if (buttonWidth >= buttonHeight) {
-            buttonHeight = buttonWidth;
-        } else {
-            buttonWidth = buttonHeight;
-        }
-
-        // Get the center of the element
-        const coords = getCoords(e.target);
-        var x = e.pageX - coords.left - buttonWidth / 2;
-        var y = e.pageY - coords.top - buttonHeight / 2;
-
-
-        ripple.style.width = `${buttonWidth}px`;
-        ripple.style.height = `${buttonHeight}px`;
-        ripple.style.top = `${y}px`;
-        ripple.style.left = `${x}px`;
-
-        ripple.classList.add('tnt-rippling');
-
-        setTimeout(() => {
-            if (target.contains(ripple)) {
-                target.removeChild(ripple);
-            }
-        }, 500);
     }
 }

@@ -15,7 +15,7 @@
         <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
     </PropertyGroup>
     <ItemGroup>
-      <Content Remove="compilerconfig.json" />
+        <Content Remove="compilerconfig.json" />
     </ItemGroup>
 
     <ItemGroup>
@@ -39,16 +39,20 @@
         </PackageReference>
     </ItemGroup>
 
-    <Target Name="CopyCss" BeforeTargets="Build">
-        <Copy SourceFiles="Styles/style.css" DestinationFolder="wwwroot" />
-    </Target>
-
     <ItemGroup>
         <None Include="..\README.md" Pack="true" PackagePath="\" />
         <None Include="compilerconfig.json" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Infrastructure\" />
+        <Folder Include="Infrastructure\" />
     </ItemGroup>
+
+    <Target Name="DeleteCssFiles" BeforeTargets="BeforeClean">
+        <ItemGroup>
+            <CssFiles Include=".\**\*.css" />
+        </ItemGroup>
+
+        <Delete Files="@(CssFiles)" />
+    </Target>
 </Project>
