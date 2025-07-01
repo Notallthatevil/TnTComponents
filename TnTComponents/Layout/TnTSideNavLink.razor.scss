@@ -1,0 +1,71 @@
+﻿@use '../Styles/_Variables/_colors.scss' as colors;
+@use '../Styles/_Variables/_textAlignments.scss' as textAlignments;
+@use '../Styles/_Variables/_typescale.scss' as typescale;
+@use '../Styles/_Variables/_interactable.scss' as interactable;
+@use '../Styles/_Variables/_elevation.scss' as elevation;
+
+.tnt-side-nav-link {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    border: none;
+    box-sizing: border-box;
+    padding: 0px 16px;
+    height: 56px;
+    margin-bottom: 4px;
+    text-decoration: none;
+    border-radius: 56px / 100%;
+    width: 100%;
+    transition: 250ms ease-in-out;
+    aspect-ratio: 16/9;
+    @include interactable.tnt-interactable;
+    @include colors.tnt-default-background-colors;
+    @include colors.tnt-default-foreground-colors;
+    @include textAlignments.tnt-text-alignments;
+    @include interactable.tnt-disabled;
+    @include typescale.tnt-typescale(600, 14px, 20px, 0.1px);
+
+    &:has(> .tnt-icon) ::deep {
+        > .tnt-icon {
+            color: colors.$tnt-color-on-secondary-container;
+            padding-right: 8px;
+            font-size: 24px;
+        }
+    }
+
+    &:not(:has(> .tnt-icon)) {
+       padding-left: calc(16px + 24px + 8px);
+    }
+
+    &.active {
+        &.active-bg-color {
+            background-color: var(--active-bg-color) !important;
+        }
+
+        &.active-fg-color {
+            color: var(--active-fg-color) !important;
+
+            ::deep {
+                > .tnt-icon {
+                    color: var(--active-fg-color) !important;
+                }
+            }
+        }
+    }
+
+
+
+    &:active, &:focus {
+    }
+
+    ::deep {
+        tnt-page-script {
+            position: absolute;
+        }
+
+        .tnt-icon {
+            pointer-events: none;
+        }
+    }
+}
