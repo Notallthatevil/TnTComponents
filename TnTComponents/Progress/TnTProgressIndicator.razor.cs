@@ -9,7 +9,7 @@ namespace TnTComponents;
 /// <summary>
 ///     A component that represents a progress indicator.
 /// </summary>
-public class TnTProgressIndicator : TnTComponentBase {
+public partial class TnTProgressIndicator{
 
     /// <summary>
     ///     Gets or sets the appearance of the progress indicator.
@@ -59,30 +59,27 @@ public class TnTProgressIndicator : TnTComponentBase {
     ///     Gets or sets the size of the progress indicator.
     /// </summary>
     [Parameter]
-    public Size Size { get; set; } = Size.Default;
+    public Size Size { get; set; } = Size.Medium;
 
     /// <summary>
     ///     Gets or sets the current value of the progress indicator.
     /// </summary>
     [Parameter]
     public double? Value { get; set; }
+}
 
-    /// <inheritdoc />
-    protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        if (Show) {
-            builder.OpenElement(0, "progress");
-            builder.AddMultipleAttributes(10, AdditionalAttributes);
-            builder.AddAttribute(20, "class", ElementClass);
-            builder.AddAttribute(30, "max", Max);
-            builder.AddAttribute(40, "value", Value);
-            builder.AddAttribute(50, "style", ElementStyle);
-            builder.AddAttribute(60, "autofocus", AutoFocus);
-            builder.AddAttribute(70, "lang", ElementLang);
-            builder.AddAttribute(80, "title", ElementTitle);
-            builder.AddAttribute(90, "id", ElementId);
-            builder.AddElementReferenceCapture(100, e => Element = e);
-            builder.AddContent(110, ChildContent);
-            builder.CloseElement();
-        }
-    }
+/// <summary>
+///     Specifies the appearance of the progress indicator.
+/// </summary>
+public enum ProgressAppearance {
+
+    /// <summary>
+    ///     A ring-shaped progress indicator.
+    /// </summary>
+    Ring,
+
+    /// <summary>
+    ///     A linear progress indicator.
+    /// </summary>
+    Linear
 }
