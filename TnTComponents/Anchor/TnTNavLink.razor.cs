@@ -13,11 +13,11 @@ namespace TnTComponents;
 public partial class TnTNavLink {
     /// <inheritdoc />
     [Parameter]
-    public virtual TnTColor? ActiveBackgroundColor { get; set; }
+    public  TnTColor? ActiveBackgroundColor { get; set; }
 
     /// <inheritdoc />
     [Parameter]
-    public virtual TnTColor? ActiveTextColor { get; set; }
+    public  TnTColor? ActiveTextColor { get; set; }
 
     /// <summary>
     ///     The appearance of the anchor.
@@ -37,7 +37,7 @@ public partial class TnTNavLink {
 
     /// <inheritdoc />
     [Parameter]
-    public virtual TnTColor BackgroundColor { get; set; } = TnTColor.Primary;
+    public  TnTColor BackgroundColor { get; set; } = TnTColor.Primary;
 
     /// <inheritdoc />
     [Parameter]
@@ -47,7 +47,7 @@ public partial class TnTNavLink {
     public ElementReference Element { get; protected set; }
 
     /// <inheritdoc />
-    public virtual string? ElementClass => CssClassBuilder.Create()
+    public  string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass(CssClass)
         .AddClass("tnt-nav-link")
@@ -100,7 +100,7 @@ public partial class TnTNavLink {
 
     /// <inheritdoc />
     [Parameter]
-    public virtual TnTColor TextColor { get; set; } = TnTColor.OnBackground;
+    public  TnTColor TextColor { get; set; } = TnTColor.OnBackground;
 
     /// <inheritdoc />
     [Parameter]
