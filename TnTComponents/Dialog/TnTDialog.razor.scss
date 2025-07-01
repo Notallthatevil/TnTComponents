@@ -1,0 +1,64 @@
+﻿@use '../Styles/_Variables/_colors.scss' as colors;
+@use '../Styles/_Variables/_typescale.scss' as typescale;
+@use '../Styles/_Variables/_elevation.scss' as elevation;
+
+.tnt-dialog {
+    z-index: 1000;
+    position: fixed;
+    max-width: 90vw;
+    max-height: 90vh;
+    border: none;
+    outline: none;
+    padding: 24px;
+    animation: dialogGrow 150ms ease-in-out;
+    overflow-x: hidden;
+    border-radius: 24px;
+
+    @include colors.tnt-default-background-colors;
+    @include colors.tnt-default-foreground-colors;
+    @include elevation.tnt-elevation(1, false);
+
+    &:first-of-type::backdrop {
+        background-color: color-mix(in srgb, colors.$tnt-color-scrim 50%, transparent);
+        backdrop-filter: blur(5px);
+    }
+
+    ::deep .tnt-dialog-header {
+        position: relative;
+        min-height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: inherit;
+
+        h2 {
+            @include typescale.tnt-headline-small;
+            display: inline;
+            color: inherit;
+        }
+
+        button.tnt-components {
+            color: inherit;
+        }
+    }
+
+    &:not(:has(.tnt-dialog-header)) {
+        box-shadow: none;
+        background-color: transparent;
+    }
+
+    &.tnt-closing {
+        transition: 150ms ease-in-out;
+        transform: scale(0);
+    }
+}
+
+@keyframes dialogGrow {
+    0% {
+        transform: scale(0%);
+    }
+
+    100% {
+        transform: scale(100%);
+    }
+}

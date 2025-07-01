@@ -6,13 +6,10 @@ namespace TnTComponents;
 /// <summary>
 ///     Represents the options for configuring a TnT dialog component.
 /// </summary>
-public class TnTDialogOptions : ITnTStyleable {
+public class TnTDialogOptions {
 
     /// <inheritdoc />
     public TnTColor BackgroundColor { get; init; } = TnTColor.SurfaceContainerHighest;
-
-    /// <inheritdoc />
-    public TnTBorderRadius? BorderRadius { get; init; } = new(2);
 
     /// <summary>
     ///     Gets a value indicating whether the dialog should close when clicking outside of it.
@@ -28,9 +25,6 @@ public class TnTDialogOptions : ITnTStyleable {
     ///     Gets the custom style for the dialog element.
     /// </summary>
     public string? ElementStyle { get; init; }
-
-    /// <inheritdoc />
-    public int Elevation { get; init; } = 2;
 
     /// <summary>
     ///     Gets a value indicating whether the dialog should show a close button.
@@ -52,4 +46,13 @@ public class TnTDialogOptions : ITnTStyleable {
     ///     Gets or sets a value indicating whether the dialog is in the process of closing.
     /// </summary>
     internal bool Closing { get; set; }
+
+    internal string? DialogCssClass => CssClassBuilder.Create()
+        .AddClass("tnt-dialog")
+        .AddClass("tnt-closing", Closing)
+        .AddClass(ElementClass)
+        .AddBackgroundColor(BackgroundColor)
+        .AddForegroundColor(TextColor)
+        .AddTextAlign(TextAlignment)
+        .Build();
 }

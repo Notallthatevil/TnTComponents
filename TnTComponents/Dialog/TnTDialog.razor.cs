@@ -11,7 +11,7 @@ namespace TnTComponents;
 /// <summary>
 ///     Represents a dialog component that can be used to display modal dialogs.
 /// </summary>
-public class TnTDialog : ComponentBase, IDisposable {
+public partial class TnTDialog {
 
     /// <summary>
     ///     Gets or sets the JavaScript runtime used to invoke JavaScript functions.
@@ -43,35 +43,7 @@ public class TnTDialog : ComponentBase, IDisposable {
     }
 
     /// <inheritdoc />
-    protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        ITnTDialog[] dialogs;
-        lock (_lock) {
-            dialogs = _dialogs.ToArray();
-        }
-        foreach (var dialog in _dialogs) {
-            builder.OpenElement(0, "dialog");
-            builder.AddAttribute(10, "class", CssClassBuilder.Create().AddTnTStyleable(dialog.Options).AddFilled().AddClass("tnt-closing", dialog.Options.Closing).AddClass(dialog.Options.ElementClass).AddClass("tnt-dialog").Build());
-            builder.AddAttribute(20, "style", CssStyleBuilder.Create().AddStyle(dialog.Options.ElementStyle, string.Empty).Build());
-            builder.AddAttribute(30, "id", dialog.ElementId);
-            builder.AddAttribute(40, "oncancel", EventCallback.Factory.Create<EventArgs>(this, dialog.CloseAsync));
-            builder.SetKey(dialog);
 
-            if (dialog == _dialogs.Last() && dialog.Options.CloseOnExternalClick) {
-                builder.OpenComponent<TnTExternalClickHandler>(60);
-                builder.AddComponentParameter(70, nameof(TnTExternalClickHandler.ExternalClickCallback), EventCallback.Factory.Create(this, dialog.CloseAsync));
-                builder.AddComponentParameter(80, nameof(TnTExternalClickHandler.ChildContent), RenderDialogContent(dialog));
-                builder.CloseComponent();
-            }
-            else {
-                builder.AddContent(60, RenderDialogContent(dialog));
-            }
-
-            builder.OpenComponent<TnTToast>(70);
-            builder.CloseComponent();
-
-            builder.CloseElement();
-        }
-    }
 
     /// <inheritdoc />
     protected override async Task OnAfterRenderAsync(bool firstRender) {
@@ -140,6 +112,9 @@ public class TnTDialog : ComponentBase, IDisposable {
                     if (dialog.Options.ShowCloseButton) {
                         builder.OpenComponent<TnTImageButton>(40);
                         builder.AddComponentParameter(50, nameof(TnTImageButton.Icon), MaterialIcon.Close);
+                        builder.AddComponentParameter(51, nameof(TnTImageButton.Appearance), ButtonAppearance.Text);
+                        builder.AddComponentParameter(52, nameof(TnTImageButton.TextColor), dialog.Options.TextColor);
+                        builder.AddComponentParameter(53, nameof(TnTImageButton.ButtonSize), Size.XS);
                         builder.AddComponentParameter(60, nameof(TnTImageButton.OnClickCallback), EventCallback.Factory.Create<MouseEventArgs>(this, dialog.CloseAsync));
                         builder.CloseComponent();
                     }
