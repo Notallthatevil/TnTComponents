@@ -364,30 +364,40 @@ window.TnTComponents = {
             element.appendChild(document.createElement('tnt-ripple-effect'));
         });
     },
-    toggleAccordion: (event) => {
-        if (event && event.target) {
-            const element = event.target;
-            if (element && element.parentElement) {
-                const parent = element.parentElement;
-                if (parent && parent.querySelector) {
-                    const accordion = parent.parentElement;
+    toggleAccordionHeader: (e) => {
+        const target = e.target;
+        const accordion = target.closest('tnt-accordion');
+        const content = e.target.parentElement.lastElementChild;
+        if (accordion) {
+            if (accordion.limitToOneExpanded() && !content.classList.contains('tnt-expanded')) {
+                accordion.closeChildren(target.parentElement);
+            }
+            if (content.classList.contains('tnt-expanded')) {
+                content.classList.remove('tnt-expanded');
+                content.classList.add('tnt-collapsed');
 
+                const nestedAccordion = content.querySelectorAll('tnt-accordion');
+                nestedAccordion.forEach((accordion) => {
+                    accordion.resetChildren();
+                });
+            }
+            else {
+                content.classList.remove('tnt-collapsed');
+                content.classList.add('tnt-expanded');
+            }
+            accordion.updateChild(content);
+            if (accordion.dotNetRef) {
+                let elementKey = target.parentElement.getAttribute('element-key');
+                if (!elementKey) {
+                    elementKey = target.getAttribute('element-key');
+                }
 
-                    let content = parent.querySelector('.tnt-accordion-content');
-                    if (content) {
-                        if (content.classList.contains('tnt-hidden')) {
-                            if (accordion && accordion.getAttribute) {
-                                if (accordion.getAttribute('tnt-one-expanded') != null ? true : false) {
-                                    accordion.querySelectorAll('.tnt-accordion-content').forEach(ele => {
-                                        ele.classList.add('tnt-hidden');
-                                    });
-                                }
-                            }
-                            content.classList.remove('tnt-hidden');
-                        }
-                        else {
-                            content.classList.add('tnt-hidden');
-                        }
+                if (elementKey) {
+                    if (accordion.lastElementChild.classList.contains('tnt-expanded')) {
+                        accordion.dotNetRef.invokeMethodAsync("SetAsOpened", parseInt(elementKey));
+                    }
+                    else {
+                        accordion.dotNetRef.invokeMethodAsync("SetAsClosed", parseInt(elementKey));
                     }
                 }
             }

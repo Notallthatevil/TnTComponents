@@ -9,7 +9,7 @@ namespace TnTComponents;
 /// <summary>
 ///     Represents a child item within a TnTAccordion component.
 /// </summary>
-public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable {
+public partial class TnTAccordionChild {
 
     /// <summary>
     ///     The content to be rendered inside the accordion child.
@@ -39,7 +39,6 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
         .AddClass("tnt-accordion-child")
         .AddBackgroundColor(ContentBodyColor ?? _parent.ContentBodyColor)
         .AddForegroundColor(ContentTextColor ?? _parent.ContentTextColor)
-        .AddFilled()
         .Build();
 
     /// <inheritdoc />
@@ -48,7 +47,7 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
 
     /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
-            .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
     /// <inheritdoc />
@@ -158,6 +157,7 @@ public class TnTAccordionChild : TnTComponentBase, ITnTInteractable, IDisposable
 
             {
                 builder.OpenElement(90, "h3");
+                builder.AddAttribute(95, "onclick", "TnTComponents.toggleAccordionHeader(event)");
                 builder.AddAttribute(100, "class", CssClassBuilder.Create()
                         .AddRipple()
                         .AddBackgroundColor(HeaderBodyColor ?? _parent.HeaderBodyColor)
