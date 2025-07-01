@@ -58,7 +58,7 @@
             &:has(> .tnt-side-nav-toggle-indicator .tnt-toggle-indicator.tnt-toggle) {
                 grid-template-columns: 0 1fr;
 
-                .tnt-side-nav {
+                ::deep .tnt-side-nav {
                     transform: translate(-105%);
                 }
             }
@@ -67,14 +67,14 @@
         &:has(> .tnt-side-nav.tnt-side-nav-hide-on-large) {
             grid-template-columns: 0 1fr;
 
-            > .tnt-side-nav {
+            ::deep > .tnt-side-nav {
                 transform: translate(-105%);
             }
 
             &:has(> .tnt-side-nav-toggle-indicator .tnt-toggle-indicator.tnt-toggle) {
                 grid-template-columns: measurements.$tnt-side-nav-width 1fr;
 
-                > .tnt-side-nav {
+                ::deep > .tnt-side-nav {
                     transform: translate(0);
                 }
             }
@@ -85,196 +85,20 @@
         &:has(> .tnt-side-nav) {
             grid-template-columns: 0 1fr !important;
 
-            > .tnt-side-nav {
+            ::deep > .tnt-side-nav {
                 transform: translateX(-105%);
             }
 
             &:has(> .tnt-side-nav-toggle-indicator .tnt-toggle-indicator.tnt-toggle) {
 
-                > .tnt-header {
+                ::deep > .tnt-header {
                     transform: translateX(calc(measurements.$tnt-side-nav-width - 16px));
                 }
 
-                > .tnt-side-nav {
+                ::deep > .tnt-side-nav {
                     transform: translate(0%);
                 }
             }
         }
     }
-    //> .tnt-body {
-    //    padding: 8px;
-    //    box-sizing: border-box;
-    //    overflow-y: auto;
-    //    overflow-x: clip;
-    //    &:has(> .tnt-layout) {
-    //        padding: 0;
-    //        .tnt-layout {
-    //            height: 100%;
-    //        }
-    //    }
-    //}
-    //&:has(> .tnt-header) {
-    //    > .tnt-body {
-    //        padding-top: 0;
-    //    }
-    //}
-    //> .tnt-header, > .tnt-footer {
-    //    height: 100%;
-    //    display: flex;
-    //    flex-direction: row;
-    //    align-items: center;
-    //    box-sizing: border-box;
-    //    padding: 0 8px;
-    //    transition: 250ms ease-in-out;
-    //    @extend .tnt-title-large;
-    //}
-    //&:has(> .tnt-side-nav) {
-    //    > .tnt-header, > .tnt-footer {
-    //        width: calc(100% + 16px);
-    //        transform: translateX(-16px);
-    //        padding-left: 24px;
-    //    }
-    //}
-    //> .tnt-side-nav {
-    //    z-index: 1000;
-    //    height: 100%;
-    //    width: measurements.tnt-side-nav-width;
-    //    border-radius: 0 16px 16px 0;
-    //    padding: 16px;
-    //    box-sizing: border-box;
-    //    transition: 250ms ease-in-out;
-    //    overflow-y: auto;
-    //    > h1, > h2, > h3, > h4, > h5, > h6 {
-    //        @extend .tnt-title-small;
-    //    }
-    //    .tnt-side-nav-link, .tnt-side-nav-menu-group-button {
-    //        align-items: center;
-    //        display: flex;
-    //        height: 46px;
-    //        text-decoration: none;
-    //        padding-left: 48px;
-    //        @extend .tnt-label-large;
-    //        & > span, & > span > span {
-    //            pointer-events: none;
-    //        }
-    //        &:has(.tnt-icon) {
-    //            padding-left: 16px;
-    //        }
-    //        .tnt-icon {
-    //            vertical-align: middle;
-    //            font-size: 24px;
-    //            padding-right: 8px;
-    //        }
-    //        &.active {
-    //            &.active-fg-color {
-    //                color: var(--active-fg-color);
-    //            }
-    //            &.active-bg-color {
-    //                background-color: var(--active-bg-color);
-    //            }
-    //        }
-    //        &:has(> tnt-ripple-effect) {
-    //            position: relative;
-    //        }
-    //    }
-    //}
-    //.tnt-side-nav-toggle {
-    //    padding: 0;
-    //    margin: 8px;
-    //    border-radius: 50%;
-    //    color: inherit;
-    //    transition: color 250ms ease-in-out;
-    //}
-    //> .tnt-side-nav .tnt-side-nav-menu-group {
-    //    max-height: 50px;
-    //    overflow: hidden;
-    //    transition: max-height 250ms ease-in-out;
-    //    .tnt-side-nav-menu-group-button {
-    //        justify-content: space-between;
-    //    }
-    //    .tnt-end-icon {
-    //        float: right;
-    //        transition: 250ms;
-    //        padding: 8px;
-    //    }
-    //    & > a.tnt-side-nav-link {
-    //        margin-left: 16px;
-    //        position: relative;
-    //        border-start-start-radius: 0;
-    //        border-end-start-radius: 0;
-    //        &:before {
-    //            content: '';
-    //            position: absolute;
-    //            left: 0;
-    //            height: 100%;
-    //            top: 0;
-    //            background-color: transparent;
-    //            width: 4px;
-    //            transition: background-color ease-in-out 250ms;
-    //        }
-    //    }
-    //    &:has( > .tnt-side-nav-group-toggle-indicator .tnt-toggle) {
-    //        max-height: unset;
-    //        .tnt-side-nav-menu-group-button {
-    //            .tnt-end-icon {
-    //                transform: rotateZ(180deg);
-    //            }
-    //        }
-    //        a.tnt-side-nav-link:before {
-    //            background-color: measurements.tnt-color-outline;
-    //        }
-    //    }
-    //}
-    //@media #{measurements.medium-and-up} {
-    //    &:has(> .tnt-side-nav:not(> .tnt-side-nav-hide-on-large)) {
-    //        &:has(> .tnt-side-nav-toggle-indicator .tnt-toggle-indicator.tnt-toggle) {
-    //            grid-template-columns: 0 1fr;
-    //            .tnt-side-nav {
-    //                transform: translate(-105%);
-    //            }
-    //        }
-    //    }
-    //    &:has(> .tnt-side-nav.tnt-side-nav-hide-on-large) {
-    //        grid-template-columns: 0 1fr;
-    //        > .tnt-side-nav {
-    //            transform: translate(-105%);
-    //        }
-    //        &:has(> .tnt-side-nav-toggle-indicator .tnt-toggle-indicator.tnt-toggle) {
-    //            grid-template-columns: measurements.tnt-side-nav-width 1fr;
-    //            > .tnt-side-nav {
-    //                transform: translate(0);
-    //            }
-    //        }
-    //    }
-    //}
-    //@media #{measurements.small-and-down} {
-    //    &:has(> .tnt-side-nav) {
-    //        grid-template-columns: 0 1fr !important;
-    //        > .tnt-side-nav {
-    //            transform: translateX(-105%);
-    //        }
-    //        &:has(> .tnt-side-nav-toggle-indicator .tnt-toggle-indicator.tnt-toggle) {
-    //            > .tnt-header {
-    //                transform: translateX(calc(measurements.tnt-side-nav-width - 16px));
-    //            }
-    //            > .tnt-side-nav {
-    //                transform: translate(0%);
-    //            }
-    //        }
-    //    }
-    //}
 }
-
-//.tnt-theme-select {
-//    display: inline-block;
-//}
-
-
-//.tnt-external-click-handler {
-//    height: inherit;
-//    max-height: inherit;
-//    min-height: inherit;
-//    width: inherit;
-//    max-width: inherit;
-//    min-width: inherit;
-//}

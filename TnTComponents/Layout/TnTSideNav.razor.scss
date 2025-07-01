@@ -5,7 +5,7 @@
     grid-area: sidenav;
     z-index: 1000;
     height: 100%;
-    width: 100%;
+    width: measurements.$tnt-side-nav-width;
     padding: 16px;
     box-sizing: border-box;
     transition: 250ms ease-in-out;

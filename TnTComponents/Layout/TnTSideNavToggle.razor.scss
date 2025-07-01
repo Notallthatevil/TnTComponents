@@ -1,0 +1,17 @@
+﻿@use '../Styles/_Variables/_interactable.scss' as interactable;
+
+.tnt-side-nav-toggle {
+    padding: 4px;
+    margin: 8px;
+    border-radius: 50%;
+    color: inherit;
+    transition: color 250ms ease-in-out;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    height: 48px;
+    width: 48px;
+    box-sizing: border-box;
+
+    @include interactable.tnt-interactable;
+}
