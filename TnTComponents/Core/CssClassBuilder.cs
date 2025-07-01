@@ -38,11 +38,11 @@ internal class CssClassBuilder {
     /// <param name="tntCornerRadius">The border radius to use.</param>
     /// <returns>The current instance of <see cref="CssClassBuilder" />.</returns>
     public CssClassBuilder AddBorderRadius(TnTBorderRadius? tntCornerRadius) => tntCornerRadius.HasValue ?
-    tntCornerRadius.Value.AllSame ? AddClass($"tnt-border-radius-{Math.Clamp(tntCornerRadius.Value.StartStart, 0, 10)}", tntCornerRadius.Value.StartStart >= 0) :
-        AddClass($"tnt-border-radius-start-start-{Math.Clamp(tntCornerRadius.Value.StartStart, 0, 10)}", tntCornerRadius.Value.StartStart >= 0)
-        .AddClass($"tnt-border-radius-start-end-{Math.Clamp(tntCornerRadius.Value.StartEnd, 0, 10)}", tntCornerRadius.Value.StartEnd >= 0)
-        .AddClass($"tnt-border-radius-end-start-{Math.Clamp(tntCornerRadius.Value.EndStart, 0, 10)}", tntCornerRadius.Value.EndStart >= 0)
-        .AddClass($"tnt-border-radius-end-end-{Math.Clamp(tntCornerRadius.Value.EndEnd, 0, 10)}", tntCornerRadius.Value.EndEnd >= 0)
+    tntCornerRadius.Value.AllSame ? AddClass($"tnt-corner-radius-{Math.Clamp(tntCornerRadius.Value.StartStart, 0, 10)}", tntCornerRadius.Value.StartStart >= 0) :
+        AddClass($"tnt-corner-radius-start-start-{Math.Clamp(tntCornerRadius.Value.StartStart, 0, 10)}", tntCornerRadius.Value.StartStart >= 0)
+        .AddClass($"tnt-corner-radius-start-end-{Math.Clamp(tntCornerRadius.Value.StartEnd, 0, 10)}", tntCornerRadius.Value.StartEnd >= 0)
+        .AddClass($"tnt-corner-radius-end-start-{Math.Clamp(tntCornerRadius.Value.EndStart, 0, 10)}", tntCornerRadius.Value.EndStart >= 0)
+        .AddClass($"tnt-corner-radius-end-end-{Math.Clamp(tntCornerRadius.Value.EndEnd, 0, 10)}", tntCornerRadius.Value.EndEnd >= 0)
     : this;
 
     /// <summary>
@@ -153,18 +153,19 @@ internal class CssClassBuilder {
     /// <param name="size">The size to use.</param>
     /// <returns>The current instance of <see cref="CssClassBuilder" />.</returns>
     public CssClassBuilder AddSize(Size? size) {
-        if (size is null || size == Size.Default) {
+        if (size is null) {
             return this;
         }
         var sizeSuffix = size switch {
-            Size.Smallest => "smallest",
-            Size.Small => "small",
-            Size.Large => "large",
-            Size.Largest => "largest",
+            Size.Smallest => "xs",
+            Size.Small => "s",
+            Size.Medium => "m",
+            Size.Large => "l",
+            Size.Largest => "xl",
             _ => string.Empty
         };
 
-        return AddClass($"tnt-size-{sizeSuffix}", size is not null && size != Size.Default);
+        return AddClass($"tnt-size-{sizeSuffix}", size is not null);
     }
 
     /// <summary>
