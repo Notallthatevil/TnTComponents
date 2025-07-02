@@ -1,24 +1,32 @@
 ﻿@namespace TnTComponents
+@using Microsoft.AspNetCore.Components.Rendering
 @inherits TnTInputBase<decimal?>
 
-<TnTInputText @bind-Value="_value"
-              AdditionalAttributes="@AdditionalAttributes"
-              Appearance="@Appearance"
-              AutoFocus="@AutoFocus"
-              BackgroundColor="@BackgroundColor"
-              BindAfter="@BindAfterFunc"
-              BindOnInput="@BindOnInput"
-              Disabled="@Disabled"
-              DisableValidationMessage="@DisableValidationMessage"
-              DisplayName="@DisplayName"
-              ElementId="@ElementId"
-              ElementLang="@ElementLang"
-              ElementTitle="@ElementTitle"
-              EndIcon="@EndIcon"
-              InputType="TextInputType.Text"
-              Label="@Label"
-              Placeholder="@Placeholder"
-              ReadOnly="@ReadOnly"
-              StartIcon="@StartIcon"
-              TextColor="@TextColor"
-              TintColor="@TintColor"/>
+@base.BuildRenderTree
+
+@code {
+    protected override void RenderInputElement(RenderTreeBuilder __builder) {
+        <input type="@Type.ToInputTypeString()"
+               @attributes="AdditionalAttributes"
+               name="@ElementName"
+               title="@FieldIdentifier.FieldName"
+               autofocus="@AutoFocus"
+               autocomplete="@AutoComplete"
+               readonly="@FieldReadonly"
+               placeholder="@(string.IsNullOrWhiteSpace(Placeholder) ? " " : Placeholder)"
+               disabled="@FieldDisabled"
+               required="@IsRequired()"
+               minlength="@GetMinLength()"
+               maxlength="@GetMaxLength()"
+               min="@GetMinValue()"
+               max="@GetMaxValue()"
+               onkeydown="TnTComponents.enforceCurrencyFormat(event)"
+               onkeyup="TnTComponents.formatToCurrency(event)"
+               cultureCode="@CultureCode"
+               currencyCode="@CurrencyCode"
+               @bind-value="CurrentValueAsString"
+               @bind-value:event="@(BindOnInput ? "oninput" : "onchange")"
+               @onblur="@(EditContext is not null ? (FocusEventArgs args) => EditContext.NotifyFieldChanged(FieldIdentifier) : (FocusEventArgs _) => { })"
+               @ref="Element" />
+    }
+}

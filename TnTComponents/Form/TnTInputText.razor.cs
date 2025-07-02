@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace TnTComponents;
 
 /// <summary>
 ///     Represents a text input component with various text input types.
 /// </summary>
-public class TnTInputText : TnTInputBase<string?> {
+public partial class TnTInputText {
 
     /// <inheritdoc />
     [Parameter]
@@ -14,6 +16,7 @@ public class TnTInputText : TnTInputBase<string?> {
 
     /// <inheritdoc />
     public override InputType Type => InputType.ToInputType();
+
 
     /// <inheritdoc />
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out string? result, [NotNullWhen(false)] out string? validationErrorMessage) {

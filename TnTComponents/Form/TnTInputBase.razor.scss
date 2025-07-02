@@ -78,12 +78,17 @@ $background-color: var(--tnt-input-background-color);
                 opacity: 0.5;
             }
 
-            &:-webkit-autofill,
-            &:-webkit-autofill:hover,
-            &:-webkit-autofill:focus,
-            &:-webkit-autofill:active {
+            &::-webkit-autofill,
+            &::-webkit-autofill:hover,
+            &::-webkit-autofill:focus,
+            &::-webkit-autofill:active {
                 -webkit-background-clip: text;
                 color: $text-color;
+            }
+
+            &::-webkit-calendar-picker-indicator {
+                border-radius: 50%;
+                background-color: color-mix(in srgb, #ffffff 50%, $background-color);
             }
         }
 
@@ -108,8 +113,13 @@ $background-color: var(--tnt-input-background-color);
             text-wrap: wrap;
             @include typescale.tnt-body-small;
         }
-    }
 
+        @for $i from 1 through 5 {
+            *:nth-child(#{$i} of .tnt-validation-message) {
+                transform: translateY(calc(12px * ($i - 1))) !important;
+            }
+        }
+    }
 
 
     .tnt-input-length {

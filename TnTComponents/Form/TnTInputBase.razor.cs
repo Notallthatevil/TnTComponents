@@ -18,7 +18,6 @@ namespace TnTComponents;
 /// </summary>
 /// <typeparam name="TInputType">The type of the input value.</typeparam>
 public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, ITnTComponentBase {
-
     /// <summary>
     ///     Gets or sets the appearance of the form.
     /// </summary>
@@ -255,7 +254,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     ///     Gets the maximum length of the input.
     /// </summary>
     /// <returns>The maximum length of the input.</returns>
-    private int? GetMaxLength() {
+    protected int? GetMaxLength() {
         if (AdditionalAttributes?.TryGetValue("maxlength", out var maxLength) == true && int.TryParse(maxLength?.ToString(), out var result)) {
             return result;
         }
@@ -278,7 +277,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     ///     Gets the maximum value of the input.
     /// </summary>
     /// <returns>The maximum value of the input.</returns>
-    private string? GetMaxValue() {
+    protected string? GetMaxValue() {
         if (AdditionalAttributes?.TryGetValue("max", out var max) == true) {
             return max?.ToString();
         }
@@ -294,7 +293,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     ///     Gets the minimum length of the input.
     /// </summary>
     /// <returns>The minimum length of the input.</returns>
-    private int? GetMinLength() {
+    protected int? GetMinLength() {
         if (AdditionalAttributes?.TryGetValue("minlength", out var minLength) == true && int.TryParse(minLength?.ToString(), out var result)) {
             return result;
         }
@@ -317,7 +316,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     ///     Gets the minimum value of the input.
     /// </summary>
     /// <returns>The minimum value of the input.</returns>
-    private string? GetMinValue() {
+    protected string? GetMinValue() {
         if (AdditionalAttributes?.TryGetValue("min", out var min) == true) {
             return min?.ToString();
         }
