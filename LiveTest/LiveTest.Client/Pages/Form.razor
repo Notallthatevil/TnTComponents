@@ -1,4 +1,267 @@
 ﻿@page "/Forms"
+@rendermode InteractiveServer
+@using System.ComponentModel.DataAnnotations
+@using TnTComponents
 
+<div style="position:sticky;top:0;background-color:var(--tnt-color-surface)">
+    <h3>FormTesting</h3>
+    <label>
+        Appearance
+        <select @bind="_appearance">
+            @foreach (var opt in Enum.GetValues<FormAppearance>()) {
+                <option value="@opt">@opt.ToString()</option>
+            }
+        </select>
+    </label>
+    <label>
+        Readonly
+        <input type="checkbox" @bind="_readonly" />
+    </label>
+    <label>
+        Disable
+        <input type="checkbox" @bind="_disabled" />
+    </label>
+    <label>
+        Start Icon
+        <input type="checkbox" @bind="_b" />
+    </label>
+    <label>
+        End Icon
+        <input type="checkbox" @bind="_c" />
+    </label>
+    <label>
+        Placeholder
+        <input type="checkbox" @bind="_d" />
+    </label>
+    <label>
+        Label
+        <input type="checkbox" @bind="_e" />
+    </label>
+</div>
 
-<LiveTest.Client.Components.FormTesting />
+<TnTForm Model="@Input" OnValidSubmit="ValidSubmit" OnInvalidSubmit="InvalidSubmit" Disabled="@_disabled" ReadOnly="@_readonly" FormName="Login" Appearance="@_appearance">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <TnTRow>
+        <h3>
+            Text @Input.Text
+        </h3>
+        <TnTColumn S="6">
+            <TnTInputText @bind-Value="@Input.Text" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" BackgroundColor="@(_appearance == FormAppearance.Filled ? TnTColor.SurfaceContainerHighest : TnTColor.Surface)" />
+        </TnTColumn>
+    </TnTRow>
+
+    @* <TnTRow>
+        <h3>
+            Numeric @Input.Integer @Input.Decimal
+        </h3>
+        <TnTColumn S="6">
+            <TnTInputNumeric @bind-Value="@Input.Integer" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+
+        <TnTColumn S="6">
+            <TnTInputNumeric @bind-Value="@Input.Decimal" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+    </TnTRow>
+
+    <TnTRow>
+        <h3>
+            Date Time Types @Input.DateTimeField @Input.Date @Input.Time @Input.DateTimeOff
+        </h3>
+        <TnTColumn S="3">
+            <TnTInputDateTime @bind-Value="@Input.DateTimeField" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+
+        <TnTColumn S="3">
+            <TnTInputDateTime @bind-Value="@Input.Date" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" MonthOnly="true" />
+        </TnTColumn>
+        <TnTColumn S="3">
+            <TnTInputDateTime @bind-Value="@Input.Time" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+        <TnTColumn S="3">
+            <TnTInputDateTime @bind-Value="@Input.DateTimeOff" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+    </TnTRow>
+
+    <TnTRow>
+        <h3>
+            Phone @Input.Phone
+        </h3>
+        <TnTColumn S="6">
+            <TnTInputText @bind-Value="@Input.Phone" InputType="TextInputType.Tel" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+    </TnTRow>
+
+    <TnTRow>
+        <h3>
+            Currency @Input.Currency
+        </h3>
+        <TnTColumn S="6">
+            <TnTInputCurrency @bind-Value="@Input.Currency" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+    </TnTRow>
+
+    <TnTRow>
+        <h3>
+            Checkboxes @Input.Checkbox @Input.Switch
+        </h3>
+        <TnTColumn S="6">
+            <TnTInputCheckbox @bind-Value="@Input.Checkbox" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+
+        <TnTColumn S="6">
+            <TnTInputSwitch @bind-Value="@Input.Switch" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+    </TnTRow>
+
+    <TnTRow>
+        <h3>
+            Select @Input.Select @string.Join(", ", Input.Multi)
+        </h3>
+        <TnTColumn S="6">
+            <TnTInputSelect @bind-Value="@Input.Select" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" AllowPlaceholderSelection="true" PlaceholderValue="@null">
+                @foreach (var value in _values) {
+                    <option value="@value">@value</option>
+                }
+            </TnTInputSelect>
+        </TnTColumn>
+
+        <TnTColumn S="6">
+            <TnTInputSelect @bind-Value="@Input.Multi" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" AllowPlaceholderSelection="true" PlaceholderValue="@null">
+                @foreach (var value in _values) {
+                    <option value="@value">@value</option>
+                }
+            </TnTInputSelect>
+        </TnTColumn>
+    </TnTRow> 
+
+    <TnTRow>
+        <h3>
+            Radio @Input.Radio
+        </h3>
+        <TnTColumn S="12">
+            <TnTInputRadioGroup @bind-Value="@Input.Radio" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon">
+                <TnTInputRadio TInputType="RadioEnum?" Value="RadioEnum.One" Label="@RadioEnum.One.ToString()" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+                <TnTInputRadio TInputType="RadioEnum?" Value="RadioEnum.Two" Label="@RadioEnum.Two.ToString()" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+                <TnTInputRadio TInputType="RadioEnum?" Value="RadioEnum.Three" Label="@RadioEnum.Three.ToString()" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+                <TnTInputRadio TInputType="RadioEnum?" Value="RadioEnum.Four" Label="@RadioEnum.Four.ToString()" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+            </TnTInputRadioGroup>
+        </TnTColumn>
+    </TnTRow>
+
+    <TnTRow>
+        <h3>
+            Input File
+        </h3>
+        <TnTColumn S="12">
+           <TnTInputFile multiple />
+        </TnTColumn>
+    </TnTRow>
+
+    <TnTRow>
+        <h3>
+            Input Area @Input.Area
+        </h3>
+
+        <TnTColumn S="6">
+            <TnTInputTextArea @bind-Value="@Input.Area" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+    </TnTRow> 
+
+        <TnTRow>
+        <h3>
+            Input Area @Input.Area
+        </h3>
+
+        <TnTColumn S="6">
+            <TnTMarkdownEditor @bind-Value="@Input.Area" />
+        </TnTColumn>
+    </TnTRow>  *@
+</TnTForm>
+
+@code {
+    private sealed class InputModel {
+        [Required]
+        [StringLength(50)]
+        public string? Text { get; set; }
+
+        [Required, Range(10, 100)]
+        public int? Integer { get; set; }
+
+        [Required]
+        public decimal Decimal { get; set; }
+
+        [Required]
+        public DateTime DateTimeField { get; set; }
+
+        [Required]
+        public DateOnly Date { get; set; }
+
+        [Required]
+        public TimeOnly? Time { get; set; }
+
+        [Required]
+        public DateTimeOffset? DateTimeOff { get; set; }
+
+        [Phone, Required]
+        public string? Phone { get; set; }
+
+        [Required]
+        public decimal? Currency { get; set; }
+
+        [Required, Range(typeof(bool), "true", "true")]
+        public bool Checkbox { get; set; }
+
+        [Required]
+        public bool Switch { get; set; }
+
+        [Required]
+        public string? Select { get; set; }
+
+        [Required]
+        public string[] Multi { get; set; } = [];
+
+        [Required]
+        public RadioEnum? Radio { get; set; }
+
+        [Required]
+        public string? Area { get; set; }
+
+    }
+
+    [SupplyParameterFromForm]
+    private InputModel Input { get; set; } = new();
+
+    private bool _disabled;
+    private bool _readonly;
+    private bool _a;
+    private bool _b;
+    private bool _c;
+    private bool _d;
+    private bool _e;
+    private TnTIcon? _startIcon => _b ? new MaterialIcon { Icon = MaterialIcon.SavedSearch } : null;
+    private TnTIcon? _endIcon => _c ? new MaterialIcon { Icon = MaterialIcon.QrCode } : null;
+    private string? _placeholder => _d ? "Placeholder" : null;
+    private string? _label => _e ? "Label" : null;
+
+    private FormAppearance _appearance = FormAppearance.Filled;
+
+    private List<string> _values = new() { "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten" };
+
+    private async Task ValidSubmit() {
+        Console.WriteLine("Valid Submit");
+    }
+
+    private async Task InvalidSubmit() {
+        Console.WriteLine("Invalid Submit");
+    }
+
+    private enum RadioEnum {
+        One,
+        Two,
+        Three,
+        Four
+    }
+}
+

@@ -121,8 +121,12 @@ public abstract class TnTIcon : TnTComponentBase {
     ///     Creates a render fragment for this icon.
     /// </summary>
     /// <returns>A <see cref="RenderFragment" /> that can be used to render this icon.</returns>
-    public RenderFragment Render() => new(BuildRenderTree);
-
+    public RenderFragment Render(string? additionalClass = null) {
+        if (additionalClass is not null) {
+            AdditionalClass = additionalClass;
+        }
+        return new(BuildRenderTree);
+    }
     /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "span");

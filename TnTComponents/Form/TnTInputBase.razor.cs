@@ -17,7 +17,7 @@ namespace TnTComponents;
 ///     Base class for TnT input components.
 /// </summary>
 /// <typeparam name="TInputType">The type of the input value.</typeparam>
-public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, ITnTComponentBase, ITnTInteractable {
+public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, ITnTComponentBase {
 
     /// <summary>
     ///     Gets or sets the appearance of the form.
@@ -60,16 +60,21 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     /// <inheritdoc />
     public ElementReference Element { get; protected set; }
 
+#if NET9_0_OR_GREATER
+    /// <summary>
+    /// Sets the color of the character length indicator.
+    /// </summary>
+    [Parameter]
+    public TnTColor CharacterLengthColor { get; set; } = TnTColor.OnSurfaceVariant;
+#endif
     /// <inheritdoc />
     public virtual string? ElementClass => CssClassBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass(CssClass)
         .AddClass("tnt-input")
-        .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddFilled(_tntForm?.Appearance is not null ? _tntForm.Appearance == FormAppearance.Filled : Appearance == FormAppearance.Filled)
-        .AddOutlined(_tntForm?.Appearance is not null ? _tntForm.Appearance == FormAppearance.Outlined : Appearance == FormAppearance.Outlined)
-        .AddBackgroundColor(BackgroundColor)
-        .AddForegroundColor(TextColor)
-        .AddTintColor(TintColor)
+        .AddClass("tnt-form-filled", _tntForm is not null ? _tntForm.Appearance == FormAppearance.Filled : Appearance == FormAppearance.Filled)
+        .AddClass("tnt-form-outlined", _tntForm is not null ? _tntForm.Appearance == FormAppearance.Outlined : Appearance == FormAppearance.Outlined)
+        .AddRipple(EnableRipple)
         .AddDisabled(FieldDisabled)
         .AddClass("tnt-placeholder", !string.IsNullOrEmpty(Placeholder))
         .Build();
@@ -87,7 +92,14 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
 
     /// <inheritdoc />
     public string? ElementStyle => CssStyleBuilder.Create()
-            .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddVariable("tnt-input-tint-color", TintColor.ToCssTnTColorVariable())
+        .AddVariable("tnt-input-background-color", BackgroundColor.ToCssTnTColorVariable())
+        .AddVariable("tnt-input-text-color", TextColor.ToCssTnTColorVariable())
+        .AddVariable("tnt-input-error-color", ErrorColor.ToCssTnTColorVariable())
+#if NET9_0_OR_GREATER
+        .AddVariable("tnt-input-character-length-color", CharacterLengthColor.ToCssTnTColorVariable())
+#endif
         .Build();
 
     /// <inheritdoc />
@@ -119,10 +131,6 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     [Parameter]
     public string? Label { get; set; }
 
-    /// <inheritdoc />
-    [Parameter]
-    public TnTColor? OnTintColor { get; set; }
-
     /// <summary>
     ///     Gets or sets the placeholder text of the input.
     /// </summary>
@@ -149,10 +157,22 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
 
     /// <inheritdoc />
     [Parameter]
-    public TnTColor? TintColor { get; set; } = TnTColor.Primary;
+    public TnTColor TintColor { get; set; } = TnTColor.Primary;
+
+    /// <summary>
+    /// Specifies the type of the input element, which determines how the input is rendered and validated.
+    /// </summary>
+    [Parameter]
+    public string? AutoComplete { get; set; }
 
     /// <inheritdoc />
     public abstract InputType Type { get; }
+
+    /// <summary>
+    /// The color used for the error state of the input.
+    /// </summary>
+    [Parameter]
+    public TnTColor ErrorColor { get; set; } = TnTColor.Error;
 
     /// <summary>
     ///     Gets or sets the cascading parameter for the form.
@@ -164,136 +184,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     ///     Sets the focus to the input element.
     /// </summary>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    public ValueTask SetFocusAsync() {
-        return Element.FocusAsync();
-    }
-
-    /// <inheritdoc />
-    protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        builder.OpenElement(0, "label");
-        builder.AddAttribute(10, "lang", ElementLang);
-        builder.AddAttribute(20, "title", ElementTitle);
-        builder.AddAttribute(30, "class", ElementClass);
-        builder.AddAttribute(40, "id", ElementId);
-        if (AdditionalAttributes?.TryGetValue("style", out var style) == true) {
-            builder.AddAttribute(41, "style", style);
-        }
-
-        {
-            {
-                if (StartIcon is not null) {
-                    builder.AddContent(50, StartIcon.Render());
-                }
-            }
-            {
-                if (Type == InputType.TextArea) {
-                    builder.OpenElement(60, "textarea");
-                }
-                else if (Type == InputType.Select) {
-                    builder.OpenElement(60, "select");
-                    builder.AddAttribute(70, "multiple", typeof(TInputType).IsArray || Nullable.GetUnderlyingType(typeof(TInputType))?.IsArray == true);
-                }
-                else {
-                    builder.OpenElement(60, "input");
-                    builder.AddAttribute(70, "type", Type.ToInputTypeString());
-                }
-                builder.AddMultipleAttributes(80, AdditionalAttributes);
-                builder.AddAttribute(90, "name", ElementName);
-
-                if (Type == InputType.Tel) {
-                    builder.AddAttribute(91, "onkeydown", "TnTComponents.enforcePhoneFormat(event)");
-                    builder.AddAttribute(92, "onkeyup", "TnTComponents.formatToPhone(event)");
-                }
-                else if (Type == InputType.Currency) {
-                    builder.AddAttribute(91, "onkeydown", "TnTComponents.enforceCurrencyFormat(event)");
-                    builder.AddAttribute(92, "onkeyup", "TnTComponents.formatToCurrency(event)");
-                }
-
-                builder.AddAttribute(93, "autofocus", AutoFocus);
-                if (typeof(TInputType) == typeof(bool)) {
-                    builder.AddAttribute(100, "value", bool.TrueString);
-                    builder.AddAttribute(110, "checked", BindConverter.FormatValue(CurrentValue));
-                }
-                else if (Type == InputType.Select && (typeof(TInputType).IsArray || Nullable.GetUnderlyingType(typeof(TInputType))?.IsArray == true)) {
-                    builder.AddAttribute(210, "value", BindConverter.FormatValue(CurrentValue)?.ToString());
-                }
-                else {
-                    builder.AddAttribute(100, "value", CurrentValueAsString);
-                }
-                builder.AddAttribute(120, "style", ElementStyle);
-                builder.AddAttribute(130, "readonly", FieldReadonly);
-                builder.AddAttribute(140, "placeholder", string.IsNullOrEmpty(Placeholder) ? " " : Placeholder);
-                builder.AddAttribute(150, "disabled", FieldDisabled || (Type == InputType.Select && FieldReadonly));
-                builder.AddAttribute(160, "required", IsRequired());
-                builder.AddAttribute(170, "minlength", GetMinLength());
-                builder.AddAttribute(180, "maxlength", GetMaxLength());
-                builder.AddAttribute(190, "min", GetMinValue());
-                builder.AddAttribute(200, "max", GetMaxValue());
-
-                if (BindOnInput && Type != InputType.Select) {
-                    builder.AddAttribute(210, "oninput", EventCallback.Factory.CreateBinder(this, value => { CurrentValue = value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
-                }
-                else {
-                    if (Type == InputType.Select && (typeof(TInputType).IsArray || Nullable.GetUnderlyingType(typeof(TInputType))?.IsArray == true)) {
-                        builder.AddAttribute(210, "onchange", EventCallback.Factory.CreateBinder<string?[]?>(this, SetCurrentValueAsStringArray, default));
-                    }
-                    else if (typeof(TInputType) == typeof(bool)) {
-                        builder.AddAttribute(210, "onchange", EventCallback.Factory.CreateBinder(this, __value => { CurrentValue = __value; BindAfter.InvokeAsync(CurrentValue); }, CurrentValue));
-                    }
-                    else {
-                        builder.AddAttribute(210, "onchange", EventCallback.Factory.CreateBinder<string?>(this, OnChangeAsync, CurrentValueAsString));
-                    }
-                }
-
-                if (typeof(TInputType) == typeof(bool)) {
-                    builder.SetUpdatesAttributeName("checked");
-                }
-                else {
-                    builder.SetUpdatesAttributeName("value");
-                }
-
-                if (EditContext is not null) {
-                    builder.AddAttribute(220, "onblur", EventCallback.Factory.Create<FocusEventArgs>(this, args => {
-                        EditContext.NotifyFieldChanged(FieldIdentifier);
-                    }));
-                }
-
-                builder.AddElementReferenceCapture(230, e => Element = e);
-
-                builder.OpenRegion(231);
-                RenderChildContent(builder);
-                builder.CloseRegion();
-
-                builder.CloseElement();
-
-                builder.OpenRegion(235);
-                RenderCustomContent(builder);
-                builder.CloseRegion();
-
-                if (EditContext is not null && !DisableValidationMessage && ValueExpression is not null) {
-                    builder.OpenComponent<ValidationMessage<TInputType>>(240);
-                    builder.AddComponentParameter(250, nameof(ValidationMessage<TInputType>.For), ValueExpression);
-                    builder.AddAttribute(260, "class", "tnt-components tnt-validation-message tnt-body-small");
-                    builder.CloseComponent();
-                }
-            }
-            {
-                if (!string.IsNullOrWhiteSpace(Label)) {
-                    builder.OpenElement(270, "span");
-                    builder.AddAttribute(280, "class", CssClassBuilder.Create().AddClass("tnt-label").Build());
-                    builder.AddContent(290, Label);
-                    builder.CloseElement();
-                }
-            }
-            {
-                if (EndIcon is not null) {
-                    builder.AddContent(300, EndIcon.Render());
-                }
-            }
-        }
-
-        builder.CloseElement();
-    }
+    public ValueTask SetFocusAsync() => Element.FocusAsync();
 
     /// <summary>
     ///     Determines whether the input is required.

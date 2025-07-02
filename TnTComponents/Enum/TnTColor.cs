@@ -366,6 +366,27 @@ public static partial class TnTColorEnumExt {
         return FindAllCapitalsExceptFirstLetter().Replace(tnTColorEnum.ToString(), @"-$1").ToLower();
     }
 
+
+    /// <summary>
+    /// Converts a <see cref="TnTColor" /> enum value to its corresponding CSS variable name.
+    /// </summary>
+    /// <param name="tnTColorEnum">The <see cref="TnTColor" /> enum value.</param>
+    /// <returns>The css variable</returns>
+    public static string ToCssTnTColorVariable(this TnTColor? tnTColorEnum) {
+        return tnTColorEnum.HasValue 
+            ? $"var(--tnt-color-{tnTColorEnum.Value.ToCssClassName()})" 
+            : string.Empty;
+    }
+
+    /// <summary>
+    /// Converts a <see cref="TnTColor" /> enum value to its corresponding CSS variable name.
+    /// </summary>
+    /// <param name="tnTColorEnum">The <see cref="TnTColor" /> enum value.</param>
+    /// <returns>The css variable</returns>
+    public static string ToCssTnTColorVariable(this TnTColor tnTColorEnum) {
+        return $"var(--tnt-color-{tnTColorEnum.ToCssClassName()})";
+    }
+
     /// <summary>
     ///     Finds all capital letters in a string except the first letter.
     /// </summary>

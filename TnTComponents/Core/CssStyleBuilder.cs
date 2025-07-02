@@ -75,6 +75,24 @@ internal class CssStyleBuilder {
         }
     }
 
+    public CssStyleBuilder AddBackgroundColor(TnTColor?color, bool enabled = true) {
+        if (enabled && color.HasValue) {
+            return AddStyle("background-color", color?.ToCssTnTColorVariable());
+        }
+        else {
+            return this;
+        }
+    }
+
+    public CssStyleBuilder AddForegroundColor(TnTColor? color, bool enabled = true) {
+        if (enabled && color.HasValue) {
+            return AddStyle("color", color?.ToCssTnTColorVariable());
+        }
+        else {
+            return this;
+        }
+    }
+
     /// <summary>
     ///     Builds the CSS style string.
     /// </summary>
