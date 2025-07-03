@@ -22,6 +22,13 @@ public partial class TnTSideNav {
         .AddForegroundColor(TextColor)
         .Build();
 
+    /// <inheritdoc />
+    public override string? ElementStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddVariable("tnt-side-nav-bg-color", BackgroundColor)
+        .AddVariable("tnt-side-nav-fg-color", TextColor)
+        .Build();
+
     /// <summary>
     ///     Indicates whether the side navigation should be hidden on large screens.
     /// </summary>

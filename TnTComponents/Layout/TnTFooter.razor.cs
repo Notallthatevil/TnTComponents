@@ -16,9 +16,14 @@ public partial class TnTFooter {
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create(base.ElementClass!)
         .AddClass("tnt-footer")
-        .AddBackgroundColor(BackgroundColor)
-        .AddForegroundColor(TextColor)
         .AddElevation(Elevation)
+        .Build();
+
+    /// <inheritdoc />
+    public override string? ElementStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddVariable("tnt-footer-bg-color", BackgroundColor)
+        .AddVariable("tnt-footer-fg-color", TextColor)
         .Build();
 
     /// <inheritdoc />

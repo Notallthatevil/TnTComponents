@@ -51,13 +51,15 @@ public partial class TnTNavLink {
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass(CssClass)
         .AddClass("tnt-nav-link")
-        .AddBackgroundColor(BackgroundColor)
-        .AddForegroundColor(TextColor)
         .AddClass("tnt-filled", Appearance == AnchorAppearance.Filled)
         .AddClass("tnt-outlined", Appearance == AnchorAppearance.Outlined)
         .AddClass("tnt-underlined", Appearance == AnchorAppearance.Underlined)
         .AddClass("tnt-anchor-square", Shape == AnchorShape.Square)
-        .AddTnTInteractable(this, enableTint: Appearance is AnchorAppearance.Filled or AnchorAppearance.Outlined, enable: Appearance is AnchorAppearance.Filled or AnchorAppearance.Outlined)
+        .AddClass("tnt-anchor-tint-color", TintColor.HasValue && (Appearance is AnchorAppearance.Filled or AnchorAppearance.Outlined))
+        .AddClass("tnt-anchor-on-tint-color", OnTintColor.HasValue)
+        .AddDisabled(Disabled)
+        .AddClass("tnt-interactable", Appearance is AnchorAppearance.Filled or AnchorAppearance.Outlined)
+        .AddRipple(EnableRipple)
         .AddSize(AnchorSize)
         .AddClass("active-fg-color", ActiveTextColor.HasValue)
         .AddClass("active-bg-color", ActiveBackgroundColor.HasValue)
@@ -78,8 +80,12 @@ public partial class TnTNavLink {
     /// <inheritdoc />
     public string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddVariable("active-bg-color", ActiveBackgroundColor.GetValueOrDefault(), ActiveBackgroundColor.HasValue)
-        .AddVariable("active-fg-color", ActiveTextColor.GetValueOrDefault(), ActiveTextColor.HasValue)
+        .AddVariable("tnt-anchor-active-bg-color", ActiveBackgroundColor.GetValueOrDefault(), ActiveBackgroundColor.HasValue)
+        .AddVariable("tnt-anchor-active-fg-color", ActiveTextColor.GetValueOrDefault(), ActiveTextColor.HasValue)
+        .AddVariable("tnt-anchor-bg-color", BackgroundColor)
+        .AddVariable("tnt-anchor-fg-color", TextColor)
+        .AddVariable("tnt-anchor-tint-color", TintColor.GetValueOrDefault(), TintColor.HasValue)
+        .AddVariable("tnt-anchor-on-tint-color", OnTintColor.GetValueOrDefault(), OnTintColor.HasValue)
         .Build();
 
     /// <inheritdoc />

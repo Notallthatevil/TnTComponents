@@ -1,6 +1,10 @@
 ﻿@use '../Styles/_Variables/_colors.scss' as colors;
 @use '../Styles/_Variables/_typescale.scss' as typescale;
 @use '../Styles/_Variables/_elevation.scss' as elevation;
+
+$bg-color: var(--tnt-footer-bg-color);
+$fg-color: var(--tnt-footer-fg-color);
+
 .tnt-layout > .tnt-footer {
     grid-area: footer;
     height: 100%;
@@ -10,8 +14,8 @@
     align-items: center;
     transition: 250ms ease-in-out;
     box-sizing: border-box;
-    @include colors.tnt-default-background-colors;
-    @include colors.tnt-default-foreground-colors;
+    background-color: $bg-color;
+    color: $fg-color;
     @include typescale.tnt-title-large;
     @include elevation.tnt-elevations;
 }

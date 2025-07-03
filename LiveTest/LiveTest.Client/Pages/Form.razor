@@ -42,6 +42,7 @@
 <TnTForm Model="@Input" OnValidSubmit="ValidSubmit" OnInvalidSubmit="InvalidSubmit" Disabled="@_disabled" ReadOnly="@_readonly" FormName="Login" Appearance="@_appearance">
     <DataAnnotationsValidator />
     <ValidationSummary />
+    @*  
 
     <TnTRow>
         <h3>
@@ -104,7 +105,7 @@
 
     <TnTRow>
         <h3>
-            Checkboxes @Input.Checkbox @Input.FalseCheckbox @Input.Switch
+            Checkboxes @Input.Checkbox @Input.FalseCheckbox @Input.Switch @Input.FalseSwitch
         </h3>
         <TnTColumn S="6">
             <TnTInputCheckbox @bind-Value="@Input.Checkbox" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
@@ -113,12 +114,14 @@
         <TnTColumn S="6">
             <TnTInputCheckbox @bind-Value="@Input.FalseCheckbox" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
-
         <TnTColumn S="6">
             <TnTInputSwitch @bind-Value="@Input.Switch" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
+
+        <TnTColumn S="6">
+            <TnTInputSwitch @bind-Value="@Input.FalseSwitch" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
     </TnTRow>
-    @*
     <TnTRow>
         <h3>
             Select @Input.Select @string.Join(", ", Input.Multi)
@@ -138,7 +141,7 @@
                 }
             </TnTInputSelect>
         </TnTColumn>
-    </TnTRow> 
+    </TnTRow>
 
     <TnTRow>
         <h3>
@@ -153,15 +156,8 @@
             </TnTInputRadioGroup>
         </TnTColumn>
     </TnTRow>
+     *@
 
-    <TnTRow>
-        <h3>
-            Input File
-        </h3>
-        <TnTColumn S="12">
-           <TnTInputFile multiple />
-        </TnTColumn>
-    </TnTRow>
 
     <TnTRow>
         <h3>
@@ -171,9 +167,17 @@
         <TnTColumn S="6">
             <TnTInputTextArea @bind-Value="@Input.Area" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
-    </TnTRow> 
+    </TnTRow>
 
-        <TnTRow>
+    <TnTRow>
+        <h3>
+            Input File
+        </h3>
+        <TnTColumn S="12">
+            <TnTInputFile multiple />
+        </TnTColumn>
+    </TnTRow>
+    <TnTRow>
         <h3>
             Input Area @Input.Area
         </h3>
@@ -181,7 +185,7 @@
         <TnTColumn S="6">
             <TnTMarkdownEditor @bind-Value="@Input.Area" />
         </TnTColumn>
-    </TnTRow>  *@
+    </TnTRow>
 </TnTForm>
 
 @code {
@@ -220,8 +224,11 @@
         [Required, Range(typeof(bool), "false", "false")]
         public bool FalseCheckbox { get; set; }
 
-        [Required]
+        [Required, Range(typeof(bool), "true", "true")]
         public bool Switch { get; set; }
+
+        [Required, Range(typeof(bool), "false", "false")]
+        public bool FalseSwitch { get; set; }
 
         [Required]
         public string? Select { get; set; }

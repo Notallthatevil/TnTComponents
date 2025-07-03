@@ -1,6 +1,9 @@
 ﻿@use '../Styles/_Variables/_colors.scss' as colors;
 @use '../Styles/_Variables/_typescale.scss' as typescale;
 
+$bg-color: var(--tnt-header-bg-color);
+$fg-color: var(--tnt-header-fg-color);
+
 .tnt-layout > .tnt-header {
     grid-area: header;
     height: 100%;
@@ -10,7 +13,7 @@
     align-items: center;
     transition: 250ms ease-in-out;
     box-sizing: border-box;
-    @include colors.tnt-default-background-colors;
-    @include colors.tnt-default-foreground-colors;
+    background-color: $bg-color;
+    color: $fg-color;
     @include typescale.tnt-title-large;
 }

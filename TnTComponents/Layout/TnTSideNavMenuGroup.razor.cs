@@ -27,11 +27,20 @@ public partial class TnTSideNavMenuGroup {
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddClass("tnt-side-nav-menu-group-tint-color", TintColor.HasValue)
+        .AddClass("tnt-side-nav-menu-group-on-tint-color", OnTintColor.HasValue)
+        .AddDisabled(Disabled)
+        .AddClass("tnt-interactable")
+        .AddRipple(EnableRipple)
         .Build();
 
     /// <inheritdoc />
-    public override string? ElementStyle => CssClassBuilder.Create()
+    public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddVariable("tnt-side-nav-menu-group-bg-color", BackgroundColor)
+        .AddVariable("tnt-side-nav-menu-group-fg-color", TextColor)
+        .AddVariable("tnt-side-nav-menu-group-tint-color", TintColor.GetValueOrDefault(), TintColor.HasValue)
+        .AddVariable("tnt-side-nav-menu-group-on-tint-color", OnTintColor.GetValueOrDefault(), OnTintColor.HasValue)
         .Build();
 
     /// <inheritdoc />
@@ -94,69 +103,4 @@ public partial class TnTSideNavMenuGroup {
     [Parameter]
     public TnTColor? OnTintColor { get; set; }
 
-    ///// <summary>
-    ///// Builds the component's render tree.
-    ///// </summary>
-    ///// <param name="builder">The <see cref="RenderTreeBuilder"/> to populate with content.</param>
-    ///// <inheritdoc />
-    //protected override void BuildRenderTree(RenderTreeBuilder builder) {
-    //    builder.OpenElement(0, "div");
-    //    builder.AddMultipleAttributes(10, AdditionalAttributes);
-    //    builder.AddAttribute(20, "class", ElementClass);
-    //    builder.AddAttribute(30, "style", ElementStyle);
-    //    builder.AddAttribute(40, "lang", ElementLang);
-    //    builder.AddAttribute(50, "id", ElementId);
-    //    builder.AddAttribute(60, "title", ElementTitle);
-    //    builder.AddAttribute(80, "autofocus", AutoFocus);
-    //    builder.AddElementReferenceCapture(90, e => Element = e);
-
-    //    builder.OpenElement(100, "div");
-    //    builder.AddAttribute(110, "class", CssClassBuilder.Create()
-    //        .AddClass("tnt-side-nav-menu-group-button")
-    //        .AddTnTInteractable(this)
-    //        .AddTnTStyleable(this)
-    //        .AddFilled()
-    //        .Build()
-    //    );
-    //    builder.AddAttribute(120, "onclick", "TnTComponents.toggleSideNavGroup(event)");
-
-    //    builder.OpenElement(121, "span");
-    //    if (Icon is not null) {
-    //        builder.AddContent(130, Icon.Render());
-    //    }
-
-    //    builder.AddContent(140, Label);
-    //    builder.CloseElement();
-
-    //    if (EnableRipple) {
-    //        builder.OpenComponent<TnTRippleEffect>(145);
-    //        builder.CloseComponent();
-    //    }
-
-
-    //    builder.OpenComponent<MaterialIcon>(150);
-    //    builder.AddComponentParameter(160, nameof(MaterialIcon.Icon), MaterialIcon.ArrowDropDown.Icon);
-    //    builder.AddAttribute(161, "class", "tnt-end-icon");
-    //    builder.CloseComponent();
-
-    //    builder.CloseElement();
-
-    //    // Data permanent section
-    //    {
-    //        builder.OpenElement(170, "div");
-    //        builder.AddAttribute(180, "class", "tnt-side-nav-group-toggle-indicator");
-    //        builder.AddAttribute(190, "style", "display:none");
-    //        builder.AddAttribute(200, "data-permanent");
-
-    //        builder.OpenElement(210, "div");
-    //        builder.AddAttribute(220, "class", $"tnt-toggle-indicator{(ExpandByDefault ? " tnt-toggle" : string.Empty)}");
-    //        builder.CloseElement();
-
-    //        builder.CloseElement();
-    //    }
-
-    //    builder.AddContent(230, ChildContent);
-
-    //    builder.CloseElement();
-    //}
 }

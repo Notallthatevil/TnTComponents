@@ -21,6 +21,13 @@ public partial class TnTHeader {
         .Build();
 
     /// <inheritdoc />
+    public override string? ElementStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddVariable("tnt-header-bg-color", BackgroundColor)
+        .AddVariable("tnt-header-fg-color", TextColor)
+        .Build();
+
+    /// <inheritdoc />
     [Parameter]
     public override TnTColor TextColor { get; set; } = TnTColor.OnSurface;
 

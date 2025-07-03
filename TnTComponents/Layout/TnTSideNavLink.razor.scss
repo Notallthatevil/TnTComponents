@@ -4,6 +4,11 @@
 @use '../Styles/_Variables/_interactable.scss' as interactable;
 @use '../Styles/_Variables/_elevation.scss' as elevation;
 
+$bg-color: var(--tnt-side-nav-bg-color);
+$fg-color: var(--tnt-side-nav-fg-color);
+$tint-color: var(--tnt-side-nav-tint-color);
+$on-tint-color: var(--tnt-side-nav-on-tint-color);
+
 .tnt-side-nav-link {
     display: inline-flex;
     flex-direction: row;
@@ -19,9 +24,26 @@
     width: 100%;
     transition: 250ms ease-in-out;
     aspect-ratio: 16/9;
-    @include interactable.tnt-interactable;
-    @include colors.tnt-default-background-colors;
-    @include colors.tnt-default-foreground-colors;
+
+    &.tnt-side-nav-tint-color.tnt-side-nav-on-tint-color {
+        @include interactable.tnt-interactable($tint-color, $on-tint-color);
+    }
+
+    &.tnt-side-nav-tint-color:not(.tnt-side-nav-on-tint-color) {
+        @include interactable.tnt-interactable($tint-color, null);
+    }
+
+    &.tnt-side-nav-on-tint-color:not(.tnt-side-nav-tint-color) {
+        @include interactable.tnt-interactable(null, $on-tint-color);
+    }
+
+    &:not(.tnt-side-nav-on-tint-color):not(.tnt-side-nav-tint-color) {
+        @include interactable.tnt-interactable(null, null);
+    }
+
+    color: $fg-color;
+    background-color: $bg-color;
+
     @include textAlignments.tnt-text-alignments;
     @include interactable.tnt-disabled;
     @include typescale.tnt-typescale(600, 14px, 20px, 0.1px);
@@ -35,20 +57,20 @@
     }
 
     &:not(:has(> .tnt-icon)) {
-       padding-left: calc(16px + 24px + 8px);
+        padding-left: calc(16px + 24px + 8px);
     }
 
     &.active {
         &.active-bg-color {
-            background-color: var(--active-bg-color) !important;
+            background-color: var(--tnt-side-nav-active-bg-color) !important;
         }
 
         &.active-fg-color {
-            color: var(--active-fg-color) !important;
+            color: var(--tnt-side-nav-active-fg-color) !important;
 
             ::deep {
                 > .tnt-icon {
-                    color: var(--active-fg-color) !important;
+                    color: var(--tnt-side-nav-active-fg-color) !important;
                 }
             }
         }

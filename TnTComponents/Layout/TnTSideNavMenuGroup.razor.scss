@@ -3,15 +3,36 @@
 @use '../Styles/_Variables/_typescale.scss' as typescale;
 @use '../Styles/_Variables/_interactable.scss' as interactable;
 
+$bg-color: var(--tnt-side-nav-menu-group-bg-color);
+$fg-color: var(--tnt-side-nav-menu-group-fg-color);
+$tint-color: var(--tnt-side-nav-menu-group-tint-color);
+$on-tint-color: var(--tnt-side-nav-menu-group-on-tint-color);
+
 .tnt-side-nav-menu-group {
     width: 100%;
     box-sizing: border-box;
     margin-bottom: 4px;
 
     & > .tnt-side-nav-menu-group-label {
-        @include interactable.tnt-interactable;
-        @include colors.tnt-default-background-colors;
-        @include colors.tnt-default-foreground-colors;
+        &.tnt-side-nav-menu-group-tint-color.tnt-side-nav-menu-group-on-tint-color {
+            @include interactable.tnt-interactable($tint-color, $on-tint-color);
+        }
+
+        &.tnt-side-nav-menu-group-tint-color:not(.tnt-side-nav-menu-group-on-tint-color) {
+            @include interactable.tnt-interactable($tint-color, null);
+        }
+
+        &.tnt-side-nav-menu-group-on-tint-color:not(.tnt-side-nav-menu-group-tint-color) {
+            @include interactable.tnt-interactable(null, $on-tint-color);
+        }
+
+        &:not(.tnt-side-nav-menu-group-on-tint-color):not(.tnt-side-nav-menu-group-tint-color) {
+            @include interactable.tnt-interactable(null, null);
+        }
+
+        color: $fg-color;
+        background-color: $bg-color;
+
         @include textAlignments.tnt-text-alignments;
         @include interactable.tnt-disabled;
         @include typescale.tnt-typescale(600, 14px, 20px, 0.1px);

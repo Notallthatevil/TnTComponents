@@ -55,4 +55,10 @@ public class TnTDialogOptions {
         .AddForegroundColor(TextColor)
         .AddTextAlign(TextAlignment)
         .Build();
+
+    internal string? DialogCssStyle => CssStyleBuilder.Create()
+        .Add(ElementStyle!)
+        .AddVariable("tnt-dialog-bg-color", BackgroundColor)
+        .AddVariable("tnt-dialog-fg-color", TextColor)
+        .Build();
 }

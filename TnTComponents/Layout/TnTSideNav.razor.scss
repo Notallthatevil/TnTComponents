@@ -1,6 +1,8 @@
 ﻿@use '../Styles/_Variables/_colors.scss' as colors;
 @use '../Styles/_Variables/_measurements.scss' as measurements;
 
+$bg-color: var(--tnt-side-nav-bg-color);
+$fg-color: var(--tnt-side-nav-fg-color);
 .tnt-layout > .tnt-side-nav {
     grid-area: sidenav;
     z-index: 1000;
@@ -10,8 +12,6 @@
     box-sizing: border-box;
     transition: 250ms ease-in-out;
     overflow-y: auto;
-
-
-    @include colors.tnt-default-background-colors;
-    @include colors.tnt-default-foreground-colors;
+    background-color: $bg-color;
+    color: $fg-color;
 }

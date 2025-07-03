@@ -43,9 +43,11 @@ public partial class TnTSideNavLink {
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass(CssClass)
         .AddClass("tnt-side-nav-link")
-        .AddBackgroundColor(BackgroundColor)
-        .AddForegroundColor(TextColor)
-        .AddTnTInteractable(this)
+        .AddClass("tnt-side-nav-tint-color", TintColor.HasValue)
+        .AddClass("tnt-side-nav-on-tint-color", OnTintColor.HasValue)
+        .AddDisabled(Disabled)
+        .AddClass("tnt-interactable")
+        .AddRipple(EnableRipple)
         .AddClass("active-fg-color", ActiveTextColor.HasValue)
         .AddClass("active-bg-color", ActiveBackgroundColor.HasValue)
         .Build();
@@ -65,8 +67,12 @@ public partial class TnTSideNavLink {
     /// <inheritdoc />
     public string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddVariable("active-bg-color", ActiveBackgroundColor.GetValueOrDefault(), ActiveBackgroundColor.HasValue)
-        .AddVariable("active-fg-color", ActiveTextColor.GetValueOrDefault(), ActiveTextColor.HasValue)
+        .AddVariable("tnt-side-nav-active-bg-color", ActiveBackgroundColor.GetValueOrDefault(), ActiveBackgroundColor.HasValue)
+        .AddVariable("tnt-side-nav-active-fg-color", ActiveTextColor.GetValueOrDefault(), ActiveTextColor.HasValue)
+        .AddVariable("tnt-side-nav-bg-color", BackgroundColor)
+        .AddVariable("tnt-side-nav-fg-color", TextColor)
+        .AddVariable("tnt-side-nav-tint-color", TintColor.GetValueOrDefault(), TintColor.HasValue)
+        .AddVariable("tnt-side-nav-on-tint-color", OnTintColor.GetValueOrDefault(), OnTintColor.HasValue)
         .Build();
 
     /// <inheritdoc />

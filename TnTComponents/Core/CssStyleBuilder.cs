@@ -7,7 +7,7 @@ namespace TnTComponents.Core;
 /// </summary>
 internal class CssStyleBuilder {
     private readonly Dictionary<string, string> _styles = [];
-
+    private string? _styleString = string.Empty;
     private CssStyleBuilder() {
     }
 
@@ -26,6 +26,16 @@ internal class CssStyleBuilder {
         if (additionalAttributes?.TryGetValue("style", out var style) == true && style is not null) {
             return AddStyle(style.ToString(), string.Empty);
         }
+        return this;
+    }
+
+    /// <summary>
+    /// Adds a CSS style to the builder.
+    /// </summary>
+    /// <param name="style">The style string to add</param>
+    /// <returns>The current instance of <see cref="CssStyleBuilder" />.</returns>
+    public CssStyleBuilder Add(string style) {
+        _styleString += style ?? string.Empty;
         return this;
     }
 
@@ -121,6 +131,7 @@ internal class CssStyleBuilder {
                     }
                 }
             }
+            sb.Append(_styleString);
             return sb.ToString();
         }
         else {

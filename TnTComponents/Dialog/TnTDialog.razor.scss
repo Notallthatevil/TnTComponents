@@ -2,6 +2,9 @@
 @use '../Styles/_Variables/_typescale.scss' as typescale;
 @use '../Styles/_Variables/_elevation.scss' as elevation;
 
+$bg-color: var(--tnt-dialog-bg-color);
+$fg-color: var(--tnt-dialog-fg-color);
+
 .tnt-dialog {
     z-index: 1000;
     position: fixed;
@@ -13,9 +16,9 @@
     animation: dialogGrow 150ms ease-in-out;
     overflow-x: hidden;
     border-radius: 24px;
+    background-color: $bg-color;
+    color: $fg-color;
 
-    @include colors.tnt-default-background-colors;
-    @include colors.tnt-default-foreground-colors;
     @include elevation.tnt-elevation(1, false);
 
     &:first-of-type::backdrop {

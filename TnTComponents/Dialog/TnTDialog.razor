@@ -14,7 +14,7 @@
 
 @foreach (var dialog in dialogs) {
     <dialog class="@dialog.Options.DialogCssClass"
-            style="@dialog.Options.ElementStyle"
+            style="@dialog.Options.DialogCssStyle"
             id="@dialog.ElementId"
             @oncancel="dialog.CloseAsync"
             @key="dialog">
