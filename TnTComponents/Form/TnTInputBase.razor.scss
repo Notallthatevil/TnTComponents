@@ -36,12 +36,12 @@ $background-color: var(--tnt-input-background-color);
         grid-template-columns: 12px 24px 16px 1fr 16px 24px 12px;
     }
 
-    &:has(.tnt-start-icon) {
+    &:has(.tnt-start-icon):not(:has(.tnt-end-icon)) {
         grid-template-areas: "pad1 start-icon pad2 text pad3";
         grid-template-columns: 12px 24px 16px 1fr 16px;
     }
 
-    &:has(.tnt-end-icon) {
+    &:has(.tnt-end-icon):not(:has(.tnt-start-icon)) {
         grid-template-areas: "pad1 text pad2 end-icon pad3";
         grid-template-columns: 16px 1fr 16px 24px 12px;
     }
@@ -259,10 +259,8 @@ $background-color: var(--tnt-input-background-color);
             transform: rotateY(90deg);
         }
 
-
-
         &:hover {
-            //background-color: color-mix(in srgb, $tint-color 15%, transparent);
+            background-color: color-mix(in srgb, $tint-color 15%, transparent);
         }
 
         &:has(input:focus), &:has(input:active) {

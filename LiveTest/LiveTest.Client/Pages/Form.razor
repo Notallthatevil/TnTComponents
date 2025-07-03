@@ -1,5 +1,5 @@
 ﻿@page "/Forms"
-@rendermode InteractiveServer
+@rendermode InteractiveWebAssembly
 @using System.ComponentModel.DataAnnotations
 @using TnTComponents
 
@@ -52,7 +52,7 @@
         </TnTColumn>
     </TnTRow>
 
-    @* <TnTRow>
+    <TnTRow>
         <h3>
             Numeric @Input.Integer @Input.Decimal
         </h3>
@@ -104,17 +104,21 @@
 
     <TnTRow>
         <h3>
-            Checkboxes @Input.Checkbox @Input.Switch
+            Checkboxes @Input.Checkbox @Input.FalseCheckbox @Input.Switch
         </h3>
         <TnTColumn S="6">
             <TnTInputCheckbox @bind-Value="@Input.Checkbox" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
 
         <TnTColumn S="6">
+            <TnTInputCheckbox @bind-Value="@Input.FalseCheckbox" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+        </TnTColumn>
+
+        <TnTColumn S="6">
             <TnTInputSwitch @bind-Value="@Input.Switch" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
     </TnTRow>
-
+    @*
     <TnTRow>
         <h3>
             Select @Input.Select @string.Join(", ", Input.Multi)
@@ -212,6 +216,9 @@
 
         [Required, Range(typeof(bool), "true", "true")]
         public bool Checkbox { get; set; }
+
+        [Required, Range(typeof(bool), "false", "false")]
+        public bool FalseCheckbox { get; set; }
 
         [Required]
         public bool Switch { get; set; }
