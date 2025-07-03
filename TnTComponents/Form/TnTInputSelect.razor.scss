@@ -298,4 +298,29 @@ $background-color: var(--tnt-input-background-color);
             }
         }
     }
+
+    &:has(select[multiple]) {
+        grid-template-rows: auto;
+
+        &.tnt-form-outlined {
+
+            .tnt-label {
+                top: -12px;
+                transform: scale(0.75) !important;
+            }
+        }
+
+        &.tnt-form-filled {
+            .tnt-label {
+                top: -15px;
+                transform: scale(0.75) !important;
+            }
+
+            ::deep {
+                select {
+                    transform: translateY(0px) !important;
+                }
+            }
+        }
+    }
 }
