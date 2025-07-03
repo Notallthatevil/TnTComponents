@@ -6,9 +6,10 @@ $text-color: var(--tnt-input-text-color);
 $tint-color: var(--tnt-input-tint-color);
 $background-color: var(--tnt-input-background-color);
 
+
 .tnt-input {
-    grid-template-areas: "checkbox";
-    grid-template-columns: 48px;
+    grid-template-areas: "switch";
+    grid-template-columns: 52px;
     grid-template-rows: 48px;
     display: inline-grid;
     box-sizing: border-box;
@@ -20,38 +21,38 @@ $background-color: var(--tnt-input-background-color);
     position: relative;
 
     &:has(.tnt-start-icon):has(.tnt-end-icon) {
-        grid-template-areas: "start-icon checkbox end-icon";
-        grid-template-columns: 24px 48px 24px;
+        grid-template-areas: "start-icon switch end-icon";
+        grid-template-columns: 24px 52px 24px;
     }
 
     &:has(.tnt-start-icon):not(:has(.tnt-end-icon)) {
-        grid-template-areas: "start-icon checkbox";
-        grid-template-columns: 24px 48px;
+        grid-template-areas: "start-icon switch";
+        grid-template-columns: 24px 52px;
     }
 
     &:has(.tnt-end-icon):not(:has(.tnt-start-icon)) {
-        grid-template-areas: "checkbox end-icon";
-        grid-template-columns: 48px 24px;
+        grid-template-areas: "switch end-icon";
+        grid-template-columns: 52px 24px;
     }
 
     &:has(.tnt-start-icon):has(.tnt-end-icon):has(.tnt-label) {
-        grid-template-areas: "start-icon checkbox label pad1 end-icon";
-        grid-template-columns: 24px 48px auto 12px 24px;
+        grid-template-areas: "start-icon switch label pad1 end-icon";
+        grid-template-columns: 24px 52px auto 12px 24px;
     }
 
     &:has(.tnt-start-icon):not(:has(.tnt-end-icon)):has(.tnt-label) {
-        grid-template-areas: "start-icon checkbox label";
-        grid-template-columns: 24px 48px auto;
+        grid-template-areas: "start-icon switch label";
+        grid-template-columns: 24px 52px auto;
     }
 
     &:has(.tnt-end-icon):not(:has(.tnt-start-icon)):has(.tnt-label) {
-        grid-template-areas: "checkbox label pad1 end-icon";
-        grid-template-columns: 48px auto 12px 24px;
+        grid-template-areas: "switch label pad1 end-icon";
+        grid-template-columns: 52px auto 12px 24px;
     }
 
     &:has(.tnt-label):not(:has(.tnt-start-icon)):not(:has(.tnt-end-icon)) {
-        grid-template-areas: "checkbox label";
-        grid-template-columns: 48px auto;
+        grid-template-areas: "switch label";
+        grid-template-columns: 52px auto;
     }
 
     .tnt-label {
@@ -65,7 +66,7 @@ $background-color: var(--tnt-input-background-color);
 
     input {
         appearance: none;
-        grid-area: checkbox;
+        grid-area: switch;
         position: absolute;
     }
 
@@ -98,9 +99,9 @@ $background-color: var(--tnt-input-background-color);
         }
     }
 
-    .tnt-checkbox-overlay {
+    .tnt-switch-overlay {
         position: absolute;
-        grid-area: checkbox;
+        grid-area: switch;
         width: 48px;
         height: 48px;
         border-radius: 50%;
@@ -109,29 +110,32 @@ $background-color: var(--tnt-input-background-color);
         box-sizing: border-box;
         align-self: center;
         justify-self: center;
+        transform: translateX(-10px);
+        z-index: 2;
     }
 
     &:hover {
-        .tnt-checkbox-overlay {
+        .tnt-switch-overlay {
             background-color: color-mix(in srgb, colors.$tnt-color-scrim 20%, transparent);
         }
     }
 
     &:focus-within {
-        .tnt-checkbox-overlay {
+        .tnt-switch-overlay {
             border: 2px solid colors.$tnt-color-outline;
         }
     }
 
     &:before {
         content: '';
-        grid-area: checkbox;
+        grid-area: switch;
         height: 18px;
-        width: 18px;
-        border: 2px solid $text-color;
-        border-radius: 4px;
-        background-color: transparent;
+        width: 36px;
+        background-color: red;
         transition: 250ms ease-in-out;
+        border: 2px solid colors.$tnt-color-outline;
+        background-color: $background-color;
+        border-radius: 22px / 100%;
         align-self: center;
         justify-self: center;
         z-index: 1;
@@ -139,17 +143,16 @@ $background-color: var(--tnt-input-background-color);
 
     &:after {
         content: '';
-        grid-area: checkbox;
-        height: 14px;
-        width: 7px;
-        border-right: 2px solid $background-color;
-        border-bottom: 3px solid $background-color;
-        background-color: transparent;
+        grid-area: switch;
+        height: 12px;
+        width: 12px;
+        background-color: $tint-color;
         transition: 250ms ease-in-out;
         align-self: center;
         justify-self: center;
-        z-index: 2;
-        transform: translateY(-4px) rotateZ(45deg) rotateY(90deg);
+        border-radius: 50%;
+        transform: translateX(-10px);
+        z-index: 3;
     }
 
     &:has(input:checked) {
@@ -159,7 +162,12 @@ $background-color: var(--tnt-input-background-color);
         }
 
         &:after {
-            transform: translateY(-4px) rotateZ(45deg);
+            background-color: $background-color;
+            transform: translateX(10px) scale(1.4);
+        }
+
+        .tnt-switch-overlay {
+            transform: translateX(10px);
         }
     }
 
@@ -179,7 +187,7 @@ $background-color: var(--tnt-input-background-color);
         }
 
         &:hover {
-            .tnt-checkbox-overlay {
+            .tnt-switch-overlay {
                 background-color: color-mix(in srgb, $error-color 20%, transparent);
             }
         }
