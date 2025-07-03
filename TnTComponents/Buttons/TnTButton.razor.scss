@@ -28,6 +28,10 @@ $on-tint-color: var(--tnt-button-on-tint-color);
                 @include interactable.tnt-interactable(null, $on-tint-color);
             }
 
+            &:not(.tnt-button-on-tint-color):not(.tnt-button-tint-color) {
+                @include interactable.tnt-interactable(null, null);
+            }
+
             color: $fg-color;
 
             &.tnt-filled {
@@ -63,6 +67,10 @@ $on-tint-color: var(--tnt-button-on-tint-color);
 
         &.tnt-button-on-tint-color:not(.tnt-button-tint-color) {
             @include interactable.tnt-interactable(null, $on-tint-color);
+        }
+
+        &:not(.tnt-button-on-tint-color):not(.tnt-button-tint-color) {
+            @include interactable.tnt-interactable(null, null);
         }
 
         color: $fg-color;

@@ -41,8 +41,6 @@ public partial class TnTButton {
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddBackgroundColor(BackgroundColor)
-        .AddForegroundColor(TextColor)
         .AddTextAlign(TextAlignment)
         .AddClass("tnt-filled", Appearance == ButtonAppearance.Filled || Appearance == ButtonAppearance.Elevated)
         .AddClass("tnt-outlined", Appearance == ButtonAppearance.Outlined)
@@ -52,7 +50,9 @@ public partial class TnTButton {
         .AddClass("tnt-button-tint-color", TintColor.HasValue)
         .AddClass("tnt-button-on-tint-color", OnTintColor.HasValue)
         .AddSize(ButtonSize)
-        .AddTnTInteractable(this)
+        .AddDisabled(Disabled)
+        .AddClass("tnt-interactable")
+        .AddRipple(EnableRipple)
         .Build();
 
     /// <inheritdoc />

@@ -4,6 +4,11 @@
 @use '../Styles/_Variables/_interactable.scss' as interactable;
 @use '../Styles/_Variables/_elevation.scss' as elevation;
 
+$bg-color: var(--tnt-button-bg-color);
+$fg-color: var(--tnt-button-fg-color);
+$tint-color: var(--tnt-button-tint-color);
+$on-tint-color: var(--tnt-button-on-tint-color);
+
 .tnt-fab-button-container {
     position: fixed;
     right: 16px;
@@ -19,9 +24,25 @@
         transition: 250ms ease-in-out;
         box-sizing: border-box;
 
-        @include interactable.tnt-interactable;
-        @include colors.tnt-default-background-colors;
-        @include colors.tnt-default-foreground-colors;
+        &.tnt-button-tint-color.tnt-button-on-tint-color {
+            @include interactable.tnt-interactable($tint-color, $on-tint-color);
+        }
+
+        &.tnt-button-tint-color:not(.tnt-button-on-tint-color) {
+            @include interactable.tnt-interactable($tint-color, null);
+        }
+
+        &.tnt-button-on-tint-color:not(.tnt-button-tint-color) {
+            @include interactable.tnt-interactable(null, $on-tint-color);
+        }
+
+        &:not(.tnt-button-on-tint-color):not(.tnt-button-tint-color) {
+            @include interactable.tnt-interactable(null, null);
+        }
+
+        color: $fg-color;
+        background-color: $bg-color;
+
         @include textAlignments.tnt-text-alignments;
         @include interactable.tnt-disabled;
         @include elevation.tnt-elevation(3);

@@ -32,11 +32,13 @@ public partial class TnTFabButton {
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddBackgroundColor(BackgroundColor)
-        .AddForegroundColor(TextColor)
         .AddTextAlign(TextAlignment)
         .AddSize(ButtonSize)
-        .AddTnTInteractable(this)
+        .AddDisabled(Disabled)
+        .AddClass("tnt-interactable")
+        .AddRipple(EnableRipple)
+        .AddClass("tnt-button-tint-color", TintColor.HasValue)
+        .AddClass("tnt-button-on-tint-color", OnTintColor.HasValue)
         .Build();
 
     /// <inheritdoc />
@@ -46,6 +48,10 @@ public partial class TnTFabButton {
     /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddVariable("tnt-button-bg-color", BackgroundColor)
+        .AddVariable("tnt-button-fg-color", TextColor)
+        .AddVariable("tnt-button-tint-color", TintColor.GetValueOrDefault(), TintColor.HasValue)
+        .AddVariable("tnt-button-on-tint-color", OnTintColor.GetValueOrDefault(), OnTintColor.HasValue)
         .Build();
 
     /// <inheritdoc />
