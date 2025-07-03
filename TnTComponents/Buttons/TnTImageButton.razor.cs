@@ -36,8 +36,6 @@ public partial class TnTImageButton {
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddBackgroundColor(BackgroundColor)
-        .AddForegroundColor(TextColor)
         .AddTextAlign(TextAlignment)
         .AddClass("tnt-filled", Appearance == ButtonAppearance.Filled || Appearance == ButtonAppearance.Elevated)
         .AddClass("tnt-outlined", Appearance == ButtonAppearance.Outlined)
@@ -47,8 +45,12 @@ public partial class TnTImageButton {
         .AddClass("tnt-image-button-round", ImageButtonAppearance == ImageButtonAppearance.Round)
         .AddClass("tnt-image-button-wide", ImageButtonAppearance == ImageButtonAppearance.Wide)
         .AddClass("tnt-image-button-narrow", ImageButtonAppearance == ImageButtonAppearance.Narrow)
+        .AddClass("tnt-button-tint-color", TintColor.HasValue)
+        .AddClass("tnt-button-on-tint-color", OnTintColor.HasValue)
         .AddSize(ButtonSize)
-        .AddTnTInteractable(this)
+        .AddDisabled(Disabled)
+        .AddClass("tnt-interactable")
+        .AddRipple(EnableRipple)
         .Build();
 
     /// <inheritdoc />
@@ -58,6 +60,10 @@ public partial class TnTImageButton {
     /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddVariable("tnt-button-bg-color", BackgroundColor)
+        .AddVariable("tnt-button-fg-color", TextColor)
+        .AddVariable("tnt-button-tint-color", TintColor.GetValueOrDefault(), TintColor.HasValue)
+        .AddVariable("tnt-button-on-tint-color", OnTintColor.GetValueOrDefault(), OnTintColor.HasValue)
         .Build();
 
     /// <inheritdoc />
