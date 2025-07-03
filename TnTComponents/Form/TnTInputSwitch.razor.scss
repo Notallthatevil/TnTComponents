@@ -19,6 +19,7 @@ $background-color: var(--tnt-input-background-color);
     min-width: 48px;
     min-height: 48px;
     position: relative;
+    margin-bottom: 12px;
 
     &:has(.tnt-start-icon):has(.tnt-end-icon) {
         grid-template-areas: "start-icon switch end-icon";
@@ -183,6 +184,10 @@ $background-color: var(--tnt-input-background-color);
         &:not(:has(input:checked)) {
             &:before {
                 border-color: $error-color;
+            }
+
+            &:after {
+                background-color: $error-color;
             }
         }
 

@@ -19,6 +19,7 @@ $background-color: var(--tnt-input-background-color);
     cursor: text;
     color: $text-color;
     transition: 250ms ease-in-out;
+    margin-bottom: 18px;
 
     .tnt-label {
         position: absolute;
