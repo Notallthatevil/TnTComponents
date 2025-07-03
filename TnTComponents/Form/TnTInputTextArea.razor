@@ -1,0 +1,57 @@
+﻿@namespace TnTComponents
+@using Microsoft.AspNetCore.Components.Rendering
+@inherits TnTInputBase<string?>
+
+<label class="@ElementClass" title="@ElementTitle" lang="@ElementLang" id="@ElementId" style="@ElementStyle">
+    @if (StartIcon is not null) {
+        @StartIcon.Render("tnt-start-icon")
+    }
+
+    @RenderInputElement
+
+    @if (EditContext is not null && !DisableValidationMessage && ValueExpression is not null) {
+        <ValidationMessage TValue="@string" For="@ValueExpression" class="tnt-components tnt-validation-message" style="color: var(--tnt-color-error)" />
+    }
+
+    @{
+#if NET9_0_OR_GREATER
+    if (GetMaxLength() > 0 && RendererInfo.IsInteractive) {
+    <span class="tnt-input-length">
+        @(CurrentValueAsString?.Length ?? 0)/@(GetMaxLength())
+    </span>
+    }
+#endif
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Label)) {
+    <span class="tnt-label">
+        @Label
+    </span>
+    }
+
+    @if (EndIcon is not null) {
+        @EndIcon.Render("tnt-end-icon")
+    }
+</label>
+
+@code {
+    protected override void RenderInputElement(RenderTreeBuilder __builder) {
+        <textarea @attributes="AdditionalAttributes"
+                  name="@ElementName"
+                  title="@FieldIdentifier.FieldName"
+                  autofocus="@AutoFocus"
+                  autocomplete="@AutoComplete"
+                  readonly="@FieldReadonly"
+                  placeholder="@(string.IsNullOrWhiteSpace(Placeholder) ? " " : Placeholder)"
+                  disabled="@FieldDisabled"
+                  required="@IsRequired()"
+                  minlength="@GetMinLength()"
+                  maxlength="@GetMaxLength()"
+                  min="@GetMinValue()"
+                  max="@GetMaxValue()"
+                  @bind-value="CurrentValueAsString"
+                  @bind-value:event="@(BindOnInput ? "oninput" : "onchange")"
+                  @onblur="@(EditContext is not null ? (FocusEventArgs args) => EditContext.NotifyFieldChanged(FieldIdentifier) : (FocusEventArgs _) => { })"
+                  @ref="Element" />
+    }
+}

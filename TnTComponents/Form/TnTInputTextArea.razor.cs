@@ -13,7 +13,7 @@ namespace TnTComponents;
 /// <summary>
 ///     Represents a text area input component.
 /// </summary>
-public class TnTInputTextArea : TnTInputBase<string?> {
+public partial class TnTInputTextArea {
 
     /// <inheritdoc />
     public override InputType Type => InputType.TextArea;

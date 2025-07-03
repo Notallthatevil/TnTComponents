@@ -1,0 +1,287 @@
+﻿@use '../Styles/_Variables/_colors.scss' as colors;
+@use '../Styles/_Variables/_typescale.scss' as typescale;
+
+$error-color: var(--tnt-input-error-color);
+$text-color: var(--tnt-input-text-color);
+$tint-color: var(--tnt-input-tint-color);
+$background-color: var(--tnt-input-background-color);
+
+.tnt-input {
+    position: relative;
+    display: inline-grid;
+    width: 100%;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    grid-template-areas: "pad1 text pad2";
+    grid-template-columns: 16px 1fr 16px;
+    caret-color: $tint-color;
+    cursor: text;
+    color: $text-color;
+    transition: 250ms ease-in-out;
+    margin-bottom: 18px;
+    grid-template-rows: auto;
+
+    .tnt-label {
+        position: absolute;
+        transition: 250ms ease-in-out;
+        box-sizing: border-box;
+        grid-area: text;
+        align-self: center;
+        z-index: 1;
+        @include typescale.tnt-body-large;
+    }
+
+
+    &:has(.tnt-start-icon):has(.tnt-end-icon) {
+        grid-template-areas: "pad1 start-icon pad2 text pad3 end-icon pad4";
+        grid-template-columns: 12px 24px 16px 1fr 16px 24px 12px;
+    }
+
+    &:has(.tnt-start-icon):not(:has(.tnt-end-icon)) {
+        grid-template-areas: "pad1 start-icon pad2 text pad3";
+        grid-template-columns: 12px 24px 16px 1fr 16px;
+    }
+
+    &:has(.tnt-end-icon):not(:has(.tnt-start-icon)) {
+        grid-template-areas: "pad1 text pad2 end-icon pad3";
+        grid-template-columns: 16px 1fr 16px 24px 12px;
+    }
+
+    &:has(input[readonly]) {
+        pointer-events: none;
+        opacity: 0.7;
+    }
+
+    &.tnt-disabled {
+        pointer-events: none;
+        opacity: 0.5 !important;
+        user-select: none;
+    }
+
+    ::deep {
+        textarea {
+            grid-area: text;
+            box-sizing: border-box;
+            appearance: none;
+            border: none;
+            outline: none;
+            background-color: transparent;
+            color: inherit;
+            caret-color: inherit;
+            height: fit-content;
+            width: 100%;
+            align-self: center;
+            transition: 250ms ease-in-out;
+            padding: 2px 0;
+            resize: vertical;
+            @include typescale.tnt-body-large;
+
+            &:placeholder {
+                opacity: 0.5;
+            }
+
+            &::-webkit-autofill,
+            &::-webkit-autofill:hover,
+            &::-webkit-autofill:focus,
+            &::-webkit-autofill:active {
+                -webkit-background-clip: text;
+                color: $text-color;
+            }
+
+            &::-webkit-calendar-picker-indicator {
+                border-radius: 50%;
+                background-color: color-mix(in srgb, #ffffff 50%, $background-color);
+            }
+        }
+
+        .tnt-start-icon {
+            grid-area: start-icon;
+        }
+
+        .tnt-end-icon {
+            grid-area: end-icon;
+        }
+
+        .tnt-start-icon, .tnt-end-icon {
+            align-self: center;
+            justify-self: center;
+        }
+
+        .tnt-validation-message {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 16px;
+            width: calc(100% - 32px - 7ch);
+            text-wrap: wrap;
+            @include typescale.tnt-body-small;
+        }
+
+        @for $i from 1 through 5 {
+            *:nth-child(#{$i} of .tnt-validation-message) {
+                transform: translateY(calc(12px * ($i - 1))) !important;
+            }
+        }
+    }
+
+
+    .tnt-input-length {
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 16px;
+        @include typescale.tnt-body-small;
+    }
+
+    &.modified.invalid {
+        outline-color: $error-color;
+
+        &:before, &:after {
+            border-color: $error-color;
+        }
+
+        .tnt-label, .tnt-input-length {
+            color: $error-color;
+        }
+
+        &:has(textarea:focus), &:has(textarea:active) {
+            caret-color: $error-color;
+        }
+
+        ::deep {
+            .tnt-end-icon {
+                color: $error-color;
+            }
+        }
+
+        &.tnt-form-filled {
+            &:after {
+                background-color: $error-color;
+            }
+
+            border-bottom: 1px solid $error-color;
+        }
+    }
+
+    &.tnt-form-filled {
+        border-bottom: 1px solid colors.$tnt-color-outline-variant;
+        border-radius: 4px 4px 0 0;
+        background-color: $background-color;
+        padding-top: 12px;
+
+        &:after {
+            position: absolute;
+            content: '';
+            bottom: 0;
+            height: 2px;
+            width: 100%;
+            left: 0;
+            bottom: 0;
+            background-color: var(--tnt-input-tint-color);
+            transform: rotateY(90deg);
+            transition: 250ms ease-out;
+        }
+
+        &:hover {
+            background-color: color-mix(in srgb, $tint-color 15%, $background-color);
+        }
+
+        &:has(textarea:focus), &:has(textarea:active) {
+            &:after {
+                transform: rotateY(0deg);
+            }
+        }
+
+        &:has(.tnt-label) {
+            &:has(textarea:not(:placeholder-shown)), &:has(textarea:focus), &:has(textarea:active), &.tnt-placeholder {
+                .tnt-label {
+                    align-self: start;
+                    transform-origin: left;
+                    transform: scale(0.75) translateY(-20px);
+                }
+            }
+
+            &:has(textarea:focus), &:has(textarea:active) {
+                .tnt-label {
+                    color: $tint-color;
+                }
+            }
+        }
+    }
+
+    &.tnt-form-outlined {
+        border-radius: 4px;
+        background-color: transparent;
+        outline: 1px solid colors.$tnt-color-outline;
+        padding-top: 18px;
+
+        &:before, &:after {
+            content: '';
+            position: absolute;
+            width: calc(100% + 2px);
+            background-color: transparent;
+            border-radius: 4px;
+            box-sizing: border-box;
+            border-color: $tint-color;
+            border-style: solid;
+            border-radius: inherit;
+            height: calc(100% + 2px);
+            top: -1px;
+            left: -1px;
+            transition: 250ms ease-in-out;
+        }
+
+        &:before {
+            border-left-width: 2px;
+            border-right-width: 2px;
+            border-top-width: 0;
+            border-bottom-width: 0;
+            transform: rotateX(90deg);
+        }
+
+        &:after {
+            border-top-width: 2px;
+            border-bottom-width: 2px;
+            border-left-width: 0;
+            border-right-width: 0;
+            transform: rotateY(90deg);
+        }
+
+        &:hover {
+            background-color: color-mix(in srgb, $tint-color 15%, transparent);
+        }
+
+        &:has(textarea:focus), &:has(textarea:active) {
+            &:before {
+                transform: rotateX(0deg);
+            }
+
+            &:after {
+                transform: rotateY(0deg);
+            }
+        }
+
+        &:has(.tnt-label) {
+            &:has(textarea:not(:placeholder-shown)), &:has(textarea:focus), &:has(textarea:active), &.tnt-placeholder {
+                .tnt-label {
+                    transform-origin: left;
+                    align-self: start;
+                    transform: scale(0.75) translateY(-38px);
+                    background-color: $background-color;
+                    padding: 0 4px;
+                }
+
+                &:has(.tnt-start-icon) {
+                    .tnt-label {
+                        transform: scale(0.75) translate(-50px,-38px)
+                    }
+                }
+            }
+
+            &:has(textarea:focus), &:has(textarea:active) {
+                .tnt-label {
+                    color: $tint-color;
+                }
+            }
+        }
+    }
+}
