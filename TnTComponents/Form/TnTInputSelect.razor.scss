@@ -13,10 +13,10 @@ $background-color: var(--tnt-input-background-color);
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
-    grid-template-areas: "pad1 text pad2";
+    grid-template-areas: "pad1 select pad2";
     grid-template-columns: 16px 1fr 16px;
     caret-color: $tint-color;
-    cursor: text;
+    cursor: pointer;
     color: $text-color;
     transition: 250ms ease-in-out;
     margin-bottom: 18px;
@@ -25,7 +25,7 @@ $background-color: var(--tnt-input-background-color);
         position: absolute;
         transition: 250ms ease-in-out;
         box-sizing: border-box;
-        grid-area: text;
+        grid-area: select;
         align-self: center;
         z-index: 1;
         @include typescale.tnt-body-large;
@@ -33,21 +33,21 @@ $background-color: var(--tnt-input-background-color);
 
 
     &:has(.tnt-start-icon):has(.tnt-end-icon) {
-        grid-template-areas: "pad1 start-icon pad2 text pad3 end-icon pad4";
+        grid-template-areas: "pad1 start-icon pad2 select pad3 end-icon pad4";
         grid-template-columns: 12px 24px 16px 1fr 16px 24px 12px;
     }
 
     &:has(.tnt-start-icon):not(:has(.tnt-end-icon)) {
-        grid-template-areas: "pad1 start-icon pad2 text pad3";
+        grid-template-areas: "pad1 start-icon pad2 select pad3";
         grid-template-columns: 12px 24px 16px 1fr 16px;
     }
 
     &:has(.tnt-end-icon):not(:has(.tnt-start-icon)) {
-        grid-template-areas: "pad1 text pad2 end-icon pad3";
+        grid-template-areas: "pad1 select pad2 end-icon pad3";
         grid-template-columns: 16px 1fr 16px 24px 12px;
     }
 
-    &:has(input[readonly]) {
+    &:has(select[readonly]) {
         pointer-events: none;
         opacity: 0.7;
     }
@@ -59,10 +59,9 @@ $background-color: var(--tnt-input-background-color);
     }
 
     ::deep {
-        input {
-            grid-area: text;
+        select {
+            grid-area: select;
             box-sizing: border-box;
-            appearance: none;
             border: none;
             outline: none;
             background-color: transparent;
@@ -70,9 +69,11 @@ $background-color: var(--tnt-input-background-color);
             caret-color: inherit;
             height: fit-content;
             width: 100%;
+            cursor: pointer;
             align-self: center;
             transition: 250ms ease-in-out;
             padding: 2px 0;
+            height: 100%;
             @include typescale.tnt-body-large;
 
             &:placeholder {
@@ -87,9 +88,9 @@ $background-color: var(--tnt-input-background-color);
                 color: $text-color;
             }
 
-            &::-webkit-calendar-picker-indicator {
-                border-radius: 50%;
-                background-color: color-mix(in srgb, #ffffff 50%, $background-color);
+            option {
+                background-color: $background-color;
+                color: $text-color;
             }
         }
 
@@ -141,7 +142,7 @@ $background-color: var(--tnt-input-background-color);
             color: $error-color;
         }
 
-        &:has(input:focus), &:has(input:active) {
+        &:has(select:focus), &:has(select:active) {
             caret-color: $error-color;
         }
 
@@ -185,21 +186,21 @@ $background-color: var(--tnt-input-background-color);
             background-color: color-mix(in srgb, $tint-color 15%, $background-color);
         }
 
-        &:has(input:focus), &:has(input:active) {
+        &:has(select:focus), &:has(select:active) {
             &:after {
                 transform: rotateY(0deg);
             }
         }
 
         &:has(.tnt-label) {
-            &:has(input:not(:placeholder-shown)), &:has(input:focus), &:has(input:active), &.tnt-placeholder {
+            &:has(option:checked), &:has(select:focus), &:has(select:active), &.tnt-placeholder {
                 .tnt-label {
                     transform-origin: left;
                     transform: scale(0.75) translateY(-20px);
                 }
             }
 
-            &:has(input:focus), &:has(input:active) {
+            &:has(select:focus), &:has(select:active) {
                 .tnt-label {
                     color: $tint-color;
                 }
@@ -207,7 +208,7 @@ $background-color: var(--tnt-input-background-color);
 
             ::deep {
 
-                input:not(:placeholder-shown), input:focus, input:active {
+                select {
                     transform: translateY(8px)
                 }
             }
@@ -264,7 +265,7 @@ $background-color: var(--tnt-input-background-color);
             background-color: color-mix(in srgb, $tint-color 15%, transparent);
         }
 
-        &:has(input:focus), &:has(input:active) {
+        &:has(select:focus), &:has(select:active) {
             &:before {
                 transform: rotateX(0deg);
             }
@@ -275,7 +276,7 @@ $background-color: var(--tnt-input-background-color);
         }
 
         &:has(.tnt-label) {
-            &:has(input:not(:placeholder-shown)), &:has(input:focus), &:has(input:active), &.tnt-placeholder {
+            &:has(option:checked), &:has(select:focus), &:has(select:active), &.tnt-placeholder {
                 .tnt-label {
                     transform-origin: left;
                     transform: scale(0.75) translateY(-38px);
@@ -290,12 +291,11 @@ $background-color: var(--tnt-input-background-color);
                 }
             }
 
-            &:has(input:focus), &:has(input:active) {
+            &:has(select:focus), &:has(select:active) {
                 .tnt-label {
                     color: $tint-color;
                 }
             }
         }
     }
-   
 }

@@ -212,18 +212,6 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     }
 
     /// <summary>
-    ///     Renders child content for the input component.
-    /// </summary>
-    /// <param name="builder">The render tree builder.</param>
-    protected virtual void RenderChildContent(RenderTreeBuilder builder) { }
-
-    /// <summary>
-    ///     Renders custom content for the input component.
-    /// </summary>
-    /// <param name="builder">The render tree builder.</param>
-    protected virtual void RenderCustomContent(RenderTreeBuilder builder) { }
-
-    /// <summary>
     ///     Gets the custom attribute if it exists.
     /// </summary>
     /// <typeparam name="TCustomAttr">The type of the custom attribute.</typeparam>
@@ -328,23 +316,5 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
         return null;
     }
 
-    /// <summary>
-    ///     Handles the change event asynchronously.
-    /// </summary>
-    /// <param name="value">The new value.</param>
-    /// <returns>A task that represents the asynchronous operation.</returns>
-    private async Task OnChangeAsync(string? value) {
-        CurrentValueAsString = value;
-        await BindAfter.InvokeAsync(CurrentValue);
-    }
 
-    /// <summary>
-    ///     Sets the current value as a string array.
-    /// </summary>
-    /// <param name="value">The value to set.</param>
-    private void SetCurrentValueAsStringArray(string?[]? value) {
-        CurrentValue = BindConverter.TryConvertTo<TInputType>(value, CultureInfo.CurrentCulture, out var result)
-            ? result
-            : default;
-    }
 }

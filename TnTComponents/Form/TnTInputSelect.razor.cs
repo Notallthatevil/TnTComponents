@@ -12,7 +12,7 @@ namespace TnTComponents;
 ///     Represents a custom input select component.
 /// </summary>
 /// <typeparam name="TInputType">The type of the input value.</typeparam>
-public class TnTInputSelect<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TInputType> : TnTInputBase<TInputType> {
+public partial class TnTInputSelect<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TInputType> {
 
     /// <summary>
     ///     Gets or sets a value indicating whether the placeholder selection is allowed.
@@ -41,23 +41,28 @@ public class TnTInputSelect<[DynamicallyAccessedMembers(DynamicallyAccessedMembe
     /// <inheritdoc />
     public override InputType Type => InputType.Select;
 
-    /// <inheritdoc />
-    protected override void RenderChildContent(RenderTreeBuilder builder) {
-        if (!string.IsNullOrWhiteSpace(Placeholder)) {
-            builder.OpenElement(0, "option");
-            if (ShouldHavePlaceholderSelected) {
-                builder.AddAttribute(10, "selected", true);
-            }
-            if (!AllowPlaceholderSelection) {
-                builder.AddAttribute(20, "disabled");
-            }
-            else {
-                builder.AddAttribute(30, "value", PlaceholderValue ?? (object)string.Empty);
-            }
-            builder.AddContent(40, Placeholder);
-            builder.CloseElement();
+    /// <summary>
+    ///     Handles the change event asynchronously.
+    /// </summary>
+    private async Task OnChangeAsync(ChangeEventArgs args) {
+        if (args.Value is string value) {
+            CurrentValueAsString = value;
         }
-        builder.AddContent(50, ChildContent);
+        else {
+            CurrentValue = default;
+        }
+        await BindAfter.InvokeAsync(CurrentValue);
+    }
+    /// <summary>
+    ///     Sets the current value as a string array.
+    /// </summary>
+    private void SetCurrentValueAsStringArray(ChangeEventArgs args) {
+        if (args.Value is IEnumerable<string> stringValues && BindConverter.TryConvertTo<TInputType>(stringValues, CultureInfo.CurrentCulture, out var result)) {
+            CurrentValue = result;
+        }
+        else {
+            CurrentValue = default;
+        }
     }
 
     /// <inheritdoc />
