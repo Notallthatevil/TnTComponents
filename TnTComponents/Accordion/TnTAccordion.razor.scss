@@ -1,14 +1,20 @@
 ﻿@use '../Styles/_Variables/_colors.scss' as colors;
 @use '../Styles/_Variables/_interactable.scss' as interactable;
 
+$header-bg-color: var(--tnt-accordion-child-header-bg-color);
+$header-text-color: var(--tnt-accordion-child-header-fg-color);
+$header-tint-color: var(--tnt-accordion-child-header-tint-color);
+$content-bg-color: var(--tnt-accordion-child-content-bg-color);
+$content-text-color: var(--tnt-accordion-child-content-fg-color);
+
 .tnt-accordion ::deep {
     display: block;
     margin: 8px;
 
     .tnt-accordion-child {
         border-radius: inherit;
-        @include colors.tnt-default-background-colors;
-        @include colors.tnt-default-foreground-colors;
+        background-color: $content-bg-color;
+        color: $content-text-color;
 
         & > h3:first-child {
             border-radius: inherit;
@@ -24,9 +30,9 @@
             z-index: 100;
             position: sticky;
             top: 0;
-            @include colors.tnt-default-background-colors;
-            @include colors.tnt-default-foreground-colors;
-            @include interactable.tnt-interactable;
+            background-color: $header-bg-color;
+            color: $header-text-color;
+            @include interactable.tnt-interactable($header-tint-color, null, false);
             @include interactable.tnt-disabled;
 
             .tnt-icon {

@@ -52,3 +52,53 @@
         }
     }
 }
+
+@mixin tnt-interactable($tint-color: null, $on-tint-color: null, $deep-ripple: true) {
+    &.tnt-interactable:not(.tnt-disabled) {
+        position: relative;
+        overflow: clip;
+        cursor: pointer;
+
+        &:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            opacity: 1;
+            transition-timing-function: ease-in-out;
+            transition-duration: 200ms;
+            transition-property: opacity, background-color;
+        }
+
+        @if $tint-color != null {
+            &:hover, &:active {
+                &:before {
+                    background-color: #{$tint-color};
+                    opacity: 0.3;
+                }
+            }
+
+            @if $deep-ripple {
+                ::deep {
+                    .tnt-rippling {
+                        background-color: #{$tint-color};
+                    }
+                }
+            }
+            @else {
+                .tnt-rippling {
+                    background-color: #{$tint-color};
+                }
+            }
+        }
+    }
+
+    @if $on-tint-color != null {
+        &:hover, &:active {
+            color: #{$on-tint-color};
+        }
+    }
+}

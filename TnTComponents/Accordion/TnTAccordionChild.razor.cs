@@ -37,8 +37,6 @@ public partial class TnTAccordionChild {
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-accordion-child")
-        .AddBackgroundColor(ContentBodyColor ?? _parent.ContentBodyColor)
-        .AddForegroundColor(ContentTextColor ?? _parent.ContentTextColor)
         .Build();
 
     /// <inheritdoc />
@@ -48,6 +46,8 @@ public partial class TnTAccordionChild {
     /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddVariable("tnt-accordion-child-content-bg-color", ContentBodyColor ?? _parent.ContentBodyColor)
+        .AddVariable("tnt-accordion-child-content-fg-color", ContentTextColor ?? _parent.ContentTextColor)
         .Build();
 
     /// <inheritdoc />
@@ -160,13 +160,16 @@ public partial class TnTAccordionChild {
                 builder.AddAttribute(95, "onclick", "TnTComponents.toggleAccordionHeader(event)");
                 builder.AddAttribute(100, "class", CssClassBuilder.Create()
                         .AddRipple()
-                        .AddBackgroundColor(HeaderBodyColor ?? _parent.HeaderBodyColor)
-                        .AddForegroundColor(HeaderTextColor ?? _parent.HeaderTextColor)
-                        .AddTintColor(HeaderTintColor ?? _parent.HeaderTintColor)
-                        .AddFilled()
-                        .AddTnTInteractable(this)
+                        .AddClass("tnt-interactable")
                         .AddDisabled(Disabled)
                         .Build());
+
+                builder.AddAttribute(105, "style", CssStyleBuilder.Create()
+                    .AddVariable("tnt-accordion-child-header-bg-color", HeaderBodyColor ?? _parent.HeaderBodyColor)
+                    .AddVariable("tnt-accordion-child-header-fg-color", HeaderTextColor ?? _parent.HeaderTextColor)
+                    .AddVariable("tnt-accordion-child-header-tint-color", HeaderTintColor ?? _parent.HeaderTintColor)
+                    .Build());
+
                 builder.AddAttribute(110, "data-permanent", true);
                 builder.AddContent(120, Label);
 
@@ -194,7 +197,7 @@ public partial class TnTAccordionChild {
                 }
 
 #if NET9_0_OR_GREATER
-                if(!RendererInfo.IsInteractive || !RemoveContentOnClose || (RendererInfo.IsInteractive && _open)) {
+                if (!RendererInfo.IsInteractive || !RemoveContentOnClose || (RendererInfo.IsInteractive && _open)) {
                     builder.AddContent(170, ChildContent);
                 }
 #else
