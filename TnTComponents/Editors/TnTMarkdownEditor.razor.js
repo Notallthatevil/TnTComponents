@@ -106,7 +106,7 @@ export function onLoad(element, dotNetElementRef) {
                                     let cm = editor.codemirror;
                                     var output = '';
                                     var selectedText = cm.getSelection();
-                                    var text = selectedText || 'align-left';
+                                    var text = selectedText || 'align-center';
 
                                     output = '!\\>\\<' + text + '!\\>\\<';
                                     cm.replaceSelection(output);
@@ -121,7 +121,7 @@ export function onLoad(element, dotNetElementRef) {
                                     let cm = editor.codemirror;
                                     var output = '';
                                     var selectedText = cm.getSelection();
-                                    var text = selectedText || 'align-left';
+                                    var text = selectedText || 'align-right';
 
                                     output = '!\\>' + text + '!\\>';
                                     cm.replaceSelection(output);

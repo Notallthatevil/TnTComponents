@@ -1,0 +1,23 @@
+﻿@use '../Styles/_Variables/_colors.scss';
+
+tnt-markdown-editor {
+    ::deep {
+        .initial-value {
+            display: none;
+        }
+
+        .editor-toolbar {
+            background-color: colors.$tnt-color-surface;
+
+            i.fa {
+                color: colors.$tnt-color-on-surface;
+            }
+        }
+
+        .CodeMirror{
+            background-color: colors.$tnt-color-surface-variant;
+            color: colors.$tnt-color-on-surface-variant;
+            caret-color: colors.$tnt-color-on-surface-variant;
+        }
+    }
+}
