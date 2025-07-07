@@ -13,4 +13,5 @@ public partial class TnTBody {
     public override string? ElementClass => CssClassBuilder.Create(base.ElementClass!)
         .AddClass("tnt-body")
         .Build();
+
 }
