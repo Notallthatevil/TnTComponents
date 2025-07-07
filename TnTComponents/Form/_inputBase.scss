@@ -7,13 +7,15 @@ $tint-color: var(--tnt-input-tint-color);
 $background-color: var(--tnt-input-background-color);
 
 @mixin tnt-label($grid-area: text) {
-    position: absolute;
-    transition: 250ms ease-in-out;
-    box-sizing: border-box;
-    grid-area: $grid-area;
-    align-self: center;
-    z-index: 1;
-    @include typescale.tnt-body-large;
+    .tnt-label {
+        position: absolute;
+        transition: 250ms ease-in-out;
+        box-sizing: border-box;
+        grid-area: $grid-area;
+        align-self: center;
+        z-index: 1;
+        @include typescale.tnt-body-large;
+    }
 }
 
 @mixin disabled-and-readonly {

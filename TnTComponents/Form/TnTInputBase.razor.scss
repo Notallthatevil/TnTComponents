@@ -15,9 +15,7 @@
     transition: 250ms ease-in-out;
     margin-bottom: 18px;
 
-    .tnt-label {
-        @include base.tnt-label;
-    }
+    @include base.tnt-label;
 
     @include base.disabled-and-readonly;
 
