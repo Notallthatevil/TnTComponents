@@ -1,10 +1,3 @@
-export function raiseFluentInputFile(fileInputId) {
-    var item = document.getElementById(fileInputId);
-    if (!!item) {
-        item.click();
-    }
-}
-
 export function attachClickHandler(buttonId, fileInputId) {
     var button = document.getElementById(buttonId);
     var fileInput = document.getElementById(fileInputId);
@@ -29,18 +22,18 @@ export function previewImage(inputElem, index, imgElem) {
 export function initializeFileDropZone(containerElement, inputFile) {
     function onDragHover(e) {
         e.preventDefault();
-        containerElement.setAttribute("drop-files", "true");
+        containerElement.classList.add('tnt-drag-over');
     }
 
     function onDragLeave(e) {
         e.preventDefault();
-        containerElement.removeAttribute("drop-files");
+        containerElement.classList.remove('tnt-drag-over');
     }
 
     // Handle the paste and drop events
     function onDrop(e) {
         e.preventDefault();
-        containerElement.removeAttribute("drop-files");
+        containerElement.classList.remove('tnt-drag-over');
 
         // Set the files property of the input element and raise the change event
         inputFile.files = e.dataTransfer.files;
@@ -48,20 +41,11 @@ export function initializeFileDropZone(containerElement, inputFile) {
         inputFile.dispatchEvent(event);
     }
 
-    // We'll implement this later
-    //function onPaste(e) {
-    //    // Set the files property of the input element and raise the change event
-    //    inputFile.files = e.clipboardData.files;
-    //    const event = new Event('change', { bubbles: true });
-    //    inputFile.dispatchEvent(event);
-    //}
-
     // Register all events
     containerElement?.addEventListener("dragenter", onDragHover);
     containerElement?.addEventListener("dragover", onDragHover);
     containerElement?.addEventListener("dragleave", onDragLeave);
     containerElement?.addEventListener("drop", onDrop);
-    //containerElement?.addEventListener('paste', onPaste);
 
     // The returned object allows to unregister the events when the Blazor component is destroyed
     return {
@@ -70,7 +54,17 @@ export function initializeFileDropZone(containerElement, inputFile) {
             containerElement?.removeEventListener('dragover', onDragHover);
             containerElement?.removeEventListener('dragleave', onDragLeave);
             containerElement?.removeEventListener("drop", onDrop);
-            //containerElement?.removeEventListener('paste', onPaste);
         }
     }
+}
+
+export function onLoad(element, dotNetRef) {
+  
+}
+
+export function onUpdate(element, dotNetRef) {
+    
+}
+
+export function onDispose(element, dotNetRef) {
 }

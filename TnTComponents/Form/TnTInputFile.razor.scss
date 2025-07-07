@@ -15,7 +15,7 @@ $background-color: var(--tnt-input-background-color);
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
-    grid-template-areas: "pad1 text pad2";
+    grid-template-areas: "pad1 text pad2" "progress progress progress";
     grid-template-columns: 16px 1fr 16px;
     caret-color: $tint-color;
     cursor: pointer;
@@ -35,17 +35,17 @@ $background-color: var(--tnt-input-background-color);
 
 
     &:has(.tnt-start-icon):has(.tnt-end-icon) {
-        grid-template-areas: "pad1 start-icon pad2 text pad3 end-icon pad4";
+        grid-template-areas: "pad1 start-icon pad2 text pad3 end-icon pad4" "progress progress progress progress progress progress progress";
         grid-template-columns: 12px 24px 16px 1fr 16px 24px 12px;
     }
 
     &:has(.tnt-start-icon):not(:has(.tnt-end-icon)) {
-        grid-template-areas: "pad1 start-icon pad2 text pad3";
+        grid-template-areas: "pad1 start-icon pad2 text pad3" "progress progress progress progress progress";
         grid-template-columns: 12px 24px 16px 1fr 16px;
     }
 
     &:has(.tnt-end-icon):not(:has(.tnt-start-icon)) {
-        grid-template-areas: "pad1 text pad2 end-icon pad3";
+        grid-template-areas: "pad1 text pad2 end-icon pad3" "progress progress progress progress progress";
         grid-template-columns: 16px 1fr 16px 24px 12px;
     }
 
@@ -75,6 +75,7 @@ $background-color: var(--tnt-input-background-color);
             transition: 250ms ease-in-out;
             padding: 2px 0;
             cursor: inherit;
+            z-index: 1;
             @include typescale.tnt-body-large;
 
             &::file-selector-button {
@@ -138,14 +139,6 @@ $background-color: var(--tnt-input-background-color);
         }
     }
 
-
-    .tnt-input-length {
-        position: absolute;
-        top: calc(100% + 4px);
-        right: 16px;
-        @include typescale.tnt-body-small;
-    }
-
     &.modified.invalid {
         outline-color: $error-color;
 
@@ -176,8 +169,6 @@ $background-color: var(--tnt-input-background-color);
         }
     }
 
-
-
     &.tnt-form-filled {
         border-bottom: 1px solid colors.$tnt-color-outline-variant;
         border-radius: 4px 4px 0 0;
@@ -197,11 +188,11 @@ $background-color: var(--tnt-input-background-color);
             transition: 250ms ease-out;
         }
 
-        &:hover {
+        &:hover, &.tnt-drag-over {
             background-color: color-mix(in srgb, $tint-color 15%, $background-color);
         }
 
-        &:has(input:focus), &:has(input:active) {
+        &:has(input:focus), &:has(input:active), &.tnt-drag-over {
             &:after {
                 transform: rotateY(0deg);
             }
@@ -215,7 +206,7 @@ $background-color: var(--tnt-input-background-color);
                 }
             }
 
-            &:has(input:focus), &:has(input:active) {
+            &:has(input:focus), &:has(input:active), &.tnt-drag-over {
                 .tnt-label {
                     color: $tint-color;
                 }
@@ -223,8 +214,8 @@ $background-color: var(--tnt-input-background-color);
 
             ::deep {
 
-                input:not(:placeholder-shown), input:focus, input:active {
-                    transform: translateY(8px)
+                input:not(:placeholder-shown), input:focus, input:active, &.tnt-drag-over {
+                    transform: translateY(16px)
                 }
             }
         }
@@ -232,7 +223,7 @@ $background-color: var(--tnt-input-background-color);
         &.tnt-placeholder:has(.tnt-label) {
             ::deep {
                 input {
-                    transform: translateY(8px);
+                    transform: translateY(16px);
                 }
             }
         }
@@ -276,11 +267,11 @@ $background-color: var(--tnt-input-background-color);
             transform: rotateY(90deg);
         }
 
-        &:hover {
+        &:hover, &.tnt-drag-over {
             background-color: color-mix(in srgb, $tint-color 15%, transparent);
         }
 
-        &:has(input:focus), &:has(input:active) {
+        &:has(input:focus), &:has(input:active), &.tnt-drag-over {
             &:before {
                 transform: rotateX(0deg);
             }
@@ -306,11 +297,35 @@ $background-color: var(--tnt-input-background-color);
                 }
             }
 
-            &:has(input:focus), &:has(input:active) {
+            &:has(input:focus), &:has(input:active), &.tnt-drag-over {
                 .tnt-label {
                     color: $tint-color;
                 }
             }
+
+            ::deep {
+
+                input:not(:placeholder-shown), input:focus, input:active, &.tnt-drag-over {
+                    transform: translateY(8px)
+                }
+            }
+        }
+
+        &.tnt-placeholder:has(.tnt-label) {
+            ::deep {
+                input {
+                    transform: translateY(8px);
+                }
+            }
+        }
+    }
+
+    .tnt-input-progress {
+        grid-area: progress;
+
+        .tnt-input-file-progress-title {
+            @include typescale.tnt-label-large;
+            text-align: center;
         }
     }
 }

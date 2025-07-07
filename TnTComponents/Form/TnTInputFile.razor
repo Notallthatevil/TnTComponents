@@ -20,4 +20,19 @@
     @if (EndIcon is not null) {
         @EndIcon.Render("tnt-end-icon")
     }
+
+    @if(ShowProgress) {
+        <div class="tnt-input-progress">
+            @if(ProgressTemplate is not null) {
+                @ProgressTemplate(ProgressPercent > 0 ? ProgressFileDetails with { Percentage = ProgressPercent } : new ProgressFileDetails())
+            }
+            else {
+                <div class="tnt-input-file-progress-title">
+                    @ProgressTitle
+                </div>
+                <TnTProgressIndicator Appearance="ProgressAppearance.Linear" Value="@ProgressPercent" Max="100" min="0" />
+            }
+        </div>
+    }
 </label>
+
