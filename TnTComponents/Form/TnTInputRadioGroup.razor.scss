@@ -1,246 +1,200 @@
-﻿//@use '../Styles/_Variables/_colors.scss' as colors;
-//@use '../Styles/_Variables/_typescale.scss' as typescale;
+﻿@use '_inputBase.scss' as base;
+@use '../Styles/_Variables/_colors.scss' as colors;
+@use '../Styles/_Variables/_typescale.scss' as typescale;
 
-//$error-color: var(--tnt-input-error-color);
-//$text-color: var(--tnt-input-text-color);
-//$tint-color: var(--tnt-input-tint-color);
-//$background-color: var(--tnt-input-background-color);
+.tnt-input {
+    position: relative;
+    display: inline-grid;
+    grid-template-areas: "pad1 radio pad2";
+    grid-template-columns: 16px 1fr 16px;
+    grid-template-rows: auto;
+    width: 100%;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    caret-color: base.$tint-color;
+    color: base.$text-color;
+    transition: 250ms ease-in-out;
+    margin-bottom: 18px;
+    appearance: none;
+    border: none;
+    outline: none;
 
-//.tnt-input {
-//    position: relative;
-//    display: inline-flex;
-//    width: 100%;
-//    box-sizing: border-box;
-//    -webkit-box-sizing: border-box;
-//    -moz-box-sizing: border-box;
-//    caret-color: $tint-color;
-//    color: $text-color;
-//    transition: 250ms ease-in-out;
-//    margin-bottom: 18px;
-//    appearance: none;
-//    border: none;
-//    outline: none;
+    &:has(.tnt-start-icon):has(.tnt-end-icon) {
+        grid-template-areas: "pad1 start-icon pad2 radio pad3 end-icon pad4";
+        grid-template-columns: 12px 24px 16px 1fr 16px 24px 12px;
+    }
 
-//    &.tnt-vertical {
-//        flex-direction: column;
-//    }
+    &:has(.tnt-start-icon):not(:has(.tnt-end-icon)) {
+        grid-template-areas: "pad1 start-icon pad2 radio pad3";
+        grid-template-columns: 12px 24px 16px 1fr 16px;
+    }
 
-//    .tnt-label {
-//        position: absolute;
-//        transition: 250ms ease-in-out;
-//        box-sizing: border-box;
-//        z-index: 1;
-//        @include typescale.tnt-body-large;
-//    }
+    &:has(.tnt-end-icon):not(:has(.tnt-start-icon)) {
+        grid-template-areas: "pad1 radio pad2 end-icon pad3";
+        grid-template-columns: 16px 1fr 16px 24px 12px;
+    }
 
+    .tnt-radio-buttons {
+        display: flex;
+        gap: 8px;
+        align-items: start;
+        justify-content: start;
+        grid-area: radio;
+    }
 
-//    &:has(input[readonly]) {
-//        pointer-events: none;
-//        opacity: 0.7;
-//    }
+    &.tnt-vertical {
+        .tnt-radio-buttons {
+            flex-direction: column;
+        }
+    }
 
-//    &.tnt-disabled {
-//        pointer-events: none;
-//        opacity: 0.5 !important;
-//        user-select: none;
-//    }
+    .tnt-label {
+        position: absolute;
+        transition: 250ms ease-in-out;
+        box-sizing: border-box;
+        z-index: 1;
+        @include typescale.tnt-body-large;
+    }
 
-//    ::deep {
-//        .tnt-start-icon {
-//            grid-area: start-icon;
-//        }
+    @include base.disabled-and-readonly;
 
-//        .tnt-end-icon {
-//            grid-area: end-icon;
-//        }
+    ::deep {
+        @include base.default-icon;
+        @include base.supporting-text;
+    }
 
-//        .tnt-start-icon, .tnt-end-icon {
-//            align-self: center;
-//            justify-self: center;
-//        }
+    @include base.invalid;
 
-//        .tnt-supporting-text {
-//            position: absolute;
-//            top: calc(100% + 4px);
-//            left: 16px;
-//            width: calc(100% - 32px - 7ch);
-//            text-wrap: wrap;
-//            color: $text-color;
-//            @include typescale.tnt-body-small;
-//        }
+    &.tnt-form-filled {
+        border-bottom: 1px solid colors.$tnt-color-outline-variant;
+        border-radius: 4px 4px 0 0;
+        background-color: base.$background-color;
 
-//        @for $i from 1 through 5 {
-//            *:nth-child(#{$i} of .tnt-supporting-text) {
-//                transform: translateY(calc(12px * ($i - 1))) !important;
-//            }
-//        }
-//    }
+        &:after {
+            position: absolute;
+            content: '';
+            bottom: 0;
+            height: 2px;
+            width: 100%;
+            left: 0;
+            bottom: 0;
+            background-color: var(--tnt-input-tint-color);
+            transform: rotateY(90deg);
+            transition: 250ms ease-out;
+        }
 
-//    .tnt-validation-message {
-//        color: $error-color;
-//    }
+        &:hover {
+            background-color: color-mix(in srgb, base.$tint-color 15%, base.$background-color);
+        }
 
-//    &.modified.invalid {
-//        outline-color: $error-color;
+        .tnt-label {
+            transform-origin: left;
+            transform: scale(0.75) translate(16px, 0);
+            align-self: start;
+        }
 
-//        &:before, &:after {
-//            border-color: $error-color;
-//        }
+        &:has(input:focus), &:has(input:active) {
+            &:after {
+                transform: rotateY(0deg);
+            }
+        }
 
-//        .tnt-label, .tnt-input-length {
-//            color: $error-color;
-//        }
+        &:has(.tnt-label) {
 
-//        &:has(input:focus), &:has(input:active) {
-//            caret-color: $error-color;
-//        }
+            &:has(input:focus), &:has(input:active) {
+                .tnt-label {
+                    color: base.$tint-color;
+                }
+            }
 
-//        ::deep {
-//            .tnt-end-icon {
-//                color: $error-color;
-//            }
-//        }
+            ::deep {
+                .tnt-radio-input {
+                    transform: translateY(8px)
+                }
+            }
+        }
 
-//        &.tnt-form-filled {
-//            &:after {
-//                background-color: $error-color;
-//            }
+        &.tnt-placeholder:has(.tnt-label) {
+            ::deep {
+                .tnt-radio-input {
+                    transform: translateY(8px);
+                }
+            }
+        }
+    }
 
-//            border-bottom: 1px solid $error-color;
-//        }
-//    }
+    &.tnt-form-outlined {
+        border-radius: 4px;
+        background-color: transparent;
+        outline: 1px solid colors.$tnt-color-outline;
 
-//    &.tnt-form-filled {
-//        border-bottom: 1px solid colors.$tnt-color-outline-variant;
-//        border-radius: 4px 4px 0 0;
-//        background-color: $background-color;
+        .tnt-label {
+            grid-area: radio;
+            transform-origin: left;
+            transform: scale(0.75) translate(16px, -22px);
+            align-self: start;
+        }
 
-//        &:after {
-//            position: absolute;
-//            content: '';
-//            bottom: 0;
-//            height: 2px;
-//            width: 100%;
-//            left: 0;
-//            bottom: 0;
-//            background-color: var(--tnt-input-tint-color);
-//            transform: rotateY(90deg);
-//            transition: 250ms ease-out;
-//        }
+        &:before, &:after {
+            content: '';
+            position: absolute;
+            width: calc(100% + 2px);
+            background-color: transparent;
+            border-radius: 4px;
+            box-sizing: border-box;
+            border-color: base.$tint-color;
+            border-style: solid;
+            border-radius: inherit;
+            height: calc(100% + 2px);
+            top: -1px;
+            left: -1px;
+            transition: 250ms ease-in-out;
+        }
 
-//        &:hover {
-//            background-color: color-mix(in srgb, $tint-color 15%, $background-color);
-//        }
+        &:before {
+            border-left-width: 2px;
+            border-right-width: 2px;
+            border-top-width: 0;
+            border-bottom-width: 0;
+            transform: rotateX(90deg);
+        }
 
-//        &:has(input:focus), &:has(input:active) {
-//            &:after {
-//                transform: rotateY(0deg);
-//            }
-//        }
+        &:after {
+            border-top-width: 2px;
+            border-bottom-width: 2px;
+            border-left-width: 0;
+            border-right-width: 0;
+            transform: rotateY(90deg);
+        }
 
-//        &:has(.tnt-label) {
-//            &:has(input:not(:placeholder-shown)), &:has(input:focus), &:has(input:active), &.tnt-placeholder {
-//                .tnt-label {
-//                    transform-origin: left;
-//                    transform: scale(0.75) translateY(-12px);
-//                }
-//            }
+        &:hover {
+            background-color: color-mix(in srgb, base.$tint-color 15%, transparent);
+        }
 
-//            &:has(input:focus), &:has(input:active) {
-//                .tnt-label {
-//                    color: $tint-color;
-//                }
-//            }
+        &:has(input:focus), &:has(input:active) {
+            &:before {
+                transform: rotateX(0deg);
+            }
 
-//            ::deep {
+            &:after {
+                transform: rotateY(0deg);
+            }
+        }
 
-//                .tnt-radio-input {
-//                    transform: translateY(8px)
-//                }
-//            }
-//        }
+        &:has(.tnt-label) {
+            &:has(input:not(:placeholder-shown)), &:has(input:focus), &:has(input:active), &.tnt-placeholder {
+                .tnt-label {
+                    background-color: base.$background-color;
+                    padding: 0 4px;
+                }
+            }
 
-//        &.tnt-placeholder:has(.tnt-label) {
-//            ::deep {
-//                .tnt-radio-input {
-//                    transform: translateY(8px);
-//                }
-//            }
-//        }
-//    }
-
-//    &.tnt-form-outlined {
-//        border-radius: 4px;
-//        background-color: transparent;
-//        outline: 1px solid colors.$tnt-color-outline;
-
-//        &:before, &:after {
-//            content: '';
-//            position: absolute;
-//            width: calc(100% + 2px);
-//            background-color: transparent;
-//            border-radius: 4px;
-//            box-sizing: border-box;
-//            border-color: $tint-color;
-//            border-style: solid;
-//            border-radius: inherit;
-//            height: calc(100% + 2px);
-//            top: -1px;
-//            left: -1px;
-//            transition: 250ms ease-in-out;
-//        }
-
-//        &:before {
-//            border-left-width: 2px;
-//            border-right-width: 2px;
-//            border-top-width: 0;
-//            border-bottom-width: 0;
-//            transform: rotateX(90deg);
-//        }
-
-//        &:after {
-//            border-top-width: 2px;
-//            border-bottom-width: 2px;
-//            border-left-width: 0;
-//            border-right-width: 0;
-//            transform: rotateY(90deg);
-//        }
-
-//        &:hover {
-//            background-color: color-mix(in srgb, $tint-color 15%, transparent);
-//        }
-
-//        &:has(input:focus), &:has(input:active) {
-//            &:before {
-//                transform: rotateX(0deg);
-//            }
-
-//            &:after {
-//                transform: rotateY(0deg);
-//            }
-//        }
-
-//        &:has(.tnt-label) {
-//            &:has(input:not(:placeholder-shown)), &:has(input:focus), &:has(input:active), &.tnt-placeholder {
-//                .tnt-label {
-//                    transform-origin: left;
-//                    transform: scale(0.75) translateY(-22px);
-//                    background-color: $background-color;
-//                    padding: 0 4px;
-//                }
-
-//                &:has(.tnt-start-icon) {
-//                    .tnt-label {
-//                        transform: scale(0.75) translate(-50px,-22px)
-//                    }
-//                }
-//            }
-
-//            &:has(input:focus), &:has(input:active) {
-//                .tnt-label {
-//                    color: $tint-color;
-//                }
-//            }
-//        }
-//    }
-//}
+            &:has(input:focus), &:has(input:active) {
+                .tnt-label {
+                    color: base.$tint-color;
+                }
+            }
+        }
+    }
+}

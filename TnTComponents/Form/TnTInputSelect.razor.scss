@@ -140,7 +140,7 @@
 
         &.tnt-placeholder:has(.tnt-label) {
             ::deep {
-                input {
+                select {
                     transform: translateY(8px);
                 }
             }
@@ -225,19 +225,22 @@
 
     &:has(select[multiple]) {
         grid-template-rows: auto;
+        padding-top: 12px;
+        .tnt-label {
+            align-self: start;
+        }
 
         &.tnt-form-outlined {
 
             .tnt-label {
-                top: -12px;
-                transform: scale(0.75) !important;
+                transform: scale(0.75) translateY(-30px) !important;
             }
         }
 
         &.tnt-form-filled {
+
             .tnt-label {
-                top: -15px;
-                transform: scale(0.75) !important;
+                transform: scale(0.75) translateY(-18px) !important;
             }
 
             ::deep {

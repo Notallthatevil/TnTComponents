@@ -8,9 +8,11 @@
         @StartIcon.Render("tnt-start-icon")
     }
 
-    <CascadingValue Value="this" IsFixed="true">
-        @ChildContent
-    </CascadingValue>
+    <div class="tnt-radio-buttons">
+        <CascadingValue Value="this" IsFixed="true">
+            @ChildContent
+        </CascadingValue>
+    </div>
 
     @if (!string.IsNullOrWhiteSpace(SupportingText)) {
         <span class="tnt-supporting-text">
@@ -22,9 +24,9 @@
     }
 
     @if (!string.IsNullOrWhiteSpace(Label)) {
-    <legend class="tnt-label">
-        @Label
-    </legend>
+        <legend class="tnt-label">
+            @Label
+        </legend>
     }
 
     @if (EndIcon is not null) {

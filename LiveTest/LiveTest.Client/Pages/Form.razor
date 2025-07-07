@@ -2,6 +2,7 @@
 @rendermode InteractiveWebAssembly
 @using System.ComponentModel.DataAnnotations
 @using TnTComponents
+<TnTContainer>
 
 <div style="position:sticky;top:0;background-color:var(--tnt-color-surface)">
     <h3>FormTesting</h3>
@@ -48,7 +49,7 @@
     <ValidationSummary />
      
 
-  @*   <TnTRow>
+  <TnTRow>
         <h3>
             Text @Input.Text
         </h3>
@@ -145,9 +146,9 @@
                 }
             </TnTInputSelect>
         </TnTColumn>
-    </TnTRow> *@
+    </TnTRow> 
 
-    @* <TnTRow>
+     <TnTRow>
         <h3>
             Radio @Input.Radio
         </h3>
@@ -159,10 +160,10 @@
                 <TnTInputRadio TInputType="RadioEnum?" Value="RadioEnum.Four" Label="@RadioEnum.Four.ToString()" StartIcon="@_startIcon" EndIcon="@_endIcon" />
             </TnTInputRadioGroup>
         </TnTColumn>
-    </TnTRow> *@
+    </TnTRow> 
 
 
-    @* <TnTRow>
+     <TnTRow>
         <h3>
             Input Area @Input.Area
         </h3>
@@ -170,7 +171,7 @@
         <TnTColumn S="6">
             <TnTInputTextArea @bind-Value="@Input.Area" SupportingText="@_supportingText" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
-    </TnTRow> *@
+    </TnTRow> 
 
     <TnTRow>
         <h3>
@@ -187,7 +188,7 @@
             <TnTInputFile multiple Label="@_label" SupportingText="@_supportingText" StartIcon="@_startIcon" EndIcon="@_endIcon" Mode="@InputFileMode.Stream" MaximumFileCount="5" />
         </TnTColumn>
     </TnTRow>
-    @* <TnTRow>
+     <TnTRow>
         <h3>
             Input Area @Input.Area
         </h3>
@@ -195,8 +196,9 @@
         <TnTColumn S="6">
             <TnTMarkdownEditor @bind-Value="@Input.Area" />
         </TnTColumn>
-    </TnTRow> *@
+    </TnTRow> 
 </TnTForm>
+</TnTContainer>
 
 @code {
     private sealed class InputModel {
