@@ -1,0 +1,16 @@
+﻿@namespace TnTComponents
+@using TnTComponents.Core
+@inherits TnTComponentBase
+
+
+<div @attributes="AdditionalAttributes"
+     class="@ElementClass"
+     style="@ElementStyle"
+     autofocus="@AutoFocus"
+     lang="@ElementLang"
+     title="@ElementTitle"
+     id="@ElementId"
+     @ref="Element">
+    @ChildContent
+</div>
+

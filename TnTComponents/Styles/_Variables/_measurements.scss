@@ -22,3 +22,24 @@ $num-cols: 12 !default;
 $gutter-width: 24px !default;
 $element-top-margin: $gutter-width/3 !default;
 $element-bottom-margin: ($gutter-width*2)/3 !default;
+
+// Mixins to eliminate code repitition
+@mixin grid-classes($size, $i, $perc) {
+    &.#{$size}#{$i}-offset {
+        margin-left: $perc;
+    }
+
+    &.#{$size}#{$i}-pull {
+        right: $perc;
+    }
+
+    &.#{$size}#{$i}-push {
+        left: $perc;
+    }
+}
+
+@mixin reset-offset {
+    margin-left: auto;
+    left: auto;
+    right: auto;
+}

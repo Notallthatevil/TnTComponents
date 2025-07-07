@@ -10,25 +10,14 @@ namespace TnTComponents;
 /// <summary>
 ///     Represents a column component in a grid layout system. This component follows a 12-column grid system with responsive behavior across different screen sizes.
 /// </summary>
-public class TnTColumn : TnTComponentBase, ITnTComponentBase, ITnTFlexBox {
+public partial class TnTColumn  {
 
-    /// <inheritdoc />
-    [Parameter]
-    public AlignContent? AlignContent { get; set; }
-
-    /// <inheritdoc />
-    [Parameter]
-    public AlignItems? AlignItems { get; set; }
-
+  
     /// <summary>
     ///     Gets or sets the content to be rendered inside the column.
     /// </summary>
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
-
-    /// <inheritdoc />
-    [Parameter]
-    public LayoutDirection? Direction { get; set; }
 
     /// <summary>
     ///     Gets the CSS class for the column element, including grid sizing classes.
@@ -38,7 +27,6 @@ public class TnTColumn : TnTComponentBase, ITnTComponentBase, ITnTFlexBox {
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-col")
         .AddClass(GetGridClass())
-        .AddFlexBox(this)
         .Build();
 
     /// <inheritdoc />
@@ -46,9 +34,6 @@ public class TnTColumn : TnTComponentBase, ITnTComponentBase, ITnTFlexBox {
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
-    /// <inheritdoc />
-    [Parameter]
-    public JustifyContent? JustifyContent { get; set; }
 
     /// <summary>
     ///     Gets or sets the column size for large screens (L). Value must be between 0 and 12, where 0 means the column is not used for this screen size.
@@ -155,25 +140,6 @@ public class TnTColumn : TnTComponentBase, ITnTComponentBase, ITnTFlexBox {
     ///     Dictionary of size classes and their corresponding values.
     /// </summary>
     private Dictionary<string, ColSize> _sizes = [];
-
-    /// <summary>
-    ///     Builds the render tree for the column component.
-    /// </summary>
-    /// <param name="builder">The <see cref="RenderTreeBuilder" /> to use for building the render tree.</param>
-    /// <inheritdoc />
-    protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        builder.OpenElement(0, "div");
-        builder.AddMultipleAttributes(10, AdditionalAttributes);
-        builder.AddAttribute(20, "class", ElementClass);
-        builder.AddAttribute(30, "style", ElementStyle);
-        builder.AddAttribute(40, "autofocus", AutoFocus);
-        builder.AddAttribute(50, "lang", ElementLang);
-        builder.AddAttribute(60, "title", ElementTitle);
-        builder.AddAttribute(70, "id", ElementId);
-        builder.AddElementReferenceCapture(80, e => Element = e);
-        builder.AddContent(90, ChildContent);
-        builder.CloseElement();
-    }
 
     /// <summary>
     ///     Initializes the column component by processing the size properties.
