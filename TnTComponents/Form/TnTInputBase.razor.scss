@@ -38,9 +38,18 @@
         input {
             @include base.default-input;
 
+            &[type="date"], &[type="datetime-local"], &[type="month"], &[type="week"] {
+                padding-left: 16px;
+            }
+
+            &[type="time"]{
+                padding-left: 28px;
+            }
             &::-webkit-calendar-picker-indicator {
                 border-radius: 50%;
                 background-color: color-mix(in srgb, #ffffff 50%, base.$background-color);
+                left: 8px;
+                position: absolute;
             }
         }
 

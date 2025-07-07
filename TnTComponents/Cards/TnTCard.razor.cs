@@ -8,21 +8,13 @@ namespace TnTComponents;
 /// <summary>
 ///     Represents a card component with customizable appearance, background color, border radius, elevation, text alignment, and text color.
 /// </summary>
-public class TnTCard : TnTComponentBase, ITnTStyleable {
+public partial class TnTCard {
 
     /// <summary>
-    ///     The appearance of the card. Default is <see cref="CardAppearance.Filled" />.
+    /// The appearance of the card.
     /// </summary>
     [Parameter]
-    public CardAppearance Appearance { get; set; } = CardAppearance.Filled;
-
-    /// <inheritdoc />
-    [Parameter]
-    public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerLow;
-
-    /// <inheritdoc />
-    [Parameter]
-    public TnTBorderRadius? BorderRadius { get; set; } = new(3);
+    public CardAppearance Appearance { get; set; } = CardAppearance.Elevated;
 
     /// <summary>
     ///     The child content to be rendered inside the card.
@@ -33,14 +25,17 @@ public class TnTCard : TnTComponentBase, ITnTStyleable {
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddTnTStyleable(this)
-        .AddFilled(Appearance == CardAppearance.Filled)
-        .AddOutlined(Appearance == CardAppearance.Outlined)
+        .AddClass("tnt-card")
+        .AddClass("tnt-card-filled", Appearance == CardAppearance.Filled)
+        .AddClass("tnt-card-outlined", Appearance == CardAppearance.Outlined)
+        .AddClass("tnt-card-elevated", Appearance == CardAppearance.Elevated)
         .Build();
 
     /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddVariable("tnt-card-background-color", BackgroundColor)
+        .AddVariable("tnt-card-text-color", TextColor)
         .Build();
 
     /// <inheritdoc />
@@ -55,16 +50,31 @@ public class TnTCard : TnTComponentBase, ITnTStyleable {
     [Parameter]
     public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
 
-    /// <inheritdoc />
-    protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        builder.OpenElement(0, "div");
-        builder.AddMultipleAttributes(10, AdditionalAttributes);
-        builder.AddAttribute(20, "class", ElementClass);
-        builder.AddAttribute(30, "style", ElementStyle);
-        builder.AddAttribute(40, "lang", ElementLang);
-        builder.AddAttribute(50, "title", ElementTitle);
-        builder.AddAttribute(60, "id", ElementId);
-        builder.AddContent(70, ChildContent);
-        builder.CloseElement();
-    }
+    /// <summary>
+    /// The background color of the card.
+    /// </summary>
+    [Parameter]
+    public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerLow;
+
+}
+
+/// <summary>
+///     Specifies the appearance of a card.
+/// </summary>
+public enum CardAppearance {
+
+    /// <summary>
+    ///     The card is filled.
+    /// </summary>
+    Filled,
+
+    /// <summary>
+    ///     The card is outlined.
+    /// </summary>
+    Outlined,
+
+    /// <summary>
+    ///     The card is elevated.
+    /// </summary>
+    Elevated
 }
