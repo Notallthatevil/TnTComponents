@@ -36,7 +36,11 @@ namespace TnTComponents;
 ///     Provides a file input component for uploading files, supporting multiple modes and progress tracking.
 /// </summary>
 public partial class TnTInputFile {
-
+    /// <summary>
+    /// Text that provides additional information about the input, such as usage instructions or validation hints.
+    /// </summary>
+    [Parameter]
+    public string? SupportingText { get; set; }
     /// <summary>
     ///     Gets or sets the appearance of the form input.
     /// </summary>

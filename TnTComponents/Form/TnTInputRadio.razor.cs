@@ -15,7 +15,7 @@ namespace TnTComponents;
 ///     Represents a radio input component.
 /// </summary>
 /// <typeparam name="TInputType">The type of the input value.</typeparam>
-public class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TInputType> : TnTComponentBase, ITnTInteractable {
+public partial class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TInputType> {
 
     /// <summary>
     ///     Gets or sets the cascading parameter for the radio group.
@@ -30,7 +30,9 @@ public class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccessedMember
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddTnTInteractable(this, enableDisabled: false)
+        .AddClass("tnt-radio-input")
+        .AddClass("tnt-interactable")
+        .AddRipple(EnableRipple)
         .AddDisabled(_disabled)
         .Build();
 
@@ -89,62 +91,6 @@ public class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccessedMember
     private bool _readOnly => _group.FieldReadonly || ReadOnly;
     private bool _trueValueToggle;
 
-    /// <inheritdoc />
-    protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        builder.OpenElement(0, "label");
-        builder.AddMultipleAttributes(10, AdditionalAttributes);
-        builder.AddAttribute(20, "class", ElementClass);
-        builder.AddAttribute(30, "style", ElementStyle);
-        builder.AddAttribute(40, "lang", ElementLang);
-        builder.AddAttribute(60, "id", ElementId);
-        builder.AddAttribute(70, "name", ElementName);
-        builder.AddElementReferenceCapture(80, e => Element = e);
-
-        if (StartIcon is not null) {
-            builder.AddContent(90, StartIcon.Render());
-        }
-
-        builder.OpenElement(100, "div");
-        builder.AddAttribute(110, "class", "tnt-radio-button");
-        builder.CloseElement();
-
-        builder.OpenElement(120, "input");
-        builder.AddAttribute(130, "title", ElementTitle);
-        builder.AddAttribute(140, "type", _group.Type.ToInputTypeString());
-        builder.AddMultipleAttributes(150, AdditionalAttributes);
-        builder.AddAttribute(160, "name", _group.ElementName);
-        builder.AddAttribute(170, "style", ElementStyle);
-        builder.AddAttribute(180, "readonly", _readOnly);
-        builder.AddAttribute(190, "disabled", _disabled);
-        builder.AddAttribute(200, "value", BindConverter.FormatValue(Value?.ToString()));
-        builder.AddAttribute(210, "checked", _group.InternalCurrentValue?.Equals(Value) == true ? GetToggledTrueValue() : null);
-        builder.AddAttribute(220, "onchange", EventCallback.Factory.Create(_group, async () => {
-            _group.InternalCurrentValue = Value;
-            await _group.BindAfter.InvokeAsync(Value);
-        }));
-        builder.SetUpdatesAttributeName("checked");
-
-        if (_group.InternalEditContext is not null) {
-            builder.AddAttribute(230, "onblur", EventCallback.Factory.Create<FocusEventArgs>(this, args => {
-                _group.NotifyStateChanged();
-            }));
-        }
-
-        builder.CloseElement();
-
-        if (!string.IsNullOrWhiteSpace(Label)) {
-            builder.OpenElement(240, "span");
-            builder.AddAttribute(250, "class", CssClassBuilder.Create().AddClass("tnt-label").Build());
-            builder.AddContent(260, Label);
-            builder.CloseElement();
-        }
-
-        if (EndIcon is not null) {
-            builder.AddContent(270, EndIcon.Render());
-        }
-
-        builder.CloseElement();
-    }
 
     /// <inheritdoc />
     protected override void OnParametersSet() {

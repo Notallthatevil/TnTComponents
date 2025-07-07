@@ -37,19 +37,23 @@
         Label
         <input type="checkbox" @bind="_e" />
     </label>
+    <label>
+        Supporting Text
+        <input type="checkbox" @bind="_f" />
+    </label>
 </div>
 
 <TnTForm Model="@Input" OnValidSubmit="ValidSubmit" OnInvalidSubmit="InvalidSubmit" Disabled="@_disabled" ReadOnly="@_readonly" FormName="Login" Appearance="@_appearance">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    @*  
+     
 
-    <TnTRow>
+  @*   <TnTRow>
         <h3>
             Text @Input.Text
         </h3>
         <TnTColumn S="6">
-            <TnTInputText @bind-Value="@Input.Text" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" BackgroundColor="@(_appearance == FormAppearance.Filled ? TnTColor.SurfaceContainerHighest : TnTColor.Surface)" />
+            <TnTInputText @bind-Value="@Input.Text" Placeholder="@_placeholder" SupportingText="@_supportingText" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" BackgroundColor="@(_appearance == FormAppearance.Filled ? TnTColor.SurfaceContainerHighest : TnTColor.Surface)" />
         </TnTColumn>
     </TnTRow>
 
@@ -58,11 +62,11 @@
             Numeric @Input.Integer @Input.Decimal
         </h3>
         <TnTColumn S="6">
-            <TnTInputNumeric @bind-Value="@Input.Integer" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+            <TnTInputNumeric @bind-Value="@Input.Integer" Placeholder="@_placeholder" SupportingText="@_supportingText" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
 
         <TnTColumn S="6">
-            <TnTInputNumeric @bind-Value="@Input.Decimal" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+            <TnTInputNumeric @bind-Value="@Input.Decimal" Placeholder="@_placeholder" SupportingText="@_supportingText" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
     </TnTRow>
 
@@ -71,17 +75,17 @@
             Date Time Types @Input.DateTimeField @Input.Date @Input.Time @Input.DateTimeOff
         </h3>
         <TnTColumn S="3">
-            <TnTInputDateTime @bind-Value="@Input.DateTimeField" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+            <TnTInputDateTime @bind-Value="@Input.DateTimeField" Placeholder="@_placeholder" SupportingText="@_supportingText" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
 
         <TnTColumn S="3">
-            <TnTInputDateTime @bind-Value="@Input.Date" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" MonthOnly="true" />
+            <TnTInputDateTime @bind-Value="@Input.Date" Placeholder="@_placeholder" SupportingText="@_supportingText" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" MonthOnly="true" />
         </TnTColumn>
         <TnTColumn S="3">
-            <TnTInputDateTime @bind-Value="@Input.Time" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+            <TnTInputDateTime @bind-Value="@Input.Time" Placeholder="@_placeholder" SupportingText="@_supportingText" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
         <TnTColumn S="3">
-            <TnTInputDateTime @bind-Value="@Input.DateTimeOff" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+            <TnTInputDateTime @bind-Value="@Input.DateTimeOff" Placeholder="@_placeholder" SupportingText="@_supportingText" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
     </TnTRow>
 
@@ -90,7 +94,7 @@
             Phone @Input.Phone
         </h3>
         <TnTColumn S="6">
-            <TnTInputText @bind-Value="@Input.Phone" InputType="TextInputType.Tel" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+            <TnTInputText @bind-Value="@Input.Phone" InputType="TextInputType.Tel" SupportingText="@_supportingText" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
     </TnTRow>
 
@@ -99,7 +103,7 @@
             Currency @Input.Currency
         </h3>
         <TnTColumn S="6">
-            <TnTInputCurrency @bind-Value="@Input.Currency" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+            <TnTInputCurrency @bind-Value="@Input.Currency" Placeholder="@_placeholder" SupportingText="@_supportingText" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
     </TnTRow>
 
@@ -108,18 +112,18 @@
             Checkboxes @Input.Checkbox @Input.FalseCheckbox @Input.Switch @Input.FalseSwitch
         </h3>
         <TnTColumn S="6">
-            <TnTInputCheckbox @bind-Value="@Input.Checkbox" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+            <TnTInputCheckbox @bind-Value="@Input.Checkbox" Placeholder="@_placeholder" SupportingText="@_supportingText" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
 
         <TnTColumn S="6">
-            <TnTInputCheckbox @bind-Value="@Input.FalseCheckbox" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+            <TnTInputCheckbox @bind-Value="@Input.FalseCheckbox" Placeholder="@_placeholder" SupportingText="@_supportingText" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
         <TnTColumn S="6">
-            <TnTInputSwitch @bind-Value="@Input.Switch" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+            <TnTInputSwitch @bind-Value="@Input.Switch" Placeholder="@_placeholder" SupportingText="@_supportingText" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
 
         <TnTColumn S="6">
-            <TnTInputSwitch @bind-Value="@Input.FalseSwitch" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+            <TnTInputSwitch @bind-Value="@Input.FalseSwitch" Placeholder="@_placeholder" SupportingText="@_supportingText" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
     </TnTRow>
     <TnTRow>
@@ -127,7 +131,7 @@
             Select @Input.Select @string.Join(", ", Input.Multi)
         </h3>
         <TnTColumn S="6">
-            <TnTInputSelect @bind-Value="@Input.Select" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" AllowPlaceholderSelection="true" PlaceholderValue="@null">
+            <TnTInputSelect @bind-Value="@Input.Select" Placeholder="@_placeholder" Label="@_label" SupportingText="@_supportingText" StartIcon="@_startIcon" EndIcon="@_endIcon" AllowPlaceholderSelection="true" PlaceholderValue="@null">
                 @foreach (var value in _values) {
                     <option value="@value">@value</option>
                 }
@@ -135,56 +139,55 @@
         </TnTColumn>
 
         <TnTColumn S="6">
-            <TnTInputSelect @bind-Value="@Input.Multi" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" AllowPlaceholderSelection="true" PlaceholderValue="@null">
+            <TnTInputSelect @bind-Value="@Input.Multi" Placeholder="@_placeholder" Label="@_label" SupportingText="@_supportingText" StartIcon="@_startIcon" EndIcon="@_endIcon" AllowPlaceholderSelection="true" PlaceholderValue="@null">
                 @foreach (var value in _values) {
                     <option value="@value">@value</option>
                 }
             </TnTInputSelect>
         </TnTColumn>
-    </TnTRow>
+    </TnTRow> *@
 
-    <TnTRow>
+    @* <TnTRow>
         <h3>
             Radio @Input.Radio
         </h3>
         <TnTColumn S="12">
-            <TnTInputRadioGroup @bind-Value="@Input.Radio" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon">
+            <TnTInputRadioGroup @bind-Value="@Input.Radio" SupportingText="@_supportingText" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon">
                 <TnTInputRadio TInputType="RadioEnum?" Value="RadioEnum.One" Label="@RadioEnum.One.ToString()" StartIcon="@_startIcon" EndIcon="@_endIcon" />
                 <TnTInputRadio TInputType="RadioEnum?" Value="RadioEnum.Two" Label="@RadioEnum.Two.ToString()" StartIcon="@_startIcon" EndIcon="@_endIcon" />
                 <TnTInputRadio TInputType="RadioEnum?" Value="RadioEnum.Three" Label="@RadioEnum.Three.ToString()" StartIcon="@_startIcon" EndIcon="@_endIcon" />
                 <TnTInputRadio TInputType="RadioEnum?" Value="RadioEnum.Four" Label="@RadioEnum.Four.ToString()" StartIcon="@_startIcon" EndIcon="@_endIcon" />
             </TnTInputRadioGroup>
         </TnTColumn>
-    </TnTRow>
-     *@
+    </TnTRow> *@
 
 
-    <TnTRow>
+    @* <TnTRow>
         <h3>
             Input Area @Input.Area
         </h3>
 
         <TnTColumn S="6">
-            <TnTInputTextArea @bind-Value="@Input.Area" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
+            <TnTInputTextArea @bind-Value="@Input.Area" SupportingText="@_supportingText" Placeholder="@_placeholder" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" />
         </TnTColumn>
-    </TnTRow>
+    </TnTRow> *@
 
     <TnTRow>
         <h3>
             Input File
         </h3>
         <TnTColumn S="4">
-            <TnTInputFile multiple Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" Mode="@InputFileMode.Buffer" MaximumFileCount="5" />
+            <TnTInputFile multiple Label="@_label" SupportingText="@_supportingText" StartIcon="@_startIcon" EndIcon="@_endIcon" Mode="@InputFileMode.Buffer" MaximumFileCount="5" />
         </TnTColumn>
         <TnTColumn S="4">
-            <TnTInputFile multiple Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" Mode="@InputFileMode.SaveToTemporaryFolder" MaximumFileCount="5" />
+            <TnTInputFile multiple Label="@_label" SupportingText="@_supportingText" StartIcon="@_startIcon" EndIcon="@_endIcon" Mode="@InputFileMode.SaveToTemporaryFolder" MaximumFileCount="5" />
         </TnTColumn>
 
         <TnTColumn S="4">
-            <TnTInputFile multiple Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" Mode="@InputFileMode.Stream" MaximumFileCount="5" />
+            <TnTInputFile multiple Label="@_label" SupportingText="@_supportingText" StartIcon="@_startIcon" EndIcon="@_endIcon" Mode="@InputFileMode.Stream" MaximumFileCount="5" />
         </TnTColumn>
     </TnTRow>
-    <TnTRow>
+    @* <TnTRow>
         <h3>
             Input Area @Input.Area
         </h3>
@@ -192,7 +195,7 @@
         <TnTColumn S="6">
             <TnTMarkdownEditor @bind-Value="@Input.Area" />
         </TnTColumn>
-    </TnTRow>
+    </TnTRow> *@
 </TnTForm>
 
 @code {
@@ -261,10 +264,12 @@
     private bool _c;
     private bool _d;
     private bool _e;
+    private bool _f;
     private TnTIcon? _startIcon => _b ? new MaterialIcon { Icon = MaterialIcon.SavedSearch } : null;
     private TnTIcon? _endIcon => _c ? new MaterialIcon { Icon = MaterialIcon.QrCode } : null;
     private string? _placeholder => _d ? "Placeholder" : null;
     private string? _label => _e ? "Label" : null;
+    private string? _supportingText => _f ? "Supporting Text" : null;
 
     private FormAppearance _appearance = FormAppearance.Filled;
 

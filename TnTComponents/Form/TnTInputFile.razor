@@ -11,6 +11,12 @@
 
     @base.BuildRenderTree
 
+    @if (!string.IsNullOrWhiteSpace(SupportingText)) {
+        <span class="tnt-supporting-text">
+            @SupportingText
+        </span>
+    }
+
     @if (!string.IsNullOrWhiteSpace(Label)) {
     <span class="tnt-label">
         @Label

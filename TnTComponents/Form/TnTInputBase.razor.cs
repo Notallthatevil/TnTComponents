@@ -29,6 +29,12 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public bool? AutoFocus { get; set; }
 
     /// <summary>
+    /// Text that provides additional information about the input, such as usage instructions or validation hints.
+    /// </summary>
+    [Parameter]
+    public string? SupportingText { get; set; }
+
+    /// <summary>
     ///     Gets or sets the background color of the input.
     /// </summary>
     [Parameter]

@@ -11,8 +11,14 @@
 
     @RenderInputElement
 
+    @if (!string.IsNullOrWhiteSpace(SupportingText)) {
+        <span class="tnt-supporting-text">
+            @SupportingText
+        </span>
+    }
+
     @if (EditContext is not null && !DisableValidationMessage && ValueExpression is not null) {
-        <ValidationMessage TValue="@bool" For="@ValueExpression" class="tnt-components tnt-validation-message" style="color: var(--tnt-color-error)" />
+        <ValidationMessage TValue="@bool" For="@ValueExpression" class="tnt-components tnt-supporting-text tnt-validation-message" style="color: var(--tnt-color-error)" />
     }
 
     @if (!string.IsNullOrWhiteSpace(Label)) {

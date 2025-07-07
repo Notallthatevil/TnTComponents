@@ -1,10 +1,5 @@
-﻿@use '../Styles/_Variables/_colors.scss' as colors;
-@use '../Styles/_Variables/_typescale.scss' as typescale;
-
-$error-color: var(--tnt-input-error-color);
-$text-color: var(--tnt-input-text-color);
-$tint-color: var(--tnt-input-tint-color);
-$background-color: var(--tnt-input-background-color);
+﻿@use '_inputBase.scss' as base;
+@use '../Styles/_Variables/_colors.scss' as colors;
 
 .tnt-input {
     position: relative;
@@ -15,21 +10,13 @@ $background-color: var(--tnt-input-background-color);
     -moz-box-sizing: border-box;
     grid-template-areas: "pad1 select pad2";
     grid-template-columns: 16px 1fr 16px;
-    caret-color: $tint-color;
+    caret-color: base.$tint-color;
     cursor: pointer;
-    color: $text-color;
+    color: base.$text-color;
     transition: 250ms ease-in-out;
     margin-bottom: 18px;
 
-    .tnt-label {
-        position: absolute;
-        transition: 250ms ease-in-out;
-        box-sizing: border-box;
-        grid-area: select;
-        align-self: center;
-        z-index: 1;
-        @include typescale.tnt-body-large;
-    }
+    @include base.tnt-label(select);
 
 
     &:has(.tnt-start-icon):has(.tnt-end-icon) {
@@ -47,117 +34,54 @@ $background-color: var(--tnt-input-background-color);
         grid-template-columns: 16px 1fr 16px 24px 12px;
     }
 
-    &:has(select[readonly]) {
-        pointer-events: none;
-        opacity: 0.7;
-    }
-
-    &.tnt-disabled {
-        pointer-events: none;
-        opacity: 0.5 !important;
-        user-select: none;
-    }
+    @include base.disabled-and-readonly;
 
     ::deep {
         select {
-            grid-area: select;
-            box-sizing: border-box;
-            border: none;
-            outline: none;
-            background-color: transparent;
-            color: inherit;
-            caret-color: inherit;
-            height: fit-content;
-            width: 100%;
-            cursor: pointer;
-            align-self: center;
-            transition: 250ms ease-in-out;
-            padding: 2px 0;
+            @include base.default-input(select);
             height: 100%;
-            @include typescale.tnt-body-large;
-
-            &:placeholder {
-                opacity: 0.5;
-            }
-
-            &::-webkit-autofill,
-            &::-webkit-autofill:hover,
-            &::-webkit-autofill:focus,
-            &::-webkit-autofill:active {
-                -webkit-background-clip: text;
-                color: $text-color;
-            }
+            cursor: pointer;
+            appearance: menulist;
 
             option {
-                background-color: $background-color;
-                color: $text-color;
+                background-color: base.$background-color;
+                color: base.$text-color;
             }
         }
 
-        .tnt-start-icon {
-            grid-area: start-icon;
-        }
-
-        .tnt-end-icon {
-            grid-area: end-icon;
-        }
-
-        .tnt-start-icon, .tnt-end-icon {
-            align-self: center;
-            justify-self: center;
-        }
-
-        .tnt-validation-message {
-            position: absolute;
-            top: calc(100% + 4px);
-            left: 16px;
-            width: calc(100% - 32px - 7ch);
-            text-wrap: wrap;
-            @include typescale.tnt-body-small;
-        }
-
-        @for $i from 1 through 5 {
-            *:nth-child(#{$i} of .tnt-validation-message) {
-                transform: translateY(calc(12px * ($i - 1))) !important;
-            }
-        }
+        @include base.default-icon;
+        @include base.supporting-text;
     }
 
-
-    .tnt-input-length {
-        position: absolute;
-        top: calc(100% + 4px);
-        right: 16px;
-        @include typescale.tnt-body-small;
-    }
+    @include base.tnt-input-length;
 
     &.modified.invalid {
-        outline-color: $error-color;
+        outline-color: base.$error-color;
 
         &:before, &:after {
-            border-color: $error-color;
+            border-color: base.$error-color;
         }
 
         .tnt-label, .tnt-input-length {
-            color: $error-color;
+            color: base.$error-color;
         }
 
         &:has(select:focus), &:has(select:active) {
-            caret-color: $error-color;
+            caret-color: base.$error-color;
         }
 
         ::deep {
             .tnt-end-icon {
-                color: $error-color;
+                color: base.$error-color;
             }
         }
 
         &.tnt-form-filled {
             &:after {
-                background-color: $error-color;
+                background-color: base.$error-color;
             }
 
-            border-bottom: 1px solid $error-color;
+            border-bottom: 1px solid base.$error-color;
         }
     }
 
@@ -166,7 +90,7 @@ $background-color: var(--tnt-input-background-color);
     &.tnt-form-filled {
         border-bottom: 1px solid colors.$tnt-color-outline-variant;
         border-radius: 4px 4px 0 0;
-        background-color: $background-color;
+        background-color: base.$background-color;
         grid-template-rows: 55px; // +1 from border-bottom
 
         &:after {
@@ -183,7 +107,7 @@ $background-color: var(--tnt-input-background-color);
         }
 
         &:hover {
-            background-color: color-mix(in srgb, $tint-color 15%, $background-color);
+            background-color: color-mix(in srgb, base.$tint-color 15%, base.$background-color);
         }
 
         &:has(select:focus), &:has(select:active) {
@@ -202,7 +126,7 @@ $background-color: var(--tnt-input-background-color);
 
             &:has(select:focus), &:has(select:active) {
                 .tnt-label {
-                    color: $tint-color;
+                    color: base.$tint-color;
                 }
             }
 
@@ -236,7 +160,7 @@ $background-color: var(--tnt-input-background-color);
             background-color: transparent;
             border-radius: 4px;
             box-sizing: border-box;
-            border-color: $tint-color;
+            border-color: base.$tint-color;
             border-style: solid;
             border-radius: inherit;
             height: calc(100% + 2px);
@@ -262,7 +186,7 @@ $background-color: var(--tnt-input-background-color);
         }
 
         &:hover {
-            background-color: color-mix(in srgb, $tint-color 15%, transparent);
+            background-color: color-mix(in srgb, base.$tint-color 15%, transparent);
         }
 
         &:has(select:focus), &:has(select:active) {
@@ -280,7 +204,7 @@ $background-color: var(--tnt-input-background-color);
                 .tnt-label {
                     transform-origin: left;
                     transform: scale(0.75) translateY(-38px);
-                    background-color: $background-color;
+                    background-color: base.$background-color;
                     padding: 0 4px;
                 }
 
@@ -293,7 +217,7 @@ $background-color: var(--tnt-input-background-color);
 
             &:has(select:focus), &:has(select:active) {
                 .tnt-label {
-                    color: $tint-color;
+                    color: base.$tint-color;
                 }
             }
         }

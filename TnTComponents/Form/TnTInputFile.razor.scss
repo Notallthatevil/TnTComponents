@@ -1,12 +1,8 @@
-﻿@use '../Styles/_Variables/_colors.scss' as colors;
+﻿@use '_inputBase.scss' as base;
+@use '../Styles/_Variables/_colors.scss' as colors;
 @use '../Styles/_Variables/_interactable.scss' as interactable;
 @use '../Styles/_Variables/_typescale.scss' as typescale;
-
-$error-color: var(--tnt-input-error-color);
-$text-color: var(--tnt-input-text-color);
-$tint-color: var(--tnt-input-tint-color);
 $on-tint-color: var(--tnt-input-on-tint-color);
-$background-color: var(--tnt-input-background-color);
 
 .tnt-input {
     position: relative;
@@ -17,21 +13,13 @@ $background-color: var(--tnt-input-background-color);
     -moz-box-sizing: border-box;
     grid-template-areas: "pad1 text pad2" "progress progress progress";
     grid-template-columns: 16px 1fr 16px;
-    caret-color: $tint-color;
+    caret-color: base.$tint-color;
     cursor: pointer;
-    color: $text-color;
+    color: base.$text-color;
     transition: 250ms ease-in-out;
     margin-bottom: 18px;
 
-    .tnt-label {
-        position: absolute;
-        transition: 250ms ease-in-out;
-        box-sizing: border-box;
-        grid-area: text;
-        align-self: center;
-        z-index: 1;
-        @include typescale.tnt-body-large;
-    }
+    @include base.tnt-label;
 
 
     &:has(.tnt-start-icon):has(.tnt-end-icon) {
@@ -49,34 +37,13 @@ $background-color: var(--tnt-input-background-color);
         grid-template-columns: 16px 1fr 16px 24px 12px;
     }
 
-    &:has(input[readonly]) {
-        pointer-events: none;
-        opacity: 0.7;
-    }
-
-    &.tnt-disabled {
-        pointer-events: none;
-        opacity: 0.5 !important;
-        user-select: none;
-    }
+    @include base.disabled-and-readonly;
 
     ::deep {
         input {
-            grid-area: text;
-            box-sizing: border-box;
-            appearance: none;
-            border: none;
-            outline: none;
-            background-color: transparent;
-            color: inherit;
-            height: fit-content;
-            width: 100%;
-            align-self: center;
-            transition: 250ms ease-in-out;
-            padding: 2px 0;
+            @include base.default-input;
             cursor: inherit;
             z-index: 1;
-            @include typescale.tnt-body-large;
 
             &::file-selector-button {
                 appearance: none;
@@ -86,239 +53,21 @@ $background-color: var(--tnt-input-background-color);
                 aspect-ratio: 16/9;
                 border-radius: 48px / 100%;
                 cursor: inherit;
-                background-color: $tint-color;
+                background-color: base.$tint-color;
                 color: $on-tint-color;
                 padding: 0px 16px;
-                @include interactable.tnt-interactable($tint-color, $on-tint-color, false);
-            }
-
-            &:placeholder {
-                opacity: 0.5;
-            }
-
-            &::-webkit-autofill,
-            &::-webkit-autofill:hover,
-            &::-webkit-autofill:focus,
-            &::-webkit-autofill:active {
-                -webkit-background-clip: text;
-                color: $text-color;
-            }
-
-            &::-webkit-calendar-picker-indicator {
-                border-radius: 50%;
-                background-color: color-mix(in srgb, #ffffff 50%, $background-color);
+                @include interactable.tnt-interactable(base.$tint-color, $on-tint-color, false);
             }
         }
 
-        .tnt-start-icon {
-            grid-area: start-icon;
-        }
-
-        .tnt-end-icon {
-            grid-area: end-icon;
-        }
-
-        .tnt-start-icon, .tnt-end-icon {
-            align-self: center;
-            justify-self: center;
-        }
-
-        .tnt-validation-message {
-            position: absolute;
-            top: calc(100% + 4px);
-            left: 16px;
-            width: calc(100% - 32px - 7ch);
-            text-wrap: wrap;
-            @include typescale.tnt-body-small;
-        }
-
-        @for $i from 1 through 5 {
-            *:nth-child(#{$i} of .tnt-validation-message) {
-                transform: translateY(calc(12px * ($i - 1))) !important;
-            }
-        }
+        @include base.default-icon;
+        @include base.supporting-text;
     }
 
-    &.modified.invalid {
-        outline-color: $error-color;
+    @include base.invalid;
+    @include base.outlined;
+    @include base.filled;
 
-        &:before, &:after {
-            border-color: $error-color;
-        }
-
-        .tnt-label, .tnt-input-length {
-            color: $error-color;
-        }
-
-        &:has(input:focus), &:has(input:active) {
-            caret-color: $error-color;
-        }
-
-        ::deep {
-            .tnt-end-icon {
-                color: $error-color;
-            }
-        }
-
-        &.tnt-form-filled {
-            &:after {
-                background-color: $error-color;
-            }
-
-            border-bottom: 1px solid $error-color;
-        }
-    }
-
-    &.tnt-form-filled {
-        border-bottom: 1px solid colors.$tnt-color-outline-variant;
-        border-radius: 4px 4px 0 0;
-        background-color: $background-color;
-        grid-template-rows: 55px; // +1 from border-bottom
-
-        &:after {
-            position: absolute;
-            content: '';
-            bottom: 0;
-            height: 2px;
-            width: 100%;
-            left: 0;
-            bottom: 0;
-            background-color: var(--tnt-input-tint-color);
-            transform: rotateY(90deg);
-            transition: 250ms ease-out;
-        }
-
-        &:hover, &.tnt-drag-over {
-            background-color: color-mix(in srgb, $tint-color 15%, $background-color);
-        }
-
-        &:has(input:focus), &:has(input:active), &.tnt-drag-over {
-            &:after {
-                transform: rotateY(0deg);
-            }
-        }
-
-        &:has(.tnt-label) {
-            &:has(input:not(:placeholder-shown)), &:has(input:focus), &:has(input:active), &.tnt-placeholder {
-                .tnt-label {
-                    transform-origin: left;
-                    transform: scale(0.75) translateY(-20px);
-                }
-            }
-
-            &:has(input:focus), &:has(input:active), &.tnt-drag-over {
-                .tnt-label {
-                    color: $tint-color;
-                }
-            }
-
-            ::deep {
-
-                input:not(:placeholder-shown), input:focus, input:active, &.tnt-drag-over {
-                    transform: translateY(16px)
-                }
-            }
-        }
-
-        &.tnt-placeholder:has(.tnt-label) {
-            ::deep {
-                input {
-                    transform: translateY(16px);
-                }
-            }
-        }
-    }
-
-    &.tnt-form-outlined {
-        border-radius: 4px;
-        background-color: transparent;
-        grid-template-rows: 56px;
-        outline: 1px solid colors.$tnt-color-outline;
-
-        &:before, &:after {
-            content: '';
-            position: absolute;
-            width: calc(100% + 2px);
-            background-color: transparent;
-            border-radius: 4px;
-            box-sizing: border-box;
-            border-color: $tint-color;
-            border-style: solid;
-            border-radius: inherit;
-            height: calc(100% + 2px);
-            top: -1px;
-            left: -1px;
-            transition: 250ms ease-in-out;
-        }
-
-        &:before {
-            border-left-width: 2px;
-            border-right-width: 2px;
-            border-top-width: 0;
-            border-bottom-width: 0;
-            transform: rotateX(90deg);
-        }
-
-        &:after {
-            border-top-width: 2px;
-            border-bottom-width: 2px;
-            border-left-width: 0;
-            border-right-width: 0;
-            transform: rotateY(90deg);
-        }
-
-        &:hover, &.tnt-drag-over {
-            background-color: color-mix(in srgb, $tint-color 15%, transparent);
-        }
-
-        &:has(input:focus), &:has(input:active), &.tnt-drag-over {
-            &:before {
-                transform: rotateX(0deg);
-            }
-
-            &:after {
-                transform: rotateY(0deg);
-            }
-        }
-
-        &:has(.tnt-label) {
-            &:has(input:not(:placeholder-shown)), &:has(input:focus), &:has(input:active), &.tnt-placeholder {
-                .tnt-label {
-                    transform-origin: left;
-                    transform: scale(0.75) translateY(-38px);
-                    background-color: $background-color;
-                    padding: 0 4px;
-                }
-
-                &:has(.tnt-start-icon) {
-                    .tnt-label {
-                        transform: scale(0.75) translate(-50px,-38px)
-                    }
-                }
-            }
-
-            &:has(input:focus), &:has(input:active), &.tnt-drag-over {
-                .tnt-label {
-                    color: $tint-color;
-                }
-            }
-
-            ::deep {
-
-                input:not(:placeholder-shown), input:focus, input:active, &.tnt-drag-over {
-                    transform: translateY(8px)
-                }
-            }
-        }
-
-        &.tnt-placeholder:has(.tnt-label) {
-            ::deep {
-                input {
-                    transform: translateY(8px);
-                }
-            }
-        }
-    }
 
     .tnt-input-progress {
         grid-area: progress;

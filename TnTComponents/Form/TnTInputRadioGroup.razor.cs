@@ -12,7 +12,7 @@ namespace TnTComponents;
 /// </summary>
 /// <typeparam name="TInputType">The type of the input value.</typeparam>
 [CascadingTypeParameter(nameof(TInputType))]
-public class TnTInputRadioGroup<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TInputType> : TnTInputBase<TInputType> {
+public partial class TnTInputRadioGroup<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TInputType> {
 
     /// <summary>
     ///     Gets or sets the child content to be rendered inside the radio group.
@@ -56,54 +56,11 @@ public class TnTInputRadioGroup<[DynamicallyAccessedMembers(DynamicallyAccessedM
     ///     Updates the value of the radio group based on the change event arguments.
     /// </summary>
     /// <param name="args">The change event arguments.</param>
-    internal void UpdateValue(ChangeEventArgs args) {
+    internal async Task UpdateValueAsync(ChangeEventArgs args) {
         CurrentValueAsString = args.Value?.ToString();
+        await BindAfter.InvokeAsync(CurrentValue);
     }
 
-    /// <inheritdoc />
-    protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        builder.OpenElement(0, "fieldset");
-        builder.AddMultipleAttributes(10, AdditionalAttributes);
-        builder.AddAttribute(20, "class", ElementClass);
-        builder.AddAttribute(30, "style", ElementStyle);
-        builder.AddAttribute(40, "name", ElementName);
-        builder.AddAttribute(50, "id", ElementId);
-        builder.AddAttribute(70, "title", ElementTitle);
-        builder.AddAttribute(80, "lang", ElementLang);
-        builder.AddAttribute(82, "disabled", FieldDisabled || FieldReadonly);
-        builder.AddElementReferenceCapture(90, e => Element = e);
-
-        if (StartIcon is not null) {
-            builder.AddContent(100, StartIcon);
-        }
-
-        if (!string.IsNullOrWhiteSpace(Label)) {
-            builder.OpenElement(110, "legend");
-            builder.AddContent(120, Label);
-            builder.CloseElement();
-        }
-
-        {
-            builder.OpenComponent<CascadingValue<TnTInputRadioGroup<TInputType>>>(130);
-            builder.AddComponentParameter(140, nameof(CascadingValue<TnTInputRadioGroup<TInputType>>.Value), this);
-            builder.AddComponentParameter(150, nameof(CascadingValue<TnTInputRadioGroup<TInputType>>.IsFixed), true);
-            builder.AddComponentParameter(160, nameof(CascadingValue<TnTInputRadioGroup<TInputType>>.ChildContent), ChildContent);
-            builder.CloseComponent();
-        }
-
-        if (EditContext is not null && !DisableValidationMessage && ValueExpression is not null) {
-            builder.OpenComponent<ValidationMessage<TInputType>>(170);
-            builder.AddComponentParameter(180, nameof(ValidationMessage<TInputType>.For), ValueExpression);
-            builder.AddAttribute(190, "class", "tnt-components tnt-validation-message tnt-body-small");
-            builder.CloseComponent();
-        }
-
-        if (EndIcon is not null) {
-            builder.AddContent(200, EndIcon);
-        }
-
-        builder.CloseElement();
-    }
 
     /// <inheritdoc />
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TInputType result, [NotNullWhen(false)] out string? validationErrorMessage) {

@@ -1,11 +1,6 @@
-﻿@use '../Styles/_Variables/_colors.scss' as colors;
+﻿@use '_inputBase.scss' as base;
 @use '../Styles/_Variables/_typescale.scss' as typescale;
-
-$error-color: var(--tnt-input-error-color);
-$text-color: var(--tnt-input-text-color);
-$tint-color: var(--tnt-input-tint-color);
-$background-color: var(--tnt-input-background-color);
-
+@use '../Styles/_Variables/_colors.scss' as colors;
 
 .tnt-input {
     grid-template-areas: "switch";
@@ -60,21 +55,12 @@ $background-color: var(--tnt-input-background-color);
         grid-area: label;
         justify-self: center;
         align-self: center;
-        color: $text-color;
+        color: base.$text-color;
 
         @include typescale.tnt-body-large;
     }
 
-    &:has(input[readonly]) {
-        pointer-events: none;
-        opacity: 0.7;
-    }
-
-    &.tnt-disabled {
-        pointer-events: none;
-        opacity: 0.5 !important;
-        user-select: none;
-    }
+    @include base.disabled-and-readonly;
 
     input {
         appearance: none;
@@ -83,33 +69,28 @@ $background-color: var(--tnt-input-background-color);
     }
 
     ::deep {
-        .tnt-start-icon {
-            grid-area: start-icon;
-        }
+        @include base.default-icon;
 
-        .tnt-end-icon {
-            grid-area: end-icon;
-        }
-
-        .tnt-start-icon, .tnt-end-icon {
-            align-self: center;
-            justify-self: center;
-        }
-
-        .tnt-validation-message {
+        .tnt-supporting-text {
             position: absolute;
             bottom: -14px;
             left: 16px;
             white-space: nowrap;
+            color: base.$text-color;
             @include typescale.tnt-body-small;
         }
 
         @for $i from 1 through 5 {
-            *:nth-child(#{$i} of .tnt-validation-message) {
+            *:nth-child(#{$i} of .tnt-supporting-text) {
                 transform: translateY(calc(12px * ($i - 1))) !important;
             }
         }
+
+        .tnt-validation-message {
+            color: base.$error-color;
+        }
     }
+
 
     .tnt-switch-overlay {
         position: absolute;
@@ -146,7 +127,7 @@ $background-color: var(--tnt-input-background-color);
         background-color: red;
         transition: 250ms ease-in-out;
         border: 2px solid colors.$tnt-color-outline;
-        background-color: $background-color;
+        background-color: base.$background-color;
         border-radius: 22px / 100%;
         align-self: center;
         justify-self: center;
@@ -158,7 +139,7 @@ $background-color: var(--tnt-input-background-color);
         grid-area: switch;
         height: 12px;
         width: 12px;
-        background-color: $tint-color;
+        background-color: base.$tint-color;
         transition: 250ms ease-in-out;
         align-self: center;
         justify-self: center;
@@ -169,12 +150,12 @@ $background-color: var(--tnt-input-background-color);
 
     &:has(input:checked) {
         &:before {
-            background-color: $tint-color;
-            border-color: $tint-color;
+            background-color: base.$tint-color;
+            border-color: base.$tint-color;
         }
 
         &:after {
-            background-color: $background-color;
+            background-color: base.$background-color;
             transform: translateX(10px) scale(1.4);
         }
 
@@ -187,34 +168,34 @@ $background-color: var(--tnt-input-background-color);
 
         &:has(input:checked) {
             &:before {
-                background-color: $error-color;
-                border-color: $error-color;
+                background-color: base.$error-color;
+                border-color: base.$error-color;
             }
         }
 
         &:not(:has(input:checked)) {
             &:before {
-                border-color: $error-color;
+                border-color: base.$error-color;
             }
 
             &:after {
-                background-color: $error-color;
+                background-color: base.$error-color;
             }
         }
 
         &:hover {
             .tnt-switch-overlay {
-                background-color: color-mix(in srgb, $error-color 20%, transparent);
+                background-color: color-mix(in srgb,base.$error-color 20%, transparent);
             }
         }
 
         .tnt-label {
-            color: $error-color;
+            color: base.$error-color;
         }
 
         ::deep {
             .tnt-end-icon {
-                color: $error-color;
+                color: base.$error-color;
             }
         }
     }
