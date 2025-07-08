@@ -5,10 +5,10 @@
     @{
         var disableLeftPages = _numberOfPages == 0 || PaginationState.CurrentPageIndex == 0;
     }
-    <TnTButton class="@($"pagination-btn pagination-first-page{(disableLeftPages ? " tnt-disabled" : "")}")" ElementTitle="First page" aria-label="First page" disabled="@disableLeftPages" BackgroundColor="@BackgroundColor" TextColor="@TextColor" OnClickCallback="@(() => PaginationState.SetCurrentPageIndexAsync(0))">
+    <TnTButton class="@($"pagination-btn pagination-first-page{(disableLeftPages ? " tnt-disabled" : "")}")" ElementTitle="First page" aria-label="First page" disabled="@disableLeftPages" BackgroundColor="@BackgroundColor" TextColor="@TextColor" OnClickCallback="@(() => PaginationState.SetCurrentPageIndexAsync(0))"Appearance="ButtonAppearance.Elevated">
         <MaterialIcon Icon="@MaterialIcon.FirstPage" Size="IconSize.Small"/>
     </TnTButton>
-    <TnTButton class="@($"pagination-btn pagination-previous-page{(disableLeftPages ? " tnt-disabled" : "")}")" ElementTitle="Previous page" aria-label="Previous page" disabled="@disableLeftPages" BackgroundColor="@BackgroundColor" TextColor="@TextColor"OnClickCallback="@(() => PaginationState.SetCurrentPageIndexAsync(PaginationState.CurrentPageIndex - 1))">
+    <TnTButton class="@($"pagination-btn pagination-previous-page{(disableLeftPages ? " tnt-disabled" : "")}")" ElementTitle="Previous page" aria-label="Previous page" disabled="@disableLeftPages" BackgroundColor="@BackgroundColor" TextColor="@TextColor"OnClickCallback="@(() => PaginationState.SetCurrentPageIndexAsync(PaginationState.CurrentPageIndex - 1))"Appearance="ButtonAppearance.Elevated">
         <MaterialIcon Icon="@MaterialIcon.ChevronLeft" Size="IconSize.Small"/>
     </TnTButton>
 
@@ -22,7 +22,7 @@
         for (var i = startIndex; i <= endIndex; i++) {
             var index = i;
             var currentPage = PaginationState.CurrentPageIndex == index;
-            <TnTButton class="@($"pagination-btn {(currentPage ? " current-page" : "")}")" ElementTitle="@index.ToString()" aria-label="@index" disabled="@currentPage"BackgroundColor="@(currentPage ? ActiveBackgroundColor : BackgroundColor)" TextColor="@(currentPage ? ActiveTextColor : TextColor)" OnClickCallback="@(() => PaginationState.SetCurrentPageIndexAsync(index))">
+            <TnTButton class="@($"pagination-btn {(currentPage ? " current-page" : "")}")" ElementTitle="@index.ToString()" aria-label="@index" disabled="@currentPage"BackgroundColor="@(currentPage ? ActiveBackgroundColor : BackgroundColor)" TextColor="@(currentPage ? ActiveTextColor : TextColor)" OnClickCallback="@(() => PaginationState.SetCurrentPageIndexAsync(index))"Appearance="ButtonAppearance.Elevated">
                 @(index + 1)
             </TnTButton>
         }
@@ -32,10 +32,10 @@
     @{
         var disableRightPages = _numberOfPages  == 0 || PaginationState.CurrentPageIndex == PaginationState.LastPageIndex;
     }
-    <TnTButton class="@($"pagination-btn pagination-first-page{(disableRightPages ? " tnt-disabled" : "")}")" ElementTitle="Next page" aria-label="Next page" disabled="@disableRightPages"BackgroundColor="@BackgroundColor" TextColor="@TextColor"OnClickCallback="@(() => PaginationState.SetCurrentPageIndexAsync(PaginationState.CurrentPageIndex + 1))">
+    <TnTButton class="@($"pagination-btn pagination-first-page{(disableRightPages ? " tnt-disabled" : "")}")" ElementTitle="Next page" aria-label="Next page" disabled="@disableRightPages"BackgroundColor="@BackgroundColor" TextColor="@TextColor"OnClickCallback="@(() => PaginationState.SetCurrentPageIndexAsync(PaginationState.CurrentPageIndex + 1))" Appearance="ButtonAppearance.Elevated">
         <MaterialIcon Icon="@MaterialIcon.ChevronRight" Size="IconSize.Small"/>
     </TnTButton>
-    <TnTButton class="@($"pagination-btn pagination-previous-page{(disableRightPages ? " tnt-disabled" : "")}")" ElementTitle="Last page" aria-label="Last page" disabled="@disableRightPages"BackgroundColor="@BackgroundColor" TextColor="@TextColor"OnClickCallback="@(() => PaginationState.SetCurrentPageIndexAsync(_numberOfPages  - 1))">
+    <TnTButton class="@($"pagination-btn pagination-previous-page{(disableRightPages ? " tnt-disabled" : "")}")" ElementTitle="Last page" aria-label="Last page" disabled="@disableRightPages"BackgroundColor="@BackgroundColor" TextColor="@TextColor"OnClickCallback="@(() => PaginationState.SetCurrentPageIndexAsync(_numberOfPages  - 1))"Appearance="ButtonAppearance.Elevated">
         <MaterialIcon Icon="@MaterialIcon.LastPage" Size="IconSize.Small"/>
     </TnTButton>
 </div>
