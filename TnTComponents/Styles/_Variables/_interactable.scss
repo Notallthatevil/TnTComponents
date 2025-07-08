@@ -11,7 +11,6 @@
 @mixin tnt-interactable {
     &.tnt-interactable:not(.tnt-disabled) {
         position: relative;
-        overflow: clip;
         cursor: pointer;
 
         &:before {
@@ -26,6 +25,7 @@
             transition-timing-function: ease-in-out;
             transition-duration: 200ms;
             transition-property: opacity, background-color;
+            border-radius: inherit;
         }
 
         @each $colorClass in colors.$tnt-all-color-classes {
@@ -56,7 +56,6 @@
 @mixin tnt-interactable($tint-color: null, $on-tint-color: null, $deep-ripple: true) {
     &.tnt-interactable:not(.tnt-disabled) {
         position: relative;
-        overflow: clip;
         cursor: pointer;
 
         &:before {
@@ -71,6 +70,7 @@
             transition-timing-function: ease-in-out;
             transition-duration: 200ms;
             transition-property: opacity, background-color;
+            border-radius: inherit;
         }
 
         @if $tint-color != null {
