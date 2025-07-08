@@ -13,7 +13,7 @@ id="@ElementId"
 title="@ElementTitle"
 autofocus="@AutoFocus"
 @ref="Element">
-    <div class="@(CssClassBuilder.Create("tnt-side-nav-menu-group-label").AddBackgroundColor(BackgroundColor).AddForegroundColor(TextColor).AddTnTInteractable(this).Build())"
+    <div class="@(CssClassBuilder.Create("tnt-side-nav-menu-group-label").AddClass("tnt-interactable").AddRipple().AddDisabled(Disabled).Build())"
          onclick="TnTComponents.toggleSideNavGroup(event)">
     <span class="tnt-side-nav-menu-group-label-content">
     @Icon?.Render()
@@ -35,66 +35,3 @@ autofocus="@AutoFocus"
         </span>
     </span>
 </div>
-   
-
-
-    @* //protected override void BuildRenderTree(RenderTreeBuilder builder) {
-    //    builder.OpenElement(0, "div");
-    //    builder.AddMultipleAttributes(10, AdditionalAttributes);
-    //    builder.AddAttribute(20, "class", ElementClass);
-    //    builder.AddAttribute(30, "style", ElementStyle);
-    //    builder.AddAttribute(40, "lang", ElementLang);
-    //    builder.AddAttribute(50, "id", ElementId);
-    //    builder.AddAttribute(60, "title", ElementTitle);
-    //    builder.AddAttribute(80, "autofocus", AutoFocus);
-    //    builder.AddElementReferenceCapture(90, e => Element = e);
-
-    //    builder.OpenElement(100, "div");
-    //    builder.AddAttribute(110, "class", CssClassBuilder.Create()
-    //        .AddClass("tnt-side-nav-menu-group-button")
-    //        .AddTnTInteractable(this)
-    //        .AddTnTStyleable(this)
-    //        .AddFilled()
-    //        .Build()
-    //    );
-    //    builder.AddAttribute(120, "onclick", "TnTComponents.toggleSideNavGroup(event)");
-
-    //    builder.OpenElement(121, "span");
-    //    if (Icon is not null) {
-    //        builder.AddContent(130, Icon.Render());
-    //    }
-
-    //    builder.AddContent(140, Label);
-    //    builder.CloseElement();
-
-    //    if (EnableRipple) {
-    //        builder.OpenComponent<TnTRippleEffect>(145);
-    //        builder.CloseComponent();
-    //    }
-
-
-    //    builder.OpenComponent<MaterialIcon>(150);
-    //    builder.AddComponentParameter(160, nameof(MaterialIcon.Icon), MaterialIcon.ArrowDropDown.Icon);
-    //    builder.AddAttribute(161, "class", "tnt-end-icon");
-    //    builder.CloseComponent();
-
-    //    builder.CloseElement();
-
-    //    // Data permanent section
-    //    {
-    //        builder.OpenElement(170, "div");
-    //        builder.AddAttribute(180, "class", "tnt-side-nav-group-toggle-indicator");
-    //        builder.AddAttribute(190, "style", "display:none");
-    //        builder.AddAttribute(200, "data-permanent");
-
-    //        builder.OpenElement(210, "div");
-    //        builder.AddAttribute(220, "class", $"tnt-toggle-indicator{(ExpandByDefault ? " tnt-toggle" : string.Empty)}");
-    //        builder.CloseElement();
-
-    //        builder.CloseElement();
-    //    }
-
-    //    builder.AddContent(230, ChildContent);
-
-    //    builder.CloseElement();
-    //} *@
