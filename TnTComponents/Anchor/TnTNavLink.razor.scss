@@ -10,6 +10,8 @@ $tint-color: var(--tnt-anchor-tint-color);
 $on-tint-color: var(--tnt-anchor-on-tint-color);
 
 .tnt-nav-link {
+    vertical-align: middle;
+
     &:not(.tnt-filled.tnt-outlined) {
         cursor: pointer;
 
@@ -70,7 +72,6 @@ $on-tint-color: var(--tnt-anchor-on-tint-color);
                 border: none;
                 box-sizing: border-box;
                 transition: 250ms ease-in-out;
-                aspect-ratio: 16/9;
 
                 &.tnt-disabled {
                     cursor: not-allowed;
@@ -121,7 +122,6 @@ $on-tint-color: var(--tnt-anchor-on-tint-color);
             @include textAlignments.tnt-text-alignments;
             @include interactable.tnt-disabled;
             transition: 250ms ease-in-out;
-            aspect-ratio: 16/9;
 
             &.active {
                 &.tnt-filled {

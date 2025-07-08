@@ -10,6 +10,8 @@ $tint-color: var(--tnt-button-tint-color);
 $on-tint-color: var(--tnt-button-on-tint-color);
 
 .tnt-button {
+    vertical-align: middle;
+
     &.tnt-size-xs, &.tnt-size-s {
         background-color: transparent;
         min-height: 48px;
@@ -48,7 +50,6 @@ $on-tint-color: var(--tnt-button-on-tint-color);
             border: none;
             box-sizing: border-box;
             transition: 250ms ease-in-out;
-            aspect-ratio: 16/9;
 
             &.tnt-disabled {
                 cursor: not-allowed;
@@ -82,7 +83,6 @@ $on-tint-color: var(--tnt-button-on-tint-color);
         @include textAlignments.tnt-text-alignments;
         @include interactable.tnt-disabled;
         transition: 250ms ease-in-out;
-        aspect-ratio: 16/9;
     }
 
     display: inline-flex;

@@ -10,6 +10,8 @@ $tint-color: var(--tnt-button-tint-color);
 $on-tint-color: var(--tnt-button-on-tint-color);
 
 .tnt-image-button {
+    vertical-align: middle;
+
     &.tnt-size-xs, &.tnt-size-s {
         background-color: transparent;
         min-height: 48px;
