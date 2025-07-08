@@ -186,58 +186,5 @@ public partial class TnTScheduler<[DynamicallyAccessedMembers(DynamicallyAccesse
         }
     }
 
-    /// <inheritdoc />
-    protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        builder.OpenElement(0, "div");
-        builder.AddMultipleAttributes(10, AdditionalAttributes);
-        builder.AddAttribute(20, "class", ElementClass);
-        builder.AddAttribute(30, "style", ElementStyle);
-        builder.AddAttribute(40, "id", ElementId);
-        builder.AddAttribute(50, "title", ElementTitle);
-        builder.AddAttribute(60, "lang", ElementLang);
-        builder.AddElementReferenceCapture(70, element => Element = element);
 
-
-        if (!HideDateControls) {
-            builder.OpenElement(80, "div");
-            builder.AddAttribute(90, "class", "date-controls");
-            {
-                builder.OpenComponent<TnTImageButton>(100);
-                builder.AddComponentParameter(110, nameof(TnTImageButton.Icon), (object)MaterialIcon.ChevronLeft);
-                builder.AddComponentParameter(120, nameof(TnTImageButton.OnClickCallback), EventCallback.Factory.Create<MouseEventArgs>(this, PreviousPage));
-                builder.AddComponentParameter(130, nameof(TnTImageButton.TextColor), TextColor);
-                builder.AddAttribute(140, "class", "prev-button");
-                builder.CloseComponent();
-
-                builder.OpenComponent<TnTButton>(150);
-                builder.AddComponentParameter(160, nameof(TnTButton.Appearance), (object)ButtonAppearance.Text);
-                builder.AddComponentParameter(170, nameof(TnTButton.OnClickCallback), EventCallback.Factory.Create<MouseEventArgs>(this, GoToToday));
-                builder.AddAttribute(180, "class", "today-button");
-                builder.AddComponentParameter(190, nameof(TnTButton.TextColor), TextColor);
-                builder.AddComponentParameter(200, nameof(TnTButton.Elevation), 0);
-                builder.AddComponentParameter(210, nameof(TnTButton.ChildContent), new RenderFragment(b => b.AddContent(0, "TODAY")));
-                builder.CloseComponent();
-
-                builder.OpenComponent<TnTImageButton>(220);
-                builder.AddComponentParameter(230, nameof(TnTImageButton.Icon), (object)MaterialIcon.ChevronRight);
-                builder.AddComponentParameter(240, nameof(TnTImageButton.OnClickCallback), EventCallback.Factory.Create<MouseEventArgs>(this, NextPage));
-                builder.AddAttribute(250, "class", "next-button");
-                builder.AddComponentParameter(260, nameof(TnTImageButton.TextColor), TextColor);
-                builder.CloseComponent();
-            }
-
-            builder.CloseElement();
-        }
-
-
-        {
-            builder.OpenComponent<CascadingValue<TnTScheduler<TEventType>>>(280);
-            builder.AddComponentParameter(290, nameof(CascadingValue<TnTScheduler<TEventType>>.Value), this);
-            builder.AddComponentParameter(290, nameof(CascadingValue<TnTScheduler<TEventType>>.IsFixed), true);
-            builder.AddComponentParameter(290, nameof(CascadingValue<TnTScheduler<TEventType>>.ChildContent), new RenderFragment(b=>b.AddContent(0, ChildContent)));
-            builder.CloseComponent();
-        }
-
-        builder.CloseElement();
-    }
 }
