@@ -57,6 +57,10 @@ export function onLoad(element, dotNetRef) {
 }
 
 export function onUpdate(element, dotNetRef) {
+    if (element && element._ensureStyleElement && element._applyMeasurements) {
+        element._ensureStyleElement();
+        element._applyMeasurements();
+    }
 }
 
 export function onDispose(element, dotNetRef) {
