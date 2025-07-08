@@ -42,27 +42,16 @@ public partial class TnTInputSelect<[DynamicallyAccessedMembers(DynamicallyAcces
     public override InputType Type => InputType.Select;
 
     /// <summary>
-    ///     Handles the change event asynchronously.
-    /// </summary>
-    private async Task OnChangeAsync(ChangeEventArgs args) {
-        if (args.Value is string value) {
-            CurrentValueAsString = value;
-        }
-        else {
-            CurrentValue = default;
-        }
-        await BindAfter.InvokeAsync(CurrentValue);
-    }
-    /// <summary>
     ///     Sets the current value as a string array.
     /// </summary>
-    private void SetCurrentValueAsStringArray(ChangeEventArgs args) {
+    private async Task SetCurrentValueAsStringArrayAsync(ChangeEventArgs args) {
         if (args.Value is IEnumerable<string> stringValues && BindConverter.TryConvertTo<TInputType>(stringValues, CultureInfo.CurrentCulture, out var result)) {
             CurrentValue = result;
         }
         else {
             CurrentValue = default;
         }
+        await BindAfter.InvokeAsync(CurrentValue);
     }
 
     /// <inheritdoc />

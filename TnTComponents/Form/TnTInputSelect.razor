@@ -34,7 +34,7 @@
     protected override void RenderInputElement(RenderTreeBuilder __builder) {
         var multiple = typeof(TInputType).IsArray || Nullable.GetUnderlyingType(typeof(TInputType))?.IsArray == true;
         EventCallback<ChangeEventArgs> changeEventCallback = multiple
-            ? EventCallback.Factory.Create<ChangeEventArgs>(this, SetCurrentValueAsStringArray)
+            ? EventCallback.Factory.Create<ChangeEventArgs>(this, SetCurrentValueAsStringArrayAsync)
             : EventCallback.Factory.Create<ChangeEventArgs>(this, OnChangeAsync);
         <select @attributes="AdditionalAttributes"
                 multiple="@multiple"

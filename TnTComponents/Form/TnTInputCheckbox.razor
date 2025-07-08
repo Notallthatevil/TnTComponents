@@ -48,7 +48,7 @@
                max="@GetMaxValue()"
                value="@bool.TrueString"
                checked="@BindConverter.FormatValue(CurrentValue)"
-               @onchange="@((ChangeEventArgs args) => CurrentValue = (bool)args.Value!)"
+               @onchange="@OnChangeAsync"
                @onblur="@(EditContext is not null ? (FocusEventArgs args) => EditContext.NotifyFieldChanged(FieldIdentifier) : (FocusEventArgs _) => { })"
                @ref="Element" />
     }

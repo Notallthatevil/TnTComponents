@@ -54,7 +54,7 @@
                     Text @Input.Text
                 </h3>
                 <TnTColumn S="6">
-                    <TnTInputText @bind-Value="@Input.Text" Placeholder="@_placeholder" SupportingText="@_supportingText" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" BackgroundColor="@(_appearance == FormAppearance.Filled ? TnTColor.SurfaceContainerHighest : TnTColor.Surface)" />
+                    <TnTInputText @bind-Value="@Input.Text" BindOnInput="true" Placeholder="@_placeholder" SupportingText="@_supportingText" Label="@_label" StartIcon="@_startIcon" EndIcon="@_endIcon" BackgroundColor="@(_appearance == FormAppearance.Filled ? TnTColor.SurfaceContainerHighest : TnTColor.Surface)" />
                 </TnTColumn>
             </TnTRow>
         </TnTCard>

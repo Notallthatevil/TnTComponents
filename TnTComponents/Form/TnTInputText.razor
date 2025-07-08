@@ -23,7 +23,8 @@
                    max="@GetMaxValue()"
                    onkeydown="TnTComponents.enforcePhoneFormat(event)"
                    onkeyup="TnTComponents.formatToPhone(event)"
-                   @bind-value="CurrentValueAsString"
+                   @bind-value:get="@CurrentValueAsString"
+                   @bind-value:set="(newValue) => OnInputAsync(newValue)"
                    @bind-value:event="@(BindOnInput ? "oninput" : "onchange")"
                    @onblur="@(EditContext is not null ? (FocusEventArgs args) => EditContext.NotifyFieldChanged(FieldIdentifier) : (FocusEventArgs _) => { })"
                    @ref="Element" />

@@ -218,6 +218,30 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     }
 
     /// <summary>
+    /// Updates the current value of the input asynchronously.
+    /// </summary>
+    /// <param name="newValue">The new value</param>
+    protected async Task OnInputAsync(string? newValue) {
+        CurrentValueAsString = newValue;
+        await BindAfter.InvokeAsync(CurrentValue);
+    }
+
+
+    /// <summary>
+    /// Updates the current value of the input asynchronously when a change event occurs.
+    /// </summary>
+    /// <param name="args">The change event args.</param>
+    protected async Task OnChangeAsync(ChangeEventArgs args) {
+        if (args.Value is TInputType value) {
+            CurrentValue = value;
+        }
+        else {
+            CurrentValue = default;
+        }
+        await BindAfter.InvokeAsync(CurrentValue);
+    }
+
+    /// <summary>
     ///     Gets the custom attribute if it exists.
     /// </summary>
     /// <typeparam name="TCustomAttr">The type of the custom attribute.</typeparam>
