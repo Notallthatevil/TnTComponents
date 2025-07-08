@@ -1,0 +1,15 @@
+﻿@namespace TnTComponents
+@using TnTComponents.Core
+@inherits TnTComponentBase
+@implements IDisposable
+
+<div @attributes="AdditionalAttributes"
+     class="@ElementClass"
+     style="@ElementStyle"
+     title="@ElementTitle"
+     id="@ElementId"
+     lang="@ElementLang"
+     name="@ElementName"
+     @ref="Element">
+    @ChildContent
+</div>

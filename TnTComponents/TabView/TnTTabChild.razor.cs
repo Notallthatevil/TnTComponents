@@ -8,7 +8,7 @@ namespace TnTComponents;
 /// <summary>
 ///     Represents a child tab component within a <see cref="TnTTabView" />.
 /// </summary>
-public class TnTTabChild : TnTComponentBase, ITnTInteractable, IDisposable {
+public partial class TnTTabChild {
 
     /// <summary>
     ///     Gets or sets the content to be rendered inside the tab.
@@ -78,21 +78,6 @@ public class TnTTabChild : TnTComponentBase, ITnTInteractable, IDisposable {
     public void Dispose() {
         _context.RemoveTabChild(this);
         GC.SuppressFinalize(this);
-    }
-
-    /// <inheritdoc />
-    protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        builder.OpenElement(0, "div");
-        builder.AddMultipleAttributes(10, AdditionalAttributes);
-        builder.AddAttribute(20, "class", ElementClass);
-        builder.AddAttribute(30, "style", ElementStyle);
-        builder.AddAttribute(40, "title", ElementTitle);
-        builder.AddAttribute(50, "id", ElementId);
-        builder.AddAttribute(60, "lang", ElementLang);
-        builder.AddAttribute(70, "name", ElementName);
-        builder.AddElementReferenceCapture(80, e => Element = e);
-        builder.AddContent(90, ChildContent);
-        builder.CloseElement();
     }
 
     /// <inheritdoc />

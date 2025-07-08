@@ -14,8 +14,10 @@
                         var index = pair.index;
                         <button type="button"
                                 title="@child.ElementTitle"
-                                class="@(CssClassBuilder.Create().AddClass("tnt-tab-view-button").AddClass("tnt-interactable").AddFilled().AddBackgroundColor(HeaderBackgroundColor).AddForegroundColor(HeaderTextColor).AddTintColor(TnTColor.SurfaceTint).AddRipple().AddDisabled(child.Disabled).Build())"
-                                disabled="@(child.Disabled ? true : null)">
+                                class="@(CssClassBuilder.Create().AddClass("tnt-tab-view-button").AddClass("tnt-interactable").AddRipple().AddDisabled(child.Disabled).Build())"
+                                style="@(CssStyleBuilder.Create().AddVariable("tnt-tab-header-background-color", HeaderBackgroundColor).AddVariable("tnt-tab-header-text-color", HeaderTextColor).AddVariable("tnt-tab-header-tint-color", HeaderTintColor).Build())"
+                                disabled="@(child.Disabled ? true : null)"
+                                @key="index">
                             @if (Appearance == TabViewAppearance.Primary) {
                                 @child.Icon?.Render()
                             }
@@ -25,7 +27,7 @@
                         </button>
                     }
                 </span>
-                <span class="@(CssClassBuilder.Create().AddClass("tnt-tab-view-active-indicator").AddFilled().AddBackgroundColor(ActiveIndicatorColor).Build())"></span>
+                <span class="@(CssClassBuilder.Create().AddClass("tnt-tab-view-active-indicator").Build())" style="@CssStyleBuilder.Create().AddBackgroundColor(ActiveIndicatorColor).Build()"></span>
             </div>
         </DeferRendering>
         @ChildContent

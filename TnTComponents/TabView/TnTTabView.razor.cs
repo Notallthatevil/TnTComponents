@@ -36,7 +36,7 @@ public partial class TnTTabView {
     /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddVariable("active-text-color", ActiveIndicatorColor)
+        .AddVariable("tnt-tab-view-active-indicator-color", ActiveIndicatorColor)
         .Build();
 
     /// <summary>
@@ -50,6 +50,13 @@ public partial class TnTTabView {
     /// </summary>
     [Parameter]
     public TnTColor HeaderTextColor { get; set; } = TnTColor.OnSurface;
+
+    /// <summary>
+    /// The tint color for the tab header, used for ripple effects and other visual enhancements.
+    /// </summary>
+    [Parameter]
+    public TnTColor HeaderTintColor { get; set; } = TnTColor.SurfaceTint;
+
 
     /// <inheritdoc />
     public override string? JsModulePath => "./_content/TnTComponents/TabView/TnTTabView.razor.js";

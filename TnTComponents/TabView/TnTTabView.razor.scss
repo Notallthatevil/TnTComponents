@@ -1,0 +1,106 @@
+﻿@use '../Styles/_Variables/_colors.scss' as colors;
+@use '../Styles/_Variables/_typescale.scss' as typescale;
+@use '../Styles/_Variables/_interactable.scss' as interactable;
+
+$header-bg-color: var(--tnt-tab-header-background-color);
+$header-text-color: var(--tnt-tab-header-text-color);
+$header-tint-color: var(--tnt-tab-header-tint-color);
+
+.tnt-tab-view {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    position: relative;
+
+    & > .tnt-tab-view-header {
+        vertical-align: bottom;
+        position: sticky;
+        border-bottom: 1px solid colors.$tnt-color-outline;
+        margin: 0 8px;
+        white-space: nowrap;
+        overflow-x: auto;
+        z-index: 10;
+
+        .tnt-tab-view-header-buttons {
+            display: table;
+            margin: 0 auto;
+            height: 100%;
+
+            .tnt-tab-view-button {
+                height: 48px;
+                display: inline-flex;
+                appearance: none;
+                border: none;
+                outline: none;
+                min-width: 80px;
+                flex-direction: column;
+                align-items: center;
+                justify-content: end;
+                margin: 0;
+                padding: 0 4px;
+                vertical-align: bottom;
+                width: -moz-fit-content;
+                width: -webkit-fit-content;
+                width: fit-content;
+                box-sizing: border-box;
+                background-color: $header-bg-color;
+                color: $header-text-color;
+                @include typescale.tnt-title-small;
+
+                &.tnt-active {
+                    color: $header-tint-color;
+                }
+
+                &:not(.tnt-disabled) {
+                    @include interactable.tnt-interactable($header-tint-color);
+                }
+
+                &.tnt-disabled {
+                    pointer-events: none;
+                    opacity: 0.5;
+                }
+
+                &:focus {
+                    outline: 1px solid colors.$tnt-color-outline;
+                    outline-offset: -4px;
+                }
+            }
+        }
+
+        .tnt-tab-view-active-indicator {
+            position: absolute;
+            display: inline-block;
+            height: 3px;
+            border-radius: 3px 3px 0 0;
+            width: 48px;
+            bottom: 0;
+            transition: 200ms ease-in-out;
+        }
+    }
+
+    &.tnt-tab-view-secondary {
+        .tnt-tab-view-header {
+            .tnt-tab-view-header-buttons {
+
+                .tnt-tab-view-button {
+                    height: 16px;
+                    padding-top: 24px;
+                }
+            }
+
+            .tnt-tab-view-active-indicator {
+                height: 2px;
+            }
+        }
+    }
+}
+
+@keyframes tnt-tab-view-loading {
+    0% {
+        background-position: 100%;
+    }
+
+    100% {
+        background-position: 0%;
+    }
+}
