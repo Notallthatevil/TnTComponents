@@ -42,7 +42,7 @@ public partial class TnTBadge {
     /// <summary>
     ///     Gets the render fragment for the badge.
     /// </summary>
-    internal RenderFragment Render => BuildRenderTree;
+    internal RenderFragment Render() => BuildRenderTree;
 
     /// <summary>
     ///     Creates a new instance of <see cref="TnTBadge" /> with specified content and properties.

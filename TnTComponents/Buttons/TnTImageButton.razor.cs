@@ -33,6 +33,12 @@ public partial class TnTImageButton {
     [Parameter]
     public bool Disabled { get; set; }
 
+    /// <summary>
+    /// The badge to be displayed on the button, if any.
+    /// </summary>
+    [Parameter]
+    public TnTBadge? Badge { get; set; }
+
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)

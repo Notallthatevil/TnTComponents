@@ -62,9 +62,18 @@ $on-tint-color: var(--tnt-button-on-tint-color);
 
             ::deep {
 
-
                 .tnt-icon {
                     font-size: 24px;
+                }
+
+                .tnt-badge {
+                    top: -10px;
+                    right: -16px;
+                }
+
+                progress.tnt-components {
+                    height: 40px;
+                    width: 40px;
                 }
             }
         }
@@ -86,6 +95,16 @@ $on-tint-color: var(--tnt-button-on-tint-color);
                 .tnt-icon {
                     font-size: 28px;
                 }
+
+                .tnt-badge {
+                    top: -10px;
+                    right: -10px;
+                }
+
+                progress.tnt-components {
+                    height: 56px;
+                    width: 56px;
+                }
             }
         }
 
@@ -106,6 +125,16 @@ $on-tint-color: var(--tnt-button-on-tint-color);
                 .tnt-icon {
                     font-size: 36px;
                 }
+
+                .tnt-badge {
+                    top: -10px;
+                    right: -6px;
+                }
+
+                progress.tnt-components {
+                    height: 96px;
+                    width: 96px;
+                }
             }
         }
 
@@ -121,6 +150,15 @@ $on-tint-color: var(--tnt-button-on-tint-color);
 
             .tnt-icon {
                 pointer-events: none;
+            }
+
+            progress.tnt-components {
+                position: absolute !important;
+
+                &.tnt-progress-linear {
+                    height: 4px !important;
+                    width: calc(100% - 8px) !important;
+                }
             }
         }
     }

@@ -19,6 +19,7 @@
 
 @if (ButtonSize == Size.Small || ButtonSize == Size.XS) {
     <div class="@($"tnt-small-button-layer {ElementClass}")">
+        @Badge?.Render()
         @Icon.Render()
         @if (EnableRipple) {
             <TnTRippleEffect />
@@ -26,6 +27,7 @@
     </div>
 }
 else {
+    @Badge?.Render()
     @Icon.Render()
     @if (EnableRipple) {
         <TnTRippleEffect />
