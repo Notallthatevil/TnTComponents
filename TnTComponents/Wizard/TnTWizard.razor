@@ -4,6 +4,11 @@
 @inherits TnTComponentBase
 
 <div @attributes="AdditionalAttributes" class="@ElementClass" style="@ElementStyle" id="@ElementId" title="@ElementTitle" @ref="Element">
+    @if (!string.IsNullOrWhiteSpace(Title)) {
+        <h1 class="tnt-wizard-title">
+            @Title
+        </h1>
+    }
     <ol class="tnt-wizard-steps">
         @foreach (var (step, i) in _steps.Select((s, i) => new KeyValuePair<TnTWizardStepBase, int>(s, i))) {
             <li class="@($"tnt-wizard-step-indicator{(_stepIndex == i ? " current-step" : string.Empty)}{(_stepIndex > i ? " completed-step" : string.Empty)}")">
@@ -38,7 +43,7 @@
             </TnTButton>
         }
         @if (_stepIndex + 1 == _steps.Count) {
-            <TnTButton OnClickCallback="@SubmitClickedAsync" BackgroundColor="TnTColor.Success" TextColor="TnTColor.OnSuccess" TintColor="TnTColor.SuccessContainer" OnTintColor="TnTColor.OnSuccessContainer" Disabled="@SubmitButtonDisabled">
+            <TnTButton OnClickCallback="@SubmitClickedAsync" BackgroundColor="TnTColor.Success" TextColor="TnTColor.OnSuccess" TintColor="TnTColor.SuccessContainer"  Disabled="@SubmitButtonDisabled">
                 Submit
             </TnTButton>
         }

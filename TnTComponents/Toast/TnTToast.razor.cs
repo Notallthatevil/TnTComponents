@@ -73,6 +73,28 @@ public partial class TnTToast {
         return Task.CompletedTask;
     }
 
+    private RenderFragment RenderCloseButton(ITnTToast toast) {
+        return new RenderFragment(b => {
+            b.OpenComponent<TnTImageButton>(0);
+            b.AddAttribute(10, nameof(TnTImageButton.Icon), MaterialIcon.Close);
+            b.AddAttribute(20, nameof(TnTImageButton.TextColor), TnTColor.Outline);
+            b.AddAttribute(30, nameof(TnTImageButton.BackgroundColor), TnTColor.Transparent);
+
+#if NET9_0_OR_GREATER
+            if (RendererInfo.IsInteractive) {
+                b.AddAttribute(40, nameof(TnTImageButton.OnClickCallback), EventCallback.Factory.Create<MouseEventArgs>(this, () => _service.CloseAsync(toast)));
+            }
+            else {
+                b.AddAttribute(40, "onclick", @"(e => { e.target.closest('.tnt-toast').classList.add('tnt-closing'); setTimeout(() => e.target.closest('.tnt-toast').remove(), 500); })(arguments[0])");
+            }
+#else
+                b.AddAttribute(40, nameof(TnTImageButton.OnClickCallback), EventCallback.Factory.Create<MouseEventArgs>(this, () => _service.CloseAsync(toast)));
+#endif
+
+            b.CloseComponent();
+        });
+    }
+
     private struct ToastMetadata {
         public required DateTimeOffset CreatedTime { get; set; }
         public required Task? Task { get; set; }

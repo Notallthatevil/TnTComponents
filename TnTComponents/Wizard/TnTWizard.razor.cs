@@ -16,6 +16,12 @@ public partial class TnTWizard : TnTComponentBase {
     [Parameter, EditorRequired]
     public RenderFragment ChildContent { get; set; } = default!;
 
+    /// <summary>
+    /// The title of the wizard, displayed at the top.
+    /// </summary>
+    [Parameter]
+    public string ?Title { get; set; }
+
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)

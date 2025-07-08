@@ -1,21 +1,37 @@
-﻿$wizard-title-height: 24px;
+﻿@use '../Styles/_Variables/_colors.scss' as colors;
+@use '../Styles/_Variables/_typescale.scss' as typescale;
+
+$wizard-title-height: 24px;
 $wizard-subtitle-height: 20px;
 $wizard-title-gap-size: 4px;
 
 .tnt-wizard {
     position: relative;
     display: grid;
+    grid-template-areas: "steps content" "steps buttons";
     grid-template-columns: auto 1fr;
     grid-template-rows: 1fr auto;
     width: 100%;
     box-sizing: border-box;
     height: 100%;
 
+    &:has(.tnt-wizard-title) {
+        grid-template-areas: "title title" "steps content" "steps buttons";
+        grid-template-rows: auto 1fr auto;
+    }
+
+    .tnt-wizard-title {
+        grid-area: title;
+        @include typescale.tnt-title-large;
+        padding: 8px;
+        border-bottom: 1px solid colors.$tnt-color-outline-variant;
+        box-sizing: border-box;
+    }
+
     .tnt-wizard-steps {
         display: flex;
         flex-direction: column;
-        grid-column: 1;
-        grid-row: 1 / span 2;
+        grid-area: steps;
         margin: 0;
         padding: 8px;
 
@@ -26,18 +42,18 @@ $wizard-title-gap-size: 4px;
             display: flex;
             flex-direction: column;
             height: 100%;
-            color: $tnt-color-outline;
+            color: colors.$tnt-color-outline;
 
             .tnt-wizard-step-title {
-                @extend .tnt-title-medium;
+                @include typescale.tnt-title-medium;
                 display: flex;
                 align-items: center;
                 height: $wizard-title-height;
 
                 .tnt-wizard-step-index {
-                    @extend .tnt-border-radius-10;
+                    border-radius: 50%;
                     box-sizing: border-box;
-                    border: 2px solid $tnt-color-outline;
+                    border: 2px solid colors.$tnt-color-outline;
                     color: inherit;
                     height: 100%;
                     aspect-ratio: 1/1;
@@ -55,7 +71,7 @@ $wizard-title-gap-size: 4px;
             }
 
             .tnt-wizard-step-subtitle {
-                @extend .tnt-title-small;
+                @include typescale.tnt-title-small;
                 margin-left: calc($wizard-title-height + 8px);
                 height: $wizard-subtitle-height;
                 color: inherit;
@@ -73,7 +89,7 @@ $wizard-title-gap-size: 4px;
                     position: absolute;
                     top: calc($wizard-title-height + 8px);
                     width: 4px;
-                    background-color: $tnt-color-outline-variant;
+                    background-color: colors.$tnt-color-outline-variant;
                     border-radius: 8px;
                     bottom: 8px;
                     left: calc($wizard-title-height / 2 - 2px);
@@ -81,35 +97,35 @@ $wizard-title-gap-size: 4px;
 
                 &.current-step {
                     &:after {
-                        background-color: $tnt-color-primary;
+                        background-color: colors.$tnt-color-primary;
                     }
                 }
             }
 
             &.current-step {
-                color: $tnt-color-primary;
+                color: colors.$tnt-color-primary;
 
                 .tnt-wizard-step-title {
                     .tnt-wizard-step-index {
                         border: none;
-                        background-color: $tnt-color-primary;
-                        color: $tnt-color-on-primary;
+                        background-color: colors.$tnt-color-primary;
+                        color: colors.$tnt-color-on-primary;
                     }
                 }
 
                 .tnt-wizard-step-subtitle {
-                    color: $tnt-color-secondary;
+                    color: colors.$tnt-color-secondary;
                 }
             }
 
             &.completed-step {
-                color: $tnt-color-secondary;
+                color: colors.$tnt-color-secondary;
 
                 .tnt-wizard-step-title {
                     .tnt-wizard-step-index {
                         border: none;
-                        background-color: $tnt-color-secondary;
-                        color: $tnt-color-on-secondary;
+                        background-color: colors.$tnt-color-secondary;
+                        color: colors.$tnt-color-on-secondary;
                     }
                 }
 
@@ -119,7 +135,7 @@ $wizard-title-gap-size: 4px;
 
                 &:not(:last-child) {
                     &:after {
-                        background-color: $tnt-color-secondary;
+                        background-color: colors.$tnt-color-secondary;
                     }
                 }
             }
@@ -127,13 +143,14 @@ $wizard-title-gap-size: 4px;
     }
 
     .tnt-wizard-content {
-        grid-column: 2;
-        grid-row: 1;
+        grid-area: content;
+        padding: 8px;
+        overflow-y: auto;
     }
 
     .tnt-wizard-buttons {
-        grid-column: 2;
-        grid-row: 2;
-        text-align-last: end;
+        grid-area: buttons;
+        align-self: center;
+        justify-self: end;
     }
 }
