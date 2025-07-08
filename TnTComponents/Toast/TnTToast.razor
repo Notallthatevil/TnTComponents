@@ -1,0 +1,69 @@
+﻿@namespace TnTComponents
+@using TnTComponents.Core
+@implements IDisposable
+
+@if (_toasts.Any()) {
+
+    <div class="tnt-toast-container">
+        @foreach (var kv in _toasts.OrderBy(kv => kv.Value.CreatedTime).Take(5).ToArray()) {
+            var metadata = kv.Value;
+            var toast = kv.Key;
+            if (metadata.Task is null) {
+                _toasts[toast] = metadata with {
+                    Task = Task.Run(async () => {
+                        await Task.Delay((int)TimeSpan.FromSeconds(toast.Timeout).TotalMilliseconds);
+                        await InvokeAsync(() => OnClose(toast));
+                    })
+                };
+            }
+
+            <div id="@metadata.Id"
+                 class="@CssClassBuilder.Create().AddClass("tnt-toast").AddClass("tnt-closing", toast.Closing).Build()"
+                 style="@CssStyleBuilder.Create().AddVariable("tnt-toast-background-color", toast.BackgroundColor).AddVariable("tnt-toast-text-color", toast.TextColor).AddVariable("timeout", $"{toast.Timeout}s", toast.Timeout > 0).Build()"
+                 @key="toast">
+                @{
+        #if NET9_0_OR_GREATER
+                if(toast.Timeout > 0  && !RendererInfo.IsInteractive) {
+        <script type="text/javascript">
+            setTimeout(() => {{ document.querySelector('#{metadata.Id}').classList.add('tnt-closing'); setTimeout(() => document.querySelector('#{metadata.Id}').remove(), 500); }}, {toast.Timeout * 1000});
+        </script>
+                }
+        #endif
+                }
+
+                <div class="tnt-toast-header">
+                    <span>
+                        @toast.Title
+                    </span>
+
+                    @if (toast.ShowClose) {
+#if NET9_0_OR_GREATER
+                        if (!RendererInfo.IsInteractive) {
+                            <TnTImageButton Icon="@MaterialIcon.Close" onclick="(e => { e.target.closest('.tnt-toast').classList.add('tnt-closing'); setTimeout(() => e.target.closest('.tnt-toast').remove(), 500); })(arguments[0])" BackgroundColor="TnTColor.Transparent" TextColor="TnTColor.Outline" />
+                        }
+                        else {
+                            <TnTImageButton Icon="@MaterialIcon.Close" OnClickCallback="@(() => _service.CloseAsync(toast))" BackgroundColor="TnTColor.Transparent" TextColor="TnTColor.Outline" />
+                        }
+#else
+                         <TnTImageButton Icon="@MaterialIcon.Close" OnClickCallback="@(() => _service.CloseAsync(toast))" BackgroundColor="TnTColor.Transparent" TextColor="TnTColor.Outline" />
+#endif
+                    }
+                </div>
+
+                @if (toast.Message is not null) {
+                    <div class="tnt-toast-body">
+                        @toast.Message
+                    </div>
+                }
+
+                @if (toast.Timeout > 0) {
+                    <div class="tnt-toast-progress" style="@($"background-color: var(--tnt-color-{toast.TextColor.ToCssClassName()})")"></div>
+                }
+
+            </div>
+        }
+
+    </div>
+}
+
+
