@@ -44,6 +44,6 @@
 
     }
     private async Task ShowError() {
-        await _service.ShowErrorAsync("My title", "My longer message description that takes up space");
+        await _service.ShowErrorAsync("My title", "My longer message description that takes up space", timeout: 10000);
     }
 }
