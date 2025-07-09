@@ -23,6 +23,12 @@ public class TnTWizardFormStep : TnTWizardStepBase {
     [Parameter, EditorRequired]
     public RenderFragment<EditContext> ChildContent { get; set; } = default!;
 
+/// <summary>
+/// The appearance of the form. <see cref="FormAppearance"/>
+/// </summary>
+    [Parameter]
+    public FormAppearance FormAppearance { get; set; } = FormAppearance.Outlined;
+
     /// <summary>
     ///     The name of the form. This is optional.
     /// </summary>
@@ -81,6 +87,7 @@ public class TnTWizardFormStep : TnTWizardStepBase {
     internal override RenderFragment Render() => new(builder => {
         builder.OpenComponent<TnTForm>(0);
         builder.AddComponentParameter(10, nameof(TnTForm.Model), Model);
+        builder.AddComponentParameter(15, nameof(TnTForm.Appearance), FormAppearance);
         builder.AddAttribute(20, "class", "tnt-wizard-form");
         if (!string.IsNullOrWhiteSpace(FormName)) {
             builder.AddComponentParameter(30, nameof(TnTForm.FormName), FormName);

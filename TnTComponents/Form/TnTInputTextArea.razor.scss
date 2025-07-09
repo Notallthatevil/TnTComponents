@@ -14,7 +14,7 @@
     cursor: text;
     color: base.$text-color;
     transition: 250ms ease-in-out;
-    margin-bottom: 18px;
+    margin-bottom: 32px;
     grid-template-rows: auto;
 
     @include base.tnt-label;

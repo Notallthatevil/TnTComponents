@@ -17,7 +17,7 @@ $on-tint-color: var(--tnt-input-on-tint-color);
     cursor: pointer;
     color: base.$text-color;
     transition: 250ms ease-in-out;
-    margin-bottom: 18px;
+    margin-bottom: 32px;
 
     @include base.tnt-label;
 
@@ -129,6 +129,7 @@ $on-tint-color: var(--tnt-input-on-tint-color);
 
                 &:not(:has(.tnt-start-icon)) {
                     padding-top: 8px;
+
                     .tnt-label {
                         transform: scale(0.75) translateY(-50px);
                     }

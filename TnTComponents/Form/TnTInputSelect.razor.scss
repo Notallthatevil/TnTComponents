@@ -14,7 +14,7 @@
     cursor: pointer;
     color: base.$text-color;
     transition: 250ms ease-in-out;
-    margin-bottom: 18px;
+    margin-bottom: 32px;
 
     @include base.tnt-label(select);
 
@@ -226,6 +226,7 @@
     &:has(select[multiple]) {
         grid-template-rows: auto;
         padding-top: 12px;
+
         .tnt-label {
             align-self: start;
         }

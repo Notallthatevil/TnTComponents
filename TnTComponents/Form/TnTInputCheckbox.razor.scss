@@ -14,6 +14,7 @@
     min-width: 48px;
     min-height: 48px;
     position: relative;
+    margin-bottom: 32px;
 
     &:has(.tnt-start-icon):has(.tnt-end-icon) {
         grid-template-areas: "start-icon checkbox end-icon";
