@@ -19,11 +19,6 @@ $on-tint-color: var(--tnt-anchor-on-tint-color);
             text-decoration: none;
         }
 
-
-        .tnt-small-anchor-layer {
-            display: inherit;
-        }
-
         ::deep {
             .tnt-icon {
                 vertical-align: middle;

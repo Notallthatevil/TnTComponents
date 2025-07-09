@@ -14,12 +14,12 @@
    autofocus="@AutoFocus"
    @ref="Element">
  @if (AnchorSize == Size.Small || AnchorSize == Size.XS) {
-        <div class="@($"tnt-small-anchor-layer {ElementClass}")">
+        <span class="@($"tnt-small-anchor-layer {ElementClass}")">
             @ChildContent
             @if (EnableRipple) {
                 <TnTRippleEffect />
             }
-        </div>
+        </span>
     }
     else {
         @ChildContent

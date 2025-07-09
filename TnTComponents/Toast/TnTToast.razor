@@ -36,8 +36,19 @@
                         @toast.Title
                     </span>
 
-                   @if (toast.ShowClose) {
-                       @RenderCloseButton(toast)
+                    @if (toast.ShowClose) {
+            #if NET9_0_OR_GREATER
+                        if(RendererInfo.IsInteractive) {
+                            <TnTImageButton Icon="@MaterialIcon.Close" TextColor="@TnTColor.Outline" BackgroundColor="@TnTColor.Transparent" OnClickCallback="@(() => _service.CloseAsync(toast))" />
+                        }
+                        else {
+                            <TnTImageButton Icon="@MaterialIcon.Close" TextColor="@TnTColor.Outline" BackgroundColor="@TnTColor.Transparent" onclick="(e => { e.target.closest('.tnt-toast').classList.add('tnt-closing'); setTimeout(() => e.target.closest('.tnt-toast').remove(), 500); })(arguments[0])" />
+                        }
+            #else
+            if(true){
+                            <TnTImageButton Icon="@MaterialIcon.Close" TextColor="@TnTColor.Outline" BackgroundColor="@TnTColor.Transparent" OnClickCallback="@(() => _service.CloseAsync(toast))" />
+            }
+            #endif
                     }
                 </div>
 
