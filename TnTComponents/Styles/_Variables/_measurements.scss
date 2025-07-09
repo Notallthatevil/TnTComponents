@@ -1,6 +1,6 @@
-﻿$tnt-side-nav-width: var(--tnt-side-nav-width);
-$tnt-header-height: var(--tnt-header-height);
-$tnt-footer-height: var(--tnt-footer-height);
+﻿$tnt-side-nav-width: var(--tnt-side-nav-width, 256px);
+$tnt-header-height: var(--tnt-header-height, 64px);
+$tnt-footer-height: var(--tnt-footer-height, 64px);
 
 // Media Query Ranges
 $small-screen-up: 751px !default;

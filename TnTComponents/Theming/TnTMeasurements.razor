@@ -1,11 +1,9 @@
 ﻿@namespace TnTComponents
-@using TnTComponents.Core
-@inherits TnTPageScriptComponent<TnTMeasurements>
 
-<tnt-measurements
-    tnt-footer-height="@FooterHeight" 
-    tnt-header-height="@HeaderHeight" 
-    tnt-side-nav-width="@SideNavWidth">
-</tnt-measurements>
-
-@PageScript
+<style class="tnt-measurements">
+    :root {
+        --tnt-header-height: @($"{HeaderHeight}px;");
+        --tnt-footer-height: @($"{FooterHeight}px;");
+        --tnt-side-nav-width: @($"{SideNavWidth}px;");
+    }
+</style>
