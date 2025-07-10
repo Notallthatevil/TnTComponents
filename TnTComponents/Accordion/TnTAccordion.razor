@@ -1,4 +1,5 @@
 ﻿@using TnTComponents.Core
+@using TnTComponents.Accordion
 @inherits TnTPageScriptComponent<TnTAccordion>
 @namespace TnTComponents
 
@@ -13,7 +14,7 @@
                    @ref="Element">
         <DeferRendering>
             @foreach (var (_, child) in _children.OrderBy(kv => kv.Value.Order)) {
-                @child.RenderChild()
+                <_TnTAccordionChildRender Child="@child" />
             }
         </DeferRendering>
         @ChildContent

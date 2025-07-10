@@ -31,6 +31,11 @@
 - Always inherit from `Bunit.TestContext` explicity. 
 - All component tests should be in a `.razor` file and be within the `@code` block. 
 - Unit tests **DO NOT** need to be documented.
+- Use bUnit's `Render` function with inline razor markup instead of `RenderComponent`
+- Avoid duplicated code within test class
+- Only verify markup that belongs to the component being tested.
+- Stick to one logical assertion per test.
+- Create custom assertion methods using business language, if needed.  
 
 ## Running Tests
 

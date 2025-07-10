@@ -46,10 +46,8 @@ public interface ITnTToastService {
     /// <param name="showClose">      Indicates whether the close button should be shown.</param>
     /// <param name="backgroundColor">The background color of the toast.</param>
     /// <param name="textColor">      The text color of the toast.</param>
-    /// <param name="borderRadius">   The border radius of the toast.</param>
-    /// <param name="elevation">      The elevation level of the toast.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task ShowAsync(string title, string? message = null, int timeout = 10, bool showClose = true, TnTColor backgroundColor = TnTColor.SurfaceVariant, TnTColor textColor = TnTColor.OnSurfaceVariant, TnTBorderRadius? borderRadius = null, int elevation = 2);
+    Task ShowAsync(string title, string? message = null, int timeout = 10, bool showClose = true, TnTColor backgroundColor = TnTColor.SurfaceVariant, TnTColor textColor = TnTColor.OnSurfaceVariant);
 
     /// <summary>
     ///     Shows an error toast with the specified parameters asynchronously.
@@ -58,10 +56,8 @@ public interface ITnTToastService {
     /// <param name="message">     The message of the toast.</param>
     /// <param name="timeout">     The timeout duration in seconds before the toast automatically closes.</param>
     /// <param name="showClose">   Indicates whether the close button should be shown.</param>
-    /// <param name="borderRadius">The border radius of the toast.</param>
-    /// <param name="elevation">   The elevation level of the toast.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task ShowErrorAsync(string title, string? message = null, int timeout = 10, bool showClose = true, TnTBorderRadius? borderRadius = null, int elevation = 2);
+    Task ShowErrorAsync(string title, string? message = null, int timeout = 10, bool showClose = true);
 
     /// <summary>
     ///     Shows an error toast with the specified parameters asynchronously.
@@ -70,10 +66,8 @@ public interface ITnTToastService {
     /// <param name="message">     The exception message to be displayed in the toast.</param>
     /// <param name="timeout">     The timeout duration in seconds before the toast automatically closes.</param>
     /// <param name="showClose">   Indicates whether the close button should be shown.</param>
-    /// <param name="borderRadius">The border radius of the toast.</param>
-    /// <param name="elevation">   The elevation level of the toast.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task ShowErrorAsync(string title, Exception? message, int timeout = 10, bool showClose = true, TnTBorderRadius? borderRadius = null, int elevation = 2);
+    Task ShowErrorAsync(string title, Exception? message, int timeout = 10, bool showClose = true);
 
     /// <summary>
     ///     Shows an informational toast with the specified parameters asynchronously.
@@ -82,10 +76,8 @@ public interface ITnTToastService {
     /// <param name="message">     The message of the toast.</param>
     /// <param name="timeout">     The timeout duration in seconds before the toast automatically closes.</param>
     /// <param name="showClose">   Indicates whether the close button should be shown.</param>
-    /// <param name="borderRadius">The border radius of the toast.</param>
-    /// <param name="elevation">   The elevation level of the toast.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task ShowInfoAsync(string title, string? message = null, int timeout = 10, bool showClose = true, TnTBorderRadius? borderRadius = null, int elevation = 2);
+    Task ShowInfoAsync(string title, string? message = null, int timeout = 10, bool showClose = true);
 
     /// <summary>
     ///     Shows a success toast with the specified parameters asynchronously.
@@ -94,10 +86,8 @@ public interface ITnTToastService {
     /// <param name="message">     The message of the toast.</param>
     /// <param name="timeout">     The timeout duration in seconds before the toast automatically closes.</param>
     /// <param name="showClose">   Indicates whether the close button should be shown.</param>
-    /// <param name="borderRadius">The border radius of the toast.</param>
-    /// <param name="elevation">   The elevation level of the toast.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task ShowSuccessAsync(string title, string? message = null, int timeout = 10, bool showClose = true, TnTBorderRadius? borderRadius = null, int elevation = 2);
+    Task ShowSuccessAsync(string title, string? message = null, int timeout = 10, bool showClose = true);
 
     /// <summary>
     ///     Shows a warning toast with the specified parameters asynchronously.
@@ -106,8 +96,6 @@ public interface ITnTToastService {
     /// <param name="message">     The message of the toast.</param>
     /// <param name="timeout">     The timeout duration in seconds before the toast automatically closes.</param>
     /// <param name="showClose">   Indicates whether the close button should be shown.</param>
-    /// <param name="borderRadius">The border radius of the toast.</param>
-    /// <param name="elevation">   The elevation level of the toast.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task ShowWarningAsync(string title, string? message = null, int timeout = 10, bool showClose = true, TnTBorderRadius? borderRadius = null, int elevation = 2);
+    Task ShowWarningAsync(string title, string? message = null, int timeout = 10, bool showClose = true);
 }

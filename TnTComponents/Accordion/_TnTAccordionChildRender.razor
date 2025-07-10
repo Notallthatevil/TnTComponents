@@ -1,0 +1,39 @@
+﻿@using TnTComponents.Core
+
+<div @attributes="Child.AdditionalAttributes"
+     class="@Child.ElementClass"
+     style="@Child.ElementStyle"
+     id="@Child.ElementId"
+     lang="@Child.ElementLang"
+     title="@Child.ElementTitle"
+     name="@Child.ElementName"
+     disabled="@Child.Disabled"
+     @key="Child._elementId">
+    <h3 onclick="TnTComponents.toggleAccordionHeader(event)"
+        class="@CssClassBuilder.Create().AddRipple().AddClass("tnt-interactable").AddDisabled(Child.Disabled).Build()"
+        style="@CssStyleBuilder.Create().AddVariable("tnt-accordion-child-header-bg-color", Child.HeaderBodyColor ?? _parent.HeaderBodyColor).AddVariable("tnt-accordion-child-header-fg-color", Child.HeaderTextColor ?? _parent.HeaderTextColor).AddVariable("tnt-accordion-child-header-tint-color", Child.HeaderTintColor ?? _parent.HeaderTintColor).Build()"
+        data-permanent>
+        @Child.Label
+        @if(Child.EnableRipple) {
+            <TnTRippleEffect />
+        }
+        <MaterialIcon Icon="@MaterialIcon.ArrowDropDown" />
+    </h3>
+
+    <div class="@CssClassBuilder.Create().AddClass("tnt-expanded", _parent.AllowOpenByDefault && ((Child.OpenByDefault && _parent.LimitToOneExpanded && !_parent._foundExpanded) || (Child.OpenByDefault && !_parent.LimitToOneExpanded))).Build()">
+        @if (Child.OpenByDefault) {
+            _parent._foundExpanded = true;
+        }
+@{
+#if NET9_0_OR_GREATER
+            if (!RendererInfo.IsInteractive || !Child.RemoveContentOnClose || (RendererInfo.IsInteractive && Child._open)) {
+                @Child.ChildContent
+            }
+#else
+            @Child.ChildContent(__builder);
+#endif
+}
+    </div>
+
+
+</div>

@@ -3,7 +3,7 @@ using LiveTest.Components;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddLogging();
 
-builder.AddTnTServices();
+builder.Services.AddTnTServices();
 var a = System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription;
 var b = builder.Environment;
 

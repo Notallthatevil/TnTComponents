@@ -19,10 +19,6 @@ public abstract class TnTLayoutComponent : TnTComponentBase{
     [Parameter]
     public virtual TnTColor BackgroundColor { get; set; } = TnTColor.Background;
 
-    /// <inheritdoc />
-    [Parameter]
-    public TnTBorderRadius? BorderRadius { get; set; }
-
     /// <summary>
     ///     The child content to be rendered inside the component.
     /// </summary>
