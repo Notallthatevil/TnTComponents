@@ -1,0 +1,161 @@
+
+@using Bunit
+@using TnTComponents.Tests.TestingUtility
+@using TnTComponents
+@inherits Bunit.TestContext
+
+@code {
+    public TnTButton_tests() {
+        TnTComponents.Tests.TestingUtility.TestingUtility.SetupRippleEffectModule(this);
+    }
+    [Fact]
+    public void TnTButton_Renders_BasicButton()
+    {
+        // Arrange
+        // (No setup needed)
+
+        // Act
+        var cut = Render(@<TnTButton>Click me</TnTButton>);
+
+        // Assert
+        cut.Markup.Should().Contain("Click me");
+    }
+
+    [Fact]
+    public void TnTButton_Renders_Disabled_WhenDisabledTrue()
+    {
+        // Arrange
+        // (No setup needed)
+
+        // Act
+        var cut = Render(@<TnTButton Disabled="true">Disabled</TnTButton>);
+
+        // Assert
+        cut.Markup.Should().Contain("disabled");
+    }
+
+    [Fact]
+    public void TnTButton_Emits_OnClickCallback()
+    {
+        // Arrange
+        var wasClicked = false;
+        void ClickHandler(MouseEventArgs _) => wasClicked = true;
+
+        // Act
+        var cut = Render(@<TnTButton OnClickCallback="@ClickHandler">Click</TnTButton>);
+        cut.Find("button").Click();
+
+        // Assert
+        wasClicked.Should().BeTrue();
+    }
+
+    [Fact]
+    public void TnTButton_Renders_WithTypeParameter()
+    {
+        // Arrange
+        // (No setup needed)
+
+        // Act
+        var cut = Render(@<TnTButton Type="ButtonType.Submit">Submit</TnTButton>);
+
+        // Assert
+        cut.Markup.Should().Contain("type=\"submit\"");
+    }
+
+    [Fact]
+    public void TnTButton_Renders_WithAppearanceParameter()
+    {
+        // Arrange
+        // (No setup needed)
+
+        // Act
+        var cut = Render(@<TnTButton Appearance="ButtonAppearance.Outlined">Outlined</TnTButton>);
+
+        // Assert
+        cut.Markup.Should().Contain("Outlined");
+    }
+
+    [Fact]
+    public void TnTButton_Renders_WithShapeParameter()
+    {
+        // Arrange
+        // (No setup needed)
+
+        // Act
+        var cut = Render(@<TnTButton Shape="ButtonShape.Round">Round</TnTButton>);
+
+        // Assert
+        cut.Markup.Should().Contain("Round");
+    }
+
+    [Fact]
+    public void TnTButton_Renders_WithoutContent()
+    {
+        // Arrange
+        // (No setup needed)
+
+        // Act
+        var cut = Render(@<TnTButton />);
+
+        // Assert
+        cut.Markup.Should().Contain("button");
+    }
+
+    [Fact]
+    public void TnTButton_Renders_WithMultipleParameters()
+    {
+        // Arrange
+        // (No setup needed)
+
+        // Act
+        var cut = Render(@<TnTButton Type="ButtonType.Reset" Appearance="ButtonAppearance.Filled" Shape="ButtonShape.Round" Disabled="true">Multi</TnTButton>);
+
+        // Assert
+        cut.Markup.Should().Contain("type=\"reset\"");
+        cut.Markup.Should().Contain("Filled");
+        cut.Markup.Should().Contain("Round");
+        cut.Markup.Should().Contain("disabled");
+    }
+
+    [Fact]
+    public void TnTButton_Renders_WithBackgroundColor()
+    {
+        // Arrange
+        // (No setup needed)
+
+        // Act
+        var cut = Render(@<TnTButton BackgroundColor="TnTColor.Primary">BG</TnTButton>);
+
+        // Assert
+        cut.Markup.Should().Contain("BG");
+        cut.Markup.Should().Contain("tnt-bg-color-primary");
+    }
+
+    [Fact]
+    public void TnTButton_Renders_WithTextColor()
+    {
+        // Arrange
+        // (No setup needed)
+
+        // Act
+        var cut = Render(@<TnTButton TextColor="TnTColor.OnPrimary">Text</TnTButton>);
+
+        // Assert
+        cut.Markup.Should().Contain("Text");
+        cut.Markup.Should().Contain("tnt-fg-color-onprimary");
+    }
+
+    [Fact]
+    public void TnTButton_Renders_WithTintColor()
+    {
+        // Arrange
+        // (No setup needed)
+
+        // Act
+        var cut = Render(@<TnTButton TintColor="TnTColor.SurfaceTint">Tint</TnTButton>);
+
+        // Assert
+        cut.Markup.Should().Contain("Tint");
+        cut.Markup.Should().Contain("tnt-tint-color-surfacetint");
+    }
+}

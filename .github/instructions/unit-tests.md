@@ -36,6 +36,7 @@
 - Only verify markup that belongs to the component being tested.
 - Stick to one logical assertion per test.
 - Create custom assertion methods using business language, if needed.  
+- Use Arrange, Act, Assert pattern.
 
 ## Running Tests
 
@@ -47,7 +48,8 @@
 - Tests should be written with the intent of the code in mind, not necessarily after the code that is written. This will help discover flaws in the code. 
 
 ## File Names
-- Test file names should be 
+- Test file names should be include `.tests.(whatever the file extension is)` i.e. `SomeClass.tests.cs` or `SomeComponent.tests.razor`. 
+- For class names, they should replace the `.tests` with `_Tests` i.e. `SomeClass_Tests`.
 
 ## References
 

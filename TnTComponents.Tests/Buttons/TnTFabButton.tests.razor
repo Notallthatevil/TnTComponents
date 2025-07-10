@@ -1,0 +1,105 @@
+@using Bunit
+@using TnTComponents.Tests.TestingUtility
+@using TnTComponents
+@inherits Bunit.TestContext
+
+@code {
+    public TnTFabButton_tests() {
+        TnTComponents.Tests.TestingUtility.TestingUtility.SetupRippleEffectModule(this);
+    }
+    [Fact]
+    public void TnTFabButton_Renders_BasicFabButton()
+    {
+        // Arrange
+        // (No setup needed)
+
+        // Act
+        var cut = Render(@<TnTFabButton>Fab</TnTFabButton>);
+
+        // Assert
+        cut.Markup.Should().Contain("Fab");
+    }
+
+    [Fact]
+    public void TnTFabButton_Renders_Disabled()
+    {
+        // Arrange
+        // (No setup needed)
+
+        // Act
+        var cut = Render(@<TnTFabButton Disabled="true">Disabled</TnTFabButton>);
+
+        // Assert
+        cut.Markup.Should().Contain("disabled");
+    }
+
+    [Fact]
+    public void TnTFabButton_Renders_WithIconContent()
+    {
+        // Arrange
+        // (No setup needed)
+
+        // Act
+        var cut = Render(@<TnTFabButton><span class="icon">*</span></TnTFabButton>);
+
+        // Assert
+        cut.Markup.Should().Contain("icon");
+        cut.Markup.Should().Contain("*");
+    }
+
+    [Fact]
+    public void TnTFabButton_Renders_WithBackgroundColor()
+    {
+        // Arrange
+        // (No setup needed)
+
+        // Act
+        var cut = Render(@<TnTFabButton BackgroundColor="TnTColor.Secondary">Fab</TnTFabButton>);
+
+        // Assert
+        cut.Markup.Should().Contain("Fab");
+        cut.Markup.Should().Contain("tnt-fab-button");
+    }
+
+    [Fact]
+    public void TnTFabButton_Renders_WithLargeSize()
+    {
+        // Arrange
+        // (No setup needed)
+
+        // Act
+        var cut = Render(@<TnTFabButton ButtonSize="Size.Large">Fab</TnTFabButton>);
+
+        // Assert
+        cut.Markup.Should().Contain("Fab");
+        cut.Markup.Should().Contain("tnt-fab-button");
+    }
+
+    [Fact]
+    public void TnTFabButton_Invokes_OnClickCallback()
+    {
+        // Arrange
+        bool clicked = false;
+        void OnClickHandler(MouseEventArgs _) => clicked = true;
+
+        // Act
+        var cut = Render(@<TnTFabButton OnClickCallback="@((MouseEventArgs e) => OnClickHandler(e))">Fab</TnTFabButton>);
+        cut.Find("button").Click();
+
+        // Assert
+        clicked.Should().BeTrue();
+    }
+
+    [Fact]
+    public void TnTFabButton_Renders_WithoutRipple()
+    {
+        // Arrange
+        // (No setup needed)
+
+        // Act
+        var cut = Render(@<TnTFabButton EnableRipple="false">Fab</TnTFabButton>);
+
+        // Assert
+        cut.Markup.Should().NotContain("tnt-ripple");
+    }
+}

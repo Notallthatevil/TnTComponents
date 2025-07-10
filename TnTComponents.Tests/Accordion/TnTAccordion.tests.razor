@@ -1,0 +1,50 @@
+@using Bunit
+@using TnTComponents
+@using TnTComponents.Accordion
+@inherits Bunit.TestContext
+
+@code {
+    [Fact]
+    public void TnTAccordion_Renders_BasicAccordion()
+    {
+        // Arrange
+        // (No setup needed)
+
+        // Act
+        var cut = Render(@<TnTAccordion><TnTAccordionChild Label="ChildLabel">Child</TnTAccordionChild></TnTAccordion>);
+
+        // Assert
+        cut.Markup.Should().Contain("Child");
+        cut.Markup.Should().Contain("ChildLabel");
+    }
+
+    [Fact]
+    public void TnTAccordion_Renders_MultipleChildren()
+    {
+        // Arrange
+        // (No setup needed)
+
+        // Act
+        var cut = Render(@<TnTAccordion><TnTAccordionChild Label="OneLabel">One</TnTAccordionChild><TnTAccordionChild Label="TwoLabel">Two</TnTAccordionChild></TnTAccordion>);
+
+        // Assert
+        cut.Markup.Should().Contain("One");
+        cut.Markup.Should().Contain("Two");
+        cut.Markup.Should().Contain("OneLabel");
+        cut.Markup.Should().Contain("TwoLabel");
+    }
+
+    [Fact]
+    public void TnTAccordionChild_Renders_WhenNested()
+    {
+        // Arrange
+        // (No setup needed)
+
+        // Act
+        var cut = Render(@<TnTAccordionChild Label="NestedLabel">Nested</TnTAccordionChild>);
+
+        // Assert
+        cut.Markup.Should().Contain("Nested");
+        cut.Markup.Should().Contain("NestedLabel");
+    }
+}

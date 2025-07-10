@@ -18,26 +18,20 @@ public partial class TnTImageButton {
     public TnTColor BackgroundColor { get; set; } = TnTColor.Primary;
 
     /// <summary>
+    ///     The badge to be displayed on the button, if any.
+    /// </summary>
+    [Parameter]
+    public TnTBadge? Badge { get; set; }
+
+    /// <summary>
     ///     The size of the button.
     /// </summary>
     [Parameter]
     public Size ButtonSize { get; set; } = Size.Small;
 
-    /// <summary>
-    ///     The icon to be rendered inside the button.
-    /// </summary>
-    [Parameter, EditorRequired]
-    public TnTIcon Icon { get; set; } = default!;
-
     /// <inheritdoc />
     [Parameter]
     public bool Disabled { get; set; }
-
-    /// <summary>
-    /// The badge to be displayed on the button, if any.
-    /// </summary>
-    [Parameter]
-    public TnTBadge? Badge { get; set; }
 
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
@@ -75,6 +69,18 @@ public partial class TnTImageButton {
     /// <inheritdoc />
     [Parameter]
     public bool EnableRipple { get; set; } = true;
+
+    /// <summary>
+    ///     The icon to be rendered inside the button.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public TnTIcon Icon { get; set; } = default!;
+
+    /// <summary>
+    ///     The appearance of the image button, which can be Round, Wide, or Narrow.
+    /// </summary>
+    [Parameter]
+    public ImageButtonAppearance ImageButtonAppearance { get; set; } = ImageButtonAppearance.Round;
 
     /// <inheritdoc />
     [Parameter]
@@ -114,27 +120,32 @@ public partial class TnTImageButton {
     [Parameter]
     public ButtonType Type { get; set; }
 
-    /// <summary>
-    ///  The appearance of the image button, which can be Round, Wide, or Narrow.
-    /// </summary>
-    [Parameter]
-    public ImageButtonAppearance ImageButtonAppearance { get; set; } = ImageButtonAppearance.Round;
+    /// <inheritdoc />
+    protected override void OnParametersSet() {
+        if (Icon == null) {
+            throw new ArgumentNullException(nameof(Icon), "TnTImageButton requires a non-null Icon parameter.");
+        }
+        base.OnParametersSet();
+    }
 }
 
 /// <summary>
-/// Specifies the appearance of the image button.
+///     Specifies the appearance of the image button.
 /// </summary>
 public enum ImageButtonAppearance {
+
     /// <summary>
-    /// The button has a round appearance.
+    ///     The button has a round appearance.
     /// </summary>
     Round,
+
     /// <summary>
-    /// The button has a wide rectangular appearance.
+    ///     The button has a wide rectangular appearance.
     /// </summary>
     Wide,
+
     /// <summary>
-    /// The button has a narrow rectangular appearance.
+    ///     The button has a narrow rectangular appearance.
     /// </summary>
     Narrow
 }
