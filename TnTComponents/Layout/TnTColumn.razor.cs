@@ -1,18 +1,15 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
 using System.Reflection;
 using System.Text;
 using TnTComponents.Core;
-using TnTComponents.Interfaces;
 
 namespace TnTComponents;
 
 /// <summary>
 ///     Represents a column component in a grid layout system. This component follows a 12-column grid system with responsive behavior across different screen sizes.
 /// </summary>
-public partial class TnTColumn  {
+public partial class TnTColumn {
 
-  
     /// <summary>
     ///     Gets or sets the content to be rendered inside the column.
     /// </summary>
@@ -33,7 +30,6 @@ public partial class TnTColumn  {
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
-
 
     /// <summary>
     ///     Gets or sets the column size for large screens (L). Value must be between 0 and 12, where 0 means the column is not used for this screen size.
@@ -139,7 +135,7 @@ public partial class TnTColumn  {
     /// <summary>
     ///     Dictionary of size classes and their corresponding values.
     /// </summary>
-    private Dictionary<string, ColSize> _sizes = [];
+    private readonly Dictionary<string, ColSize> _sizes = [];
 
     /// <summary>
     ///     Initializes the column component by processing the size properties.
@@ -153,7 +149,7 @@ public partial class TnTColumn  {
             var colSizeAttr = sizeValuePair.Value;
             var value = (int)(prop.GetValue(this) ?? 0);
 
-            if (value < 0 || value > 12) {
+            if (value is < 0 or > 12) {
                 throw new ArgumentOutOfRangeException(prop.Name, "Value must be within 0 and 12 inclusively.");
             }
             if (value > 0) {
@@ -170,7 +166,7 @@ public partial class TnTColumn  {
     ///     Gets a dictionary of properties with the ColSize attribute.
     /// </summary>
     /// <returns>A dictionary mapping PropertyInfo objects to their corresponding ColSizeAttribute.</returns>
-    private static IReadOnlyDictionary<PropertyInfo, ColSizeAttribute> GetSizeProperties() {
+    private static Dictionary<PropertyInfo, ColSizeAttribute> GetSizeProperties() {
         var sizeValues = new Dictionary<PropertyInfo, ColSizeAttribute>();
         foreach (var prop in typeof(TnTColumn).GetProperties()) {
             var colSize = prop.GetCustomAttribute<ColSizeAttribute>();

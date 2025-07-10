@@ -18,8 +18,8 @@ public partial class TnTDivider {
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
             .AddFromAdditionalAttributes(AdditionalAttributes)
-            .AddClass($"tnt-divider")
-            .AddClass($"tnt-divider-{Orientation.ToString().ToLower()}")
+            .AddClass("tnt-divider")
+            .AddClass($"tnt-divider-{Direction.ToString().ToLower()}")
             .Build();
 
     /// <inheritdoc />
@@ -28,10 +28,10 @@ public partial class TnTDivider {
             .AddVariable("tnt-divider-color", $"var(--tnt-color-{Color.ToCssClassName()})", Color.HasValue)
             .Build();
 
-
     /// <summary>
     ///     Gets or sets the orientation of the divider.
     /// </summary>
-    public Orientation Orientation { get; set; } = Orientation.Horizontal;
+    [Parameter]
+    public LayoutDirection Direction { get; set; } = LayoutDirection.Horizontal;
 
 }

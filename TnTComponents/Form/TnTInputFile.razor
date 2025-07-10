@@ -30,7 +30,7 @@
     @if (ShowProgress && !string.IsNullOrWhiteSpace(ProgressTitle)) {
         <div class="tnt-input-progress">
             @if (ProgressTemplate is not null) {
-                @ProgressTemplate(ProgressPercent > 0 ? ProgressFileDetails with { Percentage = ProgressPercent } : new ProgressFileDetails())
+                @ProgressTemplate(ProgressPercent > 0 ? _progressFileDetails with { Percentage = ProgressPercent } : new ProgressFileDetails())
             }
             else {
                 <div class="tnt-input-file-progress-title">

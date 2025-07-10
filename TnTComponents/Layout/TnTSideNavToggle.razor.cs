@@ -16,12 +16,6 @@ public partial class TnTSideNavToggle {
     [Parameter]
     public bool Disabled { get; set; }
 
-    ///<summary>
-    /// The color of the toggle icon.
-    /// </summary>
-    [Parameter]
-    public TnTColor IconColor { get; set; } = TnTColor.OnSurface;
-
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
@@ -55,6 +49,12 @@ public partial class TnTSideNavToggle {
     [Parameter]
     public TnTIcon Icon { get; set; } = MaterialIcon.Menu;
 
+    ///<summary>
+    /// The color of the toggle icon.
+    /// </summary>
+    [Parameter]
+    public TnTColor IconColor { get; set; } = TnTColor.OnSurface;
+
     /// <inheritdoc />
     [Parameter]
     public TnTColor? OnTintColor { get; set; }
@@ -62,6 +62,4 @@ public partial class TnTSideNavToggle {
     /// <inheritdoc />
     [Parameter]
     public TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
-
-
 }

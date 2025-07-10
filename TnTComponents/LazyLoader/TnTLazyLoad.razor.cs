@@ -9,7 +9,9 @@ namespace TnTComponents;
 /// <summary>
 ///     A component that lazily loads its child content.
 /// </summary>
-public partial class TnTLazyLoad {
+/// <remarks>Initializes a new instance of the <see cref="TnTLazyLoad" /> class.</remarks>
+[method: DynamicDependency(nameof(BeginLoad))]
+public partial class TnTLazyLoad() {
 
     /// <summary>
     ///     Gets or sets the content to be lazily loaded.
@@ -34,12 +36,6 @@ public partial class TnTLazyLoad {
 
     private const string _jsModulePath = "./_content/TnTComponents/LazyLoader/TnTLazyLoad.razor.js";
     private bool _beginLoad;
-
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="TnTLazyLoad" /> class.
-    /// </summary>
-    [DynamicDependency(nameof(BeginLoad))]
-    public TnTLazyLoad() { }
 
     /// <summary>
     ///     Begins loading the child content.

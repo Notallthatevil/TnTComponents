@@ -1,5 +1,4 @@
 ﻿using TnTComponents.Core;
-using TnTComponents.Interfaces;
 
 namespace TnTComponents;
 

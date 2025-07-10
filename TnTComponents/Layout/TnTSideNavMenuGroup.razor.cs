@@ -8,21 +8,25 @@ using TnTComponents.Interfaces;
 namespace TnTComponents;
 
 /// <summary>
-/// A collapsible navigation group component for side navigation menus.
+///     A collapsible navigation group component for side navigation menus.
 /// </summary>
-/// <remarks>
-/// Provides a toggleable group of navigation items with an expandable/collapsible section.
-/// </remarks>
+/// <remarks>Provides a toggleable group of navigation items with an expandable/collapsible section.</remarks>
 public partial class TnTSideNavMenuGroup {
-    /// <summary>
-    /// Gets or sets a value indicating whether the group is expanded by default.
-    /// </summary>
-    /// <value>
-    /// <c>true</c> if the group should be expanded when initially rendered; otherwise, <c>false</c>.
-    /// Default is <c>true</c>.
-    /// </value>
+
+    /// <inheritdoc />
     [Parameter]
-    public bool ExpandByDefault { get; set; } = true;
+    public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceVariant;
+
+    /// <summary>
+    ///     Gets or sets the content of the navigation group.
+    /// </summary>
+    /// <value>The child elements to be rendered inside the navigation group.</value>
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    /// <inheritdoc />
+    [Parameter]
+    public bool Disabled { get; set; }
 
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
@@ -35,6 +39,10 @@ public partial class TnTSideNavMenuGroup {
         .Build();
 
     /// <inheritdoc />
+    [Parameter]
+    public string? ElementName { get; set; }
+
+    /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddVariable("tnt-side-nav-menu-group-bg-color", BackgroundColor)
@@ -45,62 +53,42 @@ public partial class TnTSideNavMenuGroup {
 
     /// <inheritdoc />
     [Parameter]
-    public TextAlign? TextAlignment { get; set; }
-
-    /// <inheritdoc />
-    [Parameter]
-    public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceVariant;
-
-    /// <inheritdoc />
-    [Parameter]
-    public TnTColor TextColor { get; set; } = TnTColor.OnSurfaceVariant;
-
-
-    /// <inheritdoc />
-    [Parameter]
-    public TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
+    public bool EnableRipple { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets the content of the navigation group.
+    ///     Gets or sets a value indicating whether the group is expanded by default.
     /// </summary>
-    /// <value>
-    /// The child elements to be rendered inside the navigation group.
-    /// </value>
+    /// <value><c>true</c> if the group should be expanded when initially rendered; otherwise, <c>false</c>. Default is <c>true</c>.</value>
     [Parameter]
-    public RenderFragment ChildContent { get; set; } = default!;
+    public bool ExpandByDefault { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets the icon displayed alongside the label.
+    ///     Gets or sets the icon displayed alongside the label.
     /// </summary>
-    /// <value>
-    /// The icon to display, or <c>null</c> if no icon should be shown.
-    /// </value>
+    /// <value>The icon to display, or <c>null</c> if no icon should be shown.</value>
     [Parameter]
     public TnTIcon? Icon { get; set; }
 
     /// <summary>
-    /// Gets or sets the text label for the navigation group.
+    ///     Gets or sets the text label for the navigation group.
     /// </summary>
-    /// <value>
-    /// The text to display for the navigation group header.
-    /// </value>
+    /// <value>The text to display for the navigation group header.</value>
     [Parameter, EditorRequired]
     public string Label { get; set; } = default!;
 
     /// <inheritdoc />
     [Parameter]
-    public bool Disabled { get; set; }
-
-    /// <inheritdoc />
-    [Parameter]
-    public string? ElementName { get; set; }
-
-    /// <inheritdoc />
-    [Parameter]
-    public bool EnableRipple { get; set; } = true;
-
-    /// <inheritdoc />
-    [Parameter]
     public TnTColor? OnTintColor { get; set; }
 
+    /// <inheritdoc />
+    [Parameter]
+    public TextAlign? TextAlignment { get; set; }
+
+    /// <inheritdoc />
+    [Parameter]
+    public TnTColor TextColor { get; set; } = TnTColor.OnSurfaceVariant;
+
+    /// <inheritdoc />
+    [Parameter]
+    public TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
 }

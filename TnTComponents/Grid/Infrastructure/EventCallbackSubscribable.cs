@@ -7,7 +7,7 @@ namespace TnTComponents.Grid.Infrastructure;
 ///     the handlers are EventCallback <typeparamref name="T" />, and so may have async behaviors
 ///     and cause component re-rendering while retaining error flow.
 /// </summary>
-/// <typeparam name="T">A type for the eventargs.</typeparam>
+/// <typeparam name="T">A type for the event args.</typeparam>
 internal sealed class EventCallbackSubscribable<T> {
     private readonly Dictionary<EventCallbackSubscriber<T>, EventCallback<T>> _callbacks = [];
 

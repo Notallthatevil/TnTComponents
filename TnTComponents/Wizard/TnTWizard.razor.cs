@@ -84,11 +84,11 @@ public partial class TnTWizard : TnTComponentBase {
     /// <exception cref="ArgumentNullException">Thrown if the step is null.</exception>
     internal void AddChildStep(TnTWizardStepBase step) {
         ArgumentNullException.ThrowIfNull(step);
-        if (step.InternalId == -1) {
-            step.InternalId = Interlocked.Increment(ref _childId);
+        if (step._internalId == -1) {
+            step._internalId = Interlocked.Increment(ref _childId);
         }
 
-        if (!_steps.Any(s => s.InternalId == step.InternalId)) {
+        if (!_steps.Any(s => s._internalId == step._internalId)) {
             _steps.Add(step);
         }
         StateHasChanged();
@@ -112,7 +112,7 @@ public partial class TnTWizard : TnTComponentBase {
     /// <exception cref="ArgumentNullException">Thrown if the step is null.</exception>
     internal void RemoveChildStep(TnTWizardStepBase step) {
         ArgumentNullException.ThrowIfNull(step);
-        _steps.RemoveAll(s => s.InternalId == step.InternalId);
+        _steps.RemoveAll(s => s._internalId == step._internalId);
         StateHasChanged();
     }
 

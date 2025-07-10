@@ -5,11 +5,8 @@ namespace TnTComponents.Core;
 /// <summary>
 ///     A builder class for constructing CSS class strings.
 /// </summary>
-internal class CssClassBuilder {
-    private readonly HashSet<string> _classes = new();
-
-    private CssClassBuilder() {
-    }
+internal sealed class CssClassBuilder {
+    private readonly HashSet<string> _classes = [];
 
     /// <summary>
     ///     Creates a new instance of <see cref="CssClassBuilder" /> with an optional default class.
@@ -23,7 +20,7 @@ internal class CssClassBuilder {
     /// </summary>
     /// <param name="color">The color to use.</param>
     /// <returns>The current instance of <see cref="CssClassBuilder" />.</returns>
-    public CssClassBuilder AddBackgroundColor(TnTColor? color) => AddClass($"tnt-bg-color-{color?.ToCssClassName() ?? string.Empty}", color is not null && color != TnTColor.None);
+    public CssClassBuilder AddBackgroundColor(TnTColor? color) => AddClass($"tnt-bg-color-{color?.ToCssClassName() ?? string.Empty}", color is not null and not TnTColor.None);
 
     /// <summary>
     ///     Adds a CSS class if the specified condition is met.
@@ -64,26 +61,21 @@ internal class CssClassBuilder {
     /// </summary>
     /// <param name="color">The color to use.</param>
     /// <returns>The current instance of <see cref="CssClassBuilder" />.</returns>
-    public CssClassBuilder AddForegroundColor(TnTColor? color) => AddClass($"tnt-fg-color-{color?.ToCssClassName() ?? string.Empty}", color is not null && color != TnTColor.None);
+    public CssClassBuilder AddForegroundColor(TnTColor? color) => AddClass($"tnt-fg-color-{color?.ToCssClassName() ?? string.Empty}", color is not null and not TnTColor.None);
 
     /// <summary>
     ///     Adds CSS classes from additional attributes.
     /// </summary>
     /// <param name="additionalAttributes">The additional attributes.</param>
     /// <returns>The current instance of <see cref="CssClassBuilder" />.</returns>
-    public CssClassBuilder AddFromAdditionalAttributes(IReadOnlyDictionary<string, object>? additionalAttributes) {
-        if (additionalAttributes?.TryGetValue("class", out var @class) == true && @class is not null) {
-            return AddClass(@class.ToString());
-        }
-        return this;
-    }
+    public CssClassBuilder AddFromAdditionalAttributes(IReadOnlyDictionary<string, object>? additionalAttributes) => additionalAttributes?.TryGetValue("class", out var @class) == true && @class is not null ? AddClass(@class.ToString()) : this;
 
     /// <summary>
     ///     Adds a CSS class for on-tint color.
     /// </summary>
     /// <param name="color">The color to use.</param>
     /// <returns>The current instance of <see cref="CssClassBuilder" />.</returns>
-    public CssClassBuilder AddOnTintColor(TnTColor? color) => AddClass($"tnt-on-tint-color-{color?.ToCssClassName() ?? string.Empty}", color is not null && color != TnTColor.None);
+    public CssClassBuilder AddOnTintColor(TnTColor? color) => AddClass($"tnt-on-tint-color-{color?.ToCssClassName() ?? string.Empty}", color is not null and not TnTColor.None);
 
     /// <summary>
     ///     Adds a CSS class for ripple effect.
@@ -125,7 +117,7 @@ internal class CssClassBuilder {
     /// </summary>
     /// <param name="color">The color to use.</param>
     /// <returns>The current instance of <see cref="CssClassBuilder" />.</returns>
-    public CssClassBuilder AddTintColor(TnTColor? color) => AddClass($"tnt-tint-color-{color?.ToCssClassName() ?? string.Empty}", color is not null && color != TnTColor.None);
+    public CssClassBuilder AddTintColor(TnTColor? color) => AddClass($"tnt-tint-color-{color?.ToCssClassName() ?? string.Empty}", color is not null and not TnTColor.None);
 
     /// <summary>
     ///     Builds the CSS class string.

@@ -29,7 +29,21 @@ public enum IconAppearance {
     /// </summary>
     Sharp
 }
+/// <summary>
+///     Specifies the type of icon to be used.
+/// </summary>
+public enum IconType {
 
+    /// <summary>
+    ///     Represents Material Icons.
+    /// </summary>
+    MaterialIcons,
+
+    /// <summary>
+    ///     Represents Font Awesome icons.
+    /// </summary>
+    FontAwesome
+}
 /// <summary>
 ///     Defines the size options available for TnTIcon components.
 /// </summary>
@@ -101,9 +115,7 @@ public abstract class TnTIcon : TnTComponentBase {
     ///     Initializes a new instance of the <see cref="TnTIcon" /> class with the specified icon.
     /// </summary>
     /// <param name="icon">The icon content to be displayed.</param>
-    internal TnTIcon(string icon) {
-        Icon = icon;
-    }
+    internal TnTIcon(string icon) => Icon = icon;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="TnTIcon" /> class.

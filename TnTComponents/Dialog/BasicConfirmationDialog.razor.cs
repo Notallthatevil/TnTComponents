@@ -57,7 +57,6 @@ public partial class BasicConfirmationDialog {
     [CascadingParameter]
     private ITnTDialog _dialog { get; set; } = default!;
 
-
     /// <inheritdoc />
     protected override void OnParametersSet() {
         base.OnParametersSet();

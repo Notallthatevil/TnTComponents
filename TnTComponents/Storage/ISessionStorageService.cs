@@ -9,5 +9,4 @@ namespace TnTComponents.Storage;
 /// <summary>
 ///     Interface for session storage service, extending the <see cref="IStorageService" />.
 /// </summary>
-public interface ISessionStorageService : IStorageService {
-}
+public interface ISessionStorageService : IStorageService;

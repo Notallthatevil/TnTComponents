@@ -4,16 +4,14 @@ using Microsoft.AspNetCore.Components.Rendering;
 namespace TnTComponents;
 
 /// <summary>
-/// Adds dependencies to the head of the document for TnTComponents.
+///     Meant to be placed in the head section of App.razor to include necessary dependencies for TnTComponents.
 /// </summary>
 public class TnTHeadDependencies : IComponent {
-
     private RenderHandle _renderHandle;
 
     /// <inheritdoc />
-    public void Attach(RenderHandle renderHandle) {
-        _renderHandle = renderHandle;
-    }
+    public void Attach(RenderHandle renderHandle) => _renderHandle = renderHandle;
+
     /// <inheritdoc />
     public Task SetParametersAsync(ParameterView parameters) {
         _renderHandle.Render(Render);

@@ -189,11 +189,11 @@ public partial class TnTAccordionChild {
             {
                 builder.OpenElement(150, "div");
                 builder.AddAttribute(160, "class", CssClassBuilder.Create()
-                    .AddClass("tnt-expanded", _parent.AllowOpenByDefault && ((OpenByDefault && _parent.LimitToOneExpanded && !_parent.FoundExpanded) || (OpenByDefault && !_parent.LimitToOneExpanded)))
+                    .AddClass("tnt-expanded", _parent.AllowOpenByDefault && ((OpenByDefault && _parent.LimitToOneExpanded && !_parent._foundExpanded) || (OpenByDefault && !_parent.LimitToOneExpanded)))
                     .Build());
 
                 if (OpenByDefault) {
-                    _parent.FoundExpanded = true;
+                    _parent._foundExpanded = true;
                 }
 
 #if NET9_0_OR_GREATER
@@ -215,6 +215,6 @@ public partial class TnTAccordionChild {
     protected override void OnInitialized() {
         base.OnInitialized();
         _parent.RegisterChild(this);
-        _open = _parent.AllowOpenByDefault && ((OpenByDefault && _parent.LimitToOneExpanded && !_parent.FoundExpanded) || (OpenByDefault && !_parent.LimitToOneExpanded));
+        _open = _parent.AllowOpenByDefault && ((OpenByDefault && _parent.LimitToOneExpanded && !_parent._foundExpanded) || (OpenByDefault && !_parent.LimitToOneExpanded));
     }
 }

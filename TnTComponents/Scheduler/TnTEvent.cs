@@ -81,7 +81,5 @@ public record TnTEvent {
     /// </summary>
     /// <param name="other">The other event to compare with.</param>
     /// <returns><c>true</c> if the events overlap; otherwise, <c>false</c>.</returns>
-    public bool Overlaps(TnTEvent other) {
-        return EventStart < other.EventEnd && other.EventStart < EventEnd;
-    }
+    public bool Overlaps(TnTEvent other) => EventStart < other.EventEnd && other.EventStart < EventEnd;
 }

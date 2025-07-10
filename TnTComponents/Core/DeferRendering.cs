@@ -15,7 +15,5 @@ public sealed class DeferRendering : ComponentBase {
     public RenderFragment? ChildContent { get; set; }
 
     /// <inheritdoc />
-    protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        builder.AddContent(0, ChildContent);
-    }
+    protected override void BuildRenderTree(RenderTreeBuilder builder) => builder.AddContent(0, ChildContent);
 }

@@ -16,7 +16,7 @@
            disabled="@Disabled"
            value="@bool.TrueString"
            checked="@BindConverter.FormatValue(Value)"
-           @onchange="@((ChangeEventArgs args) => Value = (bool)args.Value!)"
+           @onchange="OnChangeAsync"
            @ref="Element" />
 
     @if (!string.IsNullOrWhiteSpace(Label)) {

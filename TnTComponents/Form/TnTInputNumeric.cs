@@ -23,7 +23,7 @@ public class TnTInputNumeric<[DynamicallyAccessedMembers(DynamicallyAccessedMemb
     /// <inheritdoc />
     protected override void OnInitialized() {
         base.OnInitialized();
-        Type type = Nullable.GetUnderlyingType(typeof(TNumericType)) ?? typeof(TNumericType);
+        var type = Nullable.GetUnderlyingType(typeof(TNumericType)) ?? typeof(TNumericType);
         if (type != typeof(int) && type != typeof(long) && type != typeof(short) && type != typeof(float) && type != typeof(double) && type != typeof(decimal)) {
             throw new InvalidOperationException($"The type '{type}' is not a supported numeric type.");
         }

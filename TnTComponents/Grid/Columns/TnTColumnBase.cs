@@ -91,6 +91,7 @@ public abstract class TnTColumnBase<TGridItem> : TnTComponentBase {
     internal TnTInternalGridContext<TGridItem> Context { get; private set; } = default!;
 
     internal RenderFragment RenderDefaultHeaderContent() {
+#pragma warning disable IDE0046 // Convert to conditional expression
         if (HeaderCellItemTemplate is not null) {
             return HeaderCellItemTemplate(this);
         }
@@ -110,7 +111,7 @@ public abstract class TnTColumnBase<TGridItem> : TnTComponentBase {
 
                 if (ShowSortIcon) {
                     b.OpenComponent<MaterialIcon>(40);
-                    b.AddAttribute(50, "Icon", Context.Grid.SortByAscending == true ? MaterialIcon.ArrowDropUp : MaterialIcon.ArrowDropDown);
+                    b.AddAttribute(50, "Icon", Context.Grid.SortByAscending ? MaterialIcon.ArrowDropUp : MaterialIcon.ArrowDropDown);
                     b.AddAttribute(60, "Class", "tnt-sort-icon");
                     b.CloseComponent();
                 }
@@ -121,6 +122,7 @@ public abstract class TnTColumnBase<TGridItem> : TnTComponentBase {
                 b.CloseElement();
             });
         }
+#pragma warning restore IDE0046 // Convert to conditional expression
         else {
             return new RenderFragment(b => {
                 b.OpenElement(0, "div");
@@ -134,12 +136,7 @@ public abstract class TnTColumnBase<TGridItem> : TnTComponentBase {
         }
     }
 
-    internal RenderFragment? RenderPlaceholderContent(PlaceholderContext placeholderContext) {
-        if (PlaceholderTemplate is not null) {
-            return PlaceholderTemplate(placeholderContext);
-        }
-        return null;
-    }
+    internal RenderFragment? RenderPlaceholderContent(PlaceholderContext placeholderContext) => PlaceholderTemplate is not null ? PlaceholderTemplate(placeholderContext) : null;
 
     /// <summary>
     ///     Overridden by derived components to provide rendering logic for the column's cells.
@@ -155,9 +152,7 @@ public abstract class TnTColumnBase<TGridItem> : TnTComponentBase {
     protected internal virtual string? RawCellContent(TGridItem item) => null;
 
     /// <inheritdoc />
-    protected override void BuildRenderTree(RenderTreeBuilder builder) {
-        Context.Grid.AddColumn(this, InitialSortDirection, IsDefaultSortColumn);
-    }
+    protected override void BuildRenderTree(RenderTreeBuilder builder) => Context.Grid.AddColumn(this, InitialSortDirection, IsDefaultSortColumn);
 
     /// <summary>
     ///     Gets a value indicating whether this column should act as sortable if no value was set for the <see cref="TnTColumnBase{TGridItem}.Sortable" /> parameter. The default behavior is not to be

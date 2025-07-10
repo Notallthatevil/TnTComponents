@@ -93,7 +93,7 @@ public class TnTWizardFormStep : TnTWizardStepBase {
             builder.AddComponentParameter(30, nameof(TnTForm.FormName), FormName);
         }
 
-        builder.SetKey(InternalId);
+        builder.SetKey(_internalId);
 
         builder.AddComponentParameter(60, nameof(TnTForm.ChildContent), new RenderFragment<EditContext>(editContext => new RenderFragment(b => {
             if (IncludeDataAnnotationsValidator) {

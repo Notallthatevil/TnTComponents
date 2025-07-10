@@ -37,10 +37,5 @@ internal class DisabledDateRange(DateTimeOffset disabledStart, DateTimeOffset di
     ///     <c>true</c> if the time slot on the specified day is within the disabled range;
     ///     otherwise, <c>false</c>.
     /// </returns>
-    internal override bool IsTimeSlotDisabled(DayOfWeek dayOfWeek, TimeOnly timeSlot) {
-        if (dayOfWeek == disabledStart.DayOfWeek && dayOfWeek == disabledEnd.DayOfWeek) {
-            return timeSlot >= TimeOnly.FromTimeSpan(disabledStart.TimeOfDay) && timeSlot <= TimeOnly.FromTimeSpan(disabledEnd.TimeOfDay);
-        }
-        return false;
-    }
+    internal override bool IsTimeSlotDisabled(DayOfWeek dayOfWeek, TimeOnly timeSlot) => dayOfWeek == disabledStart.DayOfWeek && dayOfWeek == disabledEnd.DayOfWeek && timeSlot >= TimeOnly.FromTimeSpan(disabledStart.TimeOfDay) && timeSlot <= TimeOnly.FromTimeSpan(disabledEnd.TimeOfDay);
 }

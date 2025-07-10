@@ -77,7 +77,7 @@ public partial class TnTAccordion() {
     /// <summary>
     /// Used internally to track whether an expanded child has been found.
     /// </summary>
-    internal bool FoundExpanded;
+    internal bool _foundExpanded;
 
     /// <summary>
     /// Gets or sets the parent accordion.
@@ -85,8 +85,8 @@ public partial class TnTAccordion() {
     [CascadingParameter]
     private TnTAccordion? _parentAccordion { get; set; }
 
-    private readonly Dictionary<int, TnTAccordionChild> _children = new();
-    private static int _elementId = 0;
+    private readonly Dictionary<int, TnTAccordionChild> _children = [];
+    private static int _elementId;
 
     /// <summary>
     /// Closes all child accordion items asynchronously.

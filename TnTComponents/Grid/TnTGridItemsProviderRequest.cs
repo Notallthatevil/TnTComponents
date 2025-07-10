@@ -35,8 +35,7 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> {
     /// <summary>
     ///     Retrieves the properties to sort on and their sort directions.
     /// </summary>
-    public IReadOnlyCollection<KeyValuePair<string, SortDirection>> SortOnProperties =>
-            GetSortByProperties().Select(sp => new KeyValuePair<string, SortDirection>(sp.PropertyName, sp.Direction)).ToList();
+    public IReadOnlyCollection<KeyValuePair<string, SortDirection>> SortOnProperties => [.. GetSortByProperties().Select(sp => new KeyValuePair<string, SortDirection>(sp.PropertyName, sp.Direction))];
 
     /// <summary>
     ///     Gets or sets the zero-based index of the first item to be supplied.
@@ -60,7 +59,7 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> {
         return new TnTGridItemsProviderRequest<TGridItem> {
             Count = request.Count,
             SortByColumn = null,
-            SortByAscending = request.SortOnProperties.Count() > 0 && request.SortOnProperties.First().Value == SortDirection.Ascending,
+            SortByAscending = request.SortOnProperties.Any() && request.SortOnProperties.First().Value == SortDirection.Ascending,
             StartIndex = request.StartIndex,
             CancellationToken = default
         };
@@ -88,5 +87,5 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> {
     ///     Produces a collection of (property name, direction) pairs representing the sorting rules.
     /// </summary>
     /// <returns>A collection of (property name, direction) pairs representing the sorting rules</returns>
-    public IReadOnlyCollection<SortedProperty> GetSortByProperties() => SortByColumn?.SortBy?.ToPropertyList(SortByAscending) ?? Array.Empty<SortedProperty>();
+    public IReadOnlyCollection<SortedProperty> GetSortByProperties() => SortByColumn?.SortBy?.ToPropertyList(SortByAscending) ?? [];
 }

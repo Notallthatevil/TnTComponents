@@ -20,6 +20,7 @@ public static class TnTComponentIdentifier {
     /// <remarks>You can use a <see cref="TnTComponentIdentifierContext" /> instance to customize the Generation process, for example in Unit Tests.</remarks>
     /// <returns>A new id</returns>
     public static string NewId(int length = 8) {
+#pragma warning disable IDE0046 // Convert to conditional expression
         if (TnTComponentIdentifierContext.Current == null) {
             if (length > 16) {
                 throw new ArgumentOutOfRangeException(nameof(length), "length must be less than 16");
@@ -32,6 +33,7 @@ public static class TnTComponentIdentifier {
         }
 
         return TnTComponentIdentifierContext.Current.GenerateId();
+#pragma warning restore IDE0046 // Convert to conditional expression
     }
 }
 
@@ -43,19 +45,10 @@ public class TnTComponentIdentifierContext : IDisposable {
     /// <summary>
     ///     The current context for generating unique identifiers.
     /// </summary>
-    public static TnTComponentIdentifierContext? Current {
-        get {
-            if (_threadScopeStack.Value == null || _threadScopeStack.Value.Count == 0) {
-                return null;
-            }
-            else {
-                return _threadScopeStack.Value?.Peek();
-            }
-        }
-    }
+    public static TnTComponentIdentifierContext? Current => _threadScopeStack.Value == null || _threadScopeStack.Value.Count == 0 ? null : (_threadScopeStack.Value?.Peek());
 
-    private uint CurrentIndex { get; set; }
-    private Func<uint, string> NewId { get; init; }
+    private uint _currentIndex { get; set; }
+    private Func<uint, string> _newId { get; init; }
     private static readonly ThreadLocal<Stack<TnTComponentIdentifierContext>> _threadScopeStack = new(() => new Stack<TnTComponentIdentifierContext>());
 
     /// <summary>
@@ -64,8 +57,8 @@ public class TnTComponentIdentifierContext : IDisposable {
     /// <param name="newId">A function for generating a new id</param>
     public TnTComponentIdentifierContext(Func<uint, string> newId) {
         _threadScopeStack.Value?.Push(this);
-        NewId = newId;
-        CurrentIndex = 0;
+        _newId = newId;
+        _currentIndex = 0;
     }
 
     /// <inheritdoc />
@@ -75,12 +68,12 @@ public class TnTComponentIdentifierContext : IDisposable {
     }
 
     internal string GenerateId() {
-        var id = NewId.Invoke(CurrentIndex);
+        var id = _newId.Invoke(_currentIndex);
 
-        CurrentIndex++;
+        _currentIndex++;
 
-        if (CurrentIndex >= 99999999) {
-            CurrentIndex = 0;
+        if (_currentIndex >= 99999999) {
+            _currentIndex = 0;
         }
 
         return id;

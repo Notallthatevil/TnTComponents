@@ -9,6 +9,47 @@ using TnTComponents.Dialog;
 namespace TnTComponents;
 
 /// <summary>
+///     Represents the possible results of a dialog operation.
+/// </summary>
+public enum DialogResult {
+
+    /// <summary>
+    ///     The dialog is pending.
+    /// </summary>
+    Pending,
+
+    /// <summary>
+    ///     The dialog has failed.
+    /// </summary>
+    Failed,
+
+    /// <summary>
+    ///     The dialog has been closed.
+    /// </summary>
+    Closed,
+
+    /// <summary>
+    ///     The dialog has been cancelled. This is equivalent to <see cref="Closed" />.
+    /// </summary>
+    Cancelled = Closed,
+
+    /// <summary>
+    ///     The dialog has been confirmed.
+    /// </summary>
+    Confirmed,
+
+    /// <summary>
+    ///     The dialog has succeeded. This is equivalent to <see cref="Confirmed" />.
+    /// </summary>
+    Succeeded = Confirmed,
+
+    /// <summary>
+    ///     The dialog has been deleted.
+    /// </summary>
+    Deleted
+}
+
+/// <summary>
 ///     Represents a dialog component that can be used to display modal dialogs.
 /// </summary>
 public partial class TnTDialog {
@@ -25,12 +66,12 @@ public partial class TnTDialog {
     [Inject]
     private ITnTDialogService _service { get; set; } = default!;
 
-    private readonly HashSet<ITnTDialog> _dialogs = new();
+    private readonly HashSet<ITnTDialog> _dialogs = [];
 
 #if NET9_0_OR_GREATER
-    private Lock _lock = new();
+    private readonly Lock _lock = new();
 #else
-    private object _lock = new();
+    private readonly object _lock = new();
 #endif
 
     /// <summary>
@@ -43,14 +84,11 @@ public partial class TnTDialog {
     }
 
     /// <inheritdoc />
-
-
-    /// <inheritdoc />
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         await base.OnAfterRenderAsync(firstRender);
         ITnTDialog[] dialogs;
         lock (_lock) {
-            dialogs = _dialogs.ToArray();
+            dialogs = [.. _dialogs];
         }
         foreach (var dialog in dialogs) {
             await _jsRuntime.InvokeVoidAsync("TnTComponents.openModalDialog", dialog.ElementId);
@@ -132,9 +170,8 @@ public partial class TnTDialog {
                 builder.AddAttribute(170, nameof(CascadingValue<ITnTDialog>.ChildContent), new RenderFragment(cascadingBuilder => {
                     cascadingBuilder.OpenComponent(0, dialog.Type);
 #pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
-                    // Disabling warning since value in these key value pairs is allowed to be null
-                    // when the parameter on the component allows it. It is up to the caller when
-                    // opening a dialog to set the parameters correctly.
+                    // Disabling warning since value in these key value pairs is allowed to be null when the parameter on the component allows it. It is up to the caller when opening a dialog to set
+                    // the parameters correctly.
                     cascadingBuilder.AddMultipleAttributes(10, dialog.Parameters);
 #pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
                     cascadingBuilder.CloseComponent();

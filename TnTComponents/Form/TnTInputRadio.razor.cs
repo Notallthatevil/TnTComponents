@@ -17,12 +17,6 @@ namespace TnTComponents;
 /// <typeparam name="TInputType">The type of the input value.</typeparam>
 public partial class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TInputType> {
 
-    /// <summary>
-    ///     Gets or sets the cascading parameter for the radio group.
-    /// </summary>
-    [CascadingParameter]
-    private TnTInputRadioGroup<TInputType> _group { get; set; } = default!;
-
     /// <inheritdoc />
     [Parameter]
     public bool Disabled { get; set; }
@@ -88,9 +82,15 @@ public partial class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccess
     public TInputType Value { get; set; } = default!;
 
     private bool _disabled => _group.FieldDisabled || Disabled;
+
+    /// <summary>
+    ///     Gets or sets the cascading parameter for the radio group.
+    /// </summary>
+    [CascadingParameter]
+    private TnTInputRadioGroup<TInputType> _group { get; set; } = default!;
+
     private bool _readOnly => _group.FieldReadonly || ReadOnly;
     private bool _trueValueToggle;
-
 
     /// <inheritdoc />
     protected override void OnParametersSet() {

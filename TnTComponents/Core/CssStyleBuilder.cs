@@ -5,7 +5,7 @@ namespace TnTComponents.Core;
 /// <summary>
 ///     A builder class for constructing CSS style strings.
 /// </summary>
-internal class CssStyleBuilder {
+internal sealed class CssStyleBuilder {
     private readonly Dictionary<string, string> _styles = [];
     private string? _styleString = string.Empty;
     private CssStyleBuilder() {
@@ -23,10 +23,9 @@ internal class CssStyleBuilder {
     /// <param name="additionalAttributes">A dictionary of additional attributes.</param>
     /// <returns>The current instance of <see cref="CssStyleBuilder" />.</returns>
     public CssStyleBuilder AddFromAdditionalAttributes(IReadOnlyDictionary<string, object>? additionalAttributes) {
-        if (additionalAttributes?.TryGetValue("style", out var style) == true && style is not null) {
-            return AddStyle(style.ToString(), string.Empty);
-        }
-        return this;
+        return additionalAttributes?.TryGetValue("style", out var style) == true && style is not null
+            ? AddStyle(style.ToString(), string.Empty)
+            : this;
     }
 
     /// <summary>
@@ -60,14 +59,7 @@ internal class CssStyleBuilder {
     /// <param name="varValue">The value of the CSS variable.</param>
     /// <param name="enabled"> A flag indicating whether the variable should be added.</param>
     /// <returns>The current instance of <see cref="CssStyleBuilder" />.</returns>
-    public CssStyleBuilder AddVariable(string varName, string varValue, bool enabled = true) {
-        if (enabled) {
-            return AddStyle($"--{varName}", varValue);
-        }
-        else {
-            return this;
-        }
-    }
+    public CssStyleBuilder AddVariable(string varName, string varValue, bool enabled = true) => enabled ? AddStyle($"--{varName}", varValue) : this;
 
     /// <summary>
     ///     Adds a CSS variable to the builder with a color value.
@@ -76,32 +68,11 @@ internal class CssStyleBuilder {
     /// <param name="color">  The color value for the CSS variable.</param>
     /// <param name="enabled">A flag indicating whether the variable should be added.</param>
     /// <returns>The current instance of <see cref="CssStyleBuilder" />.</returns>
-    public CssStyleBuilder AddVariable(string varName, TnTColor color, bool enabled = true) {
-        if (enabled) {
-            return AddStyle($"--{varName}", $"var(--tnt-color-{color.ToCssClassName()})");
-        }
-        else {
-            return this;
-        }
-    }
+    public CssStyleBuilder AddVariable(string varName, TnTColor color, bool enabled = true) => enabled ? AddStyle($"--{varName}", $"var(--tnt-color-{color.ToCssClassName()})") : this;
 
-    public CssStyleBuilder AddBackgroundColor(TnTColor?color, bool enabled = true) {
-        if (enabled && color.HasValue) {
-            return AddStyle("background-color", color?.ToCssTnTColorVariable());
-        }
-        else {
-            return this;
-        }
-    }
+    public CssStyleBuilder AddBackgroundColor(TnTColor? color, bool enabled = true) => enabled && color.HasValue ? AddStyle("background-color", color?.ToCssTnTColorVariable()) : this;
 
-    public CssStyleBuilder AddForegroundColor(TnTColor? color, bool enabled = true) {
-        if (enabled && color.HasValue) {
-            return AddStyle("color", color?.ToCssTnTColorVariable());
-        }
-        else {
-            return this;
-        }
-    }
+    public CssStyleBuilder AddForegroundColor(TnTColor? color, bool enabled = true) => enabled && color.HasValue ? AddStyle("color", color?.ToCssTnTColorVariable()) : this;
 
     /// <summary>
     ///     Builds the CSS style string.
@@ -127,7 +98,7 @@ internal class CssStyleBuilder {
                 }
                 else {
                     if (!trimmedKey.EndsWith(';')) {
-                        sb.Append(";");
+                        sb.Append(';');
                     }
                 }
             }

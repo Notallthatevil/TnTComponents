@@ -7,7 +7,7 @@ namespace TnTComponents.Grid.Infrastructure;
 internal static class DisplayAttributeExtensions {
 
     public static string? GetDisplayAttributeString([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] this Type itemType, string propertyName) {
-        PropertyInfo? propertyInfo = itemType.GetProperty(propertyName);
+        var propertyInfo = itemType.GetProperty(propertyName);
         //if (PropertyInfo == null && typeof(ICustomTypeProvider).IsAssignableFrom(itemType))
         //    PropertyInfo = ((ICustomTypeProvider)Item).GetCustomType().GetProperty(PropertyName);
         if (propertyInfo == null) {
@@ -19,7 +19,8 @@ internal static class DisplayAttributeExtensions {
             return displayAttribute.GetName();
         }
         else {
-            if (itemType.GetCustomAttribute(typeof(MetadataTypeAttribute)) is MetadataTypeAttribute metadata) {
+            var metadata = itemType.GetCustomAttribute<MetadataTypeAttribute>();
+            if (metadata is not null) {
                 return metadata.MetadataClassType.GetDisplayAttributeString(propertyName);
             }
         }

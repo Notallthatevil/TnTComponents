@@ -48,7 +48,7 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
     /// <summary>
     ///     Custom identifier attribute for the component.
     /// </summary>
-    internal const string TnTCustomIdentifierAttribute = "tntid";
+    internal const string _tnTCustomIdentifierAttribute = "tntid";
 
     /// <inheritdoc />
     protected override void OnParametersSet() {
@@ -57,16 +57,16 @@ public abstract class TnTComponentBase : ComponentBase, ITnTComponentBase {
         // Only create a new dictionary if needed, and avoid unnecessary allocations
         Dictionary<string, object> dict;
         if (AdditionalAttributes is null) {
-            dict = new Dictionary<string, object>();
+            dict = [];
         }
-        else if (!AdditionalAttributes.ContainsKey(TnTCustomIdentifierAttribute) || !Equals(AdditionalAttributes[TnTCustomIdentifierAttribute], ComponentIdentifier)) {
+        else if (!AdditionalAttributes.ContainsKey(_tnTCustomIdentifierAttribute) || !Equals(AdditionalAttributes[_tnTCustomIdentifierAttribute], ComponentIdentifier)) {
             dict = new Dictionary<string, object>(AdditionalAttributes);
         }
         else {
             // Already set and correct, no need to update
             return;
         }
-        dict[TnTCustomIdentifierAttribute] = ComponentIdentifier;
+        dict[_tnTCustomIdentifierAttribute] = ComponentIdentifier;
         AdditionalAttributes = dict;
     }
 }

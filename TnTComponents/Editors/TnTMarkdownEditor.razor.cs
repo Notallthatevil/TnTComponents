@@ -58,7 +58,7 @@ public partial class TnTMarkdownEditor {
     public async Task UpdateValue(string value, string renderedText) {
         Value = value;
         await ValueChanged.InvokeAsync(Value);
-        var body = Regex.Match(renderedText, @"<body>((.|\r|\n)*)<\/body>").Groups[1].Value;
+        var body = BodyRegex().Match(renderedText).Groups[1].Value;
         if (body is not null) {
             RenderedHtml = new MarkupString(body);
             await RenderedHtmlChanged.InvokeAsync(RenderedHtml);
@@ -71,4 +71,7 @@ public partial class TnTMarkdownEditor {
         base.OnInitialized();
         ElementId = TnTComponentIdentifier.NewId();
     }
+
+    [GeneratedRegex(@"<body>((.|\r|\n)*)<\/body>")]
+    private static partial Regex BodyRegex();
 }

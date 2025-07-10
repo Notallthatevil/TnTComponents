@@ -348,44 +348,32 @@ public static partial class TnTColorEnumExt {
     /// </summary>
     /// <param name="tnTColorEnum">The nullable <see cref="TnTColor" /> enum value.</param>
     /// <returns>The CSS class name as a string, or an empty string if the value is null.</returns>
-    public static string ToCssClassName(this TnTColor? tnTColorEnum) {
-        if (tnTColorEnum.HasValue) {
-            return tnTColorEnum.Value.ToCssClassName();
-        }
-        else {
-            return string.Empty;
-        }
-    }
+    public static string ToCssClassName(this TnTColor? tnTColorEnum) => tnTColorEnum.HasValue ? tnTColorEnum.Value.ToCssClassName() : string.Empty;
 
     /// <summary>
     ///     Converts a <see cref="TnTColor" /> enum value to its corresponding CSS class name.
     /// </summary>
     /// <param name="tnTColorEnum">The <see cref="TnTColor" /> enum value.</param>
     /// <returns>The CSS class name as a string.</returns>
-    public static string ToCssClassName(this TnTColor tnTColorEnum) {
-        return FindAllCapitalsExceptFirstLetter().Replace(tnTColorEnum.ToString(), @"-$1").ToLower();
-    }
-
+    public static string ToCssClassName(this TnTColor tnTColorEnum) => FindAllCapitalsExceptFirstLetter().Replace(tnTColorEnum.ToString(), "-$1").ToLower();
 
     /// <summary>
-    /// Converts a <see cref="TnTColor" /> enum value to its corresponding CSS variable name.
+    ///     Converts a <see cref="TnTColor" /> enum value to its corresponding CSS variable name.
     /// </summary>
     /// <param name="tnTColorEnum">The <see cref="TnTColor" /> enum value.</param>
     /// <returns>The css variable</returns>
     public static string ToCssTnTColorVariable(this TnTColor? tnTColorEnum) {
-        return tnTColorEnum.HasValue 
-            ? $"var(--tnt-color-{tnTColorEnum.Value.ToCssClassName()})" 
+        return tnTColorEnum.HasValue
+            ? $"var(--tnt-color-{tnTColorEnum.Value.ToCssClassName()})"
             : string.Empty;
     }
 
     /// <summary>
-    /// Converts a <see cref="TnTColor" /> enum value to its corresponding CSS variable name.
+    ///     Converts a <see cref="TnTColor" /> enum value to its corresponding CSS variable name.
     /// </summary>
     /// <param name="tnTColorEnum">The <see cref="TnTColor" /> enum value.</param>
     /// <returns>The css variable</returns>
-    public static string ToCssTnTColorVariable(this TnTColor tnTColorEnum) {
-        return $"var(--tnt-color-{tnTColorEnum.ToCssClassName()})";
-    }
+    public static string ToCssTnTColorVariable(this TnTColor tnTColorEnum) => $"var(--tnt-color-{tnTColorEnum.ToCssClassName()})";
 
     /// <summary>
     ///     Finds all capital letters in a string except the first letter.

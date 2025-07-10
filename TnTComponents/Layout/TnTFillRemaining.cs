@@ -3,10 +3,18 @@ using Microsoft.AspNetCore.Components.Rendering;
 using TnTComponents.Core;
 
 namespace TnTComponents;
+
 /// <summary>
-/// A container that fills the remaining height of the screen.
+///     A container that fills the remaining height of the screen.
 /// </summary>
 public partial class TnTFillRemaining : TnTComponentBase {
+
+    /// <summary>
+    ///     The content to be rendered inside the container.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
@@ -17,13 +25,6 @@ public partial class TnTFillRemaining : TnTComponentBase {
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
-
-    /// <summary>
-    /// The content to be rendered inside the container.
-    /// </summary>
-    [Parameter]
-    public RenderFragment? ChildContent { get; set; }
-
 
     /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {

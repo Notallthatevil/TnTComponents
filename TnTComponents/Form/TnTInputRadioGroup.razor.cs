@@ -43,14 +43,12 @@ public partial class TnTInputRadioGroup<[DynamicallyAccessedMembers(DynamicallyA
     /// <summary>
     ///     Gets the edit context of the radio group.
     /// </summary>
-    internal EditContext InternalEditContext { get => EditContext; }
+    internal EditContext InternalEditContext => EditContext;
 
     /// <summary>
     ///     Notifies that the state of the radio group has changed.
     /// </summary>
-    internal void NotifyStateChanged() {
-        EditContext.NotifyFieldChanged(FieldIdentifier);
-    }
+    internal void NotifyStateChanged() => EditContext.NotifyFieldChanged(FieldIdentifier);
 
     /// <summary>
     ///     Updates the value of the radio group based on the change event arguments.
@@ -61,12 +59,10 @@ public partial class TnTInputRadioGroup<[DynamicallyAccessedMembers(DynamicallyA
         await BindAfter.InvokeAsync(CurrentValue);
     }
 
-
     /// <inheritdoc />
     protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TInputType result, [NotNullWhen(false)] out string? validationErrorMessage) {
         try {
-            // We special-case bool values because BindConverter reserves bool conversion for
-            // conditional attributes.
+            // We special-case bool values because BindConverter reserves bool conversion for conditional attributes.
             if (typeof(TInputType) == typeof(bool)) {
                 if (TryConvertToBool(value, out result)) {
                     validationErrorMessage = null;

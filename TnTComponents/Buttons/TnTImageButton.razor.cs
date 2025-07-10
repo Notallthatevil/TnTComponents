@@ -43,7 +43,7 @@ public partial class TnTImageButton {
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddTextAlign(TextAlignment)
-        .AddClass("tnt-filled", Appearance == ButtonAppearance.Filled || Appearance == ButtonAppearance.Elevated)
+        .AddClass("tnt-filled", Appearance is ButtonAppearance.Filled or ButtonAppearance.Elevated)
         .AddClass("tnt-outlined", Appearance == ButtonAppearance.Outlined)
         .AddClass("tnt-text", Appearance == ButtonAppearance.Text)
         .AddClass("tnt-elevated", Appearance == ButtonAppearance.Elevated)

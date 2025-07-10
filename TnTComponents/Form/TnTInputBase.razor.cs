@@ -18,6 +18,7 @@ namespace TnTComponents;
 /// </summary>
 /// <typeparam name="TInputType">The type of the input value.</typeparam>
 public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, ITnTComponentBase {
+
     /// <summary>
     ///     Gets or sets the appearance of the form.
     /// </summary>
@@ -29,7 +30,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public bool? AutoFocus { get; set; }
 
     /// <summary>
-    /// Text that provides additional information about the input, such as usage instructions or validation hints.
+    ///     Text that provides additional information about the input, such as usage instructions or validation hints.
     /// </summary>
     [Parameter]
     public string? SupportingText { get; set; }
@@ -67,11 +68,12 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
 
 #if NET9_0_OR_GREATER
     /// <summary>
-    /// Sets the color of the character length indicator.
+    ///     Sets the color of the character length indicator.
     /// </summary>
     [Parameter]
     public TnTColor CharacterLengthColor { get; set; } = TnTColor.OnSurfaceVariant;
 #endif
+
     /// <inheritdoc />
     public virtual string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
@@ -165,7 +167,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public TnTColor TintColor { get; set; } = TnTColor.Primary;
 
     /// <summary>
-    /// Specifies the type of the input element, which determines how the input is rendered and validated.
+    ///     Specifies the type of the input element, which determines how the input is rendered and validated.
     /// </summary>
     [Parameter]
     public string? AutoComplete { get; set; }
@@ -174,7 +176,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public abstract InputType Type { get; }
 
     /// <summary>
-    /// The color used for the error state of the input.
+    ///     The color used for the error state of the input.
     /// </summary>
     [Parameter]
     public TnTColor ErrorColor { get; set; } = TnTColor.Error;
@@ -195,9 +197,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     ///     Determines whether the input is required.
     /// </summary>
     /// <returns><c>true</c> if the input is required; otherwise, <c>false</c>.</returns>
-    protected bool IsRequired() {
-        return AdditionalAttributes?.TryGetValue("required", out var _) == true || GetCustomAttributeIfExists<RequiredAttribute>() is not null;
-    }
+    protected bool IsRequired() => AdditionalAttributes?.TryGetValue("required", out var _) == true || GetCustomAttributeIfExists<RequiredAttribute>() is not null;
 
     /// <inheritdoc />
     protected override void OnParametersSet() {
@@ -218,7 +218,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     }
 
     /// <summary>
-    /// Updates the current value of the input asynchronously.
+    ///     Updates the current value of the input asynchronously.
     /// </summary>
     /// <param name="newValue">The new value</param>
     protected async Task OnInputAsync(string? newValue) {
@@ -226,18 +226,12 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
         await BindAfter.InvokeAsync(CurrentValue);
     }
 
-
     /// <summary>
-    /// Updates the current value of the input asynchronously when a change event occurs.
+    ///     Updates the current value of the input asynchronously when a change event occurs.
     /// </summary>
     /// <param name="args">The change event args.</param>
     protected async Task OnChangeAsync(ChangeEventArgs args) {
-        if (args.Value is TInputType value) {
-            CurrentValue = value;
-        }
-        else {
-            CurrentValue = default;
-        }
+        CurrentValue = args.Value is TInputType value ? value : default;
         await BindAfter.InvokeAsync(CurrentValue);
     }
 
@@ -300,11 +294,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
             return max?.ToString();
         }
         var rangeAttr = GetCustomAttributeIfExists<RangeAttribute>();
-        if (rangeAttr is not null) {
-            return rangeAttr.Maximum.ToString();
-        }
-
-        return null;
+        return rangeAttr?.Maximum.ToString();
     }
 
     /// <summary>
@@ -339,12 +329,171 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
             return min?.ToString();
         }
         var rangeAttr = GetCustomAttributeIfExists<RangeAttribute>();
-        if (rangeAttr is not null) {
-            return rangeAttr.Minimum.ToString();
-        }
-
-        return null;
+        return rangeAttr?.Minimum.ToString();
     }
+}
 
+/// <summary>
+///     Represents the different types of input elements that can be used in a form.
+/// </summary>
+public enum InputType {
 
+    /// <summary>
+    ///     Represents a button input type.
+    /// </summary>
+    Button = 1,
+
+    /// <summary>
+    ///     Represents a checkbox input type.
+    /// </summary>
+    Checkbox,
+
+    /// <summary>
+    ///     Represents a color input type.
+    /// </summary>
+    Color,
+
+    /// <summary>
+    ///     Represents a date input type.
+    /// </summary>
+    Date,
+
+    /// <summary>
+    ///     Represents a datetime input type.
+    /// </summary>
+    DateTime,
+
+    /// <summary>
+    ///     Represents a datetime-local input type.
+    /// </summary>
+    DateTimeLocal = DateTime,
+
+    /// <summary>
+    ///     Represents an email input type.
+    /// </summary>
+    Email,
+
+    /// <summary>
+    ///     Represents a file input type.
+    /// </summary>
+    File,
+
+    /// <summary>
+    ///     Represents a hidden input type.
+    /// </summary>
+    Hidden,
+
+    /// <summary>
+    ///     Represents an image input type.
+    /// </summary>
+    Image,
+
+    /// <summary>
+    ///     Represents a month input type.
+    /// </summary>
+    Month,
+
+    /// <summary>
+    ///     Represents a number input type.
+    /// </summary>
+    Number,
+
+    /// <summary>
+    ///     Represents a password input type.
+    /// </summary>
+    Password,
+
+    /// <summary>
+    ///     Represents a radio input type.
+    /// </summary>
+    Radio,
+
+    /// <summary>
+    ///     Represents a range input type.
+    /// </summary>
+    Range,
+
+    /// <summary>
+    ///     Represents a search input type.
+    /// </summary>
+    Search,
+
+    /// <summary>
+    ///     Represents a telephone input type.
+    /// </summary>
+    Tel,
+
+    /// <summary>
+    ///     Represents a text input type.
+    /// </summary>
+    Text,
+
+    /// <summary>
+    ///     Represents a time input type.
+    /// </summary>
+    Time,
+
+    /// <summary>
+    ///     Represents a URL input type.
+    /// </summary>
+    Url,
+
+    /// <summary>
+    ///     Represents a week input type.
+    /// </summary>
+    Week,
+
+    /// <summary>
+    ///     Represents a textarea input type.
+    /// </summary>
+    TextArea,
+
+    /// <summary>
+    ///     Represents a currency input type.
+    /// </summary>
+    Currency,
+
+    /// <summary>
+    ///     Represents a select input type.
+    /// </summary>
+    Select
+}
+
+/// <summary>
+///     Provides extension methods for the <see cref="InputType" /> enum.
+/// </summary>
+public static class InputTypeExt {
+
+    /// <summary>
+    ///     Converts the <see cref="InputType" /> to its corresponding string representation.
+    /// </summary>
+    /// <param name="inputType">The input type to convert.</param>
+    /// <returns>The string representation of the input type.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when the input type is not valid.</exception>
+    public static string ToInputTypeString(this InputType inputType) {
+        return inputType switch {
+            InputType.Button => "button",
+            InputType.Checkbox => "checkbox",
+            InputType.Color => "color",
+            InputType.Date => "date",
+            InputType.DateTime => "datetime-local",
+            InputType.Email => "email",
+            InputType.File => "file",
+            InputType.Hidden => "hidden",
+            InputType.Image => "image",
+            InputType.Month => "month",
+            InputType.Number => "number",
+            InputType.Password => "password",
+            InputType.Radio => "radio",
+            InputType.Range => "range",
+            InputType.Search => "search",
+            InputType.Tel => "tel",
+            InputType.Text => "text",
+            InputType.Time => "time",
+            InputType.Url => "url",
+            InputType.Week => "week",
+            InputType.Currency => "text",
+            _ => throw new InvalidOperationException($"{inputType} is not a valid value of {nameof(InputType)}")
+        };
+    }
 }

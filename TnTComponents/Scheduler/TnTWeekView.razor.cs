@@ -67,7 +67,7 @@ public partial class TnTWeekView<[DynamicallyAccessedMembers(DynamicallyAccessed
     private const int _hourOffset = _cellHeight;
     private const int _timeColumnWidth = 36;
     private TnTEvent? _addEventPlaceholder;
-    private Dictionary<DateOnly, SortedSet<WeekViewTnTEvent>> _events = [];
+    private readonly Dictionary<DateOnly, SortedSet<WeekViewTnTEvent>> _events = [];
     private bool _mouseOverEvent;
     private bool _mouseOverPicker;
     private ImmutableSortedSet<DateOnly> _visibleDates = [];
@@ -76,10 +76,10 @@ public partial class TnTWeekView<[DynamicallyAccessedMembers(DynamicallyAccessed
     public override DateOnly DecrementDate(DateOnly src) => src.AddDays(-7);
 
     /// <inheritdoc />
-    public override DateOnly GetFirstVisibleDate() => _visibleDates.First();
+    public override DateOnly GetFirstVisibleDate() => _visibleDates[0];
 
     /// <inheritdoc />
-    public override DateOnly GetLastVisibleDate() => _visibleDates.Last();
+    public override DateOnly GetLastVisibleDate() => _visibleDates[^1];
 
     /// <inheritdoc />
     public override DateOnly IncrementDate(DateOnly src) => src.AddDays(7);
@@ -127,7 +127,7 @@ public partial class TnTWeekView<[DynamicallyAccessedMembers(DynamicallyAccessed
     /// <param name="left"> The left position.</param>
     /// <param name="width">The width.</param>
     /// <returns>The CSS style.</returns>
-    private string? CreateEventStyle(TnTEvent @event, int left, int width) {
+    private static string? CreateEventStyle(TnTEvent @event, int left, int width) {
         return CssStyleBuilder.Create()
             .AddVariable("tnt-event-start-hour", @event.StartTime.Hour.ToString())
             .AddVariable("tnt-event-end-hour", @event.EndTime.Hour.ToString())
@@ -171,9 +171,9 @@ public partial class TnTWeekView<[DynamicallyAccessedMembers(DynamicallyAccessed
     /// </summary>
     private void UpdateEventsList() {
         _events.Clear();
-        foreach (var @event in Scheduler.Events.Where(e => e.StartDate <= _visibleDates.Last() && e.EndDate >= _visibleDates.First()).OrderBy(e => e.EventStart)) {
-            var eventStart = (@event.StartDate >= _visibleDates.First() ? @event.EventStart : new DateTimeOffset(_visibleDates.First(), TimeOnly.MinValue, @event.EventStart.Offset)).ToLocalTime();
-            var eventEnd = (@event.EndDate <= _visibleDates.Last() ? @event.EventEnd : new DateTimeOffset(_visibleDates.Last(), TimeOnly.MaxValue, @event.EventEnd.Offset)).ToLocalTime();
+        foreach (var @event in Scheduler.Events.Where(e => e.StartDate <= _visibleDates[^1] && e.EndDate >= _visibleDates[0]).OrderBy(e => e.EventStart)) {
+            var eventStart = (@event.StartDate >= _visibleDates[0] ? @event.EventStart : new DateTimeOffset(_visibleDates[0], TimeOnly.MinValue, @event.EventStart.Offset)).ToLocalTime();
+            var eventEnd = (@event.EndDate <= _visibleDates[^1] ? @event.EventEnd : new DateTimeOffset(_visibleDates[^1], TimeOnly.MaxValue, @event.EventEnd.Offset)).ToLocalTime();
 
             do {
                 var entryEnd = new DateTimeOffset(Math.Min(eventEnd.Ticks, new DateTimeOffset(DateOnly.FromDateTime(eventStart.LocalDateTime), TimeOnly.MaxValue, eventStart.Offset).Ticks), eventStart.Offset);
@@ -216,9 +216,7 @@ public partial class TnTWeekView<[DynamicallyAccessedMembers(DynamicallyAccessed
         var diff = (7 + (Scheduler.Date.DayOfWeek - StartViewOn)) % 7;
         var startOfWeek = Scheduler.Date.AddDays(-1 * diff);
 
-        _visibleDates = Enumerable.Range(0, 7)
-            .Select(startOfWeek.AddDays)
-            .ToImmutableSortedSet();
+        _visibleDates = [.. Enumerable.Range(0, 7).Select(startOfWeek.AddDays)];
     }
 
     /// <summary>
@@ -290,7 +288,7 @@ public partial class TnTWeekView<[DynamicallyAccessedMembers(DynamicallyAccessed
             if (result == 0) {
                 result = x?.Event.Duration.CompareTo(y?.Event.Duration);
             }
-            return result.GetValueOrDefault() == 0 ? 1 : result.GetValueOrDefault(1);
+            return result.GetValueOrDefault() == 0 ? 1 : result ?? 1;
         }
     }
 }

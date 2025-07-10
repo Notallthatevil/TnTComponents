@@ -27,12 +27,6 @@ public abstract class ScheduleViewBase<[DynamicallyAccessedMembers(DynamicallyAc
     protected TnTScheduler<TEventType> Scheduler { get; private set; } = default!;
 
     /// <summary>
-    ///     Gets or sets the JavaScript runtime.
-    /// </summary>
-    [Inject]
-    private IJSRuntime _jsRuntime { get; set; } = default!;
-
-    /// <summary>
     ///     Decrements the specified date.
     /// </summary>
     /// <param name="src">The source date.</param>
@@ -44,6 +38,7 @@ public abstract class ScheduleViewBase<[DynamicallyAccessedMembers(DynamicallyAc
     /// </summary>
     public void Dispose() {
         Scheduler.RemoveScheduleView(this);
+        GC.SuppressFinalize(this);
     }
 
     /// <summary>

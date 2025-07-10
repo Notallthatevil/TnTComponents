@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TnTComponents.Core;
+﻿using TnTComponents.Core;
 using TnTComponents.Toast;
 
 namespace TnTComponents;
@@ -21,8 +16,8 @@ public interface ITnTToastService {
     /// <summary>
     ///     Delegate for the OnClose event.
     /// </summary>
-    /// <param name="snackbar">The toast that was closed.</param>
-    public delegate Task OnCloseCallback(ITnTToast snackbar);
+    /// <param name="toast">The toast that was closed.</param>
+    public delegate Task OnCloseCallback(ITnTToast toast);
 
     /// <summary>
     ///     Event triggered when a toast is opened.
@@ -32,24 +27,22 @@ public interface ITnTToastService {
     /// <summary>
     ///     Delegate for the OnOpen event.
     /// </summary>
-    /// <param name="snackbar">The toast that was opened.</param>
-    public delegate Task OnOpenCallback(ITnTToast snackbar);
+    /// <param name="toast">The toast that was opened.</param>
+    public delegate Task OnOpenCallback(ITnTToast toast);
 
     /// <summary>
     ///     Closes the specified toast asynchronously.
     /// </summary>
-    /// <param name="snackbar">The toast to close.</param>
+    /// <param name="toast">The toast to close.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task CloseAsync(ITnTToast snackbar);
+    Task CloseAsync(ITnTToast toast);
 
     /// <summary>
     ///     Shows a toast with the specified parameters asynchronously.
     /// </summary>
     /// <param name="title">          The title of the toast.</param>
     /// <param name="message">        The message of the toast.</param>
-    /// <param name="timeout">        
-    ///     The timeout duration in seconds before the toast automatically closes.
-    /// </param>
+    /// <param name="timeout">        The timeout duration in seconds before the toast automatically closes.</param>
     /// <param name="showClose">      Indicates whether the close button should be shown.</param>
     /// <param name="backgroundColor">The background color of the toast.</param>
     /// <param name="textColor">      The text color of the toast.</param>
@@ -63,9 +56,7 @@ public interface ITnTToastService {
     /// </summary>
     /// <param name="title">       The title of the toast.</param>
     /// <param name="message">     The message of the toast.</param>
-    /// <param name="timeout">     
-    ///     The timeout duration in seconds before the toast automatically closes.
-    /// </param>
+    /// <param name="timeout">     The timeout duration in seconds before the toast automatically closes.</param>
     /// <param name="showClose">   Indicates whether the close button should be shown.</param>
     /// <param name="borderRadius">The border radius of the toast.</param>
     /// <param name="elevation">   The elevation level of the toast.</param>
@@ -77,9 +68,7 @@ public interface ITnTToastService {
     /// </summary>
     /// <param name="title">       The title of the toast.</param>
     /// <param name="message">     The exception message to be displayed in the toast.</param>
-    /// <param name="timeout">     
-    ///     The timeout duration in seconds before the toast automatically closes.
-    /// </param>
+    /// <param name="timeout">     The timeout duration in seconds before the toast automatically closes.</param>
     /// <param name="showClose">   Indicates whether the close button should be shown.</param>
     /// <param name="borderRadius">The border radius of the toast.</param>
     /// <param name="elevation">   The elevation level of the toast.</param>
@@ -91,9 +80,7 @@ public interface ITnTToastService {
     /// </summary>
     /// <param name="title">       The title of the toast.</param>
     /// <param name="message">     The message of the toast.</param>
-    /// <param name="timeout">     
-    ///     The timeout duration in seconds before the toast automatically closes.
-    /// </param>
+    /// <param name="timeout">     The timeout duration in seconds before the toast automatically closes.</param>
     /// <param name="showClose">   Indicates whether the close button should be shown.</param>
     /// <param name="borderRadius">The border radius of the toast.</param>
     /// <param name="elevation">   The elevation level of the toast.</param>
@@ -105,9 +92,7 @@ public interface ITnTToastService {
     /// </summary>
     /// <param name="title">       The title of the toast.</param>
     /// <param name="message">     The message of the toast.</param>
-    /// <param name="timeout">     
-    ///     The timeout duration in seconds before the toast automatically closes.
-    /// </param>
+    /// <param name="timeout">     The timeout duration in seconds before the toast automatically closes.</param>
     /// <param name="showClose">   Indicates whether the close button should be shown.</param>
     /// <param name="borderRadius">The border radius of the toast.</param>
     /// <param name="elevation">   The elevation level of the toast.</param>
@@ -119,9 +104,7 @@ public interface ITnTToastService {
     /// </summary>
     /// <param name="title">       The title of the toast.</param>
     /// <param name="message">     The message of the toast.</param>
-    /// <param name="timeout">     
-    ///     The timeout duration in seconds before the toast automatically closes.
-    /// </param>
+    /// <param name="timeout">     The timeout duration in seconds before the toast automatically closes.</param>
     /// <param name="showClose">   Indicates whether the close button should be shown.</param>
     /// <param name="borderRadius">The border radius of the toast.</param>
     /// <param name="elevation">   The elevation level of the toast.</param>

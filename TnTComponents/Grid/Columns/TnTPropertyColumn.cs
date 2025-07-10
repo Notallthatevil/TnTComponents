@@ -99,12 +99,7 @@ public class TnTPropertyColumn<TGridItem, TProp> : TnTColumnBase<TGridItem>, IBi
             var displayAttribute = Attribute.GetCustomAttribute(memberExpression.Member, typeof(DisplayAttribute)) as DisplayAttribute;
 
             var daText = displayAttribute?.Name;
-            if (!string.IsNullOrEmpty(daText)) {
-                Title = daText;
-            }
-            else {
-                Title = memberExpression.Member.Name.SplitPascalCase();
-            }
+            Title = !string.IsNullOrEmpty(daText) ? daText : memberExpression.Member.Name.SplitPascalCase();
         }
     }
 }

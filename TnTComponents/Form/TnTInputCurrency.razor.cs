@@ -63,10 +63,5 @@ public partial class TnTInputCurrency : TnTInputBase<decimal?> {
     }
 
     /// <inheritdoc />
-    protected override string? FormatValueAsString(decimal? value) {
-        if (value is null) {
-            return null;
-        }
-        return value.Value.ToString("C", _cultureInfo);
-    }
+    protected override string? FormatValueAsString(decimal? value) => value?.ToString("C", _cultureInfo);
 }

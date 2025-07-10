@@ -5,6 +5,21 @@ using System.Text.Json.Serialization;
 
 namespace TnTComponents.Storage;
 
+[JsonSerializable(typeof(string))]
+[JsonSerializable(typeof(char))]
+[JsonSerializable(typeof(byte))]
+[JsonSerializable(typeof(short))]
+[JsonSerializable(typeof(ushort))]
+[JsonSerializable(typeof(int))]
+[JsonSerializable(typeof(uint))]
+[JsonSerializable(typeof(long))]
+[JsonSerializable(typeof(ulong))]
+[JsonSerializable(typeof(BigInteger))]
+[JsonSerializable(typeof(float))]
+[JsonSerializable(typeof(double))]
+[JsonSerializable(typeof(decimal))]
+internal partial class DefaultJsonSerializerContext : JsonSerializerContext;
+
 /// <summary>
 ///     Service for interacting with local storage.
 /// </summary>
@@ -34,7 +49,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
     internal abstract StorageType StorageType { get; }
 
     private string _storageType => StorageType.GetStorageType();
-    private const string StorageNotAvailableMessage = "Unable to access the browser storage. This is most likely due to the browser settings.";
+    private const string _storageNotAvailableMessage = "Unable to access the browser storage. This is most likely due to the browser settings.";
 
     /// <inheritdoc />
     public async ValueTask ClearAsync(CancellationToken cancellationToken = default) {
@@ -43,7 +58,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
         }
         catch (Exception exception) {
             if (IsStorageDisabledException(exception)) {
-                throw new BrowserStorageDisabledException(StorageNotAvailableMessage, exception);
+                throw new BrowserStorageDisabledException(_storageNotAvailableMessage, exception);
             }
 
             throw;
@@ -57,7 +72,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
         }
         catch (Exception exception) {
             if (IsStorageDisabledException(exception)) {
-                throw new BrowserStorageDisabledException(StorageNotAvailableMessage, exception);
+                throw new BrowserStorageDisabledException(_storageNotAvailableMessage, exception);
             }
 
             throw;
@@ -66,11 +81,9 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
 
     /// <inheritdoc />
     public ValueTask<string?> GetItemAsStringAsync(string key, CancellationToken cancellationToken = default) {
-        if (string.IsNullOrWhiteSpace(key)) {
-            throw new ArgumentNullException(nameof(key));
-        }
-
-        return GetItemAsync<string>(key, DefaultJsonSerializerContext.Default, cancellationToken);
+        return string.IsNullOrWhiteSpace(key)
+            ? throw new ArgumentNullException(nameof(key))
+            : GetItemAsync<string>(key, DefaultJsonSerializerContext.Default, cancellationToken);
     }
 
     /// <inheritdoc />
@@ -92,14 +105,13 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
                 return (T?)result;
             }
             catch (JsonException e) when (e.Path == "$" && typeof(T) == typeof(string)) {
-                // For backward compatibility return the plain string. On the next save a correct
-                // value will be stored and this Exception will not happen again, for this 'key'
+                // For backward compatibility return the plain string. On the next save a correct value will be stored and this Exception will not happen again, for this 'key'
                 return (T)(object)serializedData;
             }
         }
         catch (Exception exception) {
             if (IsStorageDisabledException(exception)) {
-                throw new BrowserStorageDisabledException(StorageNotAvailableMessage, exception);
+                throw new BrowserStorageDisabledException(_storageNotAvailableMessage, exception);
             }
 
             throw;
@@ -113,7 +125,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
         }
         catch (Exception exception) {
             if (IsStorageDisabledException(exception)) {
-                throw new BrowserStorageDisabledException(StorageNotAvailableMessage, exception);
+                throw new BrowserStorageDisabledException(_storageNotAvailableMessage, exception);
             }
             throw;
         }
@@ -126,7 +138,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
         }
         catch (Exception exception) {
             if (IsStorageDisabledException(exception)) {
-                throw new BrowserStorageDisabledException(StorageNotAvailableMessage, exception);
+                throw new BrowserStorageDisabledException(_storageNotAvailableMessage, exception);
             }
 
             throw;
@@ -140,7 +152,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
         }
         catch (Exception exception) {
             if (IsStorageDisabledException(exception)) {
-                throw new BrowserStorageDisabledException(StorageNotAvailableMessage, exception);
+                throw new BrowserStorageDisabledException(_storageNotAvailableMessage, exception);
             }
 
             throw;
@@ -158,7 +170,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
         }
         catch (Exception exception) {
             if (IsStorageDisabledException(exception)) {
-                throw new BrowserStorageDisabledException(StorageNotAvailableMessage, exception);
+                throw new BrowserStorageDisabledException(_storageNotAvailableMessage, exception);
             }
 
             throw;
@@ -174,7 +186,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
         }
         catch (Exception exception) {
             if (IsStorageDisabledException(exception)) {
-                throw new BrowserStorageDisabledException(StorageNotAvailableMessage, exception);
+                throw new BrowserStorageDisabledException(_storageNotAvailableMessage, exception);
             }
 
             throw;
@@ -202,7 +214,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
         }
         catch (Exception exception) {
             if (IsStorageDisabledException(exception)) {
-                throw new BrowserStorageDisabledException(StorageNotAvailableMessage, exception);
+                throw new BrowserStorageDisabledException(_storageNotAvailableMessage, exception);
             }
 
             throw;
@@ -234,7 +246,7 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
         }
         catch (Exception exception) {
             if (IsStorageDisabledException(exception)) {
-                throw new BrowserStorageDisabledException(StorageNotAvailableMessage, exception);
+                throw new BrowserStorageDisabledException(_storageNotAvailableMessage, exception);
             }
 
             throw;
@@ -245,24 +257,42 @@ internal abstract class StorageService(IJSRuntime _jsRuntime) : IStorageService 
     ///     Determines whether the exception is caused by storage being disabled.
     /// </summary>
     /// <param name="exception">The exception to check.</param>
-    /// <returns>
-    ///     <c>true</c> if the exception is caused by storage being disabled; otherwise, <c>false</c>.
-    /// </returns>
-    private bool IsStorageDisabledException(Exception exception)
-        => exception.Message.Contains($"Failed to read the '{StorageType}' property from 'Window'");
+    /// <returns><c>true</c> if the exception is caused by storage being disabled; otherwise, <c>false</c>.</returns>
+    private bool IsStorageDisabledException(Exception exception) => exception.Message.Contains($"Failed to read the '{StorageType}' property from 'Window'");
 }
 
-[JsonSerializable(typeof(string))]
-[JsonSerializable(typeof(char))]
-[JsonSerializable(typeof(byte))]
-[JsonSerializable(typeof(short))]
-[JsonSerializable(typeof(ushort))]
-[JsonSerializable(typeof(int))]
-[JsonSerializable(typeof(uint))]
-[JsonSerializable(typeof(long))]
-[JsonSerializable(typeof(ulong))]
-[JsonSerializable(typeof(BigInteger))]
-[JsonSerializable(typeof(float))]
-[JsonSerializable(typeof(double))]
-[JsonSerializable(typeof(decimal))]
-internal partial class DefaultJsonSerializerContext : JsonSerializerContext;
+/// <summary>
+///     Specifies the type of storage to be used.
+/// </summary>
+internal enum StorageType {
+
+    /// <summary>
+    ///     Represents session storage.
+    /// </summary>
+    SessionStorage,
+
+    /// <summary>
+    ///     Represents local storage.
+    /// </summary>
+    LocalStorage
+}
+
+/// <summary>
+///     Provides extension methods for the <see cref="StorageType" /> enum.
+/// </summary>
+internal static class StorageTypeExt {
+
+    /// <summary>
+    ///     Gets the string representation of the specified <see cref="StorageType" />.
+    /// </summary>
+    /// <param name="storageType">The storage type.</param>
+    /// <returns>A string that represents the storage type.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when the storage type is not recognized.</exception>
+    public static string GetStorageType(this StorageType storageType) {
+        return storageType switch {
+            StorageType.SessionStorage => "sessionStorage",
+            StorageType.LocalStorage => "localStorage",
+            _ => throw new ArgumentOutOfRangeException(nameof(storageType), storageType, null)
+        };
+    }
+}

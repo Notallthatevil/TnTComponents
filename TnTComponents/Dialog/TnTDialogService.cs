@@ -17,7 +17,7 @@ internal class TnTDialogService : ITnTDialogService {
     /// <summary>
     ///     Gets the reference to the current instance of the dialog service.
     /// </summary>
-    internal DotNetObjectReference<TnTDialogService> Reference { get; private set; }
+    internal DotNetObjectReference<TnTDialogService> Reference { get; }
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="TnTDialogService" /> class.

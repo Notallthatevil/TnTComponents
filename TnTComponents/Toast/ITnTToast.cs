@@ -6,7 +6,7 @@ namespace TnTComponents.Toast;
 /// <summary>
 ///     Represents a toast notification component with customizable properties.
 /// </summary>
-public interface ITnTToast : ITnTStyleable {
+public interface ITnTToast {
 
     /// <summary>
     ///     Gets a value indicating whether the toast is in the process of closing.
@@ -32,4 +32,19 @@ public interface ITnTToast : ITnTStyleable {
     ///     Gets or sets the title of the toast.
     /// </summary>
     string Title { get; set; }
+
+    /// <summary>
+    ///     Gets the background color.
+    /// </summary>
+    TnTColor BackgroundColor { get; }
+
+    /// <summary>
+    ///     Gets the text alignment.
+    /// </summary>
+    TextAlign? TextAlignment { get; }
+
+    /// <summary>
+    ///     Gets the text color.
+    /// </summary>
+    TnTColor TextColor { get; }
 }

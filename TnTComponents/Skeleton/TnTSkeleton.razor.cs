@@ -10,7 +10,7 @@ namespace TnTComponents;
 public partial class TnTSkeleton {
 
     /// <summary>
-    /// If provided, the skeleton will animate its background color.
+    ///     If provided, the skeleton will animate its background color.
     /// </summary>
     [Parameter]
     public TnTColor? AnimatedColor { get; set; } = TnTColor.OnPrimaryContainer;
@@ -42,20 +42,20 @@ public partial class TnTSkeleton {
         .AddVariable("tnt-skeleton-bg-color", $"var(--tnt-color-{BackgroundColor.ToCssClassName()})")
         .AddVariable("tnt-skeleton-shimmer-color", $"var(--tnt-color-{AnimatedColor.ToCssClassName()})", AnimatedColor.HasValue)
         .Build();
-
-
 }
+
 /// <summary>
-/// Specifies the appearance of a skeleton component.
+///     Specifies the appearance of a skeleton component.
 /// </summary>
 public enum SkeletonAppearance {
+
     /// <summary>
-    /// A rectangular skeleton appearance.
+    ///     A rectangular skeleton appearance.
     /// </summary>
     Square,
 
     /// <summary>
-    /// A circular skeleton appearance.
+    ///     A circular skeleton appearance.
     /// </summary>
     Round
 }

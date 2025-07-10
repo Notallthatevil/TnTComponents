@@ -9,7 +9,8 @@ namespace TnTComponents;
 /// <summary>
 ///     Represents a chip component with various customizable properties and events.
 /// </summary>
-public partial class TnTChip {
+public partial class TnTChip
+{
 
     /// <inheritdoc />
     [Parameter]
@@ -95,15 +96,24 @@ public partial class TnTChip {
     [Parameter]
     public TnTColor TintColor { get; set; } = TnTColor.SurfaceTint;
 
-
     /// <summary>
     ///     The value of the chip.
     /// </summary>
+    [Parameter]
     public bool Value { get; set; }
 
     /// <summary>
     ///     The event callback to be invoked when the value changes.
     /// </summary>
+    [Parameter]
     public EventCallback<bool> ValueChanged { get; set; }
+
+    private async Task OnChangeAsync(ChangeEventArgs e) {
+        if (e.Value is bool value) {
+            Value = value;
+            await ValueChanged.InvokeAsync(value);
+            await BindAfter.InvokeAsync(value);
+        }
+    }
 
 }

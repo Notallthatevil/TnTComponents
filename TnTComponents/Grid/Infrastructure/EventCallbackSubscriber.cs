@@ -6,9 +6,7 @@ internal sealed class EventCallbackSubscriber<T>(EventCallback<T> handler) : IDi
     private readonly EventCallback<T> _handler = handler;
     private EventCallbackSubscribable<T>? _existingSubscription;
 
-    public void Dispose() {
-        _existingSubscription?.Unsubscribe(this);
-    }
+    public void Dispose() => _existingSubscription?.Unsubscribe(this);
 
     /// <summary>
     ///     Creates a subscription on the <paramref name="subscribable" />, or moves any existing

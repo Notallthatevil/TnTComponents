@@ -52,11 +52,10 @@ public partial class TnTTabView {
     public TnTColor HeaderTextColor { get; set; } = TnTColor.OnSurface;
 
     /// <summary>
-    /// The tint color for the tab header, used for ripple effects and other visual enhancements.
+    ///     The tint color for the tab header, used for ripple effects and other visual enhancements.
     /// </summary>
     [Parameter]
     public TnTColor HeaderTintColor { get; set; } = TnTColor.SurfaceTint;
-
 
     /// <inheritdoc />
     public override string? JsModulePath => "./_content/TnTComponents/TabView/TnTTabView.razor.js";
@@ -67,15 +66,27 @@ public partial class TnTTabView {
     ///     Adds a child tab to the tab view.
     /// </summary>
     /// <param name="tabChild">The child tab to add.</param>
-    public void AddTabChild(TnTTabChild tabChild) {
-        _tabChildren.Add(tabChild);
-    }
+    public void AddTabChild(TnTTabChild tabChild) => _tabChildren.Add(tabChild);
 
     /// <summary>
     ///     Removes a child tab from the tab view.
     /// </summary>
     /// <param name="tabChild">The child to remove</param>
-    public void RemoveTabChild(TnTTabChild tabChild) {
-        _tabChildren.Remove(tabChild);
-    }
+    public void RemoveTabChild(TnTTabChild tabChild) => _tabChildren.Remove(tabChild);
+}
+
+/// <summary>
+///     Specifies the appearance of a tab view.
+/// </summary>
+public enum TabViewAppearance {
+
+    /// <summary>
+    ///     The primary appearance of the tab view.
+    /// </summary>
+    Primary,
+
+    /// <summary>
+    ///     The secondary appearance of the tab view.
+    /// </summary>
+    Secondary
 }

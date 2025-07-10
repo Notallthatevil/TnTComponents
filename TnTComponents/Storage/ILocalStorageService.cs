@@ -9,5 +9,4 @@ namespace TnTComponents.Storage;
 /// <summary>
 ///     Interface for local storage service, extending the <see cref="IStorageService" />.
 /// </summary>
-public interface ILocalStorageService : IStorageService {
-}
+public interface ILocalStorageService : IStorageService;

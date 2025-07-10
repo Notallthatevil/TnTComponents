@@ -45,12 +45,9 @@ public partial class TnTInputSelect<[DynamicallyAccessedMembers(DynamicallyAcces
     ///     Sets the current value as a string array.
     /// </summary>
     private async Task SetCurrentValueAsStringArrayAsync(ChangeEventArgs args) {
-        if (args.Value is IEnumerable<string> stringValues && BindConverter.TryConvertTo<TInputType>(stringValues, CultureInfo.CurrentCulture, out var result)) {
-            CurrentValue = result;
-        }
-        else {
-            CurrentValue = default;
-        }
+        CurrentValue = args.Value is IEnumerable<string> stringValues && BindConverter.TryConvertTo<TInputType>(stringValues, CultureInfo.CurrentCulture, out var result)
+            ? result
+            : default;
         await BindAfter.InvokeAsync(CurrentValue);
     }
 

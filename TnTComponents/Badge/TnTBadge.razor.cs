@@ -65,9 +65,7 @@ public partial class TnTBadge {
         }
         return new TnTBadge {
             BackgroundColor = backgroundColor,
-            ChildContent = new RenderFragment(builder => {
-                builder.AddContent(0, content);
-            }),
+            ChildContent = new RenderFragment(builder => builder.AddContent(0, content)),
             TextAlignment = textAlignment,
             TextColor = textColor,
             AdditionalAttributes = additionalAttributes

@@ -63,7 +63,7 @@ public class TnTInputDateTime<[DynamicallyAccessedMembers(DynamicallyAccessedMem
             _ => throw new InvalidOperationException($"The type '{typeof(DateTimeType)}' is not a supported DateTime type.")
         };
 
-        var attributes = AdditionalAttributes is null ? new Dictionary<string, object>() : new Dictionary<string, object>(AdditionalAttributes);
+        var attributes = AdditionalAttributes is null ? [] : new Dictionary<string, object>(AdditionalAttributes);
         attributes.Add("format", _format);
         AdditionalAttributes = attributes;
     }

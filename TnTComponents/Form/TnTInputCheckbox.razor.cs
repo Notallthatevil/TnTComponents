@@ -14,7 +14,5 @@ public partial class TnTInputCheckbox {
     public override InputType Type => InputType.Checkbox;
 
     /// <inheritdoc />
-    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out bool result, [NotNullWhen(false)] out string? validationErrorMessage) {
-        throw new NotSupportedException();
-    }
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out bool result, [NotNullWhen(false)] out string? validationErrorMessage) => throw new NotSupportedException();
 }

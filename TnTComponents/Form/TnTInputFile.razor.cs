@@ -318,7 +318,7 @@ public partial class TnTInputFile {
     /// <summary>
     ///     Gets or sets the progress details for the current file.
     /// </summary>
-    private ProgressFileDetails ProgressFileDetails { get; set; }
+    private ProgressFileDetails _progressFileDetails { get; set; }
 
     private IJSObjectReference? _containerInstance;
 
@@ -425,14 +425,14 @@ public partial class TnTInputFile {
         await UpdateProgressAsync(0, ResourceLoadingBefore);
 
         List<TnTInputFileEventArgs>? uploadedFiles = [];
-        IReadOnlyList<IBrowserFile>? allFiles = e.GetMultipleFiles(MaximumFileCount);
+        var allFiles = e.GetMultipleFiles(MaximumFileCount);
         var allFilesSummary = allFiles.Select(i => new UploadedFileDetails() { Name = i.Name, Size = i.Size, ContentType = i.ContentType }).ToArray();
         var totalFileSizes = allFiles.Sum(i => i.Size);
         var totalRead = 0L;
         var fileNumber = 0;
 
-        foreach (IBrowserFile file in allFiles) {
-            ProgressFileDetails = new() {
+        foreach (var file in allFiles) {
+            _progressFileDetails = new() {
                 Index = fileNumber,
                 Name = file.Name,
                 Percentage = 0
@@ -536,7 +536,7 @@ public partial class TnTInputFile {
         }
 
         if (OnCompleted.HasDelegate) {
-            await OnCompleted.InvokeAsync(uploadedFiles.ToArray());
+            await OnCompleted.InvokeAsync([.. uploadedFiles]);
         }
     }
 

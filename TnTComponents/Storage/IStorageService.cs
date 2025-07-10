@@ -2,7 +2,7 @@
 
 namespace TnTComponents.Storage;
 /*
-This implementation was heavliy influenced by Blazored.LocalStorage and Blazored.SessionStorage
+This implementation was heavily influenced by Blazored.LocalStorage and Blazored.SessionStorage
 
 MIT License
 
@@ -28,108 +28,113 @@ SOFTWARE.
 */
 
 /// <summary>
-/// Interface for storage service to handle storage operations.
+///     Interface for storage service to handle storage operations.
 /// </summary>
 public interface IStorageService {
 
     /// <summary>
-    /// Event triggered when a storage item is changed.
+    ///     Event triggered when a storage item is changed.
     /// </summary>
     event EventHandler<ChangedEventArgs> Changed;
 
     /// <summary>
-    /// Event triggered when a storage item is about to change.
+    ///     Event triggered when a storage item is about to change.
     /// </summary>
     event EventHandler<ChangingEventArgs> Changing;
 
     /// <summary>
-    /// Clears all items in the storage.
+    ///     Clears all items in the storage.
     /// </summary>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A task that represents the asynchronous clear operation.</returns>
     ValueTask ClearAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Checks if a key exists in the storage.
+    ///     Checks if a key exists in the storage.
     /// </summary>
-    /// <param name="key">The key to check.</param>
+    /// <param name="key">              The key to check.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains true if the key exists; otherwise, false.</returns>
     ValueTask<bool> ContainKeyAsync(string key, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Gets an item from the storage as a string.
+    ///     Gets an item from the storage as a string.
     /// </summary>
-    /// <param name="key">The key of the item to get.</param>
+    /// <param name="key">              The key of the item to get.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the item as a string.</returns>
     ValueTask<string?> GetItemAsStringAsync(string key, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Gets an item from the storage.
+    ///     Gets an item from the storage.
     /// </summary>
     /// <typeparam name="T">The type of the item to get.</typeparam>
-    /// <param name="key">The key of the item to get.</param>
-    /// <param name="serializerContext">The serializer context. This is required if trying to deserialize a custom type, other then a primitive. This is due to AOT and trimming. <see href="https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/source-generation"/></param>
+    /// <param name="key">              The key of the item to get.</param>
+    /// <param name="serializerContext">
+    ///     The serializer context. This is required if trying to deserialize a custom type, other then a primitive. This is due to AOT and trimming. <see
+    ///     href="https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/source-generation" />
+    /// </param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the item.</returns>
     ValueTask<T?> GetItemAsync<T>(string key, JsonSerializerContext? serializerContext = null, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Gets the key at the specified index.
+    ///     Gets the key at the specified index.
     /// </summary>
-    /// <param name="index">The index of the key to get.</param>
+    /// <param name="index">            The index of the key to get.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the key.</returns>
     ValueTask<string> KeyAsync(int index, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Gets all keys in the storage.
+    ///     Gets all keys in the storage.
     /// </summary>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the keys.</returns>
     ValueTask<IEnumerable<string>> KeysAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Gets the number of items in the storage.
+    ///     Gets the number of items in the storage.
     /// </summary>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the number of items.</returns>
     ValueTask<int> LengthAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Removes an item from the storage.
+    ///     Removes an item from the storage.
     /// </summary>
-    /// <param name="key">The key of the item to remove.</param>
+    /// <param name="key">              The key of the item to remove.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
     ValueTask RemoveItemAsync(string key, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Removes multiple items from the storage.
+    ///     Removes multiple items from the storage.
     /// </summary>
-    /// <param name="keys">The keys of the items to remove.</param>
+    /// <param name="keys">             The keys of the items to remove.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
     ValueTask RemoveItemsAsync(IEnumerable<string> keys, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Sets an item in the storage as a string.
+    ///     Sets an item in the storage as a string.
     /// </summary>
-    /// <param name="key">The key of the item to set.</param>
-    /// <param name="data">The data to set.</param>
+    /// <param name="key">              The key of the item to set.</param>
+    /// <param name="data">             The data to set.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
     ValueTask SetItemAsStringAsync(string key, string data, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Sets an item in the storage.
+    ///     Sets an item in the storage.
     /// </summary>
     /// <typeparam name="T">The type of the item to set.</typeparam>
-    /// <param name="key">The key of the item to set.</param>
-    /// <param name="data">The data to set.</param>
-    /// <param name="serializerContext">The serializer context. This is required if trying to deserialize a custom type, other then a primitive. 
-    /// This is due to AOT and trimming. <see href="https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/source-generation"/></param>
+    /// <param name="key">              The key of the item to set.</param>
+    /// <param name="data">             The data to set.</param>
+    /// <param name="serializerContext">
+    ///     The serializer context. This is required if trying to deserialize a custom type, other then a primitive. This is due to AOT and trimming. <see
+    ///     href="https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/source-generation" />
+    /// </param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
     ValueTask SetItemAsync<T>(string key, T data, JsonSerializerContext? serializerContext = null, CancellationToken cancellationToken = default);

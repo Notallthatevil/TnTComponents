@@ -15,13 +15,13 @@ public class TnTTemplateColumn<TGridItem> : TnTColumnBase<TGridItem> {
     ///     Gets or sets the content to be rendered for each row in the table.
     /// </summary>
     [Parameter]
-    public RenderFragment<TGridItem> ChildContent { get; set; } = EmptyChildContent;
+    public RenderFragment<TGridItem> ChildContent { get; set; } = _emptyChildContent;
 
     /// <inheritdoc />
     [Parameter]
     public override TnTGridSort<TGridItem>? SortBy { get; set; }
 
-    private static readonly RenderFragment<TGridItem> EmptyChildContent = _ => builder => { };
+    private static readonly RenderFragment<TGridItem> _emptyChildContent = _ => _ => { };
 
     /// <inheritdoc />
     protected internal override void CellContent(RenderTreeBuilder builder, TGridItem item)

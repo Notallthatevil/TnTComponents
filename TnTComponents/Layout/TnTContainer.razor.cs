@@ -26,6 +26,4 @@ public partial class TnTContainer {
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
-
- 
 }

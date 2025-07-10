@@ -13,7 +13,7 @@ namespace TnTComponents.Layout;
 /// <summary>
 ///     A base layout class
 /// </summary>
-public abstract class TnTLayoutComponent : TnTComponentBase, ITnTStyleable {
+public abstract class TnTLayoutComponent : TnTComponentBase{
 
     /// <inheritdoc />
     [Parameter]

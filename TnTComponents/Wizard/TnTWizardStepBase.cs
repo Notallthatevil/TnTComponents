@@ -28,7 +28,7 @@ public abstract class TnTWizardStepBase : ComponentBase, IDisposable {
     /// <summary>
     ///     Internal identifier for the wizard step.
     /// </summary>
-    internal int InternalId = -1;
+    internal int _internalId = -1;
 
     /// <summary>
     ///     The parent <see cref="TnTWizard" /> component this step belongs to.
