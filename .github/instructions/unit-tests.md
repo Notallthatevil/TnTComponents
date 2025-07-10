@@ -30,6 +30,7 @@
 - Each component should have tests for basic rendering and key behaviors.
 - Always inherit from `Bunit.TestContext` explicity. 
 - All component tests should be in a `.razor` file and be within the `@code` block. 
+- Unit tests **DO NOT** need to be documented.
 
 ## Running Tests
 

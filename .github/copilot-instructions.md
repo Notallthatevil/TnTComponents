@@ -7,8 +7,11 @@
 
 ### 1. Code Generation
 - For any prompt that requires generating or modifying code, first consult [`.github/instructions/generated-code.md`](./instructions/generated-code.md) for project-specific code generation rules, patterns, and examples.
+### 2. Testing
+- For any prompt that requires writing tests, first consult [`.github/instructions/testing.md`](./instructions/unit-tests.md) for project-specific testing rules, patterns, and examples.
 
-### 2. General Project Guidance
+### 3. General Project Guidance
+- For code style guidelines, refer to [`.github/instructions/coding-style.md`](./instructions/code-style.md).
 - **Project Overview**: TnTComponents is a Blazor WebAssembly library of reusable UI components, following Google's Material 3 spec.
 - **Solution Structure**:
   - `TnTComponents/`: Core component library (e.g., Accordion, Badge, Buttons, Grid, Scheduler, etc.)
@@ -19,16 +22,16 @@
 - **Theming**: Themes are JSON files (exported from Material Theme Builder) placed in `wwwroot/Themes`. By adding a `TnTComponents.TnTThemeToggle` component in an app, users can switch themes dynamically.
 - **Testing**: Tests are organized by component in `TnTComponents.Tests/`, mirroring the main library structure.
 
-### 3. Developer Workflows
+### 4. Developer Workflows
 - **Build**: `dotnet restore` then `dotnet build` at the solution root.
 - **Test**: `dotnet test` from the solution root or target specific test projects.
 - **Run Example App**: Launch `LiveTest/LiveTest` for manual component testing.
 - Always use the command line for building and testing to ensure consistency.
 
-### 4. Integration Points
+### 5. Integration Points
 - **ASP.NET Core**: Add the `TnTComponents.AspNetCore` NuGet package for server-side features.
 
-### 5. Project-Specific Guidance
+### 6. Project-Specific Guidance
 - **Component APIs**: Follow the established patterns for parameters, events, and cascading values as seen in current components.
 - **Styling**: Use `.razor.scss` for component styles; compiled CSS is included in `.razor.css` and `.razor.min.css`.
 - **Extending Components**: Place new components in their own folder under `TnTComponents/`, following the established file structure.
