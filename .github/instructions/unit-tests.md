@@ -42,6 +42,13 @@
 - Run all tests with `dotnet test` from the solution root or the test project directory.
 - Code coverage is automatically collected if supported by the test runner.
 
+## Test Rules
+- Tests should be comprehensive, provide a high code coverage, and cover edge cases. 
+- Tests should be written with the intent of the code in mind, not necessarily after the code that is written. This will help discover flaws in the code. 
+
+## File Names
+- Test file names should be 
+
 ## References
 
 - See `TnTComponents.Tests.csproj` for package and project references.
