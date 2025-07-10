@@ -2,10 +2,13 @@
 
 ### 1. Component Design Principles
 - Each component should do one thing well. Keep components focused, simple, and easy to test.
+- They should exhibit a high level of cohesion.
+- They should not mix abstraction levels.
+- They don't depend on "infrastructure", they depend on abstractions.
 
-### 2. Component Structure
 - All components must be placed in their own folder under `TnTComponents/`.
 - Each component must include: `.razor`, `.razor.cs`, `.razor.scss` (for styles), and optional `.js` if needed.
+- If a component includes a `.js` file, it should always define `onLoad`, `onUpdate`, and `onDispose` methods for Blazor interop, following the pattern in [`TnTTabView.razor.js`](../../TnTComponents/TabView/TnTTabView.razor.js).
 - All components must inherit from `TnTComponentBase` unless otherwise specified.
 - All components should be in the TnTComponents namespace unless otherwise specified.
 
