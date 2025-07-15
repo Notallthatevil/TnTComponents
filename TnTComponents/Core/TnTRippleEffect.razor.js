@@ -1,6 +1,4 @@
 const rippleEffectByIdentifier = new Map();
-
-
 function getCoords(elem) { // crossbrowser version
     var box = elem.getBoundingClientRect();
 
