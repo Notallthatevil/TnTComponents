@@ -16,12 +16,6 @@ public partial class TnTWizard : TnTComponentBase {
     [Parameter, EditorRequired]
     public RenderFragment ChildContent { get; set; } = default!;
 
-    /// <summary>
-    /// The title of the wizard, displayed at the top.
-    /// </summary>
-    [Parameter]
-    public string ?Title { get; set; }
-
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
@@ -40,6 +34,18 @@ public partial class TnTWizard : TnTComponentBase {
     public bool NextButtonDisabled { get; set; }
 
     /// <summary>
+    ///     Callback invoked when the "Next" button is clicked.
+    /// </summary>
+    [Parameter]
+    public EventCallback<int> OnNextButtonClicked { get; set; }
+
+    /// <summary>
+    ///     Callback invoked when the "Previous" button is clicked.
+    /// </summary>
+    [Parameter]
+    public EventCallback<int> OnPreviousButtonClicked { get; set; }
+
+    /// <summary>
     ///     The callback to be invoked when the wizard is submitted.
     /// </summary>
     [Parameter]
@@ -56,6 +62,12 @@ public partial class TnTWizard : TnTComponentBase {
     /// </summary>
     [Parameter]
     public bool SubmitButtonDisabled { get; set; }
+
+    /// <summary>
+    ///     The title of the wizard, displayed at the top.
+    /// </summary>
+    [Parameter]
+    public string? Title { get; set; }
 
     /// <summary>
     ///     Gets the current step in the wizard.
@@ -102,7 +114,18 @@ public partial class TnTWizard : TnTComponentBase {
         if (_currentStep is TnTWizardFormStep formStep && formStep is not null && !await formStep.FormValidAsync()) {
             return;
         }
+        await OnNextButtonClicked.InvokeAsync(_stepIndex + 1);
         _stepIndex++;
+    }
+
+    /// <summary>
+    ///     Navigates to the previous step in the wizard.
+    /// </summary>
+    internal async Task PreviousStepAsync() {
+        if (_stepIndex > 0) {
+            await OnPreviousButtonClicked.InvokeAsync(_stepIndex);
+            _stepIndex--;
+        }
     }
 
     /// <summary>

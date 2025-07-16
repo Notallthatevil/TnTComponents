@@ -37,7 +37,7 @@
     </div>
     <div class="tnt-wizard-buttons">
         @if (_stepIndex > 0) {
-            <TnTButton Appearance="ButtonAppearance.Outlined" TextColor="TnTColor.OnSurface" OnClickCallback="@(() => _stepIndex--)" Disabled="@PreviousButtonDisabled">
+            <TnTButton Appearance="ButtonAppearance.Outlined" TextColor="TnTColor.OnSurface" OnClickCallback="@PreviousStepAsync" Disabled="@PreviousButtonDisabled">
                 <MaterialIcon Icon="@MaterialIcon.KeyboardArrowLeft" />
                 PreviousStep
             </TnTButton>
