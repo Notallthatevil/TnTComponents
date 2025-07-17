@@ -17,15 +17,20 @@ namespace TnTComponents;
 public class TnTWizardFormStep : TnTWizardStepBase {
 
     /// <summary>
-    ///     The child content of the form step, which is a render fragment that takes an <see
-    ///     cref="EditContext" />.
+    ///     The child content of the form step, which is a render fragment that takes an <see cref="EditContext" />.
     /// </summary>
     [Parameter, EditorRequired]
     public RenderFragment<EditContext> ChildContent { get; set; } = default!;
 
-/// <summary>
-/// The appearance of the form. <see cref="FormAppearance"/>
-/// </summary>
+    /// <summary>
+    ///     Sets the form fields to be disabled. When set to <c>true</c>, the form cannot be interacted with.
+    /// </summary>
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    /// <summary>
+    ///     The appearance of the form. <see cref="FormAppearance" />
+    /// </summary>
     [Parameter]
     public FormAppearance FormAppearance { get; set; } = FormAppearance.Outlined;
 
@@ -36,8 +41,7 @@ public class TnTWizardFormStep : TnTWizardStepBase {
     public string? FormName { get; set; }
 
     /// <summary>
-    ///     A value indicating whether to include a <see cref="DataAnnotationsValidator" /> in the
-    ///     form. Defaults to <c>true</c>.
+    ///     A value indicating whether to include a <see cref="DataAnnotationsValidator" /> in the form. Defaults to <c>true</c>.
     /// </summary>
     [Parameter]
     public bool IncludeDataAnnotationsValidator { get; set; } = true;
@@ -61,6 +65,12 @@ public class TnTWizardFormStep : TnTWizardStepBase {
     public EventCallback<object> OnValidSubmitCallback { get; set; }
 
     /// <summary>
+    ///     Sets the form fields to be read-only. When set to <c>true</c>, the form cannot be edited.
+    /// </summary>
+    [Parameter]
+    public bool ReadOnly { get; set; }
+
+    /// <summary>
     ///     Holds a reference to the <see cref="TnTForm" /> component used in this step.
     /// </summary>
     private TnTForm _form = default!;
@@ -68,10 +78,7 @@ public class TnTWizardFormStep : TnTWizardStepBase {
     /// <summary>
     ///     Validates the form and invokes the appropriate callback based on the validation result.
     /// </summary>
-    /// <returns>
-    ///     A <see cref="Task{TResult}" /> that resolves to <c>true</c> if the form is valid;
-    ///     otherwise, <c>false</c>.
-    /// </returns>
+    /// <returns>A <see cref="Task{TResult}" /> that resolves to <c>true</c> if the form is valid; otherwise, <c>false</c>.</returns>
     internal async Task<bool> FormValidAsync() {
         if (_form?.EditContext?.Validate() == true) {
             await OnValidSubmitCallback.InvokeAsync(Model);
@@ -88,6 +95,8 @@ public class TnTWizardFormStep : TnTWizardStepBase {
         builder.OpenComponent<TnTForm>(0);
         builder.AddComponentParameter(10, nameof(TnTForm.Model), Model);
         builder.AddComponentParameter(15, nameof(TnTForm.Appearance), FormAppearance);
+        builder.AddComponentParameter(16, nameof(TnTForm.Disabled), Disabled);
+        builder.AddComponentParameter(17, nameof(TnTForm.ReadOnly), ReadOnly);
         builder.AddAttribute(20, "class", "tnt-wizard-form");
         if (!string.IsNullOrWhiteSpace(FormName)) {
             builder.AddComponentParameter(30, nameof(TnTForm.FormName), FormName);
