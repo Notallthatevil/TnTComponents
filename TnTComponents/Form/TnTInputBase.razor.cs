@@ -230,7 +230,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     ///     Updates the current value of the input asynchronously when a change event occurs.
     /// </summary>
     /// <param name="args">The change event args.</param>
-    protected async Task OnChangeAsync(ChangeEventArgs args) {
+    protected virtual async Task OnChangeAsync(ChangeEventArgs args) {
         CurrentValue = args.Value is TInputType value ? value : default;
         await BindAfter.InvokeAsync(CurrentValue);
     }

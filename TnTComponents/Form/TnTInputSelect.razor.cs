@@ -83,6 +83,12 @@ public partial class TnTInputSelect<[DynamicallyAccessedMembers(DynamicallyAcces
         }
     }
 
+    /// <inheritdoc />
+    protected override async Task OnChangeAsync(ChangeEventArgs args) {
+        CurrentValueAsString = args.Value?.ToString();
+        await BindAfter.InvokeAsync(CurrentValue);
+    }
+
     /// <summary>
     ///     Tries to convert a string to a boolean value.
     /// </summary>

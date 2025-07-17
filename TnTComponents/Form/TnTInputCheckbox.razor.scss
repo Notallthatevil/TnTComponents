@@ -136,6 +136,7 @@
         transition: 250ms ease-in-out;
         align-self: center;
         justify-self: center;
+        pointer-events: none;
         z-index: 1;
     }
 
@@ -152,6 +153,7 @@
         justify-self: center;
         z-index: 2;
         transform: translateY(-4px) rotateZ(45deg) rotateY(90deg);
+        pointer-events: none;
     }
 
     &:has(input:checked) {

@@ -166,6 +166,7 @@ $background-color: var(--tnt-input-background-color);
             top: -1px;
             left: -1px;
             transition: 250ms ease-in-out;
+            pointer-events: none;
         }
 
         &:before {
