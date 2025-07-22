@@ -23,11 +23,10 @@ function rippleEffect(e) {
         return;
     }
 
-    const rippler = e.target.querySelector(':scope > tnt-ripple-effect');
+    let rippler = e.currentTarget.querySelector(':scope > tnt-ripple-effect');
+
 
     // Setup
-    let posX = e.target.offsetLeft;
-    let posY = e.target.offsetTop;
     let buttonWidth = e.target.offsetWidth;
     let buttonHeight = e.target.offsetHeight;
 
@@ -40,18 +39,19 @@ function rippleEffect(e) {
 
     // Get the center of the element
     const coords = getCoords(e.target);
-    var x = e.pageX - coords.left - buttonWidth / 2;
-    var y = e.pageY - coords.top - buttonHeight / 2;
+    var x = e.pageX - coords.left;
+    var y = e.pageY - coords.top;
 
     if (e.type === 'mousedown') {
         const rippleElement = document.createElement('div');
         rippleElement.style.pointerEvents = 'none';
         rippleElement.classList.add('tnt-rippling');
 
-        rippleElement.style.width = `${buttonWidth}px`;
-        rippleElement.style.height = `${buttonHeight}px`;
+        rippleElement.style.width = `${1}px`;
+        rippleElement.style.height = `${1}px`;
         rippleElement.style.top = `${y}px`;
         rippleElement.style.left = `${x}px`;
+        rippler.style = `--tnt-ripple-max-size: ${buttonWidth * 2.5};`;
         rippler.appendChild(rippleElement);
 
         setTimeout(() => {
