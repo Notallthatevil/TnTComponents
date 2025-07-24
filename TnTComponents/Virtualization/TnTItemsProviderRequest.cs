@@ -44,7 +44,7 @@ public readonly record struct TnTItemsProviderRequest() {
                 .Where(s => !string.IsNullOrWhiteSpace(s))
                 .Select(s => {
                     var split = s.Split(',');
-                    return new KeyValuePair<string, SortDirection>(split[0], Enum.Parse<SortDirection>(split.LastOrDefault() ?? nameof(SortDirection.Auto)));
+                    return new KeyValuePair<string, SortDirection>(split[0], Enum.Parse<SortDirection>(split.LastOrDefault() ?? nameof(SortDirection.Ascending)));
                 })
                 .ToList();
 

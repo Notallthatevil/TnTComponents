@@ -4,7 +4,7 @@
 @using TnTComponents.Grid
 @rendermode InteractiveServer
 
-<div style="height: 60vh; overflow-y:scroll">
+@* <div style="height: 60vh; overflow-y:scroll">
     <TnTDataGrid Items="@Items" Pagination="_paginationState" OnRowClicked="RowClicked" TGridItem="DataGridItem" DataGridAppearance="DataGridAppearance.Stripped" Resizable="true">
         <TnTPropertyColumn Property="@(x => x.Column1)" Sortable="true" />
         <TnTPropertyColumn Property="@(x => x.Column2)" Sortable="true" TextAlign="TextAlign.Center" HeaderAlignment="TextAlign.Left" />
@@ -17,7 +17,7 @@
         </TnTTemplateColumn>
     </TnTDataGrid>
 </div>
-<TnTComponents.Grid.TnTPaginationButtons PaginationState="@_paginationState"/>
+<TnTComponents.Grid.TnTPaginationButtons PaginationState="@_paginationState"/> *@
 
 
 @code {

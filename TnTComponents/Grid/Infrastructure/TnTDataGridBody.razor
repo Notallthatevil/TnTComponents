@@ -1,0 +1,7 @@
+﻿@typeparam TGridItem
+@attribute [CascadingTypeParameter(nameof(TGridItem))]
+<tbody>
+    @foreach (var item in Context.Items) {
+        <TnTDataGridBodyRow Item="@item" />
+    }
+</tbody>

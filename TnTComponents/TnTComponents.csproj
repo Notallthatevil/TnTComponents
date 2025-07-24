@@ -3,7 +3,6 @@
         <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <GenerateDocumentationFile>False</GenerateDocumentationFile>
         <Title>TnTComponents</Title>

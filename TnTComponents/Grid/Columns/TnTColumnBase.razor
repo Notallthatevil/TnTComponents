@@ -1,0 +1,75 @@
+﻿@using Microsoft.AspNetCore.Components.Rendering
+@using TnTComponents.Core
+@using TnTComponents.Interfaces
+@inherits TnTComponentBase
+@typeparam TGridItem
+@implements ITnTComponentBase
+@implements IDisposable
+
+@code {
+    public virtual void RenderHeaderContent(RenderTreeBuilder __builder) {
+        if (HeaderCellItemTemplate is not null) {
+            @HeaderCellItemTemplate(this)
+        }
+        else {
+            <div class="@_headerClass" @onclick="@(Sortable ? SortAsync : null!)">
+                <span class="tnt-column-header-title">
+                    @Title
+                </span>
+
+                @if (Sortable) {
+                    var sortedOn = IsSortedOn;
+                    @if (sortedOn.HasValue) {
+                        <span class="tnt-column-header-sort-icon">
+                            <span class="tnt-column-header-sort-index">
+                                Sort: @_sortIndex
+                            </span>
+                            @if (sortedOn == SortDirection.Ascending) {
+                                <MaterialIcon Icon="@MaterialIcon.ArrowDropUp" />
+                            }
+                            else if (sortedOn == SortDirection.Descending) {
+                                <MaterialIcon Icon="@MaterialIcon.ArrowDropDown" />
+                            }
+                        </span>
+                    }
+                    @if (EnableRipple) {
+                        <TnTRippleEffect />
+                    }
+                }
+            </div>
+        }
+
+        //            return new RenderFragment(b => {
+        //                b.OpenElement(0, "div");
+        //                b.AddAttribute(10, "class", CssClassBuilder.Create()
+        //                    .AddClass("tnt-header-content")
+        //                    .AddClass("tnt-sorted", ShowSortIcon)
+        //                    .AddTextAlign(HeaderAlignment)
+        //                    .AddClass("tnt-interactable")
+        //                    .AddRipple()
+        //                    .Build());
+
+        // //b.AddAttribute(20, "onclick", EventCallback.Factory.Create(this, () => Context.Grid.SortByColumnAsync(this))); b.AddContent(30, Title);
+
+        // if (ShowSortIcon) { b.OpenComponent<MaterialIcon>(40); //b.AddAttribute(50, "Icon", Context.Grid.SortByAscending ? MaterialIcon.ArrowDropUp : MaterialIcon.ArrowDropDown); b.AddAttribute(60,
+        // "Class", "tnt-sort-icon"); b.CloseComponent(); }
+
+        // b.OpenComponent<TnTRippleEffect>(70); b.CloseComponent();
+
+        //                b.CloseElement();
+        //            });
+        //        }
+        //#pragma warning restore IDE0046 // Convert to conditional expression
+        //        else {
+        //            return new RenderFragment(b => {
+        //                b.OpenElement(0, "div");
+        //                b.AddAttribute(10, "class", CssClassBuilder.Create()
+        //                    .AddClass("tnt-header-content")
+        //                    .AddTextAlign(HeaderAlignment)
+        //                    .Build());
+        //                b.AddContent(20, Title);
+        //                b.CloseElement();
+        //            });
+        //        }
+    }
+}

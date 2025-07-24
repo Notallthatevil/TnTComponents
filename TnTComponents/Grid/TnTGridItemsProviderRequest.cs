@@ -5,7 +5,7 @@ using TnTComponents.Virtualization;
 namespace TnTComponents.Grid;
 
 /// <summary>
-///     Parameters for data to be supplied by a <see cref="TnTDataGrid{TGridItem}" />'s <see cref="TnTDataGrid{TGridItem}.ItemsProvider" />.
+///     Parameters for data to be supplied by a <see cref="TnTDataGrid{TGridItem}" />'s 
 /// </summary>
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
 public readonly struct TnTGridItemsProviderRequest<TGridItem> {
@@ -30,23 +30,18 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> {
     ///     Gets or sets which column represents the sort order. Rather than inferring the sort rules manually, you should normally call either <see cref="ApplySorting(IQueryable{TGridItem})" /> or
     ///     <see cref="GetSortByProperties" />, since they also account for <see cref="SortByColumn" /> and <see cref="SortByAscending" /> automatically.
     /// </summary>
-    public TnTColumnBase<TGridItem>? SortByColumn { get; init; }
-
-    /// <summary>
-    ///     Retrieves the properties to sort on and their sort directions.
-    /// </summary>
-    public IReadOnlyCollection<KeyValuePair<string, SortDirection>> SortOnProperties => [.. GetSortByProperties().Select(sp => new KeyValuePair<string, SortDirection>(sp.PropertyName, sp.Direction))];
+    public TnTGridSort<TGridItem>? Sort { get; init; }
 
     /// <summary>
     ///     Gets or sets the zero-based index of the first item to be supplied.
     /// </summary>
     public int StartIndex { get; init; }
 
-    internal TnTGridItemsProviderRequest(int startIndex, int? count, TnTColumnBase<TGridItem>? sortByColumn, bool sortByAscending,
+    internal TnTGridItemsProviderRequest(int startIndex, int? count, TnTGridSort<TGridItem>? sort, bool sortByAscending,
         CancellationToken cancellationToken) {
         StartIndex = startIndex;
         Count = count;
-        SortByColumn = sortByColumn;
+        Sort = sort;
         SortByAscending = sortByAscending;
         CancellationToken = cancellationToken;
     }
@@ -58,7 +53,7 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> {
     public static implicit operator TnTGridItemsProviderRequest<TGridItem>(TnTItemsProviderRequest request) {
         return new TnTGridItemsProviderRequest<TGridItem> {
             Count = request.Count,
-            SortByColumn = null,
+            Sort = null,
             SortByAscending = request.SortOnProperties.Any() && request.SortOnProperties.First().Value == SortDirection.Ascending,
             StartIndex = request.StartIndex,
             CancellationToken = default
@@ -71,7 +66,7 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> {
     public static implicit operator TnTItemsProviderRequest(TnTGridItemsProviderRequest<TGridItem> request) {
         return new TnTItemsProviderRequest {
             StartIndex = request.StartIndex,
-            SortOnProperties = request.SortOnProperties,
+            SortOnProperties = [.. request.GetSortByProperties().Select(sp => new KeyValuePair<string, SortDirection>(sp.PropertyName, sp.Direction))],
             Count = request.Count
         };
     }
@@ -81,11 +76,11 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> {
     /// </summary>
     /// <param name="source">An <see cref="IQueryable{TGridItem}" />.</param>
     /// <returns>A new <see cref="IQueryable{TGridItem}" /> representing the <paramref name="source" /> with sorting rules applied.</returns>
-    public IQueryable<TGridItem> ApplySorting(IQueryable<TGridItem> source) => SortByColumn?.SortBy?.Apply(source, SortByAscending) ?? source;
+    public IQueryable<TGridItem> ApplySorting(IQueryable<TGridItem> source) => throw new NotImplementedException();// SortByColumn?.SortBy?.Apply(source, SortByAscending) ?? source;
 
     /// <summary>
     ///     Produces a collection of (property name, direction) pairs representing the sorting rules.
     /// </summary>
     /// <returns>A collection of (property name, direction) pairs representing the sorting rules</returns>
-    public IReadOnlyCollection<SortedProperty> GetSortByProperties() => SortByColumn?.SortBy?.ToPropertyList(SortByAscending) ?? [];
+    public IEnumerable<SortedProperty> GetSortByProperties() => Sort?.ToPropertyList() ?? [];
 }

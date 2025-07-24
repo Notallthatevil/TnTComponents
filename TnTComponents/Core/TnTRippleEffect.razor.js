@@ -23,8 +23,11 @@ function rippleEffect(e) {
         return;
     }
 
-    let rippler = e.currentTarget.querySelector(':scope > tnt-ripple-effect');
-
+    const rippler = e.currentTarget.querySelector(':scope > tnt-ripple-effect');
+    if (!rippler) {
+        return;
+    }
+    e.stopPropagation();
 
     // Setup
     let buttonWidth = e.target.offsetWidth;
@@ -43,6 +46,9 @@ function rippleEffect(e) {
     var y = e.pageY - coords.top;
 
     if (e.type === 'mousedown') {
+        e.currentTarget.removeEventListener('mouseleave', rippleEffect);
+        e.currentTarget.addEventListener('mouseleave', rippleEffect);
+
         const rippleElement = document.createElement('div');
         rippleElement.style.pointerEvents = 'none';
         rippleElement.classList.add('tnt-rippling');
@@ -59,6 +65,7 @@ function rippleEffect(e) {
         }, 1);
     }
     else if (e.type === 'mouseup' || e.type === 'mouseleave') {
+        e.currentTarget.removeEventListener('mouseleave', rippleEffect);
         const rippleElements = rippler.querySelectorAll(':scope > .tnt-rippling');
 
         rippleElements.forEach(ripple => {
@@ -106,9 +113,6 @@ export class TnTRippleEffect extends HTMLElement {
 
             this.parentElement.removeEventListener('mouseup', rippleEffect);
             this.parentElement.addEventListener('mouseup', rippleEffect);
-
-            this.parentElement.removeEventListener('mouseleave', rippleEffect);
-            this.parentElement.addEventListener('mouseleave', rippleEffect);
         }
     }
 

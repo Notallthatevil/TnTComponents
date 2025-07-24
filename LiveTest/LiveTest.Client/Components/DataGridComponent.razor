@@ -1,12 +1,12 @@
 ﻿@using TnTComponents
 @using TnTComponents.Grid
 <div style="height: 60vh; overflow-y:scroll">
-    <TnTDataGrid Items="@Items" Virtualize="true" OnRowClicked="RowClicked" TGridItem="DataGridItem" DataGridAppearance="DataGridAppearance.Stripped" Resizable="true">
+    <TnTDataGrid Items="@Items" Virtualize="true" RowClickCallback="RowClicked" BackgroundColor="TnTColor.SecondaryContainer" TextColor="TnTColor.OnSecondaryContainer" TGridItem="DataGridItem" DataGridAppearance="DataGridAppearance.Stripped" Resizable="true">
         <TnTPropertyColumn Property="@(x => x.Column1)" Sortable="true" />
         <TnTPropertyColumn Property="@(x => x.Column2)" Sortable="true" TextAlign="TextAlign.Center" HeaderAlignment="TextAlign.Left" />
         <TnTPropertyColumn Property="@(x => x.Column3)" Format="MM/yyyy" HeaderAlignment="TextAlign.Right" />
         <TnTTemplateColumn>
-            <TnTButton OnClickCallback="() => ItemClicked(context)" Appearance="ButtonAppearance.Text" TextColor="TnTColor.OnSurface" BackgroundColor="TnTColor.Surface" StopPropagation="true">
+            <TnTButton Appearance="ButtonAppearance.Text" TextColor="TnTColor.OnSurface" BackgroundColor="TnTColor.Surface" StopPropagation="true" OnClickCallback="@(() => ItemClicked(context))">
                 <MaterialIcon Icon="@MaterialIcon.Edit" />
                 Edit
             </TnTButton>
@@ -32,10 +32,10 @@
                 var list = new List<DataGridItem>();
                 foreach (var i in Enumerable.Range(1, 1000)) {
                     list.Add(new DataGridItem() {
-                            Column1 = Random.Shared.Next(1, 1000),
-                            Column2 = Guid.NewGuid().ToString(),
-                            Column3 = new DateTime(Random.Shared.Next(1, 10000), Random.Shared.Next(1, 13), Random.Shared.Next(1, 29))
-                        });
+                        Column1 = Random.Shared.Next(1, 10),
+                        Column2 = Guid.NewGuid().ToString(),
+                        Column3 = new DateTime(Random.Shared.Next(1, 10000), Random.Shared.Next(1, 13), Random.Shared.Next(1, 29))
+                    });
                 }
                 _items = list;
             }

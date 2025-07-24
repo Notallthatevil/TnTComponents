@@ -1,0 +1,12 @@
+﻿@using TnTComponents.Core
+@typeparam TGridItem
+@inherits TnTDataGridRow<TGridItem>
+
+<tr class="@_elementClass" @onclick="@(Context.RowClickCallback.HasDelegate ? () => Context.RowClickCallback.InvokeAsync(Item) : null!)" @key="Context.ItemKey.Invoke(Item)">
+    @foreach (var column in Context.Columns) {
+        <TnTDataGridBodyCell Column="@column" Item="@Item" />
+    }
+    @if (Context.RowClickCallback.HasDelegate) {
+        <TnTRippleEffect />
+    }
+</tr>

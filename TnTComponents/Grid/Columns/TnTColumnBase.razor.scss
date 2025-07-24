@@ -1,0 +1,37 @@
+﻿@use '../../Styles/_Variables/_typescale.scss' as typescale;
+@use '../../Styles/_Variables/_interactable.scss' as interactable;
+@use '../../Styles/_Variables/_textalignments.scss' as textAlignments;
+@use '../TnTDataGridVariables.scss' as dg;
+
+
+.tnt-header-content {
+    padding: 0 8px;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    user-select: none;
+    height: inherit;
+    @include typescale.tnt-title-medium;
+    @include interactable.tnt-interactable(dg.$tint-color, null);
+    @include textAlignments.tnt-text-alignments;
+
+
+    &.tnt-column-header-sorted-on {
+        color: dg.$tint-color;
+    }
+
+    .tnt-column-header-sort-icon {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .tnt-column-header-sort-index {
+            @include typescale.tnt-label-small;
+        }
+    }
+
+    ::deep tnt-page-script {
+        position: absolute;
+    }
+}

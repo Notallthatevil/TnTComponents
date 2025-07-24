@@ -1,0 +1,12 @@
+﻿@namespace TnTComponents
+@using TnTComponents.Grid.Columns
+@typeparam TGridItem
+@typeparam TProp
+@inherits TnTColumnBase<TGridItem>
+
+
+@code {
+    public override RenderFragment RenderCellContent(TGridItem gridItem) => (__builder) => {
+        <text>@_cellTextFunc?.Invoke(gridItem)</text>
+    };
+}

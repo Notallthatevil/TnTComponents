@@ -1,0 +1,8 @@
+﻿@namespace TnTComponents
+@using TnTComponents.Grid.Columns
+@typeparam TGridItem
+@inherits TnTColumnBase<TGridItem>
+
+@code {
+    public override RenderFragment RenderCellContent(TGridItem gridItem) => ChildContent(gridItem);
+}

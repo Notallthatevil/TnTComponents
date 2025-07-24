@@ -1,0 +1,9 @@
+﻿@typeparam TGridItem
+@inherits TnTDataGridRow<TGridItem>
+<thead class="tnt-data-grid-header">
+    <tr class="@($"tnt-data-grid-header-row{(Context.RowClickCallback.HasDelegate ? " tnt-interactable" : string.Empty)}")" scope="row" aria-rowindex="1">
+        @foreach (var column in Context.Columns) {
+            <TnTDataGridHeaderCell Column="@column" />
+        }
+    </tr>
+</thead>

@@ -24,7 +24,7 @@ public class TnTItemsProviderRequestBinder : IModelBinder {
                     .Where(s => !string.IsNullOrWhiteSpace(s))
                     .Select(s => {
                         var split = s.Split(',');
-                        return new KeyValuePair<string, SortDirection>(split.First(), Enum.Parse<SortDirection>(split.LastOrDefault() ?? SortDirection.Auto.ToString()));
+                        return new KeyValuePair<string, SortDirection>(split.First(), Enum.Parse<SortDirection>(split.LastOrDefault() ?? nameof(SortDirection.Ascending)));
                     })
                     .ToList();
 

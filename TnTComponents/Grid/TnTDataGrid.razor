@@ -7,8 +7,24 @@
 @namespace TnTComponents
 @typeparam TGridItem
 @inherits TnTPageScriptComponent<TnTDataGrid<TGridItem>>
-@implements IHandleEvent
-<CascadingValue TValue="TnTInternalGridContext<TGridItem>" IsFixed="true" Value="@_internalGridContext">
+
+<CascadingValue TValue="TnTInternalGridContext<TGridItem>" Value="_internalGridContext" IsFixed="true">
+    @ChildContent
+    <table @attributes="AdditionalAttributes"
+           class="@ElementClass"
+           style="@ElementStyle"
+           lang="@ElementLang"
+           id="@ElementId"
+           @ref="Element">
+           <TnTDataGridHeaderRow TGridItem="@TGridItem" @ref="_headerRow"/>
+
+           <TnTDataGridBody TGridItem="@TGridItem" @ref="_body"/>
+    </table>
+</CascadingValue>
+
+
+@* @implements IHandleEvent *@
+@* <CascadingValue TValue="TnTInternalGridContext<TGridItem>" IsFixed="true" Value="@_internalGridContext">
     @{
         StartCollectingColumns();
     }
@@ -118,84 +134,84 @@
 
         </table>
     </DeferRendering>
-</CascadingValue>
+</CascadingValue> *@
 
 @code {
-    private void RenderNonVirtualizedRows(RenderTreeBuilder __builder) {
-        var initialRowIndex = 1; // aria-rowindex is 1-based, plus 1 if there is a header
-        var rowIndex = initialRowIndex;
-        if (_currentNonVirtualizedViewItems.Any()) {
-            Loading = false;
-            foreach (var item in _currentNonVirtualizedViewItems) {
-                RenderRow(__builder, rowIndex++, item);
-            }
-        }
-        else {
-            RenderEmptyContent(__builder);
-        }
-    }
+    // private void RenderNonVirtualizedRows(RenderTreeBuilder __builder) {
+    //     var initialRowIndex = 1; aria-rowindex is 1-based, plus 1 if there is a header
+    //     var rowIndex = initialRowIndex;
+    //     if (_currentNonVirtualizedViewItems.Any()) {
+    //         Loading = false;
+    //         foreach (var item in _currentNonVirtualizedViewItems) {
+    //             RenderRow(__builder, rowIndex++, item);
+    //         }
+    //     }
+    //     else {
+    //         RenderEmptyContent(__builder);
+    //     }
+    // }
 
-    private void RenderRow(RenderTreeBuilder __builder, int rowIndex, TGridItem item) {
-        var rowClass = RowClass?.Invoke(item) ?? null;
-        var rowStyle = RowStyle?.Invoke(item) ?? null;
-        Loading = false;
-        <TnTDataGridRow @key="@(ItemKey(item))"
-                        aria-rowindex="@rowIndex"
-                        class="@rowClass"
-                        style="@CssStyleBuilder.Create().AddStyle(rowStyle, null).AddStyle("height", $"{ItemSize}px").Build()" OnClick="@OnRowClicked" TGridItem="TGridItem" Item="@item">
-            @for (var colIndex = 0; colIndex < _columns.Count; colIndex++) {
-                var col = _columns[colIndex];
+    // private void RenderRow(RenderTreeBuilder __builder, int rowIndex, TGridItem item) {
+    //     var rowClass = RowClass?.Invoke(item) ?? null;
+    //     var rowStyle = RowStyle?.Invoke(item) ?? null;
+    //     Loading = false;
+    //     <TnTDataGridRow @key="@(ItemKey(item))"
+    //                     aria-rowindex="@rowIndex"
+    //                     class="@rowClass"
+    //                     style="@CssStyleBuilder.Create().AddStyle(rowStyle, null).AddStyle("height", $"{ItemSize}px").Build()" OnClick="@OnRowClicked" TGridItem="TGridItem" Item="@item">
+    //         @for (var colIndex = 0; colIndex < _columns.Count; colIndex++) {
+    //             var col = _columns[colIndex];
 
-                <TnTDataGridCell @key="@col" class="@col.ElementClass" style="@col.ElementStyle" TGridItem="TGridItem" Item="@item">
-                    @((RenderFragment)(__builder => col.CellContent(__builder, item)))
-                </TnTDataGridCell>
-            }
-        </TnTDataGridRow>
-    }
+    //             <TnTDataGridCell @key="@col" class="@col.ElementClass" style="@col.ElementStyle" TGridItem="TGridItem" Item="@item">
+    //                 @((RenderFragment)(__builder => col.CellContent(__builder, item)))
+    //             </TnTDataGridCell>
+    //         }
+    //     </TnTDataGridRow>
+    // }
 
-    private void RenderPlaceholderRow(RenderTreeBuilder __builder, PlaceholderContext placeholderContext) {
-        string? _rowsDataSize = $"height: {ItemSize}px";
+    // private void RenderPlaceholderRow(RenderTreeBuilder __builder, PlaceholderContext placeholderContext) {
+    //     string? _rowsDataSize = $"height: {ItemSize}px";
 
-        <TnTDataGridRow aria-rowindex="@(placeholderContext.Index + 1)" style="@_rowsDataSize" TGridItem="TGridItem">
-            @for (var colIndex = 0; colIndex < _columns.Count; colIndex++) {
-                var col = _columns[colIndex];
+    //     <TnTDataGridRow aria-rowindex="@(placeholderContext.Index + 1)" style="@_rowsDataSize" TGridItem="TGridItem">
+    //         @for (var colIndex = 0; colIndex < _columns.Count; colIndex++) {
+    //             var col = _columns[colIndex];
 
-                <TnTDataGridCell class="grid-cell-placeholder" @key="@col" GridColumn=@(colIndex+1) TGridItem="TGridItem">
-                    @col.RenderPlaceholderContent(placeholderContext)
-                </TnTDataGridCell>
-            }
-        </TnTDataGridRow>
-    }
+    //             <TnTDataGridCell class="grid-cell-placeholder" @key="@col" GridColumn=@(colIndex+1) TGridItem="TGridItem">
+    //                 @col.RenderPlaceholderContent(placeholderContext)
+    //             </TnTDataGridCell>
+    //         }
+    //     </TnTDataGridRow>
+    // }
 
-    private void RenderEmptyContent(RenderTreeBuilder __builder) {
-        @if (_manualGrid) {
-            return;
-        }
-        <tr class="empty-content-row">
-            <td class="empty-content-cell" colspan="@_columns.Count">
-                @if (EmptyContent is null) {
-                    @("No data to show!")
-                }
-                else {
-                    @EmptyContent
-                }
-            </td>
-        </tr>
+    // private void RenderEmptyContent(RenderTreeBuilder __builder) {
+    //     @if (_manualGrid) {
+    //         return;
+    //     }
+    //     <tr class="empty-content-row">
+    //         <td class="empty-content-cell" colspan="@_columns.Count">
+    //             @if (EmptyContent is null) {
+    //                 @("No data to show!")
+    //             }
+    //             else {
+    //                 @EmptyContent
+    //             }
+    //         </td>
+    //     </tr>
 
-    }
+    // }
 
-    private void RenderLoadingContent(RenderTreeBuilder __builder) {
-        @if (LoadingContent is null) {
-            @for (var i = 0; i < _numberOfRowsToLoad; ++i) {
-                RenderPlaceholderRow(__builder, new PlaceholderContext(i, ItemSize));
-            }
-        }
-        else {
-            <TnTDataGridRow TGridItem="TGridItem" Class="loading-content-row">
-                <TnTDataGridCell Class="loading-content-cell">
-                    @LoadingContent
-                </TnTDataGridCell>
-            </TnTDataGridRow>
-        }
-    }
+    // private void RenderLoadingContent(RenderTreeBuilder __builder) {
+    //     @if (LoadingContent is null) {
+    //         @for (var i = 0; i < _numberOfRowsToLoad; ++i) {
+    //             RenderPlaceholderRow(__builder, new PlaceholderContext(i, ItemSize));
+    //         }
+    //     }
+    //     else {
+    //         <TnTDataGridRow TGridItem="TGridItem" Class="loading-content-row">
+    //             <TnTDataGridCell Class="loading-content-cell">
+    //                 @LoadingContent
+    //             </TnTDataGridCell>
+    //         </TnTDataGridRow>
+    //     }
+    // }
 }

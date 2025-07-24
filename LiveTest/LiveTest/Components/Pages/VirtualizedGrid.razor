@@ -3,7 +3,7 @@
 @using TnTComponents.Extensions
 @using TnTComponents.Grid
 @rendermode InteractiveServer
-<div style="height: 60vh; overflow-y:scroll">
+@* <div style="height: 60vh; overflow-y:scroll">
     <TnTDataGrid ItemsProvider="@_provider" Virtualize="true" OnRowClicked="RowClicked" TGridItem="DataGridItem" DataGridAppearance="DataGridAppearance.Stripped" Resizable="true">
         <TnTPropertyColumn Property="@(x => x.Column1)" Sortable="true" />
         <TnTPropertyColumn Property="@(x => x.Column2)" Sortable="true" TextAlign="TextAlign.Center" HeaderAlignment="TextAlign.Left" />
@@ -18,7 +18,7 @@
 
 
 </div>
-
+ *@
 
 @code {
     [Inject]

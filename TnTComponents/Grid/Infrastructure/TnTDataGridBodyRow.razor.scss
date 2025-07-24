@@ -1,0 +1,19 @@
+﻿@use '../TnTDataGridVariables.scss' as dg;
+@use '../../Styles/_Variables/_interactable.scss' as interactable;
+
+
+.tnt-data-grid-body-row {
+    @include interactable.tnt-interactable(dg.$tint-color, null);
+
+    &.tnt-stripped {
+        &:nth-child(even) {
+            background-color: dg.$bg-color;
+            filter: brightness(1.03);
+        }
+
+        &:nth-child(odd) {
+            background-color: dg.$bg-color;
+            filter: brightness(0.97);
+        }
+    }
+}
