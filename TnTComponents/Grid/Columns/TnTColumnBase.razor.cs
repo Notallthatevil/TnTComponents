@@ -40,6 +40,8 @@ public abstract partial class TnTColumnBase<TGridItem> {
     [Parameter]
     public TextAlign HeaderAlignment { get; set; } = TnTComponents.TextAlign.Left;
 
+    internal bool NewColumn { get; set; }
+
     [Parameter]
     public bool EnableRipple { get; set; } = true;
 
@@ -80,6 +82,16 @@ public abstract partial class TnTColumnBase<TGridItem> {
         await Context.RefreshAsync();
     }
 
+    protected override void OnParametersSet() {
+        base.OnParametersSet();
+        if (NewColumn) {
+            if (Sortable && IsDefaultSortColumn) {
+                Context.SortByColumn(this);
+            }
+            NewColumn = false;
+        }
+
+    }
     // internal RenderFragment? RenderPlaceholderContent(PlaceholderContext placeholderContext) => PlaceholderTemplate is not null ? PlaceholderTemplate(placeholderContext) : null;
 
     // ///

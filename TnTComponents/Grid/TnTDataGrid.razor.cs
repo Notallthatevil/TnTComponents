@@ -123,9 +123,7 @@ public partial class TnTDataGrid<TGridItem> {
     CancellationTokenSource? _cancellationTokenSource;
 
     public async Task RefreshDataGridAsync() {
-
         await ResolvePaginationResultsAsync();
-
         await InvokeAsync(StateHasChanged);
         await (_body?.RefreshAsync() ?? Task.CompletedTask);
         await (_headerRow?.RefreshAsync() ?? Task.CompletedTask);

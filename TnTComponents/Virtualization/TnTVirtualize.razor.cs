@@ -104,7 +104,7 @@ public partial class TnTVirtualize<TItem>() {
                 Count = LoadCount
             });
             if (!token.IsCancellationRequested) {
-                if(_items.Count() > result.TotalItemCount) {
+                if (_items.Count() > result.TotalItemCount) {
                     _items = result.Items;
                 }
                 else {

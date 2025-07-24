@@ -2,8 +2,8 @@
 @using TnTComponents.Grid
 <div style="height: 60vh; overflow-y:scroll">
     <TnTDataGrid Items="@Items" Virtualize="true" OnRowClicked="RowClicked" BackgroundColor="TnTColor.SecondaryContainer" TextColor="TnTColor.OnSecondaryContainer" TGridItem="DataGridItem" DataGridAppearance="DataGridAppearance.Stripped" Resizable="true">
-        <TnTPropertyColumn Property="@(x => x.Column1)" Sortable="true" />
-        <TnTPropertyColumn Property="@(x => x.Column2)" Sortable="true" TextAlign="TextAlign.Center" HeaderAlignment="TextAlign.Left" />
+        <TnTPropertyColumn Property="@(x => x.Column1)" Sortable="true" IsDefaultSortColumn="true"/>
+        <TnTPropertyColumn Property="@(x => x.Column2)" Sortable="true" TextAlign="TextAlign.Center" IsDefaultSortColumn="true" HeaderAlignment="TextAlign.Left" />
         <TnTPropertyColumn Property="@(x => x.Column3)" Format="MM/yyyy" HeaderAlignment="TextAlign.Right" />
         <TnTTemplateColumn>
             <TnTButton Appearance="ButtonAppearance.Text" TextColor="TnTColor.OnSurface" BackgroundColor="TnTColor.Surface" StopPropagation="true" OnClickCallback="@(() => ItemClicked(context))">

@@ -12,6 +12,7 @@ public partial class TnTDataGridVirtualizedBody<TGridItem> {
     private async ValueTask<TnTItemsProviderResult<(int, TGridItem)>> ProvideVirtualizedItemsAsync(TnTVirtualizeItemsProviderRequest<(int, TGridItem)> request) {
 
         // Debounce the requests. This eliminates a lot of redundant queries at the cost of slight lag after interactions.
+        
         await Task.Delay(_delay);
         if (_delay < 2000) {
             Interlocked.Add(ref _delay, 250);

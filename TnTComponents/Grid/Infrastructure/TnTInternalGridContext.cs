@@ -6,24 +6,8 @@ namespace TnTComponents.Grid.Infrastructure;
 internal sealed class TnTInternalGridContext<TGridItem>(TnTDataGrid<TGridItem> _grid) {
     public IEnumerable<TnTColumnBase<TGridItem>> Columns => _columns.Values.OrderBy(c => c.Order).ThenBy(c => c.ColumnId);
     public DataGridAppearance DataGridAppearance => _grid.DataGridAppearance;
-    public IEnumerable<TGridItem> Items {
-        get {
-            if (_grid.Items is not null) {
 
-                var items = _grid.Items;
-                if (SortBy is not null) {
-                    items = SortBy.Apply(items);
-                }
-                if (PaginationState is not null) {
-                    items = PaginationState.Apply(items);
-                }
-                return items;
-            }
-            else {
-                return _grid.ProvidedItems ?? [];
-            }
-        }
-    }
+    public IEnumerable<TGridItem> Items { get; set; } = [];
     public EventCallback<TGridItem> RowClickCallback => _grid.OnRowClicked;
     public TnTDataGrid<TGridItem> Grid => _grid;
     public int TotalRowCount { get; set; }
@@ -46,7 +30,7 @@ internal sealed class TnTInternalGridContext<TGridItem>(TnTDataGrid<TGridItem> _
         if (column.ColumnId < 0) {
             column.ColumnId = Interlocked.Increment(ref _nextColumnId);
         }
-        _columns.TryAdd(column.ColumnId, column);
+        column.NewColumn = _columns.TryAdd(column.ColumnId, column);
     }
 
     public int? GetSortIndex(TnTColumnBase<TGridItem> column) => _sortByColumns.IndexOf(column) switch {
@@ -87,6 +71,25 @@ internal sealed class TnTInternalGridContext<TGridItem>(TnTDataGrid<TGridItem> _
                 SortBy = SortBy?.Append(c.SortBy);
             }
         }
+        UpdateItems();
+    }
+
+    private void UpdateItems() {
+        if (_grid.Items is not null) {
+
+            var items = _grid.Items;
+            if (SortBy is not null) {
+                items = SortBy.Apply(items);
+            }
+            if (PaginationState is not null) {
+                items = PaginationState.Apply(items);
+            }
+            Items = items;
+        }
+        else {
+            Items = _grid.ProvidedItems ?? [];
+        }
+        //_grid.Refresh();
     }
 
     public Task RefreshAsync() => _grid.RefreshDataGridAsync();

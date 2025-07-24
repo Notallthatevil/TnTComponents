@@ -73,6 +73,9 @@ public partial class TnTPropertyColumn<TGridItem, TProp>  {
             var daText = displayAttribute?.Name;
             Title = !string.IsNullOrEmpty(daText) ? daText : memberExpression.Member.Name.SplitPascalCase();
         }
+
+        // Call after to register sorting if needed.
+        base.OnParametersSet();
     }
 
     public override string? ElementClass => throw new NotImplementedException();

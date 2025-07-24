@@ -11,4 +11,8 @@ public partial class TnTDataGridBody<TGridItem> {
     public async virtual Task RefreshAsync() {
         await InvokeAsync(StateHasChanged);
     }
+
+    public virtual void Refresh() {
+        StateHasChanged();
+    }
 }

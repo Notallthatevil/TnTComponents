@@ -10,215 +10,23 @@
 
 <CascadingValue TValue="TnTInternalGridContext<TGridItem>" Value="_internalGridContext" IsFixed="true">
     @ChildContent
-    <table @attributes="AdditionalAttributes"
-           class="@ElementClass"
-           style="@ElementStyle"
-           lang="@ElementLang"
-           id="@ElementId"
-           @ref="Element">
-
-        <TnTDataGridHeaderRow TGridItem="@TGridItem" @ref="_headerRow" />
-
-        @if (Virtualize && Pagination is null) {
-            <TnTDataGridVirtualizedBody TGridItem="@TGridItem" @ref="_body" />
-        }
-        else {
-            <TnTDataGridBody TGridItem="@TGridItem" @ref="_body" />
-        }
-
-    </table>
-</CascadingValue>
-
-
-@* @implements IHandleEvent *@
-@* <CascadingValue TValue="TnTInternalGridContext<TGridItem>" IsFixed="true" Value="@_internalGridContext">
-    @{
-        StartCollectingColumns();
-    }
-    @if (!_manualGrid) {
-        @ChildContent
-    }
     <DeferRendering>
-        @{
-            FinishCollectingColumns();
-        }
-        <ColumnsCollectedNotifier TGridItem="TGridItem" />
         <table @attributes="AdditionalAttributes"
                class="@ElementClass"
                style="@ElementStyle"
                lang="@ElementLang"
-               title="@ElementTitle"
                id="@ElementId"
-               aria-rowcount="@(_ariaBodyRowCount + 1)"
                @ref="Element">
 
-            <thead>
-                <tr class="tnt-components tnt-data-grid-header" aria-rowindex="1">
-                    @foreach (var col in _columns) {
-                        var CellId = TnTComponentIdentifier.NewId();
-                        col.ShowSortIcon = _sortByColumn == col;
-                        <TnTDataGridHeaderCell class="@($"{col.ElementClass}{(col.Sortable && _interactive ? " tnt-col-sortable" : null)}")"
-                                               style="@(col.ElementStyle + (_ariaBodyRowCount == 0 ? $" width: {100 / _columns.Count}%" : string.Empty))"
-                                               aria-sort="@(_sortByColumn == col? (_sortByAscending ? "ascending" : "descending"): null)"
-                                               title="@col.Title"
-                                               @key="@col" scope="col"
-                                               TGridItem="TGridItem">
-                            @col.RenderDefaultHeaderContent()
-                        </TnTDataGridHeaderCell>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                @if (Virtualize) {
-                    <TnTVirtualize @ref="_virtualizeComponent"
-                                   TItem="(int RowIndex, TGridItem Data)"
-                                   ItemsProvider="@ProvideVirtualizedItemsAsync">
-                        <LoadingTemplate>
-                            @if (LoadingContent is null) {
-                                @for (var i = 0; i < _numberOfRowsToLoad; ++i) {
-                                    string? _rowsDataSize = $"height: {ItemSize}px";
+            <TnTDataGridHeaderRow TGridItem="@TGridItem" @ref="_headerRow" />
 
-                                    <TnTDataGridRow aria-rowindex="@(i + 1)" style="@_rowsDataSize" TGridItem="TGridItem">
-                                        @for (var colIndex = 0; colIndex < _columns.Count; colIndex++) {
-                                            var col = _columns[colIndex];
-
-                                            <TnTDataGridCell class="grid-cell-placeholder" @key="@col" GridColumn=@(colIndex+1) TGridItem="TGridItem">
-                                                @col.RenderPlaceholderContent(new(i, ItemSize))
-                                            </TnTDataGridCell>
-                                        }
-                                    </TnTDataGridRow>
-                                }
-                            }
-                            else {
-                                <TnTDataGridRow TGridItem="TGridItem" Class="loading-content-row">
-                                    <TnTDataGridCell Class="loading-content-cell">
-                                        @LoadingContent
-                                    </TnTDataGridCell>
-                                </TnTDataGridRow>
-                            }
-                        </LoadingTemplate>
-
-                        <ItemTemplate>
-                            @if (context.Data != null) {
-                                var rowClass = RowClass?.Invoke(context.Data) ?? null;
-                                var rowStyle = CssStyleBuilder.Create().AddStyle(RowStyle?.Invoke(context.Data) ?? null, null).AddStyle("height", $"{ItemSize}px").Build();
-
-                                <TnTDataGridRow @key="@(ItemKey(context.Data))"
-                                                aria-rowindex="@context.RowIndex"
-                                                class="@rowClass"
-                                                style="@rowStyle"
-                                                Item="@context.Data"
-                                                TGridItem="TGridItem"
-                                                OnClick="@OnRowClicked">
-
-                                    @for (var colIndex = 0; colIndex < _columns.Count; colIndex++) {
-                                        var col = _columns[colIndex];
-                                        <TnTDataGridCell @key="@col" class="@col.ElementClass" style="@col.ElementStyle" TGridItem="TGridItem" Item="@context.Data">
-                                            @((RenderFragment)(b => col.CellContent(b, context.Data)))
-                                        </TnTDataGridCell>
-                                    }
-                                </TnTDataGridRow>
-                            }
-                        </ItemTemplate>
-
-                        <EmptyTemplate>
-                            @_renderEmptyContent
-                        </EmptyTemplate>
-
-                    </TnTVirtualize>
-                }
-                else if (_ariaBodyRowCount <= 0) {
-                    @_renderLoadingContent
-                }
-                else {
-                    @_renderNonVirtualizedRows
-                }
-
-                @if (_manualGrid) {
-                    @ChildContent
-                }
-            </tbody>
+            @if (Virtualize && Pagination is null) {
+                <TnTDataGridVirtualizedBody TGridItem="@TGridItem" @ref="_body" />
+            }
+            else {
+                <TnTDataGridBody TGridItem="@TGridItem" @ref="_body" />
+            }
 
         </table>
     </DeferRendering>
-</CascadingValue> *@
-
-@code {
-    // private void RenderNonVirtualizedRows(RenderTreeBuilder __builder) {
-    //     var initialRowIndex = 1; aria-rowindex is 1-based, plus 1 if there is a header
-    //     var rowIndex = initialRowIndex;
-    //     if (_currentNonVirtualizedViewItems.Any()) {
-    //         Loading = false;
-    //         foreach (var item in _currentNonVirtualizedViewItems) {
-    //             RenderRow(__builder, rowIndex++, item);
-    //         }
-    //     }
-    //     else {
-    //         RenderEmptyContent(__builder);
-    //     }
-    // }
-
-    // private void RenderRow(RenderTreeBuilder __builder, int rowIndex, TGridItem item) {
-    //     var rowClass = RowClass?.Invoke(item) ?? null;
-    //     var rowStyle = RowStyle?.Invoke(item) ?? null;
-    //     Loading = false;
-    //     <TnTDataGridRow @key="@(ItemKey(item))"
-    //                     aria-rowindex="@rowIndex"
-    //                     class="@rowClass"
-    //                     style="@CssStyleBuilder.Create().AddStyle(rowStyle, null).AddStyle("height", $"{ItemSize}px").Build()" OnClick="@OnRowClicked" TGridItem="TGridItem" Item="@item">
-    //         @for (var colIndex = 0; colIndex < _columns.Count; colIndex++) {
-    //             var col = _columns[colIndex];
-
-    //             <TnTDataGridCell @key="@col" class="@col.ElementClass" style="@col.ElementStyle" TGridItem="TGridItem" Item="@item">
-    //                 @((RenderFragment)(__builder => col.CellContent(__builder, item)))
-    //             </TnTDataGridCell>
-    //         }
-    //     </TnTDataGridRow>
-    // }
-
-    // private void RenderPlaceholderRow(RenderTreeBuilder __builder, PlaceholderContext placeholderContext) {
-    //     string? _rowsDataSize = $"height: {ItemSize}px";
-
-    //     <TnTDataGridRow aria-rowindex="@(placeholderContext.Index + 1)" style="@_rowsDataSize" TGridItem="TGridItem">
-    //         @for (var colIndex = 0; colIndex < _columns.Count; colIndex++) {
-    //             var col = _columns[colIndex];
-
-    //             <TnTDataGridCell class="grid-cell-placeholder" @key="@col" GridColumn=@(colIndex+1) TGridItem="TGridItem">
-    //                 @col.RenderPlaceholderContent(placeholderContext)
-    //             </TnTDataGridCell>
-    //         }
-    //     </TnTDataGridRow>
-    // }
-
-    // private void RenderEmptyContent(RenderTreeBuilder __builder) {
-    //     @if (_manualGrid) {
-    //         return;
-    //     }
-    //     <tr class="empty-content-row">
-    //         <td class="empty-content-cell" colspan="@_columns.Count">
-    //             @if (EmptyContent is null) {
-    //                 @("No data to show!")
-    //             }
-    //             else {
-    //                 @EmptyContent
-    //             }
-    //         </td>
-    //     </tr>
-
-    // }
-
-    // private void RenderLoadingContent(RenderTreeBuilder __builder) {
-    //     @if (LoadingContent is null) {
-    //         @for (var i = 0; i < _numberOfRowsToLoad; ++i) {
-    //             RenderPlaceholderRow(__builder, new PlaceholderContext(i, ItemSize));
-    //         }
-    //     }
-    //     else {
-    //         <TnTDataGridRow TGridItem="TGridItem" Class="loading-content-row">
-    //             <TnTDataGridCell Class="loading-content-cell">
-    //                 @LoadingContent
-    //             </TnTDataGridCell>
-    //         </TnTDataGridRow>
-    //     }
-    // }
-}
+</CascadingValue>
