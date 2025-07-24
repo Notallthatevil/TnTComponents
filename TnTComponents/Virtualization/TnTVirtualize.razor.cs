@@ -13,6 +13,7 @@ namespace TnTComponents;
 /// <typeparam name="TItem">The type of the items to be virtualized.</typeparam>
 /// <remarks>Initializes a new instance of the <see cref="TnTVirtualize{TItem}" /> class.</remarks>
 [method: DynamicDependency(nameof(LoadMoreItems))]
+[CascadingTypeParameter("TGridItem")]
 public partial class TnTVirtualize<TItem>() {
 
     /// <inheritdoc />
@@ -68,13 +69,14 @@ public partial class TnTVirtualize<TItem>() {
     ///     Gets or sets the property to sort on.
     /// </summary>
     [Parameter]
-    public Expression<Func<TItem, object>>? SortOnProperty { get; set; }
+    public IEnumerable<SortedProperty>? Sort { get; set; }
+    [Parameter]
+    public int LoadCount { get; set; } = 15;
 
     private bool _allItemsRetrieved;
     private IEnumerable<TItem> _items = [];
     private TnTVirtualizeItemsProvider<TItem>? _lastUsedProvider;
     private CancellationTokenSource? _loadItemsCts;
-    private KeyValuePair<string, SortDirection>? _sortOnProperty;
 
     /// <summary>
     ///     Loads more items asynchronously.
@@ -93,16 +95,23 @@ public partial class TnTVirtualize<TItem>() {
         try {
             Loading = true;
 
-            StateHasChanged(); // Allow the UI to display the loading indicator
+            StateHasChanged(); // Allow the UI to display the
+                               // loading indicator
             var result = await ItemsProvider(new TnTVirtualizeItemsProviderRequest<TItem> {
                 StartIndex = _items.Count(),
-                SortOnProperties = _sortOnProperty.HasValue ? [_sortOnProperty.Value] : [],
-                CancellationToken = token
+                SortOnProperties = Sort?.Select(s => new KeyValuePair<string, SortDirection>(s.PropertyName, s.Direction)).ToList() ?? [],
+                CancellationToken = token,
+                Count = LoadCount
             });
             if (!token.IsCancellationRequested) {
-                _items = _items.Concat(result.Items);
+                if(_items.Count() > result.TotalItemCount) {
+                    _items = result.Items;
+                }
+                else {
+                    _items = _items.Concat(result.Items);
+                }
 
-                if (_items.Count() == result.TotalItemCount) {
+                if (_items.Count() >= result.TotalItemCount) {
                     _allItemsRetrieved = true;
                 }
                 else if (IsolatedJsModule is not null) {
@@ -150,16 +159,6 @@ public partial class TnTVirtualize<TItem>() {
 
         _lastUsedProvider = ItemsProvider;
 
-        if (SortOnProperty is not null) {
-            if (SortOnProperty.Body is UnaryExpression unaryExpression) {
-                if (unaryExpression.Operand is MemberExpression memberExpression) {
-                    _sortOnProperty = new KeyValuePair<string, SortDirection>(memberExpression.Member.Name, SortDirection.Ascending);
-                }
-            }
-            else if (SortOnProperty.Body is MemberExpression memberExpression) {
-                _sortOnProperty = new KeyValuePair<string, SortDirection>(memberExpression.Member.Name, SortDirection.Ascending);
-            }
-        }
     }
 
     /// <summary>

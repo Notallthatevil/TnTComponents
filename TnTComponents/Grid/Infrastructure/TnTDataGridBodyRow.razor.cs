@@ -3,6 +3,10 @@ using TnTComponents.Core;
 
 namespace TnTComponents.Grid.Infrastructure;
 public partial class TnTDataGridBodyRow<TGridItem> {
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object?>? AdditionalAttributes { get; set; }
+
     [Parameter, EditorRequired]
     public TGridItem Item { get; set; }
 

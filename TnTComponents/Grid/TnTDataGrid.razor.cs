@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 using Microsoft.JSInterop;
+using System.Runtime.CompilerServices;
 using TnTComponents.Core;
 using TnTComponents.Ext;
 using TnTComponents.Grid;
@@ -47,6 +48,10 @@ public interface ITnTDataGrid<TGridItem> {
     Func<TGridItem, object> ItemKey { get; }
     EventCallback<TGridItem> RowClickCallback { get; set; }
 
+    TnTGridItemsProvider<TGridItem>? ItemsProvider { get; set; }
+    ValueTask<TnTItemsProviderResult<TGridItem>> ResolveItemsRequestAsync(TnTGridItemsProviderRequest<TGridItem> request);
+    bool Virtualize { get; set; }
+    int ItemSize { get; set; }
     Task RefreshDataGridAsync();
 }
 
@@ -56,7 +61,10 @@ public interface ITnTDataGrid<TGridItem> {
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
 [CascadingTypeParameter(nameof(TGridItem))]
 public partial class TnTDataGrid<TGridItem> : ITnTDataGrid<TGridItem> {
-
+    [Parameter]
+    public int ItemSize { get; set; } = 32;
+    [Parameter]
+    public bool Virtualize { get; set; }
     /// <summary>
     ///     The background color of the data grid.
     /// </summary>
@@ -177,6 +185,41 @@ public partial class TnTDataGrid<TGridItem> : ITnTDataGrid<TGridItem> {
 
     public TnTGridSort<TGridItem> SortBy { get; }
 
+    [Parameter]
+    public TnTGridItemsProvider<TGridItem>? ItemsProvider { get; set; }
+
+    [Parameter]
+    public int OverscanCount { get; set; } = 5;
+
+    public async ValueTask<TnTItemsProviderResult<TGridItem>> ResolveItemsRequestAsync(TnTGridItemsProviderRequest<TGridItem> request) {
+        if (ItemsProvider is not null) {
+            if (Virtualize && request.Count is null) {
+                int numberOfRowsToLoad = 10;
+                if (IsolatedJsModule is not null) {
+                    var bodyHeight = await IsolatedJsModule.InvokeAsync<int>("getBodyHeight", Element);
+
+                    if (bodyHeight >= 0) {
+                        numberOfRowsToLoad = Math.Max(bodyHeight / ItemSize, 5);
+                    }
+                }
+                request = request with { Count = numberOfRowsToLoad + OverscanCount };
+            }
+            var gipr = await ItemsProvider(request);
+            return gipr;
+        }
+        else if (Items is not null) {
+            var totalItemCount = _asyncQueryExecutor is null ? Items.Count() : await _asyncQueryExecutor.CountAsync(Items);
+            _internalGridContext.TotalRowCount = totalItemCount;
+            var result = request.ApplySorting(Items).Skip(request.StartIndex);
+            if (request.Count.HasValue) {
+                result = result.Take(request.Count.Value);
+            }
+            var resultArray = _asyncQueryExecutor is null ? [.. result] : await _asyncQueryExecutor.ToArrayAsync(result);
+            return new TnTItemsProviderResult<TGridItem> { Items = resultArray, TotalItemCount = totalItemCount };
+        }
+        return new();
+    }
+
     ///// <summary>
     /////     Gets or sets a value indicating whether the grid is in a loading data state.
     ///// </summary>
@@ -259,7 +302,7 @@ public partial class TnTDataGrid<TGridItem> : ITnTDataGrid<TGridItem> {
 
     //// IQueryable only exposes synchronous query APIs. IAsyncQueryExecutor is an adapter that lets us invoke any async query APIs that might be available. We have built-in support for using EF Core's
     //// async query APIs.
-    //private IAsyncQueryExecutor? _asyncQueryExecutor;
+    private IAsyncQueryExecutor? _asyncQueryExecutor;
 
     //private bool _collectingColumns;
     //private IReadOnlyCollection<TGridItem> _currentNonVirtualizedViewItems = [];

@@ -21,7 +21,7 @@ public abstract partial class TnTDataGridRow<TGridItem> : ComponentBase {
         ArgumentNullException.ThrowIfNull(Context, nameof(Context));
     }
 
-    public async Task RefreshAsync() {
+    public async virtual Task RefreshAsync() {
         await InvokeAsync(StateHasChanged);
     }
     ///// <summary>

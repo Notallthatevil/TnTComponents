@@ -16,6 +16,14 @@
     @media #{measurements.$small-and-down} {
         table-layout: auto;
     }
+
+    ::deep {
+        td {
+            height: inherit;
+            @include typescale.tnt-body-medium;
+        }
+    }
+
     //&.tnt-loading {
     //    opacity: 0.3;
     //}

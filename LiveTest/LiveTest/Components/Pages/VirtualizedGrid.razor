@@ -3,8 +3,20 @@
 @using TnTComponents.Extensions
 @using TnTComponents.Grid
 @rendermode InteractiveServer
-@* <div style="height: 60vh; overflow-y:scroll">
-    <TnTDataGrid ItemsProvider="@_provider" Virtualize="true" OnRowClicked="RowClicked" TGridItem="DataGridItem" DataGridAppearance="DataGridAppearance.Stripped" Resizable="true">
+<div>
+    <label>
+        Delay in Seconds
+        <input type="number" @bind-value="@_delay" />
+    </label>
+    <label>
+        Empty
+        <input type="checkbox" @bind-value="@_empty" />
+    </label>
+</div>
+
+
+<div style="height: 60vh; overflow-y:scroll">
+    <TnTDataGrid ItemsProvider="@_provider" Virtualize="true" RowClickCallback="RowClicked" TGridItem="DataGridItem" DataGridAppearance="DataGridAppearance.Stripped">
         <TnTPropertyColumn Property="@(x => x.Column1)" Sortable="true" />
         <TnTPropertyColumn Property="@(x => x.Column2)" Sortable="true" TextAlign="TextAlign.Center" HeaderAlignment="TextAlign.Left" />
         <TnTPropertyColumn Property="@(x => x.Column3)" Format="MM/yyyy" HeaderAlignment="TextAlign.Right" />
@@ -18,13 +30,14 @@
 
 
 </div>
- *@
+
 
 @code {
     [Inject]
     private ITnTToastService _service { get; set; }
-
+    private bool _empty;
     private int _count;
+    private int _delay = 2;
 
     private IQueryable<DataGridItem>? Items;
     private static object _locker = new();
@@ -37,10 +50,10 @@
                 var list = new List<DataGridItem>();
                 foreach (var i in Enumerable.Range(1, 1000)) {
                     list.Add(new DataGridItem() {
-                            Column1 = Random.Shared.Next(1, 1000),
-                            Column2 = Guid.NewGuid().ToString(),
-                            Column3 = new DateTime(Random.Shared.Next(1, 10000), Random.Shared.Next(1, 13), Random.Shared.Next(1, 29))
-                        });
+                        Column1 = Random.Shared.Next(1, 1000),
+                        Column2 = Guid.NewGuid().ToString(),
+                        Column3 = new DateTime(Random.Shared.Next(1, 10000), Random.Shared.Next(1, 13), Random.Shared.Next(1, 29))
+                    });
                 }
                 _items = list;
             }
@@ -48,13 +61,17 @@
         }
 
         _provider = async request => {
-            await Task.Delay(1500);
+            await Task.Delay(_delay * 1000);
             var items = Items.Apply(request);
 
-            return new TnTComponents.Virtualization.TnTItemsProviderResult<DataGridItem>{
-                    Items = items.ToList(),
-                    TotalItemCount = Items.Count()
-                };
+            if(_empty) {
+                return new();
+            }
+
+            return new TnTComponents.Virtualization.TnTItemsProviderResult<DataGridItem> {
+                Items = items.ToList(),
+                TotalItemCount = Items.Count()
+            };
         };
 
         return Task.CompletedTask;

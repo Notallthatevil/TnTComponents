@@ -21,12 +21,6 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> {
     public int? Count { get; init; }
 
     /// <summary>
-    ///     Gets or sets the current sort direction. Rather than inferring the sort rules manually, you should normally call either <see cref="ApplySorting(IQueryable{TGridItem})" /> or <see
-    ///     cref="GetSortByProperties" />, since they also account for <see cref="SortByColumn" /> and <see cref="SortByAscending" /> automatically.
-    /// </summary>
-    public bool SortByAscending { get; init; }
-
-    /// <summary>
     ///     Gets or sets which column represents the sort order. Rather than inferring the sort rules manually, you should normally call either <see cref="ApplySorting(IQueryable{TGridItem})" /> or
     ///     <see cref="GetSortByProperties" />, since they also account for <see cref="SortByColumn" /> and <see cref="SortByAscending" /> automatically.
     /// </summary>
@@ -37,12 +31,10 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> {
     /// </summary>
     public int StartIndex { get; init; }
 
-    internal TnTGridItemsProviderRequest(int startIndex, int? count, TnTGridSort<TGridItem>? sort, bool sortByAscending,
-        CancellationToken cancellationToken) {
+    internal TnTGridItemsProviderRequest(int startIndex, int? count, TnTGridSort<TGridItem>? sort, CancellationToken cancellationToken) {
         StartIndex = startIndex;
         Count = count;
         Sort = sort;
-        SortByAscending = sortByAscending;
         CancellationToken = cancellationToken;
     }
 
@@ -54,7 +46,6 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> {
         return new TnTGridItemsProviderRequest<TGridItem> {
             Count = request.Count,
             Sort = null,
-            SortByAscending = request.SortOnProperties.Any() && request.SortOnProperties.First().Value == SortDirection.Ascending,
             StartIndex = request.StartIndex,
             CancellationToken = default
         };
@@ -76,7 +67,7 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> {
     /// </summary>
     /// <param name="source">An <see cref="IQueryable{TGridItem}" />.</param>
     /// <returns>A new <see cref="IQueryable{TGridItem}" /> representing the <paramref name="source" /> with sorting rules applied.</returns>
-    public IQueryable<TGridItem> ApplySorting(IQueryable<TGridItem> source) => throw new NotImplementedException();// SortByColumn?.SortBy?.Apply(source, SortByAscending) ?? source;
+    public IQueryable<TGridItem> ApplySorting(IQueryable<TGridItem> source) => Sort?.Apply(source) ?? source;
 
     /// <summary>
     ///     Produces a collection of (property name, direction) pairs representing the sorting rules.

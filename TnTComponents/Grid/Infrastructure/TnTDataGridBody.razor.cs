@@ -8,7 +8,7 @@ public partial class TnTDataGridBody<TGridItem> {
     [CascadingParameter]
     internal TnTInternalGridContext<TGridItem> Context { get; set; } = default!;
 
-    public async Task RefreshAsync() {
+    public async virtual Task RefreshAsync() {
         await InvokeAsync(StateHasChanged);
     }
 }

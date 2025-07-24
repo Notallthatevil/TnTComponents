@@ -1,0 +1,37 @@
+﻿@typeparam TGridItem
+@inherits TnTDataGridBody<TGridItem>
+
+<tbody>
+    <TnTVirtualize TItem="@((int, TGridItem))"
+                   ItemsProvider="@ProvideVirtualizedItemsAsync"
+    @ref="_virtualize">
+        <ItemTemplate>
+            <TnTDataGridBodyRow aria-rowindex="@context.Item1" Item="@context.Item2" />
+        </ItemTemplate>
+        <LoadingTemplate>
+            @for (var i = 0; i < 10; ++i) {
+                <tr style="@($"height: {Context.Grid.ItemSize}px")">
+                    @if (Context.RowClickCallback.HasDelegate) { // Prepend one more for the ::before element.
+                                                                <td></td>
+                    }
+                    @foreach (var column in Context.Columns) {
+                        <td>
+                            <TnTSkeleton class="tnt-table-skeleton" />
+                        </td>
+                    }
+                </tr>
+            }
+        </LoadingTemplate>
+        <EmptyTemplate>
+            <tr style="@($"height: {Context.Grid.ItemSize}px")" aria-rowindex="2">
+                @if (Context.RowClickCallback.HasDelegate) { // Prepend one more for the ::before element.
+                                                            <td></td>
+                }
+                <td class="tnt-empty-content-row" colspan="@(Context.Columns.Count())">
+                    No content to show.
+                </td>
+            </tr>
+        </EmptyTemplate>
+
+    </TnTVirtualize>
+</tbody>

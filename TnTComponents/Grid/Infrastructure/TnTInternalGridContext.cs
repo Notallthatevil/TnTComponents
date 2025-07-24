@@ -8,7 +8,8 @@ internal sealed class TnTInternalGridContext<TGridItem>(ITnTDataGrid<TGridItem> 
     public DataGridAppearance DataGridAppearance => _grid.DataGridAppearance;
     public IQueryable<TGridItem> Items => SortBy is not null ? SortBy.Apply(_grid.Items) : _grid.Items;
     public EventCallback<TGridItem> RowClickCallback => _grid.RowClickCallback;
-
+    public ITnTDataGrid<TGridItem> Grid => _grid;
+    public int TotalRowCount { get; set; }
 
     private static int _nextColumnId;
     private readonly Dictionary<int, TnTColumnBase<TGridItem>> _columns = [];
@@ -70,4 +71,6 @@ internal sealed class TnTInternalGridContext<TGridItem>(ITnTDataGrid<TGridItem> 
     }
 
     public Task RefreshAsync() => _grid.RefreshDataGridAsync();
+
+
 }

@@ -16,9 +16,16 @@
            lang="@ElementLang"
            id="@ElementId"
            @ref="Element">
-           <TnTDataGridHeaderRow TGridItem="@TGridItem" @ref="_headerRow"/>
 
-           <TnTDataGridBody TGridItem="@TGridItem" @ref="_body"/>
+        <TnTDataGridHeaderRow TGridItem="@TGridItem" @ref="_headerRow" />
+
+        @if (Virtualize) {
+            <TnTDataGridVirtualizedBody TGridItem="@TGridItem" @ref="_body" />
+        }
+        else {
+            <TnTDataGridBody TGridItem="@TGridItem" @ref="_body" />
+        }
+
     </table>
 </CascadingValue>
 
