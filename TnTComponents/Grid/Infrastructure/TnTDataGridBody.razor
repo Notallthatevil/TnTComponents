@@ -1,7 +1,15 @@
 ﻿@typeparam TGridItem
-@attribute [CascadingTypeParameter(nameof(TGridItem))]
 <tbody>
-    @foreach (var item in Context.Items) {
-        <TnTDataGridBodyRow Item="@item" />
+    @{
+        var items = Context.Items;
+
+        @if(items.Any()) {
+            @foreach (var item in Context.Items) {
+                <TnTDataGridBodyRow Item="@item" />
+            }
+        }
+        else {
+            <TnTDataGridBodyRowEmpty TGridItem="@(TGridItem)" />
+        }
     }
 </tbody>

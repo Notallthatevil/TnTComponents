@@ -3,13 +3,32 @@ using TnTComponents.Grid.Columns;
 
 namespace TnTComponents.Grid.Infrastructure;
 
-internal sealed class TnTInternalGridContext<TGridItem>(ITnTDataGrid<TGridItem> _grid) {
+internal sealed class TnTInternalGridContext<TGridItem>(TnTDataGrid<TGridItem> _grid) {
     public IEnumerable<TnTColumnBase<TGridItem>> Columns => _columns.Values.OrderBy(c => c.Order).ThenBy(c => c.ColumnId);
     public DataGridAppearance DataGridAppearance => _grid.DataGridAppearance;
-    public IQueryable<TGridItem> Items => SortBy is not null ? SortBy.Apply(_grid.Items) : _grid.Items;
-    public EventCallback<TGridItem> RowClickCallback => _grid.RowClickCallback;
-    public ITnTDataGrid<TGridItem> Grid => _grid;
+    public IEnumerable<TGridItem> Items {
+        get {
+            if (_grid.Items is not null) {
+
+                var items = _grid.Items;
+                if (SortBy is not null) {
+                    items = SortBy.Apply(items);
+                }
+                if (PaginationState is not null) {
+                    items = PaginationState.Apply(items);
+                }
+                return items;
+            }
+            else {
+                return _grid.ProvidedItems ?? [];
+            }
+        }
+    }
+    public EventCallback<TGridItem> RowClickCallback => _grid.OnRowClicked;
+    public TnTDataGrid<TGridItem> Grid => _grid;
     public int TotalRowCount { get; set; }
+
+    public TnTPaginationState? PaginationState => _grid.Pagination;
 
     private static int _nextColumnId;
     private readonly Dictionary<int, TnTColumnBase<TGridItem>> _columns = [];

@@ -24,7 +24,7 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> {
     ///     Gets or sets which column represents the sort order. Rather than inferring the sort rules manually, you should normally call either <see cref="ApplySorting(IQueryable{TGridItem})" /> or
     ///     <see cref="GetSortByProperties" />, since they also account for <see cref="SortByColumn" /> and <see cref="SortByAscending" /> automatically.
     /// </summary>
-    public TnTGridSort<TGridItem>? Sort { get; init; }
+    public TnTGridSort<TGridItem>? SortBy { get; init; }
 
     /// <summary>
     ///     Gets or sets the zero-based index of the first item to be supplied.
@@ -34,7 +34,7 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> {
     internal TnTGridItemsProviderRequest(int startIndex, int? count, TnTGridSort<TGridItem>? sort, CancellationToken cancellationToken) {
         StartIndex = startIndex;
         Count = count;
-        Sort = sort;
+        SortBy = sort;
         CancellationToken = cancellationToken;
     }
 
@@ -45,7 +45,7 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> {
     public static implicit operator TnTGridItemsProviderRequest<TGridItem>(TnTItemsProviderRequest request) {
         return new TnTGridItemsProviderRequest<TGridItem> {
             Count = request.Count,
-            Sort = null,
+            SortBy = null,
             StartIndex = request.StartIndex,
             CancellationToken = default
         };
@@ -67,11 +67,11 @@ public readonly struct TnTGridItemsProviderRequest<TGridItem> {
     /// </summary>
     /// <param name="source">An <see cref="IQueryable{TGridItem}" />.</param>
     /// <returns>A new <see cref="IQueryable{TGridItem}" /> representing the <paramref name="source" /> with sorting rules applied.</returns>
-    public IQueryable<TGridItem> ApplySorting(IQueryable<TGridItem> source) => Sort?.Apply(source) ?? source;
+    public IQueryable<TGridItem> ApplySorting(IQueryable<TGridItem> source) => SortBy?.Apply(source) ?? source;
 
     /// <summary>
     ///     Produces a collection of (property name, direction) pairs representing the sorting rules.
     /// </summary>
     /// <returns>A collection of (property name, direction) pairs representing the sorting rules</returns>
-    public IEnumerable<SortedProperty> GetSortByProperties() => Sort?.ToPropertyList() ?? [];
+    public IEnumerable<SortedProperty> GetSortByProperties() => SortBy?.ToPropertyList() ?? [];
 }

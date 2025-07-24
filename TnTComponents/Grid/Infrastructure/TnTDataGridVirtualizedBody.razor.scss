@@ -1,12 +1,4 @@
-﻿@use '../../Styles/_Variables/_colors.scss' as colors;
-
-td ::deep .tnt-table-skeleton {
+﻿td ::deep .tnt-table-skeleton {
     margin: 0;
     height: inherit;
-}
-
-.tnt-empty-content-row {
-    color: colors.$tnt-color-on-warning-container;
-    background-color: colors.$tnt-color-warning-container;
-    text-align: center;
 }

@@ -9,11 +9,6 @@ namespace TnTComponents.Grid;
 public class TnTPaginationState {
 
     /// <summary>
-    ///     An event that is raised when the total item count has changed.
-    /// </summary>
-    public event EventHandler<int?>? TotalItemCountChanged;
-
-    /// <summary>
     ///     Gets the current zero-based page index. To set it, call <see
     ///     cref="SetCurrentPageIndexAsync(int)" />.
     /// </summary>
@@ -35,9 +30,15 @@ public class TnTPaginationState {
     ///     an associated <see cref="TnTDataGrid{TGridItem}" /> assigns a value after loading data.
     /// </summary>
     public int? TotalItemCount { get; private set; }
+    EventHandler a;
 
-    internal EventCallbackSubscribable<TnTPaginationState> CurrentPageItemsChanged { get; } = new();
-    internal EventCallbackSubscribable<TnTPaginationState> TotalItemCountChangedSubscribable { get; } = new();
+    internal event TotalItemCountChangedAsync? TotalItemCountChangedCallback;
+    internal event CurrentPageChangedAsync? CurrentPageChangedCallback;
+
+    internal IQueryable<TGridItem> Apply<TGridItem>(IQueryable<TGridItem> src) {
+        return src.Skip(CurrentPageIndex * ItemsPerPage)
+           .Take(ItemsPerPage);
+    }
 
     /// <inheritdoc />
     public override int GetHashCode()
@@ -51,7 +52,7 @@ public class TnTPaginationState {
     /// <returns>A <see cref="Task" /> representing the completion of the operation.</returns>
     public Task SetCurrentPageIndexAsync(int pageIndex) {
         CurrentPageIndex = pageIndex;
-        return CurrentPageItemsChanged.InvokeCallbacksAsync(this);
+        return CurrentPageChangedCallback?.Invoke(this) ?? Task.CompletedTask;
     }
 
     /// <summary>
@@ -72,7 +73,9 @@ public class TnTPaginationState {
         }
 
         // Under normal circumstances, we just want any associated pagination UI to update
-        TotalItemCountChanged?.Invoke(this, TotalItemCount);
-        return TotalItemCountChangedSubscribable.InvokeCallbacksAsync(this);
+        return TotalItemCountChangedCallback?.Invoke(this) ?? Task.CompletedTask;
     }
 }
+
+internal delegate Task TotalItemCountChangedAsync(TnTPaginationState paginationState);
+internal delegate Task CurrentPageChangedAsync(TnTPaginationState paginationState);

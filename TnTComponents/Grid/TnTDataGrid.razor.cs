@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 using Microsoft.JSInterop;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using TnTComponents.Core;
 using TnTComponents.Ext;
 using TnTComponents.Grid;
@@ -41,26 +42,16 @@ public enum SortDirection {
     Descending
 }
 
-public interface ITnTDataGrid<TGridItem> {
-    IQueryable<TGridItem> Items { get; set; }
-    DataGridAppearance DataGridAppearance { get; set; }
-    TnTGridSort<TGridItem> SortBy { get; }
-    Func<TGridItem, object> ItemKey { get; }
-    EventCallback<TGridItem> RowClickCallback { get; set; }
-
-    TnTGridItemsProvider<TGridItem>? ItemsProvider { get; set; }
-    ValueTask<TnTItemsProviderResult<TGridItem>> ResolveItemsRequestAsync(TnTGridItemsProviderRequest<TGridItem> request);
-    bool Virtualize { get; set; }
-    int ItemSize { get; set; }
-    Task RefreshDataGridAsync();
-}
-
 /// <summary>
 ///     A component that displays a grid.
 /// </summary>
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
 [CascadingTypeParameter(nameof(TGridItem))]
-public partial class TnTDataGrid<TGridItem> : ITnTDataGrid<TGridItem> {
+public partial class TnTDataGrid<TGridItem> {
+
+    [Parameter]
+    public TnTPaginationState? Pagination { get; set; }
+
     [Parameter]
     public int ItemSize { get; set; } = 32;
     [Parameter]
@@ -125,23 +116,47 @@ public partial class TnTDataGrid<TGridItem> : ITnTDataGrid<TGridItem> {
     private readonly TnTInternalGridContext<TGridItem> _internalGridContext;
     [Parameter]
     public IQueryable<TGridItem> Items { get; set; }
-
-    /// <summary>
-    /// A
-    /// </summary>
+    internal IEnumerable<TGridItem>? ProvidedItems;
     public TnTDataGrid() {
         _internalGridContext = new(this);
     }
+    CancellationTokenSource? _cancellationTokenSource;
+
     public async Task RefreshDataGridAsync() {
+
+        await ResolvePaginationResultsAsync();
+
         await InvokeAsync(StateHasChanged);
         await (_body?.RefreshAsync() ?? Task.CompletedTask);
         await (_headerRow?.RefreshAsync() ?? Task.CompletedTask);
     }
 
+    private int _lastPaginationStateRefreshHash = 0;
     private TnTDataGridHeaderRow<TGridItem> _headerRow = default!;
     private TnTDataGridBody<TGridItem> _body = default!;
     [Parameter]
-    public EventCallback<TGridItem> RowClickCallback { get; set; }
+    public EventCallback<TGridItem> OnRowClicked { get; set; }
+
+    private async Task ResolvePaginationResultsAsync() {
+        if (_lastUsedPaginationState is not null) {
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
+            var newCts = new CancellationTokenSource();
+            var token = newCts.Token;
+            _cancellationTokenSource = newCts;
+
+            var result = await ResolveItemsRequestAsync(new() {
+                CancellationToken = token,
+                Count = _lastUsedPaginationState.ItemsPerPage,
+                SortBy = _internalGridContext.SortBy,
+                StartIndex = _lastUsedPaginationState.CurrentPageIndex * _lastUsedPaginationState.ItemsPerPage
+            });
+            if (!token.IsCancellationRequested) {
+                await _lastUsedPaginationState.SetTotalItemCountAsync(result.TotalItemCount);
+                _internalGridContext.TotalRowCount = result.TotalItemCount;
+            }
+        }
+    }
 
     ///// <summary>
     /////     If specified, grids render this fragment when there is no content.
@@ -183,18 +198,59 @@ public partial class TnTDataGrid<TGridItem> : ITnTDataGrid<TGridItem> {
     /// <inheritdoc />
     public override string? JsModulePath => "./_content/TnTComponents/Grid/TnTDataGrid.razor.js";
 
-    public TnTGridSort<TGridItem> SortBy { get; }
-
     [Parameter]
     public TnTGridItemsProvider<TGridItem>? ItemsProvider { get; set; }
 
     [Parameter]
     public int OverscanCount { get; set; } = 5;
 
-    public async ValueTask<TnTItemsProviderResult<TGridItem>> ResolveItemsRequestAsync(TnTGridItemsProviderRequest<TGridItem> request) {
+    private TnTPaginationState? _lastUsedPaginationState;
+
+    protected override void OnParametersSet() {
+        base.OnParametersSet();
+        if (Virtualize && Pagination is not null) {
+            throw new InvalidOperationException($"Virtualization and pagination cannot be used together in {nameof(TnTDataGrid<TGridItem>)}. Please use either {nameof(Virtualize)} or {nameof(Pagination)}.");
+        }
+
+        if (Items is not null && ItemsProvider is not null) {
+            throw new InvalidOperationException($"{nameof(TnTDataGrid<TGridItem>)} requires one of {nameof(Items)} or {nameof(ItemsProvider)}, but both were specified.");
+        }
+
+        if (Pagination is not null && _lastUsedPaginationState != Pagination) {
+            _lastUsedPaginationState = Pagination;
+            _lastUsedPaginationState.CurrentPageChangedCallback += PaginationPageUpdatedAsync;
+        }
+        else if (Pagination is null && _lastUsedPaginationState is not null) {
+            _lastUsedPaginationState.CurrentPageChangedCallback -= PaginationPageUpdatedAsync;
+            _lastUsedPaginationState = null;
+        }
+    }
+
+    protected override async Task OnParametersSetAsync() {
+        await base.OnParametersSetAsync();
+        await RefreshDataGridAsync();
+    }
+
+    private Task PaginationPageUpdatedAsync(TnTPaginationState paginationState) => RefreshDataGridAsync();
+
+    protected override void Dispose(bool disposing) {
+        base.Dispose(disposing);
+        if (disposing) {
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
+            _cancellationTokenSource = null;
+            if (_lastUsedPaginationState is not null) {
+                _lastUsedPaginationState.CurrentPageChangedCallback -= PaginationPageUpdatedAsync;
+            }
+        }
+    }
+
+
+    internal async ValueTask<TnTItemsProviderResult<TGridItem>> ResolveItemsRequestAsync(TnTGridItemsProviderRequest<TGridItem> request) {
+        TnTItemsProviderResult<TGridItem> result = new();
         if (ItemsProvider is not null) {
-            if (Virtualize && request.Count is null) {
-                int numberOfRowsToLoad = 10;
+            if (Virtualize) {
+                var numberOfRowsToLoad = 10;
                 if (IsolatedJsModule is not null) {
                     var bodyHeight = await IsolatedJsModule.InvokeAsync<int>("getBodyHeight", Element);
 
@@ -204,20 +260,21 @@ public partial class TnTDataGrid<TGridItem> : ITnTDataGrid<TGridItem> {
                 }
                 request = request with { Count = numberOfRowsToLoad + OverscanCount };
             }
-            var gipr = await ItemsProvider(request);
-            return gipr;
+            result = await ItemsProvider(request);
+            ProvidedItems = result.Items;
         }
         else if (Items is not null) {
             var totalItemCount = _asyncQueryExecutor is null ? Items.Count() : await _asyncQueryExecutor.CountAsync(Items);
             _internalGridContext.TotalRowCount = totalItemCount;
-            var result = request.ApplySorting(Items).Skip(request.StartIndex);
+            var filtered = request.ApplySorting(Items).Skip(request.StartIndex);
             if (request.Count.HasValue) {
-                result = result.Take(request.Count.Value);
+                filtered = filtered.Take(request.Count.Value);
             }
-            var resultArray = _asyncQueryExecutor is null ? [.. result] : await _asyncQueryExecutor.ToArrayAsync(result);
-            return new TnTItemsProviderResult<TGridItem> { Items = resultArray, TotalItemCount = totalItemCount };
+            var resultArray = _asyncQueryExecutor is null ? [.. filtered] : await _asyncQueryExecutor.ToArrayAsync(filtered);
+            result = new() { Items = resultArray, TotalItemCount = totalItemCount };
         }
-        return new();
+
+        return result;
     }
 
     ///// <summary>

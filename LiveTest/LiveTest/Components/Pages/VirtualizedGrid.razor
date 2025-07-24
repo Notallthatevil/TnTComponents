@@ -16,7 +16,7 @@
 
 
 <div style="height: 60vh; overflow-y:scroll">
-    <TnTDataGrid ItemsProvider="@_provider" Virtualize="true" RowClickCallback="RowClicked" TGridItem="DataGridItem" DataGridAppearance="DataGridAppearance.Stripped">
+    <TnTDataGrid ItemsProvider="@_provider" Virtualize="true" OnRowClicked="RowClicked" TGridItem="DataGridItem" DataGridAppearance="DataGridAppearance.Stripped">
         <TnTPropertyColumn Property="@(x => x.Column1)" Sortable="true" />
         <TnTPropertyColumn Property="@(x => x.Column2)" Sortable="true" TextAlign="TextAlign.Center" HeaderAlignment="TextAlign.Left" />
         <TnTPropertyColumn Property="@(x => x.Column3)" Format="MM/yyyy" HeaderAlignment="TextAlign.Right" />

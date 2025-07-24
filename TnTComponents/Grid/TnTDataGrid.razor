@@ -19,7 +19,7 @@
 
         <TnTDataGridHeaderRow TGridItem="@TGridItem" @ref="_headerRow" />
 
-        @if (Virtualize) {
+        @if (Virtualize && Pagination is null) {
             <TnTDataGridVirtualizedBody TGridItem="@TGridItem" @ref="_body" />
         }
         else {

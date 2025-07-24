@@ -1,0 +1,12 @@
+﻿@typeparam TGridItem
+@inherits TnTDataGridRow<TGridItem>
+@attribute [CascadingTypeParameter(nameof(TGridItem))]
+
+<tr style="@($"height: {Context.Grid.ItemSize}px")" aria-rowindex="2">
+    @if (Context.RowClickCallback.HasDelegate) { // Prepend one more for the ::before element.
+                                                <td></td>
+    }
+    <td class="tnt-empty-content-row" colspan="@(Context.Columns.Count())">
+        No content to show.
+    </td>
+</tr>

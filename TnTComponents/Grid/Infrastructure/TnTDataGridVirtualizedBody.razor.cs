@@ -4,7 +4,8 @@ using TnTComponents.Virtualization;
 namespace TnTComponents.Grid.Infrastructure;
 [CascadingTypeParameter(nameof(TGridItem))]
 public partial class TnTDataGridVirtualizedBody<TGridItem> {
-    private int _delay;
+    private const int _defaultDelay = 500;
+    private int _delay = _defaultDelay;
 
     private TnTVirtualize<(int, TGridItem)> _virtualize = default!;
 
@@ -13,17 +14,17 @@ public partial class TnTDataGridVirtualizedBody<TGridItem> {
         // Debounce the requests. This eliminates a lot of redundant queries at the cost of slight lag after interactions.
         await Task.Delay(_delay);
         if (_delay < 2000) {
-            Interlocked.Add(ref _delay, 100);
+            Interlocked.Add(ref _delay, 250);
         }
         var result = default(TnTItemsProviderResult<(int, TGridItem)>);
         if (!request.CancellationToken.IsCancellationRequested) {
-            // Combine the query parameters from Virtualize with the ones from PaginationState
-            var startIndex = request.StartIndex;
-            var count = request.Count;
 
-
-            TnTGridItemsProviderRequest<TGridItem> providerRequest = new(startIndex, count, Context.SortBy, request.CancellationToken);
-            var providerResult = await Context.Grid.ResolveItemsRequestAsync(providerRequest);
+            var providerResult = await Context.Grid.ResolveItemsRequestAsync(new() {
+                StartIndex = request.StartIndex,
+                Count = request.Count,
+                CancellationToken = request.CancellationToken,
+                SortBy = Context.SortBy
+            });
 
             if (!request.CancellationToken.IsCancellationRequested) {
                 Context.TotalRowCount = providerResult.TotalItemCount;
@@ -32,7 +33,7 @@ public partial class TnTDataGridVirtualizedBody<TGridItem> {
                     Items = [.. providerResult.Items.Select((x, i) => ValueTuple.Create(i + request.StartIndex + 2, x))],
                     TotalItemCount = Context.TotalRowCount
                 };
-                Interlocked.Exchange(ref _delay, 0); // Reset the debounce delay
+                Interlocked.Exchange(ref _delay, _defaultDelay); // Reset the debounce delay
             }
         }
 
