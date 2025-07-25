@@ -3,7 +3,6 @@
 @use '../../Styles/_Variables/_textalignments.scss' as textAlignments;
 @use '../TnTDataGridVariables.scss' as dg;
 
-
 .tnt-header-content {
     padding: 0 8px;
     box-sizing: border-box;
@@ -15,7 +14,6 @@
     @include typescale.tnt-title-medium;
     @include interactable.tnt-interactable(dg.$tint-color, null);
     @include textAlignments.tnt-text-alignments;
-
 
     &.tnt-column-header-sorted-on {
         color: dg.$tint-color;

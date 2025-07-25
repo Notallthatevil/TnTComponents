@@ -12,7 +12,7 @@
             @HeaderCellItemTemplate(this)
         }
         else {
-            <div class="@_headerClass" @onclick="@(Sortable ? SortAsync : null!)">
+            <div class="@_headerClass" @onclick="@(Sortable? SortAsync : null!)">
                 <span class="tnt-column-header-title">
                     @Title
                 </span>
@@ -38,38 +38,5 @@
                 }
             </div>
         }
-
-        //            return new RenderFragment(b => {
-        //                b.OpenElement(0, "div");
-        //                b.AddAttribute(10, "class", CssClassBuilder.Create()
-        //                    .AddClass("tnt-header-content")
-        //                    .AddClass("tnt-sorted", ShowSortIcon)
-        //                    .AddTextAlign(HeaderAlignment)
-        //                    .AddClass("tnt-interactable")
-        //                    .AddRipple()
-        //                    .Build());
-
-        // //b.AddAttribute(20, "onclick", EventCallback.Factory.Create(this, () => Context.Grid.SortByColumnAsync(this))); b.AddContent(30, Title);
-
-        // if (ShowSortIcon) { b.OpenComponent<MaterialIcon>(40); //b.AddAttribute(50, "Icon", Context.Grid.SortByAscending ? MaterialIcon.ArrowDropUp : MaterialIcon.ArrowDropDown); b.AddAttribute(60,
-        // "Class", "tnt-sort-icon"); b.CloseComponent(); }
-
-        // b.OpenComponent<TnTRippleEffect>(70); b.CloseComponent();
-
-        //                b.CloseElement();
-        //            });
-        //        }
-        //#pragma warning restore IDE0046 // Convert to conditional expression
-        //        else {
-        //            return new RenderFragment(b => {
-        //                b.OpenElement(0, "div");
-        //                b.AddAttribute(10, "class", CssClassBuilder.Create()
-        //                    .AddClass("tnt-header-content")
-        //                    .AddTextAlign(HeaderAlignment)
-        //                    .Build());
-        //                b.AddContent(20, Title);
-        //                b.CloseElement();
-        //            });
-        //        }
     }
 }

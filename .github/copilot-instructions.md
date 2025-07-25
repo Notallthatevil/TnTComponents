@@ -35,3 +35,7 @@
 - **Component APIs**: Follow the established patterns for parameters, events, and cascading values as seen in current components.
 - **Styling**: Use `.razor.scss` for component styles; compiled CSS is included in `.razor.css` and `.razor.min.css`.
 - **Extending Components**: Place new components in their own folder under `TnTComponents/`, following the established file structure.
+
+### 7. Documentation 
+- When documenting properties, do not describe it as getting or setting a value, instead describe what the property is or how it affects the behavior.
+- If a property, method, or field is inherited or implmented from a base class or interface, use the `inheritdoc` tag to inherit documentation from the base class or interface.

@@ -11,30 +11,56 @@ using TnTComponents.Grid.Infrastructure;
 
 namespace TnTComponents;
 
+/// <summary>
+///     Represents a grid column that displays and sorts a property of <typeparamref name="TGridItem" />. Supports formatting and custom comparers for the property value.
+/// </summary>
+/// <typeparam name="TGridItem">The type of items in the grid.</typeparam>
+/// <typeparam name="TProp">The type of the property displayed in the column.</typeparam>
+[CascadingTypeParameter(nameof(TGridItem))]public partial class TnTPropertyColumn<TGridItem, TProp> {
 
-[CascadingTypeParameter(nameof(TGridItem))]
-public partial class TnTPropertyColumn<TGridItem, TProp>  {
-
+    /// <summary>
+    ///     Specifies a custom comparer to use for sorting the property values.
+    /// </summary>
     [Parameter]
     public IComparer<TProp>? Comparer { get; set; }
 
+    /// <inheritdoc />
+    public override string? ElementClass => throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public override string? ElementStyle => throw new NotImplementedException();
+
+    /// <summary>
+    ///     Specifies a format string to use when displaying the property value. The property type must implement <see cref="IFormattable" /> if this is set.
+    /// </summary>
     [Parameter]
     public string? Format { get; set; }
 
+    /// <summary>
+    ///     Specifies the culture to use for formatting the property value. Defaults to <see cref="CultureInfo.CurrentCulture" />.
+    /// </summary>
     [Parameter]
     public CultureInfo FormatCulture { get; set; } = CultureInfo.CurrentCulture;
 
+    /// <summary>
+    ///     An expression selecting the property to display in the column.
+    /// </summary>
     [Parameter, EditorRequired]
     public Expression<Func<TGridItem, TProp>> Property { get; set; } = default!;
+
+    /// <summary>
+    ///     The <see cref="PropertyInfo" /> for the property displayed in the column, if available.
+    /// </summary>
     public PropertyInfo? PropertyInfo { get; private set; }
 
+    /// <inheritdoc />
     public override TnTGridSort<TGridItem>? SortBy {
         get => _sortBuilder;
         set => throw new NotSupportedException($"{nameof(TnTPropertyColumn<TGridItem, TProp>)} generates this member internally. For custom sorting rules, see '{typeof(TnTTemplateColumn<TGridItem>)}'.");
     }
 
-    //private readonly Func<TGridItem, string?>? _cellTooltipTextFunc = (item) => item?.ToString();
     private Func<TGridItem, string>? _cellTextFunc;
+
     private Expression<Func<TGridItem, TProp>>? _lastAssignedProperty;
     private TnTGridSort<TGridItem>? _sortBuilder;
 
@@ -77,9 +103,4 @@ public partial class TnTPropertyColumn<TGridItem, TProp>  {
         // Call after to register sorting if needed.
         base.OnParametersSet();
     }
-
-    public override string? ElementClass => throw new NotImplementedException();
-
-    public override string? ElementStyle => throw new NotImplementedException();
-
 }

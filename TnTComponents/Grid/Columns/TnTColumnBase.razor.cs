@@ -9,67 +9,97 @@ using TnTComponents.Grid.Infrastructure;
 
 namespace TnTComponents.Grid.Columns;
 
+/// <summary>
+///     Base class for all grid column components in TnTComponents. Provides common parameters and logic for sorting, ordering, and rendering header/cell content.
+/// </summary>
+/// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
 [CascadingTypeParameter(nameof(TGridItem))]
 [DebuggerDisplay("Title = {Title}, Order = {Order}, Sortable = {Sortable}, IsSortedOn = {IsSortedOn}")]
 public abstract partial class TnTColumnBase<TGridItem> {
+
+    /// <summary>
+    ///     Unique column ID assigned by the grid context.
+    /// </summary>
     public int ColumnId { get; internal set; } = -1;
 
-    [Parameter]
-    public RenderFragment<TnTColumnBase<TGridItem>>? HeaderCellItemTemplate { get; set; }
-
-    [Parameter]
-    public int Order { get; set; }
-
-    [Parameter]
-    public bool Sortable { get; set; }
-
-    [CascadingParameter]
-    internal TnTInternalGridContext<TGridItem> Context { get; set; } = default!;
-
-    public void Dispose() {
-        Context?.RegisterColumn(this);
-        GC.SuppressFinalize(this);
-    }
-
-    protected override void OnInitialized() {
-        base.OnInitialized();
-        ArgumentNullException.ThrowIfNull(Context, nameof(Context));
-        Context.RegisterColumn(this);
-    }
-
-    [Parameter]
-    public TextAlign HeaderAlignment { get; set; } = TnTComponents.TextAlign.Left;
-
-    internal bool NewColumn { get; set; }
-
+    /// <summary>
+    ///     Enables ripple effect on the column header.
+    /// </summary>
     [Parameter]
     public bool EnableRipple { get; set; } = true;
 
-    public SortDirection? IsSortedOn => Context?.ColumnIsSortedOn(this);
+    /// <summary>
+    ///     Alignment of the header cell content.
+    /// </summary>
+    [Parameter]
+    public TextAlign HeaderAlignment { get; set; } = TnTComponents.TextAlign.Left;
 
-    public abstract RenderFragment RenderCellContent(TGridItem gridItem);
+    /// <summary>
+    ///     Optional template for rendering the header cell content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment<TnTColumnBase<TGridItem>>? HeaderCellItemTemplate { get; set; }
 
+    /// <summary>
+    ///     The initial sort direction for the column.
+    /// </summary>
     [Parameter]
     public SortDirection InitialSortDirection { get; set; }
 
+    /// <summary>
+    ///     Indicates if this column is the default sort column.
+    /// </summary>
     [Parameter]
     public bool IsDefaultSortColumn { get; set; }
 
-    // /// <summary> /// If specified, virtualized grids will use this template to render cells whose data has not yet been loaded. /// </summary> [Parameter] public
-    // RenderFragment<PlaceholderContext>? PlaceholderTemplate { get; set; }
+    /// <summary>
+    ///     The sort direction if the column is currently sorted.
+    /// </summary>
+    public SortDirection? IsSortedOn => Context?.ColumnIsSortedOn(this);
+
+    /// <summary>
+    ///     The order of the column in the grid.
+    /// </summary>
+    [Parameter]
+    public int Order { get; set; }
+
+    /// <summary>
+    ///     Indicates whether the column is sortable.
+    /// </summary>
+    [Parameter]
+    public bool Sortable { get; set; }
+
+    /// <summary>
+    ///     The sorting logic for the column.
+    /// </summary>
     public abstract TnTGridSort<TGridItem>? SortBy { get; set; }
 
+    /// <summary>
+    ///     Alignment of the cell content.
+    /// </summary>
     [Parameter]
     public TextAlign? TextAlign { get; set; }
 
-    private int? _sortIndex => Context.GetSortIndex(this);
-
-    ///<summary>
-    ///     Gets or sets the title text for the column. This is rendered automatically if <see cref="HeaderCellItemTemplate" /> is not used. ///
-    ///</summary>
+    /// <summary>
+    ///     The title displayed in the column header.
+    /// </summary>
     [Parameter]
     public string? Title { get; set; }
 
+    /// <summary>
+    ///     The grid context for this column.
+    /// </summary>
+    [CascadingParameter]
+    internal TnTInternalGridContext<TGridItem> Context { get; set; } = default!;
+
+    /// <summary>
+    ///     Indicates if this is a newly added column.
+    /// </summary>
+    internal bool NewColumn { get; set; }
+
+    /// <summary>
+    ///     CSS class for the header cell.
+    /// </summary>
     private string _headerClass => CssClassBuilder.Create()
         .AddClass("tnt-header-content")
         .AddTextAlign(HeaderAlignment)
@@ -77,11 +107,44 @@ public abstract partial class TnTColumnBase<TGridItem> {
         .AddClass("tnt-column-header-sorted-on", IsSortedOn.HasValue)
         .Build();
 
+    /// <summary>
+    ///     The sort index of the column if it is sorted.
+    /// </summary>
+    private int? _sortIndex => Context.GetSortIndex(this);
+
+    /// <summary>
+    ///     Disposes the column and unregisters it from the grid context.
+    /// </summary>
+    public void Dispose() {
+        Context?.RegisterColumn(this);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    ///     Renders the cell content for a given grid item.
+    /// </summary>
+    /// <param name="gridItem">The grid item to render content for.</param>
+    /// <returns>A <see cref="RenderFragment" /> representing the cell content.</returns>
+    public abstract RenderFragment RenderCellContent(TGridItem gridItem);
+
+    /// <summary>
+    ///     Sorts the grid by this column and refreshes the grid.
+    /// </summary>
     public async Task SortAsync() {
         Context.SortByColumn(this);
         await Context.RefreshAsync();
     }
 
+    /// <summary>
+    ///     Called when the component is initialized. Registers the column with the grid context.
+    /// </summary>
+    protected override void OnInitialized() {
+        base.OnInitialized();
+        ArgumentNullException.ThrowIfNull(Context, nameof(Context));
+        Context.RegisterColumn(this);
+    }
+
+    /// <inheritdoc />
     protected override void OnParametersSet() {
         base.OnParametersSet();
         if (NewColumn) {
@@ -90,34 +153,5 @@ public abstract partial class TnTColumnBase<TGridItem> {
             }
             NewColumn = false;
         }
-
     }
-    // internal RenderFragment? RenderPlaceholderContent(PlaceholderContext placeholderContext) => PlaceholderTemplate is not null ? PlaceholderTemplate(placeholderContext) : null;
-
-    // ///
-    // <summary>
-    //     /// Overridden by derived components to provide rendering logic for the column's cells. ///
-    // </summary>
-    // ///
-    // <param name="builder">The current <see cref="RenderTreeBuilder" />.</param>
-    // ///
-    // <param name="item">   The data for the row being rendered.</param>
-    // protected internal abstract void CellContent(RenderTreeBuilder builder, TGridItem item);
-
-    // ///
-    // <summary>
-    //     /// Overridden by derived components to provide the raw content for the column's cells. ///
-    // </summary>
-    // ///
-    // <param name="item">The data for the row being rendered.</param>
-    // protected internal virtual string? RawCellContent(TGridItem item) =&gt; null;
-
-    // ///
-    // <summary>
-    //     /// Gets a value indicating whether this column should act as sortable if no value was set for the <see cref="TnTColumnBase{TGridItem}.Sortable" /> parameter. The default behavior is not to
-    //     be /// sortable unless <see cref="TnTColumnBase{TGridItem}.Sortable" /> is true. /// Derived components may override this to implement alternative default sortability rules. ///
-    // </summary>
-    // ///
-    // <returns>True if the column should be sortable by default, otherwise false.</returns>
-    // protected virtual bool IsSortableByDefault() =&gt; false;
 }
