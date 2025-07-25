@@ -1,64 +1,70 @@
-﻿
-using TnTComponents.Grid.Infrastructure;
+﻿using TnTComponents.Grid.Infrastructure;
 
 namespace TnTComponents.Grid;
 
 /// <summary>
-///     Holds state to represent pagination in a <see cref="TnTDataGrid{TGridItem}" />.
+///     Represents an asynchronous callback for when the total item count changes.
+/// </summary>
+/// <param name="paginationState">The pagination state.</param>
+/// <returns>A task representing the asynchronous operation.</returns>
+internal delegate Task TotalItemCountChangedAsync(TnTPaginationState paginationState);
+
+/// <summary>
+///     Represents the pagination state for a grid, including current page, items per page, and total item count.
 /// </summary>
 public class TnTPaginationState {
 
     /// <summary>
-    ///     Gets the current zero-based page index. To set it, call <see
-    ///     cref="SetCurrentPageIndexAsync(int)" />.
+    ///     Occurs when the current page index changes asynchronously.
+    /// </summary>
+    internal event CurrentPageChangedAsync? CurrentPageChangedCallback;
+
+    /// <summary>
+    ///     Occurs when the total item count changes asynchronously.
+    /// </summary>
+    internal event TotalItemCountChangedAsync? TotalItemCountChangedCallback;
+
+    /// <summary>
+    ///     The zero-based index of the current page.
     /// </summary>
     public int CurrentPageIndex { get; private set; }
 
     /// <summary>
-    ///     Gets or sets the number of items on each page.
+    ///     The number of items displayed per page.
     /// </summary>
     public int ItemsPerPage { get; set; } = 10;
 
     /// <summary>
-    ///     Gets the zero-based index of the last page, if known. The value will be null until <see
-    ///     cref="TotalItemCount" /> is known.
+    ///     The zero-based index of the last page, calculated from the total item count and items per page.
     /// </summary>
     public int? LastPageIndex => (TotalItemCount - 1) / ItemsPerPage;
 
     /// <summary>
-    ///     Gets the total number of items across all pages, if known. The value will be null until
-    ///     an associated <see cref="TnTDataGrid{TGridItem}" /> assigns a value after loading data.
+    ///     The total number of items available for pagination.
     /// </summary>
     public int? TotalItemCount { get; private set; }
-    EventHandler a;
 
-    internal event TotalItemCountChangedAsync? TotalItemCountChangedCallback;
-    internal event CurrentPageChangedAsync? CurrentPageChangedCallback;
-
-    internal IQueryable<TGridItem> Apply<TGridItem>(IQueryable<TGridItem> src) {
-        return src.Skip(CurrentPageIndex * ItemsPerPage)
-           .Take(ItemsPerPage);
-    }
+    private EventHandler a;
 
     /// <inheritdoc />
     public override int GetHashCode()
         => HashCode.Combine(ItemsPerPage, CurrentPageIndex, TotalItemCount);
 
     /// <summary>
-    ///     Sets the current page index, and notifies any associated <see
-    ///     cref="TnTDataGrid{TGridItem}" /> to fetch and render updated data.
+    ///     Sets the current page index and triggers the <see cref="CurrentPageChangedCallback" /> event.
     /// </summary>
-    /// <param name="pageIndex">The new, zero-based page index.</param>
-    /// <returns>A <see cref="Task" /> representing the completion of the operation.</returns>
+    /// <param name="pageIndex">The new page index to set.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     public Task SetCurrentPageIndexAsync(int pageIndex) {
         CurrentPageIndex = pageIndex;
         return CurrentPageChangedCallback?.Invoke(this) ?? Task.CompletedTask;
     }
 
     /// <summary>
-    /// Sets the total item count, and notifies any associated <see cref="TnTDataGrid{TGridItem}" /> to update the pagination UI.
+    ///     Sets the total item count and triggers the <see cref="TotalItemCountChangedCallback" /> event. If the current page index is no longer valid, moves to the last valid page index.
     /// </summary>
-    /// <param name="totalItemCount">The new count</param>
+    /// <param name="totalItemCount">The new total item count.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     public Task SetTotalItemCountAsync(int totalItemCount) {
         if (totalItemCount == TotalItemCount) {
             return Task.CompletedTask;
@@ -67,15 +73,29 @@ public class TnTPaginationState {
         TotalItemCount = totalItemCount;
 
         if (CurrentPageIndex > 0 && CurrentPageIndex > LastPageIndex) {
-            // If the number of items has reduced such that the current page index is no longer
-            // valid, move automatically to the final valid page index and trigger a further data load.
+            // If the number of items has reduced such that the current page index is no longer valid, move automatically to the final valid page index and trigger a further data load.
             SetCurrentPageIndexAsync(LastPageIndex.Value);
         }
 
         // Under normal circumstances, we just want any associated pagination UI to update
         return TotalItemCountChangedCallback?.Invoke(this) ?? Task.CompletedTask;
     }
+
+    /// <summary>
+    ///     Applies pagination to the provided queryable source.
+    /// </summary>
+    /// <typeparam name="TGridItem">The type of items in the grid.</typeparam>
+    /// <param name="src">The source queryable to paginate.</param>
+    /// <returns>A queryable containing only the items for the current page.</returns>
+    internal IQueryable<TGridItem> Apply<TGridItem>(IQueryable<TGridItem> src) {
+        return src.Skip(CurrentPageIndex * ItemsPerPage)
+           .Take(ItemsPerPage);
+    }
 }
 
-internal delegate Task TotalItemCountChangedAsync(TnTPaginationState paginationState);
+/// <summary>
+///     Represents an asynchronous callback for when the current page index changes.
+/// </summary>
+/// <param name="paginationState">The pagination state.</param>
+/// <returns>A task representing the asynchronous operation.</returns>
 internal delegate Task CurrentPageChangedAsync(TnTPaginationState paginationState);

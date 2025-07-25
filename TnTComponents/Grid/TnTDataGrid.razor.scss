@@ -5,7 +5,6 @@
 @use '../Styles/_Variables/_elevation.scss' as elevation;
 @use './TnTDataGridVariables.scss' as dg;
 
-
 .tnt-datagrid {
     min-width: 100%;
     border-collapse: collapse;
@@ -23,128 +22,6 @@
             @include typescale.tnt-body-medium;
         }
     }
-
-    //&.tnt-loading {
-    //    opacity: 0.3;
-    //}
-    //::deep thead {
-    //    position: sticky;
-    //    top: 0;
-    //    z-index: 3;
-    //    background-color: inherit;
-    //    @include elevation.tnt-elevation(2, false);
-    //    tr.tnt-components.tnt-data-grid-header {
-    //        th {
-    //            padding: 0;
-    //            margin: 0;
-    //            position: relative;
-    //            user-select: none;
-    //            min-width: 16px;
-    //            overflow: hidden;
-    //            @include typescale.tnt-title-medium;
-    //            @include interactable.tnt-interactable(colors.$tnt-color-surface-tint);
-    //            .tnt-header-content {
-    //                padding: 4px 8px;
-    //                vertical-align: middle;
-    //                color: colors.$tnt-color-on-surface;
-    //                box-sizing: border-box;
-    //                min-width: 100%;
-    //                width: max-content;
-    //                .tnt-icon {
-    //                    float: right;
-    //                }
-    //                &.tnt-interactable:hover {
-    //                    color: colors.$tnt-color-secondary;
-    //                }
-    //                &.tnt-sorted {
-    //                    color: colors.$tnt-color-primary;
-    //                }
-    //            }
-    //            .tnt-resizeable {
-    //                position: absolute;
-    //                top: 0;
-    //                right: 0;
-    //                width: 5px;
-    //                background-color: transparent;
-    //                cursor: col-resize;
-    //                border-right: 1px solid colors.$tnt-color-outline;
-    //            }
-    //        }
-    //    }
-    //}
-    //&.tnt-stripped {
-    //    ::deep tbody {
-    //        tr:nth-child(odd) {
-    //            background-color: colors.$tnt-color-surface-container-low;
-    //        }
-    //    }
-    //}
-    //&.tnt-compact {
-    //    width: 100%;
-    //    ::deep tr {
-    //        td {
-    //            white-space: nowrap;
-    //            text-overflow: ellipsis;
-    //            overflow: clip;
-    //            height: 32px;
-    //        }
-    //        @media #{measurements.$medium-and-up} {
-    //            &:hover {
-    //                td {
-    //                    white-space: revert;
-    //                    text-overflow: revert;
-    //                }
-    //            }
-    //        }
-    //        .tnt-rippling {
-    //        }
-    //    }
-    //}
-    //::deep tbody {
-    //    tr {
-    //        background-color: colors.$tnt-color-surface-container-lowest;
-    //        td {
-    //            box-sizing: border-box;
-    //            padding: 2px 4px;
-    //            &.grid-cell-placeholder:empty {
-    //                position: relative;
-    //                &:before {
-    //                    height: 80%;
-    //                    width: 95%;
-    //                    top: 10%;
-    //                    left: 2.5%;
-    //                    display: block;
-    //                    position: absolute;
-    //                    content: '';
-    //                    background: linear-gradient(to right, colors.$tnt-color-surface-container-highest 33%, color-mix(in srgb, colors.$tnt-color-surface-container-highest 60%, colors.$tnt-color-background) 50%, colors.$tnt-color-surface-container-highest 66%);
-    //                    background-size: 300%;
-    //                    animation: empty-grid-cell-animation 1.5s infinite ease-in-out;
-    //                }
-    //            }
-    //        }
-    //    }
-    //}
-    //&:not(.tnt-loading) {
-    //    ::deep thead tr.tnt-data-grid-header th.tnt-col-sortable {
-    //        &:hover {
-    //            background-color: colors.$tnt-color-surface-container;
-    //            opacity: 0.8;
-    //        }
-    //        cursor: pointer;
-    //    }
-    //    ::deep tbody tr.tnt-clickable {
-    //        transition: background-color ease-in-out 200ms;
-    //        cursor: pointer;
-    //        &:hover {
-    //            background-color: color-mix(in srgb, colors.$tnt-color-surface-tint 25%, transparent);
-    //        }
-    //    }
-    //}
-    //::deep tr {
-    //    td:not(:first-child), th:not(:first-child) {
-    //        border-left: 1px solid color-mix(in srgb, colors.$tnt-color-outline 20%, colors.$tnt-color-surface);
-    //    }
-    //}
 }
 
 @keyframes empty-grid-cell-animation {
