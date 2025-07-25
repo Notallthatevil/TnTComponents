@@ -1,7 +1,6 @@
 ﻿@use '../TnTDataGridVariables.scss' as dg;
 @use '../../Styles/_Variables/_interactable.scss' as interactable;
 
-
 .tnt-data-grid-body-row {
     @include interactable.tnt-interactable(dg.$tint-color, null);
 

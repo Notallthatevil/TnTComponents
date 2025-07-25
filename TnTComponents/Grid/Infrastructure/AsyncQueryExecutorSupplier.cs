@@ -8,6 +8,7 @@ namespace TnTComponents.Grid.Infrastructure;
 ///     Provides methods for asynchronous evaluation of queries against an <see cref="IQueryable{T}" />.
 /// </summary>
 internal interface IAsyncQueryExecutor {
+
     /// <summary>
     ///     Asynchronously counts the items in the <see cref="IQueryable{T}" />, if supported.
     /// </summary>

@@ -3,7 +3,7 @@
     @{
         var items = Context.Items;
 
-        @if(items.Any()) {
+        @if (items.Any()) {
             @foreach (var item in Context.Items) {
                 <TnTDataGridBodyRow Item="@item" />
             }
