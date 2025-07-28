@@ -141,7 +141,7 @@ internal sealed class TnTInternalGridContext<TGridItem>(TnTDataGrid<TGridItem> _
     /// <summary>
     ///     Updates the <see cref="Items" /> collection by applying sorting and pagination to the grid's data source.
     /// </summary>
-    private void UpdateItems() {
+    public void UpdateItems() {
         if (_grid.Items is not null) {
             var items = _grid.Items;
             if (SortBy is not null) {

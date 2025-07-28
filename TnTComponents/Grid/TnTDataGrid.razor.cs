@@ -249,7 +249,7 @@ public partial class TnTDataGrid<TGridItem> {
             var resultArray = _asyncQueryExecutor is null ? [.. filtered] : await _asyncQueryExecutor.ToArrayAsync(filtered);
             result = new() { Items = resultArray, TotalItemCount = totalItemCount };
         }
-
+        _internalGridContext.UpdateItems();
         return result;
     }
 
