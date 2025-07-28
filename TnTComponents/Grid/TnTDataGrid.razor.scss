@@ -37,6 +37,31 @@
             @include typescale.tnt-body-medium;
         }
     }
+
+
+    &.tnt-compact {
+        width: 100%;
+
+        ::deep {
+            tr {
+                td {
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: clip;
+                    height: 32px;
+                }
+
+                @media #{measurements.$medium-and-up} {
+                    &:hover {
+                        td {
+                            white-space: revert;
+                            text-overflow: revert;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 @keyframes empty-grid-cell-animation {
