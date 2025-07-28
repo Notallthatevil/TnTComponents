@@ -17,6 +17,21 @@
     }
 
     ::deep {
+        thead th {
+            position: relative;
+
+            .tnt-resizeable {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 5px;
+                background-color: transparent;
+                cursor: col-resize;
+                border-right: 1px solid colors.$tnt-color-outline;
+            }
+        }
+
+
         td {
             height: inherit;
             @include typescale.tnt-body-medium;

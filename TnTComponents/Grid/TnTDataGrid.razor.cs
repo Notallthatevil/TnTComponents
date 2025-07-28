@@ -77,7 +77,7 @@ public partial class TnTDataGrid<TGridItem> {
         .AddClass("tnt-datagrid")
         .AddClass("tnt-stripped", DataGridAppearance.HasFlag(DataGridAppearance.Stripped))
         .AddClass("tnt-compact", DataGridAppearance.HasFlag(DataGridAppearance.Compact))
-        //.AddClass("tnt-resizable", Resizable)
+        .AddClass("tnt-resizable", Resizable)
         //.AddClass("tnt-loading", Loading)
         .Build();
 
@@ -140,6 +140,12 @@ public partial class TnTDataGrid<TGridItem> {
     /// </summary>
     [Parameter]
     public TnTPaginationState? Pagination { get; set; }
+
+    /// <summary>
+    ///     Allows the grid to be resized by the user.
+    /// </summary>
+    [Parameter]
+    public bool Resizable { get; set; }
 
     /// <summary>
     ///     The text color of the data grid.

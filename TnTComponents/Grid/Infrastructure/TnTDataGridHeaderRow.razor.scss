@@ -13,12 +13,9 @@
         height: inherit;
         box-sizing: border-box;
 
-        &.tnt-interactable {
-            &:before {
-                content: '';
-                position: absolute;
-                left: 0;
-            }
+        .tnt-interactable-placeholder {
+            max-width: 1px;
+            width: 1px;
         }
     }
 }

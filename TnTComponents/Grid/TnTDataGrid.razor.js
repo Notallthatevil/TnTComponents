@@ -2,6 +2,10 @@ function tntInitResizable(tableElement) {
     const createResizableTable = function (table) {
         const cols = table.querySelectorAll('th');
         [].forEach.call(cols, function (col) {
+            if (col.classList.contains('tnt-interactable-placeholder')) {
+                return; // Skip placeholder columns
+            }
+
             // Add a resizer element to the column
             let resizer = col.querySelector('.tnt-resizeable');
             if (!resizer) {
