@@ -87,6 +87,12 @@ public abstract partial class TnTColumnBase<TGridItem> {
     public string? Title { get; set; }
 
     /// <summary>
+    ///     The width of the column in pixels. If not provided, the column will be default width.
+    /// </summary>
+    [Parameter]
+    public int? Width { get; set; }
+
+    /// <summary>
     ///     The grid context for this column.
     /// </summary>
     [CascadingParameter]
