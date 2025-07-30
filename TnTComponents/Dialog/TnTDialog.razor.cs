@@ -109,12 +109,12 @@ public partial class TnTDialog {
     /// <returns>A task that represents the asynchronous close operation.</returns>
     private async Task OnClose(ITnTDialog dialog) {
         dialog.Options.Closing = true;
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
         await Task.Delay(150);
         lock (_lock) {
             _dialogs.Remove(dialog);
         }
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
     }
 
     /// <summary>
@@ -122,12 +122,11 @@ public partial class TnTDialog {
     /// </summary>
     /// <param name="dialog">The dialog to open.</param>
     /// <returns>A task that represents the asynchronous open operation.</returns>
-    private Task OnOpen(ITnTDialog dialog) {
+    private async Task OnOpen(ITnTDialog dialog) {
         lock (_lock) {
             _dialogs.Add(dialog);
         }
-        StateHasChanged();
-        return Task.CompletedTask;
+        await InvokeAsync(StateHasChanged);
     }
 
     /// <summary>

@@ -53,12 +53,12 @@ public partial class TnTToast {
         if (toast is TnTToastImplementation impl) {
             impl.Closing = true;
         }
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
         await Task.Delay(_closeDelay);
 
         _toasts.Remove(toast, out _);
 
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
     }
 
     /// <summary>
@@ -66,11 +66,10 @@ public partial class TnTToast {
     /// </summary>
     /// <param name="toast">The toast to open.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    private Task OnOpen(ITnTToast toast) {
+    private async Task OnOpen(ITnTToast toast) {
         _toasts.TryAdd(toast, new ToastMetadata() { CreatedTime = DateTimeOffset.Now, Task = null, Id = TnTComponentIdentifier.NewId() });
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
 
-        return Task.CompletedTask;
     }
 
     private struct ToastMetadata {
