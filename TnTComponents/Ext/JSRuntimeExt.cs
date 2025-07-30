@@ -65,8 +65,19 @@ public static class JSRuntimeExt {
     /// <returns>A <see cref="ValueTask" /> representing the asynchronous operation.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="newUri" /> is null.</exception>
     public static async ValueTask UpdateUriAsync(this IJSRuntime jsRuntime, Uri newUri) {
+        await UpdateUriAsync(jsRuntime, newUri?.ToString()!);
+    }
+
+    /// <summary>
+    ///     Updates the browser's URI without reloading the page.
+    /// </summary>
+    /// <param name="jsRuntime">The JavaScript runtime instance.</param>
+    /// <param name="newUri">   The new URI to display in the browser's address bar.</param>
+    /// <returns>A <see cref="ValueTask" /> representing the asynchronous operation.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="newUri" /> is null.</exception>
+    public static async ValueTask UpdateUriAsync(this IJSRuntime jsRuntime, string newUri) {
         ArgumentNullException.ThrowIfNull(newUri, nameof(newUri));
-        await jsRuntime.InvokeVoidAsync("history.pushState", new object(), "", newUri.ToString());
+        await jsRuntime.InvokeVoidAsync("history.pushState", new object(), "", newUri);
     }
 
     /// <summary>
