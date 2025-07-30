@@ -12,7 +12,7 @@ id="@ElementId"
 title="@ElementTitle"
 autofocus="@AutoFocus"
 @ref="Element">
-    <div class="@(CssClassBuilder.Create("tnt-side-nav-menu-group-label").AddClass("tnt-interactable").AddRipple().AddDisabled(Disabled).Build())"
+    <div class="@ElementClass"
          onclick="TnTComponents.toggleSideNavGroup(event)">
     <span class="tnt-side-nav-menu-group-label-content">
     @Icon?.Render()

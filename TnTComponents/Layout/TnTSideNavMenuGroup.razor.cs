@@ -31,6 +31,7 @@ public partial class TnTSideNavMenuGroup {
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddClass("tnt-side-nav-menu-group-label")
         .AddClass("tnt-side-nav-menu-group-tint-color", TintColor.HasValue)
         .AddClass("tnt-side-nav-menu-group-on-tint-color", OnTintColor.HasValue)
         .AddDisabled(Disabled)
