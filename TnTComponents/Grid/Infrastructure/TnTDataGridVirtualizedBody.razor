@@ -14,11 +14,9 @@
                     @if (Context.RowClickCallback.HasDelegate) { // Prepend one more for the ::before element.
                                                                 <td></td>
                     }
-                    @foreach (var column in Context.Columns) {
-                        <td>
-                            <TnTSkeleton class="tnt-table-skeleton" />
-                        </td>
-                    }
+                    <td colspan="@Context.Columns.Count()">
+                        <TnTSkeleton class="tnt-table-skeleton" />
+                    </td>
                 </tr>
             }
         </LoadingTemplate>
