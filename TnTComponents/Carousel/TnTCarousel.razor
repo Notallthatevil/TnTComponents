@@ -13,10 +13,10 @@
             @foreach (var item in _carouselItems) {
                 @item.RenderItem
             }
-            @if(_items?.Any() == true && _items.First().Value is not null) {
-                @_items.First().Value.RenderPageScript
-            }
         </div>
+        @if(_items?.Any() == true && _items.First().Value is not null) {
+            @_items.First().Value.RenderPageScript
+        }
     </tnt-carousel>
 </CascadingValue>
 @PageScript

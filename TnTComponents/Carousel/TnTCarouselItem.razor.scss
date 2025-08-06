@@ -3,12 +3,25 @@
 $bg-width: var(--tnt-carousel-item-bg-width, 80%);
 
 .tnt-carousel-item {
+    flex-grow:0;
+    flex-shrink:0;
     box-sizing: border-box;
-    border: 1px solid colors.$tnt-color-outline;
     background-size: cover;
+    border: 1px solid colors.$tnt-color-outline;
     height: 100%;
     max-width: $bg-width;
     min-width: 56px;
     border-radius: 28px;
     overflow: clip;
+    //margin: 0 4px;
+    //display: inline-block;
+    //user-select: none;
+
+    //&:first-child {
+    //    margin-left: 0;
+    //}
+
+    //&:last-child {
+    //    margin-right: 0;
+    //}
 }

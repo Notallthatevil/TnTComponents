@@ -5,20 +5,25 @@
     background-color: red;
     display: block;
     box-sizing: border-box;
-    height: 600px;
-    overflow-x: auto;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-        display: none;
-    }
+    height: 528px;
+    width: 100%;
 
     .tnt-carousel-viewport {
         display: flex;
-        flex-direction: row;
+        flex-flow: row nowrap;
+        overflow-x: scroll;
         gap: 8px;
+        //display: block;
         height: 100%;
-        width: max-content;
+        width: 100%;
+        //white-space: nowrap;
+        //overflow-x: auto;
+
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
     }
 }
