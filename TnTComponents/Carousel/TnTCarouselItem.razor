@@ -1,0 +1,16 @@
+﻿@namespace TnTComponents
+@using Microsoft.AspNetCore.Components.Rendering
+@using TnTComponents.Core
+@inherits TnTPageScriptComponent<TnTCarouselItem>
+
+@code {
+    internal void RenderItem(RenderTreeBuilder __builder) {
+        <tnt-carousel-item @attributes="@AdditionalAttributes" class="@ElementClass" style="@ElementStyle" id="@ElementId" title="@ElementTitle" @ref="Element" lang="@ElementLang">
+            @ChildContent
+        </tnt-carousel-item>
+    }
+
+    internal void RenderPageScript(RenderTreeBuilder __builder) {
+        @PageScript
+    }
+}

@@ -1,0 +1,11 @@
+﻿@use '../Styles/_Variables/_colors.scss' as colors;
+
+$bg-width: var(--tnt-carousel-item-bg-width, 256px);
+
+.tnt-carousel-item {
+    box-sizing: border-box;
+    border: 1px solid colors.$tnt-color-outline;
+    background-size: cover;
+    height: 100%;
+    width: $bg-width;
+}

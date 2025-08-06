@@ -10,7 +10,7 @@ namespace TnTComponents.Core;
 ///     Represents a base class for components that have an isolated JavaScript module.
 /// </summary>
 /// <typeparam name="TDerived">The type of the component. Must match the derived class type (CRTP pattern).</typeparam>
-public abstract class TnTPageScriptComponent<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TDerived> : TnTComponentBase, ITnTPageScriptComponent<TDerived> where TDerived : ComponentBase {
+public abstract class TnTPageScriptComponent<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TDerived> : TnTDisposableComponentBase, ITnTPageScriptComponent<TDerived> where TDerived : ComponentBase {
 
     /// <inheritdoc />
     public DotNetObjectReference<TDerived>? DotNetObjectRef { get; set; }
@@ -47,20 +47,7 @@ public abstract class TnTPageScriptComponent<[DynamicallyAccessedMembers(Dynamic
     }
 
     /// <inheritdoc />
-    public void Dispose() {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
-    }
-
-    /// <inheritdoc />
-    public async ValueTask DisposeAsync() {
-        await DisposeAsyncCore().ConfigureAwait(false);
-        Dispose(disposing: false);
-        GC.SuppressFinalize(this);
-    }
-
-    /// <inheritdoc />
-    protected virtual void Dispose(bool disposing) {
+    protected override void Dispose(bool disposing) {
         if (disposing) {
             DotNetObjectRef?.Dispose();
             DotNetObjectRef = null;
@@ -69,7 +56,7 @@ public abstract class TnTPageScriptComponent<[DynamicallyAccessedMembers(Dynamic
     }
 
     /// <inheritdoc />
-    protected virtual async ValueTask DisposeAsyncCore() {
+    protected override async ValueTask DisposeAsyncCore() {
         if (IsolatedJsModule is not null) {
             try {
                 await IsolatedJsModule.InvokeVoidAsync("onDispose", Element, DotNetObjectRef);

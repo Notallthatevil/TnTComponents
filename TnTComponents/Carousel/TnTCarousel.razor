@@ -1,0 +1,22 @@
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Rendering
+@using Microsoft.AspNetCore.Components.Web
+@using TnTComponents.Core
+@namespace TnTComponents
+@inherits TnTPageScriptComponent<TnTCarousel>
+
+<CascadingValue Value="this" IsFixed="true">
+    @ChildContent
+
+    <tnt-carousel @attributes="AdditionalAttributes" class="tnt-carousel" aria-roledescription="carousel">
+        <div class="tnt-carousel-viewport">
+            @foreach (var item in _carouselItems) {
+                @item.RenderItem
+            }
+            @if(_items?.Any() == true && _items.First().Value is not null) {
+                @_items.First().Value.RenderPageScript
+            }
+        </div>
+    </tnt-carousel>
+</CascadingValue>
+@PageScript
