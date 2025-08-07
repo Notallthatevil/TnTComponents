@@ -54,17 +54,17 @@ export class TnTCarouselItem extends HTMLElement {
         const itemRect = this.getBoundingClientRect();
 
         let newWidth = this.naturalWidth;
-        if (itemRect.width > parentRect.width) {
-            newWidth = parentRect.width;
-        }
-        else {
-            if (itemRect.left < parentRect.left) { // Scrolled off to the left 
-                newWidth = itemRect.right - parentRect.left;
-            }
-            else if (parentRect.right > itemRect.right) {
-                newWidth = parentRect.right - itemRect.left;
-            }
-        }
+        //if (itemRect.width > parentRect.width) {
+        //    newWidth = parentRect.width;
+        //}
+        //else {
+        //    if (itemRect.left < parentRect.left) { // Scrolled off to the left 
+        //        newWidth = itemRect.right - parentRect.left;
+        //    }
+        //    else if (parentRect.right > itemRect.right) {
+        //        newWidth = parentRect.right - itemRect.left;
+        //    }
+        //}
         this.style.width = `${newWidth}px`;
     }
 }

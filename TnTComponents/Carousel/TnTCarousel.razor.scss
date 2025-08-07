@@ -5,25 +5,43 @@
     background-color: red;
     display: block;
     box-sizing: border-box;
-    height: 528px;
+    height: 700px;
     width: 100%;
 
     .tnt-carousel-viewport {
         display: flex;
         flex-flow: row nowrap;
-        overflow-x: scroll;
+        overflow-x: hidden;
         gap: 8px;
-        //display: block;
         height: 100%;
         width: 100%;
-        //white-space: nowrap;
-        //overflow-x: auto;
-
         -ms-overflow-style: none;
         scrollbar-width: none;
 
         &::-webkit-scrollbar {
             display: none;
+        }
+
+        &:after {
+            display: inline-block;
+            flex-grow: 0;
+            flex-shrink: 0;
+            content: '';
+            width: 100%;
+        }
+    }
+
+    ::deep .tnt-carousel-button {
+        position: absolute;
+
+        &.tnt-carousel-prev-button {
+            left: 16px;
+            top: 50%;
+        }
+
+        &.tnt-carousel-next-button {
+            right: 16px;
+            top: 50%;
         }
     }
 }
