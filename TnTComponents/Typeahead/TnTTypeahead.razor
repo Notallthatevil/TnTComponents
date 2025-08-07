@@ -17,7 +17,7 @@
      @ref="@Element">
 
     <span class="tnt-typeahead-box">
-        <TnTInputText @bind-Value="_searchText"
+        <TnTInputText @bind-Value="Value"
                       Appearance="@Appearance"
                       Label="@Label"
                       Placeholder="@Placeholder"
@@ -30,7 +30,7 @@
                       @ref="_inputBox" />
         <TnTProgressIndicator Show="@_searching" ProgressColor="ProgressColor" Size="Size.Small" />
     </span>
-    @if (_items.Any() || (!_items.Any() && !string.IsNullOrWhiteSpace(_searchText) && !_searching)) {
+    @if (_items.Any() || (!_items.Any() && !string.IsNullOrWhiteSpace(Value) && !_searching && !_itemSelected)) {
         <div class="tnt-typeahead-content">
             @if (_items.Any()) {
                 <ul class="tnt-typeahead-list">
@@ -48,7 +48,7 @@
                     }
                 </ul>
             }
-            else if (!_items.Any() && !string.IsNullOrWhiteSpace(_searchText) && !_searching) {
+            else if (!_items.Any() && !string.IsNullOrWhiteSpace(Value) && !_searching && !_itemSelected) {
                 <div class="tnt-typeahead-no-results">
                     No results found
                 </div>

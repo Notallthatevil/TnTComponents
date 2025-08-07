@@ -11,7 +11,7 @@ namespace TnTComponents;
 public partial class TnTTypeahead<TItem> {
 
     /// <summary>
-    ///     Gets or sets the appearance of the form.
+    ///     Specifies the appearance style of the typeahead input.
     /// </summary>
     [Parameter]
     public FormAppearance Appearance { get; set; }
@@ -23,12 +23,14 @@ public partial class TnTTypeahead<TItem> {
     public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerHighest;
 
     /// <summary>
-    ///     Gets or sets the debounce delay in milliseconds.
+    ///     The delay in milliseconds before performing a search after the user types.
     /// </summary>
     [Parameter]
-    public int DebounceMilliseconds { get; set; } = 500;
+    public int DebounceMilliseconds { get; set; } = 300;
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Indicates whether the typeahead input is disabled.
+    /// </summary>
     [Parameter]
     public bool Disabled { get; set; }
 
@@ -38,7 +40,9 @@ public partial class TnTTypeahead<TItem> {
         .AddClass("tnt-typeahead")
         .Build();
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     The name attribute for the input element.
+    /// </summary>
     [Parameter]
     public string? ElementName { get; set; }
 
@@ -47,68 +51,107 @@ public partial class TnTTypeahead<TItem> {
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Enables ripple effect on the input element if true.
+    /// </summary>
     [Parameter]
     public bool EnableRipple { get; set; }
 
     /// <summary>
-    ///     Gets or sets the callback to be invoked when an item is selected.
+    ///     Callback invoked when an item is selected from the suggestions.
     /// </summary>
     [Parameter]
     public EventCallback<TItem> ItemSelectedCallback { get; set; }
 
     /// <summary>
-    ///     Gets or sets the function to lookup items based on the search text.
+    ///     Function used to retrieve items based on the current search text.
     /// </summary>
     [Parameter, EditorRequired]
     public Func<string?, CancellationToken, Task<IEnumerable<TItem>>> ItemsLookupFunc { get; set; } = default!;
 
     /// <summary>
-    ///     Gets or sets the label for the input.
+    ///     The label displayed for the input element.
     /// </summary>
     [Parameter]
     public string? Label { get; set; }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     The color used for content that appears on the tint color.
+    /// </summary>
     [Parameter]
     public TnTColor? OnTintColor { get; set; }
 
     /// <summary>
-    ///     Gets or sets the placeholder text for the input.
+    ///     The placeholder text shown in the input when empty.
     /// </summary>
     [Parameter]
     public string? Placeholder { get; set; }
 
     /// <summary>
-    ///     Gets or sets the color of the progress indicator.
+    ///     The color of the progress indicator shown during search.
     /// </summary>
     [Parameter]
     public TnTColor ProgressColor { get; set; } = TnTColor.Primary;
 
     /// <summary>
-    ///     Causes the typeahead box to be receive focus after an item is selected.
+    ///     If true, the input box will be refocused after an item is selected.
     /// </summary>
     [Parameter]
     public bool RefocusAfterSelect { get; set; } = true;
 
     /// <summary>
-    ///     Gets or sets the template for rendering each result item.
+    ///     If true, the input value will be reset when the Escape key is pressed.
+    /// </summary>
+    [Parameter]
+    public bool ResetValueOnEscape { get; set; } = true;
+
+    /// <summary>
+    ///     If true, the input value will be reset after an item is selected.
+    /// </summary>
+    [Parameter]
+    public bool ResetValueOnSelect { get; set; } = true;
+
+    /// <summary>
+    ///     Template used to render each result item in the suggestion list.
     /// </summary>
     [Parameter]
     public RenderFragment<TItem>? ResultTemplate { get; set; }
 
     /// <summary>
-    ///     Gets or sets the tint color of the component.
+    ///     The tint color applied to the component.
     /// </summary>
     [Parameter]
     public TnTColor? TintColor { get; set; }
 
+    /// <summary>
+    ///     The current value of the input box.
+    /// </summary>
+    [Parameter]
+    public string? Value { get; set; }
+
+    /// <summary>
+    ///     Event callback invoked when the input value changes.
+    /// </summary>
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    /// <summary>
+    ///     Function used to convert an item to its string representation for display.
+    /// </summary>
+    [Parameter]
+    public Func<TItem, string> ValueToStringFunc { get; set; } = item => item?.ToString() ?? string.Empty;
+
+    /// <summary>
+    ///     The currently focused item in the suggestion list.
+    /// </summary>
     private TItem? _focusedItem { get; set; }
+
     private TnTDebouncer _debouncer = default!;
     private TnTInputText _inputBox = default!;
     private IEnumerable<TItem> _items = [];
+    private bool _itemSelected;
+    private int _lastDebounceMilliseconds = -1;
     private bool _searching;
-    private string? _searchText;
 
     /// <inheritdoc />
     public void Dispose() {
@@ -121,57 +164,71 @@ public partial class TnTTypeahead<TItem> {
     /// <inheritdoc />
     protected override void OnParametersSet() {
         base.OnParametersSet();
-        _debouncer = new TnTDebouncer(DebounceMilliseconds);
+
+        // Only recreate debouncer if the delay actually changed
+        if (_lastDebounceMilliseconds != DebounceMilliseconds) {
+            _debouncer?.Dispose();
+            _debouncer = new TnTDebouncer(DebounceMilliseconds);
+            _lastDebounceMilliseconds = DebounceMilliseconds;
+        }
     }
 
     /// <summary>
-    ///     Handles the selection of an item asynchronously.
+    ///     Handles the selection of an item asynchronously and updates the input value and state.
     /// </summary>
     /// <param name="item">The selected item.</param>
     private async Task ItemSelectedAsync(TItem item) {
-        _searchText = null;
+        Value = ResetValueOnSelect ? null : ValueToStringFunc(item);
+        await ValueChanged.InvokeAsync(Value);
         _items = [];
         _searching = false;
         _focusedItem = default;
+        _itemSelected = true;
         await ItemSelectedCallback.InvokeAsync(item);
         if (RefocusAfterSelect) {
             await _inputBox.SetFocusAsync();
         }
+        await InvokeAsync(StateHasChanged);
     }
 
     /// <summary>
-    ///     Performs a search asynchronously based on the provided search value.
+    ///     Performs a search asynchronously based on the provided search value and updates the suggestion list.
     /// </summary>
     /// <param name="searchValue">The search value.</param>
     private async Task SearchAsync(string? searchValue) {
-        if (string.IsNullOrWhiteSpace(searchValue)) {
-            _searching = false;
-            _items = [];
-        }
-        else {
-            _searching = true;
-            _items = [];
-            _focusedItem = default;
-            await _debouncer.DebounceAsync(async token => {
-                var result = await ItemsLookupFunc.Invoke(searchValue, token);
-                _items = result;
-                _focusedItem = _items.FirstOrDefault();
+        _searching = true;
+        _itemSelected = false;
+        await InvokeAsync(StateHasChanged);
+
+        await _debouncer.DebounceAsync(async token => {
+            await ValueChanged.InvokeAsync(searchValue);
+            if (string.IsNullOrWhiteSpace(searchValue)) {
                 _searching = false;
-            });
-        }
+                _items = [];
+            }
+            else {
+                _items = [];
+                _focusedItem = default;
+                var result = await ItemsLookupFunc.Invoke(searchValue, token);
+                if (!token.IsCancellationRequested) {
+                    _items = result;
+                    _focusedItem = _items.FirstOrDefault();
+                }
+                _searching = false;
+            }
+            await InvokeAsync(StateHasChanged);
+        });
     }
 
     /// <summary>
-    ///     Handles keyboard events to select or shift focus.
+    ///     Handles keyboard events to select an item or shift focus within the suggestion list.
     /// </summary>
     /// <param name="args">The keyboard event arguments.</param>
     private async Task SelectOrShiftFocusAsync(KeyboardEventArgs args) {
         if (_focusedItem is not null && !_focusedItem.Equals(default)) {
             switch (args.Key) {
                 case "Enter":
-                    if (_focusedItem != null) {
-                        await ItemSelectedAsync(_focusedItem);
-                    }
+                    await ItemSelectedAsync(_focusedItem);
                     break;
 
                 case "ArrowDown": {
@@ -187,7 +244,10 @@ public partial class TnTTypeahead<TItem> {
                 case "Escape": {
                         _items = [];
                         _searching = false;
-                        _searchText = null;
+                        if (ResetValueOnEscape) {
+                            Value = null;
+                            await ValueChanged.InvokeAsync(Value);
+                        }
                     }
                     break;
 
