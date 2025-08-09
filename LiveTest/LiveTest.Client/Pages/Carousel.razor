@@ -4,7 +4,7 @@
 <p><strong>Instructions:</strong> Scroll horizontally to see items gradually shrink as they approach the edge zones (within 40px of boundaries).</p>
 
 <TnTComponents.TnTCarousel>
-    <TnTComponents.TnTCarouselItem BackgroundImageSrc="Logo.png">
+    <TnTComponents.TnTCarouselItem BackgroundImageSrc="Logo.png" OnClickCallback="@(() => Console.WriteLine("clicked"))">
         <div style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding: 16px; border-radius: 0 0 28px 28px; margin: -16px;">
             <h4 style="margin: 0; color: white;">Item 1</h4>
             <p style="margin: 8px 0 0 0; color: white; opacity: 0.9;">First carousel item</p>

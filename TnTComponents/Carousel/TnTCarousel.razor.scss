@@ -2,7 +2,6 @@
     position: relative;
     overflow: hidden;
     padding: 8px 16px;
-    background-color: red;
     display: block;
     box-sizing: border-box;
     height: 700px;
@@ -33,6 +32,7 @@
 
     ::deep .tnt-carousel-button {
         position: absolute;
+        z-index: 998;
 
         &.tnt-carousel-prev-button {
             left: 16px;

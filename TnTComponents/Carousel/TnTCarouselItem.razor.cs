@@ -11,6 +11,7 @@ public partial class TnTCarouselItem {
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-carousel-item")
+        .AddClass("tnt-interactable", OnClickCallback.HasDelegate)
         .Build();
 
     public override string? ElementStyle => CssStyleBuilder.Create()
@@ -25,9 +26,15 @@ public partial class TnTCarouselItem {
     private TnTCarousel _carousel { get; set; }
 
     [Parameter]
+    public EventCallback OnClickCallback { get; set; }
+
+    [Parameter]
     public string? BackgroundImageSrc { get; set; }
 
     public override string? JsModulePath => "./_content/TnTComponents/Carousel/TnTCarouselItem.razor.js";
+
+    [Parameter]
+    public bool EnableRipple { get; set; } = true;
 
     protected override void OnInitialized() {
         base.OnInitialized();
