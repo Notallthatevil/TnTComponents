@@ -4,9 +4,9 @@ export class TnTCarouselItem extends HTMLElement {
     static observedAttributes = [TnTComponents.customAttribute];
     constructor() {
         super();
-        this.backgroundImageWidth = '';
-        this.naturalWidth = '80%';
-        this.style.setProperty('--tnt-carousel-item-bg-width', this.naturalWidth);
+        this.naturalWidth = null;
+        this.backgroundImageWidth = '80%';
+        this.contentContainer = null;
     }
 
     disconnectedCallback() {
@@ -22,14 +22,15 @@ export class TnTCarouselItem extends HTMLElement {
                 carouselsByIdentifier.delete(oldValue);
             }
             carouselsByIdentifier.set(newValue, this);
+            this.contentContainer = this.querySelector(':scope > .tnt-carousel-item');
 
-            this.carouselContainer = this.closest('.tnt-carousel-viewport');
-            this.updateSize();
+            this.carouselContainer = this.closest('.tnt-carousel-scroll-container');
+            this.calculateNaturalWidth();
         }
     }
 
-    updateSize() {
-        const bgImage = this.style.backgroundImage;
+    calculateNaturalWidth() {
+        const bgImage = this.contentContainer.style.backgroundImage;
         if (bgImage && bgImage !== 'none') {
             // Extract URL from background-image: url("...")
             const match = bgImage.match(/url\(["']?(.*?)["']?\)/);
@@ -39,50 +40,64 @@ export class TnTCarouselItem extends HTMLElement {
                     this.naturalWidth = img.naturalWidth;
                     this.backgroundImageWidth = `${this.naturalWidth}px`;
                     this.style.setProperty('--tnt-carousel-item-bg-width', this.backgroundImageWidth);
-                    this.containWithinScrollParent();
+                    this.style.width = this.backgroundImageWidth;
+                    this.updateItemWidth();
                 };
                 img.src = match[1];
             }
-        } else {
-            this.containWithinScrollParent();
+        }
+        else {
+            this.style.width = '80%';
+            this.updateItemWidth();
         }
     }
 
-    containWithinScrollParent() {
+    updateItemWidth() {
         // Get bounding rects
         const parentRect = this.carouselContainer.getBoundingClientRect();
         const itemRect = this.getBoundingClientRect();
 
         let newWidth = this.naturalWidth;
-        //if (itemRect.width > parentRect.width) {
-        //    newWidth = parentRect.width;
-        //}
-        //else {
-        //    if (itemRect.left < parentRect.left) { // Scrolled off to the left 
-        //        newWidth = itemRect.right - parentRect.left;
-        //    }
-        //    else if (parentRect.right > itemRect.right) {
-        //        newWidth = parentRect.right - itemRect.left;
-        //    }
-        //}
-        this.style.width = `${newWidth}px`;
+        if (itemRect.width > parentRect.width) {
+            this.style.width = `${parentRect.width}px`;
+            this.contentContainer.style.width = '100%';
+        }
+        else if (itemRect.right > parentRect.right) {
+            if (itemRect.left > parentRect.right) {
+                newWidth = 0;
+            }
+            else {
+                newWidth = parentRect.right - itemRect.left;
+            }
+            this.contentContainer.style.width = `${newWidth}px`;
+            this.style.justifyContent = null;
+        }
+        else if (itemRect.left < parentRect.left) {
+            if (itemRect.right < parentRect.left) {
+                newWidth = 0;
+            }
+            else {
+                newWidth = itemRect.right - parentRect.left;
+            }
+            this.contentContainer.style.width = `${newWidth}px`;
+            this.style.justifyContent = 'end';
+            this.style.width = this.backgroundImageWidth;
+        }
+        else {
+            this.contentContainer.style.width = `${newWidth}px`;
+            this.style.width = `${newWidth}px`;
+            this.style.justifyContent = null;
+        }
     }
 }
 export function onLoad(element, dotNetRef) {
     if (!customElements.get('tnt-carousel-item')) {
         customElements.define('tnt-carousel-item', TnTCarouselItem);
     }
-
 }
 
 export function onUpdate(element, dotNetRef) {
-    if (element?._updateSize) {
-        element._updateSize();
-    }
-
 }
 export function onDispose(element, dotNetRef) {
-    if (element instanceof TnTCarousel) {
-        element.disconnectedCallback();
-    }
+
 }

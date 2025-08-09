@@ -3,17 +3,23 @@
 
 $bg-width: var(--tnt-carousel-item-bg-width, 80%);
 
-.tnt-carousel-item {
+tnt-carousel-item {
     flex-grow: 0;
     flex-shrink: 0;
     box-sizing: border-box;
-    background-size: cover;
-    border: 1px solid colors.$tnt-color-outline;
-    height: 100%;
-    max-width: $bg-width;
-    min-width: 56px;
-    border-radius: 28px;
-    overflow: clip;
+    display: flex;
 
-    @include interactable.tnt-interactable(colors.$tnt-color-surface-tint, null, true);
+    .tnt-carousel-item {
+        box-sizing: border-box;
+        background-size: cover;
+        background-position: center;
+        border: 1px solid colors.$tnt-color-outline;
+        height: 100%;
+        max-width: $bg-width;
+        min-width: 56px;
+        border-radius: 28px;
+        overflow: clip;
+
+        @include interactable.tnt-interactable(colors.$tnt-color-surface-tint, null, true);
+    }
 }

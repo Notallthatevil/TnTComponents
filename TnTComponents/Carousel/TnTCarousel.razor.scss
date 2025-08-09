@@ -1,32 +1,32 @@
+
+$gapSize: var(--tnt-carousel-item-gap, 8px);
+
 .tnt-carousel {
     position: relative;
     overflow: hidden;
-    padding: 8px 16px;
     display: block;
+    padding: 8px 16px;
     box-sizing: border-box;
     height: 700px;
     width: 100%;
 
-    .tnt-carousel-viewport {
-        display: flex;
-        flex-flow: row nowrap;
-        overflow-x: hidden;
-        gap: 8px;
+    .tnt-carousel-scroll-container {
         height: 100%;
         width: 100%;
-        -ms-overflow-style: none;
-        scrollbar-width: none;
+        overflow-x: auto;
+        overflow-y: hidden;
 
-        &::-webkit-scrollbar {
-            display: none;
-        }
-
-        &:after {
-            display: inline-block;
-            flex-grow: 0;
-            flex-shrink: 0;
-            content: '';
-            width: 100%;
+        .tnt-carousel-viewport {
+            display: flex;
+            flex-flow: row nowrap;
+            gap: var(--tnt-carousel-item-gap);
+            height: 100%;
+            //justify-content: center;
+            //-ms-overflow-style: none;
+            //scrollbar-width: none;
+            //&::-webkit-scrollbar {
+            //    display: none;
+            //}
         }
     }
 

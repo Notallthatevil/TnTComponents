@@ -5,11 +5,13 @@
 
 @code {
     internal void RenderItem(RenderTreeBuilder __builder) {
-        <tnt-carousel-item @attributes="@AdditionalAttributes" class="@ElementClass" style="@ElementStyle" id="@ElementId" title="@ElementTitle" @ref="Element" lang="@ElementLang" @onclick="@OnClickCallback">
-            @ChildContent
-            @if(OnClickCallback.HasDelegate && EnableRipple) {
-                <TnTRippleEffect />
-            }
+        <tnt-carousel-item @attributes="@AdditionalAttributes">
+            <div class="@ElementClass" style="@ElementStyle" id="@ElementId" title="@ElementTitle" @ref="Element" lang="@ElementLang" @onclick="@OnClickCallback">
+                @ChildContent
+                @if (OnClickCallback.HasDelegate && EnableRipple) {
+                    <TnTRippleEffect />
+                }
+            </div>
         </tnt-carousel-item>
     }
 

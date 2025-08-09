@@ -17,6 +17,7 @@ public partial class TnTCarouselItem {
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddStyle("background-image", $"url('{BackgroundImageSrc}')", !string.IsNullOrWhiteSpace(BackgroundImageSrc))
+        .AddStyle("width", "80%")
         .Build();
 
     [Parameter]
