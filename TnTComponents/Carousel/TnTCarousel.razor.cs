@@ -43,9 +43,6 @@ public partial class TnTCarousel {
     private Dictionary<int, TnTCarouselItem> _items = [];
     private int _nextId;
 
-
-
-
     internal void AddChild(TnTCarouselItem item) {
         item.InternalId ??= Interlocked.Increment(ref _nextId);
         if (_items.TryAdd(item.InternalId.Value, item)) {
