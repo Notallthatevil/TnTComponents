@@ -1,7 +1,5 @@
 ﻿@page "/carousel"
 
-<h3>Material 3 Carousel with Edge Zone Shrinking</h3>
-<p><strong>Instructions:</strong> Scroll horizontally to see items gradually shrink as they approach the edge zones (within 40px of boundaries).</p>
 
 <TnTComponents.TnTCarousel>
     <TnTComponents.TnTCarouselItem BackgroundImageSrc="Logo.png" OnClickCallback="@(() => Console.WriteLine("clicked"))">
@@ -46,6 +44,93 @@
         </div>
     </TnTComponents.TnTCarouselItem>
     
+    <TnTComponents.TnTCarouselItem BackgroundImageSrc="Logo.png">
+        <div style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding: 16px; border-radius: 0 0 28px 28px; margin: -16px;">
+            <h4 style="margin: 0; color: white;">Item 7</h4>
+            <p style="margin: 8px 0 0 0; color: white; opacity: 0.9;">Seventh carousel item</p>
+        </div>
+    </TnTComponents.TnTCarouselItem>
+
+    <TnTComponents.TnTCarouselItem BackgroundImageSrc="Logo.png">
+        <div style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding: 16px; border-radius: 0 0 28px 28px; margin: -16px;">
+            <h4 style="margin: 0; color: white;">Item 8</h4>
+            <p style="margin: 8px 0 0 0; color: white; opacity: 0.9;">Eighth carousel item</p>
+        </div>
+    </TnTComponents.TnTCarouselItem>
+
+    <TnTComponents.TnTCarouselItem BackgroundImageSrc="Logo.png">
+        <div style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding: 16px; border-radius: 0 0 28px 28px; margin: -16px;">
+            <h4 style="margin: 0; color: white;">Item 9</h4>
+            <p style="margin: 8px 0 0 0; color: white; opacity: 0.9;">Ninth carousel item</p>
+        </div>
+    </TnTComponents.TnTCarouselItem>
+
+    <TnTComponents.TnTCarouselItem BackgroundImageSrc="Logo.png">
+        <div style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding: 16px; border-radius: 0 0 28px 28px; margin: -16px;">
+            <h4 style="margin: 0; color: white;">Item 10</h4>
+            <p style="margin: 8px 0 0 0; color: white; opacity: 0.9;">Tenth carousel item</p>
+        </div>
+    </TnTComponents.TnTCarouselItem>
+
+    <TnTComponents.TnTCarouselItem BackgroundImageSrc="Logo.png">
+        <div style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding: 16px; border-radius: 0 0 28px 28px; margin: -16px;">
+            <h4 style="margin: 0; color: white;">Item 11</h4>
+            <p style="margin: 8px 0 0 0; color: white; opacity: 0.9;">Eleventh carousel item</p>
+        </div>
+    </TnTComponents.TnTCarouselItem>
+
+    <TnTComponents.TnTCarouselItem BackgroundImageSrc="Logo.png">
+        <div style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding: 16px; border-radius: 0 0 28px 28px; margin: -16px;">
+            <h4 style="margin: 0; color: white;">Item 12</h4>
+            <p style="margin: 8px 0 0 0; color: white; opacity: 0.9;">Twelfth carousel item</p>
+        </div>
+    </TnTComponents.TnTCarouselItem>
+</TnTComponents.TnTCarousel>
+
+
+<TnTComponents.TnTCarousel AutoPlayInterval="1">
+    <TnTComponents.TnTCarouselItem BackgroundImageSrc="Logo.png" OnClickCallback="@(() => Console.WriteLine("clicked"))">
+        <div style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding: 16px; border-radius: 0 0 28px 28px; margin: -16px;">
+            <h4 style="margin: 0; color: white;">Item 1</h4>
+            <p style="margin: 8px 0 0 0; color: white; opacity: 0.9;">First carousel item</p>
+        </div>
+    </TnTComponents.TnTCarouselItem>
+
+    <TnTComponents.TnTCarouselItem BackgroundImageSrc="Logo.png">
+        <div style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding: 16px; border-radius: 0 0 28px 28px; margin: -16px;">
+            <h4 style="margin: 0; color: white;">Item 2</h4>
+            <p style="margin: 8px 0 0 0; color: white; opacity: 0.9;">Second carousel item</p>
+        </div>
+    </TnTComponents.TnTCarouselItem>
+
+    <TnTComponents.TnTCarouselItem BackgroundImageSrc="Logo.png">
+        <div style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding: 16px; border-radius: 0 0 28px 28px; margin: -16px;">
+            <h4 style="margin: 0; color: white;">Item 3</h4>
+            <p style="margin: 8px 0 0 0; color: white; opacity: 0.9;">Third carousel item</p>
+        </div>
+    </TnTComponents.TnTCarouselItem>
+
+    <TnTComponents.TnTCarouselItem BackgroundImageSrc="Logo.png">
+        <div style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding: 16px; border-radius: 0 0 28px 28px; margin: -16px;">
+            <h4 style="margin: 0; color: white;">Item 4</h4>
+            <p style="margin: 8px 0 0 0; color: white; opacity: 0.9;">Fourth carousel item</p>
+        </div>
+    </TnTComponents.TnTCarouselItem>
+
+    <TnTComponents.TnTCarouselItem BackgroundImageSrc="Logo.png">
+        <div style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding: 16px; border-radius: 0 0 28px 28px; margin: -16px;">
+            <h4 style="margin: 0; color: white;">Item 5</h4>
+            <p style="margin: 8px 0 0 0; color: white; opacity: 0.9;">Fifth carousel item</p>
+        </div>
+    </TnTComponents.TnTCarouselItem>
+
+    <TnTComponents.TnTCarouselItem BackgroundImageSrc="Logo.png">
+        <div style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding: 16px; border-radius: 0 0 28px 28px; margin: -16px;">
+            <h4 style="margin: 0; color: white;">Item 6</h4>
+            <p style="margin: 8px 0 0 0; color: white; opacity: 0.9;">Sixth carousel item</p>
+        </div>
+    </TnTComponents.TnTCarouselItem>
+
     <TnTComponents.TnTCarouselItem BackgroundImageSrc="Logo.png">
         <div style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding: 16px; border-radius: 0 0 28px 28px; margin: -16px;">
             <h4 style="margin: 0; color: white;">Item 7</h4>

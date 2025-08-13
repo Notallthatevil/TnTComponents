@@ -2,7 +2,7 @@ const carouselsByIdentifier = new Map();
 
 const gapSize = 8;
 export class TnTCarousel extends HTMLElement {
-    static observedAttributes = [TnTComponents.customAttribute];
+    static observedAttributes = [TnTComponents.customAttribute, 'tnt-auto-play-interval'];
     constructor() {
         super();
         this.carouselViewPort = null;
@@ -22,6 +22,10 @@ export class TnTCarousel extends HTMLElement {
         this._rafId = null; // for throttling recalculations during drag
         // Resize observer
         this._resizeObserver = null;
+        // Auto play
+        this._autoPlayIntervalMs = null;
+        this._autoPlayTimerId = null;
+        this._currentAutoIndex = -1; // start before first
     }
 
     disconnectedCallback() {
@@ -42,6 +46,7 @@ export class TnTCarousel extends HTMLElement {
             this._resizeObserver.disconnect();
             this._resizeObserver = null;
         }
+        this._stopAutoPlay();
         this._detachDragEvents();
     }
 
@@ -52,7 +57,56 @@ export class TnTCarousel extends HTMLElement {
             }
             carouselsByIdentifier.set(newValue, this);
             this.onUpdate();
+        } else if (name === 'tnt-auto-play-interval' && oldValue !== newValue) {
+            this._configureAutoPlayFromAttribute();
         }
+    }
+
+    _configureAutoPlayFromAttribute() {
+        const attr = this.getAttribute('tnt-auto-play-interval');
+        if (attr == null || attr === '') {
+            this._autoPlayIntervalMs = null;
+            this._stopAutoPlay();
+            return;
+        }
+        const seconds = parseFloat(attr);
+        if (!isNaN(seconds) && seconds > 0) {
+            this._autoPlayIntervalMs = seconds * 1000;
+            this._startAutoPlay();
+        } else {
+            this._autoPlayIntervalMs = null;
+            this._stopAutoPlay();
+        }
+    }
+
+    _startAutoPlay() {
+        this._stopAutoPlay();
+        if (!this._autoPlayIntervalMs) return;
+        if (!this.carouselItems || this.carouselItems.length === 0) return;
+        // Initialize index so first tick goes to item 0
+        if (this._currentAutoIndex < 0 || this._currentAutoIndex >= this.carouselItems.length) {
+            this._currentAutoIndex = -1;
+        }
+        this._autoPlayTimerId = setInterval(() => {
+            if (this._isDragging) return; // pause while dragging
+            this._advanceAutoPlay();
+        }, this._autoPlayIntervalMs);
+    }
+
+    _stopAutoPlay() {
+        if (this._autoPlayTimerId) {
+            clearInterval(this._autoPlayTimerId);
+            this._autoPlayTimerId = null;
+        }
+    }
+
+    _advanceAutoPlay() {
+        if (!this.carouselItems || this.carouselItems.length === 0) return;
+        this._currentAutoIndex = (this._currentAutoIndex + 1) % this.carouselItems.length;
+        const target = this.carouselItems[this._currentAutoIndex];
+        if (!target) return;
+        // Scroll so the target's left aligns. Use smooth if snapping enabled; otherwise instant.
+        this.carouselViewPort.scrollTo({ left: target.offsetLeft, behavior: 'smooth' });
     }
 
     _recalculateChildWidths() {
@@ -96,6 +150,7 @@ export class TnTCarousel extends HTMLElement {
             this._dragStartX = e.clientX;
             this._dragScrollLeft = this.carouselViewPort.scrollLeft;
             this.carouselViewPort.classList.add('tnt-carousel-dragging');
+            this._stopAutoPlay(); // pause autoplay immediately on interaction
             try { this.carouselViewPort.setPointerCapture(e.pointerId); } catch { }
         };
         this._onPointerMove = (e) => {
@@ -117,6 +172,9 @@ export class TnTCarousel extends HTMLElement {
             this.carouselViewPort.classList.remove('tnt-carousel-dragging');
             // Ensure final recalculation after last movement
             this._scheduleRecalc();
+            // Re-align autoplay index to closest item so rotation appears natural
+            this._syncAutoIndexToViewport();
+            this._startAutoPlay();
         };
         this._onPointerUp = () => { finishDrag(); };
         this._onPointerLeave = () => { finishDrag(); };
@@ -132,6 +190,21 @@ export class TnTCarousel extends HTMLElement {
         this.carouselViewPort.addEventListener('pointerup', this._onPointerUp, { passive: true });
         this.carouselViewPort.addEventListener('pointerleave', this._onPointerLeave, { passive: true });
         this.carouselViewPort.addEventListener('click', this._onClickCapture, true);
+    }
+
+    _syncAutoIndexToViewport() {
+        if (!this.carouselItems || this.carouselItems.length === 0) return;
+        const viewportLeft = this.carouselViewPort.scrollLeft;
+        let closestIndex = 0;
+        let closestDistance = Number.POSITIVE_INFINITY;
+        this.carouselItems.forEach((item, idx) => {
+            const dist = Math.abs(item.offsetLeft - viewportLeft);
+            if (dist < closestDistance) {
+                closestDistance = dist;
+                closestIndex = idx;
+            }
+        });
+        this._currentAutoIndex = closestIndex - 1; // so next advance goes to the visible one if we just started
     }
 
     _attachResizeObserver() {
@@ -167,6 +240,7 @@ export class TnTCarousel extends HTMLElement {
         this.carouselViewPort.addEventListener('scroll', this._scrollListener, { passive: true });
         this._attachDragEvents();
         this._attachResizeObserver();
+        this._configureAutoPlayFromAttribute();
     }
 }
 

@@ -25,6 +25,9 @@ public partial class TnTCarousel {
     [Parameter]
     public bool EnableSnapping { get; set; } = true;
 
+    [Parameter]
+    public int? AutoPlayInterval { get; set; }
+
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-carousel")
