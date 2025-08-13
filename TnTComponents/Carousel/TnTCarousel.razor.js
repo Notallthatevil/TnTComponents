@@ -9,6 +9,7 @@ export class TnTCarousel extends HTMLElement {
         this.carouselItems = null;
         this.fullSize = null;
         this._scrollListener = null;
+        this._scrollRafId = null;
         // Drag state
         this._isDragging = false;
         this._dragStartX = 0;
@@ -19,7 +20,7 @@ export class TnTCarousel extends HTMLElement {
         this._onPointerUp = null;
         this._onPointerLeave = null;
         this._onClickCapture = null;
-        this._rafId = null; // for throttling recalculations during drag
+        this._rafId = null; // for throttling child width recalculations during drag
         // Resize observer
         this._resizeObserver = null;
         // Auto play
@@ -33,6 +34,8 @@ export class TnTCarousel extends HTMLElement {
         this._onNextClick = null;
         // Dragging enable flag
         this._allowDragging = true; // default true for backward compatibility
+        // Internal caches
+        this._lastChildCount = 0;
     }
 
     disconnectedCallback() {
@@ -40,10 +43,13 @@ export class TnTCarousel extends HTMLElement {
         if (carouselsByIdentifier.get(identifier)) {
             carouselsByIdentifier.delete(identifier);
         }
-        // Remove scroll listener
         if (this._scrollListener && this.carouselViewPort) {
             this.carouselViewPort.removeEventListener('scroll', this._scrollListener);
             this._scrollListener = null;
+        }
+        if (this._scrollRafId) {
+            cancelAnimationFrame(this._scrollRafId);
+            this._scrollRafId = null;
         }
         if (this._rafId) {
             cancelAnimationFrame(this._rafId);
@@ -72,22 +78,15 @@ export class TnTCarousel extends HTMLElement {
         }
     }
 
-    _isCenteredMode() {
-        return this.classList.contains('tnt-carousel-centered');
-    }
+    _isCenteredMode() { return this.classList.contains('tnt-carousel-centered'); }
 
     _updateDraggingFromAttribute() {
         const attr = this.getAttribute('tnt-allow-dragging');
-        // Treat explicit values meaning false; null => disabled; any other value => true
         if (attr == null) {
             this._allowDragging = false; // opt-in only
         } else {
             const val = attr.trim().toLowerCase();
-            if (val === 'false' || val === '0' || val === 'no' || val === 'off') {
-                this._allowDragging = false;
-            } else {
-                this._allowDragging = true;
-            }
+            this._allowDragging = !(val === 'false' || val === '0' || val === 'no' || val === 'off');
         }
         if (this._allowDragging) {
             this._attachDragEvents();
@@ -117,50 +116,38 @@ export class TnTCarousel extends HTMLElement {
 
     _startAutoPlay() {
         this._stopAutoPlay();
-        if (!this._autoPlayIntervalMs) return;
-        if (!this.carouselItems || this.carouselItems.length === 0) return;
-        // Initialize index so first tick goes to item 0
+        if (!this._autoPlayIntervalMs || !this.carouselItems || this.carouselItems.length === 0) return;
         if (this._currentAutoIndex < 0 || this._currentAutoIndex >= this.carouselItems.length) {
             this._currentAutoIndex = -1;
         }
         this._autoPlayTimerId = setInterval(() => {
-            if (this._isDragging) return; // pause while dragging
+            if (this._isDragging) return;
             this._advanceAutoPlay();
         }, this._autoPlayIntervalMs);
     }
 
-    _stopAutoPlay() {
-        if (this._autoPlayTimerId) {
-            clearInterval(this._autoPlayTimerId);
-            this._autoPlayTimerId = null;
-        }
-    }
+    _stopAutoPlay() { if (this._autoPlayTimerId) { clearInterval(this._autoPlayTimerId); this._autoPlayTimerId = null; } }
 
     _advanceAutoPlay() {
         if (!this.carouselItems || this.carouselItems.length === 0) return;
         this._currentAutoIndex = (this._currentAutoIndex + 1) % this.carouselItems.length;
         const target = this.carouselItems[this._currentAutoIndex];
-        if (!target) return;
-        this._scrollToItem(target);
+        if (target) this._scrollToItem(target);
     }
 
     _scrollToItem(item) {
         if (!this.carouselViewPort || !item) return;
-        if (this._isCenteredMode()) {
-            const targetLeft = item.offsetLeft - (this.carouselViewPort.clientWidth - item.offsetWidth) / 2;
-            this.carouselViewPort.scrollTo({ left: targetLeft, behavior: 'smooth' });
-        } else {
-            this.carouselViewPort.scrollTo({ left: item.offsetLeft, behavior: 'smooth' });
-        }
+        const left = this._isCenteredMode()
+            ? item.offsetLeft - (this.carouselViewPort.clientWidth - item.offsetWidth) / 2
+            : item.offsetLeft;
+        this.carouselViewPort.scrollTo({ left, behavior: 'smooth' });
     }
 
     _recalculateChildWidths() {
-        if (this.carouselItems) {
-            this.carouselItems.forEach(item => {
-                if (typeof item.updateItemWidth === 'function') {
-                    item.updateItemWidth();
-                }
-            });
+        if (!this.carouselItems) return;
+        // Convert NodeList to array only once per call
+        for (const item of this.carouselItems) {
+            if (typeof item.updateItemWidth === 'function') item.updateItemWidth();
         }
     }
 
@@ -183,11 +170,12 @@ export class TnTCarousel extends HTMLElement {
     }
 
     _attachDragEvents() {
-        if (!this.carouselViewPort) return;
-        if (!this._allowDragging) {
+        if (!this.carouselViewPort || !this._allowDragging) {
             this._detachDragEvents();
             return;
         }
+        // If already attached, skip
+        if (this._onPointerDown) return;
         this._detachDragEvents();
 
         const moveThreshold = 8;
@@ -223,12 +211,7 @@ export class TnTCarousel extends HTMLElement {
         };
         this._onPointerUp = () => { finishDrag(); };
         this._onPointerLeave = () => { finishDrag(); };
-        this._onClickCapture = (e) => {
-            if (this._dragMoved) {
-                e.stopPropagation();
-                e.preventDefault();
-            }
-        };
+        this._onClickCapture = (e) => { if (this._dragMoved) { e.stopPropagation(); e.preventDefault(); } };
 
         this.carouselViewPort.addEventListener('pointerdown', this._onPointerDown, { passive: true });
         this.carouselViewPort.addEventListener('pointermove', this._onPointerMove, { passive: false });
@@ -252,19 +235,13 @@ export class TnTCarousel extends HTMLElement {
             this.carouselItems.forEach((item, idx) => {
                 const itemCenter = item.offsetLeft + item.offsetWidth / 2;
                 const dist = Math.abs(itemCenter - viewportCenter);
-                if (dist < closestDist) {
-                    closestDist = dist;
-                    chosenIndex = idx;
-                }
+                if (dist < closestDist) { closestDist = dist; chosenIndex = idx; }
             });
         } else {
             let closestDistance = Number.POSITIVE_INFINITY;
             this.carouselItems.forEach((item, idx) => {
                 const dist = Math.abs(item.offsetLeft - viewportLeft);
-                if (dist < closestDistance) {
-                    closestDistance = dist;
-                    chosenIndex = idx;
-                }
+                if (dist < closestDistance) { closestDistance = dist; chosenIndex = idx; }
             });
         }
         this._currentAutoIndex = chosenIndex - 1;
@@ -272,15 +249,8 @@ export class TnTCarousel extends HTMLElement {
 
     _attachResizeObserver() {
         if (!this.carouselViewPort) return;
-        if (this._resizeObserver) {
-            this._resizeObserver.disconnect();
-            this._resizeObserver = null;
-        }
-        // Observe viewport size changes
-        this._resizeObserver = new ResizeObserver(() => {
-            // Use rAF to avoid layout thrash if rapid
-            this._scheduleRecalc();
-        });
+        if (this._resizeObserver) this._resizeObserver.disconnect();
+        this._resizeObserver = new ResizeObserver(() => { this._scheduleRecalc(); });
         this._resizeObserver.observe(this.carouselViewPort);
     }
 
@@ -288,34 +258,22 @@ export class TnTCarousel extends HTMLElement {
         if (!this.carouselItems || this.carouselItems.length === 0) return -1;
         const viewportLeft = this.carouselViewPort.scrollLeft;
         const atEnd = Math.ceil(viewportLeft + this.carouselViewPort.clientWidth) >= this.carouselViewPort.scrollWidth - 1;
-        if (atEnd && nextButton) {
-            return this.carouselItems.length - 1;
-        }
+        if (atEnd && nextButton) return this.carouselItems.length - 1;
         if (this._isCenteredMode()) {
-            if (this.carouselViewPort.scrollLeft === 0 && !nextButton) {
-                return this.carouselItems.length - 1
-            }
+            if (this.carouselViewPort.scrollLeft === 0 && !nextButton) return this.carouselItems.length - 1;
             const viewportCenter = viewportLeft + this.carouselViewPort.clientWidth / 2;
-            let closestIndex = 0;
-            let closestDistance = Number.POSITIVE_INFINITY;
+            let closestIndex = 0, closestDistance = Number.POSITIVE_INFINITY;
             this.carouselItems.forEach((item, idx) => {
                 const itemCenter = item.offsetLeft + item.offsetWidth / 2;
                 const dist = Math.abs(itemCenter - viewportCenter);
-                if (dist < closestDistance) {
-                    closestDistance = dist;
-                    closestIndex = idx;
-                }
+                if (dist < closestDistance) { closestDistance = dist; closestIndex = idx; }
             });
             return closestIndex;
         }
-        let closestIndex = 0;
-        let closestDistance = Number.POSITIVE_INFINITY;
+        let closestIndex = 0, closestDistance = Number.POSITIVE_INFINITY;
         this.carouselItems.forEach((item, idx) => {
             const dist = Math.abs(item.offsetLeft - viewportLeft);
-            if (dist < closestDistance) {
-                closestDistance = dist;
-                closestIndex = idx;
-            }
+            if (dist < closestDistance) { closestDistance = dist; closestIndex = idx; }
         });
         return closestIndex;
     }
@@ -366,29 +324,35 @@ export class TnTCarousel extends HTMLElement {
     }
 
     onUpdate() {
-        this.carouselViewPort = this.querySelector(':scope > .tnt-carousel-viewport');
-        if (this.carouselViewPort) {
+        const viewPort = this.querySelector(':scope > .tnt-carousel-viewport');
+        if (!viewPort) return; // nothing to do yet
+        const childCountChanged = viewPort.children.length !== this._lastChildCount;
+        const viewportChanged = viewPort !== this.carouselViewPort;
+        this.carouselViewPort = viewPort;
+        if (viewportChanged || childCountChanged) {
             this.carouselItems = this.carouselViewPort.querySelectorAll(':scope > tnt-carousel-item');
+            this._lastChildCount = this.carouselViewPort.children.length;
             this.carouselViewPort.style.setProperty('--tnt-carousel-item-gap', `${gapSize}px`);
-
             this._recalculateChildWidths();
-
-            if (this._scrollListener) {
-                this.carouselViewPort.removeEventListener('scroll', this._scrollListener);
-                this._scrollListener = null;
-            }
-            this._scrollListener = () => {
-                // Recalc on natural scroll events
-                this._recalculateChildWidths();
-            };
-
-            this.carouselViewPort.addEventListener('scroll', this._scrollListener, { passive: true });
-            // Dragging depends on attribute flag
-            this._updateDraggingFromAttribute();
-            this._attachResizeObserver();
-            this._attachNavButtonEvents();
-            this._configureAutoPlayFromAttribute();
         }
+        if (viewportChanged && this._scrollListener) {
+            viewPort.removeEventListener('scroll', this._scrollListener);
+            this._scrollListener = null;
+        }
+        if (!this._scrollListener) {
+            this._scrollListener = () => {
+                if (this._scrollRafId) return;
+                this._scrollRafId = requestAnimationFrame(() => {
+                    this._scrollRafId = null;
+                    this._recalculateChildWidths();
+                });
+            };
+            this.carouselViewPort.addEventListener('scroll', this._scrollListener, { passive: true });
+        }
+        this._updateDraggingFromAttribute();
+        this._attachResizeObserver();
+        this._attachNavButtonEvents();
+        this._configureAutoPlayFromAttribute();
     }
 }
 
@@ -398,10 +362,5 @@ export function onLoad(element, dotNetRef) {
     }
 }
 
-export function onUpdate(element, dotNetRef) {
-    if (element && element instanceof TnTCarousel) {
-        element.onUpdate();
-    }
-}
-export function onDispose(element, dotNetRef) {
-}
+export function onUpdate(element, dotNetRef) { if (element && element instanceof TnTCarousel) element.onUpdate(); }
+export function onDispose(element, dotNetRef) { }

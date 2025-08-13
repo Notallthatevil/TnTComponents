@@ -7,10 +7,12 @@ export class TnTCarouselItem extends HTMLElement {
         this.naturalWidth = null;
         this.backgroundImageWidth = '100%';
         this.contentContainer = null;
+        this.carouselContainer = null;
+        this._lastBg = null;
     }
 
     disconnectedCallback() {
-        let identifier = this.getAttribute(TnTComponents.customAttribute);
+        const identifier = this.getAttribute(TnTComponents.customAttribute);
         if (carouselsByIdentifier.get(identifier)) {
             carouselsByIdentifier.delete(identifier);
         }
@@ -18,27 +20,30 @@ export class TnTCarouselItem extends HTMLElement {
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (name === TnTComponents.customAttribute && oldValue != newValue) {
-            if (carouselsByIdentifier.get(oldValue)) {
-                carouselsByIdentifier.delete(oldValue);
-            }
+            if (carouselsByIdentifier.get(oldValue)) carouselsByIdentifier.delete(oldValue);
             carouselsByIdentifier.set(newValue, this);
             this.onUpdate();
         }
     }
 
     calculateNaturalWidth() {
-        // If this item is marked as a hero, force a fixed relative width and bypass image width logic
+        if (!this.contentContainer) return;
+        // Hero path
         if (this.classList.contains('tnt-carousel-hero')) {
+            // Maintain original semantics: initial style width set to 80%, backgroundImageWidth forced to 100%
             this.style.width = '80%';
             this.backgroundImageWidth = '100%';
-            this.naturalWidth = '100%'; // not using intrinsic width
+            this.naturalWidth = '100%';
             this.updateItemWidth();
             return;
         }
-
         const bgImage = this.contentContainer.style.backgroundImage;
         if (bgImage && bgImage !== 'none') {
-            // Extract URL from background-image: url("...")
+            if (bgImage === this._lastBg && this.naturalWidth) { // already processed
+                this.updateItemWidth();
+                return;
+            }
+            this._lastBg = bgImage;
             const match = bgImage.match(/url\(["']?(.*?)["']?\)/);
             if (match && match[1]) {
                 const img = new window.Image();
@@ -50,68 +55,51 @@ export class TnTCarouselItem extends HTMLElement {
                     this.updateItemWidth();
                 };
                 img.src = match[1];
+                return;
             }
         }
-        else {
-            this.style.width = '80%';
-            this.updateItemWidth();
-        }
+        // Fallback path (no background)
+        this.style.width = '80%';
+        this.updateItemWidth();
     }
 
     updateItemWidth() {
         if (!this.carouselContainer || !this.contentContainer) {
+            // Attempt lazy resolution once
             this.onUpdate();
-            if (!this.carouselContainer || !this.contentContainer) {
-                return;
-            }
-
+            if (!this.carouselContainer || !this.contentContainer) return;
         }
-
-        // Get bounding rects
         const parentRect = this.carouselContainer.getBoundingClientRect();
         const itemRect = this.getBoundingClientRect();
-
         let newWidth = itemRect.width;
         if (itemRect.width > parentRect.width) {
             this.style.width = `${parentRect.width}px`;
             this.contentContainer.style.width = '100%';
+            return;
         }
-        else if (itemRect.right > parentRect.right) {
-            if (itemRect.left > parentRect.right) {
-                newWidth = 0;
-            }
-            else {
-                newWidth = parentRect.right - itemRect.left;
-            }
+        if (itemRect.right > parentRect.right) {
+            if (itemRect.left > parentRect.right) newWidth = 0; else newWidth = parentRect.right - itemRect.left;
             this.contentContainer.style.width = `${newWidth}px`;
             this.style.justifyContent = null;
+            return;
         }
-        else if (itemRect.left < parentRect.left) {
-            if (itemRect.right < parentRect.left) {
-                newWidth = 0;
-            }
-            else {
-                newWidth = itemRect.right - parentRect.left;
-            }
+        if (itemRect.left < parentRect.left) {
+            if (itemRect.right < parentRect.left) newWidth = 0; else newWidth = itemRect.right - parentRect.left;
             this.contentContainer.style.width = `${newWidth}px`;
             this.style.justifyContent = 'end';
-            this.style.width = this.backgroundImageWidth;
+            this.style.width = this.backgroundImageWidth; // preserve original logic
+            return;
         }
-        else {
-            this.contentContainer.style.width = `${newWidth}px`;
-            this.style.width = `${newWidth}px`;
-            this.style.justifyContent = null;
-        }
+        this.contentContainer.style.width = `${newWidth}px`;
+        this.style.width = `${newWidth}px`;
+        this.style.justifyContent = null;
     }
 
     onUpdate() {
-        this.contentContainer = this.querySelector(':scope > .tnt-carousel-item-content');
-        this.carouselContainer = this.closest('.tnt-carousel-viewport');
-
-        if (!this.contentContainer || !this.carouselContainer) {
-            return;
-        }
-
+        // Cache queries only when missing
+        if (!this.contentContainer) this.contentContainer = this.querySelector(':scope > .tnt-carousel-item-content');
+        if (!this.carouselContainer) this.carouselContainer = this.closest('.tnt-carousel-viewport');
+        if (!this.contentContainer || !this.carouselContainer) return;
         this.calculateNaturalWidth();
     }
 }
@@ -120,12 +108,5 @@ export function onLoad(element, dotNetRef) {
         customElements.define('tnt-carousel-item', TnTCarouselItem);
     }
 }
-
-export function onUpdate(element, dotNetRef) {
-    if (element && element instanceof TnTCarouselItem) {
-        element.onUpdate();
-    }
-}
-export function onDispose(element, dotNetRef) {
-
-}
+export function onUpdate(element, dotNetRef) { if (element && element instanceof TnTCarouselItem) element.onUpdate(); }
+export function onDispose(element, dotNetRef) { }
