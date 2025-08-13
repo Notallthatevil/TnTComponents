@@ -22,12 +22,15 @@ public partial class TnTCarousel {
     [Parameter]
     public TnTColor? BackgroundColor { get; set; }
 
+    [Parameter]
+    public bool EnableSnapping { get; set; } = true;
 
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-carousel")
         .AddClass("tnt-carousel-hero", Appearance is CarouselAppearance.Hero)
         .AddClass("tnt-carousel-hero-centered", Appearance is CarouselAppearance.CenteredHero)
+        .AddClass("tnt-carousel-snapping", EnableSnapping)
         .Build();
 
     public override string? ElementStyle => CssStyleBuilder.Create()

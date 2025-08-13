@@ -32,7 +32,7 @@
         </div>
     </TnTComponents.TnTCarouselItem>
 
-    @* <TnTComponents.TnTCarouselItem BackgroundImageSrc="Logo.png">
+     <TnTComponents.TnTCarouselItem BackgroundImageSrc="Logo.png">
         <div style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding: 16px; border-radius: 0 0 28px 28px; margin: -16px;">
             <h4 style="margin: 0; color: white;">Item 5</h4>
             <p style="margin: 8px 0 0 0; color: white; opacity: 0.9;">Fifth carousel item</p>
@@ -86,33 +86,5 @@
             <h4 style="margin: 0; color: white;">Item 12</h4>
             <p style="margin: 8px 0 0 0; color: white; opacity: 0.9;">Twelfth carousel item</p>
         </div>
-    </TnTComponents.TnTCarouselItem> *@
+    </TnTComponents.TnTCarouselItem>
 </TnTComponents.TnTCarousel>
-
-<div style="margin-top: 20px; padding: 16px; border-radius: 8px;">
-    <h4>Material 3 Carousel Features:</h4>
-    <ul>
-        <li><strong>Edge Zone Shrinking:</strong> Items start shrinking when within 40px of carousel boundaries</li>
-        <li><strong>Gradual Shrinking:</strong> Items progressively reduce in size (up to 30%) as they approach edges</li>
-        <li><strong>Consistent Behavior:</strong> Same shrinking behavior whether scrolling left or right</li>
-        <li><strong>Proper Border Rendering:</strong> Borders always stay within viewport boundaries</li>
-        <li><strong>Material 3 Compliance:</strong> Maintains 56px minimum width per specification</li>
-        <li><strong>Smooth Transitions:</strong> CSS transitions provide fluid width changes</li>
-        <li><strong>Real-time Updates:</strong> Responds instantly to scrolling and container resizing</li>
-        <li><strong>Overflow Protection:</strong> Hard overflow (items extending beyond boundaries) is handled separately</li>
-    </ul>
-    <p><strong>Fixed Issue:</strong> Items now consistently shrink when positioned near carousel edges, ensuring the same partial visibility effect whether on initial load or after scrolling. The edge detection uses a 40px zone to start shrinking before items actually reach the boundaries.</p>
-</div>
-
-<button onclick="(() => {
-let carousel = document.querySelector('.tnt-carousel-viewport');
-carousel.scroll({top:0, left: carousel.scrollLeft + 1});
-})()">
-    scroll Right
-</button>
-<button onclick="(() => {
-let carousel = document.querySelector('.tnt-carousel-viewport');
-carousel.scroll({top:0, left: carousel.scrollLeft - 1});
-})()">
-    scroll Left
-</button>

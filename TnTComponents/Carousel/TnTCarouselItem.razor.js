@@ -22,10 +22,7 @@ export class TnTCarouselItem extends HTMLElement {
                 carouselsByIdentifier.delete(oldValue);
             }
             carouselsByIdentifier.set(newValue, this);
-            this.contentContainer = this.querySelector(':scope > .tnt-carousel-item');
-
-            this.carouselContainer = this.closest('.tnt-carousel-scroll-container');
-            this.calculateNaturalWidth();
+            this.onUpdate();
         }
     }
 
@@ -89,6 +86,13 @@ export class TnTCarouselItem extends HTMLElement {
             this.style.justifyContent = null;
         }
     }
+
+    onUpdate() {
+        this.contentContainer = this.querySelector(':scope > .tnt-carousel-item');
+
+        this.carouselContainer = this.closest('.tnt-carousel-scroll-container');
+        this.calculateNaturalWidth();
+    }
 }
 export function onLoad(element, dotNetRef) {
     if (!customElements.get('tnt-carousel-item')) {
@@ -97,6 +101,9 @@ export function onLoad(element, dotNetRef) {
 }
 
 export function onUpdate(element, dotNetRef) {
+    if (element && element instanceof TnTCarouselItem) {
+        element.onUpdate();
+    }
 }
 export function onDispose(element, dotNetRef) {
 
