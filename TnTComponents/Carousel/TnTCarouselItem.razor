@@ -5,7 +5,7 @@
 
 @code {
     internal void RenderItem(RenderTreeBuilder __builder) {
-        <tnt-carousel-item @attributes="@AdditionalAttributes">
+        <tnt-carousel-item @attributes="@AdditionalAttributes" class="@($"tnt-carousel-item {(_hero ? " tnt-carousel-hero" : null)}")">
             <div class="@ElementClass" style="@ElementStyle" id="@ElementId" title="@ElementTitle" @ref="Element" lang="@ElementLang" @onclick="@OnClickCallback">
                 @ChildContent
                 @if (OnClickCallback.HasDelegate && EnableRipple) {

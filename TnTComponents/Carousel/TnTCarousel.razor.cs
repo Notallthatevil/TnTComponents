@@ -28,11 +28,14 @@ public partial class TnTCarousel {
     [Parameter]
     public int? AutoPlayInterval { get; set; }
 
+    [Parameter]
+    public bool AllowDragging { get; set; } = true;
+
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-carousel")
-        .AddClass("tnt-carousel-hero", Appearance is CarouselAppearance.Hero)
-        .AddClass("tnt-carousel-hero-centered", Appearance is CarouselAppearance.CenteredHero)
+        .AddClass("tnt-carousel-hero", Appearance.HasFlag(CarouselAppearance.Hero))
+        .AddClass("tnt-carousel-centered", Appearance.HasFlag(CarouselAppearance.Centered) && EnableSnapping)
         .AddClass("tnt-carousel-snapping", EnableSnapping)
         .Build();
 
@@ -59,9 +62,10 @@ public partial class TnTCarousel {
         }
     }
 }
-
+    
+[Flags]
 public enum CarouselAppearance {
-    Default,
-    Hero,
-    CenteredHero
+    Default = 0,
+    Hero = 1,
+    Centered = 2
 }

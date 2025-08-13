@@ -5,7 +5,7 @@ export class TnTCarouselItem extends HTMLElement {
     constructor() {
         super();
         this.naturalWidth = null;
-        this.backgroundImageWidth = '80%';
+        this.backgroundImageWidth = '100%';
         this.contentContainer = null;
     }
 
@@ -27,6 +27,15 @@ export class TnTCarouselItem extends HTMLElement {
     }
 
     calculateNaturalWidth() {
+        // If this item is marked as a hero, force a fixed relative width and bypass image width logic
+        if (this.classList.contains('tnt-carousel-hero')) {
+            this.style.width = '80%';
+            this.backgroundImageWidth = '100%';
+            this.naturalWidth = '100%'; // not using intrinsic width
+            this.updateItemWidth();
+            return;
+        }
+
         const bgImage = this.contentContainer.style.backgroundImage;
         if (bgImage && bgImage !== 'none') {
             // Extract URL from background-image: url("...")
@@ -54,7 +63,7 @@ export class TnTCarouselItem extends HTMLElement {
         const parentRect = this.carouselContainer.getBoundingClientRect();
         const itemRect = this.getBoundingClientRect();
 
-        let newWidth = this.naturalWidth;
+        let newWidth = itemRect.width;
         if (itemRect.width > parentRect.width) {
             this.style.width = `${parentRect.width}px`;
             this.contentContainer.style.width = '100%';
@@ -88,7 +97,7 @@ export class TnTCarouselItem extends HTMLElement {
     }
 
     onUpdate() {
-        this.contentContainer = this.querySelector(':scope > .tnt-carousel-item');
+        this.contentContainer = this.querySelector(':scope > .tnt-carousel-item-content');
 
         this.carouselContainer = this.closest('.tnt-carousel-viewport');
         this.calculateNaturalWidth();

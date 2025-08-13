@@ -10,14 +10,16 @@ public partial class TnTCarouselItem {
 
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
-        .AddClass("tnt-carousel-item")
+        .AddClass("tnt-carousel-item-content")
         .AddClass("tnt-interactable", OnClickCallback.HasDelegate)
+        .AddClass("tnt-carousel-hero", _hero)
         .Build();
 
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddStyle("background-image", $"url('{BackgroundImageSrc}')", !string.IsNullOrWhiteSpace(BackgroundImageSrc))
-        .AddStyle("width", "80%")
+        .AddStyle("width", "80%", !_hero)
+        .AddStyle("width", "100%", _hero)
         .Build();
 
     [Parameter]
@@ -36,6 +38,8 @@ public partial class TnTCarouselItem {
 
     [Parameter]
     public bool EnableRipple { get; set; } = true;
+
+    private bool _hero => _carousel?.Appearance.HasFlag(CarouselAppearance.Hero) == true;
 
     protected override void OnInitialized() {
         base.OnInitialized();

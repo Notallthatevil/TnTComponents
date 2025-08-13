@@ -10,13 +10,21 @@ $gapSize: var(--tnt-carousel-item-gap, 8px);
     width: 100%;
 
     &.tnt-carousel-snapping {
-        .tnt-carousel-viewport:not(.tnt-carousel-dragging) {
-            scroll-snap-type: x mandatory;
-            scroll-behavior: smooth;
-
+        &:not(.tnt-carousel-centered) {
             ::deep tnt-carousel-item {
                 scroll-snap-align: start;
             }
+        }
+
+        &.tnt-carousel-centered {
+            ::deep tnt-carousel-item {
+                scroll-snap-align: center;
+            }
+        }
+
+        .tnt-carousel-viewport:not(.tnt-carousel-dragging) {
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
         }
     }
 
@@ -29,18 +37,17 @@ $gapSize: var(--tnt-carousel-item-gap, 8px);
         flex-flow: row nowrap;
         gap: $gapSize;
         border-radius: 28px;
-        -ms-overflow-style: none;
-        scrollbar-width: none;
+        //-ms-overflow-style: none;
+        //scrollbar-width: none;
         cursor: grab;
         user-select: none;
 
         &.tnt-carousel-dragging {
             cursor: grabbing;
         }
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
+        //&::-webkit-scrollbar {
+        //    display: none;
+        //}
     }
 
     ::deep .tnt-carousel-button {

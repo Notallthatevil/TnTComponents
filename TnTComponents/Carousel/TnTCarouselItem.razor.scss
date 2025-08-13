@@ -1,15 +1,16 @@
 ﻿@use '../Styles/_Variables/_colors.scss' as colors;
 @use '../Styles/_Variables/_interactable.scss' as interactable;
 
-$bg-width: var(--tnt-carousel-item-bg-width, 80%);
+$bg-width: var(--tnt-carousel-item-bg-width, 100%);
 
 tnt-carousel-item {
     flex-grow: 0;
     flex-shrink: 0;
     box-sizing: border-box;
     display: flex;
+    max-width: 80%;
 
-    .tnt-carousel-item {
+    .tnt-carousel-item-content {
         box-sizing: border-box;
         background-size: cover;
         background-position: center;
@@ -21,5 +22,9 @@ tnt-carousel-item {
         overflow: clip;
 
         @include interactable.tnt-interactable(colors.$tnt-color-surface-tint, null, true);
+
+        &.tnt-carousel-hero {
+            max-width: 100%;
+        }
     }
 }

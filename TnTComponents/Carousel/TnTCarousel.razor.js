@@ -2,7 +2,7 @@ const carouselsByIdentifier = new Map();
 
 const gapSize = 8;
 export class TnTCarousel extends HTMLElement {
-    static observedAttributes = [TnTComponents.customAttribute, 'tnt-auto-play-interval'];
+    static observedAttributes = [TnTComponents.customAttribute, 'tnt-auto-play-interval', 'tnt-allow-dragging'];
     constructor() {
         super();
         this.carouselViewPort = null;
@@ -31,6 +31,8 @@ export class TnTCarousel extends HTMLElement {
         this._nextButton = null;
         this._onPrevClick = null;
         this._onNextClick = null;
+        // Dragging enable flag
+        this._allowDragging = true; // default true for backward compatibility
     }
 
     disconnectedCallback() {
@@ -65,6 +67,34 @@ export class TnTCarousel extends HTMLElement {
             this.onUpdate();
         } else if (name === 'tnt-auto-play-interval' && oldValue !== newValue) {
             this._configureAutoPlayFromAttribute();
+        } else if (name === 'tnt-allow-dragging' && oldValue !== newValue) {
+            this._updateDraggingFromAttribute();
+        }
+    }
+
+    _isCenteredMode() {
+        return this.classList.contains('tnt-carousel-centered');
+    }
+
+    _updateDraggingFromAttribute() {
+        const attr = this.getAttribute('tnt-allow-dragging');
+        // Treat explicit values meaning false; null => disabled; any other value => true
+        if (attr == null) {
+            this._allowDragging = false; // opt-in only
+        } else {
+            const val = attr.trim().toLowerCase();
+            if (val === 'false' || val === '0' || val === 'no' || val === 'off') {
+                this._allowDragging = false;
+            } else {
+                this._allowDragging = true;
+            }
+        }
+        if (this._allowDragging) {
+            this._attachDragEvents();
+        } else {
+            this._detachDragEvents();
+            this._isDragging = false;
+            this.carouselViewPort?.classList.remove('tnt-carousel-dragging');
         }
     }
 
@@ -111,8 +141,17 @@ export class TnTCarousel extends HTMLElement {
         this._currentAutoIndex = (this._currentAutoIndex + 1) % this.carouselItems.length;
         const target = this.carouselItems[this._currentAutoIndex];
         if (!target) return;
-        // Scroll so the target's left aligns. Use smooth if snapping enabled; otherwise instant.
-        this.carouselViewPort.scrollTo({ left: target.offsetLeft, behavior: 'smooth' });
+        this._scrollToItem(target);
+    }
+
+    _scrollToItem(item) {
+        if (!this.carouselViewPort || !item) return;
+        if (this._isCenteredMode()) {
+            const targetLeft = item.offsetLeft - (this.carouselViewPort.clientWidth - item.offsetWidth) / 2;
+            this.carouselViewPort.scrollTo({ left: targetLeft, behavior: 'smooth' });
+        } else {
+            this.carouselViewPort.scrollTo({ left: item.offsetLeft, behavior: 'smooth' });
+        }
     }
 
     _recalculateChildWidths() {
@@ -136,7 +175,7 @@ export class TnTCarousel extends HTMLElement {
     }
 
     _scheduleRecalc() {
-        if (this._rafId) return; // already scheduled
+        if (this._rafId) return;
         this._rafId = requestAnimationFrame(() => {
             this._rafId = null;
             this._recalculateChildWidths();
@@ -145,10 +184,13 @@ export class TnTCarousel extends HTMLElement {
 
     _attachDragEvents() {
         if (!this.carouselViewPort) return;
-        // Clean existing first
+        if (!this._allowDragging) {
+            this._detachDragEvents();
+            return;
+        }
         this._detachDragEvents();
 
-        const moveThreshold = 8; // px before we consider it a drag
+        const moveThreshold = 8;
         this._onPointerDown = (e) => {
             if (e.button !== 0 && e.pointerType === 'mouse') return;
             this._isDragging = true;
@@ -156,7 +198,7 @@ export class TnTCarousel extends HTMLElement {
             this._dragStartX = e.clientX;
             this._dragScrollLeft = this.carouselViewPort.scrollLeft;
             this.carouselViewPort.classList.add('tnt-carousel-dragging');
-            this._stopAutoPlay(); // pause autoplay immediately on interaction
+            this._stopAutoPlay();
             try { this.carouselViewPort.setPointerCapture(e.pointerId); } catch { }
         };
         this._onPointerMove = (e) => {
@@ -166,8 +208,7 @@ export class TnTCarousel extends HTMLElement {
             e.preventDefault();
             const newLeft = this._dragScrollLeft - dx;
             if (this.carouselViewPort.scrollLeft !== newLeft) {
-                this.carouselViewPort.scrollLeft = newLeft; // direct assignment triggers scroll event
-                // Fallback immediate measurement (helps some browsers while dragging)
+                this.carouselViewPort.scrollLeft = newLeft;
                 this._scheduleRecalc();
                 this.carouselViewPort.dispatchEvent(new Event('scroll'));
             }
@@ -176,9 +217,7 @@ export class TnTCarousel extends HTMLElement {
             if (!this._isDragging) return;
             this._isDragging = false;
             this.carouselViewPort.classList.remove('tnt-carousel-dragging');
-            // Ensure final recalculation after last movement
             this._scheduleRecalc();
-            // Re-align autoplay index to closest item so rotation appears natural
             this._syncAutoIndexToViewport();
             this._startAutoPlay();
         };
@@ -203,20 +242,32 @@ export class TnTCarousel extends HTMLElement {
         const viewportLeft = this.carouselViewPort.scrollLeft;
         const atEnd = Math.ceil(viewportLeft + this.carouselViewPort.clientWidth) >= this.carouselViewPort.scrollWidth - 1;
         if (atEnd) {
-            // Set so that next autoplay advance goes to the final item, then wraps.
             this._currentAutoIndex = Math.max(0, this.carouselItems.length - 2);
             return;
         }
-        let closestIndex = 0;
-        let closestDistance = Number.POSITIVE_INFINITY;
-        this.carouselItems.forEach((item, idx) => {
-            const dist = Math.abs(item.offsetLeft - viewportLeft);
-            if (dist < closestDistance) {
-                closestDistance = dist;
-                closestIndex = idx;
-            }
-        });
-        this._currentAutoIndex = closestIndex - 1; // so next advance goes to the visible one if we just started
+        let chosenIndex = 0;
+        if (this._isCenteredMode()) {
+            const viewportCenter = viewportLeft + this.carouselViewPort.clientWidth / 2;
+            let closestDist = Number.POSITIVE_INFINITY;
+            this.carouselItems.forEach((item, idx) => {
+                const itemCenter = item.offsetLeft + item.offsetWidth / 2;
+                const dist = Math.abs(itemCenter - viewportCenter);
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    chosenIndex = idx;
+                }
+            });
+        } else {
+            let closestDistance = Number.POSITIVE_INFINITY;
+            this.carouselItems.forEach((item, idx) => {
+                const dist = Math.abs(item.offsetLeft - viewportLeft);
+                if (dist < closestDistance) {
+                    closestDistance = dist;
+                    chosenIndex = idx;
+                }
+            });
+        }
+        this._currentAutoIndex = chosenIndex - 1;
     }
 
     _attachResizeObserver() {
@@ -240,6 +291,23 @@ export class TnTCarousel extends HTMLElement {
         if (atEnd && nextButton) {
             return this.carouselItems.length - 1;
         }
+        if (this._isCenteredMode()) {
+            if (this.carouselViewPort.scrollLeft === 0 && !nextButton) {
+                return this.carouselItems.length - 1
+            }
+            const viewportCenter = viewportLeft + this.carouselViewPort.clientWidth / 2;
+            let closestIndex = 0;
+            let closestDistance = Number.POSITIVE_INFINITY;
+            this.carouselItems.forEach((item, idx) => {
+                const itemCenter = item.offsetLeft + item.offsetWidth / 2;
+                const dist = Math.abs(itemCenter - viewportCenter);
+                if (dist < closestDistance) {
+                    closestDistance = dist;
+                    closestIndex = idx;
+                }
+            });
+            return closestIndex;
+        }
         let closestIndex = 0;
         let closestDistance = Number.POSITIVE_INFINITY;
         this.carouselItems.forEach((item, idx) => {
@@ -259,8 +327,7 @@ export class TnTCarousel extends HTMLElement {
         if (index >= count) index = index % count;
         const target = this.carouselItems[index];
         if (!target) return;
-        this.carouselViewPort.scrollTo({ left: target.offsetLeft, behavior: 'smooth' });
-        // Set autoplay index so next advance is the item after the one we navigated to
+        this._scrollToItem(target);
         this._currentAutoIndex = index;
     }
 
@@ -283,7 +350,7 @@ export class TnTCarousel extends HTMLElement {
             const visible = this._getVisibleIndex();
             const target = (visible - 1 + this.carouselItems.length) % this.carouselItems.length;
             this._goToIndex(target);
-            this._startAutoPlay(); // restart timer
+            this._startAutoPlay();
         };
         this._onNextClick = (e) => {
             e.stopPropagation();
@@ -292,7 +359,7 @@ export class TnTCarousel extends HTMLElement {
             const visible = this._getVisibleIndex(true);
             const target = (visible + 1) % this.carouselItems.length;
             this._goToIndex(target);
-            this._startAutoPlay(); // restart timer
+            this._startAutoPlay();
         };
         if (this._prevButton) this._prevButton.addEventListener('click', this._onPrevClick);
         if (this._nextButton) this._nextButton.addEventListener('click', this._onNextClick);
@@ -315,7 +382,8 @@ export class TnTCarousel extends HTMLElement {
         };
 
         this.carouselViewPort.addEventListener('scroll', this._scrollListener, { passive: true });
-        this._attachDragEvents();
+        // Dragging depends on attribute flag
+        this._updateDraggingFromAttribute();
         this._attachResizeObserver();
         this._attachNavButtonEvents();
         this._configureAutoPlayFromAttribute();
