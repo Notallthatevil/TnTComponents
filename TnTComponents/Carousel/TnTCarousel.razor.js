@@ -26,6 +26,11 @@ export class TnTCarousel extends HTMLElement {
         this._autoPlayIntervalMs = null;
         this._autoPlayTimerId = null;
         this._currentAutoIndex = -1; // start before first
+        // Nav buttons
+        this._prevButton = null;
+        this._nextButton = null;
+        this._onPrevClick = null;
+        this._onNextClick = null;
     }
 
     disconnectedCallback() {
@@ -46,6 +51,7 @@ export class TnTCarousel extends HTMLElement {
             this._resizeObserver.disconnect();
             this._resizeObserver = null;
         }
+        this._detachNavButtonEvents();
         this._stopAutoPlay();
         this._detachDragEvents();
     }
@@ -195,6 +201,12 @@ export class TnTCarousel extends HTMLElement {
     _syncAutoIndexToViewport() {
         if (!this.carouselItems || this.carouselItems.length === 0) return;
         const viewportLeft = this.carouselViewPort.scrollLeft;
+        const atEnd = Math.ceil(viewportLeft + this.carouselViewPort.clientWidth) >= this.carouselViewPort.scrollWidth - 1;
+        if (atEnd) {
+            // Set so that next autoplay advance goes to the final item, then wraps.
+            this._currentAutoIndex = Math.max(0, this.carouselItems.length - 2);
+            return;
+        }
         let closestIndex = 0;
         let closestDistance = Number.POSITIVE_INFINITY;
         this.carouselItems.forEach((item, idx) => {
@@ -221,6 +233,71 @@ export class TnTCarousel extends HTMLElement {
         this._resizeObserver.observe(this.carouselViewPort);
     }
 
+    _getVisibleIndex(nextButton) {
+        if (!this.carouselItems || this.carouselItems.length === 0) return -1;
+        const viewportLeft = this.carouselViewPort.scrollLeft;
+        const atEnd = Math.ceil(viewportLeft + this.carouselViewPort.clientWidth) >= this.carouselViewPort.scrollWidth - 1;
+        if (atEnd && nextButton) {
+            return this.carouselItems.length - 1;
+        }
+        let closestIndex = 0;
+        let closestDistance = Number.POSITIVE_INFINITY;
+        this.carouselItems.forEach((item, idx) => {
+            const dist = Math.abs(item.offsetLeft - viewportLeft);
+            if (dist < closestDistance) {
+                closestDistance = dist;
+                closestIndex = idx;
+            }
+        });
+        return closestIndex;
+    }
+
+    _goToIndex(index) {
+        if (!this.carouselItems || this.carouselItems.length === 0) return;
+        const count = this.carouselItems.length;
+        if (index < 0) index = (index + count) % count;
+        if (index >= count) index = index % count;
+        const target = this.carouselItems[index];
+        if (!target) return;
+        this.carouselViewPort.scrollTo({ left: target.offsetLeft, behavior: 'smooth' });
+        // Set autoplay index so next advance is the item after the one we navigated to
+        this._currentAutoIndex = index;
+    }
+
+    _detachNavButtonEvents() {
+        if (this._prevButton && this._onPrevClick) this._prevButton.removeEventListener('click', this._onPrevClick);
+        if (this._nextButton && this._onNextClick) this._nextButton.removeEventListener('click', this._onNextClick);
+        this._prevButton = this._nextButton = null;
+        this._onPrevClick = this._onNextClick = null;
+    }
+
+    _attachNavButtonEvents() {
+        this._detachNavButtonEvents();
+        this._prevButton = this.querySelector(':scope > .tnt-carousel-prev-button');
+        this._nextButton = this.querySelector(':scope > .tnt-carousel-next-button');
+        if (!this._prevButton && !this._nextButton) return;
+        this._onPrevClick = (e) => {
+            e.stopPropagation();
+            if (!this.carouselItems || this.carouselItems.length === 0) return;
+            this._stopAutoPlay();
+            const visible = this._getVisibleIndex();
+            const target = (visible - 1 + this.carouselItems.length) % this.carouselItems.length;
+            this._goToIndex(target);
+            this._startAutoPlay(); // restart timer
+        };
+        this._onNextClick = (e) => {
+            e.stopPropagation();
+            if (!this.carouselItems || this.carouselItems.length === 0) return;
+            this._stopAutoPlay();
+            const visible = this._getVisibleIndex(true);
+            const target = (visible + 1) % this.carouselItems.length;
+            this._goToIndex(target);
+            this._startAutoPlay(); // restart timer
+        };
+        if (this._prevButton) this._prevButton.addEventListener('click', this._onPrevClick);
+        if (this._nextButton) this._nextButton.addEventListener('click', this._onNextClick);
+    }
+
     onUpdate() {
         this.carouselViewPort = this.querySelector(':scope > .tnt-carousel-viewport');
         this.carouselItems = this.carouselViewPort.querySelectorAll(':scope > tnt-carousel-item');
@@ -240,6 +317,7 @@ export class TnTCarousel extends HTMLElement {
         this.carouselViewPort.addEventListener('scroll', this._scrollListener, { passive: true });
         this._attachDragEvents();
         this._attachResizeObserver();
+        this._attachNavButtonEvents();
         this._configureAutoPlayFromAttribute();
     }
 }
