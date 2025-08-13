@@ -59,6 +59,14 @@ export class TnTCarouselItem extends HTMLElement {
     }
 
     updateItemWidth() {
+        if (!this.carouselContainer || !this.contentContainer) {
+            this.onUpdate();
+            if (!this.carouselContainer || !this.contentContainer) {
+                return;
+            }
+
+        }
+
         // Get bounding rects
         const parentRect = this.carouselContainer.getBoundingClientRect();
         const itemRect = this.getBoundingClientRect();
@@ -98,8 +106,12 @@ export class TnTCarouselItem extends HTMLElement {
 
     onUpdate() {
         this.contentContainer = this.querySelector(':scope > .tnt-carousel-item-content');
-
         this.carouselContainer = this.closest('.tnt-carousel-viewport');
+
+        if (!this.contentContainer || !this.carouselContainer) {
+            return;
+        }
+
         this.calculateNaturalWidth();
     }
 }

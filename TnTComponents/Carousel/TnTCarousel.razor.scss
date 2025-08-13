@@ -37,17 +37,17 @@ $gapSize: var(--tnt-carousel-item-gap, 8px);
         flex-flow: row nowrap;
         gap: $gapSize;
         border-radius: 28px;
-        //-ms-overflow-style: none;
-        //scrollbar-width: none;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
         cursor: grab;
         user-select: none;
 
         &.tnt-carousel-dragging {
             cursor: grabbing;
         }
-        //&::-webkit-scrollbar {
-        //    display: none;
-        //}
+        &::-webkit-scrollbar {
+            display: none;
+        }
     }
 
     ::deep .tnt-carousel-button {

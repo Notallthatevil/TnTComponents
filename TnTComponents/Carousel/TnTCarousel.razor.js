@@ -367,26 +367,28 @@ export class TnTCarousel extends HTMLElement {
 
     onUpdate() {
         this.carouselViewPort = this.querySelector(':scope > .tnt-carousel-viewport');
-        this.carouselItems = this.carouselViewPort.querySelectorAll(':scope > tnt-carousel-item');
-        this.carouselViewPort.style.setProperty('--tnt-carousel-item-gap', `${gapSize}px`);
+        if (this.carouselViewPort) {
+            this.carouselItems = this.carouselViewPort.querySelectorAll(':scope > tnt-carousel-item');
+            this.carouselViewPort.style.setProperty('--tnt-carousel-item-gap', `${gapSize}px`);
 
-        this._recalculateChildWidths();
-
-        if (this._scrollListener) {
-            this.carouselViewPort.removeEventListener('scroll', this._scrollListener);
-            this._scrollListener = null;
-        }
-        this._scrollListener = () => {
-            // Recalc on natural scroll events
             this._recalculateChildWidths();
-        };
 
-        this.carouselViewPort.addEventListener('scroll', this._scrollListener, { passive: true });
-        // Dragging depends on attribute flag
-        this._updateDraggingFromAttribute();
-        this._attachResizeObserver();
-        this._attachNavButtonEvents();
-        this._configureAutoPlayFromAttribute();
+            if (this._scrollListener) {
+                this.carouselViewPort.removeEventListener('scroll', this._scrollListener);
+                this._scrollListener = null;
+            }
+            this._scrollListener = () => {
+                // Recalc on natural scroll events
+                this._recalculateChildWidths();
+            };
+
+            this.carouselViewPort.addEventListener('scroll', this._scrollListener, { passive: true });
+            // Dragging depends on attribute flag
+            this._updateDraggingFromAttribute();
+            this._attachResizeObserver();
+            this._attachNavButtonEvents();
+            this._configureAutoPlayFromAttribute();
+        }
     }
 }
 
@@ -399,7 +401,7 @@ export function onLoad(element, dotNetRef) {
 export function onUpdate(element, dotNetRef) {
     if (element && element instanceof TnTCarousel) {
         element.onUpdate();
-    } 
+    }
 }
 export function onDispose(element, dotNetRef) {
 }
