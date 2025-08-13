@@ -20,6 +20,8 @@ export class TnTCarousel extends HTMLElement {
         this._onPointerLeave = null;
         this._onClickCapture = null;
         this._rafId = null; // for throttling recalculations during drag
+        // Resize observer
+        this._resizeObserver = null;
     }
 
     disconnectedCallback() {
@@ -35,6 +37,10 @@ export class TnTCarousel extends HTMLElement {
         if (this._rafId) {
             cancelAnimationFrame(this._rafId);
             this._rafId = null;
+        }
+        if (this._resizeObserver) {
+            this._resizeObserver.disconnect();
+            this._resizeObserver = null;
         }
         this._detachDragEvents();
     }
@@ -128,6 +134,20 @@ export class TnTCarousel extends HTMLElement {
         this.carouselViewPort.addEventListener('click', this._onClickCapture, true);
     }
 
+    _attachResizeObserver() {
+        if (!this.carouselViewPort) return;
+        if (this._resizeObserver) {
+            this._resizeObserver.disconnect();
+            this._resizeObserver = null;
+        }
+        // Observe viewport size changes
+        this._resizeObserver = new ResizeObserver(() => {
+            // Use rAF to avoid layout thrash if rapid
+            this._scheduleRecalc();
+        });
+        this._resizeObserver.observe(this.carouselViewPort);
+    }
+
     onUpdate() {
         this.carouselViewPort = this.querySelector(':scope > .tnt-carousel-viewport');
         this.carouselItems = this.carouselViewPort.querySelectorAll(':scope > tnt-carousel-item');
@@ -146,6 +166,7 @@ export class TnTCarousel extends HTMLElement {
 
         this.carouselViewPort.addEventListener('scroll', this._scrollListener, { passive: true });
         this._attachDragEvents();
+        this._attachResizeObserver();
     }
 }
 
