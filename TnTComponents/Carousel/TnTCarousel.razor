@@ -11,12 +11,10 @@
     <tnt-carousel @attributes="AdditionalAttributes" class="@ElementClass" style="@ElementStyle" @ref="Element">
         @* <TnTImageButton class="tnt-carousel-button tnt-carousel-prev-button" Icon="@MaterialIcon.ChevronLeft" /> *@
         @* <TnTImageButton class="tnt-carousel-button tnt-carousel-next-button" Icon="@MaterialIcon.ChevronRight" /> *@
-        <div class="tnt-carousel-scroll-container">
-            <div class="tnt-carousel-viewport">
-                @foreach (var item in _carouselItems) {
-                    @item.RenderItem
-                }
-            </div>
+        <div class="tnt-carousel-viewport">
+            @foreach (var item in _carouselItems) {
+                @item.RenderItem
+            }
         </div>
         @if (_items?.Any() == true && _items.First().Value is not null) {
             @_items.First().Value.RenderPageScript

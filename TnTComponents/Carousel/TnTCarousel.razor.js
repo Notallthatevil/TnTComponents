@@ -5,7 +5,6 @@ export class TnTCarousel extends HTMLElement {
     static observedAttributes = [TnTComponents.customAttribute];
     constructor() {
         super();
-        this.carouselScrollContainer = null;
         this.carouselViewPort = null;
         this.carouselItems = null;
         this.fullSize = null;
@@ -34,14 +33,6 @@ export class TnTCarousel extends HTMLElement {
         }
     }
 
-    _calculateFullSize() {
-        if (this.carouselViewPort && this.carouselItems?.length > 0) {
-            const parentRect = this.carouselViewPort.getBoundingClientRect();
-            this.fullSize = (this.carouselItems.length * (parentRect.width * 0.8)) + (this.carouselItems.length * gapSize);
-            this.carouselViewPort.style.width = `${this.fullSize}px`;
-        }
-    }
-
     _recalculateChildWidths() {
         if (this.carouselItems) {
             // Find all tnt-carousel-item children and call _updateSize
@@ -54,12 +45,10 @@ export class TnTCarousel extends HTMLElement {
     }
 
     onUpdate() {
-        this.carouselScrollContainer = this.querySelector(':scope > .tnt-carousel-scroll-container');
-        this.carouselViewPort = this.carouselScrollContainer.querySelector(':scope > .tnt-carousel-viewport');
+        this.carouselViewPort = this.querySelector(':scope > .tnt-carousel-viewport');
         this.carouselItems = this.carouselViewPort.querySelectorAll(':scope > tnt-carousel-item');
         this.carouselViewPort.style.setProperty('--tnt-carousel-item-gap', `${gapSize}px`);
 
-        this._calculateFullSize();
         this._recalculateChildWidths();
 
         if (this._scrollListener) {
@@ -71,7 +60,7 @@ export class TnTCarousel extends HTMLElement {
             this._recalculateChildWidths();
         };
 
-        this.carouselScrollContainer.addEventListener('scroll', this._scrollListener);
+        this.carouselViewPort.addEventListener('scroll', this._scrollListener);
     }
 }
 

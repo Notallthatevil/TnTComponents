@@ -11,28 +11,29 @@ $gapSize: var(--tnt-carousel-item-gap, 8px);
     width: 100%;
 
     &.tnt-carousel-snapping {
-        .tnt-carousel-scroll-container {
+        .tnt-carousel-viewport {
             scroll-snap-type: x mandatory;
+
+            ::deep tnt-carousel-item {
+                scroll-snap-align: start;
+            }
         }
     }
 
-    .tnt-carousel-scroll-container {
+    .tnt-carousel-viewport {
         height: 100%;
         width: 100%;
         overflow-x: auto;
         overflow-y: hidden;
+        display: flex;
+        flex-flow: row nowrap;
+        gap: $gapSize;
+        border-radius: 28px;
         -ms-overflow-style: none;
         scrollbar-width: none;
 
         &::-webkit-scrollbar {
             display: none;
-        }
-
-        .tnt-carousel-viewport {
-            display: flex;
-            flex-flow: row nowrap;
-            gap: $gapSize;
-            height: 100%;
         }
     }
 

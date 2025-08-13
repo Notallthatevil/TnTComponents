@@ -90,7 +90,7 @@ export class TnTCarouselItem extends HTMLElement {
     onUpdate() {
         this.contentContainer = this.querySelector(':scope > .tnt-carousel-item');
 
-        this.carouselContainer = this.closest('.tnt-carousel-scroll-container');
+        this.carouselContainer = this.closest('.tnt-carousel-viewport');
         this.calculateNaturalWidth();
     }
 }
