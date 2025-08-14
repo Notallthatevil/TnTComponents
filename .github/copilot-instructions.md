@@ -1,41 +1,82 @@
 
-# Copilot Instructions for TnTComponents
+## TnTComponents – Copilot Quick Guide
 
-## Context-Specific Guidance
-### 0: Most Important Instruction
-- Never assume anything about the project structure or conventions. Always follow the project's established patterns and conventions. If unsure, ask for clarification.
+### 0. Prime Directive
+Never assume. Mirror existing patterns. If something is ambiguous, pause and surface the question instead of guessing.
 
-### 1. Code Generation
-- For any prompt that requires generating or modifying code, first consult [`.github/instructions/generated-code.md`](./instructions/generated-code.md) for project-specific code generation rules, patterns, and examples.
-### 2. Testing
-- For any prompt that requires writing tests, first consult [`.github/instructions/testing.md`](./instructions/unit-tests.md) for project-specific testing rules, patterns, and examples.
+### 1. Core Principles
+* Small, cohesive, testable components (Material 3 look & feel).
+* Each component lives in its own folder under `TnTComponents/`.
+* Favor consistency over novelty; reuse existing abstractions.
+* No new external packages without explicit approval.
 
-### 3. General Project Guidance
-- For code style guidelines, refer to [`.github/instructions/coding-style.md`](./instructions/code-style.md).
-- **Project Overview**: TnTComponents is a Blazor WebAssembly library of reusable UI components, following Google's Material 3 spec.
-- **Solution Structure**:
-  - `TnTComponents/`: Core component library (e.g., Accordion, Badge, Buttons, Grid, Scheduler, etc.)
-  - `LiveTest/`: Example/test Blazor app for development and manual testing.
-  - `TnTComponents.AspNetCore/`: ASP.NET Core integration for server-side features (e.g., data grid virtualization).
-  - `TnTComponents.Extensions/`: Utility extensions.
-- **Component Patterns**: Each component has its own folder with `.razor`, `.razor.cs`, `.razor.css`, `.razor.scss`, and sometimes `.js` files. Example: `TnTComponents/Buttons/TnTButton.razor`.
-- **Theming**: Themes are JSON files (exported from Material Theme Builder) placed in `wwwroot/Themes`. By adding a `TnTComponents.TnTThemeToggle` component in an app, users can switch themes dynamically.
-- **Testing**: Tests are organized by component in `TnTComponents.Tests/`, mirroring the main library structure.
+### 2. Creating / Extending a Component
+Required files (per folder):
+* `Name.razor` (markup only – logic goes in code-behind)
+* `Name.razor.cs` (partial class inheriting `TnTComponentBase` unless clearly excluded)
+* `Name.razor.scss` (author styles here) → compiled to `.razor.css` / `.razor.min.css`
+* Optional `Name.razor.js` if JS interop is needed; must export: `onLoad`, `onUpdate`, `onDispose` (see `TabView` example)
 
-### 4. Developer Workflows
-- **Build**: `dotnet restore` then `dotnet build` at the solution root.
-- **Test**: `dotnet test` from the solution root or target specific test projects.
-- **Run Example App**: Launch `LiveTest/LiveTest` for manual component testing.
-- Always use the command line for building and testing to ensure consistency.
+Patterns:
+* Parameters: use `[Parameter]` (and `[EditorRequired]` when truly necessary); follow naming & style from similar existing components (e.g., `TnTButton`).
+* Events: expose strongly-typed callbacks (`EventCallback<T>`). Avoid leaking internal state types unless already public.
+* Cascading values: mirror existing usage for theme / density / localization if needed.
+* Theming: dynamic values exposed via inline `style` variables → referenced in SCSS (see button example). Theme JSON lives in `wwwroot/Themes` and is consumed via the theme toggle component.
+* Accessibility: semantic HTML first; add appropriate `role`, `aria-*`, focus order, and keyboard interactions consistent with Material guidance.
 
-### 5. Integration Points
-- **ASP.NET Core**: Add the `TnTComponents.AspNetCore` NuGet package for server-side features.
+### 3. Styling Rules
+* Only SCSS in `.razor.scss`; do not hand-edit generated `.css`.
+* Reuse shared variables from `_Variables` (never hard-code palette values unless transient/testing).
+* Keep selectors component-scoped; avoid global leakage.
 
-### 6. Project-Specific Guidance
-- **Component APIs**: Follow the established patterns for parameters, events, and cascading values as seen in current components.
-- **Styling**: Use `.razor.scss` for component styles; compiled CSS is included in `.razor.css` and `.razor.min.css`.
-- **Extending Components**: Place new components in their own folder under `TnTComponents/`, following the established file structure.
+### 4. Testing Essentials
+Refer to `instructions/unit-tests.md`, but remember:
+* One folder in `TnTComponents.Tests/` mirroring component path.
+* Component tests in `.tests.razor` files; inherit from `Bunit.TestContext`.
+* Use Arrange / Act / Assert; one logical behavioral assertion per test.
+* Focus on behavior (rendered effect, events, state transitions), not internal markup structure unless it's the behavior.
+* Provide at least: render test + key interaction / edge case tests.
 
-### 7. Documentation 
-- When documenting properties, do not describe it as getting or setting a value, instead describe what the property is or how it affects the behavior.
-- If a property, method, or field is inherited or implmented from a base class or interface, use the `inheritdoc` tag to inherit documentation from the base class or interface.
+### 5. Dev Workflows
+* Build: `dotnet restore` then `dotnet build` (solution root).
+* Test: `dotnet test` (or narrow scope by project / filter).
+* Manual verification: run `LiveTest` app (client for UI smoke checks).
+* Keep the build green before adding more features—incremental, verified changes.
+
+### 6. Documentation Rules
+* XML doc every public type/member. Describe purpose & behavior (avoid “Gets or sets ...”).
+* Use `/// <inheritdoc />` for overrides / interface implementations.
+* Include a short usage example in new component summaries when practical.
+
+### 7. When Adding JavaScript
+* Only if necessary (performance, browser API gaps, complex measurements).
+* Namespaced file alongside component.
+* Lifecycle exports: `onLoad(element, options)`, `onUpdate(element, options)`, `onDispose(element)`.
+* Keep interop surface minimal & typed (consider a C# options record / DTO).
+
+### 8. Do / Don't (Quick Scan)
+Do:
+* Follow existing naming & folder conventions.
+* Add tests with new functionality.
+* Keep PR-sized changes cohesive.
+* Support keyboard & screen reader access.
+Don't:
+* Introduce new dependencies silently.
+* Embed logic directly in `.razor` unless trivially declarative.
+* Duplicate patterns (abstract / extend when repetition emerges).
+* Hard-code theme colors where variables exist.
+
+### 9. Reference Maps
+* Code gen rules: `./instructions/generated-code.md`
+* Testing: `./instructions/unit-tests.md`
+* Style guide: `./instructions/code-style.md`
+* Examples to consult first: `Buttons/`, `Accordion/`, `TabView/` for JS pattern.
+
+### 10. Escalation Triggers
+Surface clarification instead of proceeding when:
+* API shape conflicts with an existing analogous component.
+* A feature implies cross-cutting concerns (theming, globalization, virtualization).
+* Requires altering shared base classes.
+
+---
+Concise summary: Mirror existing component structure; keep logic in code-behind; SCSS only for styling; tests mirror structure; document everything; prefer consistency and accessibility; ask when uncertain.
