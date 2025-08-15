@@ -95,8 +95,7 @@ public partial class TnTVirtualize<TItem>() {
         try {
             Loading = true;
 
-            StateHasChanged(); // Allow the UI to display the
-                               // loading indicator
+            await InvokeAsync(StateHasChanged); // Allow the UI to display the loading indicator
             var result = await ItemsProvider(new TnTVirtualizeItemsProviderRequest<TItem> {
                 StartIndex = _items.Count(),
                 SortOnProperties = Sort?.Select(s => new KeyValuePair<string, SortDirection>(s.PropertyName, s.Direction)).ToList() ?? [],
@@ -120,9 +119,10 @@ public partial class TnTVirtualize<TItem>() {
             }
         }
         catch (OperationCanceledException oce) when (oce.CancellationToken == token) { }
+
         Loading = false;
         _loadItemsCts = null;
-        StateHasChanged(); // Display the new items and hide the loading indicator
+        await InvokeAsync(StateHasChanged); // Display the new items and hide the loading indicator
     }
 
     /// <summary>
