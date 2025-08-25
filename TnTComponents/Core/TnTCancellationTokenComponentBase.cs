@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace TnTComponents.Core;
 
-namespace TnTComponents.Core;
 /// <summary>
 ///     Provides a Blazor component base class that manages a <see cref="CancellationTokenSource" /> and ensures proper cancellation and disposal.
 /// </summary>
@@ -22,27 +17,39 @@ public abstract class TnTCancellationTokenComponentBase : TnTDisposableComponent
     private CancellationTokenSource? _cancellationTokenSource = new();
     private bool _disposed;
 
-#if NET9_0_OR_GREATER
-    private readonly Lock _lock = new();
-#else
-    private readonly object _lock = new();
-#endif
     /// <inheritdoc />
     protected override void Dispose(bool disposing) {
-        base.Dispose(disposing);
-        if (disposing) {
-            lock (_lock) {
-                if (!_disposed) {
-                    try {
-                        _cancellationTokenSource?.Cancel();
-                        _cancellationTokenSource?.Dispose();
-                        _cancellationTokenSource = null;
-                    }
-                    catch (ObjectDisposedException) { }
-                    catch (OperationCanceledException) { }
-                    _disposed = true;
+        if (disposing && !_disposed) {
+            try {
+                var cts = Interlocked.Exchange(ref _cancellationTokenSource, null);
+                if (cts is not null) {
+                    cts.Cancel();
+                    cts.Dispose();
                 }
             }
+            catch (ObjectDisposedException) { }
+            finally {
+                _disposed = true;
+            }
         }
+        base.Dispose(disposing);
+    }
+
+    /// <inheritdoc />
+    protected override async ValueTask DisposeAsyncCore() {
+        if (!_disposed) {
+            try {
+                var cts = Interlocked.Exchange(ref _cancellationTokenSource, null);
+                if (cts is not null) {
+                    await cts.CancelAsync().ConfigureAwait(false);
+                    cts.Dispose();
+                }
+            }
+            catch (ObjectDisposedException) { }
+            finally {
+                _disposed = true;
+            }
+        }
+        await base.DisposeAsyncCore();
     }
 }
