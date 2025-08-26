@@ -32,10 +32,10 @@ Patterns:
 ### 4. Testing Essentials
 Refer to `instructions/unit-tests.md`, but remember:
 * One folder in `TnTComponents.Tests/` mirroring component path.
-* Component tests in `.tests.razor` files; inherit from `Bunit.TestContext`.
+* Component tests in `.Tests.cs` files; inherit from `Bunit.TestContext`.
 * Use Arrange / Act / Assert; one logical behavioral assertion per test.
 * Focus on behavior (rendered effect, events, state transitions), not internal markup structure unless it's the behavior.
-* Provide at least: render test + key interaction / edge case tests.
+* Attempt to achieve 100% coverage.
 
 ### 5. Dev Workflows
 * Build: `dotnet restore` then `dotnet build` (solution root).

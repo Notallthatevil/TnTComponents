@@ -29,9 +29,8 @@
 - Focus tests on component functionality and behavior, not markup or style details.
 - Each component should have tests for basic rendering and key behaviors.
 - Always inherit from `Bunit.TestContext` explicity. 
-- All component tests should be in a `.razor` file and be within the `@code` block. 
+- All component tests should be in a `.cs` file. 
 - Unit tests **DO NOT** need to be documented.
-- Use bUnit's `Render` function with inline razor markup instead of `RenderComponent`
 - Avoid duplicated code within test class
 - Only verify markup that belongs to the component being tested.
 - Stick to one logical assertion per test.
@@ -48,8 +47,8 @@
 - Tests should be written with the intent of the code in mind, not necessarily after the code that is written. This will help discover flaws in the code. 
 
 ## File Names
-- Test file names should be include `.tests.(whatever the file extension is)` i.e. `SomeClass.tests.cs` or `SomeComponent.tests.razor`. 
-- For class names, they should replace the `.tests` with `_Tests` i.e. `SomeClass_Tests`.
+- Test file names should be include `.Tests.(whatever the file extension is)` i.e. `SomeClass.Tests.cs` or `SomeComponent.Tests.razor`. 
+- For class names, they should replace the `.Tests` with `_Tests` i.e. `SomeClass_Tests`.
 
 ## References
 
