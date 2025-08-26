@@ -362,3 +362,4 @@ MigrationBackup/
 *.css
 */compilerconfig.json
 */compilerconfig.json.defaults
+coverlet.runsettings
