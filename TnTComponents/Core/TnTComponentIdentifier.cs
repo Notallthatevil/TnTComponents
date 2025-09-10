@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace TnTComponents.Core;
 /// <summary>
 ///     Generates unique identifiers for components in the TnTComponents library.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class TnTComponentIdentifier {
     private const string _identifierPrefix = "tnt_";
     private static readonly Random _rnd = new();
@@ -40,6 +42,7 @@ public static class TnTComponentIdentifier {
 /// <summary>
 ///     Provides a context for generating unique identifiers for components in the TnTComponents library. ///
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class TnTComponentIdentifierContext : IDisposable {
 
     /// <summary>
