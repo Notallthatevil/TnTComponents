@@ -32,7 +32,7 @@ Patterns:
 ### 4. Testing Essentials
 Refer to `instructions/unit-tests.md`, but remember:
 * One folder in `TnTComponents.Tests/` mirroring component path.
-* Component tests in `.Tests.cs` files; inherit from `Bunit.TestContext`.
+* Component tests in `.Tests.cs` files; inherit from `BunitContext`.
 * Use Arrange / Act / Assert; one logical behavioral assertion per test.
 * Focus on behavior (rendered effect, events, state transitions), not internal markup structure unless it's the behavior.
 * Attempt to achieve 100% coverage.

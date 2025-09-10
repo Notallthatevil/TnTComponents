@@ -11,7 +11,7 @@ namespace TnTComponents.Tests.TestingUtility
         /// Sets up the ripple effect JSInterop module and its methods for bUnit tests.
         /// </summary>
         /// <param name="testContext">The bUnit test context.</param>
-        public static void SetupRippleEffectModule(Bunit.TestContext testContext)
+        public static void SetupRippleEffectModule(BunitContext testContext)
         {
             var rippleModule = testContext.JSInterop.SetupModule("./_content/TnTComponents/Core/TnTRippleEffect.razor.js");
             rippleModule.SetupVoid("onLoad", _ => true);
