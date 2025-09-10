@@ -1,10 +1,12 @@
-﻿using TnTComponents.Interfaces;
+﻿using System.Diagnostics.CodeAnalysis;
+using TnTComponents.Interfaces;
 
 namespace TnTComponents.Core;
 
 /// <summary>
 ///     A builder class for constructing CSS class strings.
 /// </summary>
+[ExcludeFromCodeCoverage]
 internal sealed class CssClassBuilder {
     private readonly HashSet<string> _classes = [];
 

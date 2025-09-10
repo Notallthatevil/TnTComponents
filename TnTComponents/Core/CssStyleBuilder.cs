@@ -1,10 +1,12 @@
-﻿using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace TnTComponents.Core;
 
 /// <summary>
 ///     A builder class for constructing CSS style strings.
 /// </summary>
+[ExcludeFromCodeCoverage]
 internal sealed class CssStyleBuilder {
     private readonly Dictionary<string, string> _styles = [];
     private string? _styleString = string.Empty;
