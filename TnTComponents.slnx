@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".github/workflows/CreateRelease.yml" />
+  </Folder>
+  <Folder Name="/Solution Items/instructions/">
+    <File Path=".github/copilot-instructions.md" />
+    <File Path=".github/instructions/code-style.md" />
+    <File Path=".github/instructions/generated-code.md" />
+    <File Path=".github/instructions/unit-tests.md" />
+  </Folder>
+  <Project Path="LiveTest/LiveTest.Client/LiveTest.Client.csproj" />
+  <Project Path="LiveTest/LiveTest/LiveTest.csproj" />
+  <Project Path="TnTComponents.AspNetCore/TnTComponents.AspNetCore.csproj" />
+  <Project Path="TnTComponents.Extensions/TnTComponents.Extensions.csproj" />
+  <Project Path="TnTComponents.Tests/TnTComponents.Tests.csproj" />
+  <Project Path="TnTComponents/TnTComponents.csproj" />
+</Solution>
