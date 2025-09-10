@@ -1,17 +1,33 @@
 let externalClickCallbacks = {};
+let mouseDownTargets = {};
+
 export function externalClickCallbackRegister(element, dotNetObjectRef) {
     if (dotNetObjectRef) {
-        function callback(event) {
-            if (element && element.contains && !element.contains(event.target)) {
-                dotNetObjectRef.invokeMethodAsync('OnClick')
-            }
-        };
-
-        externalClickCallbacks[dotNetObjectRef._id] = function () {
-            window.removeEventListener('click', callback);
+        const id = dotNetObjectRef._id;
+        // If already registered for this id, deregister first to avoid duplicate handlers
+        if (externalClickCallbacks[id]) {
+            externalClickCallbacks[id]();
+            delete externalClickCallbacks[id];
         }
-
-        window.addEventListener('click', callback);
+        function onMouseDown(event) {
+            mouseDownTargets[id] = event.target;
+        }
+        function onClick(event) {
+            const downTarget = mouseDownTargets[id];
+            // If element is gone, or mousedown was outside, treat as external click
+            if (!element || !element.contains || !downTarget || !element.contains(downTarget)) {
+                dotNetObjectRef.invokeMethodAsync('OnClick');
+            }
+            // Clean up stored target
+            delete mouseDownTargets[id];
+        }
+        externalClickCallbacks[id] = function () {
+            window.removeEventListener('mousedown', onMouseDown);
+            window.removeEventListener('click', onClick);
+            delete mouseDownTargets[id];
+        };
+        window.addEventListener('mousedown', onMouseDown);
+        window.addEventListener('click', onClick);
     }
 }
 
