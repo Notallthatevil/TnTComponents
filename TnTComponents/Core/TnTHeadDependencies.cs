@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using System.Diagnostics.CodeAnalysis;
 
 namespace TnTComponents;
 
 /// <summary>
 ///     Meant to be placed in the head section of App.razor to include necessary dependencies for TnTComponents.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class TnTHeadDependencies : IComponent {
     private RenderHandle _renderHandle;
 
