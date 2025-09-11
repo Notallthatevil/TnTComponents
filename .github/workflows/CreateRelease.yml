@@ -22,6 +22,12 @@ jobs:
       id: version_step # step id used as reference for output values
       uses: gittools/actions/gitversion/execute@v3.1.1
 
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '10.x'
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
