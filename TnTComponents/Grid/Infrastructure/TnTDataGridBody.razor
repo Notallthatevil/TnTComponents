@@ -5,7 +5,7 @@
 
         @if (items.Any()) {
             @foreach (var item in Context.Items) {
-                <TnTDataGridBodyRow Item="@item" />
+                <TnTDataGridBodyRow RowClass="Context.RowClass" Item="@item" />
             }
         }
         else {

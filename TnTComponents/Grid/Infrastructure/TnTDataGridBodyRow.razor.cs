@@ -22,11 +22,22 @@ public partial class TnTDataGridBodyRow<TGridItem> {
     public TGridItem Item { get; set; }
 
     /// <summary>
+    ///     Gets or sets a delegate that returns the CSS class name for a given data grid row.
+    /// </summary>
+    /// <remarks>
+    ///     Use this property to customize the appearance of individual rows based on their data or state. The delegate receives the row data as a parameter and should return a string containing one
+    ///     or more CSS class names to apply to that row. If the delegate returns null or an empty string, no additional class is applied.
+    /// </remarks>
+    [Parameter]
+    public Func<TGridItem, string>? RowClass { get; set; }
+
+    /// <summary>
     ///     Gets the CSS class string for the row element, including state-based classes.
     /// </summary>
     private string? _elementClass => CssClassBuilder.Create()
         .AddClass("tnt-data-grid-body-row")
         .AddClass("tnt-interactable", Context.RowClickCallback.HasDelegate)
         .AddClass("tnt-stripped", Context.DataGridAppearance.HasFlag(DataGridAppearance.Stripped))
+        .AddClass(RowClass!(Item), RowClass is not null)
         .Build();
 }

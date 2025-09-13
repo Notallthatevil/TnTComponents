@@ -148,6 +148,16 @@ public partial class TnTDataGrid<TGridItem> {
     public bool Resizable { get; set; }
 
     /// <summary>
+    ///     Gets or sets a delegate that returns the CSS class name for a given data grid row.
+    /// </summary>
+    /// <remarks>
+    ///     Use this property to customize the appearance of individual rows based on their data or state. The delegate receives the row data as a parameter and should return a string containing one
+    ///     or more CSS class names to apply to that row. If the delegate returns null or an empty string, no additional class is applied.
+    /// </remarks>
+    [Parameter]
+    public Func<TGridItem, string>? RowClass { get; set; }
+
+    /// <summary>
     ///     The text color of the data grid.
     /// </summary>
     [Parameter]

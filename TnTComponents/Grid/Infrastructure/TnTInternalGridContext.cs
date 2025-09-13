@@ -40,6 +40,15 @@ internal sealed class TnTInternalGridContext<TGridItem>(TnTDataGrid<TGridItem> _
     public TnTPaginationState? PaginationState => _grid.Pagination;
 
     /// <summary>
+    ///     Gets or sets a delegate that returns the CSS class name for a given data grid row.
+    /// </summary>
+    /// <remarks>
+    ///     Use this property to customize the appearance of individual rows based on their data or state. The delegate receives the row data as a parameter and should return a string containing one
+    ///     or more CSS class names to apply to that row. If the delegate returns null or an empty string, no additional class is applied.
+    /// </remarks>
+    public Func<TGridItem, string>? RowClass => _grid.RowClass;
+
+    /// <summary>
     ///     Gets the callback invoked when a row is clicked.
     /// </summary>
     public EventCallback<TGridItem> RowClickCallback => _grid.OnRowClicked;
