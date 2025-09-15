@@ -36,6 +36,7 @@
 - Stick to one logical assertion per test.
 - Create custom assertion methods using business language, if needed.  
 - Use Arrange, Act, Assert pattern.
+- Attempt to write tests as black box tests. Use the public API of the component only and documentation to determine behavior.
 
 ## Running Tests
 
