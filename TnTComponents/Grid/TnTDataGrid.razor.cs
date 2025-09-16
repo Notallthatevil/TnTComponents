@@ -220,11 +220,13 @@ public partial class TnTDataGrid<TGridItem> {
     /// <summary>
     ///     Refreshes the data grid by resolving pagination results and updating the UI.
     /// </summary>
-    public async Task RefreshDataGridAsync() {
-        await ResolvePaginationResultsAsync();
-        await InvokeAsync(StateHasChanged);
-        await (_body?.RefreshAsync() ?? Task.CompletedTask);
-        await (_headerRow?.RefreshAsync() ?? Task.CompletedTask);
+    public async Task RefreshDataGridAsync(CancellationToken cancellationToken = default) {
+        await ResolvePaginationResultsAsync(cancellationToken);
+        if (!cancellationToken.IsCancellationRequested) {
+            await InvokeAsync(StateHasChanged);
+            await (_body?.RefreshAsync() ?? Task.CompletedTask);
+            await (_headerRow?.RefreshAsync() ?? Task.CompletedTask);
+        }
     }
 
     /// <summary>
@@ -238,7 +240,7 @@ public partial class TnTDataGrid<TGridItem> {
             if (Virtualize) {
                 var numberOfRowsToLoad = 10;
                 if (IsolatedJsModule is not null) {
-                    var bodyHeight = await IsolatedJsModule.InvokeAsync<int>("getBodyHeight", Element);
+                    var bodyHeight = await IsolatedJsModule.InvokeAsync<int>("getBodyHeight", request.CancellationToken, Element);
 
                     if (bodyHeight >= 0) {
                         numberOfRowsToLoad = Math.Max(bodyHeight / ItemSize, 5);
@@ -250,13 +252,13 @@ public partial class TnTDataGrid<TGridItem> {
             ProvidedItems = result.Items;
         }
         else if (Items is not null) {
-            var totalItemCount = _asyncQueryExecutor is null ? Items.Count() : await _asyncQueryExecutor.CountAsync(Items);
+            var totalItemCount = _asyncQueryExecutor is null ? Items.Count() : await _asyncQueryExecutor.CountAsync(Items, request.CancellationToken);
             _internalGridContext.TotalRowCount = totalItemCount;
             var filtered = request.ApplySorting(Items).Skip(request.StartIndex);
             if (request.Count.HasValue) {
                 filtered = filtered.Take(request.Count.Value);
             }
-            var resultArray = _asyncQueryExecutor is null ? [.. filtered] : await _asyncQueryExecutor.ToArrayAsync(filtered);
+            var resultArray = _asyncQueryExecutor is null ? [.. filtered] : await _asyncQueryExecutor.ToArrayAsync(filtered, request.CancellationToken);
             result = new() { Items = resultArray, TotalItemCount = totalItemCount };
         }
         _internalGridContext.UpdateItems();
@@ -314,12 +316,12 @@ public partial class TnTDataGrid<TGridItem> {
     ///     Resolves the results for the current pagination state.
     /// </summary>
     /// <returns>A task representing the asynchronous operation.</returns>
-    private async Task ResolvePaginationResultsAsync() {
+    private async Task ResolvePaginationResultsAsync(CancellationToken cancellationToken) {
         if (_lastUsedPaginationState is not null) {
             _cancellationTokenSource?.Cancel();
             _cancellationTokenSource?.Dispose();
             var newCts = new CancellationTokenSource();
-            var token = newCts.Token;
+            var token = cancellationToken != default ? cancellationToken : newCts.Token;
             _cancellationTokenSource = newCts;
 
             var result = await ResolveItemsRequestAsync(new() {
