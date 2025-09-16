@@ -14,7 +14,8 @@
     "testEnvironment": "jsdom",
     "roots": [
       "<rootDir>/TnTComponents/Carousel/__tests__",
-      "<rootDir>/TnTComponents/Core/__tests__"
+      "<rootDir>/TnTComponents/Core/__tests__",
+      "<rootDir>/TnTComponents/Accordion/__tests__"
     ],
     "setupFiles": [
       "<rootDir>/TnTComponents/Carousel/jest.setup.js"

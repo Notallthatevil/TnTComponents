@@ -141,6 +141,22 @@ public partial class TnTAccordionChild {
     protected override void OnInitialized() {
         base.OnInitialized();
         _parent.RegisterChild(this);
-        _open = _parent.AllowOpenByDefault && ((OpenByDefault && _parent.LimitToOneExpanded && !_parent._foundExpanded) || (OpenByDefault && !_parent.LimitToOneExpanded));
+        if (_parent.AllowOpenByDefault && OpenByDefault) {
+            if (_parent.LimitToOneExpanded) {
+                if (!_parent._foundExpanded) {
+                    _open = true;
+                    _parent._foundExpanded = true; // mark first expanded
+                }
+                else {
+                    _open = false; // enforce single open
+                }
+            }
+            else {
+                _open = true; // no limit, allow
+            }
+        }
+        else {
+            _open = false;
+        }
     }
 }
