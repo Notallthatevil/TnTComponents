@@ -20,20 +20,9 @@
         <MaterialIcon Icon="@MaterialIcon.ArrowDropDown" />
     </h3>
 
-    <div class="@CssClassBuilder.Create().AddClass("tnt-expanded", _parent.AllowOpenByDefault && ((Child.OpenByDefault && _parent.LimitToOneExpanded && !_parent._foundExpanded) || (Child.OpenByDefault && !_parent.LimitToOneExpanded))).Build()">
-        @if (Child.OpenByDefault) {
-            _parent._foundExpanded = true;
+    <div class="@CssClassBuilder.Create().AddClass("tnt-expanded", Child._open).Build()">
+        @if (!RendererInfo.IsInteractive || !Child.RemoveContentOnClose || (RendererInfo.IsInteractive && Child._open)) {
+            @Child.ChildContent
         }
-@{
-#if NET9_0_OR_GREATER
-            if (!RendererInfo.IsInteractive || !Child.RemoveContentOnClose || (RendererInfo.IsInteractive && Child._open)) {
-                @Child.ChildContent
-            }
-#else
-            @Child.ChildContent(__builder);
-#endif
-}
     </div>
-
-
 </div>
