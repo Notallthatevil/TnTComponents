@@ -36,6 +36,7 @@ Refer to `instructions/unit-tests.md`, but remember:
 * Use Arrange / Act / Assert; one logical behavioral assertion per test.
 * Focus on behavior (rendered effect, events, state transitions), not internal markup structure unless it's the behavior.
 * Attempt to achieve 100% coverage.
+* Always, always, always refer to `instructions/unit-tests.md` when writing tests.
 
 ### 5. Dev Workflows
 * Build: `dotnet restore` then `dotnet build` (solution root).
