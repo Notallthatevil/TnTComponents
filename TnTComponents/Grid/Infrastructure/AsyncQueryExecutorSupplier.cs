@@ -36,6 +36,7 @@ internal interface IAsyncQueryExecutor {
     Task<T[]> ToArrayAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default);
 }
 
+[ExcludeFromCodeCoverage]
 internal static class AsyncQueryExecutorSupplier {
     private static readonly ConcurrentDictionary<Type, bool> _isEntityFrameworkProviderTypeCache = new();
 
