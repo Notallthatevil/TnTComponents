@@ -16,19 +16,28 @@
       "<rootDir>/TnTComponents/Carousel/__tests__",
       "<rootDir>/TnTComponents/Core/__tests__",
       "<rootDir>/TnTComponents/Accordion/__tests__",
-      "<rootDir>/TnTComponents/Animation/__tests__"
+      "<rootDir>/TnTComponents/Animation/__tests__",
+      "<rootDir>/TnTComponents/Editors/__tests__"
     ],
     "setupFiles": [
       "<rootDir>/TnTComponents/Carousel/jest.setup.js"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/TnTComponents/Editors/__tests__/jest.setup.js"
     ],
     "moduleFileExtensions": [
       "js",
       "mjs"
     ],
     "transform": {},
+    "testMatch": [
+      "**/__tests__/**/*.test.js",
+      "**/__tests__/**/*.spec.js"
+    ],
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "jest.global.js"
+      "jest.global.js",
+      "jest.setup.js"
     ]
   }
 }

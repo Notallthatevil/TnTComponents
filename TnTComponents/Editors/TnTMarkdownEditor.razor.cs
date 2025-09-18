@@ -58,12 +58,13 @@ public partial class TnTMarkdownEditor {
     public async Task UpdateValue(string value, string renderedText) {
         Value = value;
         await ValueChanged.InvokeAsync(Value);
-        var body = BodyRegex().Match(renderedText).Groups[1].Value;
-        if (body is not null) {
+        var match = BodyRegex().Match(renderedText);
+        if (match.Success) {
+            var body = match.Groups[1].Value;
             RenderedHtml = new MarkupString(body);
             await RenderedHtmlChanged.InvokeAsync(RenderedHtml);
         }
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
     }
 
     /// <inheritdoc />
