@@ -1,10 +1,12 @@
-﻿using TnTComponents.Core;
+﻿using System.Diagnostics.CodeAnalysis;
+using TnTComponents.Core;
 
 namespace TnTComponents;
 
 /// <summary>
 ///     Represents the options for configuring a TnT dialog component.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class TnTDialogOptions {
 
     /// <inheritdoc />
@@ -50,8 +52,6 @@ public class TnTDialogOptions {
         .AddClass("tnt-dialog")
         .AddClass("tnt-closing", Closing)
         .AddClass(ElementClass)
-        .AddBackgroundColor(BackgroundColor)
-        .AddForegroundColor(TextColor)
         .AddTextAlign(TextAlignment)
         .Build();
 
