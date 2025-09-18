@@ -1,7 +1,9 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.RegularExpressions;
 
 namespace TnTComponents.Ext;
 
+[ExcludeFromCodeCoverage]
 internal static partial class StringExt {
 
     public static string SplitPascalCase(this string str, string replacement = " ") => PascalCaseSplit().Replace(str, replacement);

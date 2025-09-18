@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System.Diagnostics.CodeAnalysis;
 using TnTComponents.Core;
 
 namespace TnTComponents.Ext;
@@ -7,6 +8,7 @@ namespace TnTComponents.Ext;
 /// <summary>
 ///     Extension methods for <see cref="IJSRuntime" /> to interact with JavaScript functionality in Blazor applications.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class JSRuntimeExt {
 
     /// <summary>
