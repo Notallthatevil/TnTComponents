@@ -38,6 +38,6 @@ public partial class TnTDataGridBodyRow<TGridItem> {
         .AddClass("tnt-data-grid-body-row")
         .AddClass("tnt-interactable", Context.RowClickCallback.HasDelegate)
         .AddClass("tnt-stripped", Context.DataGridAppearance.HasFlag(DataGridAppearance.Stripped))
-        .AddClass(RowClass!(Item), RowClass is not null)
+        .AddClass(RowClass is not null ? RowClass(Item) : null!, RowClass is not null)
         .Build();
 }
