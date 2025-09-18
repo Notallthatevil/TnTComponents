@@ -1,5 +1,5 @@
 ﻿@typeparam TGridItem
 @inherits TnTDataGridCell<TGridItem>
-<th class="tnt-column-header-cell" style="@(Column.Width.HasValue ? $"width: {Column.Width.Value}px;min-width:{Column.Width.Value}px" : null)">
+<th @attributes="Column.AdditionalAttributes" class="@ElementClass" style="@ElementStyle">
     @Column.RenderHeaderContent
 </th> 

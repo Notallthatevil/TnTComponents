@@ -11,6 +11,9 @@ namespace TnTComponents.Grid.Infrastructure;
 [CascadingTypeParameter(nameof(TGridItem))]
 public abstract class TnTDataGridCell<TGridItem> : ComponentBase {
 
+    protected virtual string? ElementClass { get; }
+    protected virtual string? ElementStyle { get; }
+
     /// <summary>
     ///     The column definition associated with this cell.
     /// </summary>

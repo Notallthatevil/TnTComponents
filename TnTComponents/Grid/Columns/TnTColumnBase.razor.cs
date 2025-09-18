@@ -17,6 +17,9 @@ namespace TnTComponents.Grid.Columns;
 [DebuggerDisplay("Title = {Title}, Order = {Order}, Sortable = {Sortable}, IsSortedOn = {IsSortedOn}")]
 public abstract partial class TnTColumnBase<TGridItem> {
 
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
     /// <summary>
     ///     Unique column ID assigned by the grid context.
     /// </summary>
