@@ -36,7 +36,12 @@ internal sealed class CssStyleBuilder {
     /// <param name="style">The style string to add</param>
     /// <returns>The current instance of <see cref="CssStyleBuilder" />.</returns>
     public CssStyleBuilder Add(string style) {
-        _styleString += style ?? string.Empty;
+        if (!string.IsNullOrWhiteSpace(style)) {
+            _styleString += style;
+            if (!_styleString.EndsWith(';')) {
+                _styleString += ';';
+            }
+        }
         return this;
     }
 
@@ -82,8 +87,8 @@ internal sealed class CssStyleBuilder {
     /// <returns>A CSS style string or null if no styles were added.</returns>
     public string? Build() {
         var styles = _styles.Where(kv => !string.IsNullOrWhiteSpace(kv.Key));
+        var sb = new StringBuilder(_styleString);
         if (styles.Any()) {
-            var sb = new StringBuilder();
             foreach (var (key, value) in styles) {
                 var trimmedKey = key.Trim();
                 var trimmedValue = value.Trim();
@@ -104,11 +109,7 @@ internal sealed class CssStyleBuilder {
                     }
                 }
             }
-            sb.Append(_styleString);
-            return sb.ToString();
         }
-        else {
-            return null;
-        }
+        return sb.Length > 0 ? sb.ToString() : null;
     }
 }
