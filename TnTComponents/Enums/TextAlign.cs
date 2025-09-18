@@ -1,4 +1,6 @@
-﻿namespace TnTComponents;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace TnTComponents;
 
 /// <summary>
 ///     Specifies the text alignment options.
@@ -29,6 +31,7 @@ public enum TextAlign {
 /// <summary>
 ///     Provides extension methods for the <see cref="TextAlign" /> enum.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class TextAlignExtensions {
 
     /// <summary>

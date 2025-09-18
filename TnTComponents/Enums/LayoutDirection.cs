@@ -1,4 +1,6 @@
-﻿namespace TnTComponents;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace TnTComponents;
 
 /// <summary>
 /// Specifies the direction of the layout.
@@ -17,6 +19,7 @@ public enum LayoutDirection {
 /// <summary>
 /// Provides extension methods for the <see cref="LayoutDirection"/> enum.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class LayoutDirectionExt {
     /// <summary>
     /// Converts the <see cref="LayoutDirection"/> value to its corresponding CSS string representation.

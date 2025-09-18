@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -341,6 +342,7 @@ public enum TnTColor {
 /// <summary>
 ///     Provides extension methods for the <see cref="TnTColor" /> enum.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static partial class TnTColorEnumExt {
 
     /// <summary>
