@@ -17,7 +17,6 @@ public partial class TnTDataGridHeaderCell<TGridItem> {
 
     protected override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(Column.AdditionalAttributes)
-        .AddStyle("width", $"{Column.Width!.Value}px", Column.Width.HasValue)
-        .AddStyle("min-width", $"{Column.Width!.Value}px", Column.Width.HasValue)
+        .Add(Column.Width.HasValue ? $"width:{Column.Width.Value}px;min-width:{Column.Width.Value}px" : null!)
         .Build();
 }
