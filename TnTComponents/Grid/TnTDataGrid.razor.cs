@@ -288,21 +288,20 @@ public partial class TnTDataGrid<TGridItem> {
         if (Items is not null && ItemsProvider is not null) {
             throw new InvalidOperationException($"{nameof(TnTDataGrid<TGridItem>)} requires one of {nameof(Items)} or {nameof(ItemsProvider)}, but both were specified.");
         }
-
-        if (Pagination is not null && _lastUsedPaginationState != Pagination) {
-            _lastUsedPaginationState = Pagination;
-            _lastUsedPaginationState.CurrentPageChangedCallback += PaginationPageUpdatedAsync;
-        }
-        else if (Pagination is null && _lastUsedPaginationState is not null) {
-            _lastUsedPaginationState.CurrentPageChangedCallback -= PaginationPageUpdatedAsync;
-            _lastUsedPaginationState = null;
-        }
     }
 
     /// <inheritdoc />
     protected override async Task OnParametersSetAsync() {
         await base.OnParametersSetAsync();
-        await RefreshDataGridAsync();
+        if (Pagination is not null && _lastUsedPaginationState != Pagination) {
+            _lastUsedPaginationState = Pagination;
+            _lastUsedPaginationState.CurrentPageChangedCallback += PaginationPageUpdatedAsync;
+            await RefreshDataGridAsync();
+        }
+        else if (Pagination is null && _lastUsedPaginationState is not null) {
+            _lastUsedPaginationState.CurrentPageChangedCallback -= PaginationPageUpdatedAsync;
+            _lastUsedPaginationState = null;
+        }
     }
 
     /// <summary>
