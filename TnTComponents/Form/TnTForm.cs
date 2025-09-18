@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
+using System.Diagnostics.CodeAnalysis;
 
 namespace TnTComponents;
 
@@ -29,6 +30,7 @@ public interface ITnTForm {
 ///     A Blazor form component that extends <see cref="EditForm" /> and implements <see cref="ITnTForm" />. Provides additional parameters for appearance, disabled, and read-only state, and supplies
 ///     itself as a cascading value for child components to access form metadata and state. This class is sealed for performance as it is not intended to be inherited.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed class TnTForm : EditForm, ITnTForm {
 
     /// <inheritdoc />
