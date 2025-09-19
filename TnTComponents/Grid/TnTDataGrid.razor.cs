@@ -288,6 +288,10 @@ public partial class TnTDataGrid<TGridItem> {
         if (Items is not null && ItemsProvider is not null) {
             throw new InvalidOperationException($"{nameof(TnTDataGrid<TGridItem>)} requires one of {nameof(Items)} or {nameof(ItemsProvider)}, but both were specified.");
         }
+
+        if(Items is not null && ItemsProvider is null && !Virtualize && Pagination is null) { // No virtualization or pagination, so we can load all items at once
+            _internalGridContext.UpdateItems();
+        }
     }
 
     /// <inheritdoc />
