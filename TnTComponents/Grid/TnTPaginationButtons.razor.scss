@@ -33,6 +33,12 @@
             .tnt-icon {
                 font-size: 18px;
             }
+
+            &:active, &:focus {
+                .tnt-small-button-layer {
+                    border-radius: 0;
+                }
+            }
         }
     }
 }
