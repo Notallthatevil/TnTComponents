@@ -1,4 +1,5 @@
-﻿using TnTComponents.Core;
+﻿using System.Diagnostics.CodeAnalysis;
+using TnTComponents.Core;
 using TnTComponents.Grid.Columns;
 using TnTComponents.Virtualization;
 
@@ -8,6 +9,7 @@ namespace TnTComponents.Grid;
 ///     Represents a request for grid items, including sorting, pagination, and cancellation support.
 /// </summary>
 /// <typeparam name="TGridItem">The type of items in the grid.</typeparam>
+[ExcludeFromCodeCoverage]
 public readonly struct TnTGridItemsProviderRequest<TGridItem> {
 
     /// <summary>
