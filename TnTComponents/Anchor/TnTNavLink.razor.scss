@@ -297,3 +297,15 @@ $on-tint-color: var(--tnt-anchor-on-tint-color);
         }
     }
 }
+
+a.tnt-nav-link.tnt-underlined {
+    color: colors.$tnt-color-info;
+
+    &:hover {
+        color: color-mix(in srgb, colors.$tnt-color-info 20%, colors.$tnt-color-on-surface);
+    }
+
+    &:visited {
+        color: color-mix(in srgb, colors.$tnt-color-info-container 20%, colors.$tnt-color-on-surface);
+    }
+}
