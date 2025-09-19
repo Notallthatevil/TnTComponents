@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Components;
 using TnTComponents.Core;
+using TnTComponents.Grid;
 
-namespace TnTComponents.Grid;
+namespace TnTComponents;
 
 /// <summary>
 ///     Renders pagination buttons for navigating between pages in a grid.
