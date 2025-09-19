@@ -1,0 +1,683 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Bunit;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using TnTComponents.Grid;
+using Xunit;
+using RippleTestingUtility = TnTComponents.Tests.TestingUtility.TestingUtility;
+
+namespace TnTComponents.Tests.Grid;
+
+/// <summary>
+///     Unit tests for <see cref="TnTPaginationButtons" />.
+/// </summary>
+public class TnTPaginationButtons_Tests : BunitContext {
+
+    public TnTPaginationButtons_Tests() {
+        // Set up JavaScript module for ripple effects used by TnTButton components
+        RippleTestingUtility.SetupRippleEffectModule(this);
+    }
+
+    #region Constructor and Initial State Tests
+
+    [Fact]
+    public void Constructor_WithRequiredPaginationState_RendersCorrectly() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(50); // 5 pages with default 10 items per page
+
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        cut.Find(".tnt-pagination-buttons").Should().NotBeNull();
+        cut.FindAll(".pagination-btn").Should().HaveCountGreaterThan(0);
+    }
+
+    [Fact]
+    public void Constructor_WithNullPaginationState_ThrowsArgumentNullException() {
+        // Arrange & Act
+        var act = () => Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, (TnTPaginationState)null!));
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>();
+    }
+
+    #endregion
+
+    #region Parameter Tests
+
+    [Fact]
+    public void BackgroundColor_DefaultValue_IsSet() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(10);
+
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        cut.Instance.BackgroundColor.Should().Be(TnTColor.PrimaryContainer);
+    }
+
+    [Fact]
+    public void ActiveBackgroundColor_DefaultValue_IsSet() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(10);
+
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        cut.Instance.ActiveBackgroundColor.Should().Be(TnTColor.Primary);
+    }
+
+    [Fact]
+    public void TextColor_DefaultValue_IsSet() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(10);
+
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        cut.Instance.TextColor.Should().Be(TnTColor.OnPrimaryContainer);
+    }
+
+    [Fact]
+    public void ActiveTextColor_DefaultValue_IsSet() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(10);
+
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        cut.Instance.ActiveTextColor.Should().Be(TnTColor.OnPrimary);
+    }
+
+    [Fact]
+    public void Parameters_CanBeCustomized() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(10);
+
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState)
+            .Add(p => p.BackgroundColor, TnTColor.Secondary)
+            .Add(p => p.ActiveBackgroundColor, TnTColor.Tertiary)
+            .Add(p => p.TextColor, TnTColor.OnSecondary)
+            .Add(p => p.ActiveTextColor, TnTColor.OnTertiary));
+
+        // Assert
+        cut.Instance.BackgroundColor.Should().Be(TnTColor.Secondary);
+        cut.Instance.ActiveBackgroundColor.Should().Be(TnTColor.Tertiary);
+        cut.Instance.TextColor.Should().Be(TnTColor.OnSecondary);
+        cut.Instance.ActiveTextColor.Should().Be(TnTColor.OnTertiary);
+    }
+
+    #endregion
+
+    #region Rendering Tests
+
+    [Fact]
+    public void Render_WithSinglePage_ShowsCorrectButtons() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(5); // Single page (1 page total)
+
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        var buttons = cut.FindAll(".pagination-btn");
+        Assert.True(buttons.Count > 0, "Should have pagination buttons");
+
+        // Check that navigation buttons are properly disabled on single page
+        var disabledButtons = cut.FindAll(".tnt-disabled");
+        Assert.True(disabledButtons.Count > 1, "Navigation buttons should be disabled on single page");
+
+        // Verify we have exactly one current page
+        var currentPageButtons = cut.FindAll(".current-page");
+        Assert.Single(currentPageButtons);
+        
+        // Verify the current page shows "1"
+        var currentPageButton = currentPageButtons[0];
+        Assert.Equal("1", currentPageButton.TextContent?.Trim());
+        Assert.True(currentPageButton.HasAttribute("disabled"), "Current page button should be disabled");
+    }
+
+    [Fact]
+    public void Render_WithMultiplePages_ShowsPageNumbers() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(50); // 5 pages
+
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        var buttons = cut.FindAll(".pagination-btn");
+        buttons.Should().HaveCountGreaterThanOrEqualTo(7); // At least navigation (4) + some page buttons (3+)
+
+        // Should have page numbers displayed - filter out navigation buttons by class
+        var pageNumberButtons = buttons.Where(b => 
+            !b.GetAttribute("class")!.Contains("pagination-first-page") && 
+            !b.GetAttribute("class")!.Contains("pagination-previous-page") &&
+            !b.GetAttribute("class")!.Contains("pagination-next-page") &&
+            !b.GetAttribute("class")!.Contains("pagination-last-page") &&
+            b.TextContent.Trim().All(char.IsDigit) && 
+            !string.IsNullOrEmpty(b.TextContent.Trim())).ToList();
+        pageNumberButtons.Should().HaveCountGreaterThan(0);
+    }
+
+    [Fact]
+    public void Render_WithCurrentPageZero_MarksPagesCorrectly() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(30); // 3 pages
+        
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        // First page (index 0) should be current/disabled
+        var currentPageButtons = cut.FindAll(".current-page");
+        Assert.Single(currentPageButtons);
+        
+        // Current page should show "1" (page index 0 displays as page 1)
+        var currentPageButton = currentPageButtons[0];
+        Assert.Equal("1", currentPageButton.TextContent?.Trim());
+        Assert.True(currentPageButton.HasAttribute("disabled"), "Current page button should be disabled");
+        
+        // First and Previous navigation should be disabled
+        var disabledButtons = cut.FindAll(".tnt-disabled");
+        Assert.True(disabledButtons.Count > 1, "Navigation buttons should be disabled on first page");
+    }
+
+    [Fact]
+    public void Render_WithLastPage_DisablesNextButtons() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(30); // 3 pages (0, 1, 2)
+        _ = paginationState.SetCurrentPageIndexAsync(2); // Go to last page
+
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        // Next and Last navigation should be disabled
+        var disabledButtons = cut.FindAll(".tnt-disabled");
+        disabledButtons.Count.Should().BeGreaterThan(1);
+        
+        // Current page should be marked
+        var currentPageButtons = cut.FindAll(".current-page");
+        currentPageButtons.Should().HaveCount(1);
+    }
+
+    [Fact]
+    public void Render_WithZeroPages_DisablesAllNavigation() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(0); // No pages
+
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        // All navigation buttons should be disabled
+        var disabledButtons = cut.FindAll(".tnt-disabled");
+        disabledButtons.Count.Should().BeGreaterThan(3); // All navigation buttons
+    }
+
+    #endregion
+
+    #region Navigation Button Tests
+
+    [Fact]
+    public async Task FirstPageButton_WhenClicked_NavigatesToFirstPage() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(50); // 5 pages
+        _ = paginationState.SetCurrentPageIndexAsync(3); // Start on page 3
+        
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Act
+        var firstButton = cut.FindAll("button").First(b => b.GetAttribute("title") == "First page");
+        await firstButton.ClickAsync(new MouseEventArgs());
+
+        // Assert
+        paginationState.CurrentPageIndex.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task PreviousPageButton_WhenClicked_NavigatesToPreviousPage() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(50); // 5 pages
+        _ = paginationState.SetCurrentPageIndexAsync(2); // Start on page 2
+        
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Act
+        var previousButton = cut.FindAll("button").First(b => b.GetAttribute("title") == "Previous page");
+        await previousButton.ClickAsync(new MouseEventArgs());
+
+        // Assert
+        paginationState.CurrentPageIndex.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task NextPageButton_WhenClicked_NavigatesToNextPage() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(50); // 5 pages
+        _ = paginationState.SetCurrentPageIndexAsync(1); // Start on page 1
+        
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Act
+        var nextButton = cut.FindAll("button").First(b => b.GetAttribute("title") == "Next page");
+        await nextButton.ClickAsync(new MouseEventArgs());
+
+        // Assert
+        paginationState.CurrentPageIndex.Should().Be(2);
+    }
+
+    [Fact]
+    public async Task LastPageButton_WhenClicked_NavigatesToLastPage() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(50); // 5 pages
+        _ = paginationState.SetCurrentPageIndexAsync(1); // Start on page 1
+        
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Act
+        var lastButton = cut.FindAll("button").First(b => b.GetAttribute("title") == "Last page");
+        await lastButton.ClickAsync(new MouseEventArgs());
+
+        // Assert
+        paginationState.CurrentPageIndex.Should().Be(4); // Last page is index 4 (5 pages total)
+    }
+
+    #endregion
+
+    #region Page Number Button Tests
+
+    [Fact]
+    public async Task PageNumberButton_WhenClicked_NavigatesToCorrectPage() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(50); // 5 pages
+        
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Act - Find and click page "3" button (which represents page index 2)
+        var pageButtons = cut.FindAll("button").Where(b => b.TextContent.Trim() == "3").ToList();
+        pageButtons.Should().HaveCount(1);
+        await pageButtons[0].ClickAsync(new MouseEventArgs());
+
+        // Assert
+        paginationState.CurrentPageIndex.Should().Be(2); // Page 3 is index 2
+    }
+
+    [Fact]
+    public void CurrentPageButton_IsDisabled() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(30); // 3 pages
+        _ = paginationState.SetCurrentPageIndexAsync(1); // Current page is index 1 (page "2")
+        
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        var currentPageButtons = cut.FindAll(".current-page");
+        Assert.Single(currentPageButtons);
+        
+        var currentPageButton = currentPageButtons[0];
+        Assert.True(currentPageButton.HasAttribute("disabled"), "Current page button should be disabled");
+        Assert.Equal("2", currentPageButton.TextContent?.Trim());
+    }
+
+    #endregion
+
+    #region Page Range Display Tests
+
+    [Fact]
+    public void PageRange_WithFewPages_ShowsAllPages() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(30); // 3 pages
+        
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        var pageButtons = cut.FindAll("button").Where(b => 
+            b.TextContent.Trim().All(char.IsDigit) && 
+            !string.IsNullOrEmpty(b.TextContent.Trim())).ToList();
+        
+        pageButtons.Should().HaveCount(3); // Pages 1, 2, 3
+        pageButtons.Select(b => b.TextContent.Trim()).Should().BeEquivalentTo(["1", "2", "3"]);
+    }
+
+    [Fact]
+    public void PageRange_WithManyPages_ShowsWindowedRange() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(100); // 10 pages
+        _ = paginationState.SetCurrentPageIndexAsync(5); // Middle page
+        
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        var pageButtons = cut.FindAll("button").Where(b => 
+            b.TextContent.Trim().All(char.IsDigit) && 
+            !string.IsNullOrEmpty(b.TextContent.Trim())).ToList();
+        
+        // Should show a window around current page (implementation shows 5 pages max)
+        pageButtons.Count.Should().BeLessThan(6);
+        pageButtons.Should().HaveCountGreaterThan(0);
+    }
+
+    [Fact]
+    public void PageRange_AtBeginning_ShowsFirstPages() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(100); // 10 pages
+        _ = paginationState.SetCurrentPageIndexAsync(0); // First page
+        
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        var pageButtons = cut.FindAll("button").Where(b => 
+            b.TextContent.Trim().All(char.IsDigit) && 
+            !string.IsNullOrEmpty(b.TextContent.Trim())).ToList();
+        
+        // Should include page 1 (index 0)
+        pageButtons.Select(b => b.TextContent.Trim()).Should().Contain("1");
+    }
+
+    [Fact]
+    public void PageRange_AtEnd_ShowsLastPages() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(100); // 10 pages (indices 0-9)
+        _ = paginationState.SetCurrentPageIndexAsync(9); // Last page
+        
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        var pageButtons = cut.FindAll("button").Where(b => 
+            b.TextContent.Trim().All(char.IsDigit) && 
+            !string.IsNullOrEmpty(b.TextContent.Trim())).ToList();
+        
+        // Should include page 10 (index 9)
+        pageButtons.Select(b => b.TextContent.Trim()).Should().Contain("10");
+    }
+
+    #endregion
+
+    #region Accessibility Tests
+
+    [Fact]
+    public void Buttons_HaveCorrectAriaLabels() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(30);
+        
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        var firstButton = cut.FindAll("button").FirstOrDefault(b => b.GetAttribute("aria-label") == "First page");
+        firstButton.Should().NotBeNull();
+        
+        var previousButton = cut.FindAll("button").FirstOrDefault(b => b.GetAttribute("aria-label") == "Previous page");
+        previousButton.Should().NotBeNull();
+        
+        var nextButton = cut.FindAll("button").FirstOrDefault(b => b.GetAttribute("aria-label") == "Next page");
+        nextButton.Should().NotBeNull();
+        
+        var lastButton = cut.FindAll("button").FirstOrDefault(b => b.GetAttribute("aria-label") == "Last page");
+        lastButton.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void PageButtons_HaveCorrectAriaLabels() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(30); // 3 pages
+        
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        var pageButtons = cut.FindAll("button").Where(b => 
+            b.TextContent.Trim().All(char.IsDigit) && 
+            !string.IsNullOrEmpty(b.TextContent.Trim())).ToList();
+        
+        foreach (var button in pageButtons) {
+            var ariaLabel = button.GetAttribute("aria-label");
+            var pageNumber = button.TextContent.Trim();
+            var expectedAriaLabel = (int.Parse(pageNumber) - 1).ToString(); // aria-label should be page index
+            ariaLabel.Should().Be(expectedAriaLabel);
+        }
+    }
+
+    [Fact]
+    public void Buttons_HaveCorrectTitles() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(30);
+        
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        var buttons = cut.FindAll("button");
+        
+        buttons.FirstOrDefault(b => b.GetAttribute("title") == "First page").Should().NotBeNull();
+        buttons.FirstOrDefault(b => b.GetAttribute("title") == "Previous page").Should().NotBeNull();
+        buttons.FirstOrDefault(b => b.GetAttribute("title") == "Next page").Should().NotBeNull();
+        buttons.FirstOrDefault(b => b.GetAttribute("title") == "Last page").Should().NotBeNull();
+    }
+
+    #endregion
+
+    #region CSS Classes Tests
+
+    [Fact]
+    public void Component_HasCorrectCssClass() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(10);
+
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        cut.Find(".tnt-pagination-buttons").Should().NotBeNull();
+    }
+
+    [Fact]
+    public void Buttons_HaveCorrectCssClasses() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(30);
+        
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        cut.FindAll(".pagination-btn").Should().HaveCountGreaterThan(0);
+        cut.FindAll(".pagination-first-page").Should().HaveCount(1);
+        cut.FindAll(".pagination-previous-page").Should().HaveCount(1);
+        cut.FindAll(".pagination-next-page").Should().HaveCount(1);
+        cut.FindAll(".pagination-last-page").Should().HaveCount(1);
+    }
+
+    [Fact]
+    public void DisabledButtons_HaveDisabledClass() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(10); // Single page scenario
+        
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        var disabledButtons = cut.FindAll(".tnt-disabled");
+        disabledButtons.Count.Should().BeGreaterThan(1); // At least first and previous should be disabled on first page
+    }
+
+    #endregion
+
+    #region Integration Tests
+
+    [Fact]
+    public async Task PaginationWorkflow_NavigationBetweenPages_WorksCorrectly() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(50); // 5 pages
+        
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Act & Assert - Navigate to page 2
+        var page2Button = cut.FindAll("button").First(b => b.TextContent.Trim() == "2");
+        await page2Button.ClickAsync(new MouseEventArgs());
+        paginationState.CurrentPageIndex.Should().Be(1);
+        
+        // Navigate to next page (should be page 3)
+        var nextButton = cut.FindAll("button").First(b => b.GetAttribute("title") == "Next page");
+        await nextButton.ClickAsync(new MouseEventArgs());
+        paginationState.CurrentPageIndex.Should().Be(2);
+        
+        // Navigate to last page
+        var lastButton = cut.FindAll("button").First(b => b.GetAttribute("title") == "Last page");
+        await lastButton.ClickAsync(new MouseEventArgs());
+        paginationState.CurrentPageIndex.Should().Be(4); // Last page index
+        
+        // Navigate to first page
+        var firstButton = cut.FindAll("button").First(b => b.GetAttribute("title") == "First page");
+        await firstButton.ClickAsync(new MouseEventArgs());
+        paginationState.CurrentPageIndex.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task StateChanges_UpdateButtonsCorrectly() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(50); // 5 pages
+        
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Act - Navigate to middle page
+        var page3Button = cut.FindAll("button").First(b => b.TextContent.Trim() == "3");
+        await page3Button.ClickAsync(new MouseEventArgs());
+
+        // Assert
+        paginationState.CurrentPageIndex.Should().Be(2, "Should navigate to page index 2");
+        
+        // Current page should be disabled and marked - should have exactly one
+        var currentPageButtons = cut.FindAll(".current-page");
+        currentPageButtons.Should().HaveCount(1, "Should have exactly one current page button after navigation");
+        currentPageButtons[0].TextContent.Trim().Should().Be("3", "Current page should display as '3'");
+        currentPageButtons[0].HasAttribute("disabled").Should().BeTrue("Current page button should be disabled");
+        
+        // When on middle page, navigation buttons should be enabled
+        var firstButton = cut.FindAll("button").First(b => b.GetAttribute("title") == "First page");
+        var previousButton = cut.FindAll("button").First(b => b.GetAttribute("title") == "Previous page");
+        var nextButton = cut.FindAll("button").First(b => b.GetAttribute("title") == "Next page");
+        var lastButton = cut.FindAll("button").First(b => b.GetAttribute("title") == "Last page");
+        
+        firstButton.HasAttribute("disabled").Should().BeFalse("First button should be enabled on middle page");
+        previousButton.HasAttribute("disabled").Should().BeFalse("Previous button should be enabled on middle page");
+        nextButton.HasAttribute("disabled").Should().BeFalse("Next button should be enabled on middle page");
+        lastButton.HasAttribute("disabled").Should().BeFalse("Last button should be enabled on middle page");
+    }
+
+    #endregion
+
+    #region Edge Cases
+
+    [Fact]
+    public void Render_WithNullTotalItemCount_HandlesGracefully() {
+        // Arrange
+        var paginationState = new TnTPaginationState(); // TotalItemCount is null initially
+        
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Assert
+        cut.Find(".tnt-pagination-buttons").Should().NotBeNull();
+        
+        // All navigation buttons should be disabled when no total count is set
+        var disabledButtons = cut.FindAll(".tnt-disabled");
+        disabledButtons.Count.Should().BeGreaterThan(1);
+    }
+
+    [Fact]
+    public void AdditionalAttributes_AreAppliedCorrectly() {
+        // Arrange
+        var paginationState = new TnTPaginationState();
+        _ = paginationState.SetTotalItemCountAsync(10);
+        
+        // Act
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState)
+            .AddUnmatched("data-test", "pagination")
+            .AddUnmatched("class", "custom-class")
+            .AddUnmatched("style", "margin: 10px;"));
+
+        // Assert
+        var component = cut.Find(".tnt-pagination-buttons");
+        component.GetAttribute("data-test").Should().Be("pagination");
+        component.GetAttribute("class")!.Should().Contain("custom-class");
+        component.GetAttribute("style")!.Should().Contain("margin: 10px;");
+    }
+
+    #endregion
+}
