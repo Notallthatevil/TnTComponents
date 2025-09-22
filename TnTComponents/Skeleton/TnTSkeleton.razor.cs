@@ -25,7 +25,7 @@ public partial class TnTSkeleton {
     ///     Gets or sets the background color of the skeleton.
     /// </summary>
     [Parameter]
-    public TnTColor? BackgroundColor { get; set; } = TnTColor.PrimaryContainer;
+    public TnTColor BackgroundColor { get; set; } = TnTColor.PrimaryContainer;
 
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
@@ -33,7 +33,6 @@ public partial class TnTSkeleton {
         .AddClass("tnt-skeleton")
         .AddClass("tnt-skeleton-round", Appearance == SkeletonAppearance.Round)
         .AddClass("tnt-animated", AnimatedColor.HasValue)
-        .AddBackgroundColor(BackgroundColor)
         .Build();
 
     /// <inheritdoc />
