@@ -1,8 +1,11 @@
-﻿namespace TnTComponents.Storage;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace TnTComponents.Storage;
 
 /// <summary>
 ///     Provides data for the changing event.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class ChangingEventArgs {
 
     /// <summary>

@@ -1,8 +1,11 @@
-﻿namespace TnTComponents.Storage;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace TnTComponents.Storage;
 
 /// <summary>
 ///     Provides data for the change event.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public readonly struct ChangedEventArgs {
 
     /// <summary>
