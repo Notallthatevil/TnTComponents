@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
@@ -13,6 +14,7 @@ namespace TnTComponents.Scheduler.Infrastructure;
 /// <param name="dayOfWeekFlag">    The flag indicating the days of the week that are disabled.</param>
 /// <param name="disabledStartTime">The start time when the day is considered disabled.</param>
 /// <param name="disabledEndTime">  The end time when the day is considered disabled.</param>
+[ExcludeFromCodeCoverage]
 internal class DisabledDayOfWeek(TnTDayOfWeekFlag dayOfWeekFlag, TimeOnly disabledStartTime, TimeOnly disabledEndTime) : TnTDisabledDateTime {
 
     /// <summary>

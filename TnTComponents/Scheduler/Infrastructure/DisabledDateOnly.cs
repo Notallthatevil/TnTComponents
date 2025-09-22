@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace TnTComponents.Scheduler.Infrastructure;
 ///     Represents a disabled date.
 /// </summary>
 /// <param name="_date">The date to be disabled.</param>
+[ExcludeFromCodeCoverage]
 internal class DisabledDateOnly(DateOnly _date) : TnTDisabledDateTime {
 
     /// <summary>

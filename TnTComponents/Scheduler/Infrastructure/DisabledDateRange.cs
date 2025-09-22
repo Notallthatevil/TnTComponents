@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace TnTComponents.Scheduler.Infrastructure;
 /// <summary>
 ///     Represents a range of dates that are disabled.
 /// </summary>
+[ExcludeFromCodeCoverage]
 internal class DisabledDateRange(DateTimeOffset disabledStart, DateTimeOffset disabledEnd) : TnTDisabledDateTime {
 
     /// <summary>
