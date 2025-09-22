@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace TnTComponents.Storage;
 /// <summary>
 /// Exception thrown when browser storage is disabled.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class BrowserStorageDisabledException : Exception {
     /// <summary>
     /// Initializes a new instance of the <see cref="BrowserStorageDisabledException"/> class.
