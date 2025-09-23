@@ -18,7 +18,8 @@
         "<rootDir>/TnTComponents/Accordion/__tests__",
         "<rootDir>/TnTComponents/Animation/__tests__",
         "<rootDir>/TnTComponents/Editors/__tests__",
-        "<rootDir>/TnTComponents/TabView/__tests__"
+        "<rootDir>/TnTComponents/TabView/__tests__",
+        "<rootDir>/TnTComponents/Theming/__tests__"
     ],
     "setupFiles": [
       "<rootDir>/TnTComponents/Carousel/jest.setup.js"

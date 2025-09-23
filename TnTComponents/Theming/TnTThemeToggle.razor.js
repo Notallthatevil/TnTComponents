@@ -93,7 +93,8 @@ class TnTThemeToggleElement extends HTMLElement {
         } catch {
             return false;
         }
-    } async updateThemeAttributes() {
+    }
+    async updateThemeAttributes() {
         const theme = this.getStoredTheme();
         const contrast = this.getStoredContrast();
 
