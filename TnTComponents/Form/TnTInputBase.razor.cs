@@ -125,12 +125,12 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     /// <summary>
     ///     Gets a value indicating whether the input field is disabled.
     /// </summary>
-    public bool FieldDisabled => _tntForm?.Disabled is not null ? _tntForm.Disabled : Disabled;
+    public bool FieldDisabled =>  _tntForm?.Disabled == true || Disabled;
 
     /// <summary>
     ///     Gets a value indicating whether the input field is read-only.
     /// </summary>
-    public bool FieldReadonly => _tntForm?.ReadOnly is not null ? _tntForm.ReadOnly : ReadOnly;
+    public bool FieldReadonly => _tntForm?.ReadOnly == true || ReadOnly;
 
     /// <summary>
     ///     Gets or sets the label of the input.
