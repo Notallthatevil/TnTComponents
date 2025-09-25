@@ -12,13 +12,7 @@ on:
 
 jobs:
   aot-test:
-    strategy:
-      matrix:
-        os: [ ubuntu-latest ]
-        runtime: [ linux-x64 ]
-        dotnet-version: ['9.0.x', '10.0.x']
-
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
       with:
