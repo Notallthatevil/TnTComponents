@@ -13,7 +13,7 @@
   </Folder>
   <Folder Name="/Solution Items/workflows/">
     <File Path=".github/workflows/ci-aot.yml" />
-    <File Path=".github/workflows/CreateRelease.yml" />
+    <File Path=".github/workflows/ci-cd.yml" />
   </Folder>
   <Project Path="AotCompatibility.TestApp/AotCompatibility.TestApp.csproj" Id="5fe8afae-706b-4160-a602-2463e8cec5fd" />
   <Project Path="LiveTest/LiveTest.Client/LiveTest.Client.csproj" />
