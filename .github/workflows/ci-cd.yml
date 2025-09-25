@@ -47,7 +47,7 @@ jobs:
       run: dotnet build --configuration Release
 
     - name: Run dotnet tests with coverage
-      run: dotnet test --no-build --settings coverlet.runsettings --configuration Release
+      run: dotnet test --no-build --configuration Release
 
     - name: Install dotnet-coverage
       run: dotnet tool install --global dotnet-coverage
