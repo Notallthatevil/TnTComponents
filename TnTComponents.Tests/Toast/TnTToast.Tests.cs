@@ -395,8 +395,8 @@ public class TnTToast_Tests : BunitContext
         var closeButton = cut.Find("button.tnt-image-button");
         await closeButton.ClickAsync(new MouseEventArgs());
         
-        // Wait a bit for the close delay
-        await Task.Delay(300);
+    // Wait a bit for the close delay
+    await Task.Delay(300, Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         cut.FindAll(".tnt-toast").Should().BeEmpty();

@@ -362,7 +362,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Act
         input.Input("a");
-        await Task.Delay(10); // Small delay to let the search start
+        await Task.Delay(10, Xunit.TestContext.Current.CancellationToken); // Small delay to let the search start
 
         // Assert
         // Progress indicator should be visible as a progress element when searching
@@ -429,7 +429,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Act
         input.Input("ap");
-        await Task.Delay(400); // Wait for debounce
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken); // Wait for debounce
 
         // Assert
         searchCallCount.Should().BeGreaterThan(0);
@@ -445,7 +445,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Act
         input.Input("ap");
-        await Task.Delay(400); // Wait for debounce and search
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken); // Wait for debounce and search
 
         // Assert
         cut.Find(".tnt-typeahead-content").Should().NotBeNull();
@@ -464,7 +464,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Act
         input.Input("xyz");
-        await Task.Delay(400); // Wait for debounce and search
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken); // Wait for debounce and search
 
         // Assert
         cut.Find(".tnt-typeahead-no-results").Should().NotBeNull();
@@ -480,12 +480,12 @@ public class TnTTypeahead_Tests : BunitContext
 
         // First, perform a search
         input.Input("ap");
-        await Task.Delay(400);
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
         cut.FindAll(".tnt-typeahead-list-item").Should().HaveCountGreaterThan(0);
 
         // Act - Clear the input
         input.Input("");
-        await Task.Delay(400);
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         cut.FindAll(".tnt-typeahead-content").Should().BeEmpty();
@@ -531,7 +531,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Act & Assert - Should not throw
         input.Input("test");
-        await Task.Delay(400);
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
 
         // Component should still be in a valid state
         cut.Find("input").Should().NotBeNull();
@@ -553,7 +553,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Perform search to show results
         input.Input("ap");
-        await Task.Delay(400);
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
 
         // Act
         var firstItem = cut.Find(".tnt-typeahead-list-item");
@@ -575,7 +575,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Perform search to show results
         input.Input("ap");
-        await Task.Delay(400);
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
 
         // Act
         var firstItem = cut.Find(".tnt-typeahead-list-item");
@@ -597,7 +597,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Perform search to show results
         input.Input("ap");
-        await Task.Delay(400);
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
 
         // Act
         var firstItem = cut.Find(".tnt-typeahead-list-item");
@@ -616,7 +616,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Perform search to show results
         input.Input("ap");
-        await Task.Delay(400);
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
         cut.FindAll(".tnt-typeahead-list-item").Should().HaveCountGreaterThan(0);
 
         // Act
@@ -657,7 +657,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Perform search to show results with multiple items
         input.Input("e");
-        await Task.Delay(400);
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
 
         // Get fresh references to items after search
         var items = cut.FindAll(".tnt-typeahead-list-item");
@@ -687,7 +687,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Perform search to show results with multiple items
         input.Input("e");
-        await Task.Delay(400);
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
 
         var items = cut.FindAll(".tnt-typeahead-list-item");
         items.Should().HaveCountGreaterThan(1);
@@ -720,7 +720,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Perform search to show results
         input.Input("e");
-        await Task.Delay(400);
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
 
         var items = cut.FindAll(".tnt-typeahead-list-item");
         items.Should().HaveCountGreaterThan(1);
@@ -760,7 +760,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Perform search to show single result
         input.Input("test");
-        await Task.Delay(400);
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
 
         var items = cut.FindAll(".tnt-typeahead-list-item");
         items.Should().HaveCount(1);
@@ -787,7 +787,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Perform search with no results
         input.Input("xyz");
-        await Task.Delay(400);
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
 
         cut.FindAll(".tnt-typeahead-list-item").Should().BeEmpty();
 
@@ -809,7 +809,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Perform search to show results
         input.Input("ap");
-        await Task.Delay(400);
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
 
         // Act
         await input.KeyDownAsync(new KeyboardEventArgs { Key = "Enter" });
@@ -830,7 +830,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Perform search to show results
         input.Input("ap");
-        await Task.Delay(400);
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
         var items = cut.FindAll(".tnt-typeahead-list-item");
         items.Should().HaveCountGreaterThan(0);
 
@@ -851,7 +851,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Perform search to show results
         input.Input("ap");
-        await Task.Delay(400);
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
 
         // Act
         await input.KeyDownAsync(new KeyboardEventArgs { Key = "Escape" });
@@ -885,7 +885,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Act
         input.Input("john");
-        await Task.Delay(400);
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         var customItem = cut.Find(".custom-item");
@@ -902,7 +902,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Act
         input.Input("john");
-        await Task.Delay(400);
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         var item = cut.Find(".tnt-typeahead-list-item");
@@ -923,7 +923,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Perform search to show results
         input.Input("ap");
-        await Task.Delay(400);
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
 
         // Act
         var firstItem = cut.Find(".tnt-typeahead-list-item");
@@ -947,7 +947,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Perform search to show results
         input.Input("test");
-        await Task.Delay(400);
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
 
         var items = cut.FindAll(".tnt-typeahead-list-item");
         items.Should().HaveCountGreaterThan(1);
@@ -982,7 +982,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Act
         input.Input("test");
-        await Task.Delay(400);
+        await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
 
         // Assert - The component should handle nulls gracefully 
         // It may not render null items or may render them as empty
@@ -1110,7 +1110,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Start a search
         input.Input("ap");
-        await Task.Delay(200); // Partial wait
+        await Task.Delay(200, Xunit.TestContext.Current.CancellationToken); // Partial wait
 
         // Act - Create a new disabled component to simulate state change
         var disabledCut = RenderTypeahead(SimpleSearchFunc, parameters => parameters

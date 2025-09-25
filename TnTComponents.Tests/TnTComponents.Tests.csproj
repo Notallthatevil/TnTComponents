@@ -8,6 +8,26 @@
         <OutputType>Exe</OutputType>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0|AnyCPU'">
+      <WarningLevel>8</WarningLevel>
+      <WarningsAsErrors>$(WarningsAsErrors);NU1605;xUnit1051</WarningsAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0|AnyCPU'">
+      <WarningLevel>8</WarningLevel>
+      <WarningsAsErrors>$(WarningsAsErrors);NU1605;xUnit1051</WarningsAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0|AnyCPU'">
+      <WarningLevel>8</WarningLevel>
+      <WarningsAsErrors>$(WarningsAsErrors);NU1605;xUnit1051</WarningsAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0|AnyCPU'">
+      <WarningLevel>8</WarningLevel>
+      <WarningsAsErrors>$(WarningsAsErrors);NU1605;xUnit1051</WarningsAsErrors>
+    </PropertyGroup>
+
     <ItemGroup>
         <PackageReference Include="AwesomeAssertions" Version="9.2.0" />
         <PackageReference Include="AwesomeAssertions.Analyzers" Version="9.0.5">
