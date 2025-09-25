@@ -8,7 +8,7 @@
             </th>
         }
         @foreach (var column in Context.Columns) {
-            <TnTDataGridHeaderCell Column="@column" />
+            <TnTDataGridHeaderCell TGridItem="@TGridItem" Column="@column" />
         }
     </tr>
 </thead>

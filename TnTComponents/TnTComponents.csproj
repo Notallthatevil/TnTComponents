@@ -21,7 +21,6 @@
 		<IsAotCompatible>true</IsAotCompatible>
 		<LangVersion>latest</LangVersion>
 		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-		<SignAssembly>False</SignAssembly>
 		<PackageIcon>Logo.png</PackageIcon>
 	</PropertyGroup>
 	
