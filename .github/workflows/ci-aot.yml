@@ -1,0 +1,34 @@
+name: Publish AOTCompatibility testApp
+
+on:
+  push:
+    branches: [ 'main*' ]
+    paths-ignore:
+    - '**.md'
+  pull_request:
+    branches: [ 'main*' ]
+    paths-ignore:
+    - '**.md'
+
+jobs:
+  aot-test:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        runtime: [ linux-x64 ]
+        dotnet-version: ['9.0.x', '10.0.x']
+
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # fetching all
+
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ matrix.dotnet-version }}
+
+    - name: publish AOT testApp, assert static analysis warning count, and run the app
+      shell: pwsh
+      run: .\test-aot-compatibility.ps1 

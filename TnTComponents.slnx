@@ -1,9 +1,9 @@
 <Solution>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
-    <File Path=".github/workflows/CreateRelease.yml" />
     <File Path="package.json" />
     <File Path="README.md" />
+    <File Path="test-aot-compatibility.ps1" />
   </Folder>
   <Folder Name="/Solution Items/instructions/">
     <File Path=".github/copilot-instructions.md" />
@@ -11,6 +11,11 @@
     <File Path=".github/instructions/generated-code.md" />
     <File Path=".github/instructions/unit-tests.md" />
   </Folder>
+  <Folder Name="/Solution Items/workflows/">
+    <File Path=".github/workflows/ci-aot.yml" />
+    <File Path=".github/workflows/CreateRelease.yml" />
+  </Folder>
+  <Project Path="AotCompatibility.TestApp/AotCompatibility.TestApp.csproj" Id="5fe8afae-706b-4160-a602-2463e8cec5fd" />
   <Project Path="LiveTest/LiveTest.Client/LiveTest.Client.csproj" />
   <Project Path="LiveTest/LiveTest/LiveTest.csproj" />
   <Project Path="TnTComponents.AspNetCore/TnTComponents.AspNetCore.csproj" />
