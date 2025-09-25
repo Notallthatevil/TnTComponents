@@ -36,8 +36,8 @@ public class SessionStorageService_Tests : Bunit.TestContext {
         JSInterop.SetupVoid("sessionStorage.clear")
             .SetVoidResult();
 
-    // Act
-    await _sessionStorageService.ClearAsync(Xunit.TestContext.Current.CancellationToken);
+        // Act
+        await _sessionStorageService.ClearAsync(Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         JSInterop.VerifyInvoke("sessionStorage.clear", 1);
@@ -94,8 +94,8 @@ public class SessionStorageService_Tests : Bunit.TestContext {
         JSInterop.Setup<IEnumerable<string>>("eval", "Object.keys(sessionStorage)")
             .SetResult(expectedKeys);
 
-    // Act
-    var result = await _sessionStorageService.KeysAsync(Xunit.TestContext.Current.CancellationToken);
+        // Act
+        var result = await _sessionStorageService.KeysAsync(Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeEquivalentTo(expectedKeys);
@@ -108,8 +108,8 @@ public class SessionStorageService_Tests : Bunit.TestContext {
         JSInterop.Setup<int>("eval", "sessionStorage.length")
             .SetResult(expectedLength);
 
-    // Act
-    var result = await _sessionStorageService.LengthAsync(Xunit.TestContext.Current.CancellationToken);
+        // Act
+        var result = await _sessionStorageService.LengthAsync(Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().Be(expectedLength);
@@ -209,7 +209,7 @@ public class SessionStorageService_Tests : Bunit.TestContext {
             .SetResult("42");
 
         // Act
-    var result = await _sessionStorageService.GetItemAsync<int>(key, cancellationToken: Xunit.TestContext.Current.CancellationToken);
+        var result = await _sessionStorageService.GetItemAsync<int>(key, cancellationToken: Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().Be(expectedValue);
@@ -225,7 +225,7 @@ public class SessionStorageService_Tests : Bunit.TestContext {
             .SetResult(plainStringValue);
 
         // Act
-    var result = await _sessionStorageService.GetItemAsync<string>(key, cancellationToken: Xunit.TestContext.Current.CancellationToken);
+        var result = await _sessionStorageService.GetItemAsync<string>(key, cancellationToken: Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().Be(plainStringValue);
@@ -244,7 +244,7 @@ public class SessionStorageService_Tests : Bunit.TestContext {
             .SetVoidResult();
 
         // Act
-    await _sessionStorageService.SetItemAsync(key, testValue, cancellationToken: Xunit.TestContext.Current.CancellationToken);
+        await _sessionStorageService.SetItemAsync(key, testValue, cancellationToken: Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         JSInterop.VerifyInvoke("sessionStorage.setItem", 1);
@@ -302,7 +302,7 @@ public class SessionStorageService_Tests : Bunit.TestContext {
             .SetVoidResult();
 
         // Act
-    await _sessionStorageService.SetItemAsync(key, testValue, cancellationToken: Xunit.TestContext.Current.CancellationToken);
+        await _sessionStorageService.SetItemAsync(key, testValue, cancellationToken: Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         changingEventArgs.Should().NotBeNull();
@@ -320,7 +320,7 @@ public class SessionStorageService_Tests : Bunit.TestContext {
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public async Task GetItemAsStringAsync_WithInvalidKey_ThrowsArgumentNullException(string invalidKey) {
+    public async Task GetItemAsStringAsync_WithInvalidKey_ThrowsArgumentNullException(string? invalidKey) {
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentNullException>(() =>
             _sessionStorageService.GetItemAsStringAsync(invalidKey!, Xunit.TestContext.Current.CancellationToken).AsTask());
@@ -329,7 +329,7 @@ public class SessionStorageService_Tests : Bunit.TestContext {
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public async Task GetItemAsync_WithInvalidKey_ThrowsArgumentNullException(string invalidKey) {
+    public async Task GetItemAsync_WithInvalidKey_ThrowsArgumentNullException(string? invalidKey) {
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentNullException>(() =>
             _sessionStorageService.GetItemAsync<string>(invalidKey!, cancellationToken: Xunit.TestContext.Current.CancellationToken).AsTask());
@@ -338,7 +338,7 @@ public class SessionStorageService_Tests : Bunit.TestContext {
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public async Task RemoveItemAsync_WithInvalidKey_ThrowsArgumentNullException(string invalidKey) {
+    public async Task RemoveItemAsync_WithInvalidKey_ThrowsArgumentNullException(string? invalidKey) {
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentNullException>(() =>
             _sessionStorageService.RemoveItemAsync(invalidKey!, Xunit.TestContext.Current.CancellationToken).AsTask());
@@ -347,7 +347,7 @@ public class SessionStorageService_Tests : Bunit.TestContext {
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public async Task SetItemAsStringAsync_WithInvalidKey_ThrowsArgumentNullException(string invalidKey) {
+    public async Task SetItemAsStringAsync_WithInvalidKey_ThrowsArgumentNullException(string? invalidKey) {
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentNullException>(() =>
             _sessionStorageService.SetItemAsStringAsync(invalidKey!, "data", Xunit.TestContext.Current.CancellationToken).AsTask());
@@ -363,7 +363,7 @@ public class SessionStorageService_Tests : Bunit.TestContext {
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public async Task SetItemAsync_WithInvalidKey_ThrowsArgumentNullException(string invalidKey) {
+    public async Task SetItemAsync_WithInvalidKey_ThrowsArgumentNullException(string? invalidKey) {
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentNullException>(() =>
             _sessionStorageService.SetItemAsync(invalidKey!, 42, cancellationToken: Xunit.TestContext.Current.CancellationToken).AsTask());
@@ -381,7 +381,7 @@ public class SessionStorageService_Tests : Bunit.TestContext {
             .SetVoidResult();
 
         // Act
-    await _sessionStorageService.ClearAsync(cts.Token);
+        await _sessionStorageService.ClearAsync(cts.Token);
 
         // Assert
         JSInterop.VerifyInvoke("sessionStorage.clear", 1);
@@ -396,8 +396,8 @@ public class SessionStorageService_Tests : Bunit.TestContext {
         JSInterop.Setup<string>("sessionStorage.getItem", key)
             .SetResult("\"session-test\"");
 
-    // Act
-    await _sessionStorageService.GetItemAsync<string>(key, null, cts.Token);
+        // Act
+        await _sessionStorageService.GetItemAsync<string>(key, null, cts.Token);
 
         // Assert
         JSInterop.VerifyInvoke("sessionStorage.getItem", 1);
@@ -450,7 +450,7 @@ public class SessionStorageService_Tests : Bunit.TestContext {
             .SetResult("");
 
         // Act
-    var result = await _sessionStorageService.GetItemAsync<string>(key, cancellationToken: Xunit.TestContext.Current.CancellationToken);
+        var result = await _sessionStorageService.GetItemAsync<string>(key, cancellationToken: Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeNull();
@@ -464,7 +464,7 @@ public class SessionStorageService_Tests : Bunit.TestContext {
             .SetResult("   ");
 
         // Act
-    var result = await _sessionStorageService.GetItemAsync<string>(key, cancellationToken: Xunit.TestContext.Current.CancellationToken);
+        var result = await _sessionStorageService.GetItemAsync<string>(key, cancellationToken: Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeNull();
@@ -476,7 +476,7 @@ public class SessionStorageService_Tests : Bunit.TestContext {
         var emptyKeys = Array.Empty<string>();
 
         // Act
-    await _sessionStorageService.RemoveItemsAsync(emptyKeys, Xunit.TestContext.Current.CancellationToken);
+        await _sessionStorageService.RemoveItemsAsync(emptyKeys, Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         JSInterop.VerifyNotInvoke("sessionStorage.removeItem");
@@ -494,7 +494,7 @@ public class SessionStorageService_Tests : Bunit.TestContext {
             .SetVoidResult();
 
         // Act
-    await _sessionStorageService.SetItemAsync(key, nullString, cancellationToken: Xunit.TestContext.Current.CancellationToken);
+        await _sessionStorageService.SetItemAsync(key, nullString, cancellationToken: Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         JSInterop.VerifyInvoke("sessionStorage.setItem", 1);

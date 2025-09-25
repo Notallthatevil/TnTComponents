@@ -383,7 +383,7 @@ public class TnTDataGrid_Tests : BunitContext {
 
         // Act
         await pagination.SetCurrentPageIndexAsync(1);
-    await Task.Delay(50, Xunit.TestContext.Current.CancellationToken); // Allow async operations to complete
+        await Task.Delay(50, Xunit.TestContext.Current.CancellationToken); // Allow async operations to complete
 
         // Assert
         Assert.Equal(1, pagination.CurrentPageIndex);
@@ -421,8 +421,8 @@ public class TnTDataGrid_Tests : BunitContext {
             .Add(p => p.RowClass, rowClassFunc));
 
         // Ensure data is loaded and rendered
-    await cut.Instance.RefreshDataGridAsync(cancellationToken: Xunit.TestContext.Current.CancellationToken);
-    await Task.Delay(100, Xunit.TestContext.Current.CancellationToken);
+        await cut.Instance.RefreshDataGridAsync(cancellationToken: Xunit.TestContext.Current.CancellationToken);
+        await Task.Delay(100, Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         var markup = cut.Markup;
@@ -445,7 +445,7 @@ public class TnTDataGrid_Tests : BunitContext {
         var cut = RenderDataGridWithItems(_testItems.AsQueryable());
 
         // Act
-    var task = cut.Instance.RefreshDataGridAsync(cancellationToken: Xunit.TestContext.Current.CancellationToken);
+        var task = cut.Instance.RefreshDataGridAsync(cancellationToken: Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         await task; // Should complete without throwing
@@ -456,11 +456,11 @@ public class TnTDataGrid_Tests : BunitContext {
     public async Task RefreshDataGridAsync_WithCancellation_HandlesCancellation() {
         // Arrange
         var cut = RenderDataGridWithItems(_testItems.AsQueryable());
-    using var cts = new CancellationTokenSource();
+        using var cts = new CancellationTokenSource();
 
         // Act
         cts.Cancel();
-    var task = cut.Instance.RefreshDataGridAsync(cancellationToken: cts.Token);
+        var task = cut.Instance.RefreshDataGridAsync(cancellationToken: cts.Token);
 
         // Assert
         await task; // Should handle cancellation gracefully
@@ -624,10 +624,10 @@ public class TnTDataGrid_Tests : BunitContext {
             .Add(p => p.ItemsProvider, emptyProvider));
 
         // Force initial data load
-    await cut.Instance.RefreshDataGridAsync(cancellationToken: Xunit.TestContext.Current.CancellationToken);
+        await cut.Instance.RefreshDataGridAsync(cancellationToken: Xunit.TestContext.Current.CancellationToken);
 
-    // Allow rendering to complete
-    await Task.Delay(100, Xunit.TestContext.Current.CancellationToken);
+        // Allow rendering to complete
+        await Task.Delay(100, Xunit.TestContext.Current.CancellationToken);
 
         // Assert - Check for empty state indicators
         var markup = cut.Markup;

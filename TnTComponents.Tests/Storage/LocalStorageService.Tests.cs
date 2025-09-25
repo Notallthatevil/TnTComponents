@@ -36,8 +36,8 @@ public class LocalStorageService_Tests : Bunit.TestContext {
         JSInterop.SetupVoid("localStorage.clear")
             .SetVoidResult();
 
-    // Act
-    await _localStorageService.ClearAsync(Xunit.TestContext.Current.CancellationToken);
+        // Act
+        await _localStorageService.ClearAsync(Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         JSInterop.VerifyInvoke("localStorage.clear", 1);
@@ -159,8 +159,8 @@ public class LocalStorageService_Tests : Bunit.TestContext {
         JSInterop.SetupVoid("localStorage.setItem", key, data)
             .SetVoidResult();
 
-    // Act
-    await _localStorageService.SetItemAsStringAsync(key, data, Xunit.TestContext.Current.CancellationToken);
+        // Act
+        await _localStorageService.SetItemAsStringAsync(key, data, Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         JSInterop.VerifyInvoke("localStorage.setItem", 1);
@@ -189,8 +189,8 @@ public class LocalStorageService_Tests : Bunit.TestContext {
                 .SetVoidResult();
         }
 
-    // Act
-    await _localStorageService.RemoveItemsAsync(keys, Xunit.TestContext.Current.CancellationToken);
+        // Act
+        await _localStorageService.RemoveItemsAsync(keys, Xunit.TestContext.Current.CancellationToken);
 
         // Assert - Verify total number of calls to localStorage.removeItem
         JSInterop.VerifyInvoke("localStorage.removeItem", calledTimes: 3);
@@ -208,8 +208,8 @@ public class LocalStorageService_Tests : Bunit.TestContext {
         JSInterop.Setup<string>("localStorage.getItem", key)
             .SetResult("42");
 
-    // Act
-    var result = await _localStorageService.GetItemAsync<int>(key, cancellationToken: Xunit.TestContext.Current.CancellationToken);
+        // Act
+        var result = await _localStorageService.GetItemAsync<int>(key, cancellationToken: Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().Be(expectedValue);
@@ -224,8 +224,8 @@ public class LocalStorageService_Tests : Bunit.TestContext {
         JSInterop.Setup<string>("localStorage.getItem", key)
             .SetResult(plainStringValue);
 
-    // Act
-    var result = await _localStorageService.GetItemAsync<string>(key, cancellationToken: Xunit.TestContext.Current.CancellationToken);
+        // Act
+        var result = await _localStorageService.GetItemAsync<string>(key, cancellationToken: Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().Be(plainStringValue);
@@ -243,8 +243,8 @@ public class LocalStorageService_Tests : Bunit.TestContext {
         JSInterop.SetupVoid("localStorage.setItem", key, expectedJson)
             .SetVoidResult();
 
-    // Act
-    await _localStorageService.SetItemAsync(key, testValue, cancellationToken: Xunit.TestContext.Current.CancellationToken);
+        // Act
+        await _localStorageService.SetItemAsync(key, testValue, cancellationToken: Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         JSInterop.VerifyInvoke("localStorage.setItem", 1);
@@ -272,8 +272,8 @@ public class LocalStorageService_Tests : Bunit.TestContext {
         JSInterop.SetupVoid("localStorage.setItem", key, newData)
             .SetVoidResult();
 
-    // Act
-    await _localStorageService.SetItemAsStringAsync(key, newData, Xunit.TestContext.Current.CancellationToken);
+        // Act
+        await _localStorageService.SetItemAsStringAsync(key, newData, Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         changingEventArgs.Should().NotBeNull();
@@ -301,8 +301,8 @@ public class LocalStorageService_Tests : Bunit.TestContext {
         JSInterop.SetupVoid("localStorage.setItem", key, "789")
             .SetVoidResult();
 
-    // Act
-    await _localStorageService.SetItemAsync(key, testValue, cancellationToken: Xunit.TestContext.Current.CancellationToken);
+        // Act
+        await _localStorageService.SetItemAsync(key, testValue, cancellationToken: Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         changingEventArgs.Should().NotBeNull();
@@ -320,7 +320,7 @@ public class LocalStorageService_Tests : Bunit.TestContext {
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public async Task GetItemAsStringAsync_WithInvalidKey_ThrowsArgumentNullException(string invalidKey) {
+    public async Task GetItemAsStringAsync_WithInvalidKey_ThrowsArgumentNullException(string? invalidKey) {
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentNullException>(() =>
             _localStorageService.GetItemAsStringAsync(invalidKey!, cancellationToken: Xunit.TestContext.Current.CancellationToken).AsTask());
@@ -329,7 +329,7 @@ public class LocalStorageService_Tests : Bunit.TestContext {
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public async Task GetItemAsync_WithInvalidKey_ThrowsArgumentNullException(string invalidKey) {
+    public async Task GetItemAsync_WithInvalidKey_ThrowsArgumentNullException(string? invalidKey) {
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentNullException>(() =>
             _localStorageService.GetItemAsync<string>(invalidKey!, cancellationToken: Xunit.TestContext.Current.CancellationToken).AsTask());
@@ -338,7 +338,7 @@ public class LocalStorageService_Tests : Bunit.TestContext {
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public async Task RemoveItemAsync_WithInvalidKey_ThrowsArgumentNullException(string invalidKey) {
+    public async Task RemoveItemAsync_WithInvalidKey_ThrowsArgumentNullException(string? invalidKey) {
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentNullException>(() =>
             _localStorageService.RemoveItemAsync(invalidKey!, cancellationToken: Xunit.TestContext.Current.CancellationToken).AsTask());
@@ -347,7 +347,7 @@ public class LocalStorageService_Tests : Bunit.TestContext {
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public async Task SetItemAsStringAsync_WithInvalidKey_ThrowsArgumentNullException(string invalidKey) {
+    public async Task SetItemAsStringAsync_WithInvalidKey_ThrowsArgumentNullException(string? invalidKey) {
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentNullException>(() =>
             _localStorageService.SetItemAsStringAsync(invalidKey!, "data", cancellationToken: Xunit.TestContext.Current.CancellationToken).AsTask());
@@ -363,7 +363,7 @@ public class LocalStorageService_Tests : Bunit.TestContext {
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public async Task SetItemAsync_WithInvalidKey_ThrowsArgumentNullException(string invalidKey) {
+    public async Task SetItemAsync_WithInvalidKey_ThrowsArgumentNullException(string? invalidKey) {
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentNullException>(() =>
             _localStorageService.SetItemAsync(invalidKey!, 42, cancellationToken: Xunit.TestContext.Current.CancellationToken).AsTask());
@@ -380,8 +380,8 @@ public class LocalStorageService_Tests : Bunit.TestContext {
         JSInterop.SetupVoid("localStorage.clear")
             .SetVoidResult();
 
-    // Act
-    await _localStorageService.ClearAsync(cts.Token);
+        // Act
+        await _localStorageService.ClearAsync(cts.Token);
 
         // Assert
         JSInterop.VerifyInvoke("localStorage.clear", 1);
@@ -396,8 +396,8 @@ public class LocalStorageService_Tests : Bunit.TestContext {
         JSInterop.Setup<string>("localStorage.getItem", key)
             .SetResult("\"test\"");
 
-    // Act
-    await _localStorageService.GetItemAsync<string>(key, null, cts.Token);
+        // Act
+        await _localStorageService.GetItemAsync<string>(key, null, cts.Token);
 
         // Assert
         JSInterop.VerifyInvoke("localStorage.getItem", 1);
@@ -429,7 +429,7 @@ public class LocalStorageService_Tests : Bunit.TestContext {
             .SetResult("   ");
 
         // Act
-    var result = await _localStorageService.GetItemAsync<string>(key, cancellationToken: Xunit.TestContext.Current.CancellationToken);
+        var result = await _localStorageService.GetItemAsync<string>(key, cancellationToken: Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeNull();
@@ -440,8 +440,8 @@ public class LocalStorageService_Tests : Bunit.TestContext {
         // Arrange
         var emptyKeys = Array.Empty<string>();
 
-    // Act
-    await _localStorageService.RemoveItemsAsync(emptyKeys, Xunit.TestContext.Current.CancellationToken);
+        // Act
+        await _localStorageService.RemoveItemsAsync(emptyKeys, Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         JSInterop.VerifyNotInvoke("localStorage.removeItem");
@@ -458,8 +458,8 @@ public class LocalStorageService_Tests : Bunit.TestContext {
         JSInterop.SetupVoid("localStorage.setItem", key, "null")
             .SetVoidResult();
 
-    // Act
-    await _localStorageService.SetItemAsync(key, nullString, cancellationToken: Xunit.TestContext.Current.CancellationToken);
+        // Act
+        await _localStorageService.SetItemAsync(key, nullString, cancellationToken: Xunit.TestContext.Current.CancellationToken);
 
         // Assert
         JSInterop.VerifyInvoke("localStorage.setItem", 1);
