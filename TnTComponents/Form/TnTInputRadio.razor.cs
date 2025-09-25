@@ -15,7 +15,7 @@ namespace TnTComponents;
 ///     Represents a radio input component.
 /// </summary>
 /// <typeparam name="TInputType">The type of the input value.</typeparam>
-public partial class TnTInputRadio< TInputType> {
+public partial class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TInputType> {
 
     /// <inheritdoc />
     [Parameter]

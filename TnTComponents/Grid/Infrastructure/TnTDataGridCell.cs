@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using System.Diagnostics.CodeAnalysis;
 using TnTComponents.Core;
 using TnTComponents.Grid.Columns;
 
@@ -9,7 +10,7 @@ namespace TnTComponents.Grid.Infrastructure;
 /// </summary>
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
 [CascadingTypeParameter(nameof(TGridItem))]
-public abstract class TnTDataGridCell<TGridItem> : ComponentBase {
+public abstract class TnTDataGridCell<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)] TGridItem> : ComponentBase {
 
     /// <summary>
     ///     The column definition associated with this cell.

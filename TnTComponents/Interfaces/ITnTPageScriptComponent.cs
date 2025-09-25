@@ -7,7 +7,7 @@ namespace TnTComponents.Interfaces;
 /// <summary>
 ///     Represents a component that has an isolated JavaScript module
 /// </summary>
-public interface ITnTPageScriptComponent< TComponent> : IAsyncDisposable, IDisposable, ITnTComponentBase where TComponent : ComponentBase {
+public interface ITnTPageScriptComponent<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)] TComponent> : IAsyncDisposable, IDisposable, ITnTComponentBase where TComponent : ComponentBase {
 
     /// <summary>
     ///     Gets the reference to the DotNet object associated with the component.

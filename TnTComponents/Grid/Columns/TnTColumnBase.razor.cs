@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection.PortableExecutable;
 using System.Security.Cryptography.X509Certificates;
 using TnTComponents.Core;
 using TnTComponents.Grid.Infrastructure;
+using TnTComponents.Interfaces;
 
 namespace TnTComponents.Grid.Columns;
 
@@ -15,7 +17,7 @@ namespace TnTComponents.Grid.Columns;
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
 [CascadingTypeParameter(nameof(TGridItem))]
 [DebuggerDisplay("Title = {Title}, Order = {Order}, Sortable = {Sortable}, IsSortedOn = {IsSortedOn}")]
-public abstract partial class TnTColumnBase<TGridItem> {
+public abstract partial class TnTColumnBase<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)] TGridItem> : TnTComponentBase, ITnTComponentBase, IDisposable {
 
     /// <summary>
     ///     Unique column ID assigned by the grid context.

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using System.Diagnostics.CodeAnalysis;
 using TnTComponents.Core;
 using TnTComponents.Grid.Columns;
 using TnTComponents.Grid.Infrastructure;
@@ -11,13 +12,18 @@ namespace TnTComponents.Grid.Infrastructure;
 /// </summary>
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
 [CascadingTypeParameter(nameof(TGridItem))]
-public abstract partial class TnTDataGridRow<TGridItem> : ComponentBase {
+public abstract partial class TnTDataGridRow<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)] TGridItem> : ComponentBase {
 
     /// <summary>
     ///     The internal grid context for this row, cascaded from the parent grid.
     /// </summary>
     [CascadingParameter]
     internal TnTInternalGridContext<TGridItem> Context { get; set; } = default!;
+
+    /// <summary>
+    ///     Gets the number of columns in the current context.
+    /// </summary>
+    protected int ColumnCount => Context?.Columns.Count() ?? 0;
 
     /// <summary>
     ///     Refreshes the row by invoking a re-render.

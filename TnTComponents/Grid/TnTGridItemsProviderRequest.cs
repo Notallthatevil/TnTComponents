@@ -10,7 +10,7 @@ namespace TnTComponents.Grid;
 /// </summary>
 /// <typeparam name="TGridItem">The type of items in the grid.</typeparam>
 [ExcludeFromCodeCoverage]
-public readonly struct TnTGridItemsProviderRequest<TGridItem> {
+public readonly struct TnTGridItemsProviderRequest<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)] TGridItem> {
 
     /// <summary>
     ///     A token that can be used to cancel the request.

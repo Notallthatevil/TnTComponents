@@ -6,7 +6,7 @@
     @if (Context.RowClickCallback.HasDelegate) { // Prepend one more for the ::before element.
                                                 <td></td>
     }
-    <td class="tnt-empty-content-row" colspan="@(Context.Columns.Count())">
+    <td class="tnt-empty-content-row" colspan="@ColumnCount">
         No content to show.
     </td>
 </tr>

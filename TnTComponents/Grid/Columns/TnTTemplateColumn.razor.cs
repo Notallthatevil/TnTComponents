@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using System.Diagnostics.CodeAnalysis;
 using TnTComponents.Grid;
 using TnTComponents.Grid.Columns;
 
@@ -10,7 +11,7 @@ namespace TnTComponents;
 /// </summary>
 /// <typeparam name="TGridItem">The type of items displayed in the grid.</typeparam>
 [CascadingTypeParameter(nameof(TGridItem))]
-public partial class TnTTemplateColumn<TGridItem> {
+public partial class TnTTemplateColumn<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)] TGridItem> {
 
     /// <summary>
     ///     Specifies the template to render for each grid item.

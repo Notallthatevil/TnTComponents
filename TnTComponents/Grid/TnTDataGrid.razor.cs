@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 using Microsoft.JSInterop;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using TnTComponents.Core;
@@ -55,7 +56,7 @@ public enum SortDirection {
 /// </summary>
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
 [CascadingTypeParameter(nameof(TGridItem))]
-public partial class TnTDataGrid<TGridItem> {
+public partial class TnTDataGrid<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)] TGridItem> {
 
     /// <inheritdoc />
     [Parameter]
@@ -354,4 +355,4 @@ public partial class TnTDataGrid<TGridItem> {
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
 /// <param name="request">The request parameters.</param>
 /// <returns>A value task containing the result.</returns>
-public delegate ValueTask<TnTItemsProviderResult<TGridItem>> TnTGridItemsProvider<TGridItem>(TnTGridItemsProviderRequest<TGridItem> request);
+public delegate ValueTask<TnTItemsProviderResult<TGridItem>> TnTGridItemsProvider<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)] TGridItem>(TnTGridItemsProviderRequest<TGridItem> request);

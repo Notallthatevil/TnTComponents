@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using System.Diagnostics.CodeAnalysis;
 using TnTComponents.Core;
 using TnTComponents.Grid.Columns;
 
@@ -9,7 +10,7 @@ namespace TnTComponents.Grid.Infrastructure;
 /// </summary>
 /// <typeparam name="TGridItem">The type of the grid item associated with this header cell.</typeparam>
 [CascadingTypeParameter(nameof(TGridItem))]
-public partial class TnTDataGridHeaderCell<TGridItem> {
+public partial class TnTDataGridHeaderCell<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)] TGridItem> {
 
     /// <inheritdoc />
     protected override string? ElementClass => CssClassBuilder.Create()

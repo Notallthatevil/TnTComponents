@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using System.Diagnostics.CodeAnalysis;
 using TnTComponents.Core;
 
 namespace TnTComponents.Grid.Infrastructure;
@@ -7,7 +8,7 @@ namespace TnTComponents.Grid.Infrastructure;
 ///     Represents a row in the data grid body for a specific grid item.
 /// </summary>
 /// <typeparam name="TGridItem">The type of the grid item displayed in this row.</typeparam>
-public partial class TnTDataGridBodyRow<TGridItem> {
+public partial class TnTDataGridBodyRow<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)] TGridItem> {
 
     /// <summary>
     ///     Additional attributes to be applied to the row element.

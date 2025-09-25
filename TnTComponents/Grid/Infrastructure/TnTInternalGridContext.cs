@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using System.Diagnostics.CodeAnalysis;
 using TnTComponents.Grid.Columns;
 
 namespace TnTComponents.Grid.Infrastructure;
@@ -7,7 +8,7 @@ namespace TnTComponents.Grid.Infrastructure;
 ///     Provides internal state and logic for a <see cref="TnTDataGrid{TGridItem}" /> component, including column registration, sorting, pagination, and item management.
 /// </summary>
 /// <typeparam name="TGridItem">The type of data represented by each row in the grid.</typeparam>
-internal sealed class TnTInternalGridContext<TGridItem>(TnTDataGrid<TGridItem> _grid) {
+internal sealed class TnTInternalGridContext<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)] TGridItem>(TnTDataGrid<TGridItem> _grid) {
 
     /// <summary>
     ///     Gets the columns registered with the grid, ordered by <see cref="TnTColumnBase{TGridItem}.Order" /> and <see cref="TnTColumnBase{TGridItem}.ColumnId" />.

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using System.Diagnostics.CodeAnalysis;
 using TnTComponents.Virtualization;
 
 namespace TnTComponents.Grid.Infrastructure;
@@ -8,7 +9,7 @@ namespace TnTComponents.Grid.Infrastructure;
 /// </summary>
 /// <typeparam name="TGridItem">The type of the grid item.</typeparam>
 [CascadingTypeParameter(nameof(TGridItem))]
-public partial class TnTDataGridVirtualizedBody<TGridItem> {
+public partial class TnTDataGridVirtualizedBody<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)] TGridItem> {
 
     /// <summary>
     ///     The default debounce delay in milliseconds for virtualized data requests.

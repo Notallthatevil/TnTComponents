@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using System.Diagnostics.CodeAnalysis;
 
 namespace TnTComponents.Grid.Infrastructure;
 
@@ -7,7 +8,7 @@ namespace TnTComponents.Grid.Infrastructure;
 /// </summary>
 /// <typeparam name="TGridItem">The type of the data item displayed in the cell.</typeparam>
 [CascadingTypeParameter(nameof(TGridItem))]
-public partial class TnTDataGridBodyCell<TGridItem> {
+public partial class TnTDataGridBodyCell<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)] TGridItem> {
 
     /// <summary>
     ///     The data item associated with this cell.
