@@ -49,7 +49,7 @@ public class TnTDataGridHeaderCell_Tests : BunitContext {
     public void Renders_WithColumnAdditionalAttributes() {
         // Arrange
         var column = CreateTestColumn("Header");
-        column.AdditionalAttributes = new Dictionary<string, object?> {
+        column.AdditionalAttributes = new Dictionary<string, object> {
             { "data-test", "header-value" },
             { "title", "Column Title" }
         };
@@ -81,7 +81,7 @@ public class TnTDataGridHeaderCell_Tests : BunitContext {
     public void Renders_WithEmptyAdditionalAttributes() {
         // Arrange
         var column = CreateTestColumn("Header");
-        column.AdditionalAttributes = new Dictionary<string, object?>();
+        column.AdditionalAttributes = new Dictionary<string, object>();
 
         // Act
         var cut = RenderHeaderCellWithColumn(column);
@@ -112,7 +112,7 @@ public class TnTDataGridHeaderCell_Tests : BunitContext {
     public void Renders_WithAdditionalAttributeClasses() {
         // Arrange
         var column = CreateTestColumn("Header");
-        column.AdditionalAttributes = new Dictionary<string, object?> {
+        column.AdditionalAttributes = new Dictionary<string, object> {
             { "class", "custom-header-class" }
         };
 
@@ -130,7 +130,7 @@ public class TnTDataGridHeaderCell_Tests : BunitContext {
     public void Renders_WithMultipleAdditionalAttributeClasses() {
         // Arrange
         var column = CreateTestColumn("Header");
-        column.AdditionalAttributes = new Dictionary<string, object?> {
+        column.AdditionalAttributes = new Dictionary<string, object> {
             { "class", "class1 class2 class3" }
         };
 
@@ -189,7 +189,7 @@ public class TnTDataGridHeaderCell_Tests : BunitContext {
     public void Renders_WithAdditionalAttributeStyles() {
         // Arrange
         var column = CreateTestColumn("Header");
-        column.AdditionalAttributes = new Dictionary<string, object?> {
+        column.AdditionalAttributes = new Dictionary<string, object> {
             { "style", "background-color: red; color: white;" }
         };
 
@@ -208,7 +208,7 @@ public class TnTDataGridHeaderCell_Tests : BunitContext {
         // Arrange
         var column = CreateTestColumn("Header");
         column.Width = 200;
-        column.AdditionalAttributes = new Dictionary<string, object?> {
+        column.AdditionalAttributes = new Dictionary<string, object> {
             { "style", "text-align: center;" }
         };
 
@@ -341,7 +341,7 @@ public class TnTDataGridHeaderCell_Tests : BunitContext {
     public void ElementClass_BuildsCorrectly() {
         // Arrange
         var column = CreateTestColumn("Header");
-        column.AdditionalAttributes = new Dictionary<string, object?> {
+        column.AdditionalAttributes = new Dictionary<string, object> {
             { "class", "extra-class" }
         };
 
@@ -362,7 +362,7 @@ public class TnTDataGridHeaderCell_Tests : BunitContext {
         // Arrange
         var column = CreateTestColumn("Header");
         column.Width = 100;
-        column.AdditionalAttributes = new Dictionary<string, object?> {
+        column.AdditionalAttributes = new Dictionary<string, object> {
             { "style", "color: blue;" }
         };
 
@@ -396,7 +396,7 @@ public class TnTDataGridHeaderCell_Tests : BunitContext {
     /// </summary>
     private class TestTemplateColumn<TItem> : TnTColumnBase<TItem> {
         public Action<Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder>? HeaderTemplate { get; set; }
-        
+
         public override string? ElementClass => null;
         public override string? ElementStyle => null;
         public override TnTGridSort<TItem>? SortBy { get; set; }
@@ -406,7 +406,8 @@ public class TnTDataGridHeaderCell_Tests : BunitContext {
         public override void RenderHeaderContent(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder builder) {
             if (HeaderTemplate != null) {
                 HeaderTemplate(builder);
-            } else {
+            }
+            else {
                 builder.AddContent(0, "Default Header");
             }
         }

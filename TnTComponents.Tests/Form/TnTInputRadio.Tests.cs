@@ -15,22 +15,30 @@ using Xunit;
 namespace TnTComponents.Tests.Form;
 
 public class TnTInputRadio_Tests : BunitContext {
-    
-    public TnTInputRadio_Tests()
-    {
+
+    public TnTInputRadio_Tests() {
         // Set renderer info for tests that use NET9_0_OR_GREATER features
         SetRendererInfo(new RendererInfo("WebAssembly", true));
     }
-    
+
     private TestModel CreateTestModel() => new();
-    
+
     private TestModelWithValidation CreateValidationTestModel() => new();
-    
-    private IRenderedComponent<TnTInputRadioGroup<string?>> RenderInputRadioGroup(TestModel? model = null, Action<ComponentParameterCollectionBuilder<TnTInputRadioGroup<string?>>>? configure = null)
-    {
+
+    private IRenderedComponent<TnTInputRadioGroup<string?>> RenderInputRadioGroup(TestModel? model = null, Action<ComponentParameterCollectionBuilder<TnTInputRadioGroup<string?>>>? configure = null) {
         model ??= CreateTestModel();
-        return Render<TnTInputRadioGroup<string?>>(parameters =>
-        {
+        return Render<TnTInputRadioGroup<string?>>(parameters => {
+            parameters
+                .Add(p => p.ValueExpression, () => model.TestValue!)
+                .Add(p => p.Value, model.TestValue)
+                .Add(p => p.ValueChanged, EventCallback.Factory.Create<string?>(this, v => model.TestValue = v))
+                .Add(p => p.ChildContent, CreateRadioOptions());
+            configure?.Invoke(parameters);
+        });
+    }
+
+    private IRenderedComponent<TnTInputRadioGroup<string?>> RenderValidationInputRadioGroup(TestModelWithValidation model, Action<ComponentParameterCollectionBuilder<TnTInputRadioGroup<string?>>>? configure = null) {
+        return Render<TnTInputRadioGroup<string?>>(parameters => {
             parameters
                 .Add(p => p.ValueExpression, () => model.TestValue)
                 .Add(p => p.Value, model.TestValue)
@@ -39,44 +47,30 @@ public class TnTInputRadio_Tests : BunitContext {
             configure?.Invoke(parameters);
         });
     }
-    
-    private IRenderedComponent<TnTInputRadioGroup<string?>> RenderValidationInputRadioGroup(TestModelWithValidation model, Action<ComponentParameterCollectionBuilder<TnTInputRadioGroup<string?>>>? configure = null)
-    {
-        return Render<TnTInputRadioGroup<string?>>(parameters =>
-        {
-            parameters
-                .Add(p => p.ValueExpression, () => model.TestValue)
-                .Add(p => p.Value, model.TestValue)
-                .Add(p => p.ValueChanged, EventCallback.Factory.Create<string?>(this, v => model.TestValue = v))
-                .Add(p => p.ChildContent, CreateRadioOptions());
-            configure?.Invoke(parameters);
-        });
-    }
-    
-    private RenderFragment CreateRadioOptions() => builder =>
-    {
+
+    private RenderFragment CreateRadioOptions() => builder => {
         builder.OpenComponent<TnTInputRadio<string?>>(0);
         builder.AddAttribute(1, "Value", "option1");
         builder.AddAttribute(2, "Label", "Option 1");
         builder.CloseComponent();
-        
+
         builder.OpenComponent<TnTInputRadio<string?>>(3);
         builder.AddAttribute(4, "Value", "option2");
         builder.AddAttribute(5, "Label", "Option 2");
         builder.CloseComponent();
-        
+
         builder.OpenComponent<TnTInputRadio<string?>>(6);
         builder.AddAttribute(7, "Value", "option3");
         builder.AddAttribute(8, "Label", "Option 3");
         builder.CloseComponent();
     };
-    
+
     [Fact]
     public void Renders_RadioGroup_With_Default_Classes_And_Type() {
         // Arrange & Act
         var cut = RenderInputRadioGroup();
         var fieldset = cut.Find("fieldset");
-        
+
         // Assert
         fieldset.Should().NotBeNull();
         var cls = fieldset.GetAttribute("class")!;
@@ -90,7 +84,7 @@ public class TnTInputRadio_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputRadioGroup();
         var fieldset = cut.Find("fieldset");
-        
+
         // Assert
         cut.Instance.Should().BeAssignableTo<ITnTComponentBase>();
     }
@@ -99,7 +93,7 @@ public class TnTInputRadio_Tests : BunitContext {
     public void Default_Type_Is_Radio() {
         // Arrange & Act
         var cut = RenderInputRadioGroup();
-        
+
         // Assert
         cut.Instance.Type.Should().Be(InputType.Radio);
     }
@@ -109,7 +103,7 @@ public class TnTInputRadio_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputRadioGroup();
         var radioInputs = cut.FindAll("input[type=radio]");
-        
+
         // Assert
         radioInputs.Should().HaveCount(3);
         radioInputs[0].GetAttribute("value").Should().Be("option1");
@@ -122,7 +116,7 @@ public class TnTInputRadio_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputRadioGroup();
         var labels = cut.FindAll(".tnt-label");
-        
+
         // Assert
         labels.Should().HaveCount(3); // Only radio button labels, not group label
         labels[0].TextContent.Should().Be("Option 1");
@@ -135,7 +129,7 @@ public class TnTInputRadio_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputRadioGroup();
         var overlays = cut.FindAll(".tnt-radio-button");
-        
+
         // Assert
         overlays.Should().HaveCount(3);
     }
@@ -145,13 +139,12 @@ public class TnTInputRadio_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputRadioGroup();
         var radioInputs = cut.FindAll("input[type=radio]");
-        
+
         // Assert
         var firstName = radioInputs[0].GetAttribute("name");
         firstName.Should().NotBeNullOrEmpty();
-        
-        foreach (var radio in radioInputs)
-        {
+
+        foreach (var radio in radioInputs) {
             radio.GetAttribute("name").Should().Be(firstName);
         }
     }
@@ -160,7 +153,7 @@ public class TnTInputRadio_Tests : BunitContext {
     public void Group_Label_Renders_When_Set() {
         // Arrange & Act
         var cut = RenderInputRadioGroup(configure: p => p.Add(c => c.Label, "Test Group"));
-        
+
         // Assert
         var legend = cut.Find("legend.tnt-label");
         legend.TextContent.Should().Be("Test Group");
@@ -170,7 +163,7 @@ public class TnTInputRadio_Tests : BunitContext {
     public void Group_Label_Does_Not_Render_When_Empty() {
         // Arrange & Act
         var cut = RenderInputRadioGroup();
-        
+
         // Assert
         cut.FindAll("legend.tnt-label").Should().BeEmpty();
     }
@@ -181,11 +174,10 @@ public class TnTInputRadio_Tests : BunitContext {
         var cut = RenderInputRadioGroup(configure: p => p.Add(c => c.Disabled, true));
         var fieldset = cut.Find("fieldset");
         var radioInputs = cut.FindAll("input[type=radio]");
-        
+
         // Assert
         fieldset.GetAttribute("class")!.Should().Contain("tnt-disabled");
-        foreach (var radio in radioInputs)
-        {
+        foreach (var radio in radioInputs) {
             radio.HasAttribute("disabled").Should().BeTrue();
         }
     }
@@ -195,10 +187,9 @@ public class TnTInputRadio_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputRadioGroup(configure: p => p.Add(c => c.ReadOnly, true));
         var radioInputs = cut.FindAll("input[type=radio]");
-        
+
         // Assert
-        foreach (var radio in radioInputs)
-        {
+        foreach (var radio in radioInputs) {
             radio.HasAttribute("readonly").Should().BeTrue();
         }
     }
@@ -208,7 +199,7 @@ public class TnTInputRadio_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputRadioGroup(configure: p => p.Add(c => c.ElementId, "radio-group-id"));
         var fieldset = cut.Find("fieldset");
-        
+
         // Assert
         fieldset.GetAttribute("id").Should().Be("radio-group-id");
     }
@@ -218,7 +209,7 @@ public class TnTInputRadio_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputRadioGroup(configure: p => p.Add(c => c.ElementTitle, "Radio Group Title"));
         var fieldset = cut.Find("fieldset");
-        
+
         // Assert
         fieldset.GetAttribute("title").Should().Be("Radio Group Title");
     }
@@ -228,7 +219,7 @@ public class TnTInputRadio_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputRadioGroup(configure: p => p.Add(c => c.ElementLang, "en-US"));
         var fieldset = cut.Find("fieldset");
-        
+
         // Assert
         fieldset.GetAttribute("lang").Should().Be("en-US");
     }
@@ -238,11 +229,11 @@ public class TnTInputRadio_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         model.TestValue = "option2";
-        
+
         // Act
         var cut = RenderInputRadioGroup(model);
         var radioInputs = cut.FindAll("input[type=radio]");
-        
+
         // Assert
         radioInputs[0].HasAttribute("checked").Should().BeFalse();
         radioInputs[1].HasAttribute("checked").Should().BeTrue();
@@ -255,11 +246,11 @@ public class TnTInputRadio_Tests : BunitContext {
         var model = CreateTestModel();
         var cut = RenderInputRadioGroup(model);
         var radioInputs = cut.FindAll("input[type=radio]");
-        
+
         // Act - Simulate clicking the third radio option
         // In radio groups, the change event provides the value from the input's value attribute
         radioInputs[2].Change(new Microsoft.AspNetCore.Components.ChangeEventArgs { Value = "option3" });
-        
+
         // Assert
         model.TestValue.Should().Be("option3");
     }
@@ -272,10 +263,10 @@ public class TnTInputRadio_Tests : BunitContext {
         var callback = EventCallback.Factory.Create<string?>(this, (value) => callbackValue = value ?? "");
         var cut = RenderInputRadioGroup(model, p => p.Add(c => c.BindAfter, callback));
         var radioInputs = cut.FindAll("input[type=radio]");
-        
+
         // Act
         radioInputs[0].Change(new Microsoft.AspNetCore.Components.ChangeEventArgs { Value = "option1" });
-        
+
         // Assert
         callbackValue.Should().Be("option1");
     }
@@ -284,10 +275,10 @@ public class TnTInputRadio_Tests : BunitContext {
     public void StartIcon_Renders_When_Set() {
         // Arrange
         var startIcon = MaterialIcon.Home;
-        
+
         // Act
         var cut = RenderInputRadioGroup(configure: p => p.Add(c => c.StartIcon, startIcon));
-        
+
         // Assert
         cut.Markup.Should().Contain("tnt-start-icon");
         cut.Markup.Should().Contain("home");
@@ -297,10 +288,10 @@ public class TnTInputRadio_Tests : BunitContext {
     public void EndIcon_Renders_When_Set() {
         // Arrange
         var endIcon = MaterialIcon.Search;
-        
+
         // Act
         var cut = RenderInputRadioGroup(configure: p => p.Add(c => c.EndIcon, endIcon));
-        
+
         // Assert
         cut.Markup.Should().Contain("tnt-end-icon");
         cut.Markup.Should().Contain("search");
@@ -310,7 +301,7 @@ public class TnTInputRadio_Tests : BunitContext {
     public void SupportingText_Renders_When_Set() {
         // Arrange & Act
         var cut = RenderInputRadioGroup(configure: p => p.Add(c => c.SupportingText, "Helper text"));
-        
+
         // Assert
         var supportingText = cut.Find(".tnt-supporting-text");
         supportingText.TextContent.Should().Be("Helper text");
@@ -320,7 +311,7 @@ public class TnTInputRadio_Tests : BunitContext {
     public void SupportingText_Does_Not_Render_When_Empty() {
         // Arrange & Act
         var cut = RenderInputRadioGroup();
-        
+
         // Assert
         cut.FindAll(".tnt-supporting-text").Should().BeEmpty();
     }
@@ -330,7 +321,7 @@ public class TnTInputRadio_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputRadioGroup(configure: p => p.Add(c => c.Appearance, FormAppearance.Filled));
         var fieldset = cut.Find("fieldset");
-        
+
         // Assert
         fieldset.GetAttribute("class")!.Should().Contain("tnt-form-filled");
     }
@@ -340,7 +331,7 @@ public class TnTInputRadio_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputRadioGroup(configure: p => p.Add(c => c.Appearance, FormAppearance.Outlined));
         var fieldset = cut.Find("fieldset");
-        
+
         // Assert
         fieldset.GetAttribute("class")!.Should().Contain("tnt-form-outlined");
     }
@@ -355,7 +346,7 @@ public class TnTInputRadio_Tests : BunitContext {
             .Add(c => c.ErrorColor, TnTColor.Error));
         var fieldset = cut.Find("fieldset");
         var style = fieldset.GetAttribute("style")!;
-        
+
         // Assert
         style.Should().Contain("--tnt-input-tint-color:var(--tnt-color-primary)");
         style.Should().Contain("--tnt-input-background-color:var(--tnt-color-surface)");
@@ -369,7 +360,7 @@ public class TnTInputRadio_Tests : BunitContext {
         var cut = RenderInputRadioGroup();
         var fieldset = cut.Find("fieldset");
         var style = fieldset.GetAttribute("style")!;
-        
+
         // Assert
         style.Should().Contain("--tnt-input-tint-color:var(--tnt-color-primary)");
         style.Should().Contain("--tnt-input-background-color:var(--tnt-color-surface-container-highest)");
@@ -381,11 +372,11 @@ public class TnTInputRadio_Tests : BunitContext {
     public void Merges_Custom_Class_From_AdditionalAttributes() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "class", "custom-radio-group" } };
-        
+
         // Act
         var cut = RenderInputRadioGroup(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var fieldset = cut.Find("fieldset");
-        
+
         // Assert
         var cls = fieldset.GetAttribute("class")!;
         cls.Should().Contain("custom-radio-group");
@@ -396,11 +387,11 @@ public class TnTInputRadio_Tests : BunitContext {
     public void Merges_Custom_Style_From_AdditionalAttributes() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "style", "margin:10px;" } };
-        
+
         // Act
         var cut = RenderInputRadioGroup(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var fieldset = cut.Find("fieldset");
-        
+
         // Assert
         var style = fieldset.GetAttribute("style")!;
         style.Should().Contain("margin:10px");
@@ -412,29 +403,30 @@ public class TnTInputRadio_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         var fieldChanged = false;
-        
+
         // Create a component with EditForm wrapper that provides EditContext
+        RenderFragment<EditContext> childContent = context => builder => {
+            // Subscribe to field changes
+            context.OnFieldChanged += (_, __) => fieldChanged = true;
+
+            builder.OpenComponent<TnTInputRadioGroup<string?>>(0);
+            builder.AddAttribute(1, "ValueExpression", (Expression<Func<string?>>)(() => model.TestValue));
+            builder.AddAttribute(2, "Value", model.TestValue);
+            builder.AddAttribute(3, "ValueChanged", EventCallback.Factory.Create<string?>(this, v => model.TestValue = v));
+            builder.AddAttribute(4, "ChildContent", CreateRadioOptions());
+            builder.CloseComponent();
+        };
+
         var cut = Render<EditForm>(parameters => parameters
             .Add(p => p.Model, model)
-            .Add<RenderFragment<EditContext>>(p => p.ChildContent, context => builder =>
-            {
-                // Subscribe to field changes
-                context.OnFieldChanged += (_, __) => fieldChanged = true;
-                
-                builder.OpenComponent<TnTInputRadioGroup<string?>>(0);
-                builder.AddAttribute(1, "ValueExpression", (Expression<Func<string?>>)(() => model.TestValue));
-                builder.AddAttribute(2, "Value", model.TestValue);
-                builder.AddAttribute(3, "ValueChanged", EventCallback.Factory.Create<string?>(this, v => model.TestValue = v));
-                builder.AddAttribute(4, "ChildContent", CreateRadioOptions());
-                builder.CloseComponent();
-            })
+            .Add(p => p.ChildContent, (RenderFragment<EditContext>)childContent!)
         );
-        
+
         var radioInput = cut.Find("input[type=radio]");
-        
+
         // Act
         radioInput.Blur();
-        
+
         // Assert
         fieldChanged.Should().BeTrue();
     }
@@ -444,10 +436,10 @@ public class TnTInputRadio_Tests : BunitContext {
         // Arrange
         var model = CreateValidationTestModel();
         model.TestValue = null; // Invalid - required field
-        
+
         // Act
         var cut = RenderValidationInputRadioGroup(model);
-        
+
         // Assert
         cut.Instance.DisableValidationMessage.Should().BeFalse();
         cut.Instance.ValueExpression.Should().NotBeNull();
@@ -459,10 +451,10 @@ public class TnTInputRadio_Tests : BunitContext {
         // Arrange
         var model = CreateValidationTestModel();
         model.TestValue = null;
-        
+
         // Act
         var cut = RenderValidationInputRadioGroup(model, p => p.Add(c => c.DisableValidationMessage, true));
-        
+
         // Assert
         cut.Instance.DisableValidationMessage.Should().BeTrue();
     }
@@ -472,14 +464,13 @@ public class TnTInputRadio_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         model.TestValue = null;
-        
+
         // Act
         var cut = RenderInputRadioGroup(model);
         var radioInputs = cut.FindAll("input[type=radio]");
-        
+
         // Assert
-        foreach (var radio in radioInputs)
-        {
+        foreach (var radio in radioInputs) {
             radio.HasAttribute("checked").Should().BeFalse();
         }
     }
@@ -490,7 +481,7 @@ public class TnTInputRadio_Tests : BunitContext {
         var cut = RenderInputRadioGroup(configure: p => p
             .Add(c => c.StartIcon, MaterialIcon.Home)
             .Add(c => c.EndIcon, MaterialIcon.Search));
-        
+
         // Assert
         cut.Markup.Should().Contain("tnt-start-icon");
         cut.Markup.Should().Contain("home");
@@ -502,7 +493,7 @@ public class TnTInputRadio_Tests : BunitContext {
     public void Whitespace_Label_Does_Not_Render_Label_Legend() {
         // Arrange & Act
         var cut = RenderInputRadioGroup(configure: p => p.Add(c => c.Label, "   "));
-        
+
         // Assert
         cut.FindAll("legend.tnt-label").Should().BeEmpty();
     }
@@ -511,7 +502,7 @@ public class TnTInputRadio_Tests : BunitContext {
     public void Null_Label_Does_Not_Render_Label_Legend() {
         // Arrange & Act
         var cut = RenderInputRadioGroup(configure: p => p.Add(c => c.Label, null!));
-        
+
         // Assert
         cut.FindAll("legend.tnt-label").Should().BeEmpty();
     }
@@ -521,7 +512,7 @@ public class TnTInputRadio_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputRadioGroup(configure: p => p.Add(c => c.LayoutDirection, LayoutDirection.Vertical));
         var fieldset = cut.Find("fieldset");
-        
+
         // Assert
         fieldset.GetAttribute("class")!.Should().Contain("tnt-vertical");
     }
@@ -531,7 +522,7 @@ public class TnTInputRadio_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputRadioGroup(configure: p => p.Add(c => c.LayoutDirection, LayoutDirection.Horizontal));
         var fieldset = cut.Find("fieldset");
-        
+
         // Assert
         fieldset.GetAttribute("class")!.Should().NotContain("tnt-vertical");
     }
@@ -539,18 +530,17 @@ public class TnTInputRadio_Tests : BunitContext {
     [Fact]
     public void Individual_Radio_Can_Have_Own_Properties() {
         // Arrange & Act - Test individual radio properties instead of icons
-        var customRadioOptions = (RenderFragment)(builder =>
-        {
+        var customRadioOptions = (RenderFragment)(builder => {
             builder.OpenComponent<TnTInputRadio<string?>>(0);
             builder.AddAttribute(1, "Value", "option1");
             builder.AddAttribute(2, "Label", "Option 1");
             builder.CloseComponent();
         });
-        
+
         var cut = RenderInputRadioGroup(configure: p => p.Add(c => c.ChildContent, customRadioOptions));
         var radioInput = cut.Find("input[type=radio]");
         var label = cut.Find(".tnt-label");
-        
+
         // Assert
         radioInput.Should().NotBeNull();
         label.TextContent.Should().Be("Option 1");

@@ -15,22 +15,29 @@ using Xunit;
 namespace TnTComponents.Tests.Form;
 
 public class TnTInputTextArea_Tests : BunitContext {
-    
-    public TnTInputTextArea_Tests()
-    {
+
+    public TnTInputTextArea_Tests() {
         // Set renderer info for tests that use NET9_0_OR_GREATER features
         SetRendererInfo(new RendererInfo("WebAssembly", true));
     }
-    
+
     private TestModel CreateTestModel() => new();
-    
+
     private TestModelWithValidation CreateValidationTestModel() => new();
-    
-    private IRenderedComponent<TnTInputTextArea> RenderInputTextArea(TestModel? model = null, Action<ComponentParameterCollectionBuilder<TnTInputTextArea>>? configure = null)
-    {
+
+    private IRenderedComponent<TnTInputTextArea> RenderInputTextArea(TestModel? model = null, Action<ComponentParameterCollectionBuilder<TnTInputTextArea>>? configure = null) {
         model ??= CreateTestModel();
-        return Render<TnTInputTextArea>(parameters =>
-        {
+        return Render<TnTInputTextArea>(parameters => {
+            parameters
+                .Add(p => p.ValueExpression, () => model.TestValue!)
+                .Add(p => p.Value, model.TestValue)
+                .Add(p => p.ValueChanged, EventCallback.Factory.Create<string?>(this, v => model.TestValue = v));
+            configure?.Invoke(parameters);
+        });
+    }
+
+    private IRenderedComponent<TnTInputTextArea> RenderValidationInputTextArea(TestModelWithValidation model, Action<ComponentParameterCollectionBuilder<TnTInputTextArea>>? configure = null) {
+        return Render<TnTInputTextArea>(parameters => {
             parameters
                 .Add(p => p.ValueExpression, () => model.TestValue)
                 .Add(p => p.Value, model.TestValue)
@@ -38,25 +45,13 @@ public class TnTInputTextArea_Tests : BunitContext {
             configure?.Invoke(parameters);
         });
     }
-    
-    private IRenderedComponent<TnTInputTextArea> RenderValidationInputTextArea(TestModelWithValidation model, Action<ComponentParameterCollectionBuilder<TnTInputTextArea>>? configure = null)
-    {
-        return Render<TnTInputTextArea>(parameters =>
-        {
-            parameters
-                .Add(p => p.ValueExpression, () => model.TestValue)
-                .Add(p => p.Value, model.TestValue)
-                .Add(p => p.ValueChanged, EventCallback.Factory.Create<string?>(this, v => model.TestValue = v));
-            configure?.Invoke(parameters);
-        });
-    }
-    
+
     [Fact]
     public void Renders_TextArea_With_Default_Classes_And_Type() {
         // Arrange & Act
         var cut = RenderInputTextArea();
         var textArea = cut.Find("textarea");
-        
+
         // Assert
         textArea.Should().NotBeNull();
         var label = cut.Find("label.tnt-input");
@@ -70,7 +65,7 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputTextArea();
         var label = cut.Find("label");
-        
+
         // Assert
         // TnTInputBase implements ITnTComponentBase but doesn't inherit from TnTComponentBase
         // so it doesn't automatically get the tntid attribute
@@ -83,7 +78,7 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputTextArea();
         var textArea = cut.Find("textarea");
-        
+
         // Assert
         textArea.Should().NotBeNull();
         cut.Instance.Type.Should().Be(InputType.TextArea);
@@ -93,7 +88,7 @@ public class TnTInputTextArea_Tests : BunitContext {
     public void Label_Renders_When_Set() {
         // Arrange & Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.Label, "Test Label"));
-        
+
         // Assert
         var labelSpan = cut.Find(".tnt-label");
         labelSpan.TextContent.Should().Be("Test Label");
@@ -103,7 +98,7 @@ public class TnTInputTextArea_Tests : BunitContext {
     public void Label_Does_Not_Render_When_Empty() {
         // Arrange & Act
         var cut = RenderInputTextArea();
-        
+
         // Assert
         cut.FindAll(".tnt-label").Should().BeEmpty();
     }
@@ -113,7 +108,7 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.Placeholder, "Enter text..."));
         var textArea = cut.Find("textarea");
-        
+
         // Assert
         textArea.GetAttribute("placeholder").Should().Be("Enter text...");
     }
@@ -123,7 +118,7 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputTextArea();
         var textArea = cut.Find("textarea");
-        
+
         // Assert
         textArea.GetAttribute("placeholder").Should().Be(" ");
     }
@@ -134,7 +129,7 @@ public class TnTInputTextArea_Tests : BunitContext {
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.Disabled, true));
         var textArea = cut.Find("textarea");
         var label = cut.Find("label");
-        
+
         // Assert
         textArea.HasAttribute("disabled").Should().BeTrue();
         label.GetAttribute("class")!.Should().Contain("tnt-disabled");
@@ -145,7 +140,7 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.ReadOnly, true));
         var textArea = cut.Find("textarea");
-        
+
         // Assert
         textArea.HasAttribute("readonly").Should().BeTrue();
     }
@@ -155,7 +150,7 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.AutoFocus, true));
         var textArea = cut.Find("textarea");
-        
+
         // Assert
         textArea.HasAttribute("autofocus").Should().BeTrue();
     }
@@ -165,7 +160,7 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.AutoComplete, "off"));
         var textArea = cut.Find("textarea");
-        
+
         // Assert
         textArea.GetAttribute("autocomplete").Should().Be("off");
     }
@@ -175,7 +170,7 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputTextArea();
         var textArea = cut.Find("textarea");
-        
+
         // Assert - just verify the name attribute exists and has a value
         textArea.HasAttribute("name").Should().BeTrue();
         textArea.GetAttribute("name").Should().NotBeNullOrEmpty();
@@ -186,7 +181,7 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.ElementId, "textarea-id"));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("id").Should().Be("textarea-id");
     }
@@ -196,7 +191,7 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.ElementTitle, "TextArea Title"));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("title").Should().Be("TextArea Title");
     }
@@ -206,7 +201,7 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.ElementLang, "en-US"));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("lang").Should().Be("en-US");
     }
@@ -216,11 +211,11 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         model.TestValue = "Initial Value";
-        
+
         // Act
         var cut = RenderInputTextArea(model);
         var textArea = cut.Find("textarea");
-        
+
         // Assert
         textArea.GetAttribute("value").Should().Be("Initial Value");
     }
@@ -231,10 +226,10 @@ public class TnTInputTextArea_Tests : BunitContext {
         var model = CreateTestModel();
         var cut = RenderInputTextArea(model);
         var textArea = cut.Find("textarea");
-        
+
         // Act
         textArea.Change("New Value");
-        
+
         // Assert
         model.TestValue.Should().Be("New Value");
     }
@@ -245,10 +240,10 @@ public class TnTInputTextArea_Tests : BunitContext {
         var model = CreateTestModel();
         var cut = RenderInputTextArea(model, p => p.Add(c => c.BindOnInput, true));
         var textArea = cut.Find("textarea");
-        
+
         // Act
         textArea.Input("Typing...");
-        
+
         // Assert
         model.TestValue.Should().Be("Typing...");
     }
@@ -261,10 +256,10 @@ public class TnTInputTextArea_Tests : BunitContext {
         var callback = EventCallback.Factory.Create<string?>(this, (value) => callbackValue = value ?? "");
         var cut = RenderInputTextArea(model, p => p.Add(c => c.BindAfter, callback));
         var textArea = cut.Find("textarea");
-        
+
         // Act
         textArea.Change("Test Value");
-        
+
         // Assert
         callbackValue.Should().Be("Test Value");
     }
@@ -273,10 +268,10 @@ public class TnTInputTextArea_Tests : BunitContext {
     public void StartIcon_Renders_When_Set() {
         // Arrange
         var startIcon = MaterialIcon.Home;
-        
+
         // Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.StartIcon, startIcon));
-        
+
         // Assert
         cut.Markup.Should().Contain("tnt-start-icon");
         cut.Markup.Should().Contain("home");
@@ -286,10 +281,10 @@ public class TnTInputTextArea_Tests : BunitContext {
     public void EndIcon_Renders_When_Set() {
         // Arrange
         var endIcon = MaterialIcon.Search;
-        
+
         // Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.EndIcon, endIcon));
-        
+
         // Assert
         cut.Markup.Should().Contain("tnt-end-icon");
         cut.Markup.Should().Contain("search");
@@ -299,7 +294,7 @@ public class TnTInputTextArea_Tests : BunitContext {
     public void SupportingText_Renders_When_Set() {
         // Arrange & Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.SupportingText, "Helper text"));
-        
+
         // Assert
         var supportingText = cut.Find(".tnt-supporting-text");
         supportingText.TextContent.Should().Be("Helper text");
@@ -309,7 +304,7 @@ public class TnTInputTextArea_Tests : BunitContext {
     public void SupportingText_Does_Not_Render_When_Empty() {
         // Arrange & Act
         var cut = RenderInputTextArea();
-        
+
         // Assert
         cut.FindAll(".tnt-supporting-text").Should().BeEmpty();
     }
@@ -318,11 +313,11 @@ public class TnTInputTextArea_Tests : BunitContext {
     public void Required_Attribute_Added_When_Additional_Attributes_Contains_Required() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "required", true } };
-        
+
         // Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var textArea = cut.Find("textarea");
-        
+
         // Assert
         textArea.HasAttribute("required").Should().BeTrue();
     }
@@ -331,11 +326,11 @@ public class TnTInputTextArea_Tests : BunitContext {
     public void MaxLength_Attribute_Added_When_Set_In_Additional_Attributes() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "maxlength", "500" } };
-        
+
         // Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var textArea = cut.Find("textarea");
-        
+
         // Assert
         textArea.GetAttribute("maxlength").Should().Be("500");
     }
@@ -344,11 +339,11 @@ public class TnTInputTextArea_Tests : BunitContext {
     public void MinLength_Attribute_Added_When_Set_In_Additional_Attributes() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "minlength", "10" } };
-        
+
         // Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var textArea = cut.Find("textarea");
-        
+
         // Assert
         textArea.GetAttribute("minlength").Should().Be("10");
     }
@@ -358,7 +353,7 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.Appearance, FormAppearance.Filled));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("class")!.Should().Contain("tnt-form-filled");
     }
@@ -368,7 +363,7 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.Appearance, FormAppearance.Outlined));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("class")!.Should().Contain("tnt-form-outlined");
     }
@@ -383,7 +378,7 @@ public class TnTInputTextArea_Tests : BunitContext {
             .Add(c => c.ErrorColor, TnTColor.Error));
         var label = cut.Find("label");
         var style = label.GetAttribute("style")!;
-        
+
         // Assert
         style.Should().Contain("--tnt-input-tint-color:var(--tnt-color-primary)");
         style.Should().Contain("--tnt-input-background-color:var(--tnt-color-surface)");
@@ -397,7 +392,7 @@ public class TnTInputTextArea_Tests : BunitContext {
         var cut = RenderInputTextArea();
         var label = cut.Find("label");
         var style = label.GetAttribute("style")!;
-        
+
         // Assert
         style.Should().Contain("--tnt-input-tint-color:var(--tnt-color-primary)");
         style.Should().Contain("--tnt-input-background-color:var(--tnt-color-surface-container-highest)");
@@ -409,11 +404,11 @@ public class TnTInputTextArea_Tests : BunitContext {
     public void Merges_Custom_Class_From_AdditionalAttributes() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "class", "custom-textarea" } };
-        
+
         // Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var label = cut.Find("label");
-        
+
         // Assert
         var cls = label.GetAttribute("class")!;
         cls.Should().Contain("custom-textarea");
@@ -424,11 +419,11 @@ public class TnTInputTextArea_Tests : BunitContext {
     public void Merges_Custom_Style_From_AdditionalAttributes() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "style", "margin:10px;" } };
-        
+
         // Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var label = cut.Find("label");
-        
+
         // Assert
         var style = label.GetAttribute("style")!;
         style.Should().Contain("margin:10px");
@@ -440,7 +435,7 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.Placeholder, "Test placeholder"));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("class")!.Should().Contain("tnt-placeholder");
     }
@@ -450,7 +445,7 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputTextArea();
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("class")!.Should().NotContain("tnt-placeholder");
     }
@@ -460,28 +455,29 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         var fieldChanged = false;
-        
+
         // Create a component with EditForm wrapper that provides EditContext
+        RenderFragment<EditContext> childContent = context => builder => {
+            // Subscribe to field changes
+            context.OnFieldChanged += (_, __) => fieldChanged = true;
+
+            builder.OpenComponent<TnTInputTextArea>(0);
+            builder.AddAttribute(1, "ValueExpression", (Expression<Func<string?>>)(() => model.TestValue));
+            builder.AddAttribute(2, "Value", model.TestValue);
+            builder.AddAttribute(3, "ValueChanged", EventCallback.Factory.Create<string?>(this, v => model.TestValue = v));
+            builder.CloseComponent();
+        };
+
         var cut = Render<EditForm>(parameters => parameters
             .Add(p => p.Model, model)
-            .Add<RenderFragment<EditContext>>(p => p.ChildContent, context => builder =>
-            {
-                // Subscribe to field changes
-                context.OnFieldChanged += (_, __) => fieldChanged = true;
-                
-                builder.OpenComponent<TnTInputTextArea>(0);
-                builder.AddAttribute(1, "ValueExpression", (Expression<Func<string?>>)(() => model.TestValue));
-                builder.AddAttribute(2, "Value", model.TestValue);
-                builder.AddAttribute(3, "ValueChanged", EventCallback.Factory.Create<string?>(this, v => model.TestValue = v));
-                builder.CloseComponent();
-            })
+            .Add(p => p.ChildContent, (RenderFragment<EditContext>)childContent!)
         );
-        
+
         var textArea = cut.Find("textarea");
-        
+
         // Act
         textArea.Blur();
-        
+
         // Assert
         fieldChanged.Should().BeTrue();
     }
@@ -492,15 +488,15 @@ public class TnTInputTextArea_Tests : BunitContext {
         // For now, let's verify that the validation message element would be rendered conditionally
         var model = CreateValidationTestModel();
         model.TestValue = "";
-        
+
         // Act - Render with validation model within EditForm
         var cut = RenderValidationInputTextArea(model);
-        
+
         // Assert - Verify the component structure supports validation messages
         // The actual validation rendering depends on EditContext which may not work in bUnit
         cut.Instance.DisableValidationMessage.Should().BeFalse();
         cut.Instance.ValueExpression.Should().NotBeNull();
-        
+
         // The validation message rendering is handled by TnTInputBase.razor template
         // and depends on cascading EditContext which is complex to test in isolation
         cut.Instance.Should().BeOfType<TnTInputTextArea>();
@@ -511,10 +507,10 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange
         var model = CreateValidationTestModel();
         model.TestValue = "";
-        
+
         // Act - Render with DisableValidationMessage = true
         var cut = RenderValidationInputTextArea(model, p => p.Add(c => c.DisableValidationMessage, true));
-        
+
         // Assert - Verify validation is disabled
         cut.Instance.DisableValidationMessage.Should().BeTrue();
     }
@@ -523,11 +519,11 @@ public class TnTInputTextArea_Tests : BunitContext {
     public void Rows_Attribute_Sets_TextArea_Rows() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "rows", "5" } };
-        
+
         // Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var textArea = cut.Find("textarea");
-        
+
         // Assert
         textArea.GetAttribute("rows").Should().Be("5");
     }
@@ -536,11 +532,11 @@ public class TnTInputTextArea_Tests : BunitContext {
     public void Cols_Attribute_Sets_TextArea_Cols() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "cols", "40" } };
-        
+
         // Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var textArea = cut.Find("textarea");
-        
+
         // Assert
         textArea.GetAttribute("cols").Should().Be("40");
     }
@@ -550,7 +546,7 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputTextArea();
         var textArea = cut.Find("textarea");
-        
+
         // Assert
         textArea.GetAttribute("title").Should().Be("TestValue");
     }
@@ -561,7 +557,7 @@ public class TnTInputTextArea_Tests : BunitContext {
         var cut = RenderInputTextArea(configure: p => p
             .Add(c => c.StartIcon, MaterialIcon.Home)
             .Add(c => c.EndIcon, MaterialIcon.Search));
-        
+
         // Assert
         cut.Markup.Should().Contain("tnt-start-icon");
         cut.Markup.Should().Contain("home");
@@ -574,11 +570,11 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         model.TestValue = null;
-        
+
         // Act
         var cut = RenderInputTextArea(model);
         var textArea = cut.Find("textarea");
-        
+
         // Assert
         var value = textArea.GetAttribute("value");
         (value == null || value == string.Empty).Should().BeTrue();
@@ -589,11 +585,11 @@ public class TnTInputTextArea_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         model.TestValue = "";
-        
+
         // Act
         var cut = RenderInputTextArea(model);
         var textArea = cut.Find("textarea");
-        
+
         // Assert
         textArea.GetAttribute("value").Should().Be("");
     }
@@ -602,7 +598,7 @@ public class TnTInputTextArea_Tests : BunitContext {
     public void Whitespace_Label_Does_Not_Render_Label_Span() {
         // Arrange & Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.Label, "   "));
-        
+
         // Assert
         cut.FindAll(".tnt-label").Should().BeEmpty();
     }
@@ -611,7 +607,7 @@ public class TnTInputTextArea_Tests : BunitContext {
     public void Null_Label_Does_Not_Render_Label_Span() {
         // Arrange & Act
         var cut = RenderInputTextArea(configure: p => p.Add(c => c.Label, null!));
-        
+
         // Assert
         cut.FindAll(".tnt-label").Should().BeEmpty();
     }

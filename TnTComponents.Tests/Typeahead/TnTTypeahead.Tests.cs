@@ -19,13 +19,11 @@ namespace TnTComponents.Tests.Typeahead;
 /// <summary>
 ///     Unit tests for <see cref="TnTTypeahead{TItem}" />.
 /// </summary>
-public class TnTTypeahead_Tests : BunitContext
-{
-    public TnTTypeahead_Tests()
-    {
+public class TnTTypeahead_Tests : BunitContext {
+    public TnTTypeahead_Tests() {
         // Set renderer info for tests that use NET9_0_OR_GREATER features
         SetRendererInfo(new RendererInfo("WebAssembly", true));
-        
+
         // Setup required JS modules that the component might use
         var rippleModule = JSInterop.SetupModule("./_content/TnTComponents/Core/TnTRippleEffect.razor.js");
         rippleModule.SetupVoid("onLoad", _ => true);
@@ -50,64 +48,56 @@ public class TnTTypeahead_Tests : BunitContext
         new() { Id = 5, Name = "Charlie Wilson", Email = "charlie@example.com" }
     };
 
-    private class TestModel
-    {
+    private class TestModel {
         public int Id { get; set; }
         public string Name { get; set; } = "";
         public string Email { get; set; } = "";
         public override string ToString() => Name;
     }
 
-    private class CustomEqualityModel : IEquatable<CustomEqualityModel>
-    {
+    private class CustomEqualityModel : IEquatable<CustomEqualityModel> {
         public int Id { get; set; }
         public string Name { get; set; } = "";
-        
-        public bool Equals(CustomEqualityModel? other)
-        {
+
+        public bool Equals(CustomEqualityModel? other) {
             if (other is null) return false;
             return Id == other.Id && Name == other.Name;
         }
-        
+
         public override bool Equals(object? obj) => Equals(obj as CustomEqualityModel);
         public override int GetHashCode() => HashCode.Combine(Id, Name);
         public override string ToString() => Name;
     }
 
-    private static Task<IEnumerable<string>> SimpleSearchFunc(string? searchValue, CancellationToken cancellationToken)
-    {
+    private static Task<IEnumerable<string>> SimpleSearchFunc(string? searchValue, CancellationToken cancellationToken) {
         if (string.IsNullOrWhiteSpace(searchValue))
             return Task.FromResult<IEnumerable<string>>([]);
 
-        var results = _testItems.Where(item => 
+        var results = _testItems.Where(item =>
             item.Contains(searchValue, StringComparison.OrdinalIgnoreCase)).ToList();
         return Task.FromResult<IEnumerable<string>>(results);
     }
 
-    private static async Task<IEnumerable<string>> AsyncSearchFunc(string? searchValue, CancellationToken cancellationToken)
-    {
+    private static async Task<IEnumerable<string>> AsyncSearchFunc(string? searchValue, CancellationToken cancellationToken) {
         await Task.Delay(50, cancellationToken); // Simulate async operation
         return await SimpleSearchFunc(searchValue, cancellationToken);
     }
 
-    private static Task<IEnumerable<TestModel>> ModelSearchFunc(string? searchValue, CancellationToken cancellationToken)
-    {
+    private static Task<IEnumerable<TestModel>> ModelSearchFunc(string? searchValue, CancellationToken cancellationToken) {
         if (string.IsNullOrWhiteSpace(searchValue))
             return Task.FromResult<IEnumerable<TestModel>>([]);
 
-        var results = _testModels.Where(model => 
+        var results = _testModels.Where(model =>
             model.Name.Contains(searchValue, StringComparison.OrdinalIgnoreCase) ||
             model.Email.Contains(searchValue, StringComparison.OrdinalIgnoreCase)).ToList();
         return Task.FromResult<IEnumerable<TestModel>>(results);
     }
 
-    private static Task<IEnumerable<string>> EmptySearchFunc(string? searchValue, CancellationToken cancellationToken)
-    {
+    private static Task<IEnumerable<string>> EmptySearchFunc(string? searchValue, CancellationToken cancellationToken) {
         return Task.FromResult<IEnumerable<string>>([]);
     }
 
-    private static Task<IEnumerable<string>> SingleResultSearchFunc(string? searchValue, CancellationToken cancellationToken)
-    {
+    private static Task<IEnumerable<string>> SingleResultSearchFunc(string? searchValue, CancellationToken cancellationToken) {
         if (string.IsNullOrWhiteSpace(searchValue))
             return Task.FromResult<IEnumerable<string>>([]);
 
@@ -115,14 +105,13 @@ public class TnTTypeahead_Tests : BunitContext
         return Task.FromResult<IEnumerable<string>>(results);
     }
 
-    private static Task<IEnumerable<CustomEqualityModel>> CustomEqualitySearchFunc(string? searchValue, CancellationToken cancellationToken)
-    {
+    private static Task<IEnumerable<CustomEqualityModel>> CustomEqualitySearchFunc(string? searchValue, CancellationToken cancellationToken) {
         var models = new List<CustomEqualityModel>
         {
             new() { Id = 1, Name = "Test Item 1" },
             new() { Id = 2, Name = "Test Item 2" }
         };
-        
+
         if (string.IsNullOrWhiteSpace(searchValue))
             return Task.FromResult<IEnumerable<CustomEqualityModel>>([]);
 
@@ -135,8 +124,7 @@ public class TnTTypeahead_Tests : BunitContext
     #region Component Initialization Tests
 
     [Fact]
-    public void Constructor_InitializesCorrectly()
-    {
+    public void Constructor_InitializesCorrectly() {
         // Arrange & Act
         var cut = RenderTypeahead(SimpleSearchFunc);
 
@@ -147,8 +135,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public void RequiredParameter_ItemsLookupFunc_HasEditorRequiredAttribute()
-    {
+    public void RequiredParameter_ItemsLookupFunc_HasEditorRequiredAttribute() {
         // Arrange & Act
         var propertyInfo = typeof(TnTTypeahead<string>).GetProperty(nameof(TnTTypeahead<string>.ItemsLookupFunc));
         var editorRequiredAttribute = propertyInfo?.GetCustomAttribute<EditorRequiredAttribute>();
@@ -159,8 +146,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public void ElementClass_ContainsCorrectCssClasses()
-    {
+    public void ElementClass_ContainsCorrectCssClasses() {
         // Arrange & Act
         var cut = RenderTypeahead(SimpleSearchFunc);
         var element = cut.Find(".tnt-typeahead");
@@ -176,8 +162,7 @@ public class TnTTypeahead_Tests : BunitContext
     #region Parameter Tests
 
     [Fact]
-    public void DefaultParameters_HaveCorrectValues()
-    {
+    public void DefaultParameters_HaveCorrectValues() {
         // Arrange & Act
         var cut = RenderTypeahead(SimpleSearchFunc);
 
@@ -192,8 +177,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public void CustomParameters_SetCorrectly()
-    {
+    public void CustomParameters_SetCorrectly() {
         // Arrange & Act
         var cut = RenderTypeahead(SimpleSearchFunc, parameters => parameters
             .Add(p => p.DebounceMilliseconds, 500)
@@ -219,8 +203,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public void ValueToStringFunc_UsesToStringByDefault()
-    {
+    public void ValueToStringFunc_UsesToStringByDefault() {
         // Arrange & Act
         var cut = RenderTypeahead<TestModel>(ModelSearchFunc);
         var testModel = new TestModel { Name = "Test Item" };
@@ -231,11 +214,10 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public void CustomValueToStringFunc_WorksCorrectly()
-    {
+    public void CustomValueToStringFunc_WorksCorrectly() {
         // Arrange
         Func<TestModel, string> customFunc = model => $"{model.Name} ({model.Email})";
-        
+
         // Act
         var cut = RenderTypeahead<TestModel>(ModelSearchFunc, parameters => parameters
             .Add(p => p.ValueToStringFunc, customFunc));
@@ -247,8 +229,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public void ValueToStringFunc_WithNullValue_HandlesGracefully()
-    {
+    public void ValueToStringFunc_WithNullValue_HandlesGracefully() {
         // Arrange & Act
         var cut = RenderTypeahead<TestModel?>(parameters => parameters
             .Add(p => p.ItemsLookupFunc, (searchValue, token) => Task.FromResult<IEnumerable<TestModel?>>([null])));
@@ -259,8 +240,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public void TintColor_Parameter_SetCorrectly()
-    {
+    public void TintColor_Parameter_SetCorrectly() {
         // Arrange & Act
         var cut = RenderTypeahead(SimpleSearchFunc, parameters => parameters
             .Add(p => p.TintColor, TnTColor.Secondary));
@@ -270,8 +250,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public void OnTintColor_Parameter_SetCorrectly()
-    {
+    public void OnTintColor_Parameter_SetCorrectly() {
         // Arrange & Act
         var cut = RenderTypeahead(SimpleSearchFunc, parameters => parameters
             .Add(p => p.OnTintColor, TnTColor.OnSecondary));
@@ -281,8 +260,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public void InitialValue_DisplaysCorrectly()
-    {
+    public void InitialValue_DisplaysCorrectly() {
         // Arrange & Act
         var cut = RenderTypeahead(SimpleSearchFunc, parameters => parameters
             .Add(p => p.Value, "Initial Search Text"));
@@ -297,8 +275,7 @@ public class TnTTypeahead_Tests : BunitContext
     #region Rendering Tests
 
     [Fact]
-    public void EmptyState_RendersInputBoxOnly()
-    {
+    public void EmptyState_RendersInputBoxOnly() {
         // Arrange & Act
         var cut = RenderTypeahead(SimpleSearchFunc);
 
@@ -311,8 +288,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public void Label_RendersWhenSet()
-    {
+    public void Label_RendersWhenSet() {
         // Arrange & Act
         var cut = RenderTypeahead(SimpleSearchFunc, parameters => parameters
             .Add(p => p.Label, "Search Items"));
@@ -323,8 +299,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public void Placeholder_RendersWhenSet()
-    {
+    public void Placeholder_RendersWhenSet() {
         // Arrange & Act
         var cut = RenderTypeahead(SimpleSearchFunc, parameters => parameters
             .Add(p => p.Placeholder, "Enter search term..."));
@@ -335,8 +310,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public void SearchIcon_AlwaysPresent()
-    {
+    public void SearchIcon_AlwaysPresent() {
         // Arrange & Act
         var cut = RenderTypeahead(SimpleSearchFunc);
 
@@ -346,33 +320,45 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public async Task ProgressIndicator_ShowsWhenSearching()
-    {
+    public async Task ProgressIndicator_ShowsWhenSearching() {
         // Arrange
         var searchStarted = false;
-        async Task<IEnumerable<string>> SlowSearchFunc(string? searchValue, CancellationToken token)
-        {
+        async Task<IEnumerable<string>> SlowSearchFunc(string? searchValue, CancellationToken token) {
             searchStarted = true;
             await Task.Delay(200, token); // Longer delay to ensure we can see the progress indicator
             return await SimpleSearchFunc(searchValue, token);
         }
 
-        var cut = RenderTypeahead(SlowSearchFunc);
-        var input = cut.Find("input");
+        var cut = RenderTypeahead(SlowSearchFunc, parameters => parameters
+            .Add(p => p.DebounceMilliseconds, 1));
 
-        // Act
-        input.Input("a");
-        await Task.Delay(10, Xunit.TestContext.Current.CancellationToken); // Small delay to let the search start
+        // Act - trigger input via InvokeAsync to avoid stale handler ids when the component re-renders
+        await cut.InvokeAsync(() => cut.Find("input").Input("a"));
+
+        // Wait (up to a short timeout) for the search to start and for the progress element to appear
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        var started = false;
+        var progressShown = false;
+        while (sw.ElapsedMilliseconds < 2000)
+        {
+            if (searchStarted) started = true;
+            try {
+                await cut.InvokeAsync(() => { /* ensure latest render */ });
+                var progressIndicator = cut.Find("progress");
+                if (progressIndicator != null) progressShown = true;
+            } catch { /* progress not present yet */ }
+
+            if (started && progressShown) break;
+            await Task.Delay(20, Xunit.TestContext.Current.CancellationToken);
+        }
 
         // Assert
-        // Progress indicator should be visible as a progress element when searching
-        var progressIndicator = cut.Find("progress");
-        progressIndicator.Should().NotBeNull();
+        started.Should().BeTrue();
+        progressShown.Should().BeTrue();
     }
 
     [Fact]
-    public void ElementName_SetCorrectly_OnInputElement()
-    {
+    public void ElementName_SetCorrectly_OnInputElement() {
         // Arrange & Act
         var cut = RenderTypeahead(SimpleSearchFunc, parameters => parameters
             .Add(p => p.ElementName, "search-input"));
@@ -385,11 +371,10 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public void AdditionalAttributes_MergedCorrectly()
-    {
+    public void AdditionalAttributes_MergedCorrectly() {
         // Arrange
-        var attrs = new Dictionary<string, object> 
-        { 
+        var attrs = new Dictionary<string, object>
+        {
             { "class", "custom-typeahead" },
             { "data-test-id", "my-typeahead" }
         };
@@ -411,14 +396,12 @@ public class TnTTypeahead_Tests : BunitContext
     #region Search Functionality Tests
 
     [Fact]
-    public async Task Search_TriggersItemsLookupFunc()
-    {
+    public async Task Search_TriggersItemsLookupFunc() {
         // Arrange
         var searchCallCount = 0;
         var lastSearchValue = "";
 
-        Task<IEnumerable<string>> TrackingSearchFunc(string? searchValue, CancellationToken token)
-        {
+        Task<IEnumerable<string>> TrackingSearchFunc(string? searchValue, CancellationToken token) {
             searchCallCount++;
             lastSearchValue = searchValue ?? "";
             return SimpleSearchFunc(searchValue, token);
@@ -437,8 +420,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public async Task Search_WithResults_DisplaysSuggestionList()
-    {
+    public async Task Search_WithResults_DisplaysSuggestionList() {
         // Arrange
         var cut = RenderTypeahead(SimpleSearchFunc);
         var input = cut.Find("input");
@@ -456,8 +438,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public async Task Search_WithNoResults_ShowsNoResultsMessage()
-    {
+    public async Task Search_WithNoResults_ShowsNoResultsMessage() {
         // Arrange
         var cut = RenderTypeahead(EmptySearchFunc);
         var input = cut.Find("input");
@@ -472,8 +453,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public async Task Search_WithEmptyValue_ClearsResults()
-    {
+    public async Task Search_WithEmptyValue_ClearsResults() {
         // Arrange
         var cut = RenderTypeahead(SimpleSearchFunc);
         var input = cut.Find("input");
@@ -492,37 +472,34 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public void Search_DebouncesProperly()
-    {
+    public async Task Search_DebouncesProperly() {
         // Arrange
         var searchCallCount = 0;
 
-        Task<IEnumerable<string>> CountingSearchFunc(string? searchValue, CancellationToken token)
-        {
+        Task<IEnumerable<string>> CountingSearchFunc(string? searchValue, CancellationToken token) {
             searchCallCount++;
             return SimpleSearchFunc(searchValue, token);
         }
 
         var cut = RenderTypeahead(CountingSearchFunc, parameters => parameters
             .Add(p => p.DebounceMilliseconds, 100));
-        var input = cut.Find("input");
 
-        // Act - Type multiple characters quickly
-        input.Input("a");
-        input.Input("ap");
-        input.Input("app");
+        // Act - Type multiple characters quickly using InvokeAsync to avoid stale event handler ids
+        await cut.InvokeAsync(() => cut.Find("input").Input("a"));
+        await cut.InvokeAsync(() => cut.Find("input").Input("ap"));
+        await cut.InvokeAsync(() => cut.Find("input").Input("app"));
+
+        // Allow time for debounce to trigger the actual search call(s)
+        await Task.Delay(250, Xunit.TestContext.Current.CancellationToken);
 
         // Assert - Should not have called search for every character
-        // The exact count depends on timing, but it should be less than 3
         searchCallCount.Should().BeLessThan(3);
     }
 
     [Fact]
-    public async Task ItemsLookupFunc_ReturnsNull_HandledGracefully()
-    {
+    public async Task ItemsLookupFunc_ReturnsNull_HandledGracefully() {
         // Arrange
-        Task<IEnumerable<string>> NullReturningSearchFunc(string? searchValue, CancellationToken token)
-        {
+        Task<IEnumerable<string>> NullReturningSearchFunc(string? searchValue, CancellationToken token) {
             return Task.FromResult<IEnumerable<string>>(null!);
         }
 
@@ -543,8 +520,7 @@ public class TnTTypeahead_Tests : BunitContext
     #region Item Selection Tests
 
     [Fact]
-    public async Task ItemClick_SelectsItem()
-    {
+    public async Task ItemClick_SelectsItem() {
         // Arrange
         var selectedItem = "";
         var cut = RenderTypeahead(SimpleSearchFunc, parameters => parameters
@@ -564,8 +540,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public async Task ItemSelection_UpdatesValueWhenResetValueOnSelectFalse()
-    {
+    public async Task ItemSelection_UpdatesValueWhenResetValueOnSelectFalse() {
         // Arrange
         string? currentValue = null;
         var cut = RenderTypeahead(SimpleSearchFunc, parameters => parameters
@@ -586,8 +561,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public async Task ItemSelection_ClearsValueWhenResetValueOnSelectTrue()
-    {
+    public async Task ItemSelection_ClearsValueWhenResetValueOnSelectTrue() {
         // Arrange
         string? currentValue = "initial";
         var cut = RenderTypeahead(SimpleSearchFunc, parameters => parameters
@@ -608,8 +582,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public async Task ItemSelection_ClearsSuggestionList()
-    {
+    public async Task ItemSelection_ClearsSuggestionList() {
         // Arrange
         var cut = RenderTypeahead(SimpleSearchFunc);
         var input = cut.Find("input");
@@ -628,11 +601,10 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public void ValueChanged_NotTriggered_WhenValueSetProgrammatically()
-    {
+    public void ValueChanged_NotTriggered_WhenValueSetProgrammatically() {
         // Arrange
         var valueChangedCallCount = 0;
-        
+
         // Act - Create component with initial value set programmatically
         var cut = RenderTypeahead(SimpleSearchFunc, parameters => parameters
             .Add(p => p.Value, "programmatic")
@@ -649,8 +621,7 @@ public class TnTTypeahead_Tests : BunitContext
     #region Keyboard Navigation Tests
 
     [Fact]
-    public async Task ArrowDown_MovesFocusToNextItem()
-    {
+    public async Task ArrowDown_MovesFocusToNextItem() {
         // Arrange
         var cut = RenderTypeahead(SimpleSearchFunc);
         var input = cut.Find("input");
@@ -679,8 +650,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public async Task ArrowUp_MovesFocusToPreviousItem()
-    {
+    public async Task ArrowUp_MovesFocusToPreviousItem() {
         // Arrange
         var cut = RenderTypeahead(SimpleSearchFunc);
         var input = cut.Find("input");
@@ -694,7 +664,7 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Move focus to second item first
         await input.KeyDownAsync(new KeyboardEventArgs { Key = "ArrowDown" });
-        
+
         // Get fresh references after first keydown
         items = cut.FindAll(".tnt-typeahead-list-item");
         items[1].GetAttribute("class").Should().Contain("tnt-focused");
@@ -712,8 +682,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public async Task ArrowNavigation_WrapsAroundAtBoundaries()
-    {
+    public async Task ArrowNavigation_WrapsAroundAtBoundaries() {
         // Arrange
         var cut = RenderTypeahead(SimpleSearchFunc);
         var input = cut.Find("input");
@@ -727,11 +696,10 @@ public class TnTTypeahead_Tests : BunitContext
 
         // Test wrapping from last to first with ArrowDown
         // Navigate to last item
-        for (int i = 0; i < items.Count - 1; i++)
-        {
+        for (int i = 0; i < items.Count - 1; i++) {
             await input.KeyDownAsync(new KeyboardEventArgs { Key = "ArrowDown" });
         }
-        
+
         items = cut.FindAll(".tnt-typeahead-list-item");
         items.Last().GetAttribute("class").Should().Contain("tnt-focused");
 
@@ -752,8 +720,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public async Task KeyboardNavigation_WithSingleItem()
-    {
+    public async Task KeyboardNavigation_WithSingleItem() {
         // Arrange
         var cut = RenderTypeahead(SingleResultSearchFunc);
         var input = cut.Find("input");
@@ -779,8 +746,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public async Task KeyboardNavigation_WithNoItems()
-    {
+    public async Task KeyboardNavigation_WithNoItems() {
         // Arrange
         var cut = RenderTypeahead(EmptySearchFunc);
         var input = cut.Find("input");
@@ -799,8 +765,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public async Task Enter_SelectsFocusedItem()
-    {
+    public async Task Enter_SelectsFocusedItem() {
         // Arrange
         var selectedItem = "";
         var cut = RenderTypeahead(SimpleSearchFunc, parameters => parameters
@@ -819,8 +784,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public async Task Escape_ClearsResultsAndValue()
-    {
+    public async Task Escape_ClearsResultsAndValue() {
         // Arrange
         string? currentValue = "test";
         var cut = RenderTypeahead(SimpleSearchFunc, parameters => parameters
@@ -842,8 +806,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public async Task Escape_DoesNotClearValueWhenResetValueOnEscapeFalse()
-    {
+    public async Task Escape_DoesNotClearValueWhenResetValueOnEscapeFalse() {
         // Arrange
         var cut = RenderTypeahead(SimpleSearchFunc, parameters => parameters
             .Add(p => p.ResetValueOnEscape, false));
@@ -868,11 +831,9 @@ public class TnTTypeahead_Tests : BunitContext
     #region Custom Template Tests
 
     [Fact]
-    public async Task ResultTemplate_RendersCustomTemplate()
-    {
+    public async Task ResultTemplate_RendersCustomTemplate() {
         // Arrange
-        RenderFragment<TestModel> customTemplate = (TestModel model) => (builder) =>
-        {
+        RenderFragment<TestModel> customTemplate = (TestModel model) => (builder) => {
             builder.OpenElement(0, "div");
             builder.AddAttribute(1, "class", "custom-item");
             builder.AddContent(2, $"{model.Name} - {model.Email}");
@@ -894,8 +855,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public async Task WithoutResultTemplate_UsesToStringForDisplay()
-    {
+    public async Task WithoutResultTemplate_UsesToStringForDisplay() {
         // Arrange
         var cut = RenderTypeahead<TestModel>(ModelSearchFunc);
         var input = cut.Find("input");
@@ -914,8 +874,7 @@ public class TnTTypeahead_Tests : BunitContext
     #region Focus Management Tests
 
     [Fact]
-    public async Task RefocusAfterSelect_FocusesInputAfterSelection()
-    {
+    public async Task RefocusAfterSelect_FocusesInputAfterSelection() {
         // Arrange
         var cut = RenderTypeahead(SimpleSearchFunc, parameters => parameters
             .Add(p => p.RefocusAfterSelect, true));
@@ -939,8 +898,7 @@ public class TnTTypeahead_Tests : BunitContext
     #region Complex Object Handling Tests
 
     [Fact]
-    public async Task ComplexObjects_EqualityComparison_ForFocus()
-    {
+    public async Task ComplexObjects_EqualityComparison_ForFocus() {
         // Arrange
         var cut = RenderTypeahead<CustomEqualityModel>(CustomEqualitySearchFunc);
         var input = cut.Find("input");
@@ -967,11 +925,9 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public async Task NullItems_InSearchResults_HandledGracefully()
-    {
+    public async Task NullItems_InSearchResults_HandledGracefully() {
         // Arrange
-        Task<IEnumerable<string?>> NullItemsSearchFunc(string? searchValue, CancellationToken token)
-        {
+        Task<IEnumerable<string?>> NullItemsSearchFunc(string? searchValue, CancellationToken token) {
             var results = new string?[] { "Item 1", null, "Item 2" };
             return Task.FromResult<IEnumerable<string?>>(results);
         }
@@ -989,10 +945,9 @@ public class TnTTypeahead_Tests : BunitContext
         var items = cut.FindAll(".tnt-typeahead-list-item");
         // Just verify that the component doesn't crash and renders some content
         cut.Find("input").Should().NotBeNull(); // Component should still be functional
-        
+
         // If items are rendered, check that non-null items are present
-        if (items.Any())
-        {
+        if (items.Any()) {
             var itemsWithContent = items.Where(item => item.TextContent.Contains("Item 1") || item.TextContent.Contains("Item 2"));
             itemsWithContent.Should().HaveCountGreaterThan(0);
         }
@@ -1003,12 +958,10 @@ public class TnTTypeahead_Tests : BunitContext
     #region Debouncer Edge Cases
 
     [Fact]
-    public void DebounceMilliseconds_ZeroValue_ExecutesImmediately()
-    {
+    public void DebounceMilliseconds_ZeroValue_ExecutesImmediately() {
         // Arrange
         var searchCallCount = 0;
-        Task<IEnumerable<string>> ImmediateSearchFunc(string? searchValue, CancellationToken token)
-        {
+        Task<IEnumerable<string>> ImmediateSearchFunc(string? searchValue, CancellationToken token) {
             searchCallCount++;
             return SimpleSearchFunc(searchValue, token);
         }
@@ -1026,8 +979,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public void DebounceMilliseconds_ChangedDuringRuntime_RecreatesDebouncer()
-    {
+    public void DebounceMilliseconds_ChangedDuringRuntime_RecreatesDebouncer() {
         // Arrange
         var cut = RenderTypeahead(SimpleSearchFunc, parameters => parameters
             .Add(p => p.DebounceMilliseconds, 300));
@@ -1048,8 +1000,7 @@ public class TnTTypeahead_Tests : BunitContext
     #region Disposal Tests
 
     [Fact]
-    public void Dispose_CleansUpResources()
-    {
+    public void Dispose_CleansUpResources() {
         // Arrange
         var cut = RenderTypeahead(SimpleSearchFunc);
 
@@ -1058,14 +1009,13 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public void Debouncer_DisposalOnComponentDisposal()
-    {
+    public void Debouncer_DisposalOnComponentDisposal() {
         // Arrange
         var cut = RenderTypeahead(SimpleSearchFunc);
-        
+
         // Act
         cut.Instance.Dispose();
-        
+
         // Dispose again should not throw
         cut.Instance.Dispose();
 
@@ -1079,8 +1029,7 @@ public class TnTTypeahead_Tests : BunitContext
     #region Form Integration Tests
 
     [Fact]
-    public void FormAppearance_InheritsFromParentForm()
-    {
+    public void FormAppearance_InheritsFromParentForm() {
         // This test would require complex form rendering
         // For now, just verify the Appearance parameter can be set
         var cut = RenderTypeahead(SimpleSearchFunc, parameters => parameters
@@ -1090,8 +1039,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public void Disabled_InheritsFromParentForm()
-    {
+    public void Disabled_InheritsFromParentForm() {
         // This test would require complex form rendering
         // For now, just verify the Disabled parameter works
         var cut = RenderTypeahead(SimpleSearchFunc, parameters => parameters
@@ -1102,8 +1050,7 @@ public class TnTTypeahead_Tests : BunitContext
     }
 
     [Fact]
-    public async Task Disabled_WithActiveSearch_StopsSearchAndClearsResults()
-    {
+    public async Task Disabled_WithActiveSearch_StopsSearchAndClearsResults() {
         // Arrange
         var cut = RenderTypeahead(SimpleSearchFunc);
         var input = cut.Find("input");
@@ -1128,10 +1075,8 @@ public class TnTTypeahead_Tests : BunitContext
 
     private IRenderedComponent<TnTTypeahead<string>> RenderTypeahead(
         Func<string?, CancellationToken, Task<IEnumerable<string>>> itemsLookupFunc,
-        Action<ComponentParameterCollectionBuilder<TnTTypeahead<string>>>? configure = null)
-    {
-        return Render<TnTTypeahead<string>>(parameters =>
-        {
+        Action<ComponentParameterCollectionBuilder<TnTTypeahead<string>>>? configure = null) {
+        return Render<TnTTypeahead<string>>(parameters => {
             parameters.Add(p => p.ItemsLookupFunc, itemsLookupFunc);
             configure?.Invoke(parameters);
         });
@@ -1139,18 +1084,15 @@ public class TnTTypeahead_Tests : BunitContext
 
     private IRenderedComponent<TnTTypeahead<TItem>> RenderTypeahead<TItem>(
         Func<string?, CancellationToken, Task<IEnumerable<TItem>>> itemsLookupFunc,
-        Action<ComponentParameterCollectionBuilder<TnTTypeahead<TItem>>>? configure = null)
-    {
-        return Render<TnTTypeahead<TItem>>(parameters =>
-        {
+        Action<ComponentParameterCollectionBuilder<TnTTypeahead<TItem>>>? configure = null) {
+        return Render<TnTTypeahead<TItem>>(parameters => {
             parameters.Add(p => p.ItemsLookupFunc, itemsLookupFunc);
             configure?.Invoke(parameters);
         });
     }
 
     private IRenderedComponent<TnTTypeahead<TItem>> RenderTypeahead<TItem>(
-        Action<ComponentParameterCollectionBuilder<TnTTypeahead<TItem>>> configure)
-    {
+        Action<ComponentParameterCollectionBuilder<TnTTypeahead<TItem>>> configure) {
         return Render<TnTTypeahead<TItem>>(configure);
     }
 

@@ -16,22 +16,29 @@ using Xunit;
 namespace TnTComponents.Tests.Form;
 
 public class TnTInputCurrency_Tests : BunitContext {
-    
-    public TnTInputCurrency_Tests()
-    {
+
+    public TnTInputCurrency_Tests() {
         // Set renderer info for tests that use NET9_0_OR_GREATER features
         SetRendererInfo(new RendererInfo("WebAssembly", true));
     }
-    
+
     private TestModel CreateTestModel() => new();
-    
+
     private TestModelWithValidation CreateValidationTestModel() => new();
-    
-    private IRenderedComponent<TnTInputCurrency> RenderInputCurrency(TestModel? model = null, Action<ComponentParameterCollectionBuilder<TnTInputCurrency>>? configure = null)
-    {
+
+    private IRenderedComponent<TnTInputCurrency> RenderInputCurrency(TestModel? model = null, Action<ComponentParameterCollectionBuilder<TnTInputCurrency>>? configure = null) {
         model ??= CreateTestModel();
-        return Render<TnTInputCurrency>(parameters =>
-        {
+        return Render<TnTInputCurrency>(parameters => {
+            parameters
+                .Add(p => p.ValueExpression, () => model.TestValue!)
+                .Add(p => p.Value, model.TestValue)
+                .Add(p => p.ValueChanged, EventCallback.Factory.Create<decimal?>(this, v => model.TestValue = v));
+            configure?.Invoke(parameters);
+        });
+    }
+
+    private IRenderedComponent<TnTInputCurrency> RenderValidationInputCurrency(TestModelWithValidation model, Action<ComponentParameterCollectionBuilder<TnTInputCurrency>>? configure = null) {
+        return Render<TnTInputCurrency>(parameters => {
             parameters
                 .Add(p => p.ValueExpression, () => model.TestValue)
                 .Add(p => p.Value, model.TestValue)
@@ -39,25 +46,13 @@ public class TnTInputCurrency_Tests : BunitContext {
             configure?.Invoke(parameters);
         });
     }
-    
-    private IRenderedComponent<TnTInputCurrency> RenderValidationInputCurrency(TestModelWithValidation model, Action<ComponentParameterCollectionBuilder<TnTInputCurrency>>? configure = null)
-    {
-        return Render<TnTInputCurrency>(parameters =>
-        {
-            parameters
-                .Add(p => p.ValueExpression, () => model.TestValue)
-                .Add(p => p.Value, model.TestValue)
-                .Add(p => p.ValueChanged, EventCallback.Factory.Create<decimal?>(this, v => model.TestValue = v));
-            configure?.Invoke(parameters);
-        });
-    }
-    
+
     [Fact]
     public void Renders_Currency_Input_With_Default_Classes_And_Type() {
         // Arrange & Act
         var cut = RenderInputCurrency();
         var input = cut.Find("input[type=text]");
-        
+
         // Assert
         input.Should().NotBeNull();
         var label = cut.Find("label.tnt-input");
@@ -71,7 +66,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputCurrency();
         var label = cut.Find("label");
-        
+
         // Assert
         cut.Instance.Should().BeAssignableTo<ITnTComponentBase>();
     }
@@ -81,7 +76,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputCurrency();
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("type").Should().Be("text"); // Currency type renders as text
         cut.Instance.Type.Should().Be(InputType.Currency);
@@ -91,7 +86,7 @@ public class TnTInputCurrency_Tests : BunitContext {
     public void Default_CultureCode_Is_EnUS() {
         // Arrange & Act
         var cut = RenderInputCurrency();
-        
+
         // Assert
         cut.Instance.CultureCode.Should().Be("en-US");
     }
@@ -100,7 +95,7 @@ public class TnTInputCurrency_Tests : BunitContext {
     public void Default_CurrencyCode_Is_USD() {
         // Arrange & Act
         var cut = RenderInputCurrency();
-        
+
         // Assert
         cut.Instance.CurrencyCode.Should().Be("USD");
     }
@@ -109,7 +104,7 @@ public class TnTInputCurrency_Tests : BunitContext {
     public void Custom_CultureCode_Can_Be_Set() {
         // Arrange & Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.CultureCode, "en-GB"));
-        
+
         // Assert
         cut.Instance.CultureCode.Should().Be("en-GB");
     }
@@ -118,7 +113,7 @@ public class TnTInputCurrency_Tests : BunitContext {
     public void Custom_CurrencyCode_Can_Be_Set() {
         // Arrange & Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.CurrencyCode, "EUR"));
-        
+
         // Assert
         cut.Instance.CurrencyCode.Should().Be("EUR");
     }
@@ -128,7 +123,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputCurrency();
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("onkeydown").Should().Be("TnTComponents.enforceCurrencyFormat(event)");
         input.GetAttribute("onkeyup").Should().Be("TnTComponents.formatToCurrency(event)");
@@ -139,7 +134,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.CultureCode, "de-DE"));
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("cultureCode").Should().Be("de-DE");
     }
@@ -149,7 +144,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.CurrencyCode, "GBP"));
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("currencyCode").Should().Be("GBP");
     }
@@ -158,7 +153,7 @@ public class TnTInputCurrency_Tests : BunitContext {
     public void Label_Renders_When_Set() {
         // Arrange & Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.Label, "Test Label"));
-        
+
         // Assert
         var labelSpan = cut.Find(".tnt-label");
         labelSpan.TextContent.Should().Be("Test Label");
@@ -168,7 +163,7 @@ public class TnTInputCurrency_Tests : BunitContext {
     public void Label_Does_Not_Render_When_Empty() {
         // Arrange & Act
         var cut = RenderInputCurrency();
-        
+
         // Assert
         cut.FindAll(".tnt-label").Should().BeEmpty();
     }
@@ -178,7 +173,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.Placeholder, "Enter amount..."));
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("placeholder").Should().Be("Enter amount...");
     }
@@ -188,7 +183,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputCurrency();
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("placeholder").Should().Be(" ");
     }
@@ -199,7 +194,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.Disabled, true));
         var input = cut.Find("input");
         var label = cut.Find("label");
-        
+
         // Assert
         input.HasAttribute("disabled").Should().BeTrue();
         label.GetAttribute("class")!.Should().Contain("tnt-disabled");
@@ -210,7 +205,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.ReadOnly, true));
         var input = cut.Find("input");
-        
+
         // Assert
         input.HasAttribute("readonly").Should().BeTrue();
     }
@@ -220,7 +215,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.AutoFocus, true));
         var input = cut.Find("input");
-        
+
         // Assert
         input.HasAttribute("autofocus").Should().BeTrue();
     }
@@ -230,7 +225,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.AutoComplete, "off"));
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("autocomplete").Should().Be("off");
     }
@@ -240,7 +235,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.ElementId, "currency-id"));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("id").Should().Be("currency-id");
     }
@@ -250,7 +245,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.ElementTitle, "Currency Title"));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("title").Should().Be("Currency Title");
     }
@@ -260,7 +255,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.ElementLang, "en-US"));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("lang").Should().Be("en-US");
     }
@@ -270,11 +265,11 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         model.TestValue = 1234.56m;
-        
+
         // Act
         var cut = RenderInputCurrency(model);
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("value").Should().Be("$1,234.56");
     }
@@ -284,18 +279,18 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         model.TestValue = 1234.56m;
-        
+
         // Act
         var cut = RenderInputCurrency(model, p => p
             .Add(c => c.CultureCode, "de-DE")
             .Add(c => c.CurrencyCode, "EUR"));
         var input = cut.Find("input");
-        
+
         // Assert
         // Note: This might vary based on system locale, but should contain EUR formatting
         var value = input.GetAttribute("value")!;
         (value.Contains("1.234,56") || value.Contains("1,234.56")).Should().BeTrue();
-        value.Should().Contain("€");
+        value.Should().Contain("â‚¬");
     }
 
     [Fact]
@@ -303,11 +298,11 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         model.TestValue = null;
-        
+
         // Act
         var cut = RenderInputCurrency(model);
         var input = cut.Find("input");
-        
+
         // Assert
         var value = input.GetAttribute("value");
         (value == null || value == string.Empty).Should().BeTrue();
@@ -318,11 +313,11 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         model.TestValue = 0m;
-        
+
         // Act
         var cut = RenderInputCurrency(model);
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("value").Should().Be("$0.00");
     }
@@ -332,11 +327,11 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         model.TestValue = -123.45m;
-        
+
         // Act
         var cut = RenderInputCurrency(model);
         var input = cut.Find("input");
-        
+
         // Assert
         var value = input.GetAttribute("value")!;
         value.Should().Contain("123.45");
@@ -350,10 +345,10 @@ public class TnTInputCurrency_Tests : BunitContext {
         var model = CreateTestModel();
         var cut = RenderInputCurrency(model);
         var input = cut.Find("input");
-        
+
         // Act
         input.Change("$456.78");
-        
+
         // Assert
         model.TestValue.Should().Be(456.78m);
     }
@@ -364,10 +359,10 @@ public class TnTInputCurrency_Tests : BunitContext {
         var model = CreateTestModel();
         var cut = RenderInputCurrency(model);
         var input = cut.Find("input");
-        
+
         // Act
         input.Change("789.12");
-        
+
         // Assert
         model.TestValue.Should().Be(789.12m);
     }
@@ -378,10 +373,10 @@ public class TnTInputCurrency_Tests : BunitContext {
         var model = CreateTestModel();
         var cut = RenderInputCurrency(model, p => p.Add(c => c.BindOnInput, true));
         var input = cut.Find("input");
-        
+
         // Act
         input.Input("$999.99");
-        
+
         // Assert
         model.TestValue.Should().Be(999.99m);
     }
@@ -394,10 +389,10 @@ public class TnTInputCurrency_Tests : BunitContext {
         var callback = EventCallback.Factory.Create<decimal?>(this, (value) => callbackValue = value);
         var cut = RenderInputCurrency(model, p => p.Add(c => c.BindAfter, callback));
         var input = cut.Find("input");
-        
+
         // Act
         input.Change("$555.25");
-        
+
         // Assert
         callbackValue.Should().Be(555.25m);
     }
@@ -406,10 +401,10 @@ public class TnTInputCurrency_Tests : BunitContext {
     public void StartIcon_Renders_When_Set() {
         // Arrange
         var startIcon = MaterialIcon.Home;
-        
+
         // Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.StartIcon, startIcon));
-        
+
         // Assert
         cut.Markup.Should().Contain("tnt-start-icon");
         cut.Markup.Should().Contain("home");
@@ -419,10 +414,10 @@ public class TnTInputCurrency_Tests : BunitContext {
     public void EndIcon_Renders_When_Set() {
         // Arrange
         var endIcon = MaterialIcon.Search;
-        
+
         // Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.EndIcon, endIcon));
-        
+
         // Assert
         cut.Markup.Should().Contain("tnt-end-icon");
         cut.Markup.Should().Contain("search");
@@ -432,7 +427,7 @@ public class TnTInputCurrency_Tests : BunitContext {
     public void SupportingText_Renders_When_Set() {
         // Arrange & Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.SupportingText, "Helper text"));
-        
+
         // Assert
         var supportingText = cut.Find(".tnt-supporting-text");
         supportingText.TextContent.Should().Be("Helper text");
@@ -442,7 +437,7 @@ public class TnTInputCurrency_Tests : BunitContext {
     public void SupportingText_Does_Not_Render_When_Empty() {
         // Arrange & Act
         var cut = RenderInputCurrency();
-        
+
         // Assert
         cut.FindAll(".tnt-supporting-text").Should().BeEmpty();
     }
@@ -451,11 +446,11 @@ public class TnTInputCurrency_Tests : BunitContext {
     public void Required_Attribute_Added_When_Additional_Attributes_Contains_Required() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "required", true } };
-        
+
         // Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var input = cut.Find("input");
-        
+
         // Assert
         input.HasAttribute("required").Should().BeTrue();
     }
@@ -465,7 +460,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.Appearance, FormAppearance.Filled));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("class")!.Should().Contain("tnt-form-filled");
     }
@@ -475,7 +470,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.Appearance, FormAppearance.Outlined));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("class")!.Should().Contain("tnt-form-outlined");
     }
@@ -490,7 +485,7 @@ public class TnTInputCurrency_Tests : BunitContext {
             .Add(c => c.ErrorColor, TnTColor.Error));
         var label = cut.Find("label");
         var style = label.GetAttribute("style")!;
-        
+
         // Assert
         style.Should().Contain("--tnt-input-tint-color:var(--tnt-color-primary)");
         style.Should().Contain("--tnt-input-background-color:var(--tnt-color-surface)");
@@ -504,7 +499,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         var cut = RenderInputCurrency();
         var label = cut.Find("label");
         var style = label.GetAttribute("style")!;
-        
+
         // Assert
         style.Should().Contain("--tnt-input-tint-color:var(--tnt-color-primary)");
         style.Should().Contain("--tnt-input-background-color:var(--tnt-color-surface-container-highest)");
@@ -516,11 +511,11 @@ public class TnTInputCurrency_Tests : BunitContext {
     public void Merges_Custom_Class_From_AdditionalAttributes() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "class", "custom-currency" } };
-        
+
         // Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var label = cut.Find("label");
-        
+
         // Assert
         var cls = label.GetAttribute("class")!;
         cls.Should().Contain("custom-currency");
@@ -531,11 +526,11 @@ public class TnTInputCurrency_Tests : BunitContext {
     public void Merges_Custom_Style_From_AdditionalAttributes() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "style", "margin:10px;" } };
-        
+
         // Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var label = cut.Find("label");
-        
+
         // Assert
         var style = label.GetAttribute("style")!;
         style.Should().Contain("margin:10px");
@@ -547,7 +542,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.Placeholder, "Test placeholder"));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("class")!.Should().Contain("tnt-placeholder");
     }
@@ -557,7 +552,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputCurrency();
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("class")!.Should().NotContain("tnt-placeholder");
     }
@@ -567,28 +562,29 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         var fieldChanged = false;
-        
+
         // Create a component with EditForm wrapper that provides EditContext
+        RenderFragment<EditContext> childContent = context => builder => {
+            // Subscribe to field changes
+            context.OnFieldChanged += (_, __) => fieldChanged = true;
+
+            builder.OpenComponent<TnTInputCurrency>(0);
+            builder.AddAttribute(1, "ValueExpression", (Expression<Func<decimal?>>)(() => model.TestValue));
+            builder.AddAttribute(2, "Value", model.TestValue);
+            builder.AddAttribute(3, "ValueChanged", EventCallback.Factory.Create<decimal?>(this, v => model.TestValue = v));
+            builder.CloseComponent();
+        };
+
         var cut = Render<EditForm>(parameters => parameters
             .Add(p => p.Model, model)
-            .Add<RenderFragment<EditContext>>(p => p.ChildContent, context => builder =>
-            {
-                // Subscribe to field changes
-                context.OnFieldChanged += (_, __) => fieldChanged = true;
-                
-                builder.OpenComponent<TnTInputCurrency>(0);
-                builder.AddAttribute(1, "ValueExpression", (Expression<Func<decimal?>>)(() => model.TestValue));
-                builder.AddAttribute(2, "Value", model.TestValue);
-                builder.AddAttribute(3, "ValueChanged", EventCallback.Factory.Create<decimal?>(this, v => model.TestValue = v));
-                builder.CloseComponent();
-            })
+            .Add(p => p.ChildContent, (RenderFragment<EditContext>)childContent!)
         );
-        
+
         var input = cut.Find("input");
-        
+
         // Act
         input.Blur();
-        
+
         // Assert
         fieldChanged.Should().BeTrue();
     }
@@ -598,10 +594,10 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange
         var model = CreateValidationTestModel();
         model.TestValue = null; // Invalid - required field
-        
+
         // Act
         var cut = RenderValidationInputCurrency(model);
-        
+
         // Assert
         cut.Instance.DisableValidationMessage.Should().BeFalse();
         cut.Instance.ValueExpression.Should().NotBeNull();
@@ -613,10 +609,10 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange
         var model = CreateValidationTestModel();
         model.TestValue = null;
-        
+
         // Act
         var cut = RenderValidationInputCurrency(model, p => p.Add(c => c.DisableValidationMessage, true));
-        
+
         // Assert
         cut.Instance.DisableValidationMessage.Should().BeTrue();
     }
@@ -629,10 +625,10 @@ public class TnTInputCurrency_Tests : BunitContext {
         model.TestValue = originalValue;
         var cut = RenderInputCurrency(model);
         var input = cut.Find("input");
-        
+
         // Act
         input.Change("not a number");
-        
+
         // Assert
         model.TestValue.Should().Be(originalValue); // Value should remain unchanged
     }
@@ -644,10 +640,10 @@ public class TnTInputCurrency_Tests : BunitContext {
         model.TestValue = 123.45m;
         var cut = RenderInputCurrency(model);
         var input = cut.Find("input");
-        
+
         // Act
         input.Change("");
-        
+
         // Assert
         model.TestValue.Should().BeNull();
     }
@@ -657,7 +653,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputCurrency();
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("title").Should().Be("TestValue");
     }
@@ -668,7 +664,7 @@ public class TnTInputCurrency_Tests : BunitContext {
         var cut = RenderInputCurrency(configure: p => p
             .Add(c => c.StartIcon, MaterialIcon.Home)
             .Add(c => c.EndIcon, MaterialIcon.Search));
-        
+
         // Assert
         cut.Markup.Should().Contain("tnt-start-icon");
         cut.Markup.Should().Contain("home");
@@ -680,7 +676,7 @@ public class TnTInputCurrency_Tests : BunitContext {
     public void Whitespace_Label_Does_Not_Render_Label_Span() {
         // Arrange & Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.Label, "   "));
-        
+
         // Assert
         cut.FindAll(".tnt-label").Should().BeEmpty();
     }
@@ -689,7 +685,7 @@ public class TnTInputCurrency_Tests : BunitContext {
     public void Null_Label_Does_Not_Render_Label_Span() {
         // Arrange & Act
         var cut = RenderInputCurrency(configure: p => p.Add(c => c.Label, null!));
-        
+
         // Assert
         cut.FindAll(".tnt-label").Should().BeEmpty();
     }

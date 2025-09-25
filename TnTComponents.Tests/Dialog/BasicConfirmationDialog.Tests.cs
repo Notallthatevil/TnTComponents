@@ -9,16 +9,16 @@ using AwesomeAssertions;
 namespace TnTComponents.Tests.Dialog;
 
 public class BasicConfirmationDialog_Tests : BunitContext {
-    
+
     private readonly TnTDialogService _dialogService;
-    
+
     public BasicConfirmationDialog_Tests() {
         _dialogService = new TnTDialogService();
         Services.AddSingleton<ITnTDialogService>(_dialogService);
         // Use BUnit's built-in JSRuntime test double
         JSInterop.Mode = JSRuntimeMode.Loose;
     }
-    
+
     [Fact]
     public void BasicConfirmationDialog_Renders_Required_Body_Text() {
         // Arrange
@@ -48,11 +48,11 @@ public class BasicConfirmationDialog_Tests : BunitContext {
         // Assert
         var buttons = component.FindComponents<TnTButton>();
         buttons.Should().HaveCount(2);
-        
+
         // Cancel button (first button)
         var cancelButton = buttons[0];
         cancelButton.Markup.Should().Contain("Cancel");
-        
+
         // Confirm button (second button)
         var confirmButton = buttons[1];
         confirmButton.Markup.Should().Contain("Confirm");
@@ -73,10 +73,10 @@ public class BasicConfirmationDialog_Tests : BunitContext {
         // Assert
         var buttons = component.FindComponents<TnTButton>();
         buttons.Should().HaveCount(2);
-        
+
         var cancelButton = buttons[0];
         cancelButton.Markup.Should().Contain("No");
-        
+
         var confirmButton = buttons[1];
         confirmButton.Markup.Should().Contain("Yes");
     }
@@ -95,7 +95,7 @@ public class BasicConfirmationDialog_Tests : BunitContext {
         // Assert
         var buttons = component.FindComponents<TnTButton>();
         buttons.Should().HaveCount(1);
-        
+
         var confirmButton = buttons[0];
         confirmButton.Markup.Should().Contain("Confirm");
     }
@@ -129,7 +129,7 @@ public class BasicConfirmationDialog_Tests : BunitContext {
         // Assert
         var divider = component.FindComponent<TnTDivider>();
         divider.Should().NotBeNull();
-        
+
         // Check that the divider has the correct style attribute from the rendered markup
         var dividerElement = component.Find(".tnt-divider");
         dividerElement.Should().NotBeNull();
@@ -181,11 +181,11 @@ public class BasicConfirmationDialog_Tests : BunitContext {
         // Assert
         var icons = component.FindComponents<MaterialIcon>();
         icons.Should().HaveCount(2);
-        
+
         // Cancel button icon
         var cancelIcon = icons[0];
         cancelIcon.Instance.Icon.Should().Be("cancel");
-        
+
         // Confirm button icon
         var confirmIcon = icons[1];
         confirmIcon.Instance.Icon.Should().Be("check");
@@ -354,7 +354,7 @@ public class BasicConfirmationDialog_Tests : BunitContext {
         // Assert
         var buttonContainer = component.Find(".tnt-basic-confirmation-dialog-buttons");
         buttonContainer.Should().NotBeNull();
-        
+
         var buttons = buttonContainer.QuerySelectorAll("button");
         buttons.Length.Should().Be(2);
     }
@@ -364,7 +364,7 @@ public class BasicConfirmationDialog_Tests : BunitContext {
         // Arrange
         var dialog = CreateDialogWithComponent();
         var executionOrder = new List<string>();
-        
+
         dialog.CloseAsync = () => {
             executionOrder.Add("CloseAsync");
             return Task.CompletedTask;
@@ -392,7 +392,7 @@ public class BasicConfirmationDialog_Tests : BunitContext {
         var dialog = CreateDialogWithComponent();
         var cancelCallbackInvoked = false;
         var confirmCallbackInvoked = false;
-        
+
         var cancelCallback = EventCallback.Factory.Create(this, () => cancelCallbackInvoked = true);
         var confirmCallback = EventCallback.Factory.Create(this, () => confirmCallbackInvoked = true);
 
@@ -410,17 +410,23 @@ public class BasicConfirmationDialog_Tests : BunitContext {
         // Assert
         var bodyDiv = component.Find(".tnt-body-large");
         bodyDiv.TextContent.Should().Be("Delete this item permanently?");
-        
+
         var buttons = component.FindComponents<TnTButton>();
         buttons.Should().HaveCount(2);
-        
+
         var cancelButton = buttons[0];
         cancelButton.Markup.Should().Contain("Keep");
         cancelButton.Instance.TextColor.Should().Be(TnTColor.OnSurface);
         cancelButton.Instance.Appearance.Should().Be(ButtonAppearance.Outlined);
-        
+
         var confirmButton = buttons[1];
         confirmButton.Markup.Should().Contain("Delete");
+
+        // Invoke the callbacks to ensure the local variables are used and the test covers callback wiring
+        cancelCallback.InvokeAsync(null);
+        confirmCallback.InvokeAsync(null);
+        cancelCallbackInvoked.Should().BeTrue();
+        confirmCallbackInvoked.Should().BeTrue();
     }
 
     [Fact]
@@ -436,10 +442,10 @@ public class BasicConfirmationDialog_Tests : BunitContext {
         // Assert
         var bodyDiv = component.Find(".tnt-body-large");
         bodyDiv.Should().NotBeNull();
-        
+
         var buttonContainer = component.Find(".tnt-basic-confirmation-dialog-buttons");
         buttonContainer.Should().NotBeNull();
-        
+
         var divider = component.Find(".tnt-divider");
         divider.Should().NotBeNull();
     }
@@ -459,7 +465,7 @@ public class BasicConfirmationDialog_Tests : BunitContext {
         var buttonContainer = component.Find(".tnt-basic-confirmation-dialog-buttons");
         var buttons = buttonContainer.QuerySelectorAll("button");
         buttons.Length.Should().Be(1);
-        
+
         var confirmButton = component.FindComponents<TnTButton>().Single();
         confirmButton.Markup.Should().Contain("Confirm");
         confirmButton.Markup.Should().Contain("check"); // Material icon
@@ -489,7 +495,7 @@ public class BasicConfirmationDialog_Tests : BunitContext {
                 parameters.Add(p => p.Body, "Test body");
             });
         });
-        
+
         exception.Message.Should().Contain("BasicConfirmationDialog must be created inside a dialog");
     }
 
@@ -499,9 +505,9 @@ public class BasicConfirmationDialog_Tests : BunitContext {
     }
 
     private IRenderedComponent<BasicConfirmationDialog> RenderBasicConfirmationDialog(
-        MockDialog dialog, 
+        MockDialog dialog,
         Action<ComponentParameterCollectionBuilder<BasicConfirmationDialog>> parameterBuilder) {
-        
+
         return Render<BasicConfirmationDialog>(parameters => {
             parameters.AddCascadingValue<ITnTDialog>(dialog);
             parameterBuilder(parameters);
@@ -515,9 +521,9 @@ public class BasicConfirmationDialog_Tests : BunitContext {
         public TnTDialogOptions Options { get; init; } = new();
         public IReadOnlyDictionary<string, object?>? Parameters { get; init; }
         public Type Type { get; init; } = typeof(BasicConfirmationDialog);
-        
+
         public Func<Task> CloseAsync { get; set; } = () => Task.CompletedTask;
-        
+
         Task ITnTDialog.CloseAsync() => CloseAsync();
     }
 }

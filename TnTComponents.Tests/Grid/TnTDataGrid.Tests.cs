@@ -251,7 +251,7 @@ public class TnTDataGrid_Tests : BunitContext {
     #region Data Source Tests
 
     [Fact]
-    public async Task Items_WithQueryableData_RendersRows() {
+    public void Items_WithQueryableData_RendersRows() {
         // Arrange & Act
         var cut = RenderDataGridWithItems(_testItems.AsQueryable());
 

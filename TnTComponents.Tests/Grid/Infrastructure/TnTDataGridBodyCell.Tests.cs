@@ -55,7 +55,7 @@ public class TnTDataGridBodyCell_Tests : BunitContext {
     public void Renders_WithColumnAdditionalAttributes() {
         // Arrange
         var column = CreateTestColumn("Content");
-        column.AdditionalAttributes = new Dictionary<string, object?> {
+        column.AdditionalAttributes = new Dictionary<string, object> {
             { "data-test", "test-value" },
             { "class", "custom-class" }
         };
@@ -87,7 +87,7 @@ public class TnTDataGridBodyCell_Tests : BunitContext {
     public void Renders_WithEmptyAdditionalAttributes() {
         // Arrange
         var column = CreateTestColumn("Content");
-        column.AdditionalAttributes = new Dictionary<string, object?>();
+        column.AdditionalAttributes = new Dictionary<string, object>();
 
         // Act
         var cut = RenderCellWithColumn(column);
@@ -252,7 +252,7 @@ public class TnTDataGridBodyCell_Tests : BunitContext {
     /// </summary>
     private class TestTemplateColumn<TItem> : TnTColumnBase<TItem> {
         public RenderFragment<TItem>? CellTemplate { get; set; }
-        
+
         public override string? ElementClass => null;
         public override string? ElementStyle => null;
         public override TnTGridSort<TItem>? SortBy { get; set; }

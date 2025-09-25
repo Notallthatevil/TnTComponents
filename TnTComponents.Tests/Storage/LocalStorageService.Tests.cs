@@ -14,7 +14,7 @@ namespace TnTComponents.Tests.Storage;
 /// <summary>
 ///     Comprehensive tests for LocalStorageService functionality.
 /// </summary>
-public class LocalStorageService_Tests : Bunit.TestContext {
+public class LocalStorageService_Tests : BunitContext {
     private ILocalStorageService _localStorageService = null!;
 
     public LocalStorageService_Tests() {

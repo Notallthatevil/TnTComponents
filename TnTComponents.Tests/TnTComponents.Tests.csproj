@@ -1,65 +1,47 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
-    <PropertyGroup>
-        <TargetFrameworks>net9.0;net10.0</TargetFrameworks>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <IsPackable>false</IsPackable>
-        <OutputType>Exe</OutputType>
-    </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net9.0;net10.0</TargetFrameworks>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<IsPackable>false</IsPackable>
+		<OutputType>Exe</OutputType>
+		<WarningLevel>8</WarningLevel>
+		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+	</PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0|AnyCPU'">
-      <WarningLevel>8</WarningLevel>
-      <WarningsAsErrors>$(WarningsAsErrors);NU1605;xUnit1051;xUnit1012</WarningsAsErrors>
-    </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="AwesomeAssertions" Version="9.2.0" />
+		<PackageReference Include="AwesomeAssertions.Analyzers" Version="9.0.5">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="bunit" Version="2.0.50-preview" />
+		<PackageReference Include="coverlet.collector" Version="6.0.4">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.4">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="xunit.v3" Version="3.2.0-pre.10" />
+	</ItemGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0|AnyCPU'">
-      <WarningLevel>8</WarningLevel>
-      <WarningsAsErrors>$(WarningsAsErrors);NU1605;xUnit1051;xUnit1012</WarningsAsErrors>
-    </PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\TnTComponents\TnTComponents.csproj" />
+	</ItemGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0|AnyCPU'">
-      <WarningLevel>8</WarningLevel>
-      <WarningsAsErrors>$(WarningsAsErrors);NU1605;xUnit1051;xUnit1012</WarningsAsErrors>
-    </PropertyGroup>
+	<ItemGroup>
+		<Using Include="AwesomeAssertions" />
+		<Using Include="Bunit" />
+		<Using Include="TnTComponents" />
+		<Using Include="Xunit" />
+	</ItemGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0|AnyCPU'">
-      <WarningLevel>8</WarningLevel>
-      <WarningsAsErrors>$(WarningsAsErrors);NU1605;xUnit1051;xUnit1012</WarningsAsErrors>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="AwesomeAssertions" Version="9.2.0" />
-        <PackageReference Include="AwesomeAssertions.Analyzers" Version="9.0.5">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="bunit" Version="2.0.50-preview" />
-        <PackageReference Include="coverlet.collector" Version="6.0.4">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="xunit.v3" Version="3.2.0-pre.10" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\TnTComponents\TnTComponents.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Using Include="AwesomeAssertions" />
-        <Using Include="Bunit" />
-        <Using Include="TnTComponents" />
-        <Using Include="Xunit" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Editors\__mocks__\" />
-    </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Editors\__mocks__\" />
+	</ItemGroup>
 
 </Project>

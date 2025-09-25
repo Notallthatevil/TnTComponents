@@ -14,7 +14,7 @@ namespace TnTComponents.Tests.Storage;
 /// <summary>
 ///     Comprehensive tests for SessionStorageService functionality.
 /// </summary>
-public class SessionStorageService_Tests : Bunit.TestContext {
+public class SessionStorageService_Tests : BunitContext {
     private ISessionStorageService _sessionStorageService = null!;
 
     public SessionStorageService_Tests() {

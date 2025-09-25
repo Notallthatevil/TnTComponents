@@ -15,22 +15,29 @@ using Xunit;
 namespace TnTComponents.Tests.Form;
 
 public class TnTInputText_Tests : BunitContext {
-    
-    public TnTInputText_Tests()
-    {
+
+    public TnTInputText_Tests() {
         // Set renderer info for tests that use NET9_0_OR_GREATER features
         SetRendererInfo(new RendererInfo("WebAssembly", true));
     }
-    
+
     private TestModel CreateTestModel() => new();
-    
+
     private TestModelWithValidation CreateValidationTestModel() => new();
-    
-    private IRenderedComponent<TnTInputText> RenderInputText(TestModel? model = null, Action<ComponentParameterCollectionBuilder<TnTInputText>>? configure = null)
-    {
+
+    private IRenderedComponent<TnTInputText> RenderInputText(TestModel? model = null, Action<ComponentParameterCollectionBuilder<TnTInputText>>? configure = null) {
         model ??= CreateTestModel();
-        return Render<TnTInputText>(parameters =>
-        {
+        return Render<TnTInputText>(parameters => {
+            parameters
+                .Add(p => p.ValueExpression, () => model.TestValue!)
+                .Add(p => p.Value, model.TestValue)
+                .Add(p => p.ValueChanged, EventCallback.Factory.Create<string?>(this, v => model.TestValue = v));
+            configure?.Invoke(parameters);
+        });
+    }
+
+    private IRenderedComponent<TnTInputText> RenderValidationInputText(TestModelWithValidation model, Action<ComponentParameterCollectionBuilder<TnTInputText>>? configure = null) {
+        return Render<TnTInputText>(parameters => {
             parameters
                 .Add(p => p.ValueExpression, () => model.TestValue)
                 .Add(p => p.Value, model.TestValue)
@@ -38,25 +45,13 @@ public class TnTInputText_Tests : BunitContext {
             configure?.Invoke(parameters);
         });
     }
-    
-    private IRenderedComponent<TnTInputText> RenderValidationInputText(TestModelWithValidation model, Action<ComponentParameterCollectionBuilder<TnTInputText>>? configure = null)
-    {
-        return Render<TnTInputText>(parameters =>
-        {
-            parameters
-                .Add(p => p.ValueExpression, () => model.TestValue)
-                .Add(p => p.Value, model.TestValue)
-                .Add(p => p.ValueChanged, EventCallback.Factory.Create<string?>(this, v => model.TestValue = v));
-            configure?.Invoke(parameters);
-        });
-    }
-    
+
     [Fact]
     public void Renders_Input_With_Default_Classes_And_Type() {
         // Arrange & Act
         var cut = RenderInputText();
         var input = cut.Find("input[type=text]");
-        
+
         // Assert
         input.Should().NotBeNull();
         var label = cut.Find("label.tnt-input");
@@ -70,7 +65,7 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputText();
         var label = cut.Find("label");
-        
+
         // Assert
         // TnTInputBase implements ITnTComponentBase but doesn't inherit from TnTComponentBase
         // so it doesn't automatically get the tntid attribute
@@ -83,7 +78,7 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputText();
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("type").Should().Be("text");
         cut.Instance.InputType.Should().Be(TextInputType.Text);
@@ -101,7 +96,7 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputText(configure: p => p.Add(c => c.InputType, inputType));
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("type").Should().Be(expectedHtmlType);
         cut.Instance.InputType.Should().Be(inputType);
@@ -112,7 +107,7 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputText(configure: p => p.Add(c => c.InputType, TextInputType.Tel));
         var input = cut.Find("input[type=tel]");
-        
+
         // Assert
         input.GetAttribute("onkeydown").Should().Be("TnTComponents.enforcePhoneFormat(event)");
         input.GetAttribute("onkeyup").Should().Be("TnTComponents.formatToPhone(event)");
@@ -128,7 +123,7 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputText(configure: p => p.Add(c => c.InputType, inputType));
         var input = cut.Find("input");
-        
+
         // Assert
         input.HasAttribute("onkeydown").Should().BeFalse();
         input.HasAttribute("onkeyup").Should().BeFalse();
@@ -138,7 +133,7 @@ public class TnTInputText_Tests : BunitContext {
     public void Label_Renders_When_Set() {
         // Arrange & Act
         var cut = RenderInputText(configure: p => p.Add(c => c.Label, "Test Label"));
-        
+
         // Assert
         var labelSpan = cut.Find(".tnt-label");
         labelSpan.TextContent.Should().Be("Test Label");
@@ -148,7 +143,7 @@ public class TnTInputText_Tests : BunitContext {
     public void Label_Does_Not_Render_When_Empty() {
         // Arrange & Act
         var cut = RenderInputText();
-        
+
         // Assert
         cut.FindAll(".tnt-label").Should().BeEmpty();
     }
@@ -158,7 +153,7 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputText(configure: p => p.Add(c => c.Placeholder, "Enter text..."));
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("placeholder").Should().Be("Enter text...");
     }
@@ -168,7 +163,7 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputText();
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("placeholder").Should().Be(" ");
     }
@@ -179,7 +174,7 @@ public class TnTInputText_Tests : BunitContext {
         var cut = RenderInputText(configure: p => p.Add(c => c.Disabled, true));
         var input = cut.Find("input");
         var label = cut.Find("label");
-        
+
         // Assert
         input.HasAttribute("disabled").Should().BeTrue();
         label.GetAttribute("class")!.Should().Contain("tnt-disabled");
@@ -190,7 +185,7 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputText(configure: p => p.Add(c => c.ReadOnly, true));
         var input = cut.Find("input");
-        
+
         // Assert
         input.HasAttribute("readonly").Should().BeTrue();
     }
@@ -200,7 +195,7 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputText(configure: p => p.Add(c => c.AutoFocus, true));
         var input = cut.Find("input");
-        
+
         // Assert
         input.HasAttribute("autofocus").Should().BeTrue();
     }
@@ -210,7 +205,7 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputText(configure: p => p.Add(c => c.AutoComplete, "email"));
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("autocomplete").Should().Be("email");
     }
@@ -220,11 +215,11 @@ public class TnTInputText_Tests : BunitContext {
         // This test is not valid because ElementName is a read-only property 
         // that returns NameAttributeValue from InputBase<>
         // The name attribute is automatically generated by the framework
-        
+
         // Arrange & Act
         var cut = RenderInputText();
         var input = cut.Find("input");
-        
+
         // Assert - just verify the name attribute exists and has a value
         input.HasAttribute("name").Should().BeTrue();
         input.GetAttribute("name").Should().NotBeNullOrEmpty();
@@ -235,7 +230,7 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputText(configure: p => p.Add(c => c.ElementId, "input-id"));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("id").Should().Be("input-id");
     }
@@ -245,7 +240,7 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputText(configure: p => p.Add(c => c.ElementTitle, "Input Title"));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("title").Should().Be("Input Title");
     }
@@ -255,7 +250,7 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputText(configure: p => p.Add(c => c.ElementLang, "en-US"));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("lang").Should().Be("en-US");
     }
@@ -265,11 +260,11 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         model.TestValue = "Initial Value";
-        
+
         // Act
         var cut = RenderInputText(model);
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("value").Should().Be("Initial Value");
     }
@@ -280,10 +275,10 @@ public class TnTInputText_Tests : BunitContext {
         var model = CreateTestModel();
         var cut = RenderInputText(model);
         var input = cut.Find("input");
-        
+
         // Act
         input.Change("New Value");
-        
+
         // Assert
         model.TestValue.Should().Be("New Value");
     }
@@ -294,10 +289,10 @@ public class TnTInputText_Tests : BunitContext {
         var model = CreateTestModel();
         var cut = RenderInputText(model, p => p.Add(c => c.BindOnInput, true));
         var input = cut.Find("input");
-        
+
         // Act
         input.Input("Typing...");
-        
+
         // Assert
         model.TestValue.Should().Be("Typing...");
     }
@@ -310,10 +305,10 @@ public class TnTInputText_Tests : BunitContext {
         var callback = EventCallback.Factory.Create<string?>(this, (value) => callbackValue = value ?? "");
         var cut = RenderInputText(model, p => p.Add(c => c.BindAfter, callback));
         var input = cut.Find("input");
-        
+
         // Act
         input.Change("Test Value");
-        
+
         // Assert
         callbackValue.Should().Be("Test Value");
     }
@@ -322,10 +317,10 @@ public class TnTInputText_Tests : BunitContext {
     public void StartIcon_Renders_When_Set() {
         // Arrange
         var startIcon = MaterialIcon.Home;
-        
+
         // Act
         var cut = RenderInputText(configure: p => p.Add(c => c.StartIcon, startIcon));
-        
+
         // Assert
         cut.Markup.Should().Contain("tnt-start-icon");
         cut.Markup.Should().Contain("home");
@@ -335,10 +330,10 @@ public class TnTInputText_Tests : BunitContext {
     public void EndIcon_Renders_When_Set() {
         // Arrange
         var endIcon = MaterialIcon.Search;
-        
+
         // Act
         var cut = RenderInputText(configure: p => p.Add(c => c.EndIcon, endIcon));
-        
+
         // Assert
         cut.Markup.Should().Contain("tnt-end-icon");
         cut.Markup.Should().Contain("search");
@@ -348,7 +343,7 @@ public class TnTInputText_Tests : BunitContext {
     public void SupportingText_Renders_When_Set() {
         // Arrange & Act
         var cut = RenderInputText(configure: p => p.Add(c => c.SupportingText, "Helper text"));
-        
+
         // Assert
         var supportingText = cut.Find(".tnt-supporting-text");
         supportingText.TextContent.Should().Be("Helper text");
@@ -358,7 +353,7 @@ public class TnTInputText_Tests : BunitContext {
     public void SupportingText_Does_Not_Render_When_Empty() {
         // Arrange & Act
         var cut = RenderInputText();
-        
+
         // Assert
         cut.FindAll(".tnt-supporting-text").Should().BeEmpty();
     }
@@ -367,11 +362,11 @@ public class TnTInputText_Tests : BunitContext {
     public void Required_Attribute_Added_When_Additional_Attributes_Contains_Required() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "required", true } };
-        
+
         // Act
         var cut = RenderInputText(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var input = cut.Find("input");
-        
+
         // Assert
         input.HasAttribute("required").Should().BeTrue();
     }
@@ -380,11 +375,11 @@ public class TnTInputText_Tests : BunitContext {
     public void MaxLength_Attribute_Added_When_Set_In_Additional_Attributes() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "maxlength", "100" } };
-        
+
         // Act
         var cut = RenderInputText(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("maxlength").Should().Be("100");
     }
@@ -393,11 +388,11 @@ public class TnTInputText_Tests : BunitContext {
     public void MinLength_Attribute_Added_When_Set_In_Additional_Attributes() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "minlength", "5" } };
-        
+
         // Act
         var cut = RenderInputText(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("minlength").Should().Be("5");
     }
@@ -407,7 +402,7 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputText(configure: p => p.Add(c => c.Appearance, FormAppearance.Filled));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("class")!.Should().Contain("tnt-form-filled");
     }
@@ -417,7 +412,7 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputText(configure: p => p.Add(c => c.Appearance, FormAppearance.Outlined));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("class")!.Should().Contain("tnt-form-outlined");
     }
@@ -432,7 +427,7 @@ public class TnTInputText_Tests : BunitContext {
             .Add(c => c.ErrorColor, TnTColor.Error));
         var label = cut.Find("label");
         var style = label.GetAttribute("style")!;
-        
+
         // Assert
         style.Should().Contain("--tnt-input-tint-color:var(--tnt-color-primary)");
         style.Should().Contain("--tnt-input-background-color:var(--tnt-color-surface)");
@@ -446,7 +441,7 @@ public class TnTInputText_Tests : BunitContext {
         var cut = RenderInputText();
         var label = cut.Find("label");
         var style = label.GetAttribute("style")!;
-        
+
         // Assert
         style.Should().Contain("--tnt-input-tint-color:var(--tnt-color-primary)");
         style.Should().Contain("--tnt-input-background-color:var(--tnt-color-surface-container-highest)");
@@ -458,11 +453,11 @@ public class TnTInputText_Tests : BunitContext {
     public void Merges_Custom_Class_From_AdditionalAttributes() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "class", "custom-input" } };
-        
+
         // Act
         var cut = RenderInputText(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var label = cut.Find("label");
-        
+
         // Assert
         var cls = label.GetAttribute("class")!;
         cls.Should().Contain("custom-input");
@@ -473,11 +468,11 @@ public class TnTInputText_Tests : BunitContext {
     public void Merges_Custom_Style_From_AdditionalAttributes() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "style", "margin:10px;" } };
-        
+
         // Act
         var cut = RenderInputText(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var label = cut.Find("label");
-        
+
         // Assert
         var style = label.GetAttribute("style")!;
         style.Should().Contain("margin:10px");
@@ -489,7 +484,7 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputText(configure: p => p.Add(c => c.Placeholder, "Test placeholder"));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("class")!.Should().Contain("tnt-placeholder");
     }
@@ -499,38 +494,39 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputText();
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("class")!.Should().NotContain("tnt-placeholder");
     }
 
     [Fact]
-    public async Task Input_Blur_Notifies_EditContext_When_Present() {
+    public void Input_Blur_Notifies_EditContext_When_Present() {
         // Arrange
         var model = CreateTestModel();
         var fieldChanged = false;
-        
+
         // Create a component with EditForm wrapper that provides EditContext
+        RenderFragment<EditContext> childContent = context => builder => {
+            // Subscribe to field changes
+            context.OnFieldChanged += (_, __) => fieldChanged = true;
+
+            builder.OpenComponent<TnTInputText>(0);
+            builder.AddAttribute(1, "ValueExpression", (Expression<Func<string?>>)(() => model.TestValue));
+            builder.AddAttribute(2, "Value", model.TestValue);
+            builder.AddAttribute(3, "ValueChanged", EventCallback.Factory.Create<string?>(this, v => model.TestValue = v));
+            builder.CloseComponent();
+        };
+
         var cut = Render<EditForm>(parameters => parameters
             .Add(p => p.Model, model)
-            .Add<RenderFragment<EditContext>>(p => p.ChildContent, context => builder =>
-            {
-                // Subscribe to field changes
-                context.OnFieldChanged += (_, __) => fieldChanged = true;
-                
-                builder.OpenComponent<TnTInputText>(0);
-                builder.AddAttribute(1, "ValueExpression", (Expression<Func<string?>>)(() => model.TestValue));
-                builder.AddAttribute(2, "Value", model.TestValue);
-                builder.AddAttribute(3, "ValueChanged", EventCallback.Factory.Create<string?>(this, v => model.TestValue = v));
-                builder.CloseComponent();
-            })
+            .Add(p => p.ChildContent, (RenderFragment<EditContext>)childContent!)
         );
-        
+
         var input = cut.Find("input");
-        
+
         // Act
         input.Blur();
-        
+
         // Assert
         fieldChanged.Should().BeTrue();
     }
@@ -550,7 +546,7 @@ public class TnTInputText_Tests : BunitContext {
     public void TextInputTypeExt_ToInputType_Throws_For_Invalid_Value() {
         // Arrange
         var invalidInputType = (TextInputType)999;
-        
+
         // Act & Assert
         var act = () => invalidInputType.ToInputType();
         act.Should().Throw<InvalidOperationException>()
@@ -563,15 +559,15 @@ public class TnTInputText_Tests : BunitContext {
         // For now, let's verify that the validation message element would be rendered conditionally
         var model = CreateValidationTestModel();
         model.TestValue = "";
-        
+
         // Act - Render with validation model within EditForm
         var cut = RenderValidationInputText(model);
-        
+
         // Assert - Verify the component structure supports validation messages
         // The actual validation rendering depends on EditContext which may not work in bUnit
         cut.Instance.DisableValidationMessage.Should().BeFalse();
         cut.Instance.ValueExpression.Should().NotBeNull();
-        
+
         // The validation message rendering is handled by TnTInputBase.razor template
         // and depends on cascading EditContext which is complex to test in isolation
         cut.Instance.Should().BeOfType<TnTInputText>();
@@ -582,10 +578,10 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange
         var model = CreateValidationTestModel();
         model.TestValue = "";
-        
+
         // Act - Render with DisableValidationMessage = true
         var cut = RenderValidationInputText(model, p => p.Add(c => c.DisableValidationMessage, true));
-        
+
         // Assert - Verify validation is disabled
         cut.Instance.DisableValidationMessage.Should().BeTrue();
     }
@@ -595,11 +591,11 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         model.TestValue = null;
-        
+
         // Act
         var cut = RenderInputText(model);
         var input = cut.Find("input");
-        
+
         // Assert
         var value = input.GetAttribute("value");
         (value == null || value == string.Empty).Should().BeTrue();
@@ -610,11 +606,11 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         model.TestValue = "";
-        
+
         // Act
         var cut = RenderInputText(model);
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("value").Should().Be("");
     }
@@ -623,7 +619,7 @@ public class TnTInputText_Tests : BunitContext {
     public void Whitespace_Label_Does_Not_Render_Label_Span() {
         // Arrange & Act
         var cut = RenderInputText(configure: p => p.Add(c => c.Label, "   "));
-        
+
         // Assert
         cut.FindAll(".tnt-label").Should().BeEmpty();
     }
@@ -632,7 +628,7 @@ public class TnTInputText_Tests : BunitContext {
     public void Null_Label_Does_Not_Render_Label_Span() {
         // Arrange & Act
         var cut = RenderInputText(configure: p => p.Add(c => c.Label, null!));
-        
+
         // Assert
         cut.FindAll(".tnt-label").Should().BeEmpty();
     }
@@ -642,7 +638,7 @@ public class TnTInputText_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputText();
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("title").Should().Be("TestValue");
     }
@@ -653,7 +649,7 @@ public class TnTInputText_Tests : BunitContext {
         var cut = RenderInputText(configure: p => p
             .Add(c => c.StartIcon, MaterialIcon.Home)
             .Add(c => c.EndIcon, MaterialIcon.Search));
-        
+
         // Assert
         cut.Markup.Should().Contain("tnt-start-icon");
         cut.Markup.Should().Contain("home");

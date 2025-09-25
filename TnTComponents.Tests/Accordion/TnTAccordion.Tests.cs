@@ -111,7 +111,7 @@ public class TnTAccordion_Tests : BunitContext {
         // Arrange
         var opened = 0;
         var cut = Render<TnTAccordion>(p => p.AddChildContent(Children(
-            Child(b => { b.AddAttribute(1, "Label", "A"); b.AddAttribute(2, nameof(TnTAccordionChild.OnOpenCallback), EventCallback.Factory.Create(this, () => opened++)); }) )));
+            Child(b => { b.AddAttribute(1, "Label", "A"); b.AddAttribute(2, nameof(TnTAccordionChild.OnOpenCallback), EventCallback.Factory.Create(this, () => opened++)); }))));
         var child = cut.FindComponents<TnTAccordionChild>().Single().Instance;
         var elementId = (int)typeof(TnTAccordionChild).GetField("_elementId", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(child)!;
         // Act
@@ -126,7 +126,7 @@ public class TnTAccordion_Tests : BunitContext {
         // Arrange
         var closed = 0;
         var cut = Render<TnTAccordion>(p => p.AddChildContent(Children(
-            Child(b => { b.AddAttribute(1, "Label", "A"); b.AddAttribute(2, "OpenByDefault", true); b.AddAttribute(3, nameof(TnTAccordionChild.OnCloseCallback), EventCallback.Factory.Create(this, () => closed++)); }) )));
+            Child(b => { b.AddAttribute(1, "Label", "A"); b.AddAttribute(2, "OpenByDefault", true); b.AddAttribute(3, nameof(TnTAccordionChild.OnCloseCallback), EventCallback.Factory.Create(this, () => closed++)); }))));
         var child = cut.FindComponents<TnTAccordionChild>().Single().Instance;
         var elementId = (int)typeof(TnTAccordionChild).GetField("_elementId", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(child)!;
         // Act
@@ -159,7 +159,7 @@ public class TnTAccordion_Tests : BunitContext {
         // Arrange
         var opened = 0;
         var cut = Render<TnTAccordion>(p => p.AddChildContent(Children(
-            Child(b => { b.AddAttribute(1, "Label", "A"); b.AddAttribute(2, "OpenByDefault", true); b.AddAttribute(3, nameof(TnTAccordionChild.OnOpenCallback), EventCallback.Factory.Create(this, () => opened++)); }) )));
+            Child(b => { b.AddAttribute(1, "Label", "A"); b.AddAttribute(2, "OpenByDefault", true); b.AddAttribute(3, nameof(TnTAccordionChild.OnOpenCallback), EventCallback.Factory.Create(this, () => opened++)); }))));
         var child = cut.FindComponents<TnTAccordionChild>().Single().Instance;
         var elementId = (int)typeof(TnTAccordionChild).GetField("_elementId", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(child)!;
         // Act
@@ -174,7 +174,7 @@ public class TnTAccordion_Tests : BunitContext {
         // Arrange
         var closed = 0;
         var cut = Render<TnTAccordion>(p => p.AddChildContent(Children(
-            Child(b => { b.AddAttribute(1, "Label", "A"); b.AddAttribute(2, nameof(TnTAccordionChild.OnCloseCallback), EventCallback.Factory.Create(this, () => closed++)); }) )));
+            Child(b => { b.AddAttribute(1, "Label", "A"); b.AddAttribute(2, nameof(TnTAccordionChild.OnCloseCallback), EventCallback.Factory.Create(this, () => closed++)); }))));
         var child = cut.FindComponents<TnTAccordionChild>().Single().Instance;
         var elementId = (int)typeof(TnTAccordionChild).GetField("_elementId", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(child)!;
         // Act
@@ -185,7 +185,7 @@ public class TnTAccordion_Tests : BunitContext {
     }
 
     [Fact]
-    public void Child_Dispose_Removes_From_Dom() {
+    public async Task Child_Dispose_Removes_From_Dom() {
         // Arrange
         var cut = Render<TnTAccordion>(p => p.AddChildContent(Children(
             Child(b => b.AddAttribute(1, "Label", "First")),
@@ -193,7 +193,7 @@ public class TnTAccordion_Tests : BunitContext {
         )));
         var second = cut.FindComponents<TnTAccordionChild>().Last();
         // Act
-        cut.InvokeAsync(() => second.Instance.Dispose()).GetAwaiter().GetResult();
+        await cut.InvokeAsync(() => second.Instance.Dispose());
         cut.Render();
         // Assert
         cut.Markup.Should().NotContain("Second");
@@ -203,7 +203,7 @@ public class TnTAccordion_Tests : BunitContext {
     public void Child_EnableRipple_False_Renders_No_Ripple_Component() {
         // Arrange / Act
         var cut = Render<TnTAccordion>(p => p.AddChildContent(Children(
-            Child(b => { b.AddAttribute(1, "Label", "A"); b.AddAttribute(2, "EnableRipple", false); }) )));
+            Child(b => { b.AddAttribute(1, "Label", "A"); b.AddAttribute(2, "EnableRipple", false); }))));
         // Assert
         cut.Markup.Should().NotContain("tnt-ripple-effect");
     }
@@ -212,7 +212,7 @@ public class TnTAccordion_Tests : BunitContext {
     public void Child_ContentStyle_Includes_Custom_Color_Variable() {
         // Arrange / Act
         var cut = Render<TnTAccordion>(p => p.AddChildContent(Children(
-            Child(b => { b.AddAttribute(1, "Label", "A"); b.AddAttribute(2, "ContentBodyColor", TnTColor.Primary); }) )));
+            Child(b => { b.AddAttribute(1, "Label", "A"); b.AddAttribute(2, "ContentBodyColor", TnTColor.Primary); }))));
         // Assert
         cut.Find(".tnt-accordion-child").GetAttribute("style")!.Should().Contain("--tnt-accordion-child-content-bg-color");
     }

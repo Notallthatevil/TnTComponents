@@ -15,22 +15,29 @@ using Xunit;
 namespace TnTComponents.Tests.Form;
 
 public class TnTInputSwitch_Tests : BunitContext {
-    
-    public TnTInputSwitch_Tests()
-    {
+
+    public TnTInputSwitch_Tests() {
         // Set renderer info for tests that use NET9_0_OR_GREATER features
         SetRendererInfo(new RendererInfo("WebAssembly", true));
     }
-    
+
     private TestModel CreateTestModel() => new();
-    
+
     private TestModelWithValidation CreateValidationTestModel() => new();
-    
-    private IRenderedComponent<TnTInputSwitch> RenderInputSwitch(TestModel? model = null, Action<ComponentParameterCollectionBuilder<TnTInputSwitch>>? configure = null)
-    {
+
+    private IRenderedComponent<TnTInputSwitch> RenderInputSwitch(TestModel? model = null, Action<ComponentParameterCollectionBuilder<TnTInputSwitch>>? configure = null) {
         model ??= CreateTestModel();
-        return Render<TnTInputSwitch>(parameters =>
-        {
+        return Render<TnTInputSwitch>(parameters => {
+            parameters
+                .Add(p => p.ValueExpression, () => model.TestValue!)
+                .Add(p => p.Value, model.TestValue)
+                .Add(p => p.ValueChanged, EventCallback.Factory.Create<bool>(this, v => model.TestValue = v));
+            configure?.Invoke(parameters);
+        });
+    }
+
+    private IRenderedComponent<TnTInputSwitch> RenderValidationInputSwitch(TestModelWithValidation model, Action<ComponentParameterCollectionBuilder<TnTInputSwitch>>? configure = null) {
+        return Render<TnTInputSwitch>(parameters => {
             parameters
                 .Add(p => p.ValueExpression, () => model.TestValue)
                 .Add(p => p.Value, model.TestValue)
@@ -38,25 +45,13 @@ public class TnTInputSwitch_Tests : BunitContext {
             configure?.Invoke(parameters);
         });
     }
-    
-    private IRenderedComponent<TnTInputSwitch> RenderValidationInputSwitch(TestModelWithValidation model, Action<ComponentParameterCollectionBuilder<TnTInputSwitch>>? configure = null)
-    {
-        return Render<TnTInputSwitch>(parameters =>
-        {
-            parameters
-                .Add(p => p.ValueExpression, () => model.TestValue)
-                .Add(p => p.Value, model.TestValue)
-                .Add(p => p.ValueChanged, EventCallback.Factory.Create<bool>(this, v => model.TestValue = v));
-            configure?.Invoke(parameters);
-        });
-    }
-    
+
     [Fact]
     public void Renders_Switch_With_Default_Classes_And_Type() {
         // Arrange & Act
         var cut = RenderInputSwitch();
         var input = cut.Find("input[type=checkbox]");
-        
+
         // Assert
         input.Should().NotBeNull();
         var label = cut.Find("label.tnt-input");
@@ -70,7 +65,7 @@ public class TnTInputSwitch_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSwitch();
         var label = cut.Find("label");
-        
+
         // Assert
         cut.Instance.Should().BeAssignableTo<ITnTComponentBase>();
     }
@@ -80,7 +75,7 @@ public class TnTInputSwitch_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSwitch();
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("type").Should().Be("checkbox");
         cut.Instance.Type.Should().Be(InputType.Checkbox);
@@ -90,7 +85,7 @@ public class TnTInputSwitch_Tests : BunitContext {
     public void Switch_Overlay_Span_Renders() {
         // Arrange & Act
         var cut = RenderInputSwitch();
-        
+
         // Assert
         var overlay = cut.Find(".tnt-switch-overlay");
         overlay.Should().NotBeNull();
@@ -100,7 +95,7 @@ public class TnTInputSwitch_Tests : BunitContext {
     public void Label_Renders_When_Set() {
         // Arrange & Act
         var cut = RenderInputSwitch(configure: p => p.Add(c => c.Label, "Test Label"));
-        
+
         // Assert
         var labelSpan = cut.Find(".tnt-label");
         labelSpan.TextContent.Should().Be("Test Label");
@@ -110,7 +105,7 @@ public class TnTInputSwitch_Tests : BunitContext {
     public void Label_Does_Not_Render_When_Empty() {
         // Arrange & Act
         var cut = RenderInputSwitch();
-        
+
         // Assert
         cut.FindAll(".tnt-label").Should().BeEmpty();
     }
@@ -121,7 +116,7 @@ public class TnTInputSwitch_Tests : BunitContext {
         var cut = RenderInputSwitch(configure: p => p.Add(c => c.Disabled, true));
         var input = cut.Find("input");
         var label = cut.Find("label");
-        
+
         // Assert
         input.HasAttribute("disabled").Should().BeTrue();
         label.GetAttribute("class")!.Should().Contain("tnt-disabled");
@@ -132,7 +127,7 @@ public class TnTInputSwitch_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSwitch(configure: p => p.Add(c => c.ReadOnly, true));
         var input = cut.Find("input");
-        
+
         // Assert
         input.HasAttribute("readonly").Should().BeTrue();
     }
@@ -142,7 +137,7 @@ public class TnTInputSwitch_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSwitch(configure: p => p.Add(c => c.AutoFocus, true));
         var input = cut.Find("input");
-        
+
         // Assert
         input.HasAttribute("autofocus").Should().BeTrue();
     }
@@ -152,7 +147,7 @@ public class TnTInputSwitch_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSwitch(configure: p => p.Add(c => c.AutoComplete, "off"));
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("autocomplete").Should().Be("off");
     }
@@ -162,7 +157,7 @@ public class TnTInputSwitch_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSwitch(configure: p => p.Add(c => c.ElementId, "switch-id"));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("id").Should().Be("switch-id");
     }
@@ -172,7 +167,7 @@ public class TnTInputSwitch_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSwitch(configure: p => p.Add(c => c.ElementTitle, "Switch Title"));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("title").Should().Be("Switch Title");
     }
@@ -182,7 +177,7 @@ public class TnTInputSwitch_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSwitch(configure: p => p.Add(c => c.ElementLang, "en-US"));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("lang").Should().Be("en-US");
     }
@@ -192,11 +187,11 @@ public class TnTInputSwitch_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         model.TestValue = true;
-        
+
         // Act
         var cut = RenderInputSwitch(model);
         var input = cut.Find("input");
-        
+
         // Assert
         input.HasAttribute("checked").Should().BeTrue();
     }
@@ -206,11 +201,11 @@ public class TnTInputSwitch_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         model.TestValue = false;
-        
+
         // Act
         var cut = RenderInputSwitch(model);
         var input = cut.Find("input");
-        
+
         // Assert
         input.HasAttribute("checked").Should().BeFalse();
     }
@@ -222,10 +217,10 @@ public class TnTInputSwitch_Tests : BunitContext {
         model.TestValue = false;
         var cut = RenderInputSwitch(model);
         var input = cut.Find("input");
-        
+
         // Act
         input.Change(true);
-        
+
         // Assert
         model.TestValue.Should().BeTrue();
     }
@@ -237,10 +232,10 @@ public class TnTInputSwitch_Tests : BunitContext {
         model.TestValue = true;
         var cut = RenderInputSwitch(model);
         var input = cut.Find("input");
-        
+
         // Act
         input.Change(false);
-        
+
         // Assert
         model.TestValue.Should().BeFalse();
     }
@@ -253,10 +248,10 @@ public class TnTInputSwitch_Tests : BunitContext {
         var callback = EventCallback.Factory.Create<bool>(this, (value) => callbackValue = value);
         var cut = RenderInputSwitch(model, p => p.Add(c => c.BindAfter, callback));
         var input = cut.Find("input");
-        
+
         // Act
         input.Change(true);
-        
+
         // Assert
         callbackValue.Should().BeTrue();
     }
@@ -265,10 +260,10 @@ public class TnTInputSwitch_Tests : BunitContext {
     public void StartIcon_Renders_When_Set() {
         // Arrange
         var startIcon = MaterialIcon.Home;
-        
+
         // Act
         var cut = RenderInputSwitch(configure: p => p.Add(c => c.StartIcon, startIcon));
-        
+
         // Assert
         cut.Markup.Should().Contain("tnt-start-icon");
         cut.Markup.Should().Contain("home");
@@ -278,10 +273,10 @@ public class TnTInputSwitch_Tests : BunitContext {
     public void EndIcon_Renders_When_Set() {
         // Arrange
         var endIcon = MaterialIcon.Search;
-        
+
         // Act
         var cut = RenderInputSwitch(configure: p => p.Add(c => c.EndIcon, endIcon));
-        
+
         // Assert
         cut.Markup.Should().Contain("tnt-end-icon");
         cut.Markup.Should().Contain("search");
@@ -291,7 +286,7 @@ public class TnTInputSwitch_Tests : BunitContext {
     public void SupportingText_Renders_When_Set() {
         // Arrange & Act
         var cut = RenderInputSwitch(configure: p => p.Add(c => c.SupportingText, "Helper text"));
-        
+
         // Assert
         var supportingText = cut.Find(".tnt-supporting-text");
         supportingText.TextContent.Should().Be("Helper text");
@@ -301,7 +296,7 @@ public class TnTInputSwitch_Tests : BunitContext {
     public void SupportingText_Does_Not_Render_When_Empty() {
         // Arrange & Act
         var cut = RenderInputSwitch();
-        
+
         // Assert
         cut.FindAll(".tnt-supporting-text").Should().BeEmpty();
     }
@@ -310,11 +305,11 @@ public class TnTInputSwitch_Tests : BunitContext {
     public void Required_Attribute_Added_When_Additional_Attributes_Contains_Required() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "required", true } };
-        
+
         // Act
         var cut = RenderInputSwitch(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var input = cut.Find("input");
-        
+
         // Assert
         input.HasAttribute("required").Should().BeTrue();
     }
@@ -324,7 +319,7 @@ public class TnTInputSwitch_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSwitch(configure: p => p.Add(c => c.Appearance, FormAppearance.Filled));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("class")!.Should().Contain("tnt-form-filled");
     }
@@ -334,7 +329,7 @@ public class TnTInputSwitch_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSwitch(configure: p => p.Add(c => c.Appearance, FormAppearance.Outlined));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("class")!.Should().Contain("tnt-form-outlined");
     }
@@ -349,7 +344,7 @@ public class TnTInputSwitch_Tests : BunitContext {
             .Add(c => c.ErrorColor, TnTColor.Error));
         var label = cut.Find("label");
         var style = label.GetAttribute("style")!;
-        
+
         // Assert
         style.Should().Contain("--tnt-input-tint-color:var(--tnt-color-primary)");
         style.Should().Contain("--tnt-input-background-color:var(--tnt-color-surface)");
@@ -363,7 +358,7 @@ public class TnTInputSwitch_Tests : BunitContext {
         var cut = RenderInputSwitch();
         var label = cut.Find("label");
         var style = label.GetAttribute("style")!;
-        
+
         // Assert
         style.Should().Contain("--tnt-input-tint-color:var(--tnt-color-primary)");
         style.Should().Contain("--tnt-input-background-color:var(--tnt-color-surface-container-highest)");
@@ -375,11 +370,11 @@ public class TnTInputSwitch_Tests : BunitContext {
     public void Merges_Custom_Class_From_AdditionalAttributes() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "class", "custom-switch" } };
-        
+
         // Act
         var cut = RenderInputSwitch(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var label = cut.Find("label");
-        
+
         // Assert
         var cls = label.GetAttribute("class")!;
         cls.Should().Contain("custom-switch");
@@ -390,11 +385,11 @@ public class TnTInputSwitch_Tests : BunitContext {
     public void Merges_Custom_Style_From_AdditionalAttributes() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "style", "margin:10px;" } };
-        
+
         // Act
         var cut = RenderInputSwitch(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var label = cut.Find("label");
-        
+
         // Assert
         var style = label.GetAttribute("style")!;
         style.Should().Contain("margin:10px");
@@ -406,28 +401,29 @@ public class TnTInputSwitch_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         var fieldChanged = false;
-        
+
         // Create a component with EditForm wrapper that provides EditContext
+        RenderFragment<EditContext> childContent = context => builder => {
+            // Subscribe to field changes
+            context.OnFieldChanged += (_, __) => fieldChanged = true;
+
+            builder.OpenComponent<TnTInputSwitch>(0);
+            builder.AddAttribute(1, "ValueExpression", (Expression<Func<bool>>)(() => model.TestValue));
+            builder.AddAttribute(2, "Value", model.TestValue);
+            builder.AddAttribute(3, "ValueChanged", EventCallback.Factory.Create<bool>(this, v => model.TestValue = v));
+            builder.CloseComponent();
+        };
+
         var cut = Render<EditForm>(parameters => parameters
             .Add(p => p.Model, model)
-            .Add<RenderFragment<EditContext>>(p => p.ChildContent, context => builder =>
-            {
-                // Subscribe to field changes
-                context.OnFieldChanged += (_, __) => fieldChanged = true;
-                
-                builder.OpenComponent<TnTInputSwitch>(0);
-                builder.AddAttribute(1, "ValueExpression", (Expression<Func<bool>>)(() => model.TestValue));
-                builder.AddAttribute(2, "Value", model.TestValue);
-                builder.AddAttribute(3, "ValueChanged", EventCallback.Factory.Create<bool>(this, v => model.TestValue = v));
-                builder.CloseComponent();
-            })
+            .Add(p => p.ChildContent, (RenderFragment<EditContext>)childContent!)
         );
-        
+
         var input = cut.Find("input");
-        
+
         // Act
         input.Blur();
-        
+
         // Assert
         fieldChanged.Should().BeTrue();
     }
@@ -437,10 +433,10 @@ public class TnTInputSwitch_Tests : BunitContext {
         // Arrange
         var model = CreateValidationTestModel();
         model.TestValue = false; // Invalid - required field
-        
+
         // Act
         var cut = RenderValidationInputSwitch(model);
-        
+
         // Assert
         cut.Instance.DisableValidationMessage.Should().BeFalse();
         cut.Instance.ValueExpression.Should().NotBeNull();
@@ -452,10 +448,10 @@ public class TnTInputSwitch_Tests : BunitContext {
         // Arrange
         var model = CreateValidationTestModel();
         model.TestValue = false;
-        
+
         // Act
         var cut = RenderValidationInputSwitch(model, p => p.Add(c => c.DisableValidationMessage, true));
-        
+
         // Assert
         cut.Instance.DisableValidationMessage.Should().BeTrue();
     }
@@ -465,7 +461,7 @@ public class TnTInputSwitch_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSwitch();
         var input = cut.Find("input");
-        
+
         // Assert - checkbox inputs always have value="True" in HTML
         input.GetAttribute("value").Should().Be("True");
     }
@@ -475,7 +471,7 @@ public class TnTInputSwitch_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSwitch();
         var input = cut.Find("input");
-        
+
         // Assert
         input.GetAttribute("title").Should().Be("TestValue");
     }
@@ -486,7 +482,7 @@ public class TnTInputSwitch_Tests : BunitContext {
         var cut = RenderInputSwitch(configure: p => p
             .Add(c => c.StartIcon, MaterialIcon.Home)
             .Add(c => c.EndIcon, MaterialIcon.Search));
-        
+
         // Assert
         cut.Markup.Should().Contain("tnt-start-icon");
         cut.Markup.Should().Contain("home");
@@ -498,7 +494,7 @@ public class TnTInputSwitch_Tests : BunitContext {
     public void Whitespace_Label_Does_Not_Render_Label_Span() {
         // Arrange & Act
         var cut = RenderInputSwitch(configure: p => p.Add(c => c.Label, "   "));
-        
+
         // Assert
         cut.FindAll(".tnt-label").Should().BeEmpty();
     }
@@ -507,7 +503,7 @@ public class TnTInputSwitch_Tests : BunitContext {
     public void Null_Label_Does_Not_Render_Label_Span() {
         // Arrange & Act
         var cut = RenderInputSwitch(configure: p => p.Add(c => c.Label, null!));
-        
+
         // Assert
         cut.FindAll(".tnt-label").Should().BeEmpty();
     }

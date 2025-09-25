@@ -243,10 +243,10 @@ public class TnTDataGridBodyRow_Tests : BunitContext {
         var cut = Render<TnTDataGridBodyRow<TestGridItem>>(parameters => parameters
             .AddCascadingValue(context)
             .Add(p => p.Item, _testItem)
-            .Add(p => p.AdditionalAttributes, new Dictionary<string, object?> {
-                { "data-testid", "test-row" },
-                { "role", "row" }
-            }));
+                .Add(p => p.AdditionalAttributes, new Dictionary<string, object?> {
+                    { "data-testid", "test-row" },
+                    { "role", "row" }
+                }));
 
         // Assert
         var tr = cut.Find("tr");
@@ -352,7 +352,7 @@ public class TnTDataGridBodyRow_Tests : BunitContext {
     /// </summary>
     private class TestTemplateColumn<TItem> : TnTColumnBase<TItem> {
         public RenderFragment<TItem>? CellTemplate { get; set; }
-        
+
         public override string? ElementClass => null;
         public override string? ElementStyle => null;
         public override TnTGridSort<TItem>? SortBy { get; set; }

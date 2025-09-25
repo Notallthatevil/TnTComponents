@@ -225,8 +225,8 @@ public class TnTMarkdownEditor_Tests : BunitContext {
     [Fact]
     public void Applies_Custom_AdditionalAttributes() {
         // Arrange
-        var attrs = new Dictionary<string, object> 
-        { 
+        var attrs = new Dictionary<string, object>
+        {
             { "class", "custom-class" },
             { "data-testid", "markdown-editor" }
         };
@@ -262,7 +262,7 @@ public class TnTMarkdownEditor_Tests : BunitContext {
     }
 
     [Fact]
-    public async Task JSInvokable_UpdateValue_Can_Be_Called_From_JavaScript() {
+    public void JSInvokable_UpdateValue_Can_Be_Called_From_JavaScript() {
         // Arrange
         var cut = Render<TnTMarkdownEditor>();
         var instance = cut.Instance;

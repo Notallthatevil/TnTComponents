@@ -89,7 +89,7 @@ public class TnTDataGridVirtualizedBody_Tests : BunitContext {
         // Arrange
         var context = CreateGridContextWithItemsProvider();
         context.Grid.OnRowClicked = EventCallback.Factory.Create<TestGridItem>(context.Grid, _ => { });
-        
+
         var nameColumn = new TestTemplateColumn<TestGridItem> {
             CellTemplate = item => builder => builder.AddContent(0, item.Name)
         };
@@ -109,7 +109,7 @@ public class TnTDataGridVirtualizedBody_Tests : BunitContext {
     public void Renders_LoadingTemplate_WithoutExtraColumn_WhenNoRowClickCallback() {
         // Arrange
         var context = CreateGridContextWithItemsProvider();
-        
+
         var nameColumn = new TestTemplateColumn<TestGridItem> {
             CellTemplate = item => builder => builder.AddContent(0, item.Name)
         };
@@ -157,7 +157,7 @@ public class TnTDataGridVirtualizedBody_Tests : BunitContext {
     public void Context_IsSetCorrectly() {
         // Arrange
         var context = CreateGridContextWithItemsProvider();
-        
+
         // Act
         var cut = Render<TnTDataGridVirtualizedBody<TestGridItem>>(parameters => parameters
             .AddCascadingValue(context));
@@ -179,6 +179,8 @@ public class TnTDataGridVirtualizedBody_Tests : BunitContext {
         var initialMarkup = cut.Markup;
 
         // Act
+        // The RefreshAsync call is asynchronous but this test only verifies it completes without throwing.
+        // Call synchronously for tests that do not await: invoke and ignore the returned Task for compatibility.
         await component.RefreshAsync();
 
         // Assert
@@ -221,12 +223,12 @@ public class TnTDataGridVirtualizedBody_Tests : BunitContext {
     #region Virtualization Provider Tests
 
     [Fact]
-    public async Task ProvideVirtualizedItemsAsync_ReturnsCorrectItemsWithIndex() {
+    public void ProvideVirtualizedItemsAsync_ReturnsCorrectItemsWithIndex() {
         // Arrange
         var context = CreateGridContextWithItemsProvider();
         var cut = Render<TnTDataGridVirtualizedBody<TestGridItem>>(parameters => parameters
             .AddCascadingValue(context));
-        
+
         // Simulate the virtualized items provider being called
         // This tests the internal ProvideVirtualizedItemsAsync method indirectly
         // Act & Assert
@@ -362,7 +364,7 @@ public class TnTDataGridVirtualizedBody_Tests : BunitContext {
         // The component should handle null ItemsProvider gracefully
         var act = () => Render<TnTDataGridVirtualizedBody<TestGridItem>>(parameters => parameters
             .AddCascadingValue(context));
-        
+
         // Component may render but virtualization won't work without ItemsProvider
         act.Should().NotThrow();
     }
@@ -419,12 +421,12 @@ public class TnTDataGridVirtualizedBody_Tests : BunitContext {
     private TnTGridItemsProvider<TestGridItem> CreateMockItemsProvider() {
         return async (TnTGridItemsProviderRequest<TestGridItem> request) => {
             await Task.Delay(10); // Simulate async operation
-            
+
             var items = _testItems.AsQueryable();
             if (request.SortBy != null) {
                 items = request.ApplySorting(items);
             }
-            
+
             var pagedItems = items
                 .Skip(request.StartIndex)
                 .Take(request.Count ?? 10)
@@ -441,7 +443,7 @@ public class TnTDataGridVirtualizedBody_Tests : BunitContext {
         return async (TnTGridItemsProviderRequest<TestGridItem> request) => {
             await Task.Delay(10);
             return new TnTItemsProviderResult<TestGridItem> {
-                Items = [],
+                Items = new List<TestGridItem>(),
                 TotalItemCount = 0
             };
         };
@@ -475,7 +477,7 @@ public class TnTDataGridVirtualizedBody_Tests : BunitContext {
     /// </summary>
     private class TestTemplateColumn<TItem> : TnTColumnBase<TItem> {
         public RenderFragment<TItem>? CellTemplate { get; set; }
-        
+
         public override string? ElementClass => null;
         public override string? ElementStyle => null;
         public override TnTGridSort<TItem>? SortBy { get; set; }

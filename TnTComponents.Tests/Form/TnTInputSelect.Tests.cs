@@ -15,38 +15,33 @@ using Xunit;
 namespace TnTComponents.Tests.Form;
 
 public class TnTInputSelect_Tests : BunitContext {
-    
-    public TnTInputSelect_Tests()
-    {
+
+    public TnTInputSelect_Tests() {
         // Set renderer info for tests that use NET9_0_OR_GREATER features
         SetRendererInfo(new RendererInfo("WebAssembly", true));
     }
-    
+
     private TestModel CreateTestModel() => new();
-    
+
     private TestArrayModel CreateArrayTestModel() => new();
-    
+
     private TestModelWithValidation CreateValidationTestModel() => new();
-    
-    private IRenderedComponent<TnTInputSelect<string?>> RenderInputSelect(TestModel? model = null, Action<ComponentParameterCollectionBuilder<TnTInputSelect<string?>>>? configure = null)
-    {
+
+    private IRenderedComponent<TnTInputSelect<string?>> RenderInputSelect(TestModel? model = null, Action<ComponentParameterCollectionBuilder<TnTInputSelect<string?>>>? configure = null) {
         model ??= CreateTestModel();
-        return Render<TnTInputSelect<string?>>(parameters =>
-        {
+        return Render<TnTInputSelect<string?>>(parameters => {
             parameters
-                .Add(p => p.ValueExpression, () => model.TestValue)
+                .Add(p => p.ValueExpression, () => model.TestValue!)
                 .Add(p => p.Value, model.TestValue)
                 .Add(p => p.ValueChanged, EventCallback.Factory.Create<string?>(this, v => model.TestValue = v))
                 .Add(p => p.ChildContent, CreateSelectOptions());
             configure?.Invoke(parameters);
         });
     }
-    
-    private IRenderedComponent<TnTInputSelect<string[]?>> RenderInputSelectArray(TestArrayModel? model = null, Action<ComponentParameterCollectionBuilder<TnTInputSelect<string[]?>>>? configure = null)
-    {
+
+    private IRenderedComponent<TnTInputSelect<string[]?>> RenderInputSelectArray(TestArrayModel? model = null, Action<ComponentParameterCollectionBuilder<TnTInputSelect<string[]?>>>? configure = null) {
         model ??= CreateArrayTestModel();
-        return Render<TnTInputSelect<string[]?>>(parameters =>
-        {
+        return Render<TnTInputSelect<string[]?>>(parameters => {
             parameters
                 .Add(p => p.ValueExpression, () => model.TestValue)
                 .Add(p => p.Value, model.TestValue)
@@ -55,11 +50,9 @@ public class TnTInputSelect_Tests : BunitContext {
             configure?.Invoke(parameters);
         });
     }
-    
-    private IRenderedComponent<TnTInputSelect<string?>> RenderValidationInputSelect(TestModelWithValidation model, Action<ComponentParameterCollectionBuilder<TnTInputSelect<string?>>>? configure = null)
-    {
-        return Render<TnTInputSelect<string?>>(parameters =>
-        {
+
+    private IRenderedComponent<TnTInputSelect<string?>> RenderValidationInputSelect(TestModelWithValidation model, Action<ComponentParameterCollectionBuilder<TnTInputSelect<string?>>>? configure = null) {
+        return Render<TnTInputSelect<string?>>(parameters => {
             parameters
                 .Add(p => p.ValueExpression, () => model.TestValue)
                 .Add(p => p.Value, model.TestValue)
@@ -68,31 +61,30 @@ public class TnTInputSelect_Tests : BunitContext {
             configure?.Invoke(parameters);
         });
     }
-    
-    private RenderFragment CreateSelectOptions() => builder =>
-    {
+
+    private RenderFragment CreateSelectOptions() => builder => {
         builder.OpenElement(0, "option");
         builder.AddAttribute(1, "value", "option1");
         builder.AddContent(2, "Option 1");
         builder.CloseElement();
-        
+
         builder.OpenElement(3, "option");
         builder.AddAttribute(4, "value", "option2");
         builder.AddContent(5, "Option 2");
         builder.CloseElement();
-        
+
         builder.OpenElement(6, "option");
         builder.AddAttribute(7, "value", "option3");
         builder.AddContent(8, "Option 3");
         builder.CloseElement();
     };
-    
+
     [Fact]
     public void Renders_Select_With_Default_Classes_And_Type() {
         // Arrange & Act
         var cut = RenderInputSelect();
         var select = cut.Find("select");
-        
+
         // Assert
         select.Should().NotBeNull();
         var label = cut.Find("label.tnt-input");
@@ -106,7 +98,7 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSelect();
         var label = cut.Find("label");
-        
+
         // Assert
         cut.Instance.Should().BeAssignableTo<ITnTComponentBase>();
     }
@@ -115,7 +107,7 @@ public class TnTInputSelect_Tests : BunitContext {
     public void Default_Type_Is_Select() {
         // Arrange & Act
         var cut = RenderInputSelect();
-        
+
         // Assert
         cut.Instance.Type.Should().Be(InputType.Select);
     }
@@ -125,7 +117,7 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSelect();
         var select = cut.Find("select");
-        
+
         // Assert
         select.HasAttribute("multiple").Should().BeFalse();
     }
@@ -135,11 +127,11 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange
         var model = CreateArrayTestModel();
         model.TestValue = new[] { "option1" }; // Initialize with non-null array
-        
+
         // Act
         var cut = RenderInputSelectArray(model);
         var select = cut.Find("select");
-        
+
         // Assert
         select.HasAttribute("multiple").Should().BeTrue();
     }
@@ -149,7 +141,7 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSelect();
         var options = cut.FindAll("option");
-        
+
         // Assert
         options.Should().HaveCount(4); // 3 custom + 1 placeholder
         options[1].GetAttribute("value").Should().Be("option1");
@@ -165,7 +157,7 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSelect();
         var firstOption = cut.Find("option");
-        
+
         // Assert
         firstOption.GetAttribute("value").Should().Be("");
         firstOption.HasAttribute("disabled").Should().BeTrue(); // This is the empty placeholder, which is always disabled
@@ -177,7 +169,7 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSelect(configure: p => p.Add(c => c.Placeholder, "Choose option..."));
         var firstOption = cut.Find("option");
-        
+
         // Assert
         firstOption.TextContent.Should().Be("Choose option...");
         firstOption.HasAttribute("disabled").Should().BeFalse(); // Default AllowPlaceholderSelection is true
@@ -190,7 +182,7 @@ public class TnTInputSelect_Tests : BunitContext {
             .Add(c => c.Placeholder, "Choose option...")
             .Add(c => c.AllowPlaceholderSelection, false));
         var firstOption = cut.Find("option");
-        
+
         // Assert
         firstOption.TextContent.Should().Be("Choose option...");
         firstOption.HasAttribute("disabled").Should().BeTrue();
@@ -200,7 +192,7 @@ public class TnTInputSelect_Tests : BunitContext {
     public void Label_Renders_When_Set() {
         // Arrange & Act
         var cut = RenderInputSelect(configure: p => p.Add(c => c.Label, "Test Label"));
-        
+
         // Assert
         var labelSpan = cut.Find(".tnt-label");
         labelSpan.TextContent.Should().Be("Test Label");
@@ -210,7 +202,7 @@ public class TnTInputSelect_Tests : BunitContext {
     public void Label_Does_Not_Render_When_Empty() {
         // Arrange & Act
         var cut = RenderInputSelect();
-        
+
         // Assert
         cut.FindAll(".tnt-label").Should().BeEmpty();
     }
@@ -221,7 +213,7 @@ public class TnTInputSelect_Tests : BunitContext {
         var cut = RenderInputSelect(configure: p => p.Add(c => c.Disabled, true));
         var select = cut.Find("select");
         var label = cut.Find("label");
-        
+
         // Assert
         select.HasAttribute("disabled").Should().BeTrue();
         label.GetAttribute("class")!.Should().Contain("tnt-disabled");
@@ -232,7 +224,7 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSelect(configure: p => p.Add(c => c.ReadOnly, true));
         var select = cut.Find("select");
-        
+
         // Assert
         select.HasAttribute("readonly").Should().BeTrue();
     }
@@ -242,7 +234,7 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSelect(configure: p => p.Add(c => c.AutoFocus, true));
         var select = cut.Find("select");
-        
+
         // Assert
         select.HasAttribute("autofocus").Should().BeTrue();
     }
@@ -252,7 +244,7 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSelect(configure: p => p.Add(c => c.AutoComplete, "off"));
         var select = cut.Find("select");
-        
+
         // Assert
         select.GetAttribute("autocomplete").Should().Be("off");
     }
@@ -262,7 +254,7 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSelect(configure: p => p.Add(c => c.ElementId, "select-id"));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("id").Should().Be("select-id");
     }
@@ -272,7 +264,7 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSelect(configure: p => p.Add(c => c.ElementTitle, "Select Title"));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("title").Should().Be("Select Title");
     }
@@ -282,7 +274,7 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSelect(configure: p => p.Add(c => c.ElementLang, "en-US"));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("lang").Should().Be("en-US");
     }
@@ -292,11 +284,11 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         model.TestValue = "option2";
-        
+
         // Act
         var cut = RenderInputSelect(model);
         var select = cut.Find("select");
-        
+
         // Assert
         select.GetAttribute("value").Should().Be("option2");
     }
@@ -307,10 +299,10 @@ public class TnTInputSelect_Tests : BunitContext {
         var model = CreateTestModel();
         var cut = RenderInputSelect(model);
         var select = cut.Find("select");
-        
+
         // Act
         select.Change("option3");
-        
+
         // Assert
         model.TestValue.Should().Be("option3");
     }
@@ -323,10 +315,10 @@ public class TnTInputSelect_Tests : BunitContext {
         var callback = EventCallback.Factory.Create<string?>(this, (value) => callbackValue = value ?? "");
         var cut = RenderInputSelect(model, p => p.Add(c => c.BindAfter, callback));
         var select = cut.Find("select");
-        
+
         // Act
         select.Change("option1");
-        
+
         // Assert
         callbackValue.Should().Be("option1");
     }
@@ -335,10 +327,10 @@ public class TnTInputSelect_Tests : BunitContext {
     public void StartIcon_Renders_When_Set() {
         // Arrange
         var startIcon = MaterialIcon.Home;
-        
+
         // Act
         var cut = RenderInputSelect(configure: p => p.Add(c => c.StartIcon, startIcon));
-        
+
         // Assert
         cut.Markup.Should().Contain("tnt-start-icon");
         cut.Markup.Should().Contain("home");
@@ -348,10 +340,10 @@ public class TnTInputSelect_Tests : BunitContext {
     public void EndIcon_Renders_When_Set() {
         // Arrange
         var endIcon = MaterialIcon.Search;
-        
+
         // Act
         var cut = RenderInputSelect(configure: p => p.Add(c => c.EndIcon, endIcon));
-        
+
         // Assert
         cut.Markup.Should().Contain("tnt-end-icon");
         cut.Markup.Should().Contain("search");
@@ -361,7 +353,7 @@ public class TnTInputSelect_Tests : BunitContext {
     public void SupportingText_Renders_When_Set() {
         // Arrange & Act
         var cut = RenderInputSelect(configure: p => p.Add(c => c.SupportingText, "Helper text"));
-        
+
         // Assert
         var supportingText = cut.Find(".tnt-supporting-text");
         supportingText.TextContent.Should().Be("Helper text");
@@ -371,7 +363,7 @@ public class TnTInputSelect_Tests : BunitContext {
     public void SupportingText_Does_Not_Render_When_Empty() {
         // Arrange & Act
         var cut = RenderInputSelect();
-        
+
         // Assert
         cut.FindAll(".tnt-supporting-text").Should().BeEmpty();
     }
@@ -380,11 +372,11 @@ public class TnTInputSelect_Tests : BunitContext {
     public void Required_Attribute_Added_When_Additional_Attributes_Contains_Required() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "required", true } };
-        
+
         // Act
         var cut = RenderInputSelect(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var select = cut.Find("select");
-        
+
         // Assert
         select.HasAttribute("required").Should().BeTrue();
     }
@@ -394,7 +386,7 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSelect(configure: p => p.Add(c => c.Appearance, FormAppearance.Filled));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("class")!.Should().Contain("tnt-form-filled");
     }
@@ -404,7 +396,7 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSelect(configure: p => p.Add(c => c.Appearance, FormAppearance.Outlined));
         var label = cut.Find("label");
-        
+
         // Assert
         label.GetAttribute("class")!.Should().Contain("tnt-form-outlined");
     }
@@ -419,7 +411,7 @@ public class TnTInputSelect_Tests : BunitContext {
             .Add(c => c.ErrorColor, TnTColor.Error));
         var label = cut.Find("label");
         var style = label.GetAttribute("style")!;
-        
+
         // Assert
         style.Should().Contain("--tnt-input-tint-color:var(--tnt-color-primary)");
         style.Should().Contain("--tnt-input-background-color:var(--tnt-color-surface)");
@@ -433,7 +425,7 @@ public class TnTInputSelect_Tests : BunitContext {
         var cut = RenderInputSelect();
         var label = cut.Find("label");
         var style = label.GetAttribute("style")!;
-        
+
         // Assert
         style.Should().Contain("--tnt-input-tint-color:var(--tnt-color-primary)");
         style.Should().Contain("--tnt-input-background-color:var(--tnt-color-surface-container-highest)");
@@ -445,11 +437,11 @@ public class TnTInputSelect_Tests : BunitContext {
     public void Merges_Custom_Class_From_AdditionalAttributes() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "class", "custom-select" } };
-        
+
         // Act
         var cut = RenderInputSelect(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var label = cut.Find("label");
-        
+
         // Assert
         var cls = label.GetAttribute("class")!;
         cls.Should().Contain("custom-select");
@@ -460,11 +452,11 @@ public class TnTInputSelect_Tests : BunitContext {
     public void Merges_Custom_Style_From_AdditionalAttributes() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "style", "margin:10px;" } };
-        
+
         // Act
         var cut = RenderInputSelect(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
         var label = cut.Find("label");
-        
+
         // Assert
         var style = label.GetAttribute("style")!;
         style.Should().Contain("margin:10px");
@@ -476,29 +468,30 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         var fieldChanged = false;
-        
+
         // Create a component with EditForm wrapper that provides EditContext
+        RenderFragment<EditContext> childContent = context => builder => {
+            // Subscribe to field changes
+            context.OnFieldChanged += (_, __) => fieldChanged = true;
+
+            builder.OpenComponent<TnTInputSelect<string?>>(0);
+            builder.AddAttribute(1, "ValueExpression", (Expression<Func<string?>>)(() => model.TestValue));
+            builder.AddAttribute(2, "Value", model.TestValue);
+            builder.AddAttribute(3, "ValueChanged", EventCallback.Factory.Create<string?>(this, v => model.TestValue = v));
+            builder.AddAttribute(4, "ChildContent", CreateSelectOptions());
+            builder.CloseComponent();
+        };
+
         var cut = Render<EditForm>(parameters => parameters
             .Add(p => p.Model, model)
-            .Add<RenderFragment<EditContext>>(p => p.ChildContent, context => builder =>
-            {
-                // Subscribe to field changes
-                context.OnFieldChanged += (_, __) => fieldChanged = true;
-                
-                builder.OpenComponent<TnTInputSelect<string?>>(0);
-                builder.AddAttribute(1, "ValueExpression", (Expression<Func<string?>>)(() => model.TestValue));
-                builder.AddAttribute(2, "Value", model.TestValue);
-                builder.AddAttribute(3, "ValueChanged", EventCallback.Factory.Create<string?>(this, v => model.TestValue = v));
-                builder.AddAttribute(4, "ChildContent", CreateSelectOptions());
-                builder.CloseComponent();
-            })
+            .Add(p => p.ChildContent, (RenderFragment<EditContext>)childContent!)
         );
-        
+
         var select = cut.Find("select");
-        
+
         // Act
         select.Blur();
-        
+
         // Assert
         fieldChanged.Should().BeTrue();
     }
@@ -508,10 +501,10 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange
         var model = CreateValidationTestModel();
         model.TestValue = null; // Invalid - required field
-        
+
         // Act
         var cut = RenderValidationInputSelect(model);
-        
+
         // Assert
         cut.Instance.DisableValidationMessage.Should().BeFalse();
         cut.Instance.ValueExpression.Should().NotBeNull();
@@ -523,10 +516,10 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange
         var model = CreateValidationTestModel();
         model.TestValue = null;
-        
+
         // Act
         var cut = RenderValidationInputSelect(model, p => p.Add(c => c.DisableValidationMessage, true));
-        
+
         // Assert
         cut.Instance.DisableValidationMessage.Should().BeTrue();
     }
@@ -536,11 +529,11 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         model.TestValue = null;
-        
+
         // Act
         var cut = RenderInputSelect(model);
         var select = cut.Find("select");
-        
+
         // Assert
         var value = select.GetAttribute("value");
         (value == null || value == string.Empty).Should().BeTrue();
@@ -551,11 +544,11 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange
         var model = CreateTestModel();
         model.TestValue = "";
-        
+
         // Act
         var cut = RenderInputSelect(model);
         var select = cut.Find("select");
-        
+
         // Assert
         select.GetAttribute("value").Should().Be("");
     }
@@ -565,7 +558,7 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange & Act
         var cut = RenderInputSelect();
         var select = cut.Find("select");
-        
+
         // Assert
         select.GetAttribute("title").Should().Be("TestValue");
     }
@@ -576,7 +569,7 @@ public class TnTInputSelect_Tests : BunitContext {
         var cut = RenderInputSelect(configure: p => p
             .Add(c => c.StartIcon, MaterialIcon.Home)
             .Add(c => c.EndIcon, MaterialIcon.Search));
-        
+
         // Assert
         cut.Markup.Should().Contain("tnt-start-icon");
         cut.Markup.Should().Contain("home");
@@ -588,7 +581,7 @@ public class TnTInputSelect_Tests : BunitContext {
     public void Whitespace_Label_Does_Not_Render_Label_Span() {
         // Arrange & Act
         var cut = RenderInputSelect(configure: p => p.Add(c => c.Label, "   "));
-        
+
         // Assert
         cut.FindAll(".tnt-label").Should().BeEmpty();
     }
@@ -597,7 +590,7 @@ public class TnTInputSelect_Tests : BunitContext {
     public void Null_Label_Does_Not_Render_Label_Span() {
         // Arrange & Act
         var cut = RenderInputSelect(configure: p => p.Add(c => c.Label, null!));
-        
+
         // Assert
         cut.FindAll(".tnt-label").Should().BeEmpty();
     }
@@ -607,11 +600,11 @@ public class TnTInputSelect_Tests : BunitContext {
         // Arrange
         var model = CreateArrayTestModel();
         model.TestValue = new[] { "option1", "option3" };
-        
+
         // Act
         var cut = RenderInputSelectArray(model);
         var select = cut.Find("select");
-        
+
         // Assert
         select.HasAttribute("multiple").Should().BeTrue();
         // Note: Testing multi-select value binding is complex in bUnit
