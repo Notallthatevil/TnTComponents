@@ -15,38 +15,59 @@ TnTComponents is a Blazor WebAssembly project that provides a set of reusable UI
 
 ### Prerequisites
 
-- .NET 8 or .NET 9 SDK
+- .NET 9 or .NET 10 SDK
+
+### Install
+
+Install from NuGet (package id: `TnTComponents`):
+
+```
+dotnet add package TnTComponents
+```
+
+Or add the package reference in your project file.
 
 ### Building the Project
 
 1. Restore the NuGet packages:
-```bash
+```
 dotnet restore
 ```
 2. Build the solution:
-```bash
+```
 dotnet build
 ```
+
 ### Usage
-In your program.cs file add the following code for both ASP.NET apps and WASM applications.
+In your `Program.cs` file add the following to register any library services (see `LiveTest` for examples):
 
 ```csharp
-builder.AddTnTComponents();
+// builder is the WebAssemblyHostBuilder or WebApplicationBuilder
+builder.Services.AddTnTComponents();
 ```
 
-If you are using an ASP.NET application with an API, you will need to add the [TnTComponents.AspNetCore](https://www.nuget.org/packages/TnTComponents.AspNetCore/) package to your project. This package provides custom bindings for virtualization and pagination of the data grid.
+Then use components in your pages (see `LiveTest` samples for exact component names and parameters):
+
+```razor
+@page "/"
+<h3>Example</h3>
+<TnTButton OnClick="() => Console.WriteLine("Clicked")">Click me</TnTButton>
+```
 
 ### Theming
-Themes can be generated using Google's [Material 3 designer](https://material-foundation.github.io/material-theme-builder/). Export your theme as a json file and drop it in the `wwwroot` folder. 
-Inside your `App.razor` file, add the following code:
-```csharp
-    <TnTComponents.TnTThemeDesign ThemeFile="{Name of your .json file}" />
+Themes can be generated using Google's Material 3 designer. Export your theme as a json file and drop it in the `wwwroot` folder. Inside your `App.razor` file, add the following code:
+
+```razor
+<TnTComponents.TnTThemeDesign ThemeFile="your-theme.json" />
 ```
+
 Dark, light, and system themes can be applied by setting the `Theme` property of the `TnTThemeDesign` component.
+
 ## Contributing
 
-Contributions are welcome!
+Contributions are welcome! 
 
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+
