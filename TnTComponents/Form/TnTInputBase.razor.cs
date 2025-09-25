@@ -202,13 +202,8 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     /// <inheritdoc />
     protected override void OnParametersSet() {
         base.OnParametersSet();
-        if (StartIcon is not null) {
-            StartIcon.AdditionalClass = "tnt-start-icon";
-        }
-
-        if (EndIcon is not null) {
-            EndIcon.AdditionalClass = "tnt-end-icon";
-        }
+        StartIcon?.AdditionalClass = "tnt-start-icon";
+        EndIcon?.AdditionalClass = "tnt-end-icon";
 
         if (string.IsNullOrWhiteSpace(NameAttributeValue)) {
             // Workaround, since for some reason NameValueAttribute is not being set when rendering in WebAssembly mode

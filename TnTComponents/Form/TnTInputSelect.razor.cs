@@ -106,6 +106,8 @@ public partial class TnTInputSelect<[DynamicallyAccessedMembers(DynamicallyAcces
         return false;
     }
 
+    private string? GetValue(bool multiple) => multiple ? BindConverter.FormatValue(CurrentValue)?.ToString() : CurrentValueAsString;
+
     /// <summary>
     ///     Tries to convert a string to a nullable boolean value.
     /// </summary>

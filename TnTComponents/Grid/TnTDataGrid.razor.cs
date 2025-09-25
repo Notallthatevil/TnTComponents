@@ -100,7 +100,7 @@ public partial class TnTDataGrid<TGridItem> {
     ///     The queryable source of data for the grid.
     /// </summary>
     [Parameter]
-    public IQueryable<TGridItem> Items { get; set; }
+    public IQueryable<TGridItem>? Items { get; set; }
 
     /// <summary>
     ///     The expected height in pixels for each row.
@@ -179,6 +179,9 @@ public partial class TnTDataGrid<TGridItem> {
     ///     The items currently provided to the grid.
     /// </summary>
     internal IEnumerable<TGridItem>? ProvidedItems;
+
+    [Inject]
+    private IServiceProvider? _serviceProvider { get; set; }
 
     /// <summary>
     ///     The internal grid context containing state and configuration for the grid.
@@ -289,8 +292,12 @@ public partial class TnTDataGrid<TGridItem> {
             throw new InvalidOperationException($"{nameof(TnTDataGrid<TGridItem>)} requires one of {nameof(Items)} or {nameof(ItemsProvider)}, but both were specified.");
         }
 
-        if(Items is not null && ItemsProvider is null && !Virtualize && Pagination is null) { // No virtualization or pagination, so we can load all items at once
+        if (Items is not null && ItemsProvider is null && !Virtualize && Pagination is null) { // No virtualization or pagination, so we can load all items at once
             _internalGridContext.UpdateItems();
+        }
+
+        if (Items is not null && ItemsProvider is null && _serviceProvider is not null) {
+            _asyncQueryExecutor = AsyncQueryExecutorSupplier.GetAsyncQueryExecutor(_serviceProvider, Items);
         }
     }
 

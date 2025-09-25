@@ -18,6 +18,11 @@
 		<Description>Collection of Material-design inspired Blazor UI components for Web and WebAssembly projects. Designed for .NET 9 and .NET 10.</Description>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryType>git</RepositoryType>
+		<IsAotCompatible>true</IsAotCompatible>
+		<LangVersion>latest</LangVersion>
+		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+		<SignAssembly>False</SignAssembly>
+		<PackageIcon>Logo.png</PackageIcon>
 	</PropertyGroup>
 	
 	<ItemGroup>
@@ -54,6 +59,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Include="..\Logo.png">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+		</None>
 		<None Include="..\README.md" Pack="true" PackagePath="\" />
 		<None Include="compilerconfig.json" />
 	</ItemGroup>

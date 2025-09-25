@@ -11,14 +11,21 @@ namespace TnTComponents.Grid.Infrastructure;
 [CascadingTypeParameter(nameof(TGridItem))]
 public abstract class TnTDataGridCell<TGridItem> : ComponentBase {
 
-    protected virtual string? ElementClass { get; }
-    protected virtual string? ElementStyle { get; }
-
     /// <summary>
     ///     The column definition associated with this cell.
     /// </summary>
     [Parameter, EditorRequired]
     public TnTColumnBase<TGridItem> Column { get; set; } = default!;
+
+    /// <summary>
+    ///     The base CSS class applied to the root element of this component. <see href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/class" />
+    /// </summary>
+    protected virtual string? ElementClass { get; }
+
+    /// <summary>
+    ///     Additional inline CSS styles applied to the root element for this component. <see href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/style" />
+    /// </summary>
+    protected virtual string? ElementStyle { get; }
 
     /// <summary>
     ///     Refreshes the cell by invoking <see cref="ComponentBase.StateHasChanged" /> asynchronously.

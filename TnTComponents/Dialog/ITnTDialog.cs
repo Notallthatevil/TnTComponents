@@ -30,7 +30,8 @@ public interface ITnTDialog {
     /// <summary>
     ///     Gets the type of the dialog.
     /// </summary>
-    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type Type { get; init; }
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
+    Type Type { get; init; }
 
     /// <summary>
     ///     Asynchronously closes the dialog.

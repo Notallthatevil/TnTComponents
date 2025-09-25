@@ -65,7 +65,7 @@ public enum TnTDayOfWeekFlag {
 /// </summary>
 /// <typeparam name="TEventType">The type of the event.</typeparam>
 [CascadingTypeParameter(nameof(TEventType))]
-public partial class TnTScheduler<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TEventType> : TnTComponentBase where TEventType : TnTEvent {
+public partial class TnTScheduler< TEventType> : TnTComponentBase where TEventType : TnTEvent {
 
     /// <summary>
     ///     Gets or sets a value indicating whether dragging events is allowed.

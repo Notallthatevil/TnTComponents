@@ -10,11 +10,14 @@ namespace TnTComponents.Grid.Infrastructure;
 /// <typeparam name="TGridItem">The type of the grid item associated with this header cell.</typeparam>
 [CascadingTypeParameter(nameof(TGridItem))]
 public partial class TnTDataGridHeaderCell<TGridItem> {
+
+    /// <inheritdoc />
     protected override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(Column.AdditionalAttributes)
         .AddClass("tnt-column-header-cell")
         .Build();
 
+    /// <inheritdoc />
     protected override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(Column.AdditionalAttributes)
         .Add(Column.Width.HasValue ? $"width:{Column.Width.Value}px;min-width:{Column.Width.Value}px" : null!)

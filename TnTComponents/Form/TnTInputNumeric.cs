@@ -15,7 +15,7 @@ namespace TnTComponents;
 ///     Represents a numeric input component.
 /// </summary>
 /// <typeparam name="TNumericType">The type of the numeric value.</typeparam>
-public class TnTInputNumeric<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TNumericType> : TnTInputBase<TNumericType> {
+public class TnTInputNumeric< [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TNumericType> : TnTInputBase<TNumericType> {
 
     /// <inheritdoc />
     public override InputType Type => InputType.Number;

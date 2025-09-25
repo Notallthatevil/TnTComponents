@@ -118,16 +118,12 @@ internal sealed class TnTInternalGridContext<TGridItem>(TnTDataGrid<TGridItem> _
             if (direction == column.InitialSortDirection) {
                 var newDirection = direction == SortDirection.Ascending ? SortDirection.Descending : SortDirection.Ascending;
                 _sortingDirections[column.ColumnId] = newDirection;
-                if (column.SortBy is not null) {
-                    column.SortBy.FlipDirections = true;
-                }
+                column.SortBy?.FlipDirections = true;
             }
             else {
                 _sortingDirections.Remove(column.ColumnId);
                 _sortByColumns.Remove(column);
-                if (column.SortBy is not null) {
-                    column.SortBy.FlipDirections = false;
-                }
+                column.SortBy?.FlipDirections = false;
             }
         }
         else {

@@ -55,6 +55,12 @@ public partial class TnTVirtualize<TItem>() {
     public override string? JsModulePath => "./_content/TnTComponents/Virtualization/TnTVirtualize.razor.js";
 
     /// <summary>
+    ///     The number of items to load in a single operation.
+    /// </summary>
+    [Parameter]
+    public int LoadCount { get; set; } = 15;
+
+    /// <summary>
     ///     Indicates whether the component is currently loading items.
     /// </summary>
     public bool Loading { get; private set; } = true;
@@ -70,8 +76,6 @@ public partial class TnTVirtualize<TItem>() {
     /// </summary>
     [Parameter]
     public IEnumerable<SortedProperty>? Sort { get; set; }
-    [Parameter]
-    public int LoadCount { get; set; } = 15;
 
     private bool _allItemsRetrieved;
     private IEnumerable<TItem> _items = [];
@@ -136,6 +140,16 @@ public partial class TnTVirtualize<TItem>() {
         await LoadMoreItems();
     }
 
+    /// <summary>
+    ///     Resets the component state.
+    /// </summary>
+    public void Reset() {
+        _items = [];
+        _allItemsRetrieved = false;
+        Loading = true;
+        StateHasChanged();
+    }
+
     /// <inheritdoc />
     protected override void Dispose(bool disposing) {
         if (disposing) {
@@ -158,17 +172,6 @@ public partial class TnTVirtualize<TItem>() {
         }
 
         _lastUsedProvider = ItemsProvider;
-
-    }
-
-    /// <summary>
-    ///     Resets the component state.
-    /// </summary>
-    public void Reset() {
-        _items = [];
-        _allItemsRetrieved = false;
-        Loading = true;
-        StateHasChanged();
     }
 }
 

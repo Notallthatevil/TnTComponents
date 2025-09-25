@@ -44,8 +44,6 @@ public class TnTPaginationState {
     /// </summary>
     public int? TotalItemCount { get; private set; }
 
-    private EventHandler a;
-
     /// <inheritdoc />
     public override int GetHashCode()
         => HashCode.Combine(ItemsPerPage, CurrentPageIndex, TotalItemCount);

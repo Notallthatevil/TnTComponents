@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -16,7 +17,8 @@ namespace TnTComponents;
 /// </summary>
 /// <typeparam name="TGridItem">The type of items in the grid.</typeparam>
 /// <typeparam name="TProp">The type of the property displayed in the column.</typeparam>
-[CascadingTypeParameter(nameof(TGridItem))]public partial class TnTPropertyColumn<TGridItem, TProp> {
+[CascadingTypeParameter(nameof(TGridItem))]
+public partial class TnTPropertyColumn<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)] TGridItem, TProp> {
 
     /// <summary>
     ///     Specifies a custom comparer to use for sorting the property values.

@@ -1,6 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 using TnTComponents.Core;
 
 namespace TnTComponents.Grid;
@@ -9,7 +9,7 @@ namespace TnTComponents.Grid;
 ///     Represents sorting rules for a grid of <typeparamref name="TGridItem" /> items. Allows specifying multiple properties and directions for sorting, and supports custom comparers.
 /// </summary>
 /// <typeparam name="TGridItem">The type of items in the grid.</typeparam>
-public sealed class TnTGridSort<TGridItem> {
+public sealed class TnTGridSort<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)] TGridItem> {
 
     /// <summary>
     ///     Whether the sort directions should be flipped for all properties. When set, all sort directions are reversed.
@@ -104,20 +104,39 @@ public sealed class TnTGridSort<TGridItem> {
     /// </summary>
     /// <param name="queryable">The queryable source to sort.</param>
     /// <returns>An <see cref="IOrderedQueryable{TGridItem}" /> with sorting applied.</returns>
+    [UnconditionalSuppressMessage("Trimming", "IL2026", Justification = "TGridItem is annotated to preserve properties/fields accessed via expressions; expression creation is intentional and validated.")]
+    [UnconditionalSuppressMessage("Trimming", "IL3050", Justification = "Expression APIs are used intentionally; TGridItem annotation preserves required members for AOT/trimming scenarios.")]
     public IOrderedQueryable<TGridItem> Apply(IQueryable<TGridItem> queryable) {
         var query = queryable;
         var param = Expression.Parameter(typeof(TGridItem), "x");
-        var func = nameof(Queryable.OrderBy);
-        var descending = nameof(Queryable.OrderByDescending);
+
+        // To be AOT-friendly avoid runtime MakeGenericMethod usage. Build a selector returning object and call the generic
+        // Queryable.OrderBy/ThenBy overloads with compile-time generic arguments (TGridItem, object).
+        var isOrdered = false;
         foreach (var (property, customComparer) in _expressions) {
-            if (_sortDirections[property.Name] == SortDirection.Descending) {
-                func = descending;
+            // build Expression<Func<TGridItem, object>> selector
+            var member = Expression.PropertyOrField(param, property.Name);
+            Expression selectorBody = member;
+            if (member.Type.IsValueType || member.Type != typeof(object)) {
+                selectorBody = Expression.Convert(member, typeof(object));
             }
 
-            query = (IOrderedQueryable<TGridItem>)query.Provider.CreateQuery(Expression.Call(typeof(Queryable), func, [typeof(TGridItem), property.PropertyType], query.Expression, Expression.Lambda(Expression.PropertyOrField(param, property.Name), param)));
+            var selector = Expression.Lambda<Func<TGridItem, object>>(selectorBody, param);
 
-            func = nameof(Queryable.ThenBy);
-            descending = nameof(Queryable.ThenByDescending);
+            var direction = _sortDirections[property.Name];
+            if (!isOrdered) {
+                query = direction == SortDirection.Descending
+                    ? Queryable.OrderByDescending(query, selector)
+                    : Queryable.OrderBy(query, selector);
+                isOrdered = true;
+            }
+            else {
+                // At this point query must be IOrderedQueryable<TGridItem>
+                var ordered = (IOrderedQueryable<TGridItem>)query;
+                query = direction == SortDirection.Descending
+                    ? ordered.ThenByDescending(selector)
+                    : ordered.ThenBy(selector);
+            }
         }
 
         return (IOrderedQueryable<TGridItem>)query;
