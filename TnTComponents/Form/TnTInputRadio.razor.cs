@@ -100,6 +100,9 @@ public partial class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccess
         }
     }
 
+    private string? GetValueAsString() => BindConverter.FormatValue(Value?.ToString());
+
+
     private string GetToggledTrueValue() {
         _trueValueToggle = !_trueValueToggle;
         return _trueValueToggle ? "a" : "b";

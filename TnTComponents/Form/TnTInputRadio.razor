@@ -18,7 +18,7 @@
            name="@_group.ElementName"
            readonly="@_readOnly"
            disabled="@_disabled"
-           value="@BindConverter.FormatValue(Value?.ToString())"
+           value="@GetValueAsString()"
            checked="@(_group.InternalCurrentValue?.Equals(Value) == true ? GetToggledTrueValue() : null)"
            @onchange="@_group.UpdateValueAsync"
            @onblur="@(_group.InternalEditContext is not null ? (FocusEventArgs args) => { _group.NotifyStateChanged(); } : (FocusEventArgs _) => { })" />
