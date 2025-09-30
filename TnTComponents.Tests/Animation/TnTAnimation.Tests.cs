@@ -1,13 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Bunit;
-using Xunit;
-using TnTComponents;
-
-namespace TnTComponents.Tests.AnimationTests; // distinct namespace
+﻿namespace TnTComponents.Tests.AnimationTests; // distinct namespace
 
 public class TnTAnimation_Tests : BunitContext {
+
+    public static IEnumerable<object[]> AllAnimationTypes => System.Enum
+        .GetValues(typeof(global::TnTComponents.Animation))
+        .Cast<global::TnTComponents.Animation>()
+        .Select(v => new object[] { v });
+
     private const string JsModulePath = "./_content/TnTComponents/Animation/TnTAnimation.razor.js";
 
     public TnTAnimation_Tests() {
@@ -16,27 +15,6 @@ public class TnTAnimation_Tests : BunitContext {
         module.SetupVoid("onLoad", _ => true).SetVoidResult();
         module.SetupVoid("onUpdate", _ => true).SetVoidResult();
     }
-
-    [Fact]
-    public void Renders_Base_Class() {
-        // Arrange / Act
-        var cut = Render<TnTAnimation>(p => p.AddChildContent("Content"));
-        // Assert
-        cut.Markup.Should().Contain("tnt-animation");
-    }
-
-    [Fact]
-    public void Renders_Default_Animation_Class_FadeIn() {
-        // Arrange / Act
-        var cut = Render<TnTAnimation>(p => p.AddChildContent("Content"));
-        // Assert
-        cut.Markup.Should().Contain("tnt-animation-fadein");
-    }
-
-    public static IEnumerable<object[]> AllAnimationTypes => System.Enum
-        .GetValues(typeof(global::TnTComponents.Animation))
-        .Cast<global::TnTComponents.Animation>()
-        .Select(v => new object[] { v });
 
     [Theory]
     [MemberData(nameof(AllAnimationTypes))]
@@ -58,16 +36,6 @@ public class TnTAnimation_Tests : BunitContext {
     }
 
     [Fact]
-    public void Duration_Default_In_Style() {
-        // Arrange / Act
-        var cut = Render<TnTAnimation>(p => p.AddChildContent("Content"));
-        // Assert
-        var animationStyle = cut.Find("tnt-animation").GetAttribute("style");
-        animationStyle.Should().NotBeNull();
-        animationStyle!.Replace(" ", string.Empty).Should().Contain("animation-duration:500ms");
-    }
-
-    [Fact]
     public void Duration_Custom_In_Style() {
         // Arrange / Act
         var cut = Render<TnTAnimation>((ComponentParameterCollectionBuilder<TnTAnimation> p) => p
@@ -80,11 +48,37 @@ public class TnTAnimation_Tests : BunitContext {
     }
 
     [Fact]
-    public void Threshold_Default_Attribute() {
+    public void Duration_Default_In_Style() {
         // Arrange / Act
         var cut = Render<TnTAnimation>(p => p.AddChildContent("Content"));
         // Assert
-        cut.Find("tnt-animation").GetAttribute("tnt-threshold").Should().Be("0.5");
+        var animationStyle = cut.Find("tnt-animation").GetAttribute("style");
+        animationStyle.Should().NotBeNull();
+        animationStyle!.Replace(" ", string.Empty).Should().Contain("animation-duration:500ms");
+    }
+
+    [Fact]
+    public void Js_Module_Is_Loaded() {
+        // Arrange / Act
+        var cut = Render<TnTAnimation>(p => p.AddChildContent("Content"));
+        // Assert
+        cut.Instance.IsolatedJsModule.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void Renders_Base_Class() {
+        // Arrange / Act
+        var cut = Render<TnTAnimation>(p => p.AddChildContent("Content"));
+        // Assert
+        cut.Markup.Should().Contain("tnt-animation");
+    }
+
+    [Fact]
+    public void Renders_Default_Animation_Class_FadeIn() {
+        // Arrange / Act
+        var cut = Render<TnTAnimation>(p => p.AddChildContent("Content"));
+        // Assert
+        cut.Markup.Should().Contain("tnt-animation-fadein");
     }
 
     [Fact]
@@ -98,6 +92,14 @@ public class TnTAnimation_Tests : BunitContext {
     }
 
     [Fact]
+    public void Threshold_Default_Attribute() {
+        // Arrange / Act
+        var cut = Render<TnTAnimation>(p => p.AddChildContent("Content"));
+        // Assert
+        cut.Find("tnt-animation").GetAttribute("tnt-threshold").Should().Be("0.5");
+    }
+
+    [Fact]
     public void Updates_Class_When_AnimationType_Changes_By_New_Instance() {
         // Arrange
         Render<TnTAnimation>(p => p.AddChildContent("Content")); // initial render (default)
@@ -107,13 +109,5 @@ public class TnTAnimation_Tests : BunitContext {
             .AddChildContent("Content"));
         // Assert (only verifying updated instance)
         updated.Markup.Should().Contain("tnt-animation-rotateclockwise");
-    }
-
-    [Fact]
-    public void Js_Module_Is_Loaded() {
-        // Arrange / Act
-        var cut = Render<TnTAnimation>(p => p.AddChildContent("Content"));
-        // Assert
-        cut.Instance.IsolatedJsModule.Should().NotBeNull();
     }
 }

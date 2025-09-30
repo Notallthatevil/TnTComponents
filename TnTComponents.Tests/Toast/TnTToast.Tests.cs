@@ -1,15 +1,7 @@
-using System.Collections.Generic;
-using Bunit;
-using Xunit;
-using TnTComponents;
-using TnTComponents.Toast;
-using TnTComponents.Core;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Components;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using AwesomeAssertions;
-using Bunit.Rendering;
+using Microsoft.Extensions.DependencyInjection;
+using TnTComponents.Toast;
 
 namespace TnTComponents.Tests.Toast;
 
@@ -17,6 +9,7 @@ namespace TnTComponents.Tests.Toast;
 ///     Unit tests for <see cref="TnTToast" />.
 /// </summary>
 public class TnTToast_Tests : BunitContext {
+
     public TnTToast_Tests() {
         Services.AddSingleton<ITnTToastService, TnTToastService>();
         // Set renderer info to handle NET9_0_OR_GREATER conditional compilation
@@ -29,7 +22,27 @@ public class TnTToast_Tests : BunitContext {
         rippleModule.SetupVoid("onDispose", _ => true);
     }
 
-    #region Component Initialization Tests
+    [Fact]
+    public async Task CloseButton_Click_RemovesToast() {
+        // Arrange
+        var cut = RenderToastComponent();
+        var service = Services.GetRequiredService<ITnTToastService>();
+        await service.ShowAsync("Test Title", showClose: true);
+        cut.Render();
+
+        // Verify toast is rendered
+        cut.FindAll(".tnt-toast").Should().HaveCount(1);
+
+        // Act
+        var closeButton = cut.Find("button.tnt-image-button");
+        await closeButton.ClickAsync(new MouseEventArgs());
+
+        // Wait a bit for the close delay
+        await Task.Delay(300, Xunit.TestContext.Current.CancellationToken);
+
+        // Assert
+        cut.FindAll(".tnt-toast").Should().BeEmpty();
+    }
 
     [Fact]
     public void Constructor_InitializesCorrectly() {
@@ -42,6 +55,15 @@ public class TnTToast_Tests : BunitContext {
     }
 
     [Fact]
+    public void Dispose_CleansUpResources() {
+        // Arrange
+        var cut = RenderToastComponent();
+
+        // Act & Assert - Should not throw exception
+        cut.Instance.Dispose();
+    }
+
+    [Fact]
     public void EmptyToasts_RendersNothing() {
         // Arrange & Act
         var cut = RenderToastComponent();
@@ -51,9 +73,66 @@ public class TnTToast_Tests : BunitContext {
         markup.Should().BeEmpty(); // The component renders nothing when no toasts are present
     }
 
-    #endregion
+    [Fact]
+    public async Task MoreThanFiveToasts_RendersOnlyFirstFive() {
+        // Arrange
+        var cut = RenderToastComponent();
+        var service = Services.GetRequiredService<ITnTToastService>();
 
-    #region Service Integration Tests
+        // Act - Create 7 toasts
+        for (int i = 1; i <= 7; i++) {
+            await service.ShowAsync($"Toast {i}");
+        }
+        cut.Render();
+
+        // Assert
+        var renderedToasts = cut.FindAll(".tnt-toast");
+        renderedToasts.Should().HaveCount(5);
+
+        var markup = cut.Markup;
+        markup.Should().Contain("Toast 1");
+        markup.Should().Contain("Toast 5");
+        markup.Should().NotContain("Toast 6");
+        markup.Should().NotContain("Toast 7");
+    }
+
+    [Fact]
+    public async Task MultipleToasts_RendersAllToasts() {
+        // Arrange
+        var cut = RenderToastComponent();
+        var service = Services.GetRequiredService<ITnTToastService>();
+
+        // Act
+        await service.ShowAsync("Toast 1");
+        await service.ShowAsync("Toast 2");
+        await service.ShowAsync("Toast 3");
+        cut.Render();
+
+        // Assert
+        var toasts = cut.FindAll(".tnt-toast");
+        toasts.Should().HaveCount(3);
+
+        var markup = cut.Markup;
+        markup.Should().Contain("Toast 1");
+        markup.Should().Contain("Toast 2");
+        markup.Should().Contain("Toast 3");
+    }
+
+    [Fact]
+    public async Task ProgressBar_HasCorrectBackgroundColor() {
+        // Arrange
+        var cut = RenderToastComponent();
+        var service = Services.GetRequiredService<ITnTToastService>();
+
+        // Act
+        await service.ShowWarningAsync("Test Title", timeout: 5);
+        cut.Render();
+
+        // Assert
+        var progressBar = cut.Find(".tnt-toast-progress");
+        var style = progressBar.GetAttribute("style");
+        style.Should().Contain("background-color: var(--tnt-color-warning)");
+    }
 
     [Fact]
     public async Task ShowAsync_TriggersToastDisplay() {
@@ -147,92 +226,6 @@ public class TnTToast_Tests : BunitContext {
         markup.Should().Contain("tnt-toast-container");
     }
 
-    #endregion
-
-    #region Rendering Tests
-
-    [Fact]
-    public async Task Toast_WithoutMessage_DoesNotRenderBody() {
-        // Arrange
-        var cut = RenderToastComponent();
-        var service = Services.GetRequiredService<ITnTToastService>();
-
-        // Act
-        await service.ShowAsync("Test Title", null);
-        cut.Render();
-
-        // Assert
-        var markup = cut.Markup;
-        markup.Should().Contain("Test Title");
-        markup.Should().NotContain("tnt-toast-body");
-    }
-
-    [Fact]
-    public async Task Toast_WithCloseButton_RendersCloseButton() {
-        // Arrange
-        var cut = RenderToastComponent();
-        var service = Services.GetRequiredService<ITnTToastService>();
-
-        // Act
-        await service.ShowAsync("Test Title", "Test Message", showClose: true);
-        cut.Render();
-
-        // Assert
-        var markup = cut.Markup;
-        markup.Should().Contain("tnt-image-button");
-        markup.Should().Contain("close"); // MaterialIcon.Close renders as "close"
-    }
-
-    [Fact]
-    public async Task Toast_WithoutCloseButton_DoesNotRenderCloseButton() {
-        // Arrange
-        var cut = RenderToastComponent();
-        var service = Services.GetRequiredService<ITnTToastService>();
-
-        // Act
-        await service.ShowAsync("Test Title", "Test Message", showClose: false);
-        cut.Render();
-
-        // Assert
-        var markup = cut.Markup;
-        markup.Should().NotContain("tnt-image-button");
-        markup.Should().NotContain("close");
-    }
-
-    [Fact]
-    public async Task Toast_WithTimeout_RendersProgressBar() {
-        // Arrange
-        var cut = RenderToastComponent();
-        var service = Services.GetRequiredService<ITnTToastService>();
-
-        // Act
-        await service.ShowAsync("Test Title", "Test Message", timeout: 5);
-        cut.Render();
-
-        // Assert
-        var markup = cut.Markup;
-        markup.Should().Contain("tnt-toast-progress");
-    }
-
-    [Fact]
-    public async Task Toast_WithZeroTimeout_DoesNotRenderProgressBar() {
-        // Arrange
-        var cut = RenderToastComponent();
-        var service = Services.GetRequiredService<ITnTToastService>();
-
-        // Act
-        await service.ShowAsync("Test Title", "Test Message", timeout: 0);
-        cut.Render();
-
-        // Assert
-        var markup = cut.Markup;
-        markup.Should().NotContain("tnt-toast-progress");
-    }
-
-    #endregion
-
-    #region Style and CSS Tests
-
     [Fact]
     public async Task Toast_AppliesCorrectCssClasses() {
         // Arrange
@@ -270,136 +263,19 @@ public class TnTToast_Tests : BunitContext {
     }
 
     [Fact]
-    public async Task Toast_WithZeroTimeout_DoesNotIncludeTimeoutVariable() {
+    public async Task Toast_WithCloseButton_RendersCloseButton() {
         // Arrange
         var cut = RenderToastComponent();
         var service = Services.GetRequiredService<ITnTToastService>();
 
         // Act
-        await service.ShowAsync("Test Title", timeout: 0);
+        await service.ShowAsync("Test Title", "Test Message", showClose: true);
         cut.Render();
 
         // Assert
-        var toastElement = cut.Find(".tnt-toast");
-        var style = toastElement.GetAttribute("style");
-        style.Should().NotContain("--timeout");
-    }
-
-    #endregion
-
-    #region Progress Bar Color Tests
-
-    [Fact]
-    public async Task ProgressBar_HasCorrectBackgroundColor() {
-        // Arrange
-        var cut = RenderToastComponent();
-        var service = Services.GetRequiredService<ITnTToastService>();
-
-        // Act
-        await service.ShowWarningAsync("Test Title", timeout: 5);
-        cut.Render();
-
-        // Assert
-        var progressBar = cut.Find(".tnt-toast-progress");
-        var style = progressBar.GetAttribute("style");
-        style.Should().Contain("background-color: var(--tnt-color-warning)");
-    }
-
-    #endregion
-
-    #region Multiple Toasts Tests
-
-    [Fact]
-    public async Task MultipleToasts_RendersAllToasts() {
-        // Arrange
-        var cut = RenderToastComponent();
-        var service = Services.GetRequiredService<ITnTToastService>();
-
-        // Act
-        await service.ShowAsync("Toast 1");
-        await service.ShowAsync("Toast 2");
-        await service.ShowAsync("Toast 3");
-        cut.Render();
-
-        // Assert
-        var toasts = cut.FindAll(".tnt-toast");
-        toasts.Should().HaveCount(3);
-
         var markup = cut.Markup;
-        markup.Should().Contain("Toast 1");
-        markup.Should().Contain("Toast 2");
-        markup.Should().Contain("Toast 3");
-    }
-
-    [Fact]
-    public async Task MoreThanFiveToasts_RendersOnlyFirstFive() {
-        // Arrange
-        var cut = RenderToastComponent();
-        var service = Services.GetRequiredService<ITnTToastService>();
-
-        // Act - Create 7 toasts
-        for (int i = 1; i <= 7; i++) {
-            await service.ShowAsync($"Toast {i}");
-        }
-        cut.Render();
-
-        // Assert
-        var renderedToasts = cut.FindAll(".tnt-toast");
-        renderedToasts.Should().HaveCount(5);
-
-        var markup = cut.Markup;
-        markup.Should().Contain("Toast 1");
-        markup.Should().Contain("Toast 5");
-        markup.Should().NotContain("Toast 6");
-        markup.Should().NotContain("Toast 7");
-    }
-
-    #endregion
-
-    #region Event Handling Tests
-
-    [Fact]
-    public async Task CloseButton_Click_RemovesToast() {
-        // Arrange
-        var cut = RenderToastComponent();
-        var service = Services.GetRequiredService<ITnTToastService>();
-        await service.ShowAsync("Test Title", showClose: true);
-        cut.Render();
-
-        // Verify toast is rendered
-        cut.FindAll(".tnt-toast").Should().HaveCount(1);
-
-        // Act
-        var closeButton = cut.Find("button.tnt-image-button");
-        await closeButton.ClickAsync(new MouseEventArgs());
-
-        // Wait a bit for the close delay
-        await Task.Delay(300, Xunit.TestContext.Current.CancellationToken);
-
-        // Assert
-        cut.FindAll(".tnt-toast").Should().BeEmpty();
-    }
-
-    #endregion
-
-    #region Edge Cases
-
-    [Fact]
-    public async Task Toast_WithEmptyTitle_RendersCorrectly() {
-        // Arrange
-        var cut = RenderToastComponent();
-        var service = Services.GetRequiredService<ITnTToastService>();
-
-        // Act
-        await service.ShowAsync("", "Message");
-        cut.Render();
-
-        // Assert
-        var headerSpan = cut.Find(".tnt-toast-header span");
-        headerSpan.TextContent.Should().Be("");
-
-        var body = cut.Find(".tnt-toast-body");
-        body.TextContent.Should().Be("Message");
+        markup.Should().Contain("tnt-image-button");
+        markup.Should().Contain("close"); // MaterialIcon.Close renders as "close"
     }
 
     [Fact]
@@ -418,6 +294,24 @@ public class TnTToast_Tests : BunitContext {
 
         var body = cut.Find(".tnt-toast-body");
         body.TextContent.Should().Be("");
+    }
+
+    [Fact]
+    public async Task Toast_WithEmptyTitle_RendersCorrectly() {
+        // Arrange
+        var cut = RenderToastComponent();
+        var service = Services.GetRequiredService<ITnTToastService>();
+
+        // Act
+        await service.ShowAsync("", "Message");
+        cut.Render();
+
+        // Assert
+        var headerSpan = cut.Find(".tnt-toast-header span");
+        headerSpan.TextContent.Should().Be("");
+
+        var body = cut.Find(".tnt-toast-body");
+        body.TextContent.Should().Be("Message");
     }
 
     [Fact]
@@ -454,26 +348,85 @@ public class TnTToast_Tests : BunitContext {
         cut.FindAll(".tnt-toast-progress").Should().BeEmpty();
     }
 
-    #endregion
-
-    #region Disposal Tests
-
     [Fact]
-    public void Dispose_CleansUpResources() {
+    public async Task Toast_WithoutCloseButton_DoesNotRenderCloseButton() {
         // Arrange
         var cut = RenderToastComponent();
+        var service = Services.GetRequiredService<ITnTToastService>();
 
-        // Act & Assert - Should not throw exception
-        cut.Instance.Dispose();
+        // Act
+        await service.ShowAsync("Test Title", "Test Message", showClose: false);
+        cut.Render();
+
+        // Assert
+        var markup = cut.Markup;
+        markup.Should().NotContain("tnt-image-button");
+        markup.Should().NotContain("close");
     }
 
-    #endregion
+    [Fact]
+    public async Task Toast_WithoutMessage_DoesNotRenderBody() {
+        // Arrange
+        var cut = RenderToastComponent();
+        var service = Services.GetRequiredService<ITnTToastService>();
 
-    #region Helper Methods
+        // Act
+        await service.ShowAsync("Test Title", null);
+        cut.Render();
+
+        // Assert
+        var markup = cut.Markup;
+        markup.Should().Contain("Test Title");
+        markup.Should().NotContain("tnt-toast-body");
+    }
+
+    [Fact]
+    public async Task Toast_WithTimeout_RendersProgressBar() {
+        // Arrange
+        var cut = RenderToastComponent();
+        var service = Services.GetRequiredService<ITnTToastService>();
+
+        // Act
+        await service.ShowAsync("Test Title", "Test Message", timeout: 5);
+        cut.Render();
+
+        // Assert
+        var markup = cut.Markup;
+        markup.Should().Contain("tnt-toast-progress");
+    }
+
+    [Fact]
+    public async Task Toast_WithZeroTimeout_DoesNotIncludeTimeoutVariable() {
+        // Arrange
+        var cut = RenderToastComponent();
+        var service = Services.GetRequiredService<ITnTToastService>();
+
+        // Act
+        await service.ShowAsync("Test Title", timeout: 0);
+        cut.Render();
+
+        // Assert
+        var toastElement = cut.Find(".tnt-toast");
+        var style = toastElement.GetAttribute("style");
+        style.Should().NotContain("--timeout");
+    }
+
+    [Fact]
+    public async Task Toast_WithZeroTimeout_DoesNotRenderProgressBar() {
+        // Arrange
+        var cut = RenderToastComponent();
+        var service = Services.GetRequiredService<ITnTToastService>();
+
+        // Act
+        await service.ShowAsync("Test Title", "Test Message", timeout: 0);
+        cut.Render();
+
+        // Assert
+        var markup = cut.Markup;
+        markup.Should().NotContain("tnt-toast-progress");
+    }
 
     private IRenderedComponent<TnTToast> RenderToastComponent() {
         return Render<TnTToast>();
     }
-
-    #endregion
 }

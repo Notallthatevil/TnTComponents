@@ -1,22 +1,14 @@
-using Xunit;
-using TnTComponents.Toast;
-using TnTComponents.Core;
-using Microsoft.Extensions.DependencyInjection;
-using AwesomeAssertions;
-using System.Threading.Tasks;
+﻿using TnTComponents.Toast;
 
 namespace TnTComponents.Tests.Toast;
 
 /// <summary>
 ///     Unit tests for <see cref="TnTToastService" />.
 /// </summary>
-public class TnTToastService_Tests
-{
-    #region Constructor and Initial State Tests
+public class TnTToastService_Tests {
 
     [Fact]
-    public void Constructor_InitializesCorrectly()
-    {
+    public void Constructor_InitializesCorrectly() {
         // Arrange & Act
         var service = new TnTToastService();
 
@@ -25,20 +17,105 @@ public class TnTToastService_Tests
         service.Should().BeAssignableTo<ITnTToastService>();
     }
 
-    #endregion
+    [Fact]
+    public async Task EventHandlers_CanBeUnsubscribed() {
+        // Arrange
+        var service = new TnTToastService();
+        var openCount = 0;
+        var closeCount = 0;
 
-    #region Event Tests
+        ITnTToastService.OnOpenCallback openHandler = (toast) => {
+            openCount++;
+            return Task.CompletedTask;
+        };
+
+        ITnTToastService.OnCloseCallback closeHandler = (toast) => {
+            closeCount++;
+            return Task.CompletedTask;
+        };
+
+        service.OnOpen += openHandler;
+        service.OnClose += closeHandler;
+
+        // Act
+        await service.ShowAsync("Test 1");
+        await service.CloseAsync(CreateMockToast("Test"));
+
+        service.OnOpen -= openHandler;
+        service.OnClose -= closeHandler;
+
+        await service.ShowAsync("Test 2");
+        await service.CloseAsync(CreateMockToast("Test"));
+
+        // Assert
+        openCount.Should().Be(1);
+        closeCount.Should().Be(1);
+    }
 
     [Fact]
-    public async Task OnOpen_EventTriggered_WhenShowAsyncCalled()
-    {
+    public async Task Events_NoException_WhenNoSubscribers() {
+        // Arrange
+        var service = new TnTToastService();
+        var mockToast = CreateMockToast("Test Toast");
+
+        // Act & Assert
+        await service.ShowAsync("Test Title");
+        await service.CloseAsync(mockToast);
+        // No exceptions should be thrown
+    }
+
+    [Fact]
+    public async Task MultipleToasts_EachTriggersEvent() {
+        // Arrange
+        var service = new TnTToastService();
+        var toastCount = 0;
+
+        service.OnOpen += (toast) => {
+            toastCount++;
+            return Task.CompletedTask;
+        };
+
+        // Act
+        await service.ShowAsync("Toast 1");
+        await service.ShowErrorAsync("Toast 2");
+        await service.ShowInfoAsync("Toast 3");
+        await service.ShowSuccessAsync("Toast 4");
+        await service.ShowWarningAsync("Toast 5");
+
+        // Assert
+        toastCount.Should().Be(5);
+    }
+
+    [Fact]
+    public async Task OnClose_EventTriggered_WhenCloseAsyncCalled() {
+        // Arrange
+        var service = new TnTToastService();
+        var mockToast = CreateMockToast("Test Toast");
+        ITnTToast? capturedToast = null;
+        var eventTriggered = false;
+
+        service.OnClose += (toast) => {
+            capturedToast = toast;
+            eventTriggered = true;
+            return Task.CompletedTask;
+        };
+
+        // Act
+        await service.CloseAsync(mockToast);
+
+        // Assert
+        eventTriggered.Should().BeTrue();
+        capturedToast.Should().Be(mockToast);
+    }
+
+    [Fact]
+    public async Task OnOpen_EventTriggered_WhenShowAsyncCalled() {
         // Arrange
         var service = new TnTToastService();
         ITnTToast? capturedToast = null;
         var eventTriggered = false;
 
-        service.OnOpen += (toast) =>
-        {
+        service.OnOpen += (toast) => {
             capturedToast = toast;
             eventTriggered = true;
             return Task.CompletedTask;
@@ -55,55 +132,12 @@ public class TnTToastService_Tests
     }
 
     [Fact]
-    public async Task OnClose_EventTriggered_WhenCloseAsyncCalled()
-    {
-        // Arrange
-        var service = new TnTToastService();
-        var mockToast = CreateMockToast("Test Toast");
-        ITnTToast? capturedToast = null;
-        var eventTriggered = false;
-
-        service.OnClose += (toast) =>
-        {
-            capturedToast = toast;
-            eventTriggered = true;
-            return Task.CompletedTask;
-        };
-
-        // Act
-        await service.CloseAsync(mockToast);
-
-        // Assert
-        eventTriggered.Should().BeTrue();
-        capturedToast.Should().Be(mockToast);
-    }
-
-    [Fact]
-    public async Task Events_NoException_WhenNoSubscribers()
-    {
-        // Arrange
-        var service = new TnTToastService();
-        var mockToast = CreateMockToast("Test Toast");
-
-        // Act & Assert
-        await service.ShowAsync("Test Title");
-        await service.CloseAsync(mockToast);
-        // No exceptions should be thrown
-    }
-
-    #endregion
-
-    #region ShowAsync Tests
-
-    [Fact]
-    public async Task ShowAsync_CreatesToastWithCorrectProperties()
-    {
+    public async Task ShowAsync_CreatesToastWithCorrectProperties() {
         // Arrange
         var service = new TnTToastService();
         ITnTToast? createdToast = null;
 
-        service.OnOpen += (toast) =>
-        {
+        service.OnOpen += (toast) => {
             createdToast = toast;
             return Task.CompletedTask;
         };
@@ -129,14 +163,12 @@ public class TnTToastService_Tests
     }
 
     [Fact]
-    public async Task ShowAsync_UsesDefaultValues_WhenOptionalParametersNotProvided()
-    {
+    public async Task ShowAsync_UsesDefaultValues_WhenOptionalParametersNotProvided() {
         // Arrange
         var service = new TnTToastService();
         ITnTToast? createdToast = null;
 
-        service.OnOpen += (toast) =>
-        {
+        service.OnOpen += (toast) => {
             createdToast = toast;
             return Task.CompletedTask;
         };
@@ -155,14 +187,72 @@ public class TnTToastService_Tests
     }
 
     [Fact]
-    public async Task ShowAsync_WithNullMessage_CreatesValidToast()
-    {
+    public async Task ShowAsync_WithEmptyTitle_HandlesGracefully() {
         // Arrange
         var service = new TnTToastService();
         ITnTToast? createdToast = null;
 
-        service.OnOpen += (toast) =>
-        {
+        service.OnOpen += (toast) => {
+            createdToast = toast;
+            return Task.CompletedTask;
+        };
+
+        // Act
+        await service.ShowAsync("");
+
+        // Assert
+        createdToast.Should().NotBeNull();
+        createdToast!.Title.Should().Be("");
+    }
+
+    [Fact]
+    public async Task ShowAsync_WithLongTexts_HandlesGracefully() {
+        // Arrange
+        var service = new TnTToastService();
+        ITnTToast? createdToast = null;
+        var longTitle = new string('A', 1000);
+        var longMessage = new string('B', 2000);
+
+        service.OnOpen += (toast) => {
+            createdToast = toast;
+            return Task.CompletedTask;
+        };
+
+        // Act
+        await service.ShowAsync(longTitle, longMessage);
+
+        // Assert
+        createdToast.Should().NotBeNull();
+        createdToast!.Title.Should().Be(longTitle);
+        createdToast.Message.Should().Be(longMessage);
+    }
+
+    [Fact]
+    public async Task ShowAsync_WithNegativeTimeout_CreatesValidToast() {
+        // Arrange
+        var service = new TnTToastService();
+        ITnTToast? createdToast = null;
+
+        service.OnOpen += (toast) => {
+            createdToast = toast;
+            return Task.CompletedTask;
+        };
+
+        // Act
+        await service.ShowAsync("Test Title", timeout: -5);
+
+        // Assert
+        createdToast.Should().NotBeNull();
+        createdToast!.Timeout.Should().Be(-5);
+    }
+
+    [Fact]
+    public async Task ShowAsync_WithNullMessage_CreatesValidToast() {
+        // Arrange
+        var service = new TnTToastService();
+        ITnTToast? createdToast = null;
+
+        service.OnOpen += (toast) => {
             createdToast = toast;
             return Task.CompletedTask;
         };
@@ -176,19 +266,95 @@ public class TnTToastService_Tests
         createdToast.Message.Should().BeNull();
     }
 
-    #endregion
-
-    #region ShowErrorAsync Tests
-
     [Fact]
-    public async Task ShowErrorAsync_WithStringMessage_CreatesErrorToast()
-    {
+    public async Task ShowAsync_WithZeroTimeout_CreatesValidToast() {
         // Arrange
         var service = new TnTToastService();
         ITnTToast? createdToast = null;
 
-        service.OnOpen += (toast) =>
-        {
+        service.OnOpen += (toast) => {
+            createdToast = toast;
+            return Task.CompletedTask;
+        };
+
+        // Act
+        await service.ShowAsync("Test Title", timeout: 0);
+
+        // Assert
+        createdToast.Should().NotBeNull();
+        createdToast!.Timeout.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task ShowErrorAsync_UsesDefaultValues() {
+        // Arrange
+        var service = new TnTToastService();
+        ITnTToast? createdToast = null;
+
+        service.OnOpen += (toast) => {
+            createdToast = toast;
+            return Task.CompletedTask;
+        };
+
+        // Act
+        await service.ShowErrorAsync("Error Title");
+
+        // Assert
+        createdToast.Should().NotBeNull();
+        createdToast!.Timeout.Should().Be(10);
+        createdToast.ShowClose.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task ShowErrorAsync_WithException_UsesExceptionMessage() {
+        // Arrange
+        var service = new TnTToastService();
+        ITnTToast? createdToast = null;
+        var exception = new InvalidOperationException("Something went wrong");
+
+        service.OnOpen += (toast) => {
+            createdToast = toast;
+            return Task.CompletedTask;
+        };
+
+        // Act
+        await service.ShowErrorAsync("Error Title", exception);
+
+        // Assert
+        createdToast.Should().NotBeNull();
+        createdToast!.Title.Should().Be("Error Title");
+        createdToast.Message.Should().Be("Something went wrong");
+        createdToast.BackgroundColor.Should().Be(TnTColor.ErrorContainer);
+        createdToast.TextColor.Should().Be(TnTColor.Error);
+    }
+
+    [Fact]
+    public async Task ShowErrorAsync_WithNullException_HandlesGracefully() {
+        // Arrange
+        var service = new TnTToastService();
+        ITnTToast? createdToast = null;
+
+        service.OnOpen += (toast) => {
+            createdToast = toast;
+            return Task.CompletedTask;
+        };
+
+        // Act
+        await service.ShowErrorAsync("Error Title", (Exception?)null);
+
+        // Assert
+        createdToast.Should().NotBeNull();
+        createdToast!.Title.Should().Be("Error Title");
+        createdToast.Message.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task ShowErrorAsync_WithStringMessage_CreatesErrorToast() {
+        // Arrange
+        var service = new TnTToastService();
+        ITnTToast? createdToast = null;
+
+        service.OnOpen += (toast) => {
             createdToast = toast;
             return Task.CompletedTask;
         };
@@ -207,87 +373,12 @@ public class TnTToastService_Tests
     }
 
     [Fact]
-    public async Task ShowErrorAsync_WithException_UsesExceptionMessage()
-    {
-        // Arrange
-        var service = new TnTToastService();
-        ITnTToast? createdToast = null;
-        var exception = new InvalidOperationException("Something went wrong");
-
-        service.OnOpen += (toast) =>
-        {
-            createdToast = toast;
-            return Task.CompletedTask;
-        };
-
-        // Act
-        await service.ShowErrorAsync("Error Title", exception);
-
-        // Assert
-        createdToast.Should().NotBeNull();
-        createdToast!.Title.Should().Be("Error Title");
-        createdToast.Message.Should().Be("Something went wrong");
-        createdToast.BackgroundColor.Should().Be(TnTColor.ErrorContainer);
-        createdToast.TextColor.Should().Be(TnTColor.Error);
-    }
-
-    [Fact]
-    public async Task ShowErrorAsync_WithNullException_HandlesGracefully()
-    {
+    public async Task ShowInfoAsync_CreatesInfoToast() {
         // Arrange
         var service = new TnTToastService();
         ITnTToast? createdToast = null;
 
-        service.OnOpen += (toast) =>
-        {
-            createdToast = toast;
-            return Task.CompletedTask;
-        };
-
-        // Act
-        await service.ShowErrorAsync("Error Title", (Exception?)null);
-
-        // Assert
-        createdToast.Should().NotBeNull();
-        createdToast!.Title.Should().Be("Error Title");
-        createdToast.Message.Should().BeNull();
-    }
-
-    [Fact]
-    public async Task ShowErrorAsync_UsesDefaultValues()
-    {
-        // Arrange
-        var service = new TnTToastService();
-        ITnTToast? createdToast = null;
-
-        service.OnOpen += (toast) =>
-        {
-            createdToast = toast;
-            return Task.CompletedTask;
-        };
-
-        // Act
-        await service.ShowErrorAsync("Error Title");
-
-        // Assert
-        createdToast.Should().NotBeNull();
-        createdToast!.Timeout.Should().Be(10);
-        createdToast.ShowClose.Should().BeTrue();
-    }
-
-    #endregion
-
-    #region ShowInfoAsync Tests
-
-    [Fact]
-    public async Task ShowInfoAsync_CreatesInfoToast()
-    {
-        // Arrange
-        var service = new TnTToastService();
-        ITnTToast? createdToast = null;
-
-        service.OnOpen += (toast) =>
-        {
+        service.OnOpen += (toast) => {
             createdToast = toast;
             return Task.CompletedTask;
         };
@@ -306,14 +397,12 @@ public class TnTToastService_Tests
     }
 
     [Fact]
-    public async Task ShowInfoAsync_UsesDefaultValues()
-    {
+    public async Task ShowInfoAsync_UsesDefaultValues() {
         // Arrange
         var service = new TnTToastService();
         ITnTToast? createdToast = null;
 
-        service.OnOpen += (toast) =>
-        {
+        service.OnOpen += (toast) => {
             createdToast = toast;
             return Task.CompletedTask;
         };
@@ -328,19 +417,13 @@ public class TnTToastService_Tests
         createdToast.Message.Should().BeNull();
     }
 
-    #endregion
-
-    #region ShowSuccessAsync Tests
-
     [Fact]
-    public async Task ShowSuccessAsync_CreatesSuccessToast()
-    {
+    public async Task ShowSuccessAsync_CreatesSuccessToast() {
         // Arrange
         var service = new TnTToastService();
         ITnTToast? createdToast = null;
 
-        service.OnOpen += (toast) =>
-        {
+        service.OnOpen += (toast) => {
             createdToast = toast;
             return Task.CompletedTask;
         };
@@ -359,14 +442,12 @@ public class TnTToastService_Tests
     }
 
     [Fact]
-    public async Task ShowSuccessAsync_UsesDefaultValues()
-    {
+    public async Task ShowSuccessAsync_UsesDefaultValues() {
         // Arrange
         var service = new TnTToastService();
         ITnTToast? createdToast = null;
 
-        service.OnOpen += (toast) =>
-        {
+        service.OnOpen += (toast) => {
             createdToast = toast;
             return Task.CompletedTask;
         };
@@ -381,19 +462,13 @@ public class TnTToastService_Tests
         createdToast.Message.Should().BeNull();
     }
 
-    #endregion
-
-    #region ShowWarningAsync Tests
-
     [Fact]
-    public async Task ShowWarningAsync_CreatesWarningToast()
-    {
+    public async Task ShowWarningAsync_CreatesWarningToast() {
         // Arrange
         var service = new TnTToastService();
         ITnTToast? createdToast = null;
 
-        service.OnOpen += (toast) =>
-        {
+        service.OnOpen += (toast) => {
             createdToast = toast;
             return Task.CompletedTask;
         };
@@ -412,14 +487,12 @@ public class TnTToastService_Tests
     }
 
     [Fact]
-    public async Task ShowWarningAsync_UsesDefaultValues()
-    {
+    public async Task ShowWarningAsync_UsesDefaultValues() {
         // Arrange
         var service = new TnTToastService();
         ITnTToast? createdToast = null;
 
-        service.OnOpen += (toast) =>
-        {
+        service.OnOpen += (toast) => {
             createdToast = toast;
             return Task.CompletedTask;
         };
@@ -434,29 +507,8 @@ public class TnTToastService_Tests
         createdToast.Message.Should().BeNull();
     }
 
-    #endregion
-
-    #region TnTToastImplementation Tests
-
     [Fact]
-    public void TnTToastImplementation_HasCorrectDefaults()
-    {
-        // Arrange & Act
-        var toast = new TnTToastService.TnTToastImplementation();
-
-        // Assert
-        toast.BackgroundColor.Should().Be(TnTColor.SurfaceVariant);
-        toast.TextColor.Should().Be(TnTColor.OnSurfaceVariant);
-        toast.ShowClose.Should().BeTrue();
-        toast.Timeout.Should().Be(10);
-        toast.Closing.Should().BeFalse();
-        toast.TextAlignment.Should().BeNull();
-        toast.Message.Should().BeNull();
-    }
-
-    [Fact]
-    public void TnTToastImplementation_CanSetProperties()
-    {
+    public void TnTToastImplementation_CanSetProperties() {
         // Arrange
         var toast = new TnTToastService.TnTToastImplementation();
 
@@ -478,8 +530,7 @@ public class TnTToastService_Tests
     }
 
     [Fact]
-    public void TnTToastImplementation_Closing_CanBeSetInternally()
-    {
+    public void TnTToastImplementation_Closing_CanBeSetInternally() {
         // Arrange
         var toast = new TnTToastService.TnTToastImplementation();
 
@@ -491,171 +542,23 @@ public class TnTToastService_Tests
         toast.Closing.Should().BeTrue();
     }
 
-    #endregion
-
-    #region Integration Tests
-
     [Fact]
-    public async Task MultipleToasts_EachTriggersEvent()
-    {
-        // Arrange
-        var service = new TnTToastService();
-        var toastCount = 0;
-
-        service.OnOpen += (toast) =>
-        {
-            toastCount++;
-            return Task.CompletedTask;
-        };
-
-        // Act
-        await service.ShowAsync("Toast 1");
-        await service.ShowErrorAsync("Toast 2");
-        await service.ShowInfoAsync("Toast 3");
-        await service.ShowSuccessAsync("Toast 4");
-        await service.ShowWarningAsync("Toast 5");
+    public void TnTToastImplementation_HasCorrectDefaults() {
+        // Arrange & Act
+        var toast = new TnTToastService.TnTToastImplementation();
 
         // Assert
-        toastCount.Should().Be(5);
+        toast.BackgroundColor.Should().Be(TnTColor.SurfaceVariant);
+        toast.TextColor.Should().Be(TnTColor.OnSurfaceVariant);
+        toast.ShowClose.Should().BeTrue();
+        toast.Timeout.Should().Be(10);
+        toast.Closing.Should().BeFalse();
+        toast.TextAlignment.Should().BeNull();
+        toast.Message.Should().BeNull();
     }
 
-    [Fact]
-    public async Task EventHandlers_CanBeUnsubscribed()
-    {
-        // Arrange
-        var service = new TnTToastService();
-        var openCount = 0;
-        var closeCount = 0;
-
-        ITnTToastService.OnOpenCallback openHandler = (toast) =>
-        {
-            openCount++;
-            return Task.CompletedTask;
-        };
-
-        ITnTToastService.OnCloseCallback closeHandler = (toast) =>
-        {
-            closeCount++;
-            return Task.CompletedTask;
-        };
-
-        service.OnOpen += openHandler;
-        service.OnClose += closeHandler;
-
-        // Act
-        await service.ShowAsync("Test 1");
-        await service.CloseAsync(CreateMockToast("Test"));
-
-        service.OnOpen -= openHandler;
-        service.OnClose -= closeHandler;
-
-        await service.ShowAsync("Test 2");
-        await service.CloseAsync(CreateMockToast("Test"));
-
-        // Assert
-        openCount.Should().Be(1);
-        closeCount.Should().Be(1);
-    }
-
-    #endregion
-
-    #region Edge Cases
-
-    [Fact]
-    public async Task ShowAsync_WithEmptyTitle_HandlesGracefully()
-    {
-        // Arrange
-        var service = new TnTToastService();
-        ITnTToast? createdToast = null;
-
-        service.OnOpen += (toast) =>
-        {
-            createdToast = toast;
-            return Task.CompletedTask;
-        };
-
-        // Act
-        await service.ShowAsync("");
-
-        // Assert
-        createdToast.Should().NotBeNull();
-        createdToast!.Title.Should().Be("");
-    }
-
-    [Fact]
-    public async Task ShowAsync_WithLongTexts_HandlesGracefully()
-    {
-        // Arrange
-        var service = new TnTToastService();
-        ITnTToast? createdToast = null;
-        var longTitle = new string('A', 1000);
-        var longMessage = new string('B', 2000);
-
-        service.OnOpen += (toast) =>
-        {
-            createdToast = toast;
-            return Task.CompletedTask;
-        };
-
-        // Act
-        await service.ShowAsync(longTitle, longMessage);
-
-        // Assert
-        createdToast.Should().NotBeNull();
-        createdToast!.Title.Should().Be(longTitle);
-        createdToast.Message.Should().Be(longMessage);
-    }
-
-    [Fact]
-    public async Task ShowAsync_WithZeroTimeout_CreatesValidToast()
-    {
-        // Arrange
-        var service = new TnTToastService();
-        ITnTToast? createdToast = null;
-
-        service.OnOpen += (toast) =>
-        {
-            createdToast = toast;
-            return Task.CompletedTask;
-        };
-
-        // Act
-        await service.ShowAsync("Test Title", timeout: 0);
-
-        // Assert
-        createdToast.Should().NotBeNull();
-        createdToast!.Timeout.Should().Be(0);
-    }
-
-    [Fact]
-    public async Task ShowAsync_WithNegativeTimeout_CreatesValidToast()
-    {
-        // Arrange
-        var service = new TnTToastService();
-        ITnTToast? createdToast = null;
-
-        service.OnOpen += (toast) =>
-        {
-            createdToast = toast;
-            return Task.CompletedTask;
-        };
-
-        // Act
-        await service.ShowAsync("Test Title", timeout: -5);
-
-        // Assert
-        createdToast.Should().NotBeNull();
-        createdToast!.Timeout.Should().Be(-5);
-    }
-
-    #endregion
-
-    #region Helper Methods
-
-    private static ITnTToast CreateMockToast(string title)
-    {
-        return new TnTToastService.TnTToastImplementation
-        {
+    private static ITnTToast CreateMockToast(string title) {
+        return new TnTToastService.TnTToastImplementation {
             Title = title,
             Message = "Test Message",
             ShowClose = true,
@@ -664,6 +567,4 @@ public class TnTToastService_Tests
             TextColor = TnTColor.OnSurfaceVariant
         };
     }
-
-    #endregion
 }

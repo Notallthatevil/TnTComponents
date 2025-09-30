@@ -1,14 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Bunit;
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components;
 using TnTComponents.Grid;
 using TnTComponents.Grid.Columns;
 using TnTComponents.Grid.Infrastructure;
-using Xunit;
 using RippleTestingUtility = TnTComponents.Tests.TestingUtility.TestingUtility;
 
 namespace TnTComponents.Tests.Grid.Infrastructure;
@@ -18,27 +11,80 @@ namespace TnTComponents.Tests.Grid.Infrastructure;
 /// </summary>
 public class TnTDataGridBody_Tests : BunitContext {
 
-    /// <summary>
-    ///     Test model for grid body tests.
-    /// </summary>
-    private class TestGridItem {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-    }
-
     private readonly List<TestGridItem> _testItems = [
-        new() { Id = 1, Name = "John Doe", Email = "john@example.com" },
+            new() { Id = 1, Name = "John Doe", Email = "john@example.com" },
         new() { Id = 2, Name = "Jane Smith", Email = "jane@example.com" },
         new() { Id = 3, Name = "Bob Johnson", Email = "bob@example.com" }
-    ];
+        ];
 
     public TnTDataGridBody_Tests() {
         // Arrange (global) & Act: JS module setup for ripple in constructor
         RippleTestingUtility.SetupRippleEffectModule(this);
     }
 
-    #region Rendering Tests
+    [Fact]
+    public void Context_IsRequired() {
+        // Arrange & Act
+        var act = () => Render<TnTDataGridBody<TestGridItem>>();
+
+        // Assert The component may not throw ArgumentNullException explicitly for cascading parameters Instead, it may fail during rendering when trying to use the null context
+        act.Should().Throw<Exception>(); // More general exception expectation
+    }
+
+    [Fact]
+    public void Context_IsSetCorrectly() {
+        // Arrange
+        var grid = CreateDataGrid();
+        var context = new TnTInternalGridContext<TestGridItem>(grid);
+
+        // Act
+        var cut = Render<TnTDataGridBody<TestGridItem>>(parameters => parameters
+            .AddCascadingValue(context));
+
+        // Assert
+        var component = cut.Instance;
+        component.Context.Should().BeSameAs(context);
+    }
+
+    [Fact]
+    public async Task RefreshAsync_ReturnsCompletedTask() {
+        // Arrange
+        var cut = RenderWithItems(_testItems);
+        var component = cut.Instance;
+
+        // Act
+        var task = component.RefreshAsync();
+
+        // Assert
+        task.Should().NotBeNull();
+        await task; // Should complete without throwing
+        task.IsCompleted.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task RefreshAsync_TriggersStateChange() {
+        // Arrange
+        var cut = RenderWithItems(_testItems);
+        var component = cut.Instance;
+        var initialMarkup = cut.Markup;
+
+        // Act
+        await component.RefreshAsync();
+
+        // Assert The refresh should complete without error Since it's a state change trigger, we verify it doesn't throw
+        cut.Markup.Should().NotBeEmpty();
+    }
+
+    [Fact]
+    public void Renders_TbodyElement_WithCorrectStructure() {
+        // Arrange & Act
+        var cut = RenderWithItems(_testItems);
+
+        // Assert
+        var tbody = cut.Find("tbody");
+        tbody.Should().NotBeNull();
+        tbody.Children.Should().HaveCount(3); // Three rows for three items
+    }
 
     [Fact]
     public void Renders_WithItems_ShowsBodyRows() {
@@ -46,7 +92,7 @@ public class TnTDataGridBody_Tests : BunitContext {
         var grid = CreateDataGrid();
         grid.Items = _testItems.AsQueryable();
         var context = new TnTInternalGridContext<TestGridItem>(grid);
-        
+
         // Register columns so content can be rendered
         var nameColumn = new TestTemplateColumn<TestGridItem> {
             CellTemplate = item => builder => builder.AddContent(0, item.Name)
@@ -100,86 +146,6 @@ public class TnTDataGridBody_Tests : BunitContext {
     }
 
     [Fact]
-    public void Renders_TbodyElement_WithCorrectStructure() {
-        // Arrange & Act
-        var cut = RenderWithItems(_testItems);
-
-        // Assert
-        var tbody = cut.Find("tbody");
-        tbody.Should().NotBeNull();
-        tbody.Children.Should().HaveCount(3); // Three rows for three items
-    }
-
-    #endregion
-
-    #region RefreshAsync Tests
-
-    [Fact]
-    public async Task RefreshAsync_TriggersStateChange() {
-        // Arrange
-        var cut = RenderWithItems(_testItems);
-        var component = cut.Instance;
-        var initialMarkup = cut.Markup;
-
-        // Act
-        await component.RefreshAsync();
-
-        // Assert
-        // The refresh should complete without error
-        // Since it's a state change trigger, we verify it doesn't throw
-        cut.Markup.Should().NotBeEmpty();
-    }
-
-    [Fact]
-    public async Task RefreshAsync_ReturnsCompletedTask() {
-        // Arrange
-        var cut = RenderWithItems(_testItems);
-        var component = cut.Instance;
-
-        // Act
-        var task = component.RefreshAsync();
-
-        // Assert
-        task.Should().NotBeNull();
-        await task; // Should complete without throwing
-        task.IsCompleted.Should().BeTrue();
-    }
-
-    #endregion
-
-    #region Context Parameter Tests
-
-    [Fact]
-    public void Context_IsRequired() {
-        // Arrange & Act
-        var act = () => Render<TnTDataGridBody<TestGridItem>>();
-
-        // Assert
-        // The component may not throw ArgumentNullException explicitly for cascading parameters
-        // Instead, it may fail during rendering when trying to use the null context
-        act.Should().Throw<Exception>(); // More general exception expectation
-    }
-
-    [Fact]
-    public void Context_IsSetCorrectly() {
-        // Arrange
-        var grid = CreateDataGrid();
-        var context = new TnTInternalGridContext<TestGridItem>(grid);
-        
-        // Act
-        var cut = Render<TnTDataGridBody<TestGridItem>>(parameters => parameters
-            .AddCascadingValue(context));
-
-        // Assert
-        var component = cut.Instance;
-        component.Context.Should().BeSameAs(context);
-    }
-
-    #endregion
-
-    #region Integration Tests
-
-    [Fact]
     public void RendersCorrectly_WithRowClassCallback() {
         // Arrange
         var grid = CreateDataGrid();
@@ -217,9 +183,12 @@ public class TnTDataGridBody_Tests : BunitContext {
         firstRow.GetAttribute("class").Should().Contain("tnt-interactable");
     }
 
-    #endregion
-
-    #region Helper Methods
+    private TnTDataGrid<TestGridItem> CreateDataGrid() {
+        var grid = new TnTDataGrid<TestGridItem>();
+        grid.ItemKey = item => item.Id;
+        grid.ItemSize = 40;
+        return grid;
+    }
 
     private IRenderedComponent<TnTDataGridBody<TestGridItem>> RenderWithItems(List<TestGridItem> items) {
         var grid = CreateDataGrid();
@@ -231,21 +200,21 @@ public class TnTDataGridBody_Tests : BunitContext {
             .AddCascadingValue(context));
     }
 
-    private TnTDataGrid<TestGridItem> CreateDataGrid() {
-        var grid = new TnTDataGrid<TestGridItem>();
-        grid.ItemKey = item => item.Id;
-        grid.ItemSize = 40;
-        return grid;
+    /// <summary>
+    ///     Test model for grid body tests.
+    /// </summary>
+    private class TestGridItem {
+        public string Email { get; set; } = string.Empty;
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
-
-    #endregion
 
     /// <summary>
     ///     Test implementation of TnTColumnBase for testing purposes.
     /// </summary>
     private class TestTemplateColumn<TItem> : TnTColumnBase<TItem> {
         public RenderFragment<TItem>? CellTemplate { get; set; }
-        
+
         public override string? ElementClass => null;
         public override string? ElementStyle => null;
         public override TnTGridSort<TItem>? SortBy { get; set; }

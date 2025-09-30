@@ -1,9 +1,4 @@
-using System.Collections.Generic;
-using Bunit;
-using Xunit;
-using TnTComponents;
-using Microsoft.AspNetCore.Components;
-using static TnTComponents.Tests.TestingUtility.TestingUtility;
+﻿using static TnTComponents.Tests.TestingUtility.TestingUtility;
 
 namespace TnTComponents.Tests.Layout;
 
@@ -14,172 +9,48 @@ public class TnTSideNavMenuGroup_Tests : BunitContext {
     }
 
     [Fact]
-    public void Renders_Default_MenuGroup_With_Base_Class() {
-        // Arrange & Act
+    public void AdditionalAttributes_Applied_To_Element() {
+        // Arrange
+        var attrs = new Dictionary<string, object> {
+            { "data-test", "menu-group" },
+            { "aria-label", "Navigation group" }
+        };
+
+        // Act
         var cut = Render<TnTSideNavMenuGroup>(p => p
-            .Add(c => c.Label, "Menu Group")
-            .AddChildContent("Group Content"));
-        var div = cut.Find("div.tnt-side-nav-menu-group");
+            .Add(c => c.Label, "Test")
+            .Add(c => c.AdditionalAttributes, attrs));
 
-        // Assert
-        div.Should().NotBeNull();
-        cut.Markup.Should().Contain("Menu Group");
-        cut.Markup.Should().Contain("Group Content");
+        var outerDiv = cut.Find("div");  // First div element
+
+        // Assert - Check that custom attributes are applied
+        outerDiv.GetAttribute("data-test")!.Should().Be("menu-group");
+        outerDiv.GetAttribute("aria-label")!.Should().Be("Navigation group");
+
+        // Base classes should still be present
+        outerDiv.GetAttribute("class")!.Should().Contain("tnt-side-nav-menu-group");
+        outerDiv.GetAttribute("class")!.Should().Contain("tnt-components");
     }
 
     [Fact]
-    public void Label_Is_Required_And_Renders() {
-        // Arrange & Act
-        var cut = Render<TnTSideNavMenuGroup>(p => p.Add(c => c.Label, "Test Label"));
-
-        // Assert
-        cut.Find("span.tnt-side-nav-menu-group-label-content").InnerHtml.Should().Contain("Test Label");
-    }
-
-    [Fact]
-    public void Default_BackgroundColor_Is_SurfaceVariant() {
-        // Arrange & Act
-        var cut = Render<TnTSideNavMenuGroup>(p => p.Add(c => c.Label, "Test"));
-        var style = cut.Find("div.tnt-side-nav-menu-group").GetAttribute("style")!;
-
-        // Assert
-        style.Should().Contain("--tnt-side-nav-menu-group-bg-color:var(--tnt-color-surface-variant)");
-    }
-
-    [Fact]
-    public void Default_TextColor_Is_OnSurfaceVariant() {
-        // Arrange & Act
-        var cut = Render<TnTSideNavMenuGroup>(p => p.Add(c => c.Label, "Test"));
-        var style = cut.Find("div.tnt-side-nav-menu-group").GetAttribute("style")!;
-
-        // Assert
-        style.Should().Contain("--tnt-side-nav-menu-group-fg-color:var(--tnt-color-on-surface-variant)");
-    }
-
-    [Fact]
-    public void Default_TintColor_Is_SurfaceTint() {
-        // Arrange & Act
-        var cut = Render<TnTSideNavMenuGroup>(p => p.Add(c => c.Label, "Test"));
-        var style = cut.Find("div.tnt-side-nav-menu-group").GetAttribute("style")!;
-
-        // Assert
-        style.Should().Contain("--tnt-side-nav-menu-group-tint-color:var(--tnt-color-surface-tint)");
-    }
-
-    [Fact]
-    public void Default_EnableRipple_Is_True() {
+    public void Arrow_Icon_Is_Present() {
         // Arrange & Act
         var cut = Render<TnTSideNavMenuGroup>(p => p.Add(c => c.Label, "Test"));
 
         // Assert
-        cut.Find("div.tnt-side-nav-menu-group-label").GetAttribute("class")!.Should().Contain("tnt-ripple");
-        cut.Markup.Should().Contain("TnTRippleEffect");
+        cut.Find("span.tnt-close-icon").Should().NotBeNull();
+        cut.Markup.Should().Contain("arrow_drop_up");
     }
 
     [Fact]
-    public void Default_ExpandByDefault_Is_True() {
-        // Arrange & Act
-        var cut = Render<TnTSideNavMenuGroup>(p => p.Add(c => c.Label, "Test"));
-
-        // Assert
-        cut.Find("span.tnt-side-nav-menu-group-toggler").GetAttribute("class")!.Should().Contain("tnt-toggle");
-    }
-
-    [Fact]
-    public void ExpandByDefault_False_Does_Not_Add_Toggle_Class() {
+    public void AutoFocus_True_Renders_Autofocus_Attribute() {
         // Arrange & Act
         var cut = Render<TnTSideNavMenuGroup>(p => p
             .Add(c => c.Label, "Test")
-            .Add(c => c.ExpandByDefault, false));
+            .Add(c => c.AutoFocus, true));
 
         // Assert
-        cut.Find("span.tnt-side-nav-menu-group-toggler").GetAttribute("class")!.Should().NotContain("tnt-toggle");
-    }
-
-    [Fact]
-    public void Disabled_True_Adds_Disabled_Class() {
-        // Arrange & Act
-        var cut = Render<TnTSideNavMenuGroup>(p => p
-            .Add(c => c.Label, "Test")
-            .Add(c => c.Disabled, true));
-
-        // Assert
-        cut.Find("div.tnt-side-nav-menu-group").GetAttribute("class")!.Should().Contain("tnt-disabled");
-    }
-
-    [Fact]
-    public void Disabled_False_Does_Not_Add_Disabled_Class() {
-        // Arrange & Act
-        var cut = Render<TnTSideNavMenuGroup>(p => p
-            .Add(c => c.Label, "Test")
-            .Add(c => c.Disabled, false));
-
-        // Assert
-        cut.Find("div.tnt-side-nav-menu-group").GetAttribute("class")!.Should().NotContain("tnt-disabled");
-    }
-
-    [Fact]
-    public void TintColor_Adds_Tint_Color_Class_And_Variable() {
-        // Arrange & Act
-        var cut = Render<TnTSideNavMenuGroup>(p => p
-            .Add(c => c.Label, "Test")
-            .Add(c => c.TintColor, TnTColor.Primary));
-
-        var cls = cut.Find("div.tnt-side-nav-menu-group-label").GetAttribute("class")!;
-        var style = cut.Find("div.tnt-side-nav-menu-group").GetAttribute("style")!;
-
-        // Assert
-        cls.Should().Contain("tnt-side-nav-menu-group-tint-color");
-        style.Should().Contain("--tnt-side-nav-menu-group-tint-color:var(--tnt-color-primary)");
-    }
-
-    [Fact]
-    public void OnTintColor_Adds_On_Tint_Color_Class_And_Variable() {
-        // Arrange & Act
-        var cut = Render<TnTSideNavMenuGroup>(p => p
-            .Add(c => c.Label, "Test")
-            .Add(c => c.OnTintColor, TnTColor.OnPrimary));
-
-        var cls = cut.Find("div.tnt-side-nav-menu-group-label").GetAttribute("class")!;
-        var style = cut.Find("div.tnt-side-nav-menu-group").GetAttribute("style")!;
-
-        // Assert
-        cls.Should().Contain("tnt-side-nav-menu-group-on-tint-color");
-        style.Should().Contain("--tnt-side-nav-menu-group-on-tint-color:var(--tnt-color-on-primary)");
-    }
-
-    [Fact]
-    public void EnableRipple_False_Does_Not_Add_Ripple_Class_Or_Effect() {
-        // Arrange & Act
-        var cut = Render<TnTSideNavMenuGroup>(p => p
-            .Add(c => c.Label, "Test")
-            .Add(c => c.EnableRipple, false));
-
-        // Assert
-        cut.Find("div.tnt-side-nav-menu-group-label").GetAttribute("class")!.Should().NotContain("tnt-ripple");
-        cut.Markup.Should().NotContain("TnTRippleEffect");
-    }
-
-    [Fact]
-    public void Icon_Renders_When_Provided() {
-        // Arrange & Act
-        var cut = Render<TnTSideNavMenuGroup>(p => p
-            .Add(c => c.Label, "Test")
-            .Add(c => c.Icon, MaterialIcon.Folder));
-
-        // Assert
-        cut.Markup.Should().Contain("folder");
-    }
-
-    [Fact]
-    public void Icon_Does_Not_Render_When_Null() {
-        // Arrange & Act
-        var cut = Render<TnTSideNavMenuGroup>(p => p
-            .Add(c => c.Label, "Test")
-            .Add(c => c.Icon, (TnTIcon?)null));
-
-        // Assert
-        cut.Find("span.tnt-side-nav-menu-group-label-content").InnerHtml.Should().NotContain("<span");
+        cut.Find("div.tnt-side-nav-menu-group").HasAttribute("autofocus").Should().BeTrue();
     }
 
     [Fact]
@@ -195,16 +66,6 @@ public class TnTSideNavMenuGroup_Tests : BunitContext {
     }
 
     [Fact]
-    public void Arrow_Icon_Is_Present() {
-        // Arrange & Act
-        var cut = Render<TnTSideNavMenuGroup>(p => p.Add(c => c.Label, "Test"));
-
-        // Assert
-        cut.Find("span.tnt-close-icon").Should().NotBeNull();
-        cut.Markup.Should().Contain("arrow_drop_up");
-    }
-
-    [Fact]
     public void Click_Handler_Is_Attached() {
         // Arrange & Act
         var cut = Render<TnTSideNavMenuGroup>(p => p.Add(c => c.Label, "Test"));
@@ -212,25 +73,6 @@ public class TnTSideNavMenuGroup_Tests : BunitContext {
         // Assert
         cut.Find("div.tnt-side-nav-menu-group-label").GetAttribute("onclick")!
             .Should().Be("TnTComponents.toggleSideNavGroup(event)");
-    }
-
-    [Fact]
-    public void Data_Permanent_Section_Is_Present() {
-        // Arrange & Act
-        var cut = Render<TnTSideNavMenuGroup>(p => p.Add(c => c.Label, "Test"));
-
-        // Assert
-        cut.Find("span.tnt-side-nav-data-permanent").Should().NotBeNull();
-        cut.Find("span.tnt-side-nav-data-permanent").HasAttribute("data-permanent").Should().BeTrue();
-    }
-
-    [Fact]
-    public void Interactable_Class_Is_Present() {
-        // Arrange & Act
-        var cut = Render<TnTSideNavMenuGroup>(p => p.Add(c => c.Label, "Test"));
-
-        // Assert
-        cut.Find("div.tnt-side-nav-menu-group-label").GetAttribute("class")!.Should().Contain("tnt-interactable");
     }
 
     [Fact]
@@ -258,27 +100,93 @@ public class TnTSideNavMenuGroup_Tests : BunitContext {
     }
 
     [Fact]
-    public void AdditionalAttributes_Applied_To_Element() {
-        // Arrange
-        var attrs = new Dictionary<string, object> { 
-            { "data-test", "menu-group" },
-            { "aria-label", "Navigation group" }
-        };
+    public void Data_Permanent_Section_Is_Present() {
+        // Arrange & Act
+        var cut = Render<TnTSideNavMenuGroup>(p => p.Add(c => c.Label, "Test"));
 
-        // Act
+        // Assert
+        cut.Find("span.tnt-side-nav-data-permanent").Should().NotBeNull();
+        cut.Find("span.tnt-side-nav-data-permanent").HasAttribute("data-permanent").Should().BeTrue();
+    }
+
+    [Fact]
+    public void Default_BackgroundColor_Is_SurfaceVariant() {
+        // Arrange & Act
+        var cut = Render<TnTSideNavMenuGroup>(p => p.Add(c => c.Label, "Test"));
+        var style = cut.Find("div.tnt-side-nav-menu-group").GetAttribute("style")!;
+
+        // Assert
+        style.Should().Contain("--tnt-side-nav-menu-group-bg-color:var(--tnt-color-surface-variant)");
+    }
+
+    [Fact]
+    public void Default_EnableRipple_Is_True() {
+        // Arrange & Act
+        var cut = Render<TnTSideNavMenuGroup>(p => p.Add(c => c.Label, "Test"));
+
+        // Assert
+        cut.Find("div.tnt-side-nav-menu-group-label").GetAttribute("class")!.Should().Contain("tnt-ripple");
+        cut.Markup.Should().Contain("TnTRippleEffect");
+    }
+
+    [Fact]
+    public void Default_ExpandByDefault_Is_True() {
+        // Arrange & Act
+        var cut = Render<TnTSideNavMenuGroup>(p => p.Add(c => c.Label, "Test"));
+
+        // Assert
+        cut.Find("span.tnt-side-nav-menu-group-toggler").GetAttribute("class")!.Should().Contain("tnt-toggle");
+    }
+
+    [Fact]
+    public void Default_TextColor_Is_OnSurfaceVariant() {
+        // Arrange & Act
+        var cut = Render<TnTSideNavMenuGroup>(p => p.Add(c => c.Label, "Test"));
+        var style = cut.Find("div.tnt-side-nav-menu-group").GetAttribute("style")!;
+
+        // Assert
+        style.Should().Contain("--tnt-side-nav-menu-group-fg-color:var(--tnt-color-on-surface-variant)");
+    }
+
+    [Fact]
+    public void Default_TintColor_Is_SurfaceTint() {
+        // Arrange & Act
+        var cut = Render<TnTSideNavMenuGroup>(p => p.Add(c => c.Label, "Test"));
+        var style = cut.Find("div.tnt-side-nav-menu-group").GetAttribute("style")!;
+
+        // Assert
+        style.Should().Contain("--tnt-side-nav-menu-group-tint-color:var(--tnt-color-surface-tint)");
+    }
+
+    [Fact]
+    public void Disabled_False_Does_Not_Add_Disabled_Class() {
+        // Arrange & Act
         var cut = Render<TnTSideNavMenuGroup>(p => p
             .Add(c => c.Label, "Test")
-            .Add(c => c.AdditionalAttributes, attrs));
-        
-        var outerDiv = cut.Find("div");  // First div element
+            .Add(c => c.Disabled, false));
 
-        // Assert - Check that custom attributes are applied
-        outerDiv.GetAttribute("data-test")!.Should().Be("menu-group");
-        outerDiv.GetAttribute("aria-label")!.Should().Be("Navigation group");
-        
-        // Base classes should still be present
-        outerDiv.GetAttribute("class")!.Should().Contain("tnt-side-nav-menu-group");
-        outerDiv.GetAttribute("class")!.Should().Contain("tnt-components");
+        // Assert
+        cut.Find("div.tnt-side-nav-menu-group").GetAttribute("class")!.Should().NotContain("tnt-disabled");
+    }
+
+    [Fact]
+    public void Disabled_True_Adds_Disabled_Class() {
+        // Arrange & Act
+        var cut = Render<TnTSideNavMenuGroup>(p => p
+            .Add(c => c.Label, "Test")
+            .Add(c => c.Disabled, true));
+
+        // Assert
+        cut.Find("div.tnt-side-nav-menu-group").GetAttribute("class")!.Should().Contain("tnt-disabled");
+    }
+
+    [Fact]
+    public void Element_Reference_Captured() {
+        // Arrange & Act
+        var cut = Render<TnTSideNavMenuGroup>(p => p.Add(c => c.Label, "Test"));
+
+        // Assert
+        cut.Find("div.tnt-side-nav-menu-group").Should().NotBeNull();
     }
 
     [Fact]
@@ -293,17 +201,6 @@ public class TnTSideNavMenuGroup_Tests : BunitContext {
     }
 
     [Fact]
-    public void ElementTitle_Renders_Title_Attribute() {
-        // Arrange & Act
-        var cut = Render<TnTSideNavMenuGroup>(p => p
-            .Add(c => c.Label, "Test")
-            .Add(c => c.ElementTitle, "Menu group"));
-
-        // Assert
-        cut.Find("div.tnt-side-nav-menu-group").GetAttribute("title")!.Should().Be("Menu group");
-    }
-
-    [Fact]
     public void ElementLang_Renders_Lang_Attribute() {
         // Arrange & Act
         var cut = Render<TnTSideNavMenuGroup>(p => p
@@ -315,23 +212,77 @@ public class TnTSideNavMenuGroup_Tests : BunitContext {
     }
 
     [Fact]
-    public void AutoFocus_True_Renders_Autofocus_Attribute() {
+    public void ElementTitle_Renders_Title_Attribute() {
         // Arrange & Act
         var cut = Render<TnTSideNavMenuGroup>(p => p
             .Add(c => c.Label, "Test")
-            .Add(c => c.AutoFocus, true));
+            .Add(c => c.ElementTitle, "Menu group"));
 
         // Assert
-        cut.Find("div.tnt-side-nav-menu-group").HasAttribute("autofocus").Should().BeTrue();
+        cut.Find("div.tnt-side-nav-menu-group").GetAttribute("title")!.Should().Be("Menu group");
     }
 
     [Fact]
-    public void Element_Reference_Captured() {
+    public void EnableRipple_False_Does_Not_Add_Ripple_Class_Or_Effect() {
+        // Arrange & Act
+        var cut = Render<TnTSideNavMenuGroup>(p => p
+            .Add(c => c.Label, "Test")
+            .Add(c => c.EnableRipple, false));
+
+        // Assert
+        cut.Find("div.tnt-side-nav-menu-group-label").GetAttribute("class")!.Should().NotContain("tnt-ripple");
+        cut.Markup.Should().NotContain("TnTRippleEffect");
+    }
+
+    [Fact]
+    public void ExpandByDefault_False_Does_Not_Add_Toggle_Class() {
+        // Arrange & Act
+        var cut = Render<TnTSideNavMenuGroup>(p => p
+            .Add(c => c.Label, "Test")
+            .Add(c => c.ExpandByDefault, false));
+
+        // Assert
+        cut.Find("span.tnt-side-nav-menu-group-toggler").GetAttribute("class")!.Should().NotContain("tnt-toggle");
+    }
+
+    [Fact]
+    public void Icon_Does_Not_Render_When_Null() {
+        // Arrange & Act
+        var cut = Render<TnTSideNavMenuGroup>(p => p
+            .Add(c => c.Label, "Test")
+            .Add(c => c.Icon, (TnTIcon?)null));
+
+        // Assert
+        cut.Find("span.tnt-side-nav-menu-group-label-content").InnerHtml.Should().NotContain("<span");
+    }
+
+    [Fact]
+    public void Icon_Renders_When_Provided() {
+        // Arrange & Act
+        var cut = Render<TnTSideNavMenuGroup>(p => p
+            .Add(c => c.Label, "Test")
+            .Add(c => c.Icon, MaterialIcon.Folder));
+
+        // Assert
+        cut.Markup.Should().Contain("folder");
+    }
+
+    [Fact]
+    public void Interactable_Class_Is_Present() {
         // Arrange & Act
         var cut = Render<TnTSideNavMenuGroup>(p => p.Add(c => c.Label, "Test"));
 
         // Assert
-        cut.Find("div.tnt-side-nav-menu-group").Should().NotBeNull();
+        cut.Find("div.tnt-side-nav-menu-group-label").GetAttribute("class")!.Should().Contain("tnt-interactable");
+    }
+
+    [Fact]
+    public void Label_Is_Required_And_Renders() {
+        // Arrange & Act
+        var cut = Render<TnTSideNavMenuGroup>(p => p.Add(c => c.Label, "Test Label"));
+
+        // Assert
+        cut.Find("span.tnt-side-nav-menu-group-label-content").InnerHtml.Should().Contain("Test Label");
     }
 
     [Fact]
@@ -372,5 +323,49 @@ public class TnTSideNavMenuGroup_Tests : BunitContext {
         cut.Markup.Should().Contain("Multi Property Group");
         contentDiv.InnerHtml.Should().Contain("<div>Child Item</div>");
         cut.Markup.Should().NotContain("TnTRippleEffect");
+    }
+
+    [Fact]
+    public void OnTintColor_Adds_On_Tint_Color_Class_And_Variable() {
+        // Arrange & Act
+        var cut = Render<TnTSideNavMenuGroup>(p => p
+            .Add(c => c.Label, "Test")
+            .Add(c => c.OnTintColor, TnTColor.OnPrimary));
+
+        var cls = cut.Find("div.tnt-side-nav-menu-group-label").GetAttribute("class")!;
+        var style = cut.Find("div.tnt-side-nav-menu-group").GetAttribute("style")!;
+
+        // Assert
+        cls.Should().Contain("tnt-side-nav-menu-group-on-tint-color");
+        style.Should().Contain("--tnt-side-nav-menu-group-on-tint-color:var(--tnt-color-on-primary)");
+    }
+
+    [Fact]
+    public void Renders_Default_MenuGroup_With_Base_Class() {
+        // Arrange & Act
+        var cut = Render<TnTSideNavMenuGroup>(p => p
+            .Add(c => c.Label, "Menu Group")
+            .AddChildContent("Group Content"));
+        var div = cut.Find("div.tnt-side-nav-menu-group");
+
+        // Assert
+        div.Should().NotBeNull();
+        cut.Markup.Should().Contain("Menu Group");
+        cut.Markup.Should().Contain("Group Content");
+    }
+
+    [Fact]
+    public void TintColor_Adds_Tint_Color_Class_And_Variable() {
+        // Arrange & Act
+        var cut = Render<TnTSideNavMenuGroup>(p => p
+            .Add(c => c.Label, "Test")
+            .Add(c => c.TintColor, TnTColor.Primary));
+
+        var cls = cut.Find("div.tnt-side-nav-menu-group-label").GetAttribute("class")!;
+        var style = cut.Find("div.tnt-side-nav-menu-group").GetAttribute("style")!;
+
+        // Assert
+        cls.Should().Contain("tnt-side-nav-menu-group-tint-color");
+        style.Should().Contain("--tnt-side-nav-menu-group-tint-color:var(--tnt-color-primary)");
     }
 }

@@ -1,114 +1,27 @@
-using System.Collections.Generic;
-using System.Linq;
-using Bunit;
-using Microsoft.AspNetCore.Components;
-using Xunit;
+﻿using Microsoft.AspNetCore.Components;
 
 namespace TnTComponents.Tests.Script;
 
 public class TnTPageScript_Tests : BunitContext {
 
     [Fact]
-    public void Renders_Custom_Element_With_Src_Attribute() {
-        // Arrange
-        const string scriptSrc = "./my-script.js";
+    public void BuildRenderTree_Uses_Correct_Sequence_Numbers() {
+        // This test verifies the internal implementation follows the documented pattern Act
+        var cut = Render<TnTPageScript>(p => p.Add(s => s.Src, "./test.js"));
 
+        // Assert We can't directly test sequence numbers, but we can verify the structure is correct
+        var element = cut.Find("tnt-page-script");
+        element.Should().NotBeNull();
+        element.GetAttribute("src").Should().Be("./test.js");
+    }
+
+    [Fact]
+    public void Component_Implements_ComponentBase() {
         // Act
-        var cut = Render<TnTPageScript>(p => p.Add(s => s.Src, scriptSrc));
-        var element = cut.Find("tnt-page-script");
+        var cut = Render<TnTPageScript>(p => p.Add(s => s.Src, "./test.js"));
 
         // Assert
-        element.Should().NotBeNull();
-        element.GetAttribute("src").Should().Be(scriptSrc);
-    }
-
-    [Fact]
-    public void Src_Parameter_Is_Required() {
-        // Arrange & Act
-        var cut = Render<TnTPageScript>();
-        var element = cut.Find("tnt-page-script");
-
-        // Assert
-        element.Should().NotBeNull();
-        element.GetAttribute("src").Should().BeNull();
-    }
-
-    [Fact]
-    public void Renders_With_Different_Src_Values() {
-        // Arrange
-        var testCases = new[]
-        {
-            "./component.js",
-            "/assets/scripts/module.js",
-            "https://cdn.example.com/script.js",
-            "../shared/utils.js",
-            "./folder/subfolder/script.min.js"
-        };
-
-        foreach (var src in testCases)
-        {
-            // Act
-            var cut = Render<TnTPageScript>(p => p.Add(s => s.Src, src));
-            var element = cut.Find("tnt-page-script");
-
-            // Assert
-            element.GetAttribute("src").Should().Be(src, $"because src should be {src}");
-        }
-    }
-
-    [Fact]
-    public void Src_Parameter_Handles_Null_Value() {
-        // Act
-        var cut = Render<TnTPageScript>(p => p.Add(s => s.Src, null!));
-        var element = cut.Find("tnt-page-script");
-
-        // Assert
-        element.Should().NotBeNull();
-        element.GetAttribute("src").Should().BeNull();
-    }
-
-    [Fact]
-    public void Src_Parameter_Handles_Empty_String() {
-        // Act
-        var cut = Render<TnTPageScript>(p => p.Add(s => s.Src, string.Empty));
-        var element = cut.Find("tnt-page-script");
-
-        // Assert
-        element.Should().NotBeNull();
-        element.GetAttribute("src").Should().Be(string.Empty);
-    }
-
-    [Fact]
-    public void Src_Parameter_Handles_Whitespace_String() {
-        // Arrange
-        const string whitespaceSrc = "   ";
-
-        // Act
-        var cut = Render<TnTPageScript>(p => p.Add(s => s.Src, whitespaceSrc));
-        var element = cut.Find("tnt-page-script");
-
-        // Assert
-        element.Should().NotBeNull();
-        element.GetAttribute("src").Should().Be(whitespaceSrc);
-    }
-
-    [Fact]
-    public void Re_Render_With_Different_Src_Updates_Attribute() {
-        // Arrange
-        const string initialSrc = "./initial.js";
-        const string updatedSrc = "./updated.js";
-
-        // Act - Initial render
-        var cut = Render<TnTPageScript>(p => p.Add(s => s.Src, initialSrc));
-        var element = cut.Find("tnt-page-script");
-        element.GetAttribute("src").Should().Be(initialSrc);
-
-        // Act - Re-render with updated src by rendering new component
-        var cut2 = Render<TnTPageScript>(p => p.Add(s => s.Src, updatedSrc));
-        element = cut2.Find("tnt-page-script");
-
-        // Assert
-        element.GetAttribute("src").Should().Be(updatedSrc);
+        cut.Instance.Should().BeAssignableTo<ComponentBase>();
     }
 
     [Fact]
@@ -168,12 +81,119 @@ public class TnTPageScript_Tests : BunitContext {
     }
 
     [Fact]
-    public void Component_Implements_ComponentBase() {
-        // Act
-        var cut = Render<TnTPageScript>(p => p.Add(s => s.Src, "./test.js"));
+    public void Re_Render_With_Different_Src_Updates_Attribute() {
+        // Arrange
+        const string initialSrc = "./initial.js";
+        const string updatedSrc = "./updated.js";
+
+        // Act - Initial render
+        var cut = Render<TnTPageScript>(p => p.Add(s => s.Src, initialSrc));
+        var element = cut.Find("tnt-page-script");
+        element.GetAttribute("src").Should().Be(initialSrc);
+
+        // Act - Re-render with updated src by rendering new component
+        var cut2 = Render<TnTPageScript>(p => p.Add(s => s.Src, updatedSrc));
+        element = cut2.Find("tnt-page-script");
 
         // Assert
-        cut.Instance.Should().BeAssignableTo<ComponentBase>();
+        element.GetAttribute("src").Should().Be(updatedSrc);
+    }
+
+    [Fact]
+    public void Renders_Custom_Element_With_Src_Attribute() {
+        // Arrange
+        const string scriptSrc = "./my-script.js";
+
+        // Act
+        var cut = Render<TnTPageScript>(p => p.Add(s => s.Src, scriptSrc));
+        var element = cut.Find("tnt-page-script");
+
+        // Assert
+        element.Should().NotBeNull();
+        element.GetAttribute("src").Should().Be(scriptSrc);
+    }
+
+    [Fact]
+    public void Renders_With_Different_Src_Values() {
+        // Arrange
+        var testCases = new[]
+        {
+            "./component.js",
+            "/assets/scripts/module.js",
+            "https://cdn.example.com/script.js",
+            "../shared/utils.js",
+            "./folder/subfolder/script.min.js"
+        };
+
+        foreach (var src in testCases) {
+            // Act
+            var cut = Render<TnTPageScript>(p => p.Add(s => s.Src, src));
+            var element = cut.Find("tnt-page-script");
+
+            // Assert
+            element.GetAttribute("src").Should().Be(src, $"because src should be {src}");
+        }
+    }
+
+    [Fact]
+    public void Src_Parameter_Handles_Empty_String() {
+        // Act
+        var cut = Render<TnTPageScript>(p => p.Add(s => s.Src, string.Empty));
+        var element = cut.Find("tnt-page-script");
+
+        // Assert
+        element.Should().NotBeNull();
+        element.GetAttribute("src").Should().Be(string.Empty);
+    }
+
+    [Fact]
+    public void Src_Parameter_Handles_Null_Value() {
+        // Act
+        var cut = Render<TnTPageScript>(p => p.Add(s => s.Src, null!));
+        var element = cut.Find("tnt-page-script");
+
+        // Assert
+        element.Should().NotBeNull();
+        element.GetAttribute("src").Should().BeNull();
+    }
+
+    [Fact]
+    public void Src_Parameter_Handles_Whitespace_String() {
+        // Arrange
+        const string whitespaceSrc = "   ";
+
+        // Act
+        var cut = Render<TnTPageScript>(p => p.Add(s => s.Src, whitespaceSrc));
+        var element = cut.Find("tnt-page-script");
+
+        // Assert
+        element.Should().NotBeNull();
+        element.GetAttribute("src").Should().Be(whitespaceSrc);
+    }
+
+    [Fact]
+    public void Src_Parameter_Has_EditorRequired_Attribute() {
+        // Arrange & Act
+        var srcProperty = typeof(TnTPageScript).GetProperty(nameof(TnTPageScript.Src));
+
+        // Assert
+        srcProperty.Should().NotBeNull();
+        var parameterAttribute = srcProperty!.GetCustomAttributes(typeof(ParameterAttribute), false);
+        var editorRequiredAttribute = srcProperty.GetCustomAttributes(typeof(EditorRequiredAttribute), false);
+
+        parameterAttribute.Should().HaveCount(1, "because Src should be a Parameter");
+        editorRequiredAttribute.Should().HaveCount(1, "because Src should be EditorRequired");
+    }
+
+    [Fact]
+    public void Src_Parameter_Is_Required() {
+        // Arrange & Act
+        var cut = Render<TnTPageScript>();
+        var element = cut.Find("tnt-page-script");
+
+        // Assert
+        element.Should().NotBeNull();
+        element.GetAttribute("src").Should().BeNull();
     }
 
     [Theory]
@@ -188,32 +208,5 @@ public class TnTPageScript_Tests : BunitContext {
 
         // Assert
         element.GetAttribute("src").Should().Be(srcValue);
-    }
-
-    [Fact]
-    public void Src_Parameter_Has_EditorRequired_Attribute() {
-        // Arrange & Act
-        var srcProperty = typeof(TnTPageScript).GetProperty(nameof(TnTPageScript.Src));
-
-        // Assert
-        srcProperty.Should().NotBeNull();
-        var parameterAttribute = srcProperty!.GetCustomAttributes(typeof(ParameterAttribute), false);
-        var editorRequiredAttribute = srcProperty.GetCustomAttributes(typeof(EditorRequiredAttribute), false);
-        
-        parameterAttribute.Should().HaveCount(1, "because Src should be a Parameter");
-        editorRequiredAttribute.Should().HaveCount(1, "because Src should be EditorRequired");
-    }
-
-    [Fact]
-    public void BuildRenderTree_Uses_Correct_Sequence_Numbers() {
-        // This test verifies the internal implementation follows the documented pattern
-        // Act
-        var cut = Render<TnTPageScript>(p => p.Add(s => s.Src, "./test.js"));
-        
-        // Assert
-        // We can't directly test sequence numbers, but we can verify the structure is correct
-        var element = cut.Find("tnt-page-script");
-        element.Should().NotBeNull();
-        element.GetAttribute("src").Should().Be("./test.js");
     }
 }

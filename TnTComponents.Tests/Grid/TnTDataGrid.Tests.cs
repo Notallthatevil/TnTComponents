@@ -1,18 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Bunit;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using Microsoft.JSInterop;
-using TnTComponents.Core;
 using TnTComponents.Grid;
 using TnTComponents.Grid.Columns;
-using TnTComponents.Grid.Infrastructure;
 using TnTComponents.Virtualization;
-using Xunit;
 using RippleTestingUtility = TnTComponents.Tests.TestingUtility.TestingUtility;
 
 namespace TnTComponents.Tests.Grid;
@@ -22,25 +12,13 @@ namespace TnTComponents.Tests.Grid;
 /// </summary>
 public class TnTDataGrid_Tests : BunitContext {
 
-    /// <summary>
-    ///     Test model for data grid tests.
-    /// </summary>
-    private class TestGridItem {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public DateTime CreatedDate { get; set; }
-        public bool IsActive { get; set; }
-        public decimal Amount { get; set; }
-    }
-
     private readonly List<TestGridItem> _testItems = [
-        new() { Id = 1, Name = "John Doe", Email = "john@example.com", CreatedDate = new DateTime(2023, 1, 1), IsActive = true, Amount = 100.50m },
+            new() { Id = 1, Name = "John Doe", Email = "john@example.com", CreatedDate = new DateTime(2023, 1, 1), IsActive = true, Amount = 100.50m },
         new() { Id = 2, Name = "Jane Smith", Email = "jane@example.com", CreatedDate = new DateTime(2023, 2, 1), IsActive = false, Amount = 200.75m },
         new() { Id = 3, Name = "Bob Johnson", Email = "bob@example.com", CreatedDate = new DateTime(2023, 3, 1), IsActive = true, Amount = 150.25m },
         new() { Id = 4, Name = "Alice Brown", Email = "alice@example.com", CreatedDate = new DateTime(2023, 4, 1), IsActive = false, Amount = 300.00m },
         new() { Id = 5, Name = "Charlie Wilson", Email = "charlie@example.com", CreatedDate = new DateTime(2023, 5, 1), IsActive = true, Amount = 75.99m }
-    ];
+        ];
 
     public TnTDataGrid_Tests() {
         // Set up JavaScript module for ripple effects
@@ -58,7 +36,67 @@ public class TnTDataGrid_Tests : BunitContext {
         virtualizeModule.Setup<int>("getScrollTop", _ => true).SetResult(0);
     }
 
-    #region Constructor and Initial State Tests
+    [Fact]
+    public void AdditionalAttributes_AreAppliedToTable() {
+        // Arrange
+        var cut = RenderDataGrid(parameters => parameters
+            .AddUnmatched("data-testid", "test-grid")
+            .AddUnmatched("aria-label", "Test Data Grid"));
+
+        // Act & Assert
+        var table = cut.Find("table");
+        Assert.Equal("test-grid", table.GetAttribute("data-testid"));
+        Assert.Equal("Test Data Grid", table.GetAttribute("aria-label"));
+    }
+
+    [Fact]
+    public void BackgroundColor_CanBeCustomized() {
+        // Arrange & Act
+        var cut = RenderDataGrid(parameters => parameters
+            .Add(p => p.BackgroundColor, TnTColor.Surface));
+
+        // Assert
+        Assert.Equal(TnTColor.Surface, cut.Instance.BackgroundColor);
+        cut.Markup.Should().Contain("--tnt-data-grid-bg-color:var(--tnt-color-surface)");
+    }
+
+    [Fact]
+    public void BackgroundColor_DefaultValue_IsBackground() {
+        // Arrange
+        var cut = RenderDataGrid();
+
+        // Act & Assert
+        Assert.Equal(TnTColor.Background, cut.Instance.BackgroundColor);
+    }
+
+    [Fact]
+    public void CascadingValue_InternalGridContext_IsProvided() {
+        // Arrange & Act
+        var cut = RenderDataGrid(grid => grid
+            .Add(p => p.ChildContent, (RenderFragment)(builder => {
+                builder.OpenElement(0, "div");
+                builder.AddContent(1, "Content rendered");
+                builder.CloseElement();
+            })));
+
+        // Assert
+        cut.Markup.Should().Contain("Content rendered");
+    }
+
+    [Fact]
+    public async Task ComplexScenario_WithSortingAndPagination_WorksCorrectly() {
+        // Arrange
+        var pagination = new TnTPaginationState();
+        await pagination.SetTotalItemCountAsync(_testItems.Count);
+        pagination.ItemsPerPage = 2;
+
+        // Act
+        var cut = RenderCompleteGrid(parameters => parameters
+            .Add(p => p.Pagination, pagination));
+
+        // Assert
+        cut.FindAll("tbody tr").Should().HaveCount(2); // Should show only first page
+    }
 
     [Fact]
     public void Constructor_InitializesCorrectly() {
@@ -88,39 +126,6 @@ public class TnTDataGrid_Tests : BunitContext {
         Assert.Equal(item, grid.ItemKey(item));
     }
 
-    #endregion
-
-    #region Parameter Tests
-
-    [Fact]
-    public void BackgroundColor_DefaultValue_IsBackground() {
-        // Arrange
-        var cut = RenderDataGrid();
-
-        // Act & Assert
-        Assert.Equal(TnTColor.Background, cut.Instance.BackgroundColor);
-    }
-
-    [Fact]
-    public void BackgroundColor_CanBeCustomized() {
-        // Arrange & Act
-        var cut = RenderDataGrid(parameters => parameters
-            .Add(p => p.BackgroundColor, TnTColor.Surface));
-
-        // Assert
-        Assert.Equal(TnTColor.Surface, cut.Instance.BackgroundColor);
-        cut.Markup.Should().Contain("--tnt-data-grid-bg-color:var(--tnt-color-surface)");
-    }
-
-    [Fact]
-    public void TextColor_DefaultValue_IsOnBackground() {
-        // Arrange
-        var cut = RenderDataGrid();
-
-        // Act & Assert
-        Assert.Equal(TnTColor.OnBackground, cut.Instance.TextColor);
-    }
-
     [Fact]
     public void DataGridAppearance_CanBeSet() {
         // Arrange & Act
@@ -134,60 +139,17 @@ public class TnTDataGrid_Tests : BunitContext {
     }
 
     [Fact]
-    public void Resizable_WhenTrue_AddsResizableClass() {
-        // Arrange & Act
+    public void Dispose_CancelsOperationsAndCleansUpResources() {
+        // Arrange
+        var pagination = new TnTPaginationState();
         var cut = RenderDataGrid(parameters => parameters
-            .Add(p => p.Resizable, true));
-
-        // Assert
-        Assert.True(cut.Instance.Resizable);
-        cut.Find("table").GetAttribute("class").Should().Contain("tnt-resizable");
-    }
-
-    [Fact]
-    public void ItemSize_DefaultValue_Is32() {
-        // Arrange
-        var cut = RenderDataGrid();
-
-        // Act & Assert
-        Assert.Equal(32, cut.Instance.ItemSize);
-    }
-
-    [Fact]
-    public void ItemSize_CanBeCustomized() {
-        // Arrange & Act
-        var cut = RenderDataGrid(parameters => parameters
-            .Add(p => p.ItemSize, 48));
-
-        // Assert
-        Assert.Equal(48, cut.Instance.ItemSize);
-    }
-
-    [Fact]
-    public void OverscanCount_DefaultValue_Is5() {
-        // Arrange
-        var cut = RenderDataGrid();
-
-        // Act & Assert
-        Assert.Equal(5, cut.Instance.OverscanCount);
-    }
-
-    [Fact]
-    public void ItemKey_CanBeCustomized() {
-        // Arrange
-        Func<TestGridItem, object> customKeyFunc = item => item.Id;
+            .Add(p => p.Pagination, pagination));
 
         // Act
-        var cut = RenderDataGrid(parameters => parameters
-            .Add(p => p.ItemKey, customKeyFunc));
+        cut.Instance.Dispose();
 
-        // Assert
-        Assert.Equal(customKeyFunc, cut.Instance.ItemKey);
+        // Assert Disposal should complete without throwing Internal state should be cleaned up (cancellation tokens, event subscriptions)
     }
-
-    #endregion
-
-    #region CSS Classes and Styles Tests
 
     [Fact]
     public void ElementClass_ContainsBaseClass() {
@@ -234,21 +196,51 @@ public class TnTDataGrid_Tests : BunitContext {
     }
 
     [Fact]
-    public void AdditionalAttributes_AreAppliedToTable() {
-        // Arrange
+    public void EmptyChildContent_RendersWithoutColumns() {
+        // Arrange & Act
         var cut = RenderDataGrid(parameters => parameters
-            .AddUnmatched("data-testid", "test-grid")
-            .AddUnmatched("aria-label", "Test Data Grid"));
+            .Add(p => p.Items, _testItems.AsQueryable()));
 
-        // Act & Assert
-        var table = cut.Find("table");
-        Assert.Equal("test-grid", table.GetAttribute("data-testid"));
-        Assert.Equal("Test Data Grid", table.GetAttribute("aria-label"));
+        // Assert
+        cut.Find("table").Should().NotBeNull();
+        cut.Find("thead").Should().NotBeNull();
+        cut.Find("tbody").Should().NotBeNull();
     }
 
-    #endregion
+    [Fact]
+    public void FullGridRendering_WithItemsAndColumns_RendersCompleteStructure() {
+        // Arrange & Act
+        var cut = RenderCompleteGrid();
 
-    #region Data Source Tests
+        // Assert
+        cut.Find("table").Should().NotBeNull();
+        cut.Find("thead").Should().NotBeNull();
+        cut.Find("tbody").Should().NotBeNull();
+        cut.FindAll("tbody tr").Should().HaveCount(5); // Data rows
+    }
+
+    [Fact]
+    public void ItemKey_CanBeCustomized() {
+        // Arrange
+        Func<TestGridItem, object> customKeyFunc = item => item.Id;
+
+        // Act
+        var cut = RenderDataGrid(parameters => parameters
+            .Add(p => p.ItemKey, customKeyFunc));
+
+        // Assert
+        Assert.Equal(customKeyFunc, cut.Instance.ItemKey);
+    }
+
+    [Fact]
+    public void Items_WithEmptyQueryable_ShowsEmptyState() {
+        // Arrange & Act
+        var cut = RenderDataGridWithItems(Enumerable.Empty<TestGridItem>().AsQueryable());
+
+        // Assert
+        cut.FindAll("tbody tr").Should().HaveCount(1); // Empty row
+        cut.Markup.Should().Contain("No content to show");
+    }
 
     [Fact]
     public void Items_WithQueryableData_RendersRows() {
@@ -260,13 +252,47 @@ public class TnTDataGrid_Tests : BunitContext {
     }
 
     [Fact]
-    public void Items_WithEmptyQueryable_ShowsEmptyState() {
+    public void ItemSize_CanBeCustomized() {
         // Arrange & Act
-        var cut = RenderDataGridWithItems(Enumerable.Empty<TestGridItem>().AsQueryable());
+        var cut = RenderDataGrid(parameters => parameters
+            .Add(p => p.ItemSize, 48));
 
         // Assert
-        cut.FindAll("tbody tr").Should().HaveCount(1); // Empty row
-        cut.Markup.Should().Contain("No content to show");
+        Assert.Equal(48, cut.Instance.ItemSize);
+    }
+
+    [Fact]
+    public void ItemSize_DefaultValue_Is32() {
+        // Arrange
+        var cut = RenderDataGrid();
+
+        // Act & Assert
+        Assert.Equal(32, cut.Instance.ItemSize);
+    }
+
+    [Fact]
+    public async Task ItemsProvider_ReturningEmptyResult_ShowsEmptyState() {
+        // Arrange
+        TnTGridItemsProvider<TestGridItem> emptyProvider = request =>
+            ValueTask.FromResult(new TnTItemsProviderResult<TestGridItem>([], 0));
+
+        // Act
+        var cut = RenderDataGrid(parameters => parameters
+            .Add(p => p.ItemsProvider, emptyProvider));
+
+        // Force initial data load
+        await cut.Instance.RefreshDataGridAsync(cancellationToken: Xunit.TestContext.Current.CancellationToken);
+
+        // Allow rendering to complete
+        await Task.Delay(100, Xunit.TestContext.Current.CancellationToken);
+
+        // Assert - Check for empty state indicators
+        var markup = cut.Markup;
+        var hasEmptyContent = markup.Contains("No content to show") ||
+                             markup.Contains("empty") ||
+                             cut.FindAll("tbody tr").Count <= 1;
+
+        Assert.True(hasEmptyContent, $"Expected empty state in markup: {markup}");
     }
 
     [Fact]
@@ -289,9 +315,15 @@ public class TnTDataGrid_Tests : BunitContext {
         Assert.Equal(provider, cut.Instance.ItemsProvider);
     }
 
-    #endregion
+    [Fact]
+    public void NullItems_HandledGracefully() {
+        // Arrange & Act
+        var cut = RenderDataGrid(parameters => parameters
+            .Add(p => p.Items, (IQueryable<TestGridItem>?)null));
 
-    #region Validation Tests
+        // Assert
+        cut.Markup.Should().Contain("No content to show");
+    }
 
     [Fact]
     public void OnParametersSet_WithBothItemsAndItemsProvider_ThrowsInvalidOperationException() {
@@ -320,55 +352,27 @@ public class TnTDataGrid_Tests : BunitContext {
             .WithMessage("*Virtualization and pagination cannot be used together*");
     }
 
-    #endregion
-
-    #region Virtualization Tests
-
     [Fact]
-    public void Virtualize_WhenTrue_RendersVirtualizedBody() {
-        // Arrange & Act
-        var cut = RenderDataGrid(parameters => parameters
-            .Add(p => p.Virtualize, true)
-            .Add(p => p.ItemsProvider, request => ValueTask.FromResult(new TnTItemsProviderResult<TestGridItem>(_testItems, _testItems.Count))));
-
-        // Assert
-        // Should render TnTDataGridVirtualizedBody instead of regular TnTDataGridBody
-        // Check that virtualization is enabled and component renders
-        Assert.True(cut.Instance.Virtualize);
-        cut.Markup.Should().NotBeEmpty();
-        // The component should not throw when virtualization is enabled
-    }
-
-    [Fact]
-    public void Virtualize_WithPagination_ThrowsException() {
+    public void OnRowClicked_WhenSet_MakesRowsClickable() {
         // Arrange
-        var pagination = new TnTPaginationState();
-
-        // Act & Assert
-        var act = () => RenderDataGrid(parameters => parameters
-            .Add(p => p.Virtualize, true)
-            .Add(p => p.Pagination, pagination));
-
-        act.Should().Throw<InvalidOperationException>();
-    }
-
-    #endregion
-
-    #region Pagination Tests
-
-    [Fact]
-    public async Task Pagination_WhenSet_SubscribesToPageChanges() {
-        // Arrange
-        var pagination = new TnTPaginationState();
-        await pagination.SetTotalItemCountAsync(50);
+        TestGridItem? clickedItem = null;
+        var callback = EventCallback.Factory.Create<TestGridItem>(this, item => clickedItem = item);
 
         // Act
-        var cut = RenderDataGrid(parameters => parameters
-            .Add(p => p.Items, _testItems.AsQueryable())
-            .Add(p => p.Pagination, pagination));
+        var cut = RenderDataGridWithItems(_testItems.AsQueryable(), parameters => parameters
+            .Add(p => p.OnRowClicked, callback));
 
         // Assert
-        Assert.Equal(pagination, cut.Instance.Pagination);
+        cut.FindAll("tr.tnt-interactable").Should().HaveCountGreaterThan(0);
+    }
+
+    [Fact]
+    public void OverscanCount_DefaultValue_Is5() {
+        // Arrange
+        var cut = RenderDataGrid();
+
+        // Act & Assert
+        Assert.Equal(5, cut.Instance.OverscanCount);
     }
 
     [Fact]
@@ -389,55 +393,20 @@ public class TnTDataGrid_Tests : BunitContext {
         Assert.Equal(1, pagination.CurrentPageIndex);
     }
 
-    #endregion
-
-    #region Row Click Tests
-
     [Fact]
-    public void OnRowClicked_WhenSet_MakesRowsClickable() {
+    public async Task Pagination_WhenSet_SubscribesToPageChanges() {
         // Arrange
-        TestGridItem? clickedItem = null;
-        var callback = EventCallback.Factory.Create<TestGridItem>(this, item => clickedItem = item);
+        var pagination = new TnTPaginationState();
+        await pagination.SetTotalItemCountAsync(50);
 
         // Act
-        var cut = RenderDataGridWithItems(_testItems.AsQueryable(), parameters => parameters
-            .Add(p => p.OnRowClicked, callback));
+        var cut = RenderDataGrid(parameters => parameters
+            .Add(p => p.Items, _testItems.AsQueryable())
+            .Add(p => p.Pagination, pagination));
 
         // Assert
-        cut.FindAll("tr.tnt-interactable").Should().HaveCountGreaterThan(0);
+        Assert.Equal(pagination, cut.Instance.Pagination);
     }
-
-    #endregion
-
-    #region Row Class Tests
-
-    [Fact]
-    public async Task RowClass_WhenSet_AppliesCustomClassesToRows() {
-        // Arrange
-        Func<TestGridItem, string> rowClassFunc = item => item.IsActive ? "active-row" : "inactive-row";
-
-        // Act
-        var cut = RenderDataGridWithItems(_testItems.AsQueryable(), parameters => parameters
-            .Add(p => p.RowClass, rowClassFunc));
-
-        // Ensure data is loaded and rendered
-        await cut.Instance.RefreshDataGridAsync(cancellationToken: Xunit.TestContext.Current.CancellationToken);
-        await Task.Delay(100, Xunit.TestContext.Current.CancellationToken);
-
-        // Assert
-        var markup = cut.Markup;
-
-        // The data grid should render rows, even if the specific classes aren't visible in this test context
-        var hasRows = cut.FindAll("tbody tr").Count > 0;
-        Assert.True(hasRows, "Expected to find table rows in the data grid");
-
-        // Verify the RowClass function is set on the component
-        Assert.Equal(rowClassFunc, cut.Instance.RowClass);
-    }
-
-    #endregion
-
-    #region Public Method Tests
 
     [Fact]
     public async Task RefreshDataGridAsync_CompletesSuccessfully() {
@@ -467,29 +436,15 @@ public class TnTDataGrid_Tests : BunitContext {
         task.IsCompleted.Should().BeTrue();
     }
 
-    #endregion
-
-    #region Internal Method Tests
-
     [Fact]
-    public async Task ResolveItemsRequestAsync_WithQueryableItems_ReturnsExpectedResult() {
-        // Arrange
-        var cut = RenderDataGridWithItems(_testItems.AsQueryable());
-        var request = new TnTGridItemsProviderRequest<TestGridItem> {
-            StartIndex = 1,
-            Count = 2,
-            CancellationToken = Xunit.TestContext.Current.CancellationToken
-        };
-
-        // Act
-        var result = await cut.Instance.ResolveItemsRequestAsync(request);
+    public void Resizable_WhenTrue_AddsResizableClass() {
+        // Arrange & Act
+        var cut = RenderDataGrid(parameters => parameters
+            .Add(p => p.Resizable, true));
 
         // Assert
-        Assert.Equal(2, result.Items.Count);
-        Assert.Equal(_testItems.Count, result.TotalItemCount);
-        var resultItems = result.Items.ToList();
-        Assert.Equal(_testItems[1].Id, resultItems[0].Id);
-        Assert.Equal(_testItems[2].Id, resultItems[1].Id);
+        Assert.True(cut.Instance.Resizable);
+        cut.Find("table").GetAttribute("class").Should().Contain("tnt-resizable");
     }
 
     [Fact]
@@ -519,150 +474,88 @@ public class TnTDataGrid_Tests : BunitContext {
         Assert.Equal(_testItems.Count, result.TotalItemCount);
     }
 
-    #endregion
-
-    #region Disposal Tests
-
     [Fact]
-    public void Dispose_CancelsOperationsAndCleansUpResources() {
+    public async Task ResolveItemsRequestAsync_WithQueryableItems_ReturnsExpectedResult() {
         // Arrange
-        var pagination = new TnTPaginationState();
-        var cut = RenderDataGrid(parameters => parameters
-            .Add(p => p.Pagination, pagination));
+        var cut = RenderDataGridWithItems(_testItems.AsQueryable());
+        var request = new TnTGridItemsProviderRequest<TestGridItem> {
+            StartIndex = 1,
+            Count = 2,
+            CancellationToken = Xunit.TestContext.Current.CancellationToken
+        };
 
         // Act
-        cut.Instance.Dispose();
+        var result = await cut.Instance.ResolveItemsRequestAsync(request);
 
         // Assert
-        // Disposal should complete without throwing
-        // Internal state should be cleaned up (cancellation tokens, event subscriptions)
-    }
-
-    #endregion
-
-    #region Cascading Values Tests
-
-    [Fact]
-    public void CascadingValue_InternalGridContext_IsProvided() {
-        // Arrange & Act
-        var cut = RenderDataGrid(grid => grid
-            .Add(p => p.ChildContent, (RenderFragment)(builder => {
-                builder.OpenElement(0, "div");
-                builder.AddContent(1, "Content rendered");
-                builder.CloseElement();
-            })));
-
-        // Assert
-        cut.Markup.Should().Contain("Content rendered");
-    }
-
-    #endregion
-
-    #region Integration Tests
-
-    [Fact]
-    public void FullGridRendering_WithItemsAndColumns_RendersCompleteStructure() {
-        // Arrange & Act
-        var cut = RenderCompleteGrid();
-
-        // Assert
-        cut.Find("table").Should().NotBeNull();
-        cut.Find("thead").Should().NotBeNull();
-        cut.Find("tbody").Should().NotBeNull();
-        cut.FindAll("tbody tr").Should().HaveCount(5); // Data rows
+        Assert.Equal(2, result.Items.Count);
+        Assert.Equal(_testItems.Count, result.TotalItemCount);
+        var resultItems = result.Items.ToList();
+        Assert.Equal(_testItems[1].Id, resultItems[0].Id);
+        Assert.Equal(_testItems[2].Id, resultItems[1].Id);
     }
 
     [Fact]
-    public async Task ComplexScenario_WithSortingAndPagination_WorksCorrectly() {
+    public async Task RowClass_WhenSet_AppliesCustomClassesToRows() {
         // Arrange
-        var pagination = new TnTPaginationState();
-        await pagination.SetTotalItemCountAsync(_testItems.Count);
-        pagination.ItemsPerPage = 2;
+        Func<TestGridItem, string> rowClassFunc = item => item.IsActive ? "active-row" : "inactive-row";
 
         // Act
-        var cut = RenderCompleteGrid(parameters => parameters
-            .Add(p => p.Pagination, pagination));
+        var cut = RenderDataGridWithItems(_testItems.AsQueryable(), parameters => parameters
+            .Add(p => p.RowClass, rowClassFunc));
 
-        // Assert
-        cut.FindAll("tbody tr").Should().HaveCount(2); // Should show only first page
-    }
-
-    #endregion
-
-    #region Edge Cases and Error Handling
-
-    [Fact]
-    public void EmptyChildContent_RendersWithoutColumns() {
-        // Arrange & Act
-        var cut = RenderDataGrid(parameters => parameters
-            .Add(p => p.Items, _testItems.AsQueryable()));
-
-        // Assert
-        cut.Find("table").Should().NotBeNull();
-        cut.Find("thead").Should().NotBeNull();
-        cut.Find("tbody").Should().NotBeNull();
-    }
-
-    [Fact]
-    public void NullItems_HandledGracefully() {
-        // Arrange & Act
-        var cut = RenderDataGrid(parameters => parameters
-            .Add(p => p.Items, (IQueryable<TestGridItem>?)null));
-
-        // Assert
-        cut.Markup.Should().Contain("No content to show");
-    }
-
-    [Fact]
-    public async Task ItemsProvider_ReturningEmptyResult_ShowsEmptyState() {
-        // Arrange
-        TnTGridItemsProvider<TestGridItem> emptyProvider = request =>
-            ValueTask.FromResult(new TnTItemsProviderResult<TestGridItem>([], 0));
-
-        // Act
-        var cut = RenderDataGrid(parameters => parameters
-            .Add(p => p.ItemsProvider, emptyProvider));
-
-        // Force initial data load
+        // Ensure data is loaded and rendered
         await cut.Instance.RefreshDataGridAsync(cancellationToken: Xunit.TestContext.Current.CancellationToken);
-
-        // Allow rendering to complete
         await Task.Delay(100, Xunit.TestContext.Current.CancellationToken);
 
-        // Assert - Check for empty state indicators
+        // Assert
         var markup = cut.Markup;
-        var hasEmptyContent = markup.Contains("No content to show") ||
-                             markup.Contains("empty") ||
-                             cut.FindAll("tbody tr").Count <= 1;
 
-        Assert.True(hasEmptyContent, $"Expected empty state in markup: {markup}");
+        // The data grid should render rows, even if the specific classes aren't visible in this test context
+        var hasRows = cut.FindAll("tbody tr").Count > 0;
+        Assert.True(hasRows, "Expected to find table rows in the data grid");
+
+        // Verify the RowClass function is set on the component
+        Assert.Equal(rowClassFunc, cut.Instance.RowClass);
     }
 
-    #endregion
+    [Fact]
+    public void TextColor_DefaultValue_IsOnBackground() {
+        // Arrange
+        var cut = RenderDataGrid();
 
-    #region Helper Methods
-
-    private IRenderedComponent<TnTDataGrid<TestGridItem>> RenderDataGrid(
-        Action<ComponentParameterCollectionBuilder<TnTDataGrid<TestGridItem>>>? parameterBuilder = null) {
-
-        return Render<TnTDataGrid<TestGridItem>>(parameters => {
-            parameterBuilder?.Invoke(parameters);
-        });
+        // Act & Assert
+        Assert.Equal(TnTColor.OnBackground, cut.Instance.TextColor);
     }
 
-    private IRenderedComponent<TnTDataGrid<TestGridItem>> RenderDataGridWithItems(
-        IQueryable<TestGridItem> items,
-        Action<ComponentParameterCollectionBuilder<TnTDataGrid<TestGridItem>>>? additionalParameters = null) {
+    [Fact]
+    public void Virtualize_WhenTrue_RendersVirtualizedBody() {
+        // Arrange & Act
+        var cut = RenderDataGrid(parameters => parameters
+            .Add(p => p.Virtualize, true)
+            .Add(p => p.ItemsProvider, request => ValueTask.FromResult(new TnTItemsProviderResult<TestGridItem>(_testItems, _testItems.Count))));
 
-        return RenderDataGrid(parameters => {
-            parameters.Add(p => p.Items, items);
-            additionalParameters?.Invoke(parameters);
-        });
+        // Assert Should render TnTDataGridVirtualizedBody instead of regular TnTDataGridBody Check that virtualization is enabled and component renders
+        Assert.True(cut.Instance.Virtualize);
+        cut.Markup.Should().NotBeEmpty();
+        // The component should not throw when virtualization is enabled
+    }
+
+    [Fact]
+    public void Virtualize_WithPagination_ThrowsException() {
+        // Arrange
+        var pagination = new TnTPaginationState();
+
+        // Act & Assert
+        var act = () => RenderDataGrid(parameters => parameters
+            .Add(p => p.Virtualize, true)
+            .Add(p => p.Pagination, pagination));
+
+        act.Should().Throw<InvalidOperationException>();
     }
 
     private IRenderedComponent<TnTDataGrid<TestGridItem>> RenderCompleteGrid(
-        Action<ComponentParameterCollectionBuilder<TnTDataGrid<TestGridItem>>>? additionalParameters = null) {
-
+            Action<ComponentParameterCollectionBuilder<TnTDataGrid<TestGridItem>>>? additionalParameters = null) {
         return RenderDataGrid(parameters => {
             parameters.Add(p => p.Items, _testItems.AsQueryable());
             parameters.Add(p => p.ChildContent, (RenderFragment)(builder => {
@@ -683,9 +576,33 @@ public class TnTDataGrid_Tests : BunitContext {
         });
     }
 
-    #endregion
+    private IRenderedComponent<TnTDataGrid<TestGridItem>> RenderDataGrid(
+            Action<ComponentParameterCollectionBuilder<TnTDataGrid<TestGridItem>>>? parameterBuilder = null) {
+        return Render<TnTDataGrid<TestGridItem>>(parameters => {
+            parameterBuilder?.Invoke(parameters);
+        });
+    }
 
-    #region Test Helper Components
+    private IRenderedComponent<TnTDataGrid<TestGridItem>> RenderDataGridWithItems(
+            IQueryable<TestGridItem> items,
+            Action<ComponentParameterCollectionBuilder<TnTDataGrid<TestGridItem>>>? additionalParameters = null) {
+        return RenderDataGrid(parameters => {
+            parameters.Add(p => p.Items, items);
+            additionalParameters?.Invoke(parameters);
+        });
+    }
+
+    /// <summary>
+    ///     Test model for data grid tests.
+    /// </summary>
+    private class TestGridItem {
+        public decimal Amount { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public string Email { get; set; } = string.Empty;
+        public int Id { get; set; }
+        public bool IsActive { get; set; }
+        public string Name { get; set; } = string.Empty;
+    }
 
     /// <summary>
     ///     Test implementation of template column for testing purposes.
@@ -704,6 +621,4 @@ public class TnTDataGrid_Tests : BunitContext {
             builder.AddContent(0, Title ?? "Header");
         }
     }
-
-    #endregion
 }

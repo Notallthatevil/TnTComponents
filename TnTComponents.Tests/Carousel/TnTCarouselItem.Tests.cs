@@ -1,13 +1,10 @@
-using System.Collections.Generic;
-using Bunit;
-using Microsoft.AspNetCore.Components;
-using Xunit;
-using TnTComponents;
+﻿using Microsoft.AspNetCore.Components;
 using RippleTestingUtility = TnTComponents.Tests.TestingUtility.TestingUtility;
 
 namespace TnTComponents.Tests.Carousel;
 
 public class TnTCarouselItem_Tests : BunitContext {
+
     public TnTCarouselItem_Tests() {
         // Arrange (global) ripple module
         RippleTestingUtility.SetupRippleEffectModule(this);
@@ -22,41 +19,23 @@ public class TnTCarouselItem_Tests : BunitContext {
         itemModule.SetupVoid("onDispose", _ => true);
     }
 
-    private RenderFragment BuildCarousel(RenderFragment items) => b => {
-        b.OpenComponent<TnTCarousel>(0);
-        b.AddAttribute(1, nameof(TnTCarousel.ChildContent), items);
-        b.CloseComponent();
-    };
-
     [Fact]
-    public void Item_Renders_With_Content() {
+    public void AdditionalAttributes_Class_And_Style_Merged() {
         // Arrange
+        var attrs = new Dictionary<string, object> { { "class", "extra" }, { "style", "margin:4px" } };
         RenderFragment items = b => {
             b.OpenComponent<TnTCarouselItem>(0);
             b.AddAttribute(1, nameof(TnTCarouselItem.Order), 1);
-            b.AddAttribute(2, nameof(TnTCarouselItem.ChildContent), (RenderFragment)(c => c.AddContent(0, "Hello")));
+            b.AddAttribute(2, nameof(TnTCarouselItem.AdditionalAttributes), attrs);
+            b.AddAttribute(3, nameof(TnTCarouselItem.ChildContent), (RenderFragment)(c => c.AddContent(0, "Attr")));
             b.CloseComponent();
         };
         // Act
-        var cut = Render(BuildCarousel(items));
+        var cut = Render<TnTCarousel>(p => p.AddChildContent(items));
+        var div = cut.Find("div.tnt-carousel-item-content");
         // Assert
-        cut.Markup.Should().Contain("Hello");
-        cut.Find("tnt-carousel-item");
-    }
-
-    [Fact]
-    public void Hero_Item_Gets_Hero_Class() {
-        // Arrange
-        RenderFragment items = b => {
-            b.OpenComponent<TnTCarouselItem>(0);
-            b.AddAttribute(1, nameof(TnTCarouselItem.Order), 1);
-            b.AddAttribute(2, nameof(TnTCarouselItem.ChildContent), (RenderFragment)(c => c.AddContent(0, "Hero")));
-            b.CloseComponent();
-        };
-        // Act
-        var cut = Render<TnTCarousel>(p => p.Add(c => c.Appearance, CarouselAppearance.Hero).AddChildContent(items));
-        // Assert
-        cut.Find("tnt-carousel-item").GetAttribute("class")!.Should().Contain("tnt-carousel-hero");
+        div.GetAttribute("class")!.Should().Contain("extra").And.Contain("tnt-carousel-item-content");
+        div.GetAttribute("style")!.Should().Contain("margin:4px");
     }
 
     [Fact]
@@ -74,22 +53,6 @@ public class TnTCarouselItem_Tests : BunitContext {
         var contentDiv = cut.Find("div.tnt-carousel-item-content");
         // Assert
         contentDiv.GetAttribute("style")!.Should().Contain("background-image:url('image.png')");
-    }
-
-    [Fact]
-    public void Non_Clickable_Item_No_Ripple_Component() {
-        // Arrange
-        RenderFragment items = b => {
-            b.OpenComponent<TnTCarouselItem>(0);
-            b.AddAttribute(1, nameof(TnTCarouselItem.Order), 1);
-            b.AddAttribute(2, nameof(TnTCarouselItem.ChildContent), (RenderFragment)(c => c.AddContent(0, "Plain")));
-            b.CloseComponent();
-        };
-        // Act
-        var cut = Render<TnTCarousel>(p => p.AddChildContent(items));
-        // Assert
-        // Scope to carousel item only (navigation buttons have ripple)
-        cut.Find("tnt-carousel-item").InnerHtml.Should().NotContain("tnt-ripple-effect");
     }
 
     [Fact]
@@ -112,39 +75,49 @@ public class TnTCarouselItem_Tests : BunitContext {
     }
 
     [Fact]
-    public void Ripple_Disabled_Removes_Ripple_Component() {
+    public void Hero_Item_Gets_Hero_Class() {
         // Arrange
         RenderFragment items = b => {
             b.OpenComponent<TnTCarouselItem>(0);
             b.AddAttribute(1, nameof(TnTCarouselItem.Order), 1);
-            b.AddAttribute(2, nameof(TnTCarouselItem.OnClickCallback), EventCallback.Factory.Create(this, (Action)(() => { })));
-            b.AddAttribute(3, nameof(TnTCarouselItem.EnableRipple), false);
-            b.AddAttribute(4, nameof(TnTCarouselItem.ChildContent), (RenderFragment)(c => c.AddContent(0, "NoRipple")));
+            b.AddAttribute(2, nameof(TnTCarouselItem.ChildContent), (RenderFragment)(c => c.AddContent(0, "Hero")));
             b.CloseComponent();
         };
         // Act
-        var cut = Render<TnTCarousel>(p => p.AddChildContent(items));
+        var cut = Render<TnTCarousel>(p => p.Add(c => c.Appearance, CarouselAppearance.Hero).AddChildContent(items));
         // Assert
-        cut.Find("tnt-carousel-item").InnerHtml.Should().NotContain("tnt-ripple-effect");
+        cut.Find("tnt-carousel-item").GetAttribute("class")!.Should().Contain("tnt-carousel-hero");
     }
 
     [Fact]
-    public void AdditionalAttributes_Class_And_Style_Merged() {
+    public void Item_Renders_With_Content() {
         // Arrange
-        var attrs = new Dictionary<string, object>{{"class","extra"},{"style","margin:4px"}};
         RenderFragment items = b => {
             b.OpenComponent<TnTCarouselItem>(0);
             b.AddAttribute(1, nameof(TnTCarouselItem.Order), 1);
-            b.AddAttribute(2, nameof(TnTCarouselItem.AdditionalAttributes), attrs);
-            b.AddAttribute(3, nameof(TnTCarouselItem.ChildContent), (RenderFragment)(c => c.AddContent(0, "Attr")));
+            b.AddAttribute(2, nameof(TnTCarouselItem.ChildContent), (RenderFragment)(c => c.AddContent(0, "Hello")));
+            b.CloseComponent();
+        };
+        // Act
+        var cut = Render(BuildCarousel(items));
+        // Assert
+        cut.Markup.Should().Contain("Hello");
+        cut.Find("tnt-carousel-item");
+    }
+
+    [Fact]
+    public void Non_Clickable_Item_No_Ripple_Component() {
+        // Arrange
+        RenderFragment items = b => {
+            b.OpenComponent<TnTCarouselItem>(0);
+            b.AddAttribute(1, nameof(TnTCarouselItem.Order), 1);
+            b.AddAttribute(2, nameof(TnTCarouselItem.ChildContent), (RenderFragment)(c => c.AddContent(0, "Plain")));
             b.CloseComponent();
         };
         // Act
         var cut = Render<TnTCarousel>(p => p.AddChildContent(items));
-        var div = cut.Find("div.tnt-carousel-item-content");
-        // Assert
-        div.GetAttribute("class")!.Should().Contain("extra").And.Contain("tnt-carousel-item-content");
-        div.GetAttribute("style")!.Should().Contain("margin:4px");
+        // Assert Scope to carousel item only (navigation buttons have ripple)
+        cut.Find("tnt-carousel-item").InnerHtml.Should().NotContain("tnt-ripple-effect");
     }
 
     [Fact]
@@ -164,4 +137,27 @@ public class TnTCarouselItem_Tests : BunitContext {
         // Assert
         clicked.Should().Be(1);
     }
+
+    [Fact]
+    public void Ripple_Disabled_Removes_Ripple_Component() {
+        // Arrange
+        RenderFragment items = b => {
+            b.OpenComponent<TnTCarouselItem>(0);
+            b.AddAttribute(1, nameof(TnTCarouselItem.Order), 1);
+            b.AddAttribute(2, nameof(TnTCarouselItem.OnClickCallback), EventCallback.Factory.Create(this, (Action)(() => { })));
+            b.AddAttribute(3, nameof(TnTCarouselItem.EnableRipple), false);
+            b.AddAttribute(4, nameof(TnTCarouselItem.ChildContent), (RenderFragment)(c => c.AddContent(0, "NoRipple")));
+            b.CloseComponent();
+        };
+        // Act
+        var cut = Render<TnTCarousel>(p => p.AddChildContent(items));
+        // Assert
+        cut.Find("tnt-carousel-item").InnerHtml.Should().NotContain("tnt-ripple-effect");
+    }
+
+    private RenderFragment BuildCarousel(RenderFragment items) => b => {
+        b.OpenComponent<TnTCarousel>(0);
+        b.AddAttribute(1, nameof(TnTCarousel.ChildContent), items);
+        b.CloseComponent();
+    };
 }

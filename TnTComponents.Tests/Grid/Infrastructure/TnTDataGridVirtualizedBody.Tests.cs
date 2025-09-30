@@ -1,16 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Bunit;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using TnTComponents.Grid;
 using TnTComponents.Grid.Columns;
 using TnTComponents.Grid.Infrastructure;
 using TnTComponents.Virtualization;
-using Xunit;
 using RippleTestingUtility = TnTComponents.Tests.TestingUtility.TestingUtility;
 
 namespace TnTComponents.Tests.Grid.Infrastructure;
@@ -20,129 +13,19 @@ namespace TnTComponents.Tests.Grid.Infrastructure;
 /// </summary>
 public class TnTDataGridVirtualizedBody_Tests : BunitContext {
 
-    /// <summary>
-    ///     Test model for grid virtualized body tests.
-    /// </summary>
-    private class TestGridItem {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-    }
-
     private readonly List<TestGridItem> _testItems = [
-        new() { Id = 1, Name = "John Doe", Email = "john@example.com" },
+            new() { Id = 1, Name = "John Doe", Email = "john@example.com" },
         new() { Id = 2, Name = "Jane Smith", Email = "jane@example.com" },
         new() { Id = 3, Name = "Bob Johnson", Email = "bob@example.com" },
         new() { Id = 4, Name = "Alice Brown", Email = "alice@example.com" },
         new() { Id = 5, Name = "Charlie Wilson", Email = "charlie@example.com" }
-    ];
+        ];
 
     public TnTDataGridVirtualizedBody_Tests() {
         // Arrange (global) & Act: JS module setup for ripple and virtualization
         RippleTestingUtility.SetupRippleEffectModule(this);
         SetupVirtualizationModule();
     }
-
-    #region Rendering Tests
-
-    [Fact]
-    public void Renders_TbodyElement_WithVirtualizeComponent() {
-        // Arrange & Act
-        var cut = RenderWithItemsProvider();
-
-        // Assert
-        cut.FindAll("tbody").Should().HaveCount(1);
-        var tbody = cut.Find("tbody");
-        tbody.Should().NotBeNull();
-        // The component should render with loading skeleton content
-        cut.Markup.Should().Contain("tnt-table-skeleton");
-    }
-
-    [Fact]
-    public void Renders_LoadingTemplate_WithSkeletons() {
-        // Arrange & Act
-        var cut = RenderWithItemsProvider();
-
-        // Assert
-        // Initially should show loading template with skeletons
-        cut.Markup.Should().Contain("tnt-table-skeleton");
-        cut.FindAll("tr").Count.Should().Be(10); // Default skeleton count
-    }
-
-    [Fact]
-    public void Renders_LoadingTemplate_WithCorrectItemSize() {
-        // Arrange
-        var context = CreateGridContextWithItemsProvider();
-        context.Grid.ItemSize = 60;
-
-        // Act
-        var cut = Render<TnTDataGridVirtualizedBody<TestGridItem>>(parameters => parameters
-            .AddCascadingValue(context));
-
-        // Assert
-        // Check that skeleton rows have correct height
-        cut.Markup.Should().Contain("height: 60px");
-    }
-
-    [Fact]
-    public void Renders_LoadingTemplate_WithExtraColumn_WhenRowClickCallbackExists() {
-        // Arrange
-        var context = CreateGridContextWithItemsProvider();
-        context.Grid.OnRowClicked = EventCallback.Factory.Create<TestGridItem>(context.Grid, _ => { });
-
-        var nameColumn = new TestTemplateColumn<TestGridItem> {
-            CellTemplate = item => builder => builder.AddContent(0, item.Name)
-        };
-        context.RegisterColumn(nameColumn);
-
-        // Act
-        var cut = Render<TnTDataGridVirtualizedBody<TestGridItem>>(parameters => parameters
-            .AddCascadingValue(context));
-
-        // Assert
-        // Should render loading template when row click callback exists
-        cut.FindAll("tr").Should().HaveCountGreaterThan(0);
-        cut.Markup.Should().Contain("tnt-table-skeleton");
-    }
-
-    [Fact]
-    public void Renders_LoadingTemplate_WithoutExtraColumn_WhenNoRowClickCallback() {
-        // Arrange
-        var context = CreateGridContextWithItemsProvider();
-
-        var nameColumn = new TestTemplateColumn<TestGridItem> {
-            CellTemplate = item => builder => builder.AddContent(0, item.Name)
-        };
-        context.RegisterColumn(nameColumn);
-
-        // Act
-        var cut = Render<TnTDataGridVirtualizedBody<TestGridItem>>(parameters => parameters
-            .AddCascadingValue(context));
-
-        // Assert
-        // Should render loading template when no row click callback
-        cut.FindAll("tr").Should().HaveCountGreaterThan(0);
-        cut.Markup.Should().Contain("tnt-table-skeleton");
-    }
-
-    [Fact]
-    public void Renders_EmptyTemplate_WhenNoItemsAvailable() {
-        // Arrange
-        var context = CreateGridContextWithEmptyItemsProvider();
-
-        // Act
-        var cut = Render<TnTDataGridVirtualizedBody<TestGridItem>>(parameters => parameters
-            .AddCascadingValue(context));
-
-        // Assert
-        // The component should render without throwing when empty provider is used
-        // Note: The actual empty template rendering depends on the virtualize component's internal logic
-        cut.Find("tbody").Should().NotBeNull();
-    }
-
-    #endregion
-
-    #region Context Parameter Tests
 
     [Fact]
     public void Context_IsRequired() {
@@ -167,9 +50,39 @@ public class TnTDataGridVirtualizedBody_Tests : BunitContext {
         component.Context.Should().BeSameAs(context);
     }
 
-    #endregion
+    [Fact]
+    public void InheritsFrom_TnTDataGridBody() {
+        // Arrange & Act
+        var cut = RenderWithItemsProvider();
 
-    #region RefreshAsync Tests
+        // Assert
+        var component = cut.Instance;
+        component.Should().BeAssignableTo<TnTDataGridBody<TestGridItem>>();
+    }
+
+    [Fact]
+    public async Task ProvideVirtualizedItemsAsync_ImplementsDebouncing() {
+        // Arrange
+        var cut = RenderWithItemsProvider();
+
+        // Act This test verifies that the debouncing mechanism exists The actual debouncing behavior is internal and tested through successful operation
+        await cut.Instance.RefreshAsync();
+
+        // Assert Should complete without error, indicating debouncing works correctly
+        cut.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void ProvideVirtualizedItemsAsync_ReturnsCorrectItemsWithIndex() {
+        // Arrange
+        var context = CreateGridContextWithItemsProvider();
+        var cut = Render<TnTDataGridVirtualizedBody<TestGridItem>>(parameters => parameters
+            .AddCascadingValue(context));
+
+        // Simulate the virtualized items provider being called This tests the internal ProvideVirtualizedItemsAsync method indirectly Act & Assert The component should render without throwing
+        cut.Should().NotBeNull();
+        cut.Find("tbody").Should().NotBeNull();
+    }
 
     [Fact]
     public async Task RefreshAsync_CallsBaseRefreshAsync() {
@@ -178,14 +91,24 @@ public class TnTDataGridVirtualizedBody_Tests : BunitContext {
         var component = cut.Instance;
         var initialMarkup = cut.Markup;
 
-        // Act
-        // The RefreshAsync call is asynchronous but this test only verifies it completes without throwing.
-        // Call synchronously for tests that do not await: invoke and ignore the returned Task for compatibility.
+        // Act The RefreshAsync call is asynchronous but this test only verifies it completes without throwing. Call synchronously for tests that do not await: invoke and ignore the returned Task for compatibility.
         await component.RefreshAsync();
 
-        // Assert
-        // Should complete without error
+        // Assert Should complete without error
         cut.Markup.Should().NotBeEmpty();
+    }
+
+    [Fact]
+    public async Task RefreshAsync_RefreshesVirtualizeComponent() {
+        // Arrange
+        var cut = RenderWithItemsProvider();
+        var component = cut.Instance;
+
+        // Act
+        await component.RefreshAsync();
+
+        // Assert The virtualize component should be refreshed This is tested implicitly by ensuring RefreshAsync completes successfully
+        cut.Should().NotBeNull();
     }
 
     [Fact]
@@ -204,64 +127,122 @@ public class TnTDataGridVirtualizedBody_Tests : BunitContext {
     }
 
     [Fact]
-    public async Task RefreshAsync_RefreshesVirtualizeComponent() {
+    public void Renders_EmptyTemplate_WhenNoItemsAvailable() {
         // Arrange
-        var cut = RenderWithItemsProvider();
-        var component = cut.Instance;
+        var context = CreateGridContextWithEmptyItemsProvider();
 
         // Act
-        await component.RefreshAsync();
-
-        // Assert
-        // The virtualize component should be refreshed
-        // This is tested implicitly by ensuring RefreshAsync completes successfully
-        cut.Should().NotBeNull();
-    }
-
-    #endregion
-
-    #region Virtualization Provider Tests
-
-    [Fact]
-    public void ProvideVirtualizedItemsAsync_ReturnsCorrectItemsWithIndex() {
-        // Arrange
-        var context = CreateGridContextWithItemsProvider();
         var cut = Render<TnTDataGridVirtualizedBody<TestGridItem>>(parameters => parameters
             .AddCascadingValue(context));
 
-        // Simulate the virtualized items provider being called
-        // This tests the internal ProvideVirtualizedItemsAsync method indirectly
-        // Act & Assert
-        // The component should render without throwing
-        cut.Should().NotBeNull();
+        // Assert The component should render without throwing when empty provider is used
+        // Note: The actual empty template rendering depends on the virtualize component's internal logic
         cut.Find("tbody").Should().NotBeNull();
     }
 
     [Fact]
-    public void VirtualizeComponent_HasCorrectItemTemplate() {
+    public void Renders_LoadingTemplate_WithCorrectItemSize() {
+        // Arrange
+        var context = CreateGridContextWithItemsProvider();
+        context.Grid.ItemSize = 60;
+
+        // Act
+        var cut = Render<TnTDataGridVirtualizedBody<TestGridItem>>(parameters => parameters
+            .AddCascadingValue(context));
+
+        // Assert Check that skeleton rows have correct height
+        cut.Markup.Should().Contain("height: 60px");
+    }
+
+    [Fact]
+    public void Renders_LoadingTemplate_WithExtraColumn_WhenRowClickCallbackExists() {
+        // Arrange
+        var context = CreateGridContextWithItemsProvider();
+        context.Grid.OnRowClicked = EventCallback.Factory.Create<TestGridItem>(context.Grid, _ => { });
+
+        var nameColumn = new TestTemplateColumn<TestGridItem> {
+            CellTemplate = item => builder => builder.AddContent(0, item.Name)
+        };
+        context.RegisterColumn(nameColumn);
+
+        // Act
+        var cut = Render<TnTDataGridVirtualizedBody<TestGridItem>>(parameters => parameters
+            .AddCascadingValue(context));
+
+        // Assert Should render loading template when row click callback exists
+        cut.FindAll("tr").Should().HaveCountGreaterThan(0);
+        cut.Markup.Should().Contain("tnt-table-skeleton");
+    }
+
+    [Fact]
+    public void Renders_LoadingTemplate_WithoutExtraColumn_WhenNoRowClickCallback() {
+        // Arrange
+        var context = CreateGridContextWithItemsProvider();
+
+        var nameColumn = new TestTemplateColumn<TestGridItem> {
+            CellTemplate = item => builder => builder.AddContent(0, item.Name)
+        };
+        context.RegisterColumn(nameColumn);
+
+        // Act
+        var cut = Render<TnTDataGridVirtualizedBody<TestGridItem>>(parameters => parameters
+            .AddCascadingValue(context));
+
+        // Assert Should render loading template when no row click callback
+        cut.FindAll("tr").Should().HaveCountGreaterThan(0);
+        cut.Markup.Should().Contain("tnt-table-skeleton");
+    }
+
+    [Fact]
+    public void Renders_LoadingTemplate_WithSkeletons() {
+        // Arrange & Act
+        var cut = RenderWithItemsProvider();
+
+        // Assert Initially should show loading template with skeletons
+        cut.Markup.Should().Contain("tnt-table-skeleton");
+        cut.FindAll("tr").Count.Should().Be(10); // Default skeleton count
+    }
+
+    [Fact]
+    public void Renders_TbodyElement_WithVirtualizeComponent() {
         // Arrange & Act
         var cut = RenderWithItemsProvider();
 
         // Assert
-        // The virtualize component should render item templates correctly
-        // This is verified by ensuring the component renders the tbody structure
+        cut.FindAll("tbody").Should().HaveCount(1);
+        var tbody = cut.Find("tbody");
+        tbody.Should().NotBeNull();
+        // The component should render with loading skeleton content
+        cut.Markup.Should().Contain("tnt-table-skeleton");
+    }
+
+    [Fact]
+    public void Renders_WithCancellationRequested() {
+        // Arrange
+        var context = CreateGridContextWithCancellationProvider();
+
+        // Act
+        var cut = Render<TnTDataGridVirtualizedBody<TestGridItem>>(parameters => parameters
+            .AddCascadingValue(context));
+
+        // Assert Should handle cancellation gracefully
         cut.Find("tbody").Should().NotBeNull();
     }
 
     [Fact]
-    public void VirtualizeComponent_HasCorrectAriaRowIndex() {
-        // Arrange & Act
-        var cut = RenderWithItemsProvider();
+    public void Renders_WithNullItemsProvider() {
+        // Arrange
+        var grid = CreateDataGrid();
+        // Don't set ItemsProvider - leave it null
+        var context = new TnTInternalGridContext<TestGridItem>(grid);
 
-        // Assert
-        // The component should use context.Item1 for aria-rowindex
-        // This is indirectly tested through successful rendering
-        cut.Find("tbody").Should().NotBeNull();
+        // Act & Assert The component should handle null ItemsProvider gracefully
+        var act = () => Render<TnTDataGridVirtualizedBody<TestGridItem>>(parameters => parameters
+            .AddCascadingValue(context));
+
+        // Component may render but virtualization won't work without ItemsProvider
+        act.Should().NotThrow();
     }
-
-    #endregion
-
-    #region Integration Tests
 
     [Fact]
     public void RendersCorrectly_WithMultipleColumns() {
@@ -296,8 +277,7 @@ public class TnTDataGridVirtualizedBody_Tests : BunitContext {
         var cut = Render<TnTDataGridVirtualizedBody<TestGridItem>>(parameters => parameters
             .AddCascadingValue(context));
 
-        // Assert
-        // Component should render successfully with row click callback
+        // Assert Component should render successfully with row click callback
         cut.Find("tbody").Should().NotBeNull();
     }
 
@@ -321,81 +301,55 @@ public class TnTDataGridVirtualizedBody_Tests : BunitContext {
     }
 
     [Fact]
-    public void InheritsFrom_TnTDataGridBody() {
+    public void VirtualizeComponent_HasCorrectAriaRowIndex() {
         // Arrange & Act
         var cut = RenderWithItemsProvider();
 
-        // Assert
-        var component = cut.Instance;
-        component.Should().BeAssignableTo<TnTDataGridBody<TestGridItem>>();
-    }
-
-    #endregion
-
-    #region Debouncing Tests
-
-    [Fact]
-    public async Task ProvideVirtualizedItemsAsync_ImplementsDebouncing() {
-        // Arrange
-        var cut = RenderWithItemsProvider();
-
-        // Act
-        // This test verifies that the debouncing mechanism exists
-        // The actual debouncing behavior is internal and tested through successful operation
-        await cut.Instance.RefreshAsync();
-
-        // Assert
-        // Should complete without error, indicating debouncing works correctly
-        cut.Should().NotBeNull();
-    }
-
-    #endregion
-
-    #region Error Handling Tests
-
-    [Fact]
-    public void Renders_WithNullItemsProvider() {
-        // Arrange
-        var grid = CreateDataGrid();
-        // Don't set ItemsProvider - leave it null
-        var context = new TnTInternalGridContext<TestGridItem>(grid);
-
-        // Act & Assert
-        // The component should handle null ItemsProvider gracefully
-        var act = () => Render<TnTDataGridVirtualizedBody<TestGridItem>>(parameters => parameters
-            .AddCascadingValue(context));
-
-        // Component may render but virtualization won't work without ItemsProvider
-        act.Should().NotThrow();
-    }
-
-    [Fact]
-    public void Renders_WithCancellationRequested() {
-        // Arrange
-        var context = CreateGridContextWithCancellationProvider();
-
-        // Act
-        var cut = Render<TnTDataGridVirtualizedBody<TestGridItem>>(parameters => parameters
-            .AddCascadingValue(context));
-
-        // Assert
-        // Should handle cancellation gracefully
+        // Assert The component should use context.Item1 for aria-rowindex This is indirectly tested through successful rendering
         cut.Find("tbody").Should().NotBeNull();
     }
 
-    #endregion
+    [Fact]
+    public void VirtualizeComponent_HasCorrectItemTemplate() {
+        // Arrange & Act
+        var cut = RenderWithItemsProvider();
 
-    #region Helper Methods
-
-    private IRenderedComponent<TnTDataGridVirtualizedBody<TestGridItem>> RenderWithItemsProvider() {
-        var context = CreateGridContextWithItemsProvider();
-        return Render<TnTDataGridVirtualizedBody<TestGridItem>>(parameters => parameters
-            .AddCascadingValue(context));
+        // Assert The virtualize component should render item templates correctly This is verified by ensuring the component renders the tbody structure
+        cut.Find("tbody").Should().NotBeNull();
     }
 
-    private TnTInternalGridContext<TestGridItem> CreateGridContextWithItemsProvider() {
+    private TnTGridItemsProvider<TestGridItem> CreateCancellationItemsProvider() {
+        return async (TnTGridItemsProviderRequest<TestGridItem> request) => {
+            // Simulate cancellation
+            request.CancellationToken.ThrowIfCancellationRequested();
+            await Task.Delay(10, request.CancellationToken);
+            return new TnTItemsProviderResult<TestGridItem> {
+                Items = _testItems.Take(3).ToList(),
+                TotalItemCount = _testItems.Count
+            };
+        };
+    }
+
+    private TnTDataGrid<TestGridItem> CreateDataGrid() {
+        var grid = new TnTDataGrid<TestGridItem>();
+        grid.ItemKey = item => item.Id;
+        grid.ItemSize = 40;
+        return grid;
+    }
+
+    private TnTGridItemsProvider<TestGridItem> CreateEmptyItemsProvider() {
+        return async (TnTGridItemsProviderRequest<TestGridItem> request) => {
+            await Task.Delay(10);
+            return new TnTItemsProviderResult<TestGridItem> {
+                Items = new List<TestGridItem>(),
+                TotalItemCount = 0
+            };
+        };
+    }
+
+    private TnTInternalGridContext<TestGridItem> CreateGridContextWithCancellationProvider() {
         var grid = CreateDataGrid();
-        grid.ItemsProvider = CreateMockItemsProvider();
+        grid.ItemsProvider = CreateCancellationItemsProvider();
         return new TnTInternalGridContext<TestGridItem>(grid);
     }
 
@@ -405,17 +359,10 @@ public class TnTDataGridVirtualizedBody_Tests : BunitContext {
         return new TnTInternalGridContext<TestGridItem>(grid);
     }
 
-    private TnTInternalGridContext<TestGridItem> CreateGridContextWithCancellationProvider() {
+    private TnTInternalGridContext<TestGridItem> CreateGridContextWithItemsProvider() {
         var grid = CreateDataGrid();
-        grid.ItemsProvider = CreateCancellationItemsProvider();
+        grid.ItemsProvider = CreateMockItemsProvider();
         return new TnTInternalGridContext<TestGridItem>(grid);
-    }
-
-    private TnTDataGrid<TestGridItem> CreateDataGrid() {
-        var grid = new TnTDataGrid<TestGridItem>();
-        grid.ItemKey = item => item.Id;
-        grid.ItemSize = 40;
-        return grid;
     }
 
     private TnTGridItemsProvider<TestGridItem> CreateMockItemsProvider() {
@@ -439,26 +386,10 @@ public class TnTDataGridVirtualizedBody_Tests : BunitContext {
         };
     }
 
-    private TnTGridItemsProvider<TestGridItem> CreateEmptyItemsProvider() {
-        return async (TnTGridItemsProviderRequest<TestGridItem> request) => {
-            await Task.Delay(10);
-            return new TnTItemsProviderResult<TestGridItem> {
-                Items = new List<TestGridItem>(),
-                TotalItemCount = 0
-            };
-        };
-    }
-
-    private TnTGridItemsProvider<TestGridItem> CreateCancellationItemsProvider() {
-        return async (TnTGridItemsProviderRequest<TestGridItem> request) => {
-            // Simulate cancellation
-            request.CancellationToken.ThrowIfCancellationRequested();
-            await Task.Delay(10, request.CancellationToken);
-            return new TnTItemsProviderResult<TestGridItem> {
-                Items = _testItems.Take(3).ToList(),
-                TotalItemCount = _testItems.Count
-            };
-        };
+    private IRenderedComponent<TnTDataGridVirtualizedBody<TestGridItem>> RenderWithItemsProvider() {
+        var context = CreateGridContextWithItemsProvider();
+        return Render<TnTDataGridVirtualizedBody<TestGridItem>>(parameters => parameters
+            .AddCascadingValue(context));
     }
 
     private void SetupVirtualizationModule() {
@@ -470,6 +401,15 @@ public class TnTDataGridVirtualizedBody_Tests : BunitContext {
         module.SetupVoid("onNewItems", _ => true).SetVoidResult();
         module.SetupVoid("resetScrollPosition", _ => true).SetVoidResult();
         module.Setup<ValueTask>("LoadMoreItems", _ => true).SetResult(ValueTask.CompletedTask);
+    }
+
+    /// <summary>
+    ///     Test model for grid virtualized body tests.
+    /// </summary>
+    private class TestGridItem {
+        public string Email { get; set; } = string.Empty;
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 
     /// <summary>
@@ -489,6 +429,4 @@ public class TnTDataGridVirtualizedBody_Tests : BunitContext {
             builder.AddContent(0, "Header");
         }
     }
-
-    #endregion
 }

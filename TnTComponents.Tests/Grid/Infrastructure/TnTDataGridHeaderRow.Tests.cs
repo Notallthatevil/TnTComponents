@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Bunit;
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components;
 using TnTComponents.Grid;
 using TnTComponents.Grid.Columns;
 using TnTComponents.Grid.Infrastructure;
-using Xunit;
 using RippleTestingUtility = TnTComponents.Tests.TestingUtility.TestingUtility;
 
 namespace TnTComponents.Tests.Grid.Infrastructure;
@@ -17,21 +11,214 @@ namespace TnTComponents.Tests.Grid.Infrastructure;
 /// </summary>
 public class TnTDataGridHeaderRow_Tests : BunitContext {
 
-    /// <summary>
-    ///     Test model for grid header row tests.
-    /// </summary>
-    private class TestGridItem {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-    }
-
     public TnTDataGridHeaderRow_Tests() {
         // Arrange (global) & Act: JS module setup for ripple in constructor
         RippleTestingUtility.SetupRippleEffectModule(this);
     }
 
-    #region Rendering Tests
+    [Fact]
+    public void Context_IsRequired() {
+        // Arrange & Act
+        var act = () => Render<TnTDataGridHeaderRow<TestGridItem>>();
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>()
+           .WithParameterName("Context");
+    }
+
+    [Fact]
+    public void Context_IsSetCorrectly() {
+        // Arrange
+        var context = CreateGridContext();
+
+        // Act
+        var cut = RenderHeaderRowWithContext(context);
+
+        // Assert
+        var component = cut.Instance;
+        component.Context.Should().BeSameAs(context);
+    }
+
+    [Fact]
+    public void DoesNotRender_InteractablePlaceholder_WhenNoRowClickCallback() {
+        // Arrange
+        var context = CreateGridContext();
+        var column = new TestTemplateColumn<TestGridItem> {
+            HeaderTemplate = builder => builder.AddContent(0, "Column")
+        };
+        context.RegisterColumn(column);
+
+        // Act
+        var cut = RenderHeaderRowWithContext(context);
+
+        // Assert
+        var thElements = cut.FindAll("th");
+        thElements.Should().HaveCount(1); // Only the actual column
+        thElements[0].InnerHtml.Should().Contain("Column");
+    }
+
+    [Fact]
+    public void HasCascadingTypeParameterAttribute() {
+        // Arrange & Act
+        var componentType = typeof(TnTDataGridHeaderRow<TestGridItem>);
+
+        // Assert
+        var attribute = componentType.GetCustomAttributes(typeof(CascadingTypeParameterAttribute), false);
+        attribute.Should().HaveCount(1);
+        var cascadingAttr = (CascadingTypeParameterAttribute)attribute[0];
+        cascadingAttr.Name.Should().Be("TGridItem");
+    }
+
+    [Fact]
+    public void InheritsFrom_TnTDataGridRow() {
+        // Arrange & Act
+        var cut = RenderHeaderRowWithContext();
+
+        // Assert
+        var component = cut.Instance;
+        component.Should().BeAssignableTo<TnTDataGridRow<TestGridItem>>();
+    }
+
+    [Fact]
+    public async Task RefreshAsync_InheritsFromBase() {
+        // Arrange
+        var cut = RenderHeaderRowWithContext();
+        var component = cut.Instance;
+
+        // Act
+        var task = component.RefreshAsync();
+
+        // Assert
+        task.Should().NotBeNull();
+        await task; // Should complete without throwing
+        task.IsCompleted.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Renders_ColumnsInCorrectOrder() {
+        // Arrange
+        var context = CreateGridContext();
+        var column1 = new TestTemplateColumn<TestGridItem> {
+            HeaderTemplate = builder => builder.AddContent(0, "First"),
+            Order = 2
+        };
+        var column2 = new TestTemplateColumn<TestGridItem> {
+            HeaderTemplate = builder => builder.AddContent(0, "Second"),
+            Order = 1
+        };
+        var column3 = new TestTemplateColumn<TestGridItem> {
+            HeaderTemplate = builder => builder.AddContent(0, "Third"),
+            Order = 3
+        };
+
+        // Register in different order than display order
+        context.RegisterColumn(column1);
+        context.RegisterColumn(column3);
+        context.RegisterColumn(column2);
+
+        // Act
+        var cut = RenderHeaderRowWithContext(context);
+
+        // Assert
+        var thElements = cut.FindAll("th");
+        thElements.Should().HaveCount(3);
+        // Should be ordered by Order property: Second, First, Third
+        thElements[0].InnerHtml.Should().Contain("Second");
+        thElements[1].InnerHtml.Should().Contain("First");
+        thElements[2].InnerHtml.Should().Contain("Third");
+    }
+
+    [Fact]
+    public void Renders_CompleteHeader_WithMultipleColumnsAndRowCallback() {
+        // Arrange
+        var context = CreateGridContext();
+        context.Grid.OnRowClicked = EventCallback.Factory.Create<TestGridItem>(context.Grid, _ => { });
+
+        var idColumn = new TestTemplateColumn<TestGridItem> {
+            HeaderTemplate = builder => builder.AddContent(0, "ID"),
+            Order = 1
+        };
+        var nameColumn = new TestTemplateColumn<TestGridItem> {
+            HeaderTemplate = builder => builder.AddContent(0, "Name"),
+            Order = 2
+        };
+        var emailColumn = new TestTemplateColumn<TestGridItem> {
+            HeaderTemplate = builder => builder.AddContent(0, "Email"),
+            Order = 3
+        };
+
+        context.RegisterColumn(nameColumn);
+        context.RegisterColumn(idColumn);
+        context.RegisterColumn(emailColumn);
+
+        // Act
+        var cut = RenderHeaderRowWithContext(context);
+
+        // Assert Should have thead structure
+        cut.FindAll("thead").Should().HaveCount(1);
+        cut.Find("thead").GetAttribute("class").Should().Be("tnt-data-grid-header");
+
+        // Should have tr with correct classes
+        var tr = cut.Find("tr");
+        tr.GetAttribute("class").Should().Contain("tnt-data-grid-header-row");
+        tr.GetAttribute("class").Should().Contain("tnt-interactable");
+
+        // Should have placeholder + 3 columns = 4 th elements
+        var thElements = cut.FindAll("th");
+        thElements.Should().HaveCount(4);
+
+        // First should be placeholder
+        thElements[0].GetAttribute("class").Should().Be("tnt-interactable-placeholder");
+
+        // Others should be in order: ID, Name, Email
+        thElements[1].InnerHtml.Should().Contain("ID");
+        thElements[2].InnerHtml.Should().Contain("Name");
+        thElements[3].InnerHtml.Should().Contain("Email");
+    }
+
+    [Fact]
+    public void Renders_HeaderCellsForEachColumn() {
+        // Arrange
+        var context = CreateGridContext();
+        var nameColumn = new TestTemplateColumn<TestGridItem> {
+            HeaderTemplate = builder => builder.AddContent(0, "Name")
+        };
+        var emailColumn = new TestTemplateColumn<TestGridItem> {
+            HeaderTemplate = builder => builder.AddContent(0, "Email")
+        };
+        context.RegisterColumn(nameColumn);
+        context.RegisterColumn(emailColumn);
+
+        // Act
+        var cut = RenderHeaderRowWithContext(context);
+
+        // Assert
+        cut.FindAll("th").Should().HaveCount(2);
+        cut.Markup.Should().Contain("Name");
+        cut.Markup.Should().Contain("Email");
+    }
+
+    [Fact]
+    public void Renders_InteractablePlaceholder_WhenRowClickCallbackExists() {
+        // Arrange
+        var context = CreateGridContext();
+        context.Grid.OnRowClicked = EventCallback.Factory.Create<TestGridItem>(context.Grid, _ => { });
+        var column = new TestTemplateColumn<TestGridItem> {
+            HeaderTemplate = builder => builder.AddContent(0, "Column")
+        };
+        context.RegisterColumn(column);
+
+        // Act
+        var cut = RenderHeaderRowWithContext(context);
+
+        // Assert
+        var thElements = cut.FindAll("th");
+        thElements.Should().HaveCount(2); // Placeholder + actual column
+
+        var placeholderTh = thElements[0];
+        placeholderTh.GetAttribute("class").Should().Be("tnt-interactable-placeholder");
+        placeholderTh.InnerHtml.Trim().Should().BeEmpty();
+    }
 
     [Fact]
     public void Renders_TheadElement_WithHeaderStructure() {
@@ -72,6 +259,23 @@ public class TnTDataGridHeaderRow_Tests : BunitContext {
     }
 
     [Fact]
+    public void Renders_WithNoColumns() {
+        // Arrange
+        var context = CreateGridContext();
+        // Don't register any columns
+
+        // Act
+        var cut = RenderHeaderRowWithContext(context);
+
+        // Assert Should still render the basic structure
+        cut.FindAll("thead").Should().HaveCount(1);
+        cut.FindAll("tr").Should().HaveCount(1);
+        // Should have no th elements (except potentially the placeholder)
+        var thElements = cut.FindAll("th");
+        thElements.Should().HaveCount(0); // No columns, no placeholders
+    }
+
+    [Fact]
     public void Renders_WithoutInteractableClass_WhenNoRowClickCallback() {
         // Arrange
         var context = CreateGridContext();
@@ -86,252 +290,12 @@ public class TnTDataGridHeaderRow_Tests : BunitContext {
         tr.GetAttribute("class").Should().Be("tnt-data-grid-header-row");
     }
 
-    #endregion
-
-    #region Column Rendering Tests
-
-    [Fact]
-    public void Renders_HeaderCellsForEachColumn() {
-        // Arrange
-        var context = CreateGridContext();
-        var nameColumn = new TestTemplateColumn<TestGridItem> {
-            HeaderTemplate = builder => builder.AddContent(0, "Name")
-        };
-        var emailColumn = new TestTemplateColumn<TestGridItem> {
-            HeaderTemplate = builder => builder.AddContent(0, "Email")
-        };
-        context.RegisterColumn(nameColumn);
-        context.RegisterColumn(emailColumn);
-
-        // Act
-        var cut = RenderHeaderRowWithContext(context);
-
-        // Assert
-        cut.FindAll("th").Should().HaveCount(2);
-        cut.Markup.Should().Contain("Name");
-        cut.Markup.Should().Contain("Email");
+    private TnTInternalGridContext<TestGridItem> CreateGridContext() {
+        var grid = new TnTDataGrid<TestGridItem>();
+        grid.ItemKey = item => item.Id;
+        grid.ItemSize = 40;
+        return new TnTInternalGridContext<TestGridItem>(grid);
     }
-
-    [Fact]
-    public void Renders_WithNoColumns() {
-        // Arrange
-        var context = CreateGridContext();
-        // Don't register any columns
-
-        // Act
-        var cut = RenderHeaderRowWithContext(context);
-
-        // Assert
-        // Should still render the basic structure
-        cut.FindAll("thead").Should().HaveCount(1);
-        cut.FindAll("tr").Should().HaveCount(1);
-        // Should have no th elements (except potentially the placeholder)
-        var thElements = cut.FindAll("th");
-        thElements.Should().HaveCount(0); // No columns, no placeholders
-    }
-
-    [Fact]
-    public void Renders_ColumnsInCorrectOrder() {
-        // Arrange
-        var context = CreateGridContext();
-        var column1 = new TestTemplateColumn<TestGridItem> {
-            HeaderTemplate = builder => builder.AddContent(0, "First"),
-            Order = 2
-        };
-        var column2 = new TestTemplateColumn<TestGridItem> {
-            HeaderTemplate = builder => builder.AddContent(0, "Second"),
-            Order = 1
-        };
-        var column3 = new TestTemplateColumn<TestGridItem> {
-            HeaderTemplate = builder => builder.AddContent(0, "Third"),
-            Order = 3
-        };
-
-        // Register in different order than display order
-        context.RegisterColumn(column1);
-        context.RegisterColumn(column3);
-        context.RegisterColumn(column2);
-
-        // Act
-        var cut = RenderHeaderRowWithContext(context);
-
-        // Assert
-        var thElements = cut.FindAll("th");
-        thElements.Should().HaveCount(3);
-        // Should be ordered by Order property: Second, First, Third
-        thElements[0].InnerHtml.Should().Contain("Second");
-        thElements[1].InnerHtml.Should().Contain("First");
-        thElements[2].InnerHtml.Should().Contain("Third");
-    }
-
-    #endregion
-
-    #region Interactable Placeholder Tests
-
-    [Fact]
-    public void Renders_InteractablePlaceholder_WhenRowClickCallbackExists() {
-        // Arrange
-        var context = CreateGridContext();
-        context.Grid.OnRowClicked = EventCallback.Factory.Create<TestGridItem>(context.Grid, _ => { });
-        var column = new TestTemplateColumn<TestGridItem> {
-            HeaderTemplate = builder => builder.AddContent(0, "Column")
-        };
-        context.RegisterColumn(column);
-
-        // Act
-        var cut = RenderHeaderRowWithContext(context);
-
-        // Assert
-        var thElements = cut.FindAll("th");
-        thElements.Should().HaveCount(2); // Placeholder + actual column
-        
-        var placeholderTh = thElements[0];
-        placeholderTh.GetAttribute("class").Should().Be("tnt-interactable-placeholder");
-        placeholderTh.InnerHtml.Trim().Should().BeEmpty();
-    }
-
-    [Fact]
-    public void DoesNotRender_InteractablePlaceholder_WhenNoRowClickCallback() {
-        // Arrange
-        var context = CreateGridContext();
-        var column = new TestTemplateColumn<TestGridItem> {
-            HeaderTemplate = builder => builder.AddContent(0, "Column")
-        };
-        context.RegisterColumn(column);
-
-        // Act
-        var cut = RenderHeaderRowWithContext(context);
-
-        // Assert
-        var thElements = cut.FindAll("th");
-        thElements.Should().HaveCount(1); // Only the actual column
-        thElements[0].InnerHtml.Should().Contain("Column");
-    }
-
-    #endregion
-
-    #region Context Parameter Tests
-
-    [Fact]
-    public void Context_IsRequired() {
-        // Arrange & Act
-        var act = () => Render<TnTDataGridHeaderRow<TestGridItem>>();
-
-        // Assert
-        act.Should().Throw<ArgumentNullException>()
-           .WithParameterName("Context");
-    }
-
-    [Fact]
-    public void Context_IsSetCorrectly() {
-        // Arrange
-        var context = CreateGridContext();
-
-        // Act
-        var cut = RenderHeaderRowWithContext(context);
-
-        // Assert
-        var component = cut.Instance;
-        component.Context.Should().BeSameAs(context);
-    }
-
-    #endregion
-
-    #region Inheritance Tests
-
-    [Fact]
-    public void InheritsFrom_TnTDataGridRow() {
-        // Arrange & Act
-        var cut = RenderHeaderRowWithContext();
-
-        // Assert
-        var component = cut.Instance;
-        component.Should().BeAssignableTo<TnTDataGridRow<TestGridItem>>();
-    }
-
-    [Fact]
-    public void HasCascadingTypeParameterAttribute() {
-        // Arrange & Act
-        var componentType = typeof(TnTDataGridHeaderRow<TestGridItem>);
-
-        // Assert
-        var attribute = componentType.GetCustomAttributes(typeof(CascadingTypeParameterAttribute), false);
-        attribute.Should().HaveCount(1);
-        var cascadingAttr = (CascadingTypeParameterAttribute)attribute[0];
-        cascadingAttr.Name.Should().Be("TGridItem");
-    }
-
-    [Fact]
-    public async Task RefreshAsync_InheritsFromBase() {
-        // Arrange
-        var cut = RenderHeaderRowWithContext();
-        var component = cut.Instance;
-
-        // Act
-        var task = component.RefreshAsync();
-
-        // Assert
-        task.Should().NotBeNull();
-        await task; // Should complete without throwing
-        task.IsCompleted.Should().BeTrue();
-    }
-
-    #endregion
-
-    #region Integration Tests
-
-    [Fact]
-    public void Renders_CompleteHeader_WithMultipleColumnsAndRowCallback() {
-        // Arrange
-        var context = CreateGridContext();
-        context.Grid.OnRowClicked = EventCallback.Factory.Create<TestGridItem>(context.Grid, _ => { });
-        
-        var idColumn = new TestTemplateColumn<TestGridItem> {
-            HeaderTemplate = builder => builder.AddContent(0, "ID"),
-            Order = 1
-        };
-        var nameColumn = new TestTemplateColumn<TestGridItem> {
-            HeaderTemplate = builder => builder.AddContent(0, "Name"),
-            Order = 2
-        };
-        var emailColumn = new TestTemplateColumn<TestGridItem> {
-            HeaderTemplate = builder => builder.AddContent(0, "Email"),
-            Order = 3
-        };
-
-        context.RegisterColumn(nameColumn);
-        context.RegisterColumn(idColumn);
-        context.RegisterColumn(emailColumn);
-
-        // Act
-        var cut = RenderHeaderRowWithContext(context);
-
-        // Assert
-        // Should have thead structure
-        cut.FindAll("thead").Should().HaveCount(1);
-        cut.Find("thead").GetAttribute("class").Should().Be("tnt-data-grid-header");
-
-        // Should have tr with correct classes
-        var tr = cut.Find("tr");
-        tr.GetAttribute("class").Should().Contain("tnt-data-grid-header-row");
-        tr.GetAttribute("class").Should().Contain("tnt-interactable");
-
-        // Should have placeholder + 3 columns = 4 th elements
-        var thElements = cut.FindAll("th");
-        thElements.Should().HaveCount(4);
-
-        // First should be placeholder
-        thElements[0].GetAttribute("class").Should().Be("tnt-interactable-placeholder");
-
-        // Others should be in order: ID, Name, Email
-        thElements[1].InnerHtml.Should().Contain("ID");
-        thElements[2].InnerHtml.Should().Contain("Name");
-        thElements[3].InnerHtml.Should().Contain("Email");
-    }
-
-    #endregion
-
-    #region Helper Methods
 
     private IRenderedComponent<TnTDataGridHeaderRow<TestGridItem>> RenderHeaderRowWithContext(TnTInternalGridContext<TestGridItem>? context = null) {
         context ??= CreateGridContext();
@@ -340,21 +304,22 @@ public class TnTDataGridHeaderRow_Tests : BunitContext {
             .AddCascadingValue(context));
     }
 
-    private TnTInternalGridContext<TestGridItem> CreateGridContext() {
-        var grid = new TnTDataGrid<TestGridItem>();
-        grid.ItemKey = item => item.Id;
-        grid.ItemSize = 40;
-        return new TnTInternalGridContext<TestGridItem>(grid);
+    /// <summary>
+    ///     Test model for grid header row tests.
+    /// </summary>
+    private class TestGridItem {
+        public string Email { get; set; } = string.Empty;
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 
     /// <summary>
     ///     Test implementation of TnTColumnBase for testing purposes.
     /// </summary>
     private class TestTemplateColumn<TItem> : TnTColumnBase<TItem> {
-        public Action<Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder>? HeaderTemplate { get; set; }
-        
         public override string? ElementClass => null;
         public override string? ElementStyle => null;
+        public Action<Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder>? HeaderTemplate { get; set; }
         public override TnTGridSort<TItem>? SortBy { get; set; }
 
         public override RenderFragment RenderCellContent(TItem item) => builder => builder.AddContent(0, "Cell");
@@ -362,11 +327,10 @@ public class TnTDataGridHeaderRow_Tests : BunitContext {
         public override void RenderHeaderContent(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder builder) {
             if (HeaderTemplate != null) {
                 HeaderTemplate(builder);
-            } else {
+            }
+            else {
                 builder.AddContent(0, "Default Header");
             }
         }
     }
-
-    #endregion
 }

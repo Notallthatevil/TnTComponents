@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using Bunit;
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components;
 using TnTComponents.Grid;
 using TnTComponents.Grid.Columns;
 using TnTComponents.Grid.Infrastructure;
-using Xunit;
 using RippleTestingUtility = TnTComponents.Tests.TestingUtility.TestingUtility;
 
 namespace TnTComponents.Tests.Grid.Infrastructure;
@@ -15,15 +10,6 @@ namespace TnTComponents.Tests.Grid.Infrastructure;
 ///     Unit tests for <see cref="TnTDataGridBodyCell{TGridItem}" />.
 /// </summary>
 public class TnTDataGridBodyCell_Tests : BunitContext {
-
-    /// <summary>
-    ///     Test model for grid body cell tests.
-    /// </summary>
-    private class TestGridItem {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-    }
 
     private readonly TestGridItem _testItem = new() {
         Id = 1,
@@ -36,7 +22,100 @@ public class TnTDataGridBodyCell_Tests : BunitContext {
         RippleTestingUtility.SetupRippleEffectModule(this);
     }
 
-    #region Rendering Tests
+    [Fact]
+    public void Column_IsRequired() {
+        // Arrange & Act
+        var act = () => Render<TnTDataGridBodyCell<TestGridItem>>(parameters => parameters
+            .Add(p => p.Column, (TnTColumnBase<TestGridItem>)null!)
+            .Add(p => p.Item, _testItem));
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>()
+           .WithParameterName("Column");
+    }
+
+    [Fact]
+    public void Column_IsSetCorrectly() {
+        // Arrange
+        var column = CreateTestColumn("Content");
+
+        // Act
+        var cut = RenderCellWithColumn(column);
+
+        // Assert
+        var component = cut.Instance;
+        component.Column.Should().BeSameAs(column);
+    }
+
+    [Fact]
+    public void HasCascadingTypeParameter() {
+        // Arrange & Act
+        var componentType = typeof(TnTDataGridBodyCell<TestGridItem>);
+
+        // Assert
+        var attribute = componentType.GetCustomAttributes(typeof(CascadingTypeParameterAttribute), false);
+        attribute.Should().HaveCount(1);
+        var cascadingAttr = (CascadingTypeParameterAttribute)attribute[0];
+        cascadingAttr.Name.Should().Be("TGridItem");
+    }
+
+    [Fact]
+    public void InheritsFrom_TnTDataGridCell() {
+        // Arrange
+        var column = CreateTestColumn("Content");
+
+        // Act
+        var cut = RenderCellWithColumn(column);
+
+        // Assert
+        var component = cut.Instance;
+        component.Should().BeAssignableTo<TnTDataGridCell<TestGridItem>>();
+    }
+
+    [Fact]
+    public void Item_IsRequired() {
+        // Arrange
+        var column = CreateTestColumn("Content");
+
+        // Act
+        var cut = Render<TnTDataGridBodyCell<TestGridItem>>(parameters => parameters
+            .Add(p => p.Column, column)
+            .Add(p => p.Item, (TestGridItem)null!));
+
+        // Assert - The component should render but Item will be null The EditorRequired attribute is primarily for design-time tooling
+        cut.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void Item_IsSetCorrectly() {
+        // Arrange
+        var column = CreateTestColumn("Content");
+
+        // Act
+        var cut = RenderCellWithColumn(column);
+
+        // Assert
+        var component = cut.Instance;
+        component.Item.Should().BeSameAs(_testItem);
+    }
+
+    [Fact]
+    public void Renders_ColumnContentWithItem() {
+        // Arrange
+        var column = new TestTemplateColumn<TestGridItem> {
+            CellTemplate = item => builder => {
+                builder.OpenElement(0, "span");
+                builder.AddContent(1, $"{item.Name} ({item.Id})");
+                builder.CloseElement();
+            }
+        };
+
+        // Act
+        var cut = RenderCellWithColumn(column);
+
+        // Assert
+        cut.Markup.Should().Contain("John Doe (1)");
+    }
 
     [Fact]
     public void Renders_TdElement_WithColumnContent() {
@@ -70,142 +149,6 @@ public class TnTDataGridBodyCell_Tests : BunitContext {
     }
 
     [Fact]
-    public void Renders_WithNullAdditionalAttributes() {
-        // Arrange
-        var column = CreateTestColumn("Content");
-        column.AdditionalAttributes = null;
-
-        // Act
-        var cut = RenderCellWithColumn(column);
-
-        // Assert
-        cut.FindAll("td").Should().HaveCount(1);
-        cut.Markup.Should().Contain("Content");
-    }
-
-    [Fact]
-    public void Renders_WithEmptyAdditionalAttributes() {
-        // Arrange
-        var column = CreateTestColumn("Content");
-        column.AdditionalAttributes = new Dictionary<string, object>();
-
-        // Act
-        var cut = RenderCellWithColumn(column);
-
-        // Assert
-        cut.FindAll("td").Should().HaveCount(1);
-        cut.Markup.Should().Contain("Content");
-    }
-
-    #endregion
-
-    #region Parameter Tests
-
-    [Fact]
-    public void Item_IsRequired() {
-        // Arrange
-        var column = CreateTestColumn("Content");
-
-        // Act
-        var cut = Render<TnTDataGridBodyCell<TestGridItem>>(parameters => parameters
-            .Add(p => p.Column, column)
-            .Add(p => p.Item, (TestGridItem)null!));
-
-        // Assert - The component should render but Item will be null
-        // The EditorRequired attribute is primarily for design-time tooling
-        cut.Should().NotBeNull();
-    }
-
-    [Fact]
-    public void Column_IsRequired() {
-        // Arrange & Act
-        var act = () => Render<TnTDataGridBodyCell<TestGridItem>>(parameters => parameters
-            .Add(p => p.Column, (TnTColumnBase<TestGridItem>)null!)
-            .Add(p => p.Item, _testItem));
-
-        // Assert
-        act.Should().Throw<ArgumentNullException>()
-           .WithParameterName("Column");
-    }
-
-    [Fact]
-    public void Item_IsSetCorrectly() {
-        // Arrange
-        var column = CreateTestColumn("Content");
-
-        // Act
-        var cut = RenderCellWithColumn(column);
-
-        // Assert
-        var component = cut.Instance;
-        component.Item.Should().BeSameAs(_testItem);
-    }
-
-    [Fact]
-    public void Column_IsSetCorrectly() {
-        // Arrange
-        var column = CreateTestColumn("Content");
-
-        // Act
-        var cut = RenderCellWithColumn(column);
-
-        // Assert
-        var component = cut.Instance;
-        component.Column.Should().BeSameAs(column);
-    }
-
-    #endregion
-
-    #region Inheritance Tests
-
-    [Fact]
-    public void InheritsFrom_TnTDataGridCell() {
-        // Arrange
-        var column = CreateTestColumn("Content");
-
-        // Act
-        var cut = RenderCellWithColumn(column);
-
-        // Assert
-        var component = cut.Instance;
-        component.Should().BeAssignableTo<TnTDataGridCell<TestGridItem>>();
-    }
-
-    [Fact]
-    public void HasCascadingTypeParameter() {
-        // Arrange & Act
-        var componentType = typeof(TnTDataGridBodyCell<TestGridItem>);
-
-        // Assert
-        var attribute = componentType.GetCustomAttributes(typeof(CascadingTypeParameterAttribute), false);
-        attribute.Should().HaveCount(1);
-        var cascadingAttr = (CascadingTypeParameterAttribute)attribute[0];
-        cascadingAttr.Name.Should().Be("TGridItem");
-    }
-
-    #endregion
-
-    #region Content Rendering Tests
-
-    [Fact]
-    public void Renders_ColumnContentWithItem() {
-        // Arrange
-        var column = new TestTemplateColumn<TestGridItem> {
-            CellTemplate = item => builder => {
-                builder.OpenElement(0, "span");
-                builder.AddContent(1, $"{item.Name} ({item.Id})");
-                builder.CloseElement();
-            }
-        };
-
-        // Act
-        var cut = RenderCellWithColumn(column);
-
-        // Assert
-        cut.Markup.Should().Contain("John Doe (1)");
-    }
-
-    [Fact]
     public void Renders_WithComplexColumnContent() {
         // Arrange
         var column = new TestTemplateColumn<TestGridItem> {
@@ -231,9 +174,39 @@ public class TnTDataGridBodyCell_Tests : BunitContext {
         cut.Markup.Should().Contain("<small>john@example.com</small>");
     }
 
-    #endregion
+    [Fact]
+    public void Renders_WithEmptyAdditionalAttributes() {
+        // Arrange
+        var column = CreateTestColumn("Content");
+        column.AdditionalAttributes = new Dictionary<string, object>();
 
-    #region Helper Methods
+        // Act
+        var cut = RenderCellWithColumn(column);
+
+        // Assert
+        cut.FindAll("td").Should().HaveCount(1);
+        cut.Markup.Should().Contain("Content");
+    }
+
+    [Fact]
+    public void Renders_WithNullAdditionalAttributes() {
+        // Arrange
+        var column = CreateTestColumn("Content");
+        column.AdditionalAttributes = null;
+
+        // Act
+        var cut = RenderCellWithColumn(column);
+
+        // Assert
+        cut.FindAll("td").Should().HaveCount(1);
+        cut.Markup.Should().Contain("Content");
+    }
+
+    private TestTemplateColumn<TestGridItem> CreateTestColumn(string content) {
+        return new TestTemplateColumn<TestGridItem> {
+            CellTemplate = _ => builder => builder.AddContent(0, content)
+        };
+    }
 
     private IRenderedComponent<TnTDataGridBodyCell<TestGridItem>> RenderCellWithColumn(TnTColumnBase<TestGridItem> column) {
         return Render<TnTDataGridBodyCell<TestGridItem>>(parameters => parameters
@@ -241,10 +214,13 @@ public class TnTDataGridBodyCell_Tests : BunitContext {
             .Add(p => p.Item, _testItem));
     }
 
-    private TestTemplateColumn<TestGridItem> CreateTestColumn(string content) {
-        return new TestTemplateColumn<TestGridItem> {
-            CellTemplate = _ => builder => builder.AddContent(0, content)
-        };
+    /// <summary>
+    ///     Test model for grid body cell tests.
+    /// </summary>
+    private class TestGridItem {
+        public string Email { get; set; } = string.Empty;
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 
     /// <summary>
@@ -264,6 +240,4 @@ public class TnTDataGridBodyCell_Tests : BunitContext {
             builder.AddContent(0, "Header");
         }
     }
-
-    #endregion
 }

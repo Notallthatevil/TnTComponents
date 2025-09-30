@@ -1,139 +1,137 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using TnTComponents.Core;
-using Xunit;
+﻿using TnTComponents.Core;
 
 namespace TnTComponents.Tests.Core {
-   public class TnTDebouncerTests {
-      [Fact]
-      public async Task Debounce_ExecutesOnlyLastAction_WhenSecondCallWithinDelay() {
-         // Arrange
-         var debouncer = new TnTDebouncer(millisecondsDelay: 120);
-         int callCount = 0;
-         string? last = null;
 
-         // Act
-         var first = debouncer.DebounceAsync(_ => { callCount++; last = "A"; return Task.CompletedTask; });
-         await Task.Delay(20, Xunit.TestContext.Current.CancellationToken);
-         var second = debouncer.DebounceAsync(_ => { callCount++; last = "B"; return Task.CompletedTask; });
-         await Task.WhenAll(first, second);
+    public class TnTDebouncerTests {
 
-         // Assert
-         callCount.Should().Be(1);
-         last.Should().Be("B");
-      }
+        [Fact]
+        public async Task ActionToken_IsCanceled_WhenSubsequentCallOccurs() {
+            // Arrange
+            var debouncer = new TnTDebouncer(millisecondsDelay: 20);
+            var actionStarted = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+            bool wasCanceled = false;
 
-      [Fact]
-      public async Task Debounce_ExecutesEachAction_WhenCallsSpacedBeyondDelay() {
-         // Arrange
-         var debouncer = new TnTDebouncer(millisecondsDelay: 25);
-         int callCount = 0;
+            // Act
+            var first = debouncer.DebounceAsync(async token => {
+                actionStarted.TrySetResult();
+                try {
+                    await Task.Delay(TimeSpan.FromMinutes(1), token);
+                }
+                catch (OperationCanceledException) {
+                    wasCanceled = true;
+                }
+            });
+            await actionStarted.Task; // ensure first action started
+            var second = debouncer.DebounceAsync(_ => Task.CompletedTask);
+            await Task.WhenAll(first, second);
 
-         // Act
-         await debouncer.DebounceAsync(_ => { callCount++; return Task.CompletedTask; });
-         await Task.Delay(40, Xunit.TestContext.Current.CancellationToken);
-         await debouncer.DebounceAsync(_ => { callCount++; return Task.CompletedTask; });
+            // Assert
+            wasCanceled.Should().BeTrue();
+        }
 
-         // Assert
-         callCount.Should().Be(2);
-      }
+        [Fact]
+        public async Task CancelAsync_PreventsPendingExecution() {
+            // Arrange
+            var debouncer = new TnTDebouncer(millisecondsDelay: 60);
+            bool executed = false;
+            var task = debouncer.DebounceAsync(_ => { executed = true; return Task.CompletedTask; });
 
-      [Fact]
-      public async Task DebounceForResult_ReturnsResult_WhenNotCanceled() {
-         // Arrange
-         var debouncer = new TnTDebouncer(millisecondsDelay: 30);
+            // Act
+            await debouncer.CancelAsync();
+            await task; // should complete without running the action
+            await Task.Delay(80, Xunit.TestContext.Current.CancellationToken); // ensure enough time has passed beyond delay
 
-         // Act
-         var result = await debouncer.DebounceForResultAsync<int>(_ => Task.FromResult(42));
+            // Assert
+            executed.Should().BeFalse();
+        }
 
-         // Assert
-         result.Should().Be(42);
-      }
+        [Fact]
+        public async Task Debounce_ExecutesEachAction_WhenCallsSpacedBeyondDelay() {
+            // Arrange
+            var debouncer = new TnTDebouncer(millisecondsDelay: 25);
+            int callCount = 0;
 
-      [Fact]
-      public async Task DebounceForResult_ReturnsDefault_WhenCanceledByNextCall() {
-         // Arrange
-         var debouncer = new TnTDebouncer(millisecondsDelay: 40);
+            // Act
+            await debouncer.DebounceAsync(_ => { callCount++; return Task.CompletedTask; });
+            await Task.Delay(40, Xunit.TestContext.Current.CancellationToken);
+            await debouncer.DebounceAsync(_ => { callCount++; return Task.CompletedTask; });
 
-         // Act
-         var first = debouncer.DebounceForResultAsync<string>(_ => Task.FromResult("first"));
-         var second = debouncer.DebounceForResultAsync<string>(_ => Task.FromResult("second"));
-         var results = await Task.WhenAll(first, second);
+            // Assert
+            callCount.Should().Be(2);
+        }
 
-         // Assert
-         results[0].Should().BeNull();
-         results[1].Should().Be("second");
-      }
+        [Fact]
+        public async Task Debounce_ExecutesOnlyLastAction_WhenSecondCallWithinDelay() {
+            // Arrange
+            var debouncer = new TnTDebouncer(millisecondsDelay: 120);
+            int callCount = 0;
+            string? last = null;
 
-      [Fact]
-      public async Task CancelAsync_PreventsPendingExecution() {
-         // Arrange
-         var debouncer = new TnTDebouncer(millisecondsDelay: 60);
-         bool executed = false;
-         var task = debouncer.DebounceAsync(_ => { executed = true; return Task.CompletedTask; });
+            // Act
+            var first = debouncer.DebounceAsync(_ => { callCount++; last = "A"; return Task.CompletedTask; });
+            await Task.Delay(20, Xunit.TestContext.Current.CancellationToken);
+            var second = debouncer.DebounceAsync(_ => { callCount++; last = "B"; return Task.CompletedTask; });
+            await Task.WhenAll(first, second);
 
-         // Act
-         await debouncer.CancelAsync();
-         await task; // should complete without running the action
-         await Task.Delay(80, Xunit.TestContext.Current.CancellationToken); // ensure enough time has passed beyond delay
+            // Assert
+            callCount.Should().Be(1);
+            last.Should().Be("B");
+        }
 
-         // Assert
-         executed.Should().BeFalse();
-      }
+        [Fact]
+        public async Task DebounceForResult_ReturnsDefault_WhenCanceledByNextCall() {
+            // Arrange
+            var debouncer = new TnTDebouncer(millisecondsDelay: 40);
 
-      [Fact]
-      public async Task Dispose_CancelsPendingDelay_AndPreventsExecution() {
-         // Arrange
-         var debouncer = new TnTDebouncer(millisecondsDelay: 60);
-         bool executed = false;
-         var task = debouncer.DebounceAsync(_ => { executed = true; return Task.CompletedTask; });
+            // Act
+            var first = debouncer.DebounceForResultAsync<string>(_ => Task.FromResult("first"));
+            var second = debouncer.DebounceForResultAsync<string>(_ => Task.FromResult("second"));
+            var results = await Task.WhenAll(first, second);
 
-         // Act
-         debouncer.Dispose();
-         await task; // swallow cancellation internally
-         await Task.Delay(80, Xunit.TestContext.Current.CancellationToken);
+            // Assert
+            results[0].Should().BeNull();
+            results[1].Should().Be("second");
+        }
 
-         // Assert
-         executed.Should().BeFalse();
-      }
+        [Fact]
+        public async Task DebounceForResult_ReturnsResult_WhenNotCanceled() {
+            // Arrange
+            var debouncer = new TnTDebouncer(millisecondsDelay: 30);
 
-      [Fact]
-      public async Task ActionToken_IsCanceled_WhenSubsequentCallOccurs() {
-         // Arrange
-         var debouncer = new TnTDebouncer(millisecondsDelay: 20);
-         var actionStarted = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
-         bool wasCanceled = false;
+            // Act
+            var result = await debouncer.DebounceForResultAsync<int>(_ => Task.FromResult(42));
 
-         // Act
-         var first = debouncer.DebounceAsync(async token => {
-            actionStarted.TrySetResult();
-            try {
-               await Task.Delay(TimeSpan.FromMinutes(1), token);
-            }
-            catch (OperationCanceledException) {
-               wasCanceled = true;
-            }
-         });
-         await actionStarted.Task; // ensure first action started
-         var second = debouncer.DebounceAsync(_ => Task.CompletedTask);
-         await Task.WhenAll(first, second);
+            // Assert
+            result.Should().Be(42);
+        }
 
-         // Assert
-         wasCanceled.Should().BeTrue();
-      }
+        [Fact]
+        public async Task Dispose_CancelsPendingDelay_AndPreventsExecution() {
+            // Arrange
+            var debouncer = new TnTDebouncer(millisecondsDelay: 60);
+            bool executed = false;
+            var task = debouncer.DebounceAsync(_ => { executed = true; return Task.CompletedTask; });
 
-      [Fact]
-      public async Task ZeroDelay_RunsImmediately() {
-         // Arrange
-         var debouncer = new TnTDebouncer(millisecondsDelay: 0);
-         bool executed = false;
+            // Act
+            debouncer.Dispose();
+            await task; // swallow cancellation internally
+            await Task.Delay(80, Xunit.TestContext.Current.CancellationToken);
 
-         // Act
-         await debouncer.DebounceAsync(_ => { executed = true; return Task.CompletedTask; });
+            // Assert
+            executed.Should().BeFalse();
+        }
 
-         // Assert
-         executed.Should().BeTrue();
-      }
-   }
+        [Fact]
+        public async Task ZeroDelay_RunsImmediately() {
+            // Arrange
+            var debouncer = new TnTDebouncer(millisecondsDelay: 0);
+            bool executed = false;
+
+            // Act
+            await debouncer.DebounceAsync(_ => { executed = true; return Task.CompletedTask; });
+
+            // Assert
+            executed.Should().BeTrue();
+        }
+    }
 }

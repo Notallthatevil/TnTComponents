@@ -1,32 +1,8 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Bunit;
-using Xunit;
-using TnTComponents.Core;
+﻿using TnTComponents.Core;
 
 namespace TnTComponents.Tests.Core;
 
-
 public class TnTCancellationTokenComponentBase_Tests : BunitContext {
-
-    private class TestCancellationTokenComponent : TnTCancellationTokenComponentBase {
-        public override string? ElementClass => null;
-        public override string? ElementStyle => null;
-        public CancellationToken ExposedToken => CancellationToken;
-        public bool IsDisposed => typeof(TnTCancellationTokenComponentBase)
-            .GetField("_disposed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            ?.GetValue(this) as bool? ?? false;
-    }
-
-    [Fact]
-    public void CancellationToken_IsNotCanceled_BeforeDisposal() {
-        // Arrange
-        var component = new TestCancellationTokenComponent();
-
-        // Act & Assert
-        component.ExposedToken.IsCancellationRequested.Should().BeFalse();
-    }
 
     [Fact]
     public void CancellationToken_IsCanceled_AfterDispose() {
@@ -36,8 +12,7 @@ public class TnTCancellationTokenComponentBase_Tests : BunitContext {
         // Act
         component.Dispose();
 
-        // Assert
-        // After dispose, ExposedToken should be CancellationToken.None
+        // Assert After dispose, ExposedToken should be CancellationToken.None
         component.ExposedToken.Should().Be(CancellationToken.None);
     }
 
@@ -49,9 +24,17 @@ public class TnTCancellationTokenComponentBase_Tests : BunitContext {
         // Act
         await component.DisposeAsync();
 
-        // Assert
-        // After dispose, ExposedToken should be CancellationToken.None
+        // Assert After dispose, ExposedToken should be CancellationToken.None
         component.ExposedToken.Should().Be(CancellationToken.None);
+    }
+
+    [Fact]
+    public void CancellationToken_IsNotCanceled_BeforeDisposal() {
+        // Arrange
+        var component = new TestCancellationTokenComponent();
+
+        // Act & Assert
+        component.ExposedToken.IsCancellationRequested.Should().BeFalse();
     }
 
     [Fact]
@@ -68,6 +51,18 @@ public class TnTCancellationTokenComponentBase_Tests : BunitContext {
     }
 
     [Fact]
+    public void Dispose_SetsDisposedFlag() {
+        // Arrange
+        var component = new TestCancellationTokenComponent();
+
+        // Act
+        component.Dispose();
+
+        // Assert
+        component.IsDisposed.Should().BeTrue();
+    }
+
+    [Fact]
     public async Task DisposeAsync_IsIdempotent() {
         // Arrange
         var component = new TestCancellationTokenComponent();
@@ -80,15 +75,13 @@ public class TnTCancellationTokenComponentBase_Tests : BunitContext {
         exception.Should().BeNull();
     }
 
-    [Fact]
-    public void Dispose_SetsDisposedFlag() {
-        // Arrange
-        var component = new TestCancellationTokenComponent();
+    private class TestCancellationTokenComponent : TnTCancellationTokenComponentBase {
+        public override string? ElementClass => null;
+        public override string? ElementStyle => null;
+        public CancellationToken ExposedToken => CancellationToken;
 
-        // Act
-        component.Dispose();
-
-        // Assert
-        component.IsDisposed.Should().BeTrue();
+        public bool IsDisposed => typeof(TnTCancellationTokenComponentBase)
+            .GetField("_disposed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            ?.GetValue(this) as bool? ?? false;
     }
 }

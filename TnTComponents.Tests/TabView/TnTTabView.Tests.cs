@@ -1,22 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Bunit;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
-using Xunit;
-using TnTComponents.Core;
-using TnTComponents.Tests.TestingUtility;
+﻿using Microsoft.AspNetCore.Components;
 
 namespace TnTComponents.Tests.TabView;
 
 /// <summary>
 ///     Unit tests for <see cref="TnTTabView" />.
 /// </summary>
-public class TnTTabView_Tests : BunitContext
-{
-    public TnTTabView_Tests()
-    {
+public class TnTTabView_Tests : BunitContext {
+
+    public TnTTabView_Tests() {
         // Set up JavaScript module for tab view functionality
         var tabViewModule = JSInterop.SetupModule("./_content/TnTComponents/TabView/TnTTabView.razor.js");
         tabViewModule.SetupVoid("onLoad", _ => true);
@@ -27,11 +18,109 @@ public class TnTTabView_Tests : BunitContext
         TestingUtility.TestingUtility.SetupRippleEffectModule(this);
     }
 
-    #region Constructor and Initial State Tests
+    [Fact]
+    public void ActiveIndicator_HasCorrectStyling() {
+        // Arrange & Act
+        var cut = RenderTabView(parameters => parameters
+            .Add(p => p.ActiveIndicatorColor, TnTColor.Error));
+
+        // Assert
+        var activeIndicator = cut.Find(".tnt-tab-view-active-indicator");
+        activeIndicator.GetAttribute("style").Should().Contain("--tnt-color-error");
+    }
 
     [Fact]
-    public void Constructor_InitializesCorrectly()
-    {
+    public void ActiveIndicatorColor_CanBeCustomized() {
+        // Arrange & Act
+        var cut = RenderTabView(parameters => parameters
+            .Add(p => p.ActiveIndicatorColor, TnTColor.Secondary));
+
+        // Assert
+        cut.Instance.ActiveIndicatorColor.Should().Be(TnTColor.Secondary);
+        cut.Markup.Should().Contain("--tnt-tab-view-active-indicator-color:var(--tnt-color-secondary)");
+    }
+
+    [Fact]
+    public void ActiveIndicatorColor_DefaultValue_IsPrimary() {
+        // Arrange
+        var cut = RenderTabView();
+
+        // Act & Assert
+        cut.Instance.ActiveIndicatorColor.Should().Be(TnTColor.Primary);
+    }
+
+    [Fact]
+    public void AdditionalAttributes_AreAppliedToTabView() {
+        // Arrange
+        var cut = RenderTabView(parameters => parameters
+            .AddUnmatched("data-testid", "test-tab-view")
+            .AddUnmatched("aria-label", "Test Tab View"));
+
+        // Act & Assert
+        var tabView = cut.Find("tnt-tab-view");
+        tabView.GetAttribute("data-testid").Should().Be("test-tab-view");
+        tabView.GetAttribute("aria-label").Should().Be("Test Tab View");
+    }
+
+    [Fact]
+    public void AddTabChild_AddsChildToCollection() {
+        // Arrange
+        var tabView = new TnTTabView();
+        var tabChild = new TnTTabChild { Label = "Test Tab" };
+
+        // Act
+        tabView.AddTabChild(tabChild);
+
+        // Assert - We can't directly access _tabChildren, but we can verify behavior through rendering
+        tabView.Should().NotBeNull(); // Ensures no exception was thrown
+    }
+
+    [Fact]
+    public void Appearance_DefaultValue_IsPrimary() {
+        // Arrange
+        var cut = RenderTabView();
+
+        // Act & Assert
+        cut.Instance.Appearance.Should().Be(TabViewAppearance.Primary);
+        cut.Find("tnt-tab-view").GetAttribute("class").Should().Contain("tnt-tab-view");
+        cut.Find("tnt-tab-view").GetAttribute("class").Should().NotContain("tnt-tab-view-secondary");
+    }
+
+    [Fact]
+    public void Appearance_WhenSecondary_AppliesCorrectClass() {
+        // Arrange & Act
+        var cut = RenderTabView(parameters => parameters
+            .Add(p => p.Appearance, TabViewAppearance.Secondary));
+
+        // Assert
+        cut.Instance.Appearance.Should().Be(TabViewAppearance.Secondary);
+        cut.Find("tnt-tab-view").GetAttribute("class").Should().Contain("tnt-tab-view-secondary");
+    }
+
+    [Fact]
+    public void CascadingValue_IsProvidedToChildren() {
+        // Arrange & Act
+        var cut = RenderTabViewWithTabs();
+
+        // Assert The tabs should render without errors, indicating the cascading value is working
+        cut.FindAll(".tnt-tab-child").Should().HaveCount(3);
+    }
+
+    [Fact]
+    public void CompleteTabView_WithMultipleTabs_RendersCorrectly() {
+        // Arrange & Act
+        var cut = RenderCompleteTabView();
+
+        // Assert
+        cut.Find("tnt-tab-view").Should().NotBeNull();
+        cut.Find(".tnt-tab-view-header").Should().NotBeNull();
+        cut.FindAll(".tnt-tab-view-button").Should().HaveCount(3);
+        cut.FindAll(".tnt-tab-child").Should().HaveCount(3);
+        cut.Find(".tnt-tab-view-active-indicator").Should().NotBeNull();
+    }
+
+    [Fact]
+    public void Constructor_InitializesCorrectly() {
         // Arrange & Act
         var tabView = new TnTTabView();
 
@@ -44,93 +133,8 @@ public class TnTTabView_Tests : BunitContext
         tabView.HeaderTintColor.Should().Be(TnTColor.SurfaceTint);
     }
 
-    #endregion
-
-    #region Parameter Tests
-
     [Fact]
-    public void ActiveIndicatorColor_DefaultValue_IsPrimary()
-    {
-        // Arrange
-        var cut = RenderTabView();
-
-        // Act & Assert
-        cut.Instance.ActiveIndicatorColor.Should().Be(TnTColor.Primary);
-    }
-
-    [Fact]
-    public void ActiveIndicatorColor_CanBeCustomized()
-    {
-        // Arrange & Act
-        var cut = RenderTabView(parameters => parameters
-            .Add(p => p.ActiveIndicatorColor, TnTColor.Secondary));
-
-        // Assert
-        cut.Instance.ActiveIndicatorColor.Should().Be(TnTColor.Secondary);
-        cut.Markup.Should().Contain("--tnt-tab-view-active-indicator-color:var(--tnt-color-secondary)");
-    }
-
-    [Fact]
-    public void Appearance_DefaultValue_IsPrimary()
-    {
-        // Arrange
-        var cut = RenderTabView();
-
-        // Act & Assert
-        cut.Instance.Appearance.Should().Be(TabViewAppearance.Primary);
-        cut.Find("tnt-tab-view").GetAttribute("class").Should().Contain("tnt-tab-view");
-        cut.Find("tnt-tab-view").GetAttribute("class").Should().NotContain("tnt-tab-view-secondary");
-    }
-
-    [Fact]
-    public void Appearance_WhenSecondary_AppliesCorrectClass()
-    {
-        // Arrange & Act
-        var cut = RenderTabView(parameters => parameters
-            .Add(p => p.Appearance, TabViewAppearance.Secondary));
-
-        // Assert
-        cut.Instance.Appearance.Should().Be(TabViewAppearance.Secondary);
-        cut.Find("tnt-tab-view").GetAttribute("class").Should().Contain("tnt-tab-view-secondary");
-    }
-
-    [Fact]
-    public void HeaderBackgroundColor_DefaultValue_IsSurface()
-    {
-        // Arrange
-        var cut = RenderTabView();
-
-        // Act & Assert
-        cut.Instance.HeaderBackgroundColor.Should().Be(TnTColor.Surface);
-    }
-
-    [Fact]
-    public void HeaderTextColor_DefaultValue_IsOnSurface()
-    {
-        // Arrange
-        var cut = RenderTabView();
-
-        // Act & Assert
-        cut.Instance.HeaderTextColor.Should().Be(TnTColor.OnSurface);
-    }
-
-    [Fact]
-    public void HeaderTintColor_DefaultValue_IsSurfaceTint()
-    {
-        // Arrange
-        var cut = RenderTabView();
-
-        // Act & Assert
-        cut.Instance.HeaderTintColor.Should().Be(TnTColor.SurfaceTint);
-    }
-
-    #endregion
-
-    #region CSS Classes and Styles Tests
-
-    [Fact]
-    public void ElementClass_ContainsBaseClass()
-    {
+    public void ElementClass_ContainsBaseClass() {
         // Arrange
         var cut = RenderTabView();
 
@@ -139,8 +143,7 @@ public class TnTTabView_Tests : BunitContext
     }
 
     [Fact]
-    public void ElementClass_WithSecondaryAppearance_ContainsSecondaryClass()
-    {
+    public void ElementClass_WithSecondaryAppearance_ContainsSecondaryClass() {
         // Arrange
         var cut = RenderTabView(parameters => parameters
             .Add(p => p.Appearance, TabViewAppearance.Secondary));
@@ -154,8 +157,7 @@ public class TnTTabView_Tests : BunitContext
     }
 
     [Fact]
-    public void ElementStyle_ContainsActiveIndicatorColorVariable()
-    {
+    public void ElementStyle_ContainsActiveIndicatorColorVariable() {
         // Arrange
         var cut = RenderTabView(parameters => parameters
             .Add(p => p.ActiveIndicatorColor, TnTColor.Tertiary));
@@ -168,38 +170,27 @@ public class TnTTabView_Tests : BunitContext
     }
 
     [Fact]
-    public void AdditionalAttributes_AreAppliedToTabView()
-    {
-        // Arrange
-        var cut = RenderTabView(parameters => parameters
-            .AddUnmatched("data-testid", "test-tab-view")
-            .AddUnmatched("aria-label", "Test Tab View"));
-
-        // Act & Assert
-        var tabView = cut.Find("tnt-tab-view");
-        tabView.GetAttribute("data-testid").Should().Be("test-tab-view");
-        tabView.GetAttribute("aria-label").Should().Be("Test Tab View");
-    }
-
-    #endregion
-
-    #region Header Structure Tests
-
-    [Fact]
-    public void Rendering_IncludesHeaderStructure()
-    {
+    public void EmptyTabView_RendersWithoutErrors() {
         // Arrange & Act
         var cut = RenderTabView();
 
         // Assert
+        cut.Find("tnt-tab-view").Should().NotBeNull();
         cut.Find(".tnt-tab-view-header").Should().NotBeNull();
-        cut.Find(".tnt-tab-view-header-buttons").Should().NotBeNull();
-        cut.Find(".tnt-tab-view-active-indicator").Should().NotBeNull();
+        cut.FindAll(".tnt-tab-view-button").Should().HaveCount(0);
     }
 
     [Fact]
-    public void HeaderStyles_ApplyCorrectVariables()
-    {
+    public void HeaderBackgroundColor_DefaultValue_IsSurface() {
+        // Arrange
+        var cut = RenderTabView();
+
+        // Act & Assert
+        cut.Instance.HeaderBackgroundColor.Should().Be(TnTColor.Surface);
+    }
+
+    [Fact]
+    public void HeaderStyles_ApplyCorrectVariables() {
         // Arrange & Act
         var cut = RenderTabViewWithTabs();
 
@@ -211,38 +202,37 @@ public class TnTTabView_Tests : BunitContext
     }
 
     [Fact]
-    public void ActiveIndicator_HasCorrectStyling()
-    {
-        // Arrange & Act
-        var cut = RenderTabView(parameters => parameters
-            .Add(p => p.ActiveIndicatorColor, TnTColor.Error));
+    public void HeaderTextColor_DefaultValue_IsOnSurface() {
+        // Arrange
+        var cut = RenderTabView();
 
-        // Assert
-        var activeIndicator = cut.Find(".tnt-tab-view-active-indicator");
-        activeIndicator.GetAttribute("style").Should().Contain("--tnt-color-error");
+        // Act & Assert
+        cut.Instance.HeaderTextColor.Should().Be(TnTColor.OnSurface);
     }
 
-    #endregion
+    [Fact]
+    public void HeaderTintColor_DefaultValue_IsSurfaceTint() {
+        // Arrange
+        var cut = RenderTabView();
 
-    #region Tab Children Management Tests
+        // Act & Assert
+        cut.Instance.HeaderTintColor.Should().Be(TnTColor.SurfaceTint);
+    }
 
     [Fact]
-    public void AddTabChild_AddsChildToCollection()
-    {
+    public void JsModulePath_ReturnsCorrectPath() {
         // Arrange
         var tabView = new TnTTabView();
-        var tabChild = new TnTTabChild { Label = "Test Tab" };
 
         // Act
-        tabView.AddTabChild(tabChild);
+        var path = tabView.JsModulePath;
 
-        // Assert - We can't directly access _tabChildren, but we can verify behavior through rendering
-        tabView.Should().NotBeNull(); // Ensures no exception was thrown
+        // Assert
+        path.Should().Be("./_content/TnTComponents/TabView/TnTTabView.razor.js");
     }
 
     [Fact]
-    public void RemoveTabChild_RemovesChildFromCollection()
-    {
+    public void RemoveTabChild_RemovesChildFromCollection() {
         // Arrange
         var tabView = new TnTTabView();
         var tabChild = new TnTTabChild { Label = "Test Tab" };
@@ -255,35 +245,25 @@ public class TnTTabView_Tests : BunitContext
         tabView.Should().NotBeNull();
     }
 
-    #endregion
-
-    #region Tab Buttons Rendering Tests
-
     [Fact]
-    public void TabButtons_RenderCorrectly()
-    {
+    public void Rendering_IncludesHeaderStructure() {
         // Arrange & Act
-        var cut = RenderTabViewWithTabs();
+        var cut = RenderTabView();
 
         // Assert
-        var buttons = cut.FindAll(".tnt-tab-view-button");
-        buttons.Should().HaveCount(3);
-        
-        buttons[0].TextContent.Should().Contain("Tab 1");
-        buttons[1].TextContent.Should().Contain("Tab 2");
-        buttons[2].TextContent.Should().Contain("Tab 3");
+        cut.Find(".tnt-tab-view-header").Should().NotBeNull();
+        cut.Find(".tnt-tab-view-header-buttons").Should().NotBeNull();
+        cut.Find(".tnt-tab-view-active-indicator").Should().NotBeNull();
     }
 
     [Fact]
-    public void TabButtons_HaveCorrectAttributes()
-    {
+    public void TabButtons_HaveCorrectAttributes() {
         // Arrange & Act
         var cut = RenderTabViewWithTabs();
 
         // Assert
         var buttons = cut.FindAll(".tnt-tab-view-button");
-        foreach (var button in buttons)
-        {
+        foreach (var button in buttons) {
             button.GetAttribute("type").Should().Be("button");
             button.GetAttribute("class").Should().Contain("tnt-tab-view-button");
             button.GetAttribute("class").Should().Contain("tnt-interactable");
@@ -292,66 +272,56 @@ public class TnTTabView_Tests : BunitContext
     }
 
     [Fact]
-    public void TabButtons_WithDisabledTab_ShowsDisabledState()
-    {
+    public void TabButtons_IncludeRippleEffect() {
+        // Arrange & Act
+        var cut = RenderTabViewWithTabs();
+
+        // Assert
+        cut.Markup.Should().Contain("TnTRippleEffect");
+
+        // Verify that each button has ripple class
+        var buttons = cut.FindAll(".tnt-tab-view-button");
+        buttons.Should().HaveCount(3);
+        foreach (var button in buttons) {
+            button.GetAttribute("class").Should().Contain("tnt-ripple");
+        }
+    }
+
+    [Fact]
+    public void TabButtons_RenderCorrectly() {
+        // Arrange & Act
+        var cut = RenderTabViewWithTabs();
+
+        // Assert
+        var buttons = cut.FindAll(".tnt-tab-view-button");
+        buttons.Should().HaveCount(3);
+
+        buttons[0].TextContent.Should().Contain("Tab 1");
+        buttons[1].TextContent.Should().Contain("Tab 2");
+        buttons[2].TextContent.Should().Contain("Tab 3");
+    }
+
+    [Fact]
+    public void TabButtons_WithDisabledTab_ShowsDisabledState() {
         // Arrange & Act
         var cut = RenderTabViewWithDisabledTab();
 
         // Assert
         var buttons = cut.FindAll(".tnt-tab-view-button");
         buttons.Should().HaveCount(2);
-        
+
         var enabledButton = buttons[0];
         var disabledButton = buttons[1];
-        
+
         enabledButton.GetAttribute("class").Should().NotContain("tnt-disabled");
         enabledButton.HasAttribute("disabled").Should().BeFalse();
-        
+
         disabledButton.GetAttribute("class").Should().Contain("tnt-disabled");
         disabledButton.HasAttribute("disabled").Should().BeTrue();
     }
 
-    #endregion
-
-    #region Ripple Effect Tests
-
     [Fact]
-    public void TabButtons_IncludeRippleEffect()
-    {
-        // Arrange & Act
-        var cut = RenderTabViewWithTabs();
-
-        // Assert
-        cut.Markup.Should().Contain("TnTRippleEffect");
-        
-        // Verify that each button has ripple class
-        var buttons = cut.FindAll(".tnt-tab-view-button");
-        buttons.Should().HaveCount(3);
-        foreach (var button in buttons)
-        {
-            button.GetAttribute("class").Should().Contain("tnt-ripple");
-        }
-    }
-
-    #endregion
-
-    #region Edge Cases and Error Handling
-
-    [Fact]
-    public void EmptyTabView_RendersWithoutErrors()
-    {
-        // Arrange & Act
-        var cut = RenderTabView();
-
-        // Assert
-        cut.Find("tnt-tab-view").Should().NotBeNull();
-        cut.Find(".tnt-tab-view-header").Should().NotBeNull();
-        cut.FindAll(".tnt-tab-view-button").Should().HaveCount(0);
-    }
-
-    [Fact]
-    public void TabView_WithNullChildContent_RendersWithoutErrors()
-    {
+    public void TabView_WithNullChildContent_RendersWithoutErrors() {
         // Arrange & Act
         var cut = RenderTabView(parameters => parameters
             .Add(p => p.ChildContent, (RenderFragment?)null));
@@ -361,96 +331,7 @@ public class TnTTabView_Tests : BunitContext
         cut.Find(".tnt-tab-view-header").Should().NotBeNull();
     }
 
-    #endregion
-
-    #region JavaScript Module Path Tests
-
-    [Fact]
-    public void JsModulePath_ReturnsCorrectPath()
-    {
-        // Arrange
-        var tabView = new TnTTabView();
-
-        // Act
-        var path = tabView.JsModulePath;
-
-        // Assert
-        path.Should().Be("./_content/TnTComponents/TabView/TnTTabView.razor.js");
-    }
-
-    #endregion
-
-    #region Integration Tests
-
-    [Fact]
-    public void CompleteTabView_WithMultipleTabs_RendersCorrectly()
-    {
-        // Arrange & Act
-        var cut = RenderCompleteTabView();
-
-        // Assert
-        cut.Find("tnt-tab-view").Should().NotBeNull();
-        cut.Find(".tnt-tab-view-header").Should().NotBeNull();
-        cut.FindAll(".tnt-tab-view-button").Should().HaveCount(3);
-        cut.FindAll(".tnt-tab-child").Should().HaveCount(3);
-        cut.Find(".tnt-tab-view-active-indicator").Should().NotBeNull();
-    }
-
-    [Fact]
-    public void CascadingValue_IsProvidedToChildren()
-    {
-        // Arrange & Act
-        var cut = RenderTabViewWithTabs();
-
-        // Assert
-        // The tabs should render without errors, indicating the cascading value is working
-        cut.FindAll(".tnt-tab-child").Should().HaveCount(3);
-    }
-
-    #endregion
-
-    #region Helper Methods
-
-    private IRenderedComponent<TnTTabView> RenderTabView(
-        Action<ComponentParameterCollectionBuilder<TnTTabView>>? parameterBuilder = null)
-    {
-        return Render<TnTTabView>(parameters =>
-        {
-            parameterBuilder?.Invoke(parameters);
-        });
-    }
-
-    private IRenderedComponent<TnTTabView> RenderTabViewWithTabs(
-        Action<ComponentParameterCollectionBuilder<TnTTabView>>? additionalParameters = null)
-    {
-        return RenderTabView(parameters =>
-        {
-            parameters.Add(p => p.ChildContent, CreateTabsFragment());
-            additionalParameters?.Invoke(parameters);
-        });
-    }
-
-    private IRenderedComponent<TnTTabView> RenderTabViewWithDisabledTab()
-    {
-        return RenderTabView(parameters =>
-        {
-            parameters.Add(p => p.ChildContent, CreateTabsWithDisabledFragment());
-        });
-    }
-
-    private IRenderedComponent<TnTTabView> RenderCompleteTabView()
-    {
-        return RenderTabView(parameters =>
-        {
-            parameters.Add(p => p.ChildContent, CreateTabsFragment());
-            parameters.Add(p => p.ActiveIndicatorColor, TnTColor.Primary);
-            parameters.Add(p => p.HeaderBackgroundColor, TnTColor.Surface);
-            parameters.Add(p => p.HeaderTextColor, TnTColor.OnSurface);
-        });
-    }
-
-    private RenderFragment CreateTabsFragment() => builder =>
-    {
+    private RenderFragment CreateTabsFragment() => builder => {
         builder.OpenComponent<TnTTabChild>(0);
         builder.AddAttribute(1, nameof(TnTTabChild.Label), "Tab 1");
         builder.AddAttribute(2, nameof(TnTTabChild.ChildContent), (RenderFragment)(b => b.AddContent(0, "Content 1")));
@@ -467,8 +348,7 @@ public class TnTTabView_Tests : BunitContext
         builder.CloseComponent();
     };
 
-    private RenderFragment CreateTabsWithDisabledFragment() => builder =>
-    {
+    private RenderFragment CreateTabsWithDisabledFragment() => builder => {
         builder.OpenComponent<TnTTabChild>(0);
         builder.AddAttribute(1, nameof(TnTTabChild.Label), "Enabled Tab");
         builder.AddAttribute(2, nameof(TnTTabChild.ChildContent), (RenderFragment)(b => b.AddContent(0, "Enabled Content")));
@@ -481,5 +361,33 @@ public class TnTTabView_Tests : BunitContext
         builder.CloseComponent();
     };
 
-    #endregion
+    private IRenderedComponent<TnTTabView> RenderCompleteTabView() {
+        return RenderTabView(parameters => {
+            parameters.Add(p => p.ChildContent, CreateTabsFragment());
+            parameters.Add(p => p.ActiveIndicatorColor, TnTColor.Primary);
+            parameters.Add(p => p.HeaderBackgroundColor, TnTColor.Surface);
+            parameters.Add(p => p.HeaderTextColor, TnTColor.OnSurface);
+        });
+    }
+
+    private IRenderedComponent<TnTTabView> RenderTabView(
+                    Action<ComponentParameterCollectionBuilder<TnTTabView>>? parameterBuilder = null) {
+        return Render<TnTTabView>(parameters => {
+            parameterBuilder?.Invoke(parameters);
+        });
+    }
+
+    private IRenderedComponent<TnTTabView> RenderTabViewWithDisabledTab() {
+        return RenderTabView(parameters => {
+            parameters.Add(p => p.ChildContent, CreateTabsWithDisabledFragment());
+        });
+    }
+
+    private IRenderedComponent<TnTTabView> RenderTabViewWithTabs(
+            Action<ComponentParameterCollectionBuilder<TnTTabView>>? additionalParameters = null) {
+        return RenderTabView(parameters => {
+            parameters.Add(p => p.ChildContent, CreateTabsFragment());
+            additionalParameters?.Invoke(parameters);
+        });
+    }
 }

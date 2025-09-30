@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Bunit;
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components;
 using TnTComponents.Grid;
 using TnTComponents.Grid.Columns;
 using TnTComponents.Grid.Infrastructure;
-using Xunit;
 using RippleTestingUtility = TnTComponents.Tests.TestingUtility.TestingUtility;
 
 namespace TnTComponents.Tests.Grid.Infrastructure;
@@ -16,15 +10,6 @@ namespace TnTComponents.Tests.Grid.Infrastructure;
 ///     Unit tests for <see cref="TnTDataGridBodyRow{TGridItem}" />.
 /// </summary>
 public class TnTDataGridBodyRow_Tests : BunitContext {
-
-    /// <summary>
-    ///     Test model for grid body row tests.
-    /// </summary>
-    private class TestGridItem {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-    }
 
     private readonly TestGridItem _testItem = new() {
         Id = 1,
@@ -37,45 +22,59 @@ public class TnTDataGridBodyRow_Tests : BunitContext {
         RippleTestingUtility.SetupRippleEffectModule(this);
     }
 
-    #region Rendering Tests
+    [Fact]
+    public void Context_IsRequired() {
+        // Arrange & Act
+        var act = () => Render<TnTDataGridBodyRow<TestGridItem>>(parameters => parameters
+            .Add(p => p.Item, _testItem));
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>()
+           .WithParameterName("Context");
+    }
 
     [Fact]
-    public void Renders_TrElement_WithBasicStructure() {
+    public void InheritsFrom_TnTDataGridRow() {
         // Arrange & Act
         var cut = RenderRowWithContext();
 
         // Assert
-        cut.FindAll("tr").Should().HaveCount(1);
-        var tr = cut.Find("tr");
-        tr.Should().NotBeNull();
+        var component = cut.Instance;
+        component.Should().BeAssignableTo<TnTDataGridRow<TestGridItem>>();
     }
 
     [Fact]
-    public void Renders_WithCorrectHeight() {
+    public void Item_IsRequired() {
         // Arrange
         var context = CreateGridContext();
-        context.Grid.ItemSize = 50;
+        // Create a context with a safe ItemKey that handles null
+        var safeGrid = new TnTDataGrid<TestGridItem>();
+        safeGrid.ItemKey = item => item?.Id ?? 0; // Handle null safely
+        safeGrid.ItemSize = 40;
+        var safeContext = new TnTInternalGridContext<TestGridItem>(safeGrid);
 
         // Act
-        var cut = RenderRowWithContext(context);
+        var cut = Render<TnTDataGridBodyRow<TestGridItem>>(parameters => parameters
+            .AddCascadingValue(safeContext)
+            .Add(p => p.Item, (TestGridItem)null!));
 
-        // Assert
-        var tr = cut.Find("tr");
-        tr.GetAttribute("style").Should().Contain("height: 50px");
+        // Assert - The component should render but Item will be null The EditorRequired attribute is primarily for design-time tooling
+        cut.Should().NotBeNull();
     }
 
     [Fact]
-    public void Renders_WithItemKey() {
-        // Arrange & Act
+    public async Task RefreshAsync_InheritsFromBase() {
+        // Arrange
         var cut = RenderRowWithContext();
+        var component = cut.Instance;
+
+        // Act
+        var task = component.RefreshAsync();
 
         // Assert
-        var tr = cut.Find("tr");
-        // The key attribute in Blazor might be rendered differently, let's check what's actually there
-        // The component uses @key="Context.ItemKey.Invoke(Item)" which should use the item ID (1)
-        // But the HTML key attribute may not be rendered the same way, so let's just verify the component renders
-        tr.Should().NotBeNull();
-        // Verify the item key is being used by ensuring the component doesn't crash
+        task.Should().NotBeNull();
+        await task; // Should complete without throwing
+        task.IsCompleted.Should().BeTrue();
     }
 
     [Fact]
@@ -101,9 +100,36 @@ public class TnTDataGridBodyRow_Tests : BunitContext {
         cut.Markup.Should().Contain("john@example.com");
     }
 
-    #endregion
+    [Fact]
+    public void Renders_TrElement_WithBasicStructure() {
+        // Arrange & Act
+        var cut = RenderRowWithContext();
 
-    #region CSS Classes Tests
+        // Assert
+        cut.FindAll("tr").Should().HaveCount(1);
+        var tr = cut.Find("tr");
+        tr.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void Renders_WithAdditionalAttributes() {
+        // Arrange
+        var context = CreateGridContext();
+
+        // Act
+        var cut = Render<TnTDataGridBodyRow<TestGridItem>>(parameters => parameters
+            .AddCascadingValue(context)
+            .Add(p => p.Item, _testItem)
+                .Add(p => p.AdditionalAttributes, new Dictionary<string, object?> {
+                    { "data-testid", "test-row" },
+                    { "role", "row" }
+                }));
+
+        // Assert
+        var tr = cut.Find("tr");
+        tr.GetAttribute("data-testid").Should().Be("test-row");
+        tr.GetAttribute("role").Should().Be("row");
+    }
 
     [Fact]
     public void Renders_WithBaseCssClass() {
@@ -116,31 +142,17 @@ public class TnTDataGridBodyRow_Tests : BunitContext {
     }
 
     [Fact]
-    public void Renders_WithInteractableClass_WhenRowClickCallbackExists() {
+    public void Renders_WithCorrectHeight() {
         // Arrange
         var context = CreateGridContext();
-        context.Grid.OnRowClicked = EventCallback.Factory.Create<TestGridItem>(context.Grid, _ => { });
+        context.Grid.ItemSize = 50;
 
         // Act
         var cut = RenderRowWithContext(context);
 
         // Assert
         var tr = cut.Find("tr");
-        tr.GetAttribute("class").Should().Contain("tnt-interactable");
-    }
-
-    [Fact]
-    public void Renders_WithStrippedClass_WhenDataGridAppearanceHasStripped() {
-        // Arrange
-        var context = CreateGridContext();
-        context.Grid.DataGridAppearance = DataGridAppearance.Stripped;
-
-        // Act
-        var cut = RenderRowWithContext(context);
-
-        // Assert
-        var tr = cut.Find("tr");
-        tr.GetAttribute("class").Should().Contain("tnt-stripped");
+        tr.GetAttribute("style").Should().Contain("height: 50px");
     }
 
     [Fact]
@@ -161,6 +173,60 @@ public class TnTDataGridBodyRow_Tests : BunitContext {
     }
 
     [Fact]
+    public void Renders_WithInteractableClass_WhenRowClickCallbackExists() {
+        // Arrange
+        var context = CreateGridContext();
+        context.Grid.OnRowClicked = EventCallback.Factory.Create<TestGridItem>(context.Grid, _ => { });
+
+        // Act
+        var cut = RenderRowWithContext(context);
+
+        // Assert
+        var tr = cut.Find("tr");
+        tr.GetAttribute("class").Should().Contain("tnt-interactable");
+    }
+
+    [Fact]
+    public void Renders_WithItemKey() {
+        // Arrange & Act
+        var cut = RenderRowWithContext();
+
+        // Assert
+        var tr = cut.Find("tr");
+        // The key attribute in Blazor might be rendered differently, let's check what's actually there The component uses @key="Context.ItemKey.Invoke(Item)" which should use the item ID (1) But the
+        // HTML key attribute may not be rendered the same way, so let's just verify the component renders
+        tr.Should().NotBeNull();
+        // Verify the item key is being used by ensuring the component doesn't crash
+    }
+
+    [Fact]
+    public void Renders_WithNullAdditionalAttributes() {
+        // Arrange & Act
+        var cut = RenderRowWithContext();
+
+        // Assert
+        var tr = cut.Find("tr");
+        tr.Should().NotBeNull(); // Should render successfully
+    }
+
+    [Fact]
+    public void Renders_WithOnClick_WhenRowClickCallbackExists() {
+        // Arrange
+        var context = CreateGridContext();
+        var clickedItem = (TestGridItem?)null;
+        context.Grid.OnRowClicked = EventCallback.Factory.Create<TestGridItem>(context.Grid, item => clickedItem = item);
+
+        // Act
+        var cut = RenderRowWithContext(context);
+
+        // Assert
+        var tr = cut.Find("tr");
+        // Blazor may not render the onclick attribute directly in HTML, but we can verify the interactable class is present and that the ripple effect is rendered, which indicates the row is clickable
+        tr.GetAttribute("class").Should().Contain("tnt-interactable");
+        cut.Markup.Should().Contain("tnt-ripple-effect");
+    }
+
+    [Fact]
     public void Renders_WithoutCustomRowClass_WhenRowClassReturnsNull() {
         // Arrange
         var context = CreateGridContext();
@@ -175,28 +241,6 @@ public class TnTDataGridBodyRow_Tests : BunitContext {
         var tr = cut.Find("tr");
         tr.GetAttribute("class").Should().NotContain("null");
         tr.GetAttribute("class").Should().Contain("tnt-data-grid-body-row");
-    }
-
-    #endregion
-
-    #region Row Click Tests
-
-    [Fact]
-    public void Renders_WithOnClick_WhenRowClickCallbackExists() {
-        // Arrange
-        var context = CreateGridContext();
-        var clickedItem = (TestGridItem?)null;
-        context.Grid.OnRowClicked = EventCallback.Factory.Create<TestGridItem>(context.Grid, item => clickedItem = item);
-
-        // Act
-        var cut = RenderRowWithContext(context);
-
-        // Assert
-        var tr = cut.Find("tr");
-        // Blazor may not render the onclick attribute directly in HTML, but we can verify the interactable class is present
-        // and that the ripple effect is rendered, which indicates the row is clickable
-        tr.GetAttribute("class").Should().Contain("tnt-interactable");
-        cut.Markup.Should().Contain("tnt-ripple-effect");
     }
 
     [Fact]
@@ -224,113 +268,30 @@ public class TnTDataGridBodyRow_Tests : BunitContext {
         // Act
         var cut = RenderRowWithContext(context);
 
-        // Assert
-        // The TnTRippleEffect component should be present when row click callback exists
-        // This will be rendered as part of the component's template
+        // Assert The TnTRippleEffect component should be present when row click callback exists This will be rendered as part of the component's template
         cut.FindAll("tr").Should().HaveCount(1);
     }
 
-    #endregion
-
-    #region Additional Attributes Tests
-
     [Fact]
-    public void Renders_WithAdditionalAttributes() {
+    public void Renders_WithStrippedClass_WhenDataGridAppearanceHasStripped() {
         // Arrange
         var context = CreateGridContext();
+        context.Grid.DataGridAppearance = DataGridAppearance.Stripped;
 
         // Act
-        var cut = Render<TnTDataGridBodyRow<TestGridItem>>(parameters => parameters
-            .AddCascadingValue(context)
-            .Add(p => p.Item, _testItem)
-                .Add(p => p.AdditionalAttributes, new Dictionary<string, object?> {
-                    { "data-testid", "test-row" },
-                    { "role", "row" }
-                }));
+        var cut = RenderRowWithContext(context);
 
         // Assert
         var tr = cut.Find("tr");
-        tr.GetAttribute("data-testid").Should().Be("test-row");
-        tr.GetAttribute("role").Should().Be("row");
+        tr.GetAttribute("class").Should().Contain("tnt-stripped");
     }
 
-    [Fact]
-    public void Renders_WithNullAdditionalAttributes() {
-        // Arrange & Act
-        var cut = RenderRowWithContext();
-
-        // Assert
-        var tr = cut.Find("tr");
-        tr.Should().NotBeNull(); // Should render successfully
+    private TnTInternalGridContext<TestGridItem> CreateGridContext() {
+        var grid = new TnTDataGrid<TestGridItem>();
+        grid.ItemKey = item => item.Id;
+        grid.ItemSize = 40;
+        return new TnTInternalGridContext<TestGridItem>(grid);
     }
-
-    #endregion
-
-    #region Parameter Tests
-
-    [Fact]
-    public void Item_IsRequired() {
-        // Arrange
-        var context = CreateGridContext();
-        // Create a context with a safe ItemKey that handles null
-        var safeGrid = new TnTDataGrid<TestGridItem>();
-        safeGrid.ItemKey = item => item?.Id ?? 0; // Handle null safely
-        safeGrid.ItemSize = 40;
-        var safeContext = new TnTInternalGridContext<TestGridItem>(safeGrid);
-
-        // Act
-        var cut = Render<TnTDataGridBodyRow<TestGridItem>>(parameters => parameters
-            .AddCascadingValue(safeContext)
-            .Add(p => p.Item, (TestGridItem)null!));
-
-        // Assert - The component should render but Item will be null
-        // The EditorRequired attribute is primarily for design-time tooling
-        cut.Should().NotBeNull();
-    }
-
-    [Fact]
-    public void Context_IsRequired() {
-        // Arrange & Act
-        var act = () => Render<TnTDataGridBodyRow<TestGridItem>>(parameters => parameters
-            .Add(p => p.Item, _testItem));
-
-        // Assert
-        act.Should().Throw<ArgumentNullException>()
-           .WithParameterName("Context");
-    }
-
-    #endregion
-
-    #region Inheritance Tests
-
-    [Fact]
-    public void InheritsFrom_TnTDataGridRow() {
-        // Arrange & Act
-        var cut = RenderRowWithContext();
-
-        // Assert
-        var component = cut.Instance;
-        component.Should().BeAssignableTo<TnTDataGridRow<TestGridItem>>();
-    }
-
-    [Fact]
-    public async Task RefreshAsync_InheritsFromBase() {
-        // Arrange
-        var cut = RenderRowWithContext();
-        var component = cut.Instance;
-
-        // Act
-        var task = component.RefreshAsync();
-
-        // Assert
-        task.Should().NotBeNull();
-        await task; // Should complete without throwing
-        task.IsCompleted.Should().BeTrue();
-    }
-
-    #endregion
-
-    #region Helper Methods
 
     private IRenderedComponent<TnTDataGridBodyRow<TestGridItem>> RenderRowWithContext(TnTInternalGridContext<TestGridItem>? context = null) {
         context ??= CreateGridContext();
@@ -340,11 +301,13 @@ public class TnTDataGridBodyRow_Tests : BunitContext {
             .Add(p => p.Item, _testItem));
     }
 
-    private TnTInternalGridContext<TestGridItem> CreateGridContext() {
-        var grid = new TnTDataGrid<TestGridItem>();
-        grid.ItemKey = item => item.Id;
-        grid.ItemSize = 40;
-        return new TnTInternalGridContext<TestGridItem>(grid);
+    /// <summary>
+    ///     Test model for grid body row tests.
+    /// </summary>
+    private class TestGridItem {
+        public string Email { get; set; } = string.Empty;
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 
     /// <summary>
@@ -364,6 +327,4 @@ public class TnTDataGridBodyRow_Tests : BunitContext {
             builder.AddContent(0, "Header");
         }
     }
-
-    #endregion
 }

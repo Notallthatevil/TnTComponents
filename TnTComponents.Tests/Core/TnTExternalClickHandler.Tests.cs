@@ -1,10 +1,6 @@
-using System.Threading.Tasks;
-using Bunit;
-using Microsoft.AspNetCore.Components;
-using Xunit;
-using TnTComponents.Core;
-using AwesomeAssertions;
+﻿using Microsoft.AspNetCore.Components;
 using System.Reflection;
+using TnTComponents.Core;
 
 namespace TnTComponents.Tests.Core;
 
@@ -21,15 +17,58 @@ public class TnTExternalClickHandler_Tests : BunitContext {
     }
 
     [Fact]
+    public void CanRenderMultipleTimesWithoutError() {
+        // Arrange
+        var comp = Render<TnTExternalClickHandler>();
+        // Act
+        comp.Render();
+        comp.Render();
+        // Assert
+        comp.Instance.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task Defensive_NoJsInteropIfModuleNotLoaded() {
+        // Arrange: Try to set IsolatedJsModule to null via reflection, skip if not possible
+        var comp = Render<TnTExternalClickHandler>();
+        var prop = comp.Instance.GetType().GetProperty("IsolatedJsModule", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+        if (prop == null || !prop.CanWrite) {
+            // Property cannot be set, skip test
+            true.Should().BeTrue();
+            return;
+        }
+        prop.SetValue(comp.Instance, null);
+        // Act & Assert
+        await comp.Instance.DisposeAsync(); // Should not throw
+    }
+
+    [Fact]
+    public async Task DisposesAndDeregistersCallback() {
+        // Arrange
+        var comp = Render<TnTExternalClickHandler>();
+        // Act
+        await comp.Instance.DisposeAsync();
+        // Assert
+        JSInterop.VerifyInvoke("externalClickCallbackDeregister");
+    }
+
+    [Fact]
     public void DoesNotInvokeCallback_WhenClickIsInside() {
         // Arrange
         var called = false;
         var comp = Render<TnTExternalClickHandler>(parameters =>
             parameters.Add(p => p.ExternalClickCallback, EventCallback.Factory.Create(this, () => { called = true; return Task.CompletedTask; }))
         );
-        // Act: Do not call OnClick (simulates click inside)
-        // Assert
+        // Act: Do not call OnClick (simulates click inside) Assert
         called.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task DoesNotThrow_WhenCallbackNotSet() {
+        // Arrange
+        var comp = Render<TnTExternalClickHandler>();
+        // Act & Assert
+        await comp.Instance.OnClick(); // Should not throw
     }
 
     [Fact]
@@ -66,49 +105,5 @@ public class TnTExternalClickHandler_Tests : BunitContext {
         var comp = Render<TnTExternalClickHandler>(p => p.AddChildContent(content));
         // Assert
         comp.Markup.Should().Contain("child");
-    }
-
-    [Fact]
-    public async Task DisposesAndDeregistersCallback() {
-        // Arrange
-        var comp = Render<TnTExternalClickHandler>();
-        // Act
-        await comp.Instance.DisposeAsync();
-        // Assert
-        JSInterop.VerifyInvoke("externalClickCallbackDeregister");
-    }
-
-    [Fact]
-    public async Task DoesNotThrow_WhenCallbackNotSet() {
-        // Arrange
-        var comp = Render<TnTExternalClickHandler>();
-        // Act & Assert
-        await comp.Instance.OnClick(); // Should not throw
-    }
-
-    [Fact]
-    public void CanRenderMultipleTimesWithoutError() {
-        // Arrange
-        var comp = Render<TnTExternalClickHandler>();
-        // Act
-        comp.Render();
-        comp.Render();
-        // Assert
-        comp.Instance.Should().NotBeNull();
-    }
-
-    [Fact]
-    public async Task Defensive_NoJsInteropIfModuleNotLoaded() {
-        // Arrange: Try to set IsolatedJsModule to null via reflection, skip if not possible
-        var comp = Render<TnTExternalClickHandler>();
-        var prop = comp.Instance.GetType().GetProperty("IsolatedJsModule", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-        if (prop == null || !prop.CanWrite) {
-            // Property cannot be set, skip test
-            true.Should().BeTrue();
-            return;
-        }
-        prop.SetValue(comp.Instance, null);
-        // Act & Assert
-        await comp.Instance.DisposeAsync(); // Should not throw
     }
 }

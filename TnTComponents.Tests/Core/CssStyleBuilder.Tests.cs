@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using TnTComponents.Core;
-using Xunit;
+﻿using TnTComponents.Core;
 
 namespace TnTComponents.Tests.Core;
 
@@ -10,39 +7,241 @@ namespace TnTComponents.Tests.Core;
 /// </summary>
 public class CssStyleBuilder_Tests {
 
-    #region Create Tests
-
     [Fact]
-    public void Create_ReturnsNewBuilderInstance() {
-        // Arrange & Act
-        var builder = CssStyleBuilder.Create();
-
-        // Assert
-        builder.Should().NotBeNull();
-        builder.Should().BeOfType<CssStyleBuilder>();
-    }
-
-    [Fact]
-    public void Create_MultipleCalls_ReturnsDifferentInstances() {
-        // Arrange & Act
-        var builder1 = CssStyleBuilder.Create();
-        var builder2 = CssStyleBuilder.Create();
-
-        // Assert
-        builder1.Should().NotBeSameAs(builder2);
-    }
-
-    #endregion
-
-    #region AddStyle Tests
-
-    [Fact]
-    public void AddStyle_WithValidKeyValue_AddsStyle() {
+    public void Add_WithEmptyString_DoesNotAddStyle() {
         // Arrange
         var builder = CssStyleBuilder.Create();
 
         // Act
-        var result = builder.AddStyle("color", "red").Build();
+        var result = builder.Add("").Build();
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public void Add_WithMultipleStyleStrings_ConcatenatesStyles() {
+        // Arrange
+        var builder = CssStyleBuilder.Create();
+
+        // Act
+        var result = builder
+            .Add("color: red")
+            .Add("background: blue")
+            .Build();
+
+        // Assert
+        result.Should().Be("color: red;background: blue;");
+    }
+
+    [Fact]
+    public void Add_WithNullString_DoesNotAddStyle() {
+        // Arrange
+        var builder = CssStyleBuilder.Create();
+
+        // Act
+        var result = builder.Add(null!).Build();
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public void Add_WithStyleStringEndingSemicolon_DoesNotAddExtraSemicolon() {
+        // Arrange
+        var builder = CssStyleBuilder.Create();
+
+        // Act
+        var result = builder.Add("color: red;").Build();
+
+        // Assert
+        result.Should().Be("color: red;");
+    }
+
+    [Fact]
+    public void Add_WithValidStyleString_AddsStyleString() {
+        // Arrange
+        var builder = CssStyleBuilder.Create();
+
+        // Act
+        var result = builder.Add("color: red").Build();
+
+        // Assert
+        result.Should().Be("color: red;");
+    }
+
+    [Fact]
+    public void Add_WithWhitespaceString_DoesNotAddStyle() {
+        // Arrange
+        var builder = CssStyleBuilder.Create();
+
+        // Act
+        var result = builder.Add("   ").Build();
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public void AddFromAdditionalAttributes_WithNonStringStyleValue_ConvertsToString() {
+        // Arrange
+        var builder = CssStyleBuilder.Create();
+        var attributes = new Dictionary<string, object> { ["style"] = 123 };
+
+        // Act
+        var result = builder.AddFromAdditionalAttributes(attributes).Build();
+
+        // Assert
+        result.Should().Be("123;");
+    }
+
+    [Fact]
+    public void AddFromAdditionalAttributes_WithNullAttributes_DoesNotAddStyle() {
+        // Arrange
+        var builder = CssStyleBuilder.Create();
+
+        // Act
+        var result = builder.AddFromAdditionalAttributes(null).Build();
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public void AddFromAdditionalAttributes_WithNullStyleValue_DoesNotAddStyle() {
+        // Arrange
+        var builder = CssStyleBuilder.Create();
+        var attributes = new Dictionary<string, object> { ["style"] = null! };
+
+        // Act
+        var result = builder.AddFromAdditionalAttributes(attributes).Build();
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public void AddFromAdditionalAttributes_WithoutStyleKey_DoesNotAddStyle() {
+        // Arrange
+        var builder = CssStyleBuilder.Create();
+        var attributes = new Dictionary<string, object> { ["class"] = "test-class" };
+
+        // Act
+        var result = builder.AddFromAdditionalAttributes(attributes).Build();
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public void AddFromAdditionalAttributes_WithStyleAttribute_AddsStyleString() {
+        // Arrange
+        var builder = CssStyleBuilder.Create();
+        var attributes = new Dictionary<string, object> { ["style"] = "color: red; background: blue;" };
+
+        // Act
+        var result = builder.AddFromAdditionalAttributes(attributes).Build();
+
+        // Assert
+        result.Should().Be("color: red; background: blue;");
+    }
+
+    [Fact]
+    public void AddFromAdditionalAttributes_WithStyleAttributeMissingSemicolon_AddsSemicolon() {
+        // Arrange
+        var builder = CssStyleBuilder.Create();
+        var attributes = new Dictionary<string, object> { ["style"] = "color: red" };
+
+        // Act
+        var result = builder.AddFromAdditionalAttributes(attributes).Build();
+
+        // Assert
+        result.Should().Be("color: red;");
+    }
+
+    [Fact]
+    public void AddStyle_WithDuplicateKey_OverwritesValue() {
+        // Arrange
+        var builder = CssStyleBuilder.Create();
+
+        // Act
+        var result = builder
+            .AddStyle("color", "red")
+            .AddStyle("color", "blue")
+            .Build();
+
+        // Assert
+        result.Should().Be("color:blue;");
+        result.Should().NotContain("red");
+    }
+
+    [Fact]
+    public void AddStyle_WithEmptyKey_DoesNotAddStyle() {
+        // Arrange
+        var builder = CssStyleBuilder.Create();
+
+        // Act
+        var result = builder.AddStyle("", "red").Build();
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public void AddStyle_WithEmptyValue_AddsKeyWithSemicolon() {
+        // Arrange
+        var builder = CssStyleBuilder.Create();
+
+        // Act
+        var result = builder.AddStyle("display", "").Build();
+
+        // Assert
+        result.Should().Be("display;");
+    }
+
+    [Fact]
+    public void AddStyle_WithEnabledFalse_DoesNotAddStyle() {
+        // Arrange
+        var builder = CssStyleBuilder.Create();
+
+        // Act
+        var result = builder.AddStyle("color", "red", false).Build();
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public void AddStyle_WithEnabledTrue_AddsStyle() {
+        // Arrange
+        var builder = CssStyleBuilder.Create();
+
+        // Act
+        var result = builder.AddStyle("color", "red", true).Build();
+
+        // Assert
+        result.Should().Be("color:red;");
+    }
+
+    [Fact]
+    public void AddStyle_WithKeyAndValueHavingWhitespace_TrimsWhitespace() {
+        // Arrange
+        var builder = CssStyleBuilder.Create();
+
+        // Act
+        var result = builder.AddStyle("  color  ", "  red  ").Build();
+
+        // Assert
+        result.Should().Be("color:red;");
+    }
+
+    [Fact]
+    public void AddStyle_WithKeyContainingColon_DoesNotAddExtraColon() {
+        // Arrange
+        var builder = CssStyleBuilder.Create();
+
+        // Act
+        var result = builder.AddStyle("color:", "red").Build();
 
         // Assert
         result.Should().Be("color:red;");
@@ -79,30 +278,6 @@ public class CssStyleBuilder_Tests {
     }
 
     [Fact]
-    public void AddStyle_WithEmptyKey_DoesNotAddStyle() {
-        // Arrange
-        var builder = CssStyleBuilder.Create();
-
-        // Act
-        var result = builder.AddStyle("", "red").Build();
-
-        // Assert
-        result.Should().BeNull();
-    }
-
-    [Fact]
-    public void AddStyle_WithWhitespaceKey_DoesNotAddStyle() {
-        // Arrange
-        var builder = CssStyleBuilder.Create();
-
-        // Act
-        var result = builder.AddStyle("   ", "red").Build();
-
-        // Assert
-        result.Should().BeNull();
-    }
-
-    [Fact]
     public void AddStyle_WithNullValue_DoesNotAddStyle() {
         // Arrange
         var builder = CssStyleBuilder.Create();
@@ -115,76 +290,12 @@ public class CssStyleBuilder_Tests {
     }
 
     [Fact]
-    public void AddStyle_WithEnabledFalse_DoesNotAddStyle() {
+    public void AddStyle_WithValidKeyValue_AddsStyle() {
         // Arrange
         var builder = CssStyleBuilder.Create();
 
         // Act
-        var result = builder.AddStyle("color", "red", false).Build();
-
-        // Assert
-        result.Should().BeNull();
-    }
-
-    [Fact]
-    public void AddStyle_WithEnabledTrue_AddsStyle() {
-        // Arrange
-        var builder = CssStyleBuilder.Create();
-
-        // Act
-        var result = builder.AddStyle("color", "red", true).Build();
-
-        // Assert
-        result.Should().Be("color:red;");
-    }
-
-    [Fact]
-    public void AddStyle_WithDuplicateKey_OverwritesValue() {
-        // Arrange
-        var builder = CssStyleBuilder.Create();
-
-        // Act
-        var result = builder
-            .AddStyle("color", "red")
-            .AddStyle("color", "blue")
-            .Build();
-
-        // Assert
-        result.Should().Be("color:blue;");
-        result.Should().NotContain("red");
-    }
-
-    [Fact]
-    public void AddStyle_WithEmptyValue_AddsKeyWithSemicolon() {
-        // Arrange
-        var builder = CssStyleBuilder.Create();
-
-        // Act
-        var result = builder.AddStyle("display", "").Build();
-
-        // Assert
-        result.Should().Be("display;");
-    }
-
-    [Fact]
-    public void AddStyle_WithWhitespaceValue_AddsKeyWithSemicolon() {
-        // Arrange
-        var builder = CssStyleBuilder.Create();
-
-        // Act
-        var result = builder.AddStyle("display", "   ").Build();
-
-        // Assert
-        result.Should().Be("display;");
-    }
-
-    [Fact]
-    public void AddStyle_WithKeyContainingColon_DoesNotAddExtraColon() {
-        // Arrange
-        var builder = CssStyleBuilder.Create();
-
-        // Act
-        var result = builder.AddStyle("color:", "red").Build();
+        var result = builder.AddStyle("color", "red").Build();
 
         // Assert
         result.Should().Be("color:red;");
@@ -203,110 +314,39 @@ public class CssStyleBuilder_Tests {
     }
 
     [Fact]
-    public void AddStyle_WithKeyAndValueHavingWhitespace_TrimsWhitespace() {
+    public void AddStyle_WithWhitespaceKey_DoesNotAddStyle() {
         // Arrange
         var builder = CssStyleBuilder.Create();
 
         // Act
-        var result = builder.AddStyle("  color  ", "  red  ").Build();
-
-        // Assert
-        result.Should().Be("color:red;");
-    }
-
-    #endregion
-
-    #region Add Tests
-
-    [Fact]
-    public void Add_WithValidStyleString_AddsStyleString() {
-        // Arrange
-        var builder = CssStyleBuilder.Create();
-
-        // Act
-        var result = builder.Add("color: red").Build();
-
-        // Assert
-        result.Should().Be("color: red;");
-    }
-
-    [Fact]
-    public void Add_WithStyleStringEndingSemicolon_DoesNotAddExtraSemicolon() {
-        // Arrange
-        var builder = CssStyleBuilder.Create();
-
-        // Act
-        var result = builder.Add("color: red;").Build();
-
-        // Assert
-        result.Should().Be("color: red;");
-    }
-
-    [Fact]
-    public void Add_WithMultipleStyleStrings_ConcatenatesStyles() {
-        // Arrange
-        var builder = CssStyleBuilder.Create();
-
-        // Act
-        var result = builder
-            .Add("color: red")
-            .Add("background: blue")
-            .Build();
-
-        // Assert
-        result.Should().Be("color: red;background: blue;");
-    }
-
-    [Fact]
-    public void Add_WithEmptyString_DoesNotAddStyle() {
-        // Arrange
-        var builder = CssStyleBuilder.Create();
-
-        // Act
-        var result = builder.Add("").Build();
+        var result = builder.AddStyle("   ", "red").Build();
 
         // Assert
         result.Should().BeNull();
     }
 
     [Fact]
-    public void Add_WithWhitespaceString_DoesNotAddStyle() {
+    public void AddStyle_WithWhitespaceValue_AddsKeyWithSemicolon() {
         // Arrange
         var builder = CssStyleBuilder.Create();
 
         // Act
-        var result = builder.Add("   ").Build();
+        var result = builder.AddStyle("display", "   ").Build();
 
         // Assert
-        result.Should().BeNull();
+        result.Should().Be("display;");
     }
 
     [Fact]
-    public void Add_WithNullString_DoesNotAddStyle() {
+    public void AddVariable_WithEmptyVariableName_CreatesEmptyVariable() {
         // Arrange
         var builder = CssStyleBuilder.Create();
 
         // Act
-        var result = builder.Add(null!).Build();
+        var result = builder.AddVariable("", "value").Build();
 
-        // Assert
-        result.Should().BeNull();
-    }
-
-    #endregion
-
-    #region AddVariable Tests
-
-    [Fact]
-    public void AddVariable_WithValidNameValue_AddsVariableStyle() {
-        // Arrange
-        var builder = CssStyleBuilder.Create();
-
-        // Act
-        var result = builder.AddVariable("primary-color", "#ff0000").Build();
-
-        // Assert
-        result.Should().Be("--primary-color:#ff0000;");
+        // Assert This tests the current behavior - empty variable names are allowed
+        result.Should().Be("--:value;");
     }
 
     [Fact]
@@ -334,30 +374,6 @@ public class CssStyleBuilder_Tests {
     }
 
     [Fact]
-    public void AddVariable_WithTnTColorOverload_AddsColorVariable() {
-        // Arrange
-        var builder = CssStyleBuilder.Create();
-
-        // Act
-        var result = builder.AddVariable("theme-color", TnTColor.Primary).Build();
-
-        // Assert
-        result.Should().Be("--theme-color:var(--tnt-color-primary);");
-    }
-
-    [Fact]
-    public void AddVariable_WithTnTColorAndEnabledFalse_DoesNotAddVariable() {
-        // Arrange
-        var builder = CssStyleBuilder.Create();
-
-        // Act
-        var result = builder.AddVariable("theme-color", TnTColor.Primary, false).Build();
-
-        // Assert
-        result.Should().BeNull();
-    }
-
-    [Fact]
     public void AddVariable_WithMultipleVariables_AddsAllVariables() {
         // Arrange
         var builder = CssStyleBuilder.Create();
@@ -376,102 +392,73 @@ public class CssStyleBuilder_Tests {
     }
 
     [Fact]
-    public void AddVariable_WithEmptyVariableName_CreatesEmptyVariable() {
+    public void AddVariable_WithTnTColorAndEnabledFalse_DoesNotAddVariable() {
         // Arrange
         var builder = CssStyleBuilder.Create();
 
         // Act
-        var result = builder.AddVariable("", "value").Build();
-
-        // Assert
-        // This tests the current behavior - empty variable names are allowed
-        result.Should().Be("--:value;");
-    }
-
-    #endregion
-
-    #region AddFromAdditionalAttributes Tests
-
-    [Fact]
-    public void AddFromAdditionalAttributes_WithStyleAttribute_AddsStyleString() {
-        // Arrange
-        var builder = CssStyleBuilder.Create();
-        var attributes = new Dictionary<string, object> { ["style"] = "color: red; background: blue;" };
-
-        // Act
-        var result = builder.AddFromAdditionalAttributes(attributes).Build();
-
-        // Assert
-        result.Should().Be("color: red; background: blue;");
-    }
-
-    [Fact]
-    public void AddFromAdditionalAttributes_WithStyleAttributeMissingSemicolon_AddsSemicolon() {
-        // Arrange
-        var builder = CssStyleBuilder.Create();
-        var attributes = new Dictionary<string, object> { ["style"] = "color: red" };
-
-        // Act
-        var result = builder.AddFromAdditionalAttributes(attributes).Build();
-
-        // Assert
-        result.Should().Be("color: red;");
-    }
-
-    [Fact]
-    public void AddFromAdditionalAttributes_WithNullAttributes_DoesNotAddStyle() {
-        // Arrange
-        var builder = CssStyleBuilder.Create();
-
-        // Act
-        var result = builder.AddFromAdditionalAttributes(null).Build();
+        var result = builder.AddVariable("theme-color", TnTColor.Primary, false).Build();
 
         // Assert
         result.Should().BeNull();
     }
 
     [Fact]
-    public void AddFromAdditionalAttributes_WithoutStyleKey_DoesNotAddStyle() {
+    public void AddVariable_WithTnTColorOverload_AddsColorVariable() {
         // Arrange
         var builder = CssStyleBuilder.Create();
-        var attributes = new Dictionary<string, object> { ["class"] = "test-class" };
 
         // Act
-        var result = builder.AddFromAdditionalAttributes(attributes).Build();
+        var result = builder.AddVariable("theme-color", TnTColor.Primary).Build();
 
         // Assert
-        result.Should().BeNull();
+        result.Should().Be("--theme-color:var(--tnt-color-primary);");
     }
 
     [Fact]
-    public void AddFromAdditionalAttributes_WithNullStyleValue_DoesNotAddStyle() {
+    public void AddVariable_WithValidNameValue_AddsVariableStyle() {
         // Arrange
         var builder = CssStyleBuilder.Create();
-        var attributes = new Dictionary<string, object> { ["style"] = null! };
 
         // Act
-        var result = builder.AddFromAdditionalAttributes(attributes).Build();
+        var result = builder.AddVariable("primary-color", "#ff0000").Build();
 
         // Assert
-        result.Should().BeNull();
+        result.Should().Be("--primary-color:#ff0000;");
     }
 
     [Fact]
-    public void AddFromAdditionalAttributes_WithNonStringStyleValue_ConvertsToString() {
+    public void Build_MultipleCalls_ReturnsSameResult() {
         // Arrange
-        var builder = CssStyleBuilder.Create();
-        var attributes = new Dictionary<string, object> { ["style"] = 123 };
+        var builder = CssStyleBuilder.Create()
+            .AddStyle("color", "red")
+            .AddVariable("size", "10px");
 
         // Act
-        var result = builder.AddFromAdditionalAttributes(attributes).Build();
+        var result1 = builder.Build();
+        var result2 = builder.Build();
 
         // Assert
-        result.Should().Be("123;");
+        result1.Should().Be(result2);
     }
 
-    #endregion
+    [Fact]
+    public void Build_WithMixedEnabledDisabledStyles_ReturnsOnlyEnabledStyles() {
+        // Arrange
+        var builder = CssStyleBuilder.Create();
 
-    #region Build Tests
+        // Act
+        var result = builder
+            .AddStyle("color", "red", true)
+            .AddStyle("background", "blue", false)
+            .AddVariable("size", "10px", true)
+            .Build();
+
+        // Assert
+        result.Should().Contain("color:red;");
+        result.Should().Contain("--size:10px;");
+        result.Should().NotContain("background");
+    }
 
     [Fact]
     public void Build_WithNoStyles_ReturnsNull() {
@@ -501,41 +488,17 @@ public class CssStyleBuilder_Tests {
     }
 
     [Fact]
-    public void Build_WithMixedEnabledDisabledStyles_ReturnsOnlyEnabledStyles() {
-        // Arrange
+    public void Builder_ChainedCalls_ReturnsBuilderInstance() {
+        // Arrange & Act
         var builder = CssStyleBuilder.Create();
-
-        // Act
-        var result = builder
-            .AddStyle("color", "red", true)
-            .AddStyle("background", "blue", false)
-            .AddVariable("size", "10px", true)
-            .Build();
-
-        // Assert
-        result.Should().Contain("color:red;");
-        result.Should().Contain("--size:10px;");
-        result.Should().NotContain("background");
-    }
-
-    [Fact]
-    public void Build_MultipleCalls_ReturnsSameResult() {
-        // Arrange
-        var builder = CssStyleBuilder.Create()
-            .AddStyle("color", "red")
+        var chainedBuilder = builder
+            .Add("color: red")
+            .AddStyle("background", "blue")
             .AddVariable("size", "10px");
 
-        // Act
-        var result1 = builder.Build();
-        var result2 = builder.Build();
-
         // Assert
-        result1.Should().Be(result2);
+        builder.Should().BeSameAs(chainedBuilder);
     }
-
-    #endregion
-
-    #region Integration Tests
 
     [Fact]
     public void Builder_WithAllMethodTypes_CombinesAllStyles() {
@@ -560,38 +523,6 @@ public class CssStyleBuilder_Tests {
     }
 
     [Fact]
-    public void Builder_WithConditionalStyles_AddsOnlyWhenEnabled() {
-        // Arrange
-        bool isHighlighted = true;
-        bool isHidden = false;
-
-        // Act
-        var result = CssStyleBuilder.Create()
-            .AddStyle("background-color", "yellow", isHighlighted)
-            .AddStyle("display", "none", isHidden)
-            .AddVariable("highlight-color", "#ffff00", isHighlighted)
-            .Build();
-
-        // Assert
-        result.Should().Contain("background-color:yellow;");
-        result.Should().Contain("--highlight-color:#ffff00;");
-        result.Should().NotContain("display");
-    }
-
-    [Fact]
-    public void Builder_ChainedCalls_ReturnsBuilderInstance() {
-        // Arrange & Act
-        var builder = CssStyleBuilder.Create();
-        var chainedBuilder = builder
-            .Add("color: red")
-            .AddStyle("background", "blue")
-            .AddVariable("size", "10px");
-
-        // Assert
-        builder.Should().BeSameAs(chainedBuilder);
-    }
-
-    [Fact]
     public void Builder_WithComplexStylesAndVariables_GeneratesCorrectCss() {
         // Arrange & Act
         var result = CssStyleBuilder.Create()
@@ -613,6 +544,25 @@ public class CssStyleBuilder_Tests {
     }
 
     [Fact]
+    public void Builder_WithConditionalStyles_AddsOnlyWhenEnabled() {
+        // Arrange
+        bool isHighlighted = true;
+        bool isHidden = false;
+
+        // Act
+        var result = CssStyleBuilder.Create()
+            .AddStyle("background-color", "yellow", isHighlighted)
+            .AddStyle("display", "none", isHidden)
+            .AddVariable("highlight-color", "#ffff00", isHighlighted)
+            .Build();
+
+        // Assert
+        result.Should().Contain("background-color:yellow;");
+        result.Should().Contain("--highlight-color:#ffff00;");
+        result.Should().NotContain("display");
+    }
+
+    [Fact]
     public void Builder_WithEmptyAndNullInputs_HandlesGracefully() {
         // Arrange & Act
         var result = CssStyleBuilder.Create()
@@ -624,8 +574,7 @@ public class CssStyleBuilder_Tests {
             .AddFromAdditionalAttributes(null)
             .Build();
 
-        // Assert
-        // Empty and null inputs are filtered out, so result should be null
+        // Assert Empty and null inputs are filtered out, so result should be null
         result.Should().BeNull();
     }
 
@@ -644,5 +593,23 @@ public class CssStyleBuilder_Tests {
         result.Should().Contain("margin:10px;");
     }
 
-    #endregion
+    [Fact]
+    public void Create_MultipleCalls_ReturnsDifferentInstances() {
+        // Arrange & Act
+        var builder1 = CssStyleBuilder.Create();
+        var builder2 = CssStyleBuilder.Create();
+
+        // Assert
+        builder1.Should().NotBeSameAs(builder2);
+    }
+
+    [Fact]
+    public void Create_ReturnsNewBuilderInstance() {
+        // Arrange & Act
+        var builder = CssStyleBuilder.Create();
+
+        // Assert
+        builder.Should().NotBeNull();
+        builder.Should().BeOfType<CssStyleBuilder>();
+    }
 }

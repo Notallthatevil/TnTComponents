@@ -1,10 +1,7 @@
-using System;
-using Bunit;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using TnTComponents.Grid;
-using TnTComponents.Grid.Infrastructure;
 using TnTComponents.Grid.Columns;
-using Xunit;
+using TnTComponents.Grid.Infrastructure;
 
 namespace TnTComponents.Tests.Grid.Columns;
 
@@ -13,16 +10,6 @@ namespace TnTComponents.Tests.Grid.Columns;
 /// </summary>
 public class TnTTemplateColumn_Tests : BunitContext {
 
-    /// <summary>
-    ///     Test model for template column tests.
-    /// </summary>
-    private class TestGridItem {
-        public string Name { get; set; } = string.Empty;
-        public int Age { get; set; }
-        public bool IsActive { get; set; }
-        public decimal Salary { get; set; }
-    }
-
     private readonly TestGridItem _testItem = new() {
         Name = "John Doe",
         Age = 25,
@@ -30,15 +17,75 @@ public class TnTTemplateColumn_Tests : BunitContext {
         Salary = 50000.99m
     };
 
-    #region Basic Rendering Tests
+    [Fact]
+    public void ChildContent_IsRequired() {
+        // Arrange
+        var gridContext = CreateMockGridContext();
+        var column = CreateColumn(gridContext);
+
+        // Act & Assert The ChildContent property should have EditorRequired attribute
+        var property = typeof(TnTTemplateColumn<TestGridItem>).GetProperty(nameof(TnTTemplateColumn<TestGridItem>.ChildContent));
+        var editorRequiredAttribute = property?.GetCustomAttributes(typeof(EditorRequiredAttribute), false);
+        editorRequiredAttribute.Should().NotBeNull().And.HaveCount(1);
+    }
 
     [Fact]
-    public void RenderCellContent_WithSimpleTemplate_RendersCorrectly() {
+    public void ElementClass_IsNull() {
+        // Arrange
+        var gridContext = CreateMockGridContext();
+        var column = CreateColumn(gridContext);
+
+        // Act & Assert
+        column.ElementClass.Should().BeNull();
+    }
+
+    [Fact]
+    public void ElementStyle_IsNull() {
+        // Arrange
+        var gridContext = CreateMockGridContext();
+        var column = CreateColumn(gridContext);
+
+        // Act & Assert
+        column.ElementStyle.Should().BeNull();
+    }
+
+    [Fact]
+    public void ImplementsRenderCellContent() {
+        // Arrange
+        var gridContext = CreateMockGridContext();
+        var column = CreateColumn(gridContext);
+        column.ChildContent = item => builder => builder.AddContent(0, "Test");
+
+        // Act
+        var fragment = column.RenderCellContent(_testItem);
+
+        // Assert
+        fragment.Should().NotBeNull();
+        var cut = Render(fragment);
+        cut.Markup.Should().Contain("Test");
+    }
+
+    [Fact]
+    public void InheritsFromTnTColumnBase() {
+        // Arrange & Act
+        var gridContext = CreateMockGridContext();
+        var column = CreateColumn(gridContext);
+
+        // Assert
+        column.Should().BeAssignableTo<TnTColumnBase<TestGridItem>>();
+    }
+
+    [Fact]
+    public void RenderCellContent_WithButtonComponent_RendersButton() {
         // Arrange
         var gridContext = CreateMockGridContext();
         var column = CreateColumn(gridContext);
         column.ChildContent = item => builder => {
-            builder.AddContent(0, $"Name: {item.Name}");
+            builder.OpenElement(0, "button");
+            builder.AddAttribute(1, "type", "button");
+            builder.AddAttribute(2, "class", "btn btn-primary");
+            builder.AddContent(3, "Edit");
+            builder.CloseElement();
         };
 
         // Act
@@ -46,7 +93,11 @@ public class TnTTemplateColumn_Tests : BunitContext {
         var cut = Render(fragment);
 
         // Assert
-        cut.Markup.Should().Contain("Name: John Doe");
+        var button = cut.Find("button[type='button']");
+        button.Should().NotBeNull();
+        var classes = button.GetAttribute("class")!.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        classes.Should().Contain("btn").And.Contain("btn-primary");
+        button.TextContent.Should().Be("Edit");
     }
 
     [Fact]
@@ -86,7 +137,8 @@ public class TnTTemplateColumn_Tests : BunitContext {
         column.ChildContent = item => builder => {
             if (item.IsActive) {
                 builder.AddContent(0, "Active User");
-            } else {
+            }
+            else {
                 builder.AddContent(0, "Inactive User");
             }
         };
@@ -101,26 +153,42 @@ public class TnTTemplateColumn_Tests : BunitContext {
     }
 
     [Fact]
-    public void RenderCellContent_WithInactiveUser_RendersInactive() {
+    public void RenderCellContent_WithDataAttributes_RendersCorrectly() {
         // Arrange
         var gridContext = CreateMockGridContext();
         var column = CreateColumn(gridContext);
         column.ChildContent = item => builder => {
-            if (item.IsActive) {
-                builder.AddContent(0, "Active User");
-            } else {
-                builder.AddContent(0, "Inactive User");
-            }
+            builder.OpenElement(0, "div");
+            builder.AddAttribute(1, "data-id", item.Age.ToString());
+            builder.AddAttribute(2, "data-name", item.Name);
+            builder.AddContent(3, item.Name);
+            builder.CloseElement();
         };
-        var inactiveItem = new TestGridItem { Name = "Jane Doe", Age = 30, IsActive = false };
 
         // Act
-        var fragment = column.RenderCellContent(inactiveItem);
+        var fragment = column.RenderCellContent(_testItem);
         var cut = Render(fragment);
 
         // Assert
-        cut.Markup.Should().Contain("Inactive User");
-        cut.Markup.Should().NotContain("Active User");
+        cut.Find("div").GetAttribute("data-id").Should().Be("25");
+        cut.Find("div").GetAttribute("data-name").Should().Be("John Doe");
+    }
+
+    [Fact]
+    public void RenderCellContent_WithEmptyTemplate_RendersEmpty() {
+        // Arrange
+        var gridContext = CreateMockGridContext();
+        var column = CreateColumn(gridContext);
+        column.ChildContent = item => builder => {
+            // Empty template
+        };
+
+        // Act
+        var fragment = column.RenderCellContent(_testItem);
+        var cut = Render(fragment);
+
+        // Assert
+        cut.Markup.Should().BeEmpty();
     }
 
     [Fact]
@@ -141,49 +209,27 @@ public class TnTTemplateColumn_Tests : BunitContext {
     }
 
     [Fact]
-    public void RenderCellContent_WithEmptyTemplate_RendersEmpty() {
+    public void RenderCellContent_WithInactiveUser_RendersInactive() {
         // Arrange
         var gridContext = CreateMockGridContext();
         var column = CreateColumn(gridContext);
         column.ChildContent = item => builder => {
-            // Empty template
+            if (item.IsActive) {
+                builder.AddContent(0, "Active User");
+            }
+            else {
+                builder.AddContent(0, "Inactive User");
+            }
         };
+        var inactiveItem = new TestGridItem { Name = "Jane Doe", Age = 30, IsActive = false };
 
         // Act
-        var fragment = column.RenderCellContent(_testItem);
+        var fragment = column.RenderCellContent(inactiveItem);
         var cut = Render(fragment);
 
         // Assert
-        cut.Markup.Should().BeEmpty();
-    }
-
-    #endregion
-
-    #region Component Rendering Tests
-
-    [Fact]
-    public void RenderCellContent_WithButtonComponent_RendersButton() {
-        // Arrange
-        var gridContext = CreateMockGridContext();
-        var column = CreateColumn(gridContext);
-        column.ChildContent = item => builder => {
-            builder.OpenElement(0, "button");
-            builder.AddAttribute(1, "type", "button");
-            builder.AddAttribute(2, "class", "btn btn-primary");
-            builder.AddContent(3, "Edit");
-            builder.CloseElement();
-        };
-
-        // Act
-        var fragment = column.RenderCellContent(_testItem);
-        var cut = Render(fragment);
-
-        // Assert
-        var button = cut.Find("button[type='button']");
-        button.Should().NotBeNull();
-        var classes = button.GetAttribute("class")!.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        classes.Should().Contain("btn").And.Contain("btn-primary");
-        button.TextContent.Should().Be("Edit");
+        cut.Markup.Should().Contain("Inactive User");
+        cut.Markup.Should().NotContain("Active User");
     }
 
     [Fact]
@@ -209,104 +255,6 @@ public class TnTTemplateColumn_Tests : BunitContext {
         cut.Find("small").TextContent.Should().Be("Age: 25");
     }
 
-    #endregion
-
-    #region Properties Tests
-
-    [Fact]
-    public void ElementClass_IsNull() {
-        // Arrange
-        var gridContext = CreateMockGridContext();
-        var column = CreateColumn(gridContext);
-
-        // Act & Assert
-        column.ElementClass.Should().BeNull();
-    }
-
-    [Fact]
-    public void ElementStyle_IsNull() {
-        // Arrange
-        var gridContext = CreateMockGridContext();
-        var column = CreateColumn(gridContext);
-
-        // Act & Assert
-        column.ElementStyle.Should().BeNull();
-    }
-
-    [Fact]
-    public void SortBy_CanBeSet() {
-        // Arrange
-        var gridContext = CreateMockGridContext();
-        var column = CreateColumn(gridContext);
-        var sortBy = TnTGridSort<TestGridItem>.ByAscending(x => x.Name);
-
-        // Act
-        column.SortBy = sortBy;
-
-        // Assert
-        column.SortBy.Should().Be(sortBy);
-    }
-
-    [Fact]
-    public void SortBy_CanBeNull() {
-        // Arrange
-        var gridContext = CreateMockGridContext();
-        var column = CreateColumn(gridContext);
-
-        // Act
-        column.SortBy = null;
-
-        // Assert
-        column.SortBy.Should().BeNull();
-    }
-
-    [Fact]
-    public void ChildContent_IsRequired() {
-        // Arrange
-        var gridContext = CreateMockGridContext();
-        var column = CreateColumn(gridContext);
-
-        // Act & Assert
-        // The ChildContent property should have EditorRequired attribute
-        var property = typeof(TnTTemplateColumn<TestGridItem>).GetProperty(nameof(TnTTemplateColumn<TestGridItem>.ChildContent));
-        var editorRequiredAttribute = property?.GetCustomAttributes(typeof(EditorRequiredAttribute), false);
-        editorRequiredAttribute.Should().NotBeNull().And.HaveCount(1);
-    }
-
-    #endregion
-
-    #region Inheritance Tests
-
-    [Fact]
-    public void InheritsFromTnTColumnBase() {
-        // Arrange & Act
-        var gridContext = CreateMockGridContext();
-        var column = CreateColumn(gridContext);
-
-        // Assert
-        column.Should().BeAssignableTo<TnTColumnBase<TestGridItem>>();
-    }
-
-    [Fact]
-    public void ImplementsRenderCellContent() {
-        // Arrange
-        var gridContext = CreateMockGridContext();
-        var column = CreateColumn(gridContext);
-        column.ChildContent = item => builder => builder.AddContent(0, "Test");
-
-        // Act
-        var fragment = column.RenderCellContent(_testItem);
-
-        // Assert
-        fragment.Should().NotBeNull();
-        var cut = Render(fragment);
-        cut.Markup.Should().Contain("Test");
-    }
-
-    #endregion
-
-    #region Edge Cases Tests
-
     [Fact]
     public void RenderCellContent_WithNullItem_HandlesGracefully() {
         // Arrange
@@ -315,7 +263,8 @@ public class TnTTemplateColumn_Tests : BunitContext {
         column.ChildContent = item => builder => {
             if (item != null) {
                 builder.AddContent(0, item.Name);
-            } else {
+            }
+            else {
                 builder.AddContent(0, "No item");
             }
         };
@@ -326,6 +275,23 @@ public class TnTTemplateColumn_Tests : BunitContext {
 
         // Assert
         cut.Markup.Should().Contain("No item");
+    }
+
+    [Fact]
+    public void RenderCellContent_WithSimpleTemplate_RendersCorrectly() {
+        // Arrange
+        var gridContext = CreateMockGridContext();
+        var column = CreateColumn(gridContext);
+        column.ChildContent = item => builder => {
+            builder.AddContent(0, $"Name: {item.Name}");
+        };
+
+        // Act
+        var fragment = column.RenderCellContent(_testItem);
+        var cut = Render(fragment);
+
+        // Assert
+        cut.Markup.Should().Contain("Name: John Doe");
     }
 
     [Fact]
@@ -346,39 +312,40 @@ public class TnTTemplateColumn_Tests : BunitContext {
     }
 
     [Fact]
-    public void RenderCellContent_WithDataAttributes_RendersCorrectly() {
+    public void SortBy_CanBeNull() {
         // Arrange
         var gridContext = CreateMockGridContext();
         var column = CreateColumn(gridContext);
-        column.ChildContent = item => builder => {
-            builder.OpenElement(0, "div");
-            builder.AddAttribute(1, "data-id", item.Age.ToString());
-            builder.AddAttribute(2, "data-name", item.Name);
-            builder.AddContent(3, item.Name);
-            builder.CloseElement();
-        };
 
         // Act
-        var fragment = column.RenderCellContent(_testItem);
-        var cut = Render(fragment);
+        column.SortBy = null;
 
         // Assert
-        cut.Find("div").GetAttribute("data-id").Should().Be("25");
-        cut.Find("div").GetAttribute("data-name").Should().Be("John Doe");
+        column.SortBy.Should().BeNull();
     }
 
-    #endregion
+    [Fact]
+    public void SortBy_CanBeSet() {
+        // Arrange
+        var gridContext = CreateMockGridContext();
+        var column = CreateColumn(gridContext);
+        var sortBy = TnTGridSort<TestGridItem>.ByAscending(x => x.Name);
 
-    #region Helper Methods
+        // Act
+        column.SortBy = sortBy;
+
+        // Assert
+        column.SortBy.Should().Be(sortBy);
+    }
 
     private TnTTemplateColumn<TestGridItem> CreateColumn(TnTInternalGridContext<TestGridItem> context) {
         var column = new TnTTemplateColumn<TestGridItem>();
-        
+
         // Set the cascading parameter using reflection
         var contextProperty = typeof(TnTTemplateColumn<TestGridItem>)
             .GetProperty("Context", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         contextProperty?.SetValue(column, context);
-        
+
         return column;
     }
 
@@ -387,5 +354,13 @@ public class TnTTemplateColumn_Tests : BunitContext {
         return new TnTInternalGridContext<TestGridItem>(grid);
     }
 
-    #endregion
+    /// <summary>
+    ///     Test model for template column tests.
+    /// </summary>
+    private class TestGridItem {
+        public int Age { get; set; }
+        public bool IsActive { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public decimal Salary { get; set; }
+    }
 }

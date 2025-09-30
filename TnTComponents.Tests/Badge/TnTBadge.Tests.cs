@@ -1,44 +1,6 @@
-using System.Collections.Generic;
-using Bunit;
-using Xunit;
-using TnTComponents;
-
-namespace TnTComponents.Tests.Badge;
+﻿namespace TnTComponents.Tests.Badge;
 
 public class TnTBadge_Tests : BunitContext {
-
-    [Fact]
-    public void Renders_Badge_With_Default_Classes() {
-        // Act
-        var cut = Render<TnTBadge>(p => p.AddChildContent("Hello"));
-        var root = cut.Find("span.tnt-badge");
-
-        // Assert
-        root.GetAttribute("class")!.Should().Contain("tnt-badge");
-        root.GetAttribute("class")!.Should().Contain("tnt-components");
-        cut.Markup.Should().Contain("Hello");
-    }
-
-    [Fact]
-    public void Has_TnTId_Attribute() {
-        // Act
-        var cut = Render<TnTBadge>();
-        var root = cut.Find("span.tnt-badge");
-        // Assert
-        root.HasAttribute("tntid").Should().BeTrue();
-        root.GetAttribute("tntid").Should().NotBeNullOrEmpty();
-    }
-
-    [Fact]
-    public void Default_Style_Includes_Default_Color_Variables() {
-        // Act
-        var cut = Render<TnTBadge>();
-        var style = cut.Find("span.tnt-badge").GetAttribute("style");
-        // Assert
-        style.Should().NotBeNull();
-        style!.Should().Contain("--tnt-badge-background-color:var(--tnt-color-error)");
-        style.Should().Contain("--tnt-badge-text-color:var(--tnt-color-on-error)");
-    }
 
     [Fact]
     public void Applies_Custom_Class_From_AdditionalAttributes() {
@@ -57,31 +19,14 @@ public class TnTBadge_Tests : BunitContext {
     }
 
     [Fact]
-    public void Merges_Multiple_Custom_Classes() {
-        // Arrange
-        var attrs = new Dictionary<string, object> { { "class", "foo bar" } };
+    public void Default_Style_Includes_Default_Color_Variables() {
         // Act
-        var cut = Render<TnTBadge>(p => p.Add(b => b.AdditionalAttributes, attrs));
-        var cls = cut.Find("span.tnt-badge").GetAttribute("class")!;
-        // Assert
-        cls.Should().Contain("foo");
-        cls.Should().Contain("bar");
-        cls.Should().Contain("tnt-badge");
-    }
-
-    [Fact]
-    public void Style_Includes_Background_And_Text_Color_Variables() {
-        // Act
-        var cut = Render<TnTBadge>(p => p
-            .Add(b => b.BackgroundColor, TnTColor.Primary)
-            .Add(b => b.TextColor, TnTColor.OnPrimary)
-            .AddChildContent("X"));
+        var cut = Render<TnTBadge>();
         var style = cut.Find("span.tnt-badge").GetAttribute("style");
-
         // Assert
         style.Should().NotBeNull();
-        style!.Should().Contain("--tnt-badge-background-color:var(--tnt-color-primary)");
-        style.Should().Contain("--tnt-badge-text-color:var(--tnt-color-on-primary)");
+        style!.Should().Contain("--tnt-badge-background-color:var(--tnt-color-error)");
+        style.Should().Contain("--tnt-badge-text-color:var(--tnt-color-on-error)");
     }
 
     [Fact]
@@ -105,50 +50,15 @@ public class TnTBadge_Tests : BunitContext {
     }
 
     [Fact]
-    public void Merges_Custom_Style_From_AdditionalAttributes() {
-        // Arrange
-        var attrs = new Dictionary<string, object> { { "style", "color:red" } };
-
+    public void Factory_CreateBadge_No_Class_Or_Style_Leaves_Empty_AdditionalAttributes() {
         // Act
-        var cut = Render<TnTBadge>(p => p
-            .Add(b => b.AdditionalAttributes, attrs)
-            .AddChildContent("Styled"));
-        var style = cut.Find("span.tnt-badge").GetAttribute("style");
+        var badge = TnTBadge.CreateBadge("Simple");
 
         // Assert
-        style.Should().NotBeNull();
-        style!.Should().Contain("color:red");
-        style.Should().Contain("--tnt-badge-background-color");
-        style.Should().Contain("--tnt-badge-text-color");
-    }
-
-    [Fact]
-    public void Style_Custom_Semicolon_Variations_Normalized() {
-        // Arrange
-        var attrs = new Dictionary<string, object> { { "style", "color:blue;" } };
-        // Act
-        var cut = Render<TnTBadge>(p => p.Add(b => b.AdditionalAttributes, attrs));
-        var style = cut.Find("span.tnt-badge").GetAttribute("style")!;
-        // Assert
-        style.Count(c => c == ';').Should().BeGreaterThan(0); // has semicolons
-        style.Should().Contain("color:blue");
-    }
-
-    [Fact]
-    public void TextAlignment_Does_Not_Add_Class_Currently() {
-        // Sentinel regression test
-        var cut = Render<TnTBadge>(p => p.Add(b => b.TextAlignment, TextAlign.Center));
-        var cls = cut.Find("span.tnt-badge").GetAttribute("class")!;
-        cls.Should().NotContain("tnt-text-align-center");
-    }
-
-    [Fact]
-    public void Null_ChildContent_Renders_Empty_Inner_Span() {
-        // Act
-        var cut = Render<TnTBadge>();
-        var inner = cut.Find("span.tnt-badge > span.tnt-badge-content");
-        // Assert
-        inner.TextContent.Should().Be(string.Empty);
+        badge.BackgroundColor.Should().Be(TnTColor.Error); // default
+        badge.TextColor.Should().Be(TnTColor.OnError); // default
+        badge.AdditionalAttributes.Should().NotBeNull();
+        badge.AdditionalAttributes!.Count.Should().Be(0);
     }
 
     [Fact]
@@ -167,14 +77,99 @@ public class TnTBadge_Tests : BunitContext {
     }
 
     [Fact]
-    public void Factory_CreateBadge_No_Class_Or_Style_Leaves_Empty_AdditionalAttributes() {
+    public void Has_TnTId_Attribute() {
         // Act
-        var badge = TnTBadge.CreateBadge("Simple");
+        var cut = Render<TnTBadge>();
+        var root = cut.Find("span.tnt-badge");
+        // Assert
+        root.HasAttribute("tntid").Should().BeTrue();
+        root.GetAttribute("tntid").Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public void Merges_Custom_Style_From_AdditionalAttributes() {
+        // Arrange
+        var attrs = new Dictionary<string, object> { { "style", "color:red" } };
+
+        // Act
+        var cut = Render<TnTBadge>(p => p
+            .Add(b => b.AdditionalAttributes, attrs)
+            .AddChildContent("Styled"));
+        var style = cut.Find("span.tnt-badge").GetAttribute("style");
 
         // Assert
-        badge.BackgroundColor.Should().Be(TnTColor.Error); // default
-        badge.TextColor.Should().Be(TnTColor.OnError); // default
-        badge.AdditionalAttributes.Should().NotBeNull();
-        badge.AdditionalAttributes!.Count.Should().Be(0);
+        style.Should().NotBeNull();
+        style!.Should().Contain("color:red");
+        style.Should().Contain("--tnt-badge-background-color");
+        style.Should().Contain("--tnt-badge-text-color");
+    }
+
+    [Fact]
+    public void Merges_Multiple_Custom_Classes() {
+        // Arrange
+        var attrs = new Dictionary<string, object> { { "class", "foo bar" } };
+        // Act
+        var cut = Render<TnTBadge>(p => p.Add(b => b.AdditionalAttributes, attrs));
+        var cls = cut.Find("span.tnt-badge").GetAttribute("class")!;
+        // Assert
+        cls.Should().Contain("foo");
+        cls.Should().Contain("bar");
+        cls.Should().Contain("tnt-badge");
+    }
+
+    [Fact]
+    public void Null_ChildContent_Renders_Empty_Inner_Span() {
+        // Act
+        var cut = Render<TnTBadge>();
+        var inner = cut.Find("span.tnt-badge > span.tnt-badge-content");
+        // Assert
+        inner.TextContent.Should().Be(string.Empty);
+    }
+
+    [Fact]
+    public void Renders_Badge_With_Default_Classes() {
+        // Act
+        var cut = Render<TnTBadge>(p => p.AddChildContent("Hello"));
+        var root = cut.Find("span.tnt-badge");
+
+        // Assert
+        root.GetAttribute("class")!.Should().Contain("tnt-badge");
+        root.GetAttribute("class")!.Should().Contain("tnt-components");
+        cut.Markup.Should().Contain("Hello");
+    }
+
+    [Fact]
+    public void Style_Custom_Semicolon_Variations_Normalized() {
+        // Arrange
+        var attrs = new Dictionary<string, object> { { "style", "color:blue;" } };
+        // Act
+        var cut = Render<TnTBadge>(p => p.Add(b => b.AdditionalAttributes, attrs));
+        var style = cut.Find("span.tnt-badge").GetAttribute("style")!;
+        // Assert
+        style.Count(c => c == ';').Should().BeGreaterThan(0); // has semicolons
+        style.Should().Contain("color:blue");
+    }
+
+    [Fact]
+    public void Style_Includes_Background_And_Text_Color_Variables() {
+        // Act
+        var cut = Render<TnTBadge>(p => p
+            .Add(b => b.BackgroundColor, TnTColor.Primary)
+            .Add(b => b.TextColor, TnTColor.OnPrimary)
+            .AddChildContent("X"));
+        var style = cut.Find("span.tnt-badge").GetAttribute("style");
+
+        // Assert
+        style.Should().NotBeNull();
+        style!.Should().Contain("--tnt-badge-background-color:var(--tnt-color-primary)");
+        style.Should().Contain("--tnt-badge-text-color:var(--tnt-color-on-primary)");
+    }
+
+    [Fact]
+    public void TextAlignment_Does_Not_Add_Class_Currently() {
+        // Sentinel regression test
+        var cut = Render<TnTBadge>(p => p.Add(b => b.TextAlignment, TextAlign.Center));
+        var cls = cut.Find("span.tnt-badge").GetAttribute("class")!;
+        cls.Should().NotContain("tnt-text-align-center");
     }
 }

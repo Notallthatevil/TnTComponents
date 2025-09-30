@@ -1,23 +1,10 @@
-using Bunit;
-using Microsoft.AspNetCore.Components;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Components;
 using TnTComponents.Core;
 using TnTComponents.Dialog;
-using Xunit;
 
 namespace TnTComponents.Tests.Dialog;
 
 public class TnTDialogService_Tests : BunitContext {
-
-    [Fact]
-    public void Constructor_Creates_DotNetObjectReference() {
-        // Arrange & Act
-        var service = new TnTDialogService();
-
-        // Assert
-        service.Reference.Should().NotBeNull();
-        service.Reference.Value.Should().Be(service);
-    }
 
     [Fact]
     public async Task CloseAsync_With_No_OnClose_Handler_Completes_Successfully() {
@@ -55,6 +42,180 @@ public class TnTDialogService_Tests : BunitContext {
     }
 
     [Fact]
+    public void Constructor_Creates_DotNetObjectReference() {
+        // Arrange & Act
+        var service = new TnTDialogService();
+
+        // Assert
+        service.Reference.Should().NotBeNull();
+        service.Reference.Value.Should().Be(service);
+    }
+
+    [Fact]
+    public async Task Dialog_Implements_ITnTDialog() {
+        // Arrange
+        var service = new TnTDialogService();
+
+        // Act
+        var dialog = await service.OpenAsync<TestComponent>();
+
+        // Assert
+        dialog.Should().BeAssignableTo<ITnTDialog>();
+    }
+
+    [Fact]
+    public async Task DialogImpl_CloseAsync_Calls_Service_CloseAsync() {
+        // Arrange
+        var service = new TnTDialogService();
+        var closeCallbackInvoked = false;
+        ITnTDialog? closedDialog = null;
+
+        service.OnClose += (dialog) => {
+            closeCallbackInvoked = true;
+            closedDialog = dialog;
+            return Task.CompletedTask;
+        };
+
+        var dialog = await service.OpenAsync<TestComponent>();
+
+        // Act
+        await dialog.CloseAsync();
+
+        // Assert
+        closeCallbackInvoked.Should().BeTrue();
+        closedDialog.Should().Be(dialog);
+    }
+
+    [Fact]
+    public async Task DialogImpl_DialogResult_Is_Mutable() {
+        // Arrange
+        var service = new TnTDialogService();
+        var dialog = await service.OpenAsync<TestComponent>();
+
+        // Act & Assert
+        dialog.DialogResult.Should().Be(DialogResult.Pending);
+
+        dialog.DialogResult = DialogResult.Confirmed;
+        dialog.DialogResult.Should().Be(DialogResult.Confirmed);
+
+        dialog.DialogResult = DialogResult.Failed;
+        dialog.DialogResult.Should().Be(DialogResult.Failed);
+    }
+
+    [Fact]
+    public async Task DialogImpl_Has_Unique_ElementId() {
+        // Arrange
+        var service = new TnTDialogService();
+
+        // Act
+        var dialog1 = await service.OpenAsync<TestComponent>();
+        var dialog2 = await service.OpenAsync<TestComponent>();
+
+        // Assert
+        dialog1.ElementId.Should().NotBe(dialog2.ElementId);
+        dialog1.ElementId.Should().NotBeNullOrEmpty();
+        dialog2.ElementId.Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task Multiple_OnClose_Handlers_Are_All_Invoked() {
+        // Arrange
+        var service = new TnTDialogService();
+        var handler1Called = false;
+        var handler2Called = false;
+
+        service.OnClose += (dialog) => {
+            handler1Called = true;
+            return Task.CompletedTask;
+        };
+
+        service.OnClose += (dialog) => {
+            handler2Called = true;
+            return Task.CompletedTask;
+        };
+
+        var dialog = await service.OpenAsync<TestComponent>();
+
+        // Act
+        await service.CloseAsync(dialog);
+
+        // Assert
+        handler1Called.Should().BeTrue();
+        handler2Called.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task Multiple_OnOpen_Handlers_Are_All_Invoked() {
+        // Arrange
+        var service = new TnTDialogService();
+        var handler1Called = false;
+        var handler2Called = false;
+
+        service.OnOpen += (dialog) => {
+            handler1Called = true;
+            return Task.CompletedTask;
+        };
+
+        service.OnOpen += (dialog) => {
+            handler2Called = true;
+            return Task.CompletedTask;
+        };
+
+        // Act
+        await service.OpenAsync<TestComponent>();
+
+        // Assert
+        handler1Called.Should().BeTrue();
+        handler2Called.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task OnClose_Handler_Exception_Propagates_And_Breaks_Dialog_Closing() {
+        // Arrange
+        var service = new TnTDialogService();
+        var goodHandlerCalled = false;
+
+        service.OnClose += (dialog) => {
+            throw new InvalidOperationException("Test exception");
+        };
+
+        service.OnClose += (dialog) => {
+            goodHandlerCalled = true;
+            return Task.CompletedTask;
+        };
+
+        var dialog = await service.OpenAsync<TestComponent>();
+
+        // Act & Assert
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => service.CloseAsync(dialog));
+
+        exception.Message.Should().Be("Test exception");
+        goodHandlerCalled.Should().BeFalse(); // Subsequent handlers should not be called
+    }
+
+    [Fact]
+    public async Task OnOpen_Handler_Exception_Propagates_And_Breaks_Dialog_Creation() {
+        // Arrange
+        var service = new TnTDialogService();
+        var goodHandlerCalled = false;
+
+        service.OnOpen += (dialog) => {
+            throw new InvalidOperationException("Test exception");
+        };
+
+        service.OnOpen += (dialog) => {
+            goodHandlerCalled = true;
+            return Task.CompletedTask;
+        };
+
+        // Act & Assert
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => service.OpenAsync<TestComponent>());
+
+        exception.Message.Should().Be("Test exception");
+        goodHandlerCalled.Should().BeFalse(); // Subsequent handlers should not be called
+    }
+
+    [Fact]
     public async Task OpenAsync_Generic_Creates_Dialog_With_Correct_Properties() {
         // Arrange
         var service = new TnTDialogService();
@@ -69,23 +230,6 @@ public class TnTDialogService_Tests : BunitContext {
         dialog.Type.Should().Be(typeof(TestComponent));
         dialog.Options.Should().Be(options);
         dialog.Parameters.Should().BeSameAs(parameters);
-        dialog.ElementId.Should().NotBeNullOrEmpty();
-        dialog.DialogResult.Should().Be(DialogResult.Pending);
-    }
-
-    [Fact]
-    public async Task OpenAsync_Generic_With_No_Parameters_Uses_Defaults() {
-        // Arrange
-        var service = new TnTDialogService();
-
-        // Act
-        var dialog = await service.OpenAsync<TestComponent>();
-
-        // Assert
-        dialog.Should().NotBeNull();
-        dialog.Type.Should().Be(typeof(TestComponent));
-        dialog.Options.Should().NotBeNull();
-        dialog.Parameters.Should().BeNull();
         dialog.ElementId.Should().NotBeNullOrEmpty();
         dialog.DialogResult.Should().Be(DialogResult.Pending);
     }
@@ -112,12 +256,20 @@ public class TnTDialogService_Tests : BunitContext {
     }
 
     [Fact]
-    public async Task OpenAsync_RenderFragment_Null_RenderFragment_Throws_ArgumentNullException() {
+    public async Task OpenAsync_Generic_With_No_Parameters_Uses_Defaults() {
         // Arrange
         var service = new TnTDialogService();
 
-        // Act & Assert
-        await Assert.ThrowsAsync<ArgumentNullException>(() => service.OpenAsync(null!));
+        // Act
+        var dialog = await service.OpenAsync<TestComponent>();
+
+        // Assert
+        dialog.Should().NotBeNull();
+        dialog.Type.Should().Be(typeof(TestComponent));
+        dialog.Options.Should().NotBeNull();
+        dialog.Parameters.Should().BeNull();
+        dialog.ElementId.Should().NotBeNullOrEmpty();
+        dialog.DialogResult.Should().Be(DialogResult.Pending);
     }
 
     [Fact]
@@ -144,6 +296,15 @@ public class TnTDialogService_Tests : BunitContext {
     }
 
     [Fact]
+    public async Task OpenAsync_RenderFragment_Null_RenderFragment_Throws_ArgumentNullException() {
+        // Arrange
+        var service = new TnTDialogService();
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentNullException>(() => service.OpenAsync(null!));
+    }
+
+    [Fact]
     public async Task OpenAsync_RenderFragment_With_No_Options_Uses_Default() {
         // Arrange
         var service = new TnTDialogService();
@@ -158,6 +319,31 @@ public class TnTDialogService_Tests : BunitContext {
         dialog.Should().NotBeNull();
         dialog.Options.Should().NotBeNull();
         dialog.Type.Should().Be(typeof(DeferRendering));
+    }
+
+    [Fact]
+    public async Task OpenForResultAsync_Generic_Creates_Dialog_With_Correct_Properties() {
+        // Arrange
+        var service = new TnTDialogService();
+        var options = new TnTDialogOptions { Title = "Result Dialog" };
+        var parameters = new Dictionary<string, object?> { { "Key", "Value" } };
+        ITnTDialog? dialogFromHandler = null;
+
+        service.OnOpen += (dialog) => {
+            dialogFromHandler = dialog;
+            dialog.DialogResult = DialogResult.Deleted;
+            return Task.CompletedTask;
+        };
+
+        // Act
+        var result = await service.OpenForResultAsync<TestComponent>(options, parameters);
+
+        // Assert
+        result.Should().Be(DialogResult.Deleted);
+        dialogFromHandler.Should().NotBeNull();
+        dialogFromHandler!.Type.Should().Be(typeof(TestComponent));
+        dialogFromHandler.Options.Should().Be(options);
+        dialogFromHandler.Parameters.Should().BeSameAs(parameters);
     }
 
     [Fact]
@@ -198,37 +384,33 @@ public class TnTDialogService_Tests : BunitContext {
     }
 
     [Fact]
-    public async Task OpenForResultAsync_Generic_Creates_Dialog_With_Correct_Properties() {
+    public async Task OpenForResultAsync_Polls_DialogResult_Until_Not_Pending() {
         // Arrange
         var service = new TnTDialogService();
-        var options = new TnTDialogOptions { Title = "Result Dialog" };
-        var parameters = new Dictionary<string, object?> { { "Key", "Value" } };
-        ITnTDialog? dialogFromHandler = null;
+        ITnTDialog? dialogRef = null;
 
         service.OnOpen += (dialog) => {
-            dialogFromHandler = dialog;
-            dialog.DialogResult = DialogResult.Deleted;
+            dialogRef = dialog;
+            // Simulate changing result after some polls
+            Task.Run(async () => {
+                await Task.Delay(1200); // More than 2 polling intervals (500ms each)
+                dialog.DialogResult = DialogResult.Confirmed;
+            });
             return Task.CompletedTask;
         };
 
+        var startTime = DateTime.UtcNow;
+
         // Act
-        var result = await service.OpenForResultAsync<TestComponent>(options, parameters);
+        var result = await service.OpenForResultAsync<TestComponent>();
+
+        var elapsedTime = DateTime.UtcNow - startTime;
 
         // Assert
-        result.Should().Be(DialogResult.Deleted);
-        dialogFromHandler.Should().NotBeNull();
-        dialogFromHandler!.Type.Should().Be(typeof(TestComponent));
-        dialogFromHandler.Options.Should().Be(options);
-        dialogFromHandler.Parameters.Should().BeSameAs(parameters);
-    }
-
-    [Fact]
-    public async Task OpenForResultAsync_RenderFragment_Null_RenderFragment_Throws_ArgumentNullException() {
-        // Arrange
-        var service = new TnTDialogService();
-
-        // Act & Assert
-        await Assert.ThrowsAsync<ArgumentNullException>(() => service.OpenForResultAsync(null!));
+        result.Should().Be(DialogResult.Confirmed);
+        elapsedTime.TotalMilliseconds.Should().BeGreaterThan(1000); // Should have waited
+        dialogRef.Should().NotBeNull();
+        dialogRef!.DialogResult.Should().Be(DialogResult.Confirmed);
     }
 
     [Fact]
@@ -258,185 +440,12 @@ public class TnTDialogService_Tests : BunitContext {
     }
 
     [Fact]
-    public async Task DialogImpl_CloseAsync_Calls_Service_CloseAsync() {
+    public async Task OpenForResultAsync_RenderFragment_Null_RenderFragment_Throws_ArgumentNullException() {
         // Arrange
         var service = new TnTDialogService();
-        var closeCallbackInvoked = false;
-        ITnTDialog? closedDialog = null;
-
-        service.OnClose += (dialog) => {
-            closeCallbackInvoked = true;
-            closedDialog = dialog;
-            return Task.CompletedTask;
-        };
-
-        var dialog = await service.OpenAsync<TestComponent>();
-
-        // Act
-        await dialog.CloseAsync();
-
-        // Assert
-        closeCallbackInvoked.Should().BeTrue();
-        closedDialog.Should().Be(dialog);
-    }
-
-    [Fact]
-    public async Task DialogImpl_Has_Unique_ElementId() {
-        // Arrange
-        var service = new TnTDialogService();
-
-        // Act
-        var dialog1 = await service.OpenAsync<TestComponent>();
-        var dialog2 = await service.OpenAsync<TestComponent>();
-
-        // Assert
-        dialog1.ElementId.Should().NotBe(dialog2.ElementId);
-        dialog1.ElementId.Should().NotBeNullOrEmpty();
-        dialog2.ElementId.Should().NotBeNullOrEmpty();
-    }
-
-    [Fact]
-    public async Task DialogImpl_DialogResult_Is_Mutable() {
-        // Arrange
-        var service = new TnTDialogService();
-        var dialog = await service.OpenAsync<TestComponent>();
 
         // Act & Assert
-        dialog.DialogResult.Should().Be(DialogResult.Pending);
-        
-        dialog.DialogResult = DialogResult.Confirmed;
-        dialog.DialogResult.Should().Be(DialogResult.Confirmed);
-        
-        dialog.DialogResult = DialogResult.Failed;
-        dialog.DialogResult.Should().Be(DialogResult.Failed);
-    }
-
-    [Fact]
-    public async Task Multiple_OnOpen_Handlers_Are_All_Invoked() {
-        // Arrange
-        var service = new TnTDialogService();
-        var handler1Called = false;
-        var handler2Called = false;
-
-        service.OnOpen += (dialog) => {
-            handler1Called = true;
-            return Task.CompletedTask;
-        };
-
-        service.OnOpen += (dialog) => {
-            handler2Called = true;
-            return Task.CompletedTask;
-        };
-
-        // Act
-        await service.OpenAsync<TestComponent>();
-
-        // Assert
-        handler1Called.Should().BeTrue();
-        handler2Called.Should().BeTrue();
-    }
-
-    [Fact]
-    public async Task Multiple_OnClose_Handlers_Are_All_Invoked() {
-        // Arrange
-        var service = new TnTDialogService();
-        var handler1Called = false;
-        var handler2Called = false;
-
-        service.OnClose += (dialog) => {
-            handler1Called = true;
-            return Task.CompletedTask;
-        };
-
-        service.OnClose += (dialog) => {
-            handler2Called = true;
-            return Task.CompletedTask;
-        };
-
-        var dialog = await service.OpenAsync<TestComponent>();
-
-        // Act
-        await service.CloseAsync(dialog);
-
-        // Assert
-        handler1Called.Should().BeTrue();
-        handler2Called.Should().BeTrue();
-    }
-
-    [Fact]
-    public async Task OnOpen_Handler_Exception_Propagates_And_Breaks_Dialog_Creation() {
-        // Arrange
-        var service = new TnTDialogService();
-        var goodHandlerCalled = false;
-
-        service.OnOpen += (dialog) => {
-            throw new InvalidOperationException("Test exception");
-        };
-
-        service.OnOpen += (dialog) => {
-            goodHandlerCalled = true;
-            return Task.CompletedTask;
-        };
-
-        // Act & Assert
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => service.OpenAsync<TestComponent>());
-        
-        exception.Message.Should().Be("Test exception");
-        goodHandlerCalled.Should().BeFalse(); // Subsequent handlers should not be called
-    }
-
-    [Fact]
-    public async Task OnClose_Handler_Exception_Propagates_And_Breaks_Dialog_Closing() {
-        // Arrange
-        var service = new TnTDialogService();
-        var goodHandlerCalled = false;
-
-        service.OnClose += (dialog) => {
-            throw new InvalidOperationException("Test exception");
-        };
-
-        service.OnClose += (dialog) => {
-            goodHandlerCalled = true;
-            return Task.CompletedTask;
-        };
-
-        var dialog = await service.OpenAsync<TestComponent>();
-
-        // Act & Assert
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => service.CloseAsync(dialog));
-        
-        exception.Message.Should().Be("Test exception");
-        goodHandlerCalled.Should().BeFalse(); // Subsequent handlers should not be called
-    }
-
-    [Fact]
-    public async Task OpenForResultAsync_Polls_DialogResult_Until_Not_Pending() {
-        // Arrange
-        var service = new TnTDialogService();
-        ITnTDialog? dialogRef = null;
-
-        service.OnOpen += (dialog) => {
-            dialogRef = dialog;
-            // Simulate changing result after some polls
-            Task.Run(async () => {
-                await Task.Delay(1200); // More than 2 polling intervals (500ms each)
-                dialog.DialogResult = DialogResult.Confirmed;
-            });
-            return Task.CompletedTask;
-        };
-
-        var startTime = DateTime.UtcNow;
-
-        // Act
-        var result = await service.OpenForResultAsync<TestComponent>();
-        
-        var elapsedTime = DateTime.UtcNow - startTime;
-
-        // Assert
-        result.Should().Be(DialogResult.Confirmed);
-        elapsedTime.TotalMilliseconds.Should().BeGreaterThan(1000); // Should have waited
-        dialogRef.Should().NotBeNull();
-        dialogRef!.DialogResult.Should().Be(DialogResult.Confirmed);
+        await Assert.ThrowsAsync<ArgumentNullException>(() => service.OpenForResultAsync(null!));
     }
 
     [Fact]
@@ -446,18 +455,6 @@ public class TnTDialogService_Tests : BunitContext {
 
         // Assert
         service.Should().BeAssignableTo<ITnTDialogService>();
-    }
-
-    [Fact]
-    public async Task Dialog_Implements_ITnTDialog() {
-        // Arrange
-        var service = new TnTDialogService();
-
-        // Act
-        var dialog = await service.OpenAsync<TestComponent>();
-
-        // Assert
-        dialog.Should().BeAssignableTo<ITnTDialog>();
     }
 
     // Test component for generic dialog tests

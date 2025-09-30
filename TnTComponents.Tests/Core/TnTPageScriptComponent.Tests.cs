@@ -1,9 +1,4 @@
-using System;
-using System.Threading.Tasks;
-using Bunit;
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using Xunit;
+﻿using Microsoft.AspNetCore.Components;
 using TnTComponents.Core;
 
 namespace TnTComponents.Tests.Core;
@@ -28,6 +23,27 @@ public class TnTPageScriptComponentTests : BunitContext {
         var comp = new TestPageScriptComponent();
         comp.Dispose();
         comp.DotNetObjectRef.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task DisposeAsync_DisposesModuleAndDotNetObjectRef() {
+        // Arrange: render so module loads
+        var module = JSInterop.SetupModule("./test.js");
+        module.SetupVoid("onLoad", _ => true).SetVoidResult();
+        module.SetupVoid("onUpdate", _ => true).SetVoidResult();
+        module.SetupVoid("onDispose", _ => true).SetVoidResult();
+
+        var rendered = Render<TestPageScriptComponent>();
+        var instance = rendered.Instance;
+        instance.IsolatedJsModule.Should().NotBeNull();
+        instance.DotNetObjectRef.Should().NotBeNull();
+
+        // Act
+        await instance.DisposeAsync();
+
+        // Assert
+        instance.IsolatedJsModule.Should().BeNull();
+        instance.DotNetObjectRef.Should().BeNull();
     }
 
     [Fact]
@@ -59,27 +75,6 @@ public class TnTPageScriptComponentTests : BunitContext {
 
         rendered.Instance.IsolatedJsModule.Should().NotBeNull();
         rendered.Instance.DotNetObjectRef.Should().NotBeNull();
-    }
-
-    [Fact]
-    public async Task DisposeAsync_DisposesModuleAndDotNetObjectRef() {
-        // Arrange: render so module loads
-        var module = JSInterop.SetupModule("./test.js");
-        module.SetupVoid("onLoad", _ => true).SetVoidResult();
-        module.SetupVoid("onUpdate", _ => true).SetVoidResult();
-        module.SetupVoid("onDispose", _ => true).SetVoidResult();
-
-        var rendered = Render<TestPageScriptComponent>();
-        var instance = rendered.Instance;
-        instance.IsolatedJsModule.Should().NotBeNull();
-        instance.DotNetObjectRef.Should().NotBeNull();
-
-        // Act
-        await instance.DisposeAsync();
-
-        // Assert
-        instance.IsolatedJsModule.Should().BeNull();
-        instance.DotNetObjectRef.Should().BeNull();
     }
 
     private class InvalidDerived : TnTPageScriptComponent<TestPageScriptComponent> {
