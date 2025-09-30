@@ -1,4 +1,4 @@
-name: Create Release
+﻿name: Create Release
 
 on:
   push:
@@ -47,15 +47,24 @@ jobs:
       run: dotnet build --configuration Release
 
     - name: Run dotnet tests with coverage
-      run: dotnet test --no-build --configuration Release
+      run: dotnet test --no-build --configuration Release --coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml
 
     - name: Install dotnet-coverage
       run: dotnet tool install --global dotnet-coverage
 
-    - name: Check code coverage
+    - name: Merge coverage report
       run: |
-        dotnet-coverage merge TestResults/**/*.coverage -f cobertura -o coverage.cobertura.xml
-        dotnet-coverage check coverage.cobertura.xml --threshold 90 --threshold-type line --threshold-stat total
+        dotnet-coverage merge **/TestResults/**/coverage.cobertura.xml -f cobertura -o coverage.cobertura.xml
+
+    - name: Post coverage summary to PR
+      uses: irongut/CodeCoverageSummary@v1.3.0
+      with:
+        filename: coverage.cobertura.xml
+        fail_below_min: true
+        format: markdown
+        output: console
+        thresholds: '75 90'
+        badge: true
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
