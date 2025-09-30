@@ -339,14 +339,14 @@ public class TnTTypeahead_Tests : BunitContext {
         var sw = System.Diagnostics.Stopwatch.StartNew();
         var started = false;
         var progressShown = false;
-        while (sw.ElapsedMilliseconds < 2000)
-        {
+        while (sw.ElapsedMilliseconds < 2000) {
             if (searchStarted) started = true;
             try {
                 await cut.InvokeAsync(() => { /* ensure latest render */ });
                 var progressIndicator = cut.Find("progress");
                 if (progressIndicator != null) progressShown = true;
-            } catch { /* progress not present yet */ }
+            }
+            catch { /* progress not present yet */ }
 
             if (started && progressShown) break;
             await Task.Delay(20, Xunit.TestContext.Current.CancellationToken);

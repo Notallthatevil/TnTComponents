@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
@@ -186,7 +186,7 @@ public class TnTPropertyColumn_Tests : BunitContext {
         var cut = Render(fragment);
 
         // Assert
-        cut.Markup.Should().Contain("�"); // Generic currency symbol in invariant culture
+        cut.Markup.Should().Contain("¤"); // Generic currency symbol in invariant culture
         cut.Markup.Should().Contain("50,000.99");
     }
 
