@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components.Web;
+using System.Diagnostics.CodeAnalysis;
 
 namespace TnTComponents.Events;
 
 /// <summary>
 ///     Provides data for the row click event in a data grid component. Extends <see cref="MouseEventArgs" /> with additional information about the clicked row.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class DataGridRowClickEventArgs : MouseEventArgs {
 
     /// <summary>

@@ -1,9 +1,11 @@
+﻿using System.Diagnostics.CodeAnalysis;
+
 namespace TnTComponents.Virtualization;
 
 /// <summary>
 ///     Contains the result of a data request from a <see cref="TnTItemsProviderRequest" />.
 /// </summary>
-/// <typeparam name="TItem"></typeparam>
+[ExcludeFromCodeCoverage]
 public readonly struct TnTItemsProviderResult<TItem>() {
 
     /// <summary>

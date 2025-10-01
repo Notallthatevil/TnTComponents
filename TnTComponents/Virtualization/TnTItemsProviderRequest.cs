@@ -1,4 +1,5 @@
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
+using System.Diagnostics.CodeAnalysis;
 
 namespace TnTComponents.Virtualization;
 
@@ -12,6 +13,7 @@ namespace TnTComponents.Virtualization;
 ///     </code>
 ///     This endpoint accepts the following query parameters: https://example.com?StartIndex=0&amp;SortOnProperties=%5BPropertyName%2CAscending%5D%2C%5Bb%2C%20Descending%5D&amp;Count=10 Decoded = https://example.com?StartIndex=0&amp;SortOnProperties=[PropertyName,Ascending],[PropertyName2,Descending]&amp;Count=10
 /// </remarks>
+[ExcludeFromCodeCoverage]
 public readonly record struct TnTItemsProviderRequest() {
     /// <summary>
     ///     Gets or sets the start index of the requested items.

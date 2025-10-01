@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -18,6 +19,7 @@ namespace TnTComponents.Storage;
 [JsonSerializable(typeof(float))]
 [JsonSerializable(typeof(double))]
 [JsonSerializable(typeof(decimal))]
+[ExcludeFromCodeCoverage]
 internal partial class DefaultJsonSerializerContext : JsonSerializerContext;
 
 /// <summary>

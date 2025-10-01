@@ -1,9 +1,12 @@
 ﻿
+using System.Diagnostics.CodeAnalysis;
+
 namespace TnTComponents.Theming;
 
 /// <summary>
 /// Represents a theme file containing theme details.
 /// </summary>
+[ExcludeFromCodeCoverage]
 internal class ThemeFile {
     /// <summary>
     /// Gets or sets the description of the theme file.
@@ -29,6 +32,7 @@ internal class ThemeFile {
 /// <summary>
 /// Represents the core colors of a theme.
 /// </summary>
+[ExcludeFromCodeCoverage]
 internal class CoreColors {
     /// <summary>
     /// Gets or sets the primary color.
@@ -59,6 +63,7 @@ internal class CoreColors {
 /// <summary>
 /// Represents the color schemes for light and dark themes.
 /// </summary>
+[ExcludeFromCodeCoverage]
 internal class Scheme {
     /// <summary>
     /// Gets or sets the light color scheme.
@@ -203,6 +208,7 @@ internal class Scheme {
     };
 }
 
+[ExcludeFromCodeCoverage]
 internal class ColorScheme {
     public string? Primary { get; set; } = "#8F4C38";
     public string? SurfaceTint { get; set; } = "#8F4C38";

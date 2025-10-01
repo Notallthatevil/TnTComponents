@@ -1,4 +1,4 @@
-# TnTComponents Unit Test Instructions
+﻿# TnTComponents Unit Test Instructions
 
 ## Test Frameworks & Tools
 
@@ -7,7 +7,7 @@
 - Use **AwesomeAssertions** for fluent assertions in tests.
 - Use **NSubstitute** for mocking.
 - Use **AutoFixture** for any 
-- Code coverage is collected using **coverlet.collector**.
+- Code coverage is collected using **Microsoft.Testing.Extensions.CodeCoverage**.
 
 ## Project Setup
 
@@ -54,3 +54,16 @@
 ## References
 
 - See `TnTComponents.Tests.csproj` for package and project references.
+
+## CLI
+Flag | Description
+:---: | :---:
+--filter-method | Run a given test method. Pass one or more fully qualified method names (i.e., 'MyNamespace.MyClass.MyTestMethod'). Wildcard '*' is supported at the beginning and/or end of each filter. Note: Specifying more than one is an OR operation. This is categorized as a simple filter. You cannot use both simple filters and query filters.
+--filter-class | Run all methods in a given test class. Pass one or more fully qualified type names (i.e., 'MyNamespace.MyClass' or 'MyNamespace.MyClass+InnerClass'). Wildcard '*' is supported at the beginning and/or end of each filter. Note: Specifying more than one is an OR operation. This is categorized as a simple filter. You cannot use both simple filters and query filters.
+
+***Do not use any other flags but those***
+**examples:**
+```bash
+dotnet test --filter-method *MyTestMethod
+dotnet test --filter-class *MyTestClass
+```

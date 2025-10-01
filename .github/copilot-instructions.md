@@ -1,4 +1,4 @@
-
+﻿
 ## TnTComponents – Copilot Quick Guide
 
 ### 0. Prime Directive
@@ -37,6 +37,14 @@ Refer to `instructions/unit-tests.md`, but remember:
 * Focus on behavior (rendered effect, events, state transitions), not internal markup structure unless it's the behavior.
 * Attempt to achieve 100% coverage.
 * Always, always, always refer to `instructions/unit-tests.md` when writing tests.
+
+This project uses the new MTP testing framework. Familiarize yourself with its patterns and utilities.
+[link text](https://learn.microsoft.com/en-us/dotnet/core/testing/microsoft-testing-platform-extensions-code-coverage)
+Code coverage can be collected using the following command in the terminal:
+```bash
+dotnet test --coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml
+```
+Files are output in the test projects bin folder.
 
 ### 5. Dev Workflows
 * Build: `dotnet restore` then `dotnet build` (solution root).
