@@ -248,17 +248,18 @@ public class TnTCarousel_Tests : BunitContext {
     }
 
     private RenderFragment BuildItems(params (int order, string text, bool clickable, bool enableRipple, Dictionary<string, object>? additional)[] items) => b => {
-        var seq = 0;
         foreach (var (order, text, clickable, enableRipple, additional) in items) {
-            b.OpenComponent<TnTCarouselItem>(seq++);
-            b.AddAttribute(seq++, nameof(TnTCarouselItem.Order), order);
+            b.OpenComponent<TnTCarouselItem>(0);
+            b.AddAttribute(10, nameof(TnTCarouselItem.Order), order);
             if (clickable) {
-                b.AddAttribute(seq++, nameof(TnTCarouselItem.OnClickCallback), EventCallback.Factory.Create(this, (Action)(() => { })));
+                b.AddAttribute(20, nameof(TnTCarouselItem.OnClickCallback), EventCallback.Factory.Create(this, () => { }));
             }
-            b.AddAttribute(seq++, nameof(TnTCarouselItem.EnableRipple), enableRipple);
-            if (additional is not null)
-                b.AddAttribute(seq++, nameof(TnTCarouselItem.AdditionalAttributes), additional);
-            b.AddAttribute(seq++, nameof(TnTCarouselItem.ChildContent), (RenderFragment)(c => c.AddContent(0, text)));
+            b.AddAttribute(30, nameof(TnTCarouselItem.EnableRipple), enableRipple);
+            if (additional is not null) {
+                b.AddAttribute(40, nameof(TnTCarouselItem.AdditionalAttributes), additional);
+            }
+
+            b.AddAttribute(50, nameof(TnTCarouselItem.ChildContent), (RenderFragment)(c => c.AddContent(0, text)));
             b.CloseComponent();
         }
     };
