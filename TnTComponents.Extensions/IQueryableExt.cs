@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 using TnTComponents.Virtualization;
 
 namespace TnTComponents.Extensions;
@@ -79,20 +74,10 @@ public static class IQueryableExt {
 
         var firstSort = sortOn.First();
 
-        if (firstSort.Value == SortDirection.Descending) {
-            result = query.OrderByDescending(firstSort.Key);
-        }
-        else {
-            result = query.OrderBy(firstSort.Key);
-        }
+        result = firstSort.Value == SortDirection.Descending ? query.OrderByDescending(firstSort.Key) : query.OrderBy(firstSort.Key);
 
         foreach (var sort in sortOn.Skip(1)) {
-            if (sort.Value == SortDirection.Descending) {
-                result = result.ThenByDescending(sort.Key);
-            }
-            else {
-                result = result.ThenBy(sort.Key);
-            }
+            result = sort.Value == SortDirection.Descending ? result.ThenByDescending(sort.Key) : result.ThenBy(sort.Key);
         }
 
         return result;
@@ -105,9 +90,7 @@ public static class IQueryableExt {
     /// <param name="query">       The source query.</param>
     /// <param name="propertyName">The name of the property to sort by.</param>
     /// <returns>An <see cref="IOrderedQueryable{T}" /> whose elements are sorted in descending order.</returns>
-    private static IOrderedQueryable<T> OrderByDescending<T>(this IQueryable<T> query, string propertyName) {
-        return CallOrderedQueryable(query, "OrderByDescending", propertyName);
-    }
+    private static IOrderedQueryable<T> OrderByDescending<T>(this IQueryable<T> query, string propertyName) => CallOrderedQueryable(query, "OrderByDescending", propertyName);
 
     /// <summary>
     ///     Performs a subsequent ordering of the elements in a sequence in ascending order according to a specified property name.
@@ -116,9 +99,7 @@ public static class IQueryableExt {
     /// <param name="query">       The source query.</param>
     /// <param name="propertyName">The name of the property to sort by.</param>
     /// <returns>An <see cref="IOrderedQueryable{T}" /> whose elements are sorted according to an additional key.</returns>
-    private static IOrderedQueryable<T> ThenBy<T>(this IOrderedQueryable<T> query, string propertyName) {
-        return CallOrderedQueryable(query, "ThenBy", propertyName);
-    }
+    private static IOrderedQueryable<T> ThenBy<T>(this IOrderedQueryable<T> query, string propertyName) => CallOrderedQueryable(query, "ThenBy", propertyName);
 
     /// <summary>
     ///     Performs a subsequent ordering of the elements in a sequence in descending order according to a specified property name.
@@ -127,7 +108,5 @@ public static class IQueryableExt {
     /// <param name="query">       The source query.</param>
     /// <param name="propertyName">The name of the property to sort by.</param>
     /// <returns>An <see cref="IOrderedQueryable{T}" /> whose elements are sorted in descending order according to an additional key.</returns>
-    private static IOrderedQueryable<T> ThenByDescending<T>(this IOrderedQueryable<T> query, string propertyName) {
-        return CallOrderedQueryable(query, "ThenByDescending", propertyName);
-    }
+    private static IOrderedQueryable<T> ThenByDescending<T>(this IOrderedQueryable<T> query, string propertyName) => CallOrderedQueryable(query, "ThenByDescending", propertyName);
 }

@@ -29,6 +29,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\TnTComponents\TnTComponents.csproj" />
 		<ProjectReference Include="..\TnTComponents.AspNetCore\TnTComponents.AspNetCore.csproj" />
+		<ProjectReference Include="..\TnTComponents.Extensions\TnTComponents.Extensions.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
