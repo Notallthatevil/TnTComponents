@@ -1,9 +1,23 @@
-param(
-    [string[]]$runtimes
+﻿param(
+    [string[]]$runtimes,
+    [string[]]$frameworks
 )
 
 $rootDirectory = $PSScriptRoot
+
+# Determine target frameworks: prefer explicit parameter, then TARGET_FRAMEWORK env var, then sensible defaults
+if (-not $frameworks -or $frameworks.Length -eq 0) {
+    if ($env:TARGET_FRAMEWORK) {
+        # Allow comma- or semicolon-separated env var values
+        $frameworks = $env:TARGET_FRAMEWORK -split '[,;]' | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne '' }
+    }
+}
+
 $targetFrameworks = @('net9.0', 'net10.0')
+if ($frameworks -and $frameworks.Length -gt 0) {
+    $targetFrameworks = $frameworks
+}
+
 if (-not $runtimes -or $runtimes.Length -eq 0) {
     # sensible default set of common RIDs to test; adjust if you need a different matrix
     $runtimes = @(
