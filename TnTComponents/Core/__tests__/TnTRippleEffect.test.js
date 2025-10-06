@@ -1,4 +1,4 @@
-import { jest } from '@jest/globals';
+﻿import { jest } from '@jest/globals';
 import { TnTRippleEffect, onLoad, onUpdate } from '../TnTRippleEffect.razor.js';
 
 if (!global.TnTComponents) {
@@ -116,6 +116,37 @@ describe('TnTRippleEffect web component', () => {
     parent.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, pageX: 1, pageY: 1 }));
     const styleAttr = el.getAttribute('style');
     expect(styleAttr).toMatch(/--tnt-ripple-max-size: 200/);
+  });
+
+  test('special case: mousedown on child inside a tnt-data-grid-body-row uses currentTarget dimensions', () => {
+    onLoad(null, null);
+    const el = new TnTRippleEffect();
+    const row = document.createElement('tr');
+    row.classList.add('tnt-data-grid-body-row');
+
+    // Mock offsets on the row (currentTarget)
+    Object.defineProperty(row, 'offsetWidth', { value: 120, configurable: true });
+    Object.defineProperty(row, 'offsetHeight', { value: 30, configurable: true });
+
+    // create a child cell which will be the event.target
+    const cell = document.createElement('td');
+    cell.textContent = 'cell';
+
+    row.appendChild(cell);
+    row.appendChild(el); // ripple element is direct child of row (scope > tnt-ripple-effect)
+    document.body.appendChild(row);
+
+    el.update();
+
+    // Dispatch mousedown on the child cell; rippleEffect should detect the special case and use row dims
+    cell.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, pageX: 10, pageY: 10 }));
+
+    const ripple = el.querySelector('.tnt-rippling');
+    expect(ripple).not.toBeNull();
+
+    // The ripple max size should be based on the larger of offsetWidth/offsetHeight (120) * 2.5 = 300
+    const styleAttr = el.getAttribute('style') || '';
+    expect(styleAttr).toMatch(/--tnt-ripple-max-size: 300/);
   });
 
   test('onUpdate calls element.update when available', () => {

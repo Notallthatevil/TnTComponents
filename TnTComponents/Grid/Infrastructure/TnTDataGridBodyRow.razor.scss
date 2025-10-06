@@ -3,7 +3,24 @@
 @use '../../Styles/_Variables/_colors.scss' as colors;
 
 .tnt-data-grid-body-row {
-    @include interactable.tnt-interactable(dg.$tint-color, null);
+    //@include interactable.tnt-interactable(dg.$tint-color, null);
+    &.tnt-interactable:not(.tnt-disabled) {
+        position: relative;
+        cursor: pointer;
+
+        &:hover, &:active {
+            &:before {
+                background-color: #{dg.$tint-color};
+                opacity: 0.3;
+            }
+        }
+
+        ::deep {
+            .tnt-rippling {
+                background-color: #{dg.$tint-color};
+            }
+        }
+    }
 
     &.tnt-stripped {
         &:nth-child(even) {

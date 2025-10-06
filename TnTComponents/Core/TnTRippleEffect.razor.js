@@ -1,4 +1,4 @@
-const rippleEffectByIdentifier = new Map();
+﻿const rippleEffectByIdentifier = new Map();
 function getCoords(elem) { // crossbrowser version
     var box = elem.getBoundingClientRect();
 
@@ -29,9 +29,15 @@ function rippleEffect(e) {
     }
     e.stopPropagation();
 
+    let target = e.target;
+
+    if (e.currentTarget.classList.contains('tnt-data-grid-body-row')) {
+        target = e.currentTarget;
+    }
+
     // Setup
-    let buttonWidth = e.target.offsetWidth;
-    let buttonHeight = e.target.offsetHeight;
+    let buttonWidth = target.offsetWidth;
+    let buttonHeight = target.offsetHeight;
 
     // Make it round!
     if (buttonWidth >= buttonHeight) {
@@ -41,7 +47,7 @@ function rippleEffect(e) {
     }
 
     // Get the center of the element
-    const coords = getCoords(e.target);
+    const coords = getCoords(target);
     var x = e.pageX - coords.left;
     var y = e.pageY - coords.top;
 
