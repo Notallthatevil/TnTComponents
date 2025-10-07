@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using TnTComponents.Core;
 using TnTComponents.Grid;
 
@@ -54,11 +54,34 @@ public partial class TnTPaginationButtons {
     ///     The total number of pages, calculated from <see cref="PaginationState" />.
     /// </summary>
     private int _numberOfPages;
+    private TnTPaginationState? _lastUsedState;
 
     /// <inheritdoc />
     protected override void OnParametersSet() {
         base.OnParametersSet();
         ArgumentNullException.ThrowIfNull(PaginationState, nameof(PaginationState));
+
+        if (_lastUsedState != PaginationState) {
+            PaginationState.TotalItemCountChangedCallback -= PageCountChangedAsync;
+
+            _lastUsedState = PaginationState;
+            _lastUsedState.TotalItemCountChangedCallback += PageCountChangedAsync;
+        }
+
         _numberOfPages = (PaginationState?.LastPageIndex ?? 0) + 1;
+    }
+
+    private async Task PageCountChangedAsync(TnTPaginationState paginationState) {
+        _numberOfPages = (paginationState.LastPageIndex ?? 0) + 1;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    /// <inheritdoc />
+    protected override void Dispose(bool disposing) {
+        if (_lastUsedState is not null) {
+            _lastUsedState.TotalItemCountChangedCallback -= PageCountChangedAsync;
+            _lastUsedState = null;
+        }
+        base.Dispose(disposing);
     }
 }

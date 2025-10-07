@@ -648,4 +648,73 @@ public class TnTPaginationButtons_Tests : BunitContext {
         // Assert
         cut.Instance.TextColor.Should().Be(TnTColor.OnPrimaryContainer);
     }
+
+    [Fact]
+    public async Task TotalItemCountChange_UpdatesPageButtons() {
+        // Arrange
+        var paginationState = new TnTPaginationState(); // TotalItemCount is null initially
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, paginationState));
+
+        // Initially there should be no numeric page buttons
+        var initialPageButtons = cut.FindAll("button").Where(b =>
+            b.TextContent.Trim().All(char.IsDigit) &&
+            !string.IsNullOrEmpty(b.TextContent.Trim())).ToList();
+        initialPageButtons.Should().BeEmpty();
+
+        // Act - update total item count which should trigger the component to update
+        await paginationState.SetTotalItemCountAsync(30); // 3 pages with default 10 items per page
+
+        // Assert - should now render three page buttons
+        var pageButtons = cut.FindAll("button").Where(b =>
+            b.TextContent.Trim().All(char.IsDigit) &&
+            !string.IsNullOrEmpty(b.TextContent.Trim())).ToList();
+
+        pageButtons.Should().HaveCount(3);
+        var pageTexts = pageButtons.Select(b => b.TextContent.Trim()).ToArray();
+        pageTexts.Should().Contain(new[] { "1", "2", "3" });
+    }
+
+    [Fact]
+    public async Task ChangingPaginationStateParameter_UnsubscribesFromOldStateAndSubscribesToNewState() {
+        // Arrange
+        var state1 = new TnTPaginationState();
+        var state2 = new TnTPaginationState();
+
+        await state1.SetTotalItemCountAsync(50); // 5 pages
+        await state2.SetTotalItemCountAsync(10); // 1 page
+
+        var cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, state1));
+
+        // Verify we're rendering state1 pages
+        var pageButtonsState1 = cut.FindAll("button").Where(b =>
+            b.TextContent.Trim().All(char.IsDigit) &&
+            !string.IsNullOrEmpty(b.TextContent.Trim())).ToList();
+        pageButtonsState1.Should().HaveCount(5);
+
+        // Act - switch to state2
+        cut = Render<TnTPaginationButtons>(parameters => parameters
+            .Add(p => p.PaginationState, state2));
+
+        // Verify component now reflects state2
+        var pageButtonsState2 = cut.FindAll("button").Where(b =>
+            b.TextContent.Trim().All(char.IsDigit) &&
+            !string.IsNullOrEmpty(b.TextContent.Trim())).ToList();
+        pageButtonsState2.Should().HaveCount(1);
+
+        // Change state1 - component should NOT update because it should have unsubscribed
+        await state1.SetTotalItemCountAsync(20); // would be 2 pages if it were subscribed
+        var afterOldStateChangeButtons = cut.FindAll("button").Where(b =>
+            b.TextContent.Trim().All(char.IsDigit) &&
+            !string.IsNullOrEmpty(b.TextContent.Trim())).ToList();
+        afterOldStateChangeButtons.Should().HaveCount(1, "Component should be unsubscribed from the old state and not update when it changes");
+
+        // Change state2 - component SHOULD update
+        await state2.SetTotalItemCountAsync(40); // 4 pages
+        var afterNewStateChangeButtons = cut.FindAll("button").Where(b =>
+            b.TextContent.Trim().All(char.IsDigit) &&
+            !string.IsNullOrEmpty(b.TextContent.Trim())).ToList();
+        afterNewStateChangeButtons.Should().HaveCount(4, "Component should be subscribed to the new state and update when it changes");
+    }
 }
