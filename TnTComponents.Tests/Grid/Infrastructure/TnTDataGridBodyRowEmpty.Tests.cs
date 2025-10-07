@@ -78,7 +78,7 @@ public class TnTDataGridBodyRowEmpty_Tests : BunitContext {
         var cut = RenderEmptyRowWithContext(context);
 
         // Assert
-        cut.FindAll("td").Should().HaveCount(2); // Placeholder + content
+        cut.FindAll("td").Should().HaveCount(1); // Only the content cell
         var contentCell = cut.Find("td.tnt-empty-content-row");
         contentCell.GetAttribute("colspan").Should().Be("3"); // Should match column count
     }
@@ -150,7 +150,7 @@ public class TnTDataGridBodyRowEmpty_Tests : BunitContext {
     }
 
     [Fact]
-    public void Renders_WithExtraCell_WhenRowClickCallbackExists() {
+    public void Renders_NoExtraCell_WhenRowClickCallbackExists() {
         // Arrange
         var context = CreateGridContext();
         context.Grid.OnRowClicked = EventCallback.Factory.Create<TestGridItem>(context.Grid, _ => { });
@@ -162,12 +162,9 @@ public class TnTDataGridBodyRowEmpty_Tests : BunitContext {
         var cut = RenderEmptyRowWithContext(context);
 
         // Assert
-        cut.FindAll("td").Should().HaveCount(2); // Extra placeholder + content cell
-        var placeholderCell = cut.FindAll("td")[0];
-        placeholderCell.InnerHtml.Trim().Should().BeEmpty();
-
+        cut.FindAll("td").Should().HaveCount(1); // Only the content cell
         var contentCell = cut.Find("td.tnt-empty-content-row");
-        contentCell.GetAttribute("colspan").Should().Be("1"); // Colspan should match column count
+        contentCell.GetAttribute("colspan").Should().Be("1");
     }
 
     [Fact]
@@ -213,7 +210,7 @@ public class TnTDataGridBodyRowEmpty_Tests : BunitContext {
         var cut = RenderEmptyRowWithContext(context);
 
         // Assert
-        cut.FindAll("td").Should().HaveCount(2); // Placeholder + content
+        cut.FindAll("td").Should().HaveCount(1); // content
         var contentCell = cut.Find("td.tnt-empty-content-row");
         contentCell.GetAttribute("colspan").Should().Be("0");
     }
