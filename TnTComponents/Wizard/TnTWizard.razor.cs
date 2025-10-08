@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TnTComponents.Core;
 using TnTComponents.Wizard;
@@ -11,6 +11,12 @@ namespace TnTComponents;
 public partial class TnTWizard : TnTComponentBase {
 
     /// <summary>
+    ///     The visual layout style of the wizard component.
+    /// </summary>
+    [Parameter]
+    public LayoutDirection LayoutDirection { get; set; } = LayoutDirection.Vertical;
+
+    /// <summary>
     ///     The child content to be rendered inside the wizard.
     /// </summary>
     [Parameter, EditorRequired]
@@ -20,6 +26,7 @@ public partial class TnTWizard : TnTComponentBase {
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-wizard")
+        .AddClass("tnt-layout-horizontal", LayoutDirection == LayoutDirection.Horizontal)
         .Build();
 
     /// <inheritdoc />
