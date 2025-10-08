@@ -5,12 +5,12 @@
     top: 0;
     background-color: inherit;
     z-index: 5;
-    height: 40px;
+    min-height: 40px;
     box-sizing: border-box;
     @include elevation.tnt-elevation(1, false);
 
     .tnt-data-grid-header-row {
-        height: inherit;
+        min-height: inherit;
         box-sizing: border-box;
 
         .tnt-interactable-placeholder {

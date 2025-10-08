@@ -10,20 +10,21 @@
     grid-template-columns: 1fr auto;
     align-items: center;
     user-select: none;
-    height: inherit;
+    min-height: inherit;
     @include typescale.tnt-title-medium;
     @include interactable.tnt-interactable(dg.$tint-color, null);
     @include textAlignments.tnt-text-alignments;
 
     &.tnt-column-header-sorted-on {
         color: dg.$tint-color;
-        grid-template-columns: 1fr 160px;
+        grid-template-columns: 1fr 65px;
     }
 
     .tnt-column-header-sort-icon {
         display: flex;
         flex-direction: row;
         align-items: center;
+        justify-self: end;
 
         .tnt-column-header-sort-index {
             @include typescale.tnt-label-small;
