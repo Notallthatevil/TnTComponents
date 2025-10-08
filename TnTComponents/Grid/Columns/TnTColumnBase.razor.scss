@@ -7,7 +7,7 @@
     padding: 0 8px;
     box-sizing: border-box;
     display: grid;
-    grid-template-columns: 1fr 140px;
+    grid-template-columns: 1fr auto;
     align-items: center;
     user-select: none;
     height: inherit;
@@ -17,6 +17,7 @@
 
     &.tnt-column-header-sorted-on {
         color: dg.$tint-color;
+        grid-template-columns: 1fr 160px;
     }
 
     .tnt-column-header-sort-icon {
