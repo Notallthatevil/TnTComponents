@@ -9,7 +9,6 @@
     min-width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
-    table-layout: fixed;
     background-color: dg.$bg-color;
 
     @media #{measurements.$small-and-down} {
@@ -61,6 +60,10 @@
                 }
             }
         }
+    }
+
+    &.tnt-table-layout-fixed {
+        table-layout: fixed;
     }
 }
 

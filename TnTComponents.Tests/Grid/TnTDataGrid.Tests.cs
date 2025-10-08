@@ -139,6 +139,28 @@ public class TnTDataGrid_Tests : BunitContext {
     }
 
     [Fact]
+    public void DataGridAppearance_TableLayoutFixed_AddsFixedTableClass() {
+        // Arrange & Act
+        var cut = RenderDataGrid(parameters => parameters
+            .Add(p => p.DataGridAppearance, DataGridAppearance.TableLayoutFixed));
+
+        // Assert
+        cut.Find("table").GetAttribute("class").Should().Contain("tnt-table-layout-fixed");
+    }
+
+    [Fact]
+    public void DataGridAppearance_MultipleFlags_ContainsTableLayoutFixedClass() {
+        // Arrange & Act
+        var cut = RenderDataGrid(parameters => parameters
+            .Add(p => p.DataGridAppearance, DataGridAppearance.Stripped | DataGridAppearance.TableLayoutFixed));
+
+        // Assert
+        var cls = cut.Find("table").GetAttribute("class");
+        cls.Should().Contain("tnt-stripped");
+        cls.Should().Contain("tnt-table-layout-fixed");
+    }
+
+    [Fact]
     public void Dispose_CancelsOperationsAndCleansUpResources() {
         // Arrange
         var pagination = new TnTPaginationState();

@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 using Microsoft.JSInterop;
 using System.Diagnostics.CodeAnalysis;
@@ -33,6 +33,11 @@ public enum DataGridAppearance {
     ///     Applies a compact row style.
     /// </summary>
     Compact = 2,
+
+    /// <summary>
+    ///     Specifies that the table layout uses fixed column widths, regardless of the content within each cell.
+    /// </summary>
+    TableLayoutFixed = 4
 }
 
 /// <summary>
@@ -78,8 +83,8 @@ public partial class TnTDataGrid<[DynamicallyAccessedMembers(DynamicallyAccessed
         .AddClass("tnt-datagrid")
         .AddClass("tnt-stripped", DataGridAppearance.HasFlag(DataGridAppearance.Stripped))
         .AddClass("tnt-compact", DataGridAppearance.HasFlag(DataGridAppearance.Compact))
+        .AddClass("tnt-table-layout-fixed", DataGridAppearance.HasFlag(DataGridAppearance.TableLayoutFixed))
         .AddClass("tnt-resizable", Resizable)
-        //.AddClass("tnt-loading", Loading)
         .Build();
 
     /// <inheritdoc />
