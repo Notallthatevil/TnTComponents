@@ -1,0 +1,39 @@
+﻿{
+	"Arguments": "--error-css --style=expanded --no-source-map",
+	"GenerateScopedCss": true,
+	"ScopedCssFolders": [
+		"Accordion",
+		"Anchor",
+		"Animation",
+		"Badge",
+		"Cards",
+		"Carousel",
+		"Chips",
+		"Core",
+		"Dialog",
+		"Divider",
+		"Editors",
+		"Form",
+		"Grid",
+		"Icons",
+		"Layout",
+		"LazyLoader",
+		"Progress",
+		"Scheduler",
+		"Script",
+		"Skeleton",
+		"Storage",
+		"TabView",
+		"Theming",
+		"Toast",
+		"Typeahead",
+		"Virualization",
+		"Wizard"
+	],
+
+	"Configurations": {
+		"Release": {
+			"Arguments": "--no-error-css --style=compressed --no-source-map"
+		}
+	}
+}

@@ -1,10 +1,10 @@
 ﻿@use '../Styles/_Variables/_measurements.scss' as measurements;
-
+@use "sass:string";
 
 .tnt-col {
     float: left;
     box-sizing: border-box;
-    padding: 0 measurements.$gutter-width / 2;
+    padding: 0 calc(measurements.$gutter-width / 2);
     min-height: 1px;
 
     &[class*="push-"],
@@ -15,7 +15,7 @@
     $i: 1;
 
     @while $i <= measurements.$num-cols {
-        $perc: unquote((100 / (measurements.$num-cols / $i)) + "%");
+        $perc: string.unquote(calc(100 / calc(measurements.$num-cols / $i)) + "%");
 
         &.s#{$i} {
             width: $perc;
@@ -28,7 +28,7 @@
     $i: 1;
 
     @while $i <= measurements.$num-cols {
-        $perc: unquote((100 / (measurements.$num-cols / $i)) + "%");
+        $perc: string.unquote(calc(100 / calc(measurements.$num-cols / $i)) + "%");
         @include measurements.grid-classes("s", $i, $perc);
         $i: $i + 1;
     }
@@ -37,7 +37,7 @@
         $i: 1;
 
         @while $i <= measurements.$num-cols {
-            $perc: unquote((100 / (measurements.$num-cols / $i)) + "%");
+            $perc: string.unquote(calc(100 / calc(measurements.$num-cols / $i)) + "%");
 
             &.m#{$i} {
                 width: $perc;
@@ -50,7 +50,7 @@
         $i: 1;
 
         @while $i <= measurements.$num-cols {
-            $perc: unquote((100 / (measurements.$num-cols / $i)) + "%");
+            $perc: string.unquote(calc(100 / calc(measurements.$num-cols / $i)) + "%");
             @include measurements.grid-classes("m", $i, $perc);
             $i: $i + 1;
         }
@@ -60,7 +60,7 @@
         $i: 1;
 
         @while $i <= measurements.$num-cols {
-            $perc: unquote((100 / (measurements.$num-cols / $i)) + "%");
+            $perc: string.unquote(calc(100 / calc(measurements.$num-cols / $i)) + "%");
 
             &.l#{$i} {
                 width: $perc;
@@ -73,7 +73,7 @@
         $i: 1;
 
         @while $i <= measurements.$num-cols {
-            $perc: unquote((100 / (measurements.$num-cols / $i)) + "%");
+            $perc: string.unquote(calc(100 / calc(measurements.$num-cols / $i)) + "%");
             @include measurements.grid-classes("l", $i, $perc);
             $i: $i + 1;
         }
@@ -83,7 +83,7 @@
         $i: 1;
 
         @while $i <= measurements.$num-cols {
-            $perc: unquote((100 / (measurements.$num-cols / $i)) + "%");
+            $perc: string.unquote(calc(100 / calc(measurements.$num-cols / $i)) + "%");
 
             &.xl#{$i} {
                 width: $perc;
@@ -96,7 +96,7 @@
         $i: 1;
 
         @while $i <= measurements.$num-cols {
-            $perc: unquote((100 / (measurements.$num-cols / $i)) + "%");
+            $perc: string.unquote(calc(100 / calc(measurements.$num-cols / $i)) + "%");
             @include measurements.grid-classes("xl", $i, $perc);
             $i: $i + 1;
         }
@@ -104,8 +104,8 @@
 
     ::deep {
         .tnt-row {
-            margin-left: (-1 * measurements.$gutter-width / 2);
-            margin-right: (-1 * measurements.$gutter-width / 2);
+            margin-left: calc(-1 * measurements.$gutter-width / 2);
+            margin-right: calc(-1 * measurements.$gutter-width / 2);
         }
     }
 }

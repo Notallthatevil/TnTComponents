@@ -54,7 +54,7 @@
 
 
     @media #{measurements.$medium-and-up} {
-        &:has(> .tnt-side-nav:not(> .tnt-side-nav-hide-on-large)) {
+        &:not(:has(> .tnt-side-nav.tnt-side-nav-hide-on-large)) {
             &:has(> .tnt-side-nav-toggle-indicator .tnt-toggle-indicator.tnt-toggle) {
                 grid-template-columns: 0 1fr;
 

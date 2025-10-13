@@ -20,8 +20,8 @@ $medium-only: "only screen and (min-width : #{$small-screen-up}) and (max-width 
 // Grid
 $num-cols: 12 !default;
 $gutter-width: 24px !default;
-$element-top-margin: $gutter-width/3 !default;
-$element-bottom-margin: ($gutter-width*2)/3 !default;
+$element-top-margin: calc($gutter-width / 3) !default;
+$element-bottom-margin: calc(calc($gutter-width * 2) / 3) !default;
 
 // Mixins to eliminate code repitition
 @mixin grid-classes($size, $i, $perc) {
