@@ -1,6 +1,6 @@
 ﻿@typeparam TGridItem
 @inherits TnTDataGridCell<TGridItem>
 
-<td @attributes="Column.AdditionalAttributes">
+<td @attributes="Column.AdditionalAttributes" style="@ElementStyle">
     @Column.RenderCellContent(Item)
 </td>

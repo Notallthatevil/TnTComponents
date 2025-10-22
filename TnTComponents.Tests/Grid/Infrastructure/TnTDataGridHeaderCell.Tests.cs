@@ -326,12 +326,115 @@ public class TnTDataGridHeaderCell_Tests : BunitContext {
         var cut = RenderHeaderCellWithColumn(column);
 
         // Assert
-        var th = cut.Find("th");
+     var th = cut.Find("th");
         var style = th.GetAttribute("style");
         if (!string.IsNullOrEmpty(style)) {
             style.Should().NotContain("width:");
-            style.Should().NotContain("min-width:");
+          style.Should().NotContain("min-width:");
         }
+    }
+
+    [Fact]
+    public void Renders_WithMaxWidth_InStyle() {
+        // Arrange
+        var column = CreateTestColumn("Header");
+        column.MaxWidth = 100;
+
+        // Act
+    var cut = RenderHeaderCellWithColumn(column);
+
+        // Assert
+        var th = cut.Find("th");
+        var style = th.GetAttribute("style");
+        style.Should().Contain("max-width:100px");
+        style.Should().Contain("word-wrap:break-word");
+    }
+
+    [Fact]
+    public void Renders_WithoutMaxWidthStyle_WhenNoMaxWidthSpecified() {
+        // Arrange
+        var column = CreateTestColumn("Header");
+        column.MaxWidth = null;
+
+        // Act
+    var cut = RenderHeaderCellWithColumn(column);
+
+// Assert
+        var th = cut.Find("th");
+  var style = th.GetAttribute("style");
+ if (!string.IsNullOrEmpty(style)) {
+ style.Should().NotContain("max-width:");
+   style.Should().NotContain("word-wrap:break-word");
+        }
+    }
+
+    [Fact]
+    public void Renders_WithBothWidthAndMaxWidth_InStyle() {
+     // Arrange
+      var column = CreateTestColumn("Header");
+      column.Width = 200;
+        column.MaxWidth = 150;
+
+        // Act
+        var cut = RenderHeaderCellWithColumn(column);
+
+        // Assert
+        var th = cut.Find("th");
+        var style = th.GetAttribute("style");
+        style.Should().Contain("width:200px");
+  style.Should().Contain("min-width:200px");
+ style.Should().Contain("max-width:150px");
+        style.Should().Contain("word-wrap:break-word");
+    }
+
+    [Fact]
+    public void Renders_WithMaxWidth_AndAdditionalAttributes() {
+  // Arrange
+        var column = CreateTestColumn("Header");
+        column.MaxWidth = 120;
+        column.AdditionalAttributes = new Dictionary<string, object> {
+            { "style", "background-color: blue;" }
+        };
+
+        // Act
+  var cut = RenderHeaderCellWithColumn(column);
+
+        // Assert
+        var th = cut.Find("th");
+        var style = th.GetAttribute("style");
+     style.Should().Contain("max-width:120px");
+        style.Should().Contain("word-wrap:break-word");
+    style.Should().Contain("background-color: blue");
+    }
+
+    [Fact]
+    public void Renders_WithSmallMaxWidth_AppliesCorrectly() {
+     // Arrange
+        var column = CreateTestColumn("Header");
+  column.MaxWidth = 25;
+
+   // Act
+     var cut = RenderHeaderCellWithColumn(column);
+
+        // Assert
+     var th = cut.Find("th");
+var style = th.GetAttribute("style");
+     style.Should().Contain("max-width:25px;word-wrap:break-word");
+    }
+
+    [Fact]
+    public void Renders_WithLargeMaxWidth_AppliesCorrectly() {
+        // Arrange
+        var column = CreateTestColumn("Header");
+column.MaxWidth = 500;
+
+        // Act
+    var cut = RenderHeaderCellWithColumn(column);
+
+        // Assert
+        var th = cut.Find("th");
+   var style = th.GetAttribute("style");
+      style.Should().Contain("max-width:500px;word-wrap:break-word");
     }
 
     private TestTemplateColumn<TestGridItem> CreateTestColumn(string headerContent) {

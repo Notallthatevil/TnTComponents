@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using System.Diagnostics.CodeAnalysis;
 using TnTComponents.Core;
 using TnTComponents.Grid.Columns;
@@ -22,5 +22,6 @@ public partial class TnTDataGridHeaderCell<[DynamicallyAccessedMembers(Dynamical
     protected override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(Column.AdditionalAttributes)
         .Add(Column.Width.HasValue ? $"width:{Column.Width.Value}px;min-width:{Column.Width.Value}px" : null!)
+        .Add(Column.MaxWidth.HasValue ? $"max-width:{Column.MaxWidth.Value}px;word-wrap:break-word" : null!)
         .Build();
 }

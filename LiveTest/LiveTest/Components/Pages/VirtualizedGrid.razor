@@ -16,9 +16,9 @@
 
 
 <div style="height: 60vh; overflow-y:scroll">
-    <TnTDataGrid ItemsProvider="@_provider" Virtualize="true" OnRowClicked="RowClicked" TGridItem="DataGridItem" DataGridAppearance="DataGridAppearance.Stripped">
+    <TnTDataGrid ItemsProvider="@_provider" Virtualize="true" OnRowClicked="RowClicked" TGridItem="DataGridItem" DataGridAppearance="DataGridAppearance.Stripped | DataGridAppearance.Compact">
         <TnTPropertyColumn Property="@(x => x.Column1)" Sortable="true" />
-        <TnTPropertyColumn Property="@(x => x.Column2)" Sortable="true" TextAlign="TextAlign.Center" HeaderAlignment="TextAlign.Left" />
+        <TnTPropertyColumn Property="@(x => x.Column2)" Sortable="true" TextAlign="TextAlign.Center" MaxWidth="50" HeaderAlignment="TextAlign.Left" />
         <TnTPropertyColumn Property="@(x => x.Column3)" Format="MM/yyyy" HeaderAlignment="TextAlign.Right" />
         <TnTTemplateColumn>
             <TnTButton OnClickCallback="() => ItemClicked(context)" Appearance="ButtonAppearance.Text" TextColor="TnTColor.OnSurface" BackgroundColor="TnTColor.Surface" StopPropagation="true">
@@ -64,7 +64,7 @@
             await Task.Delay(_delay * 1000);
             var items = Items.Apply(request);
 
-            if(_empty) {
+            if (_empty) {
                 return new();
             }
 

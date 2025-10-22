@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 using System.Diagnostics;
@@ -58,6 +58,12 @@ public abstract partial class TnTColumnBase<[DynamicallyAccessedMembers(Dynamica
     ///     The sort direction if the column is currently sorted.
     /// </summary>
     public SortDirection? IsSortedOn => Context?.ColumnIsSortedOn(this);
+
+    /// <summary>
+    ///     The maximum width, in pixels, that the column can occupy.
+    /// </summary>
+    [Parameter]
+    public int? MaxWidth { get; set; }
 
     /// <summary>
     ///     The order of the column in the grid.

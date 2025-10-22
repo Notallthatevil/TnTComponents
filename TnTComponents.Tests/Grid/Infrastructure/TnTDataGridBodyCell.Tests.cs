@@ -202,6 +202,120 @@ public class TnTDataGridBodyCell_Tests : BunitContext {
         cut.Markup.Should().Contain("Content");
     }
 
+    [Fact]
+    public void Renders_WithMaxWidth_InStyle() {
+        // Arrange
+        var column = CreateTestColumn("Content");
+        column.MaxWidth = 75;
+
+        // Act
+        var cut = RenderCellWithColumn(column);
+
+        // Assert
+        var td = cut.Find("td");
+        var style = td.GetAttribute("style");
+        style.Should().Contain("max-width:75px");
+        style.Should().Contain("word-wrap:break-word");
+    }
+
+    [Fact]
+    public void Renders_WithoutMaxWidthStyle_WhenNoMaxWidthSpecified() {
+        // Arrange
+        var column = CreateTestColumn("Content");
+        column.MaxWidth = null;
+
+        // Act
+        var cut = RenderCellWithColumn(column);
+
+        // Assert
+        var td = cut.Find("td");
+        var style = td.GetAttribute("style");
+        if (!string.IsNullOrEmpty(style)) {
+            style.Should().NotContain("max-width:");
+            style.Should().NotContain("word-wrap:break-word");
+        }
+    }
+
+    [Fact]
+    public void Renders_WithMaxWidth_AndAdditionalAttributeStyle() {
+        // Arrange
+        var column = CreateTestColumn("Content");
+        column.MaxWidth = 90;
+        column.AdditionalAttributes = new Dictionary<string, object> {
+            { "style", "text-align: center;" }
+        };
+
+        // Act
+        var cut = RenderCellWithColumn(column);
+
+        // Assert
+        var td = cut.Find("td");
+        var style = td.GetAttribute("style");
+        style.Should().Contain("max-width:90px");
+        style.Should().Contain("word-wrap:break-word");
+        style.Should().Contain("text-align: center");
+    }
+
+    [Fact]
+    public void Renders_WithSmallMaxWidth_AppliesCorrectly() {
+        // Arrange
+        var column = CreateTestColumn("Content");
+        column.MaxWidth = 30;
+
+        // Act
+        var cut = RenderCellWithColumn(column);
+
+        // Assert
+        var td = cut.Find("td");
+        var style = td.GetAttribute("style");
+        style.Should().Contain("max-width:30px;word-wrap:break-word");
+    }
+
+    [Fact]
+    public void Renders_WithLargeMaxWidth_AppliesCorrectly() {
+        // Arrange
+        var column = CreateTestColumn("Content");
+        column.MaxWidth = 400;
+
+        // Act
+        var cut = RenderCellWithColumn(column);
+
+        // Assert
+        var td = cut.Find("td");
+        var style = td.GetAttribute("style");
+        style.Should().Contain("max-width:400px;word-wrap:break-word");
+    }
+
+    [Fact]
+    public void Renders_WithMaxWidth_AndComplexContent() {
+        // Arrange
+        var column = new TestTemplateColumn<TestGridItem> {
+            CellTemplate = item => builder => {
+                builder.OpenElement(0, "div");
+                builder.AddAttribute(1, "class", "content-wrapper");
+                builder.OpenElement(2, "strong");
+                builder.AddContent(3, item.Name);
+                builder.CloseElement();
+                builder.OpenElement(4, "small");
+                builder.AddContent(5, item.Email);
+                builder.CloseElement();
+                builder.CloseElement();
+            }
+        };
+        column.MaxWidth = 85;
+
+        // Act
+        var cut = RenderCellWithColumn(column);
+
+        // Assert
+        var td = cut.Find("td");
+        var style = td.GetAttribute("style");
+        style.Should().Contain("max-width:85px;word-wrap:break-word");
+        cut.Markup.Should().Contain("content-wrapper");
+        cut.Markup.Should().Contain("John Doe");
+        cut.Markup.Should().Contain("john@example.com");
+    }
+
     private TestTemplateColumn<TestGridItem> CreateTestColumn(string content) {
         return new TestTemplateColumn<TestGridItem> {
             CellTemplate = _ => builder => builder.AddContent(0, content)

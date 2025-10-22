@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using System.Diagnostics.CodeAnalysis;
+using TnTComponents.Core;
 
 namespace TnTComponents.Grid.Infrastructure;
 
@@ -15,4 +16,11 @@ public partial class TnTDataGridBodyCell<[DynamicallyAccessedMembers(Dynamically
     /// </summary>
     [Parameter, EditorRequired]
     public TGridItem Item { get; set; }
+
+    /// <inheritdoc />
+    protected override string? ElementStyle => CssStyleBuilder.Create()
+        .AddFromAdditionalAttributes(Column.AdditionalAttributes)
+        .Add(Column.MaxWidth.HasValue ? $"max-width:{Column.MaxWidth.Value}px;word-wrap:break-word" : null!)
+        .Build();
+
 }
