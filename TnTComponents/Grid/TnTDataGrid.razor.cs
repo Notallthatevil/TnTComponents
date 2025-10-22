@@ -182,6 +182,12 @@ public partial class TnTDataGrid<[DynamicallyAccessedMembers(DynamicallyAccessed
     public bool Virtualize { get; set; }
 
     /// <summary>
+    ///     Indicates whether users can sort by multiple columns simultaneously.
+    /// </summary>
+    [Parameter]
+    public bool AllowMultiSort { get; set; } = true;
+
+    /// <summary>
     ///     The items currently provided to the grid.
     /// </summary>
     internal IEnumerable<TGridItem>? ProvidedItems;

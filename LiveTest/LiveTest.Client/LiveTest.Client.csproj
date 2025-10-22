@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\NTComponents.Charts\NTComponents.Charts.csproj" />
     <ProjectReference Include="..\..\TnTComponents.Extensions\TnTComponents.Extensions.csproj" />
     <ProjectReference Include="..\..\TnTComponents\TnTComponents.csproj" />
   </ItemGroup>

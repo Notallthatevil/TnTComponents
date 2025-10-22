@@ -41,8 +41,8 @@
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.SassCompiler" Version="1.93.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.0-rc.1.25451.107" />
-		<PackageReference Include="System.Text.Encodings.Web" Version="10.0.0-rc.1.25451.107" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.0-rc.2.25502.107" />
+		<PackageReference Include="System.Text.Encodings.Web" Version="10.0.0-rc.2.25502.107" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
@@ -53,7 +53,7 @@
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly">
-			<Version>10.0.0-rc.1.25451.107</Version>
+			<Version>10.0.0-rc.2.25502.107</Version>
 		</PackageReference>
 	</ItemGroup>
 

@@ -3,16 +3,13 @@
 @use '../../Styles/_Variables/_colors.scss' as colors;
 
 .tnt-data-grid-body-row {
-    //@include interactable.tnt-interactable(dg.$tint-color, null);
     &.tnt-interactable:not(.tnt-disabled) {
         position: relative;
         cursor: pointer;
+        transition: background-color ease-in-out 250ms;
 
         &:hover, &:active {
-            &:before {
-                background-color: #{dg.$tint-color};
-                opacity: 0.3;
-            }
+            background-color: color-mix(in srgb, dg.$bg-color 75%, dg.$tint-color);
         }
 
         ::deep {

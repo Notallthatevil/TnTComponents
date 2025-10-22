@@ -21,14 +21,16 @@
                     var sortedOn = IsSortedOn;
                     @if (sortedOn.HasValue) {
                         <span class="tnt-column-header-sort-icon">
-                            <span class="tnt-column-header-sort-index">
-                                Sort: @_sortIndex
-                            </span>
                             @if (sortedOn == SortDirection.Ascending) {
                                 <MaterialIcon Icon="@MaterialIcon.ArrowDropUp" />
                             }
                             else if (sortedOn == SortDirection.Descending) {
                                 <MaterialIcon Icon="@MaterialIcon.ArrowDropDown" />
+                            }
+                            @if (Context.Grid.AllowMultiSort) {
+                                <span class="tnt-column-header-sort-index">
+                                    @_sortIndex
+                                </span>
                             }
                         </span>
                     }

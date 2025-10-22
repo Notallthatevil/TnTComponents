@@ -21,6 +21,9 @@ public static class TnTServicesExt {
     /// <param name="services">Service collection</param>
     /// <returns>The IServiceCollection instance</returns>
     public static IServiceCollection AddTnTServices(this IServiceCollection services) {
+#if DEBUG
+        services.AddSassCompiler();
+#endif
         return services.AddScoped<ITnTDialogService, TnTDialogService>()
              .AddScoped<ITnTToastService, TnTToastService>()
              .AddScoped<ISessionStorageService, SessionStorageService>()

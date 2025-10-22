@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using System.Diagnostics.CodeAnalysis;
 using TnTComponents.Grid.Columns;
 
@@ -115,31 +115,36 @@ internal sealed class TnTInternalGridContext<[DynamicallyAccessedMembers(Dynamic
     /// </summary>
     /// <param name="column">The column to sort by.</param>
     public void SortByColumn(TnTColumnBase<TGridItem> column) {
-        if (_sortingDirections.TryGetValue(column.ColumnId, out var direction)) {
-            if (direction == column.InitialSortDirection) {
-                var newDirection = direction == SortDirection.Ascending ? SortDirection.Descending : SortDirection.Ascending;
-                _sortingDirections[column.ColumnId] = newDirection;
-                column.SortBy?.FlipDirections = true;
+        if (_grid.AllowMultiSort) {
+            if (_sortingDirections.TryGetValue(column.ColumnId, out var direction)) {
+                if (direction == column.InitialSortDirection) {
+                    var newDirection = direction == SortDirection.Ascending ? SortDirection.Descending : SortDirection.Ascending;
+                    _sortingDirections[column.ColumnId] = newDirection;
+                    column.SortBy?.FlipDirections = true;
+                }
+                else {
+                    _sortingDirections.Remove(column.ColumnId);
+                    _sortByColumns.Remove(column);
+                    column.SortBy?.FlipDirections = false;
+                }
             }
             else {
-                _sortingDirections.Remove(column.ColumnId);
-                _sortByColumns.Remove(column);
-                column.SortBy?.FlipDirections = false;
+                _sortingDirections[column.ColumnId] = column.InitialSortDirection;
+                _sortByColumns.Add(column);
             }
-        }
-        else {
-            _sortingDirections[column.ColumnId] = column.InitialSortDirection;
-            _sortByColumns.Add(column);
-        }
 
-        if (_sortByColumns.Count == 0) {
-            SortBy = null;
+            if (_sortByColumns.Count == 0) {
+                SortBy = null;
+            }
+            else {
+                SortBy = _sortByColumns[0].SortBy;
+                foreach (var c in _sortByColumns.Skip(1)) {
+                    SortBy = SortBy?.Append(c.SortBy);
+                }
+            }
         }
         else {
-            SortBy = _sortByColumns[0].SortBy;
-            foreach (var c in _sortByColumns.Skip(1)) {
-                SortBy = SortBy?.Append(c.SortBy);
-            }
+            SortBy = column.SortBy;
         }
         UpdateItems();
     }
