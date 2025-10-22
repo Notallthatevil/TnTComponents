@@ -124,7 +124,7 @@ public class TnTWizardStepBase_Tests : BunitContext {
         nextButton.Click();
 
         // Navigate back to step 1
-        var previousButton = cut.Find("button:contains('PreviousStep')");
+        var previousButton = cut.Find("button:contains('Previous Step')");
         previousButton.Click();
 
         // Assert - Original step should maintain its properties

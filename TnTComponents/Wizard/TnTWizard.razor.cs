@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Web;
 using TnTComponents.Core;
 using TnTComponents.Wizard;
 
@@ -9,12 +10,6 @@ namespace TnTComponents;
 ///     Represents a wizard component that manages multiple steps and provides navigation between them.
 /// </summary>
 public partial class TnTWizard : TnTComponentBase {
-
-    /// <summary>
-    ///     The visual layout style of the wizard component.
-    /// </summary>
-    [Parameter]
-    public LayoutDirection LayoutDirection { get; set; } = LayoutDirection.Vertical;
 
     /// <summary>
     ///     The child content to be rendered inside the wizard.
@@ -33,6 +28,12 @@ public partial class TnTWizard : TnTComponentBase {
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .Build();
+
+    /// <summary>
+    ///     The visual layout style of the wizard component.
+    /// </summary>
+    [Parameter]
+    public LayoutDirection LayoutDirection { get; set; } = LayoutDirection.Vertical;
 
     /// <summary>
     ///     A value indicating whether the "Next" button is disabled.
@@ -118,11 +119,11 @@ public partial class TnTWizard : TnTComponentBase {
     /// </summary>
     /// <returns>A task that represents the asynchronous operation.</returns>
     internal async Task NextStepAsync() {
-        if (_currentStep is TnTWizardFormStep formStep && formStep is not null && !await formStep.FormValidAsync()) {
-            return;
+        if (await ValidateCurrentStepAsync()) {
+            await OnNextButtonClicked.InvokeAsync(_stepIndex + 1);
+            _stepIndex++;
         }
-        await OnNextButtonClicked.InvokeAsync(_stepIndex + 1);
-        _stepIndex++;
+        return;
     }
 
     /// <summary>
@@ -147,8 +148,35 @@ public partial class TnTWizard : TnTComponentBase {
     }
 
     /// <summary>
+    ///     Handles the key press event for keyboard input, advancing the workflow or submitting the form when the Enter key is pressed.
+    /// </summary>
+    /// <remarks>If the Enter key is pressed on the final step, the form is submitted; otherwise, the workflow advances to the next step.</remarks>
+    /// <param name="args">The keyboard event arguments containing information about the key that was pressed.</param>
+    /// <returns>A task that represents the asynchronous operation of handling the key press event.</returns>
+    private async Task HandleKeyPressAsync(KeyboardEventArgs args) {
+        if (args.Key == "Enter") {
+            if (_stepIndex + 1 == _steps.Count) {
+                if (!SubmitButtonDisabled) {
+                    await SubmitClickedAsync();
+                }
+            }
+            else {
+                if (!NextButtonDisabled) {
+                    await NextStepAsync();
+                }
+            }
+        }
+    }
+
+    /// <summary>
     ///     Invokes the submit callback when the submit button is clicked.
     /// </summary>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    private Task SubmitClickedAsync() => OnSubmitCallback.InvokeAsync();
+    private async Task SubmitClickedAsync() {
+        if (await ValidateCurrentStepAsync()) {
+            await OnSubmitCallback.InvokeAsync();
+        }
+    }
+
+    private async Task<bool> ValidateCurrentStepAsync() => _currentStep is not TnTWizardFormStep formStep || formStep is null || await formStep.FormValidAsync();
 }

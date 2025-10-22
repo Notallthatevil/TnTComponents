@@ -27,7 +27,7 @@
             </li>
         }
     </ol>
-    <div class="tnt-wizard-content">
+    <div class="tnt-wizard-content" @onkeypress="HandleKeyPressAsync">
         @if (_currentStep is not null) {
             @_currentStep.Render()
         }
@@ -39,7 +39,7 @@
         @if (_stepIndex > 0) {
             <TnTButton Appearance="ButtonAppearance.Outlined" TextColor="TnTColor.OnSurface" OnClickCallback="@PreviousStepAsync" Disabled="@PreviousButtonDisabled">
                 <MaterialIcon Icon="@MaterialIcon.KeyboardArrowLeft" />
-                PreviousStep
+                Previous Step
             </TnTButton>
         }
         @if (_stepIndex + 1 == _steps.Count) {
