@@ -139,10 +139,6 @@ function getCoords(elem) { // crossbrowser version
     return { top: Math.round(top), left: Math.round(left) };
 }
 
-function ripple(e) {
-    TnTComponents.rippleEffect(e);
-}
-
 const isNumericInput = (event) => {
     const key = event.keyCode;
     return ((key >= 48 && key <= 57) || // Allow number line
@@ -210,18 +206,6 @@ window.TnTComponents = {
             return `#${r}${g}${b}`;
         }
         return value;
-    },
-    openDialog: (dialogId) => {
-        const dialog = document.getElementById(dialogId);
-        if (dialog) {
-            dialog.show();
-        }
-    },
-    closeDialog: (dialogId) => {
-        const dialog = document.getElementById(dialogId);
-        if (dialog) {
-            dialog.close();
-        }
     },
     openModalDialog: (dialogId) => {
         const dialog = document.getElementById(dialogId);
@@ -324,35 +308,6 @@ window.TnTComponents = {
         if (input.length > 6) { event.target.value = `(${areaCode}) ${middle}-${last}`; }
         else if (input.length > 3) { event.target.value = `(${areaCode}) ${middle}`; }
         else if (input.length > 0) { event.target.value = `(${areaCode}`; }
-    },
-    getBoundingClientRect: (element) => {
-        if (element && element.getBoundingClientRect) {
-            return element.getBoundingClientRect();
-        }
-        return null;
-    },
-    setBoundingClientRect: (element, boundingClientRect) => {
-        if (element && element.style && boundingClientRect) {
-            element.style.top = boundingClientRect.top + 'px';
-            element.style.left = boundingClientRect.left + 'px';
-            element.style.width = boundingClientRect.width + 'px';
-            element.style.height = boundingClientRect.height + 'px';
-        }
-    },
-    hideElement: (element) => {
-        if (element && element.style) {
-            element.style.display = 'none';
-        }
-    },
-    showElement: (element) => {
-        if (element && element.style) {
-            element.style.display = 'revert';
-        }
-    },
-    setOpacity: (element, opacity) => {
-        if (element && element.style) {
-            element.style.opacity = `${opacity}`;
-        }
     },
     getCurrentLocation: () => {
         return window.location.href;

@@ -7,7 +7,7 @@ namespace TnTComponents.Core;
 ///     A builder class for constructing CSS class strings.
 /// </summary>
 [ExcludeFromCodeCoverage]
-internal sealed class CssClassBuilder {
+public sealed class CssClassBuilder {
     private readonly HashSet<string> _classes = [];
 
     /// <summary>
