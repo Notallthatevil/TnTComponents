@@ -1,5 +1,4 @@
-﻿
-## TnTComponents – Copilot Quick Guide
+﻿## TnTComponents – Copilot Quick Guide
 
 ### 0. Prime Directive
 Never assume. Mirror existing patterns. If something is ambiguous, pause and surface the question instead of guessing.
@@ -10,82 +9,63 @@ Never assume. Mirror existing patterns. If something is ambiguous, pause and sur
 * Favor consistency over novelty; reuse existing abstractions.
 * No new external packages without explicit approval.
 
-### 2. Creating / Extending a Component
+### 2. Instruction Files – Your Source of Truth
+This repository has detailed instruction files for specific concerns. **Always consult the relevant file for your task:**
+
+* **`./instructions/blazor.instructions.md`** — Apply when creating or modifying `*.razor` files. Covers component markup, dependency injection, no inline `@code`, accessibility, and Blazor conventions.
+* **`./instructions/styles.instructions.md`** — Apply when creating or modifying `*.razor.scss` files. Covers SCSS scoping, shared variables, BEM-like patterns, responsiveness, and asset organization.
+* **`./instructions/code-generation.instructions.md`** — Apply when generating or writing new C# code (`*.cs` files). Covers documentation, testability, abstractions, design, and PR guidance.
+* **`./instructions/tests.instructions.md`** — Apply when creating or modifying `*.Tests.cs` files. Covers test frameworks (xUnit, NSubstitute, AutoFixture, AwesomeAssertions), AAA pattern, naming conventions, and coverage targets.
+
+**Before starting work, identify which instruction file(s) apply and refer to them for deterministic rules and checklists.**
+
+### 3. Creating / Extending a Component
 Required files (per folder):
-* `Name.razor` (markup only – logic goes in code-behind)
-* `Name.razor.cs` (partial class inheriting `TnTComponentBase` unless clearly excluded)
-* `Name.razor.scss` (author styles here) → compiled to `.razor.css` / `.razor.min.css`
+* `Name.razor` (markup only – logic goes in code-behind) — see `./instructions/blazor.instructions.md`
+* `Name.razor.cs` (partial class inheriting `TnTComponentBase` unless clearly excluded) — see `./instructions/code-generation.instructions.md`
+* `Name.razor.scss` (author styles here) → compiled to `.razor.css` / `.razor.min.css` — see `./instructions/styles.instructions.md`
 * Optional `Name.razor.js` if JS interop is needed; must export: `onLoad`, `onUpdate`, `onDispose` (see `TabView` example)
+* Corresponding test file `Name.Tests.cs` in `TnTComponents.Tests/` — see `./instructions/tests.instructions.md`
 
-Patterns:
-* Parameters: use `[Parameter]` (and `[EditorRequired]` when truly necessary); follow naming & style from similar existing components (e.g., `TnTButton`).
-* Events: expose strongly-typed callbacks (`EventCallback<T>`). Avoid leaking internal state types unless already public.
-* Cascading values: mirror existing usage for theme / density / localization if needed.
-* Theming: dynamic values exposed via inline `style` variables → referenced in SCSS (see button example). Theme JSON lives in `wwwroot/Themes` and is consumed via the theme toggle component.
-* Accessibility: semantic HTML first; add appropriate `role`, `aria-*`, focus order, and keyboard interactions consistent with Material guidance.
-
-### 3. Styling Rules
-* Only SCSS in `.razor.scss`; do not hand-edit generated `.css`.
-* Reuse shared variables from `_Variables` (never hard-code palette values unless transient/testing).
-* Keep selectors component-scoped; avoid global leakage.
-
-### 4. Testing Essentials
-Refer to `instructions/unit-tests.md`, but remember:
-* One folder in `TnTComponents.Tests/` mirroring component path.
-* Component tests in `.Tests.cs` files; inherit from `BunitContext`.
-* Use Arrange / Act / Assert; one logical behavioral assertion per test.
-* Focus on behavior (rendered effect, events, state transitions), not internal markup structure unless it's the behavior.
-* Attempt to achieve 100% coverage.
-* Always, always, always refer to `instructions/unit-tests.md` when writing tests.
-
-This project uses the new MTP testing framework. Familiarize yourself with its patterns and utilities.
-[link text](https://learn.microsoft.com/en-us/dotnet/core/testing/microsoft-testing-platform-extensions-code-coverage)
-Code coverage can be collected using the following command in the terminal:
-```bash
-dotnet test --coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml
-```
-Files are output in the test projects bin folder.
-
-### 5. Dev Workflows
+### 4. Dev Workflows
 * Build: `dotnet restore` then `dotnet build` (solution root).
 * Test: `dotnet test` (or narrow scope by project / filter).
 * Manual verification: run `LiveTest` app (client for UI smoke checks).
 * Keep the build green before adding more features—incremental, verified changes.
+* Code coverage: `dotnet test --coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml` (output in test project bin folder).
 
-### 6. Documentation Rules
-* XML doc every public type/member. Describe purpose & behavior (avoid “Gets or sets ...”).
-* Use `/// <inheritdoc />` for overrides / interface implementations.
-* Include a short usage example in new component summaries when practical.
+### 5. Quick Reference Checklist
+Before submitting changes:
+- [ ] Consulted relevant instruction file(s) from section 2
+- [ ] Followed file naming and structure conventions
+- [ ] Added/updated tests with new functionality
+- [ ] Component is keyboard accessible and semantic
+- [ ] No hardcoded theme colors (use variables)
+- [ ] No new dependencies without approval
+- [ ] Build passes: `dotnet build`
+- [ ] Tests pass: `dotnet test`
 
-### 7. When Adding JavaScript
-* Only if necessary (performance, browser API gaps, complex measurements).
-* Namespaced file alongside component.
-* Lifecycle exports: `onLoad(element, options)`, `onUpdate(element, options)`, `onDispose(element)`.
-* Keep interop surface minimal & typed (consider a C# options record / DTO).
+### 6. Reference Maps
+* **Blazor component markup rules:** `./instructions/blazor.instructions.md`
+* **SCSS and styling rules:** `./instructions/styles.instructions.md`
+* **C# code and documentation rules:** `./instructions/code-generation.instructions.md`
+* **Testing framework and conventions:** `./instructions/tests.instructions.md`
+* **Component examples to consult:** `Buttons/`, `Accordion/`, `TabView/` (especially for JS interop pattern).
 
-### 8. Do / Don't (Quick Scan)
-Do:
-* Follow existing naming & folder conventions.
-* Add tests with new functionality.
-* Keep PR-sized changes cohesive.
-* Support keyboard & screen reader access.
-Don't:
-* Introduce new dependencies silently.
-* Embed logic directly in `.razor` unless trivially declarative.
-* Duplicate patterns (abstract / extend when repetition emerges).
-* Hard-code theme colors where variables exist.
-
-### 9. Reference Maps
-* Code gen rules: `./instructions/generated-code.md`
-* Testing: `./instructions/unit-tests.md`
-* Style guide: `./instructions/code-style.md`
-* Examples to consult first: `Buttons/`, `Accordion/`, `TabView/` for JS pattern.
-
-### 10. Escalation Triggers
+### 7. Escalation Triggers
 Surface clarification instead of proceeding when:
 * API shape conflicts with an existing analogous component.
 * A feature implies cross-cutting concerns (theming, globalization, virtualization).
 * Requires altering shared base classes.
+* Any instruction file rule is unclear or conflicts with reviewer feedback.
+* You are uncertain about which instruction file(s) apply to your task.
 
 ---
-Concise summary: Mirror existing component structure; keep logic in code-behind; SCSS only for styling; tests mirror structure; document everything; prefer consistency and accessibility; ask when uncertain.
+### Quick Summary
+1. **Identify your task:** Am I creating/modifying `.razor` files? Styles (`.razor.scss`)? Tests (`.Tests.cs`)? C# code (`.cs`)?
+2. **Consult the right file:** Use the reference maps in section 6 to find the correct instruction file.
+3. **Follow the checklist:** Each instruction file contains a deterministic checklist — use it.
+4. **Mirror existing patterns:** Consistency and cohesion over novelty.
+5. **Ask before guessing:** If a rule is unclear or conflicts, surface it rather than proceeding.
+
+**TL;DR:** Mirror existing component structure; keep logic in code-behind; SCSS only for styling; tests mirror structure; document everything; prefer consistency and accessibility; consult the instruction files for deterministic rules; ask when uncertain.
