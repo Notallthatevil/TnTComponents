@@ -1,5 +1,6 @@
-# TnTComponents
-[![Deploy to NuGet](https://github.com/Notallthatevil/TnTComponents/actions/workflows/TnTComponentsToNuget.yml/badge.svg)](https://github.com/Notallthatevil/TnTComponents/actions/workflows/TnTComponentsToNuget.yml)
+﻿# TnTComponents
+[![Deploy](https://github.com/Notallthatevil/TnTComponents/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Notallthatevil/TnTComponents/actions/workflows/ci-cd.yml)
+[![Publish AOTCompatibility](https://github.com/Notallthatevil/TnTComponents/actions/workflows/ci-aot.yml/badge.svg)](https://github.com/Notallthatevil/TnTComponents/actions/workflows/ci-aot.yml)
 
 TnTComponents is a Blazor WebAssembly project that provides a set of reusable UI components for building modern web applications based on Google's Material 3 spec. The components are designed to be highly customizable and easy to use.
 
