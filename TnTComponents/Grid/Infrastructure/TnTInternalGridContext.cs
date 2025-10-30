@@ -144,6 +144,17 @@ internal sealed class TnTInternalGridContext<[DynamicallyAccessedMembers(Dynamic
             }
         }
         else {
+            if(_sortingDirections.TryGetValue(column.ColumnId, out var direction)) {
+                var newDirection = direction == SortDirection.Ascending ? SortDirection.Descending : SortDirection.Ascending;
+                _sortingDirections.Clear();
+                _sortingDirections[column.ColumnId] = newDirection;
+                column.SortBy?.FlipDirections = !column.SortBy.FlipDirections;
+            }
+            else {
+                _sortingDirections.Clear();
+                _sortingDirections[column.ColumnId] = column.InitialSortDirection;
+                column.SortBy?.FlipDirections = false;
+            }
             SortBy = column.SortBy;
         }
         UpdateItems();
