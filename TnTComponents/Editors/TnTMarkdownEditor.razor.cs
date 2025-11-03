@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Text.RegularExpressions;
 using TnTComponents.Core;
@@ -58,12 +58,13 @@ public partial class TnTMarkdownEditor {
     public async Task UpdateValue(string value, string renderedText) {
         Value = value;
         await ValueChanged.InvokeAsync(Value);
+        var body = renderedText;
         var match = BodyRegex().Match(renderedText);
         if (match.Success) {
-            var body = match.Groups[1].Value;
-            RenderedHtml = new MarkupString(body);
-            await RenderedHtmlChanged.InvokeAsync(RenderedHtml);
+            body = match.Groups[1].Value;
         }
+        RenderedHtml = new MarkupString(body);
+        await RenderedHtmlChanged.InvokeAsync(RenderedHtml);
         await InvokeAsync(StateHasChanged);
     }
 

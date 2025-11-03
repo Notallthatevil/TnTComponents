@@ -1,4 +1,4 @@
-// Test the TnTMarkdownEditor JavaScript module exports
+﻿// Test the TnTMarkdownEditor JavaScript module exports
 // Note: This module uses dynamic CDN imports that cannot be easily tested in Jest
 // This test verifies the module structure and basic functionality without the CDN dependencies
 
@@ -38,9 +38,9 @@ describe('TnTMarkdownEditor JavaScript Module Structure', () => {
     expect(fileContent).toContain('right-text');
     
     // Verify text transformations are present
-    expect(fileContent).toContain('tnt-text-align-left');
-    expect(fileContent).toContain('tnt-text-align-center');
-    expect(fileContent).toContain('tnt-text-align-right');
+    expect(fileContent).toContain('tnt-left');
+    expect(fileContent).toContain('tnt-center');
+    expect(fileContent).toContain('tnt-right');
   });
 
   test('module contains expected CSS loading logic', () => {
@@ -64,9 +64,9 @@ describe('TnTMarkdownEditor JavaScript Module Structure', () => {
     expect(fileContent).toContain('toolbar:');
     
     // Verify custom alignment functionality
-    expect(fileContent).toContain('!\\\\<');
-    expect(fileContent).toContain('!\\\\>\\\\<');
-    expect(fileContent).toContain('!\\\\>');
+    expect(fileContent).toContain('<tnt-left>');
+    expect(fileContent).toContain('<tnt-center>');
+    expect(fileContent).toContain('<tnt-right>');
     
     // Verify change handler setup
     expect(fileContent).toContain('codemirror.on("change"');

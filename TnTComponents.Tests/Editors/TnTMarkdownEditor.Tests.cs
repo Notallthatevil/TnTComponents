@@ -258,7 +258,7 @@ public class TnTMarkdownEditor_Tests : BunitContext {
         await cut.Instance.UpdateValue("# Test", "<h1>Test</h1><p>Content</p>");
 
         // Assert When no body tag is found, the regex should not match and RenderedHtml should not be set
-        cut.Instance.RenderedHtml.Should().BeNull();
+        cut.Instance.RenderedHtml.Should().Be(new MarkupString("<h1>Test</h1><p>Content</p>"));
     }
 
     [Fact]

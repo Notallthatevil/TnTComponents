@@ -1,4 +1,4 @@
-import * as EasyMDEImport from "https://unpkg.com/easymde/dist/easymde.min.js";
+﻿import * as EasyMDEImport from "https://unpkg.com/easymde/dist/easymde.min.js";
 import * as HighlightImport from "https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js";
 
 const highlightJsCss = 'https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css';
@@ -73,9 +73,9 @@ export function onLoad(element, dotNetElementRef) {
                                     text = e.markdown(text);
                                 }
 
-                                text = text.replace(/!&gt;&lt;(.+)?!&gt;&lt;/g, '<div class="tnt-text-align-center">$1</div>');
-                                text = text.replace(/!&lt;(.+)?!&lt;/g, '<div class="tnt-text-align-left">$1</div>');
-                                text = text.replace(/!&gt;(.+)?!&gt;/g, '<div class="tnt-text-align-right">$1</div>');
+                                text = text.replace(/<tnt-left>(.+)?<\/tnt-left>/g, '<div style="text-align:left">$1</div>');
+                                text = text.replace(/<tnt-center>(.+)?<\/tnt-center>/g, '<div style="text-align:center">$1</div>');
+                                text = text.replace(/<tnt-right>(.+)?<\/tnt-right>/g, '<div style="text-align:right">$1</div>');
                                 text = text.replace(/<table>/, '<table style="width:100%">');
                             }
                             return text;
@@ -93,7 +93,7 @@ export function onLoad(element, dotNetElementRef) {
                                     var selectedText = cm.getSelection();
                                     var text = selectedText || 'align-left';
 
-                                    output = '!\\<' + text + '!\\<';
+                                    output = '<tnt-left>' + text + '</tnt-left>';
                                     cm.replaceSelection(output);
                                 },
                                 className: "fa fa-align-left",
@@ -108,7 +108,7 @@ export function onLoad(element, dotNetElementRef) {
                                     var selectedText = cm.getSelection();
                                     var text = selectedText || 'align-center';
 
-                                    output = '!\\>\\<' + text + '!\\>\\<';
+                                    output = '<tnt-center>' + text + '</tnt-center>';
                                     cm.replaceSelection(output);
                                 },
                                 className: "fa fa-align-center",
@@ -123,7 +123,7 @@ export function onLoad(element, dotNetElementRef) {
                                     var selectedText = cm.getSelection();
                                     var text = selectedText || 'align-right';
 
-                                    output = '!\\>' + text + '!\\>';
+                                    output = '<tnt-right>' + text + '</tnt-right>';
                                     cm.replaceSelection(output);
                                 },
                                 className: "fa fa-align-right",
