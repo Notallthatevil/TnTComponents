@@ -4,6 +4,10 @@ applyTo: "**/*.Tests.cs"
 
 Testing frameworks and guidelines
 
+## IMPORTANT
+You must use Microsoft Testing Platform syntax when testing [MTP docs](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-test?tabs=dotnet-test-with-mtp)
+
+---
 Frameworks
 - Mocking: `NSubstitute` — use for creating test doubles and verifying interactions.
 - Test data: `AutoFixture` — use to generate input data and minimize manual setup; prefer customizing fixtures when specific values are required.
