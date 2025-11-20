@@ -1,0 +1,238 @@
+﻿@page "/Tooltip"
+@using TnTComponents
+@rendermode InteractiveAuto
+
+<style>
+    .tooltip-demo-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin: 30px 0;
+        flex-wrap: wrap;
+    }
+
+    .demo-element {
+        padding: 16px 24px;
+        background-color: var(--tnt-color-primary-container);
+        color: var(--tnt-color-on-primary-container);
+        border-radius: 8px;
+        cursor: help;
+        user-select: none;
+        position: relative;
+    }
+
+    .demo-element:hover {
+        background-color: var(--tnt-color-primary);
+        color: var(--tnt-color-on-primary);
+    }
+
+    .control-section {
+        margin: 24px 0;
+        padding: 16px;
+        background-color: var(--tnt-color-surface-container);
+        border-radius: 8px;
+    }
+
+    .control-label {
+        display: block;
+        margin-bottom: 12px;
+        font-weight: 500;
+    }
+
+    .control-input {
+        padding: 8px 12px;
+        border: 1px solid var(--tnt-color-outline);
+        border-radius: 4px;
+        background-color: var(--tnt-color-surface);
+        color: var(--tnt-color-on-surface);
+        margin: 8px 0;
+    }
+
+    .demo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 24px;
+        margin: 24px 0;
+    }
+
+    .demo-card {
+        padding: 20px;
+        background-color: var(--tnt-color-surface-container-low);
+        border: 1px solid var(--tnt-color-outline-variant);
+        border-radius: 12px;
+        text-align: center;
+    }
+</style>
+
+<div style="padding: 20px;">
+    <h1>Tooltip Component Demo</h1>
+    <p>Hover over the elements below to see the tooltip component in action. The tooltip displays contextual information and follows the cursor position while being constrained to the viewport.</p>
+
+    <TnTDivider />
+
+    <div class="control-section">
+        <label class="control-label">
+            Show Delay (ms):
+            <input type="number" @bind="ShowDelay" min="100" max="5000" step="100" class="control-input" />
+        </label>
+        <label class="control-label">
+            Hide Delay (ms):
+            <input type="number" @bind="HideDelay" min="50" max="2000" step="50" class="control-input" />
+        </label>
+    </div>
+
+    <TnTDivider />
+
+    <h2>Basic Tooltips</h2>
+    <div class="tooltip-demo-wrapper">
+        <div class="demo-element">
+            Hover me
+            <TnTTooltip ShowDelay="@ShowDelay" HideDelay="@HideDelay">
+                This is a basic tooltip
+            </TnTTooltip>
+        </div>
+
+        <div class="demo-element">
+            Info Button
+            <TnTTooltip ShowDelay="@ShowDelay" HideDelay="@HideDelay">
+                <strong>Information:</strong> This tooltip provides helpful information
+            </TnTTooltip>
+        </div>
+
+        <div class="demo-element">
+            Help Text
+            <TnTTooltip ShowDelay="@ShowDelay" HideDelay="@HideDelay">
+                <span>Click me for more help</span>
+            </TnTTooltip>
+        </div>
+    </div>
+
+    <TnTDivider />
+
+    <h2>Color Variations</h2>
+    <div class="demo-grid">
+        <div class="demo-card">
+            <div class="demo-element" style="background-color: var(--tnt-color-error-container); color: var(--tnt-color-on-error-container);">
+                Error Tooltip
+                <TnTTooltip ShowDelay="@ShowDelay" HideDelay="@HideDelay" BackgroundColor="TnTColor.Error" TextColor="TnTColor.OnError" BorderColor="TnTColor.Error">
+                    This is an error message
+                </TnTTooltip>
+            </div>
+        </div>
+
+        <div class="demo-card">
+            <div class="demo-element" style="background-color: var(--tnt-color-success-container); color: var(--tnt-color-on-success-container);">
+                Success Tooltip
+                <TnTTooltip ShowDelay="@ShowDelay" HideDelay="@HideDelay" BackgroundColor="TnTColor.Success" TextColor="TnTColor.OnSuccess" BorderColor="TnTColor.Success">
+                    Operation successful
+                </TnTTooltip>
+            </div>
+        </div>
+
+        <div class="demo-card">
+            <div class="demo-element" style="background-color: var(--tnt-color-warning-container); color: var(--tnt-color-on-warning-container);">
+                Warning Tooltip
+                <TnTTooltip ShowDelay="@ShowDelay" HideDelay="@HideDelay" BackgroundColor="TnTColor.Warning" TextColor="TnTColor.OnWarning" >
+                    Be careful with this action
+                </TnTTooltip>
+            </div>
+        </div>
+
+        <div class="demo-card">
+            <div class="demo-element" style="background-color: var(--tnt-color-info-container); color: var(--tnt-color-on-info-container);">
+                Info Tooltip
+                <TnTTooltip ShowDelay="@ShowDelay" HideDelay="@HideDelay" BackgroundColor="TnTColor.Info" TextColor="TnTColor.OnInfo" BorderColor="TnTColor.Info">
+                    Here is some information
+                </TnTTooltip>
+            </div>
+        </div>
+    </div>
+
+    <TnTDivider />
+
+    <h2>Delay Variations</h2>
+    <p>Try the different delay configurations to see how quickly the tooltip appears and disappears:</p>
+    <div class="tooltip-demo-wrapper">
+        <div class="demo-element">
+            Fast (100ms)
+            <TnTTooltip ShowDelay="100" HideDelay="50">
+                Shows very quickly
+            </TnTTooltip>
+        </div>
+
+        <div class="demo-element">
+            Normal (500ms)
+            <TnTTooltip ShowDelay="500" HideDelay="200">
+                Standard delay timing
+            </TnTTooltip>
+        </div>
+
+        <div class="demo-element">
+            Slow (1000ms)
+            <TnTTooltip ShowDelay="1000" HideDelay="300">
+                Takes longer to appear
+            </TnTTooltip>
+        </div>
+    </div>
+
+    <TnTDivider />
+
+    <h2>Rich Content Tooltips</h2>
+    <div class="tooltip-demo-wrapper">
+        <div class="demo-element">
+            Complex Content
+            <TnTTooltip ShowDelay="@ShowDelay" HideDelay="@HideDelay">
+                <div style="text-align: left;">
+                    <strong>Settings:</strong>
+                    <ul style="margin: 8px 0; padding-left: 20px;">
+                        <li>Save automatically</li>
+                        <li>Enable notifications</li>
+                        <li>Dark mode</li>
+                    </ul>
+                </div>
+            </TnTTooltip>
+        </div>
+
+        <div class="demo-element">
+            With Code
+            <TnTTooltip ShowDelay="@ShowDelay" HideDelay="@HideDelay">
+                <div>
+                    <strong>Keyboard Shortcut:</strong><br />
+                    <code style="background-color: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 3px;">Ctrl + S</code>
+                </div>
+            </TnTTooltip>
+        </div>
+    </div>
+
+    <TnTDivider />
+
+    <h2>Edge Cases - Viewport Constraints</h2>
+    <p>Move your mouse near the edges of the screen to see how the tooltip automatically adjusts to stay visible:</p>
+    <div style="display: flex; justify-content: space-between; margin: 20px 0;">
+        <div class="demo-element" style="margin-left: 0;">
+            Left Edge
+            <TnTTooltip ShowDelay="@ShowDelay" HideDelay="@HideDelay">
+                Adjusted for left edge
+            </TnTTooltip>
+        </div>
+
+        <div class="demo-element">
+            Center
+            <TnTTooltip ShowDelay="@ShowDelay" HideDelay="@HideDelay">
+                Normal positioning
+            </TnTTooltip>
+        </div>
+
+        <div class="demo-element" style="margin-right: 0;">
+            Right Edge
+            <TnTTooltip ShowDelay="@ShowDelay" HideDelay="@HideDelay">
+                Adjusted for right edge
+            </TnTTooltip>
+        </div>
+    </div>
+</div>
+
+@code {
+    private int ShowDelay { get; set; } = 500;
+    private int HideDelay { get; set; } = 200;
+}

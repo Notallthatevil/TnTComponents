@@ -27,6 +27,7 @@
 		"TabView",
 		"Theming",
 		"Toast",
+		"Tooltip",
 		"Typeahead",
 		"Virualization",
 		"Wizard"
