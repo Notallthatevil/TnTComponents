@@ -78,13 +78,13 @@ jobs:
         npm install
         npm test
 
-    - name: Bump version and push tag
-      if: github.ref == 'refs/heads/main'
-      uses: anothrNick/github-tag-action@v1 # Don't use @master or @v1 unless you're happy to test the latest version
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
-        WITH_V: false
-        CUSTOM_TAG: 'v${{ steps.version_step.outputs.MajorMinorPatch }}'
+    #- name: Bump version and push tag
+    #  if: github.ref == 'refs/heads/main'
+    #  uses: anothrNick/github-tag-action@v1 # Don't use @master or @v1 unless you're happy to test the latest version
+    #  env:
+    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
+    #    WITH_V: false
+    #    CUSTOM_TAG: 'v${{ steps.version_step.outputs.MajorMinorPatch }}'
 
     - name: Publish TnTComponents to NuGet
       env:
