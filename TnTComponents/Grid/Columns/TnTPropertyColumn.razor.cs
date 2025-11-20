@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
@@ -90,8 +90,12 @@ public partial class TnTPropertyColumn<[DynamicallyAccessedMembers(DynamicallyAc
                     return !string.IsNullOrEmpty(result) ? result : " ";
                 };
             }
-
-            _sortBuilder ??= Comparer is not null ? TnTGridSort<TGridItem>.ByAscending(Property, Comparer) : TnTGridSort<TGridItem>.ByAscending(Property);
+            if (InitialSortDirection == SortDirection.Ascending) {
+                _sortBuilder ??= Comparer is not null ? TnTGridSort<TGridItem>.ByAscending(Property, Comparer) : TnTGridSort<TGridItem>.ByAscending(Property);
+            }
+            else {
+                _sortBuilder ??= Comparer is not null ? TnTGridSort<TGridItem>.ByDescending(Property, Comparer) : TnTGridSort<TGridItem>.ByDescending(Property);
+            }
         }
 
         if (Title is null && Property.Body is MemberExpression memberExpression) {

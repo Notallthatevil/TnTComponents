@@ -521,6 +521,131 @@ public class TnTInternalGridContext_Tests : BunitContext {
         items[^1].Id.Should().Be(1); // Lowest ID last
     }
 
+    [Fact]
+    public void SortByColumn_SingleSortMode_FirstClickSetsInitialDirection() {
+        // Arrange
+        var grid = CreateDataGrid();
+        grid.Items = _testItems.AsQueryable();
+        grid.AllowMultiSort = false;
+        var context = new TnTInternalGridContext<TestGridItem>(grid);
+        var column = new TestTemplateColumn<TestGridItem> {
+            SortBy = TnTGridSort<TestGridItem>.ByAscending(x => x.Name),
+            InitialSortDirection = SortDirection.Ascending
+        };
+        context.RegisterColumn(column);
+
+        // Act
+        context.SortByColumn(column);
+
+        // Assert
+        context.ColumnIsSortedOn(column).Should().Be(SortDirection.Ascending);
+        context.SortBy.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void SortByColumn_SingleSortMode_SecondClickFlipsDirection() {
+        // Arrange
+        var grid = CreateDataGrid();
+        grid.Items = _testItems.AsQueryable();
+        grid.AllowMultiSort = false;
+        var context = new TnTInternalGridContext<TestGridItem>(grid);
+        var column = new TestTemplateColumn<TestGridItem> {
+            SortBy = TnTGridSort<TestGridItem>.ByAscending(x => x.Name),
+            InitialSortDirection = SortDirection.Ascending
+        };
+        context.RegisterColumn(column);
+
+        // Act
+        context.SortByColumn(column); // First click - Ascending
+        context.SortByColumn(column); // Second click - should flip to Descending
+
+        // Assert
+        context.ColumnIsSortedOn(column).Should().Be(SortDirection.Descending);
+        column.SortBy!.FlipDirections.Should().BeTrue();
+    }
+
+    [Fact]
+    public void SortByColumn_SingleSortMode_ThirdClickRemovesSorting() {
+        // Arrange
+        var grid = CreateDataGrid();
+        grid.Items = _testItems.AsQueryable();
+        grid.AllowMultiSort = false;
+        var context = new TnTInternalGridContext<TestGridItem>(grid);
+        var column = new TestTemplateColumn<TestGridItem> {
+            SortBy = TnTGridSort<TestGridItem>.ByAscending(x => x.Name),
+            InitialSortDirection = SortDirection.Ascending
+        };
+        context.RegisterColumn(column);
+
+        // Act
+        context.SortByColumn(column); // First click - Ascending
+        context.SortByColumn(column); // Second click - Descending
+        context.SortByColumn(column); // Third click - should remove
+
+        // Assert
+        context.ColumnIsSortedOn(column).Should().BeNull();
+        context.SortBy.Should().BeNull();
+        column.SortBy!.FlipDirections.Should().BeFalse();
+    }
+
+    [Fact]
+    public void SortByColumn_SingleSortMode_SwitchingColumns_RemovesPreviousSort() {
+        // Arrange
+        var grid = CreateDataGrid();
+        grid.Items = _testItems.AsQueryable();
+        grid.AllowMultiSort = false;
+        var context = new TnTInternalGridContext<TestGridItem>(grid);
+        var column1 = new TestTemplateColumn<TestGridItem> {
+            SortBy = TnTGridSort<TestGridItem>.ByAscending(x => x.Name),
+            InitialSortDirection = SortDirection.Ascending
+        };
+        var column2 = new TestTemplateColumn<TestGridItem> {
+            SortBy = TnTGridSort<TestGridItem>.ByAscending(x => x.Id),
+            InitialSortDirection = SortDirection.Ascending
+        };
+        context.RegisterColumn(column1);
+        context.RegisterColumn(column2);
+
+        // Act
+        context.SortByColumn(column1); // Sort by column1
+        context.SortByColumn(column2); // Sort by column2 - should remove column1 sort
+
+        // Assert
+        context.ColumnIsSortedOn(column1).Should().BeNull();
+        context.ColumnIsSortedOn(column2).Should().Be(SortDirection.Ascending);
+    }
+
+    [Fact]
+    public void SortByColumn_SingleSortMode_WithDescendingInitialDirection() {
+        // Arrange
+        var grid = CreateDataGrid();
+        grid.Items = _testItems.AsQueryable();
+        grid.AllowMultiSort = false;
+        var context = new TnTInternalGridContext<TestGridItem>(grid);
+        var column = new TestTemplateColumn<TestGridItem> {
+            SortBy = TnTGridSort<TestGridItem>.ByDescending(x => x.Id),
+            InitialSortDirection = SortDirection.Descending
+        };
+        context.RegisterColumn(column);
+
+        // Act
+        context.SortByColumn(column); // First click - Descending (initial)
+        // Assert - First click should set to initial direction
+        context.ColumnIsSortedOn(column).Should().Be(SortDirection.Descending);
+
+        // Act
+        context.SortByColumn(column); // Second click - should flip to Ascending
+
+        // Assert
+        context.ColumnIsSortedOn(column).Should().Be(SortDirection.Ascending);
+
+        // Act
+        context.SortByColumn(column); // Third click - should remove
+
+        // Assert
+        context.ColumnIsSortedOn(column).Should().BeNull();
+    }
+
     private TnTDataGrid<TestGridItem> CreateDataGrid() {
         var grid = new TnTDataGrid<TestGridItem>();
         grid.ItemKey = item => item.Id;
