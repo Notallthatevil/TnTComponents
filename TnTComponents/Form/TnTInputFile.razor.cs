@@ -324,6 +324,8 @@ public partial class TnTInputFile {
 
     private ElementReference _labelElement;
 
+    private bool _defaultHandler;
+
     /// <summary>
     ///     Initializes a new instance of the <see cref="TnTInputFile" /> class.
     /// </summary>
@@ -396,6 +398,7 @@ public partial class TnTInputFile {
         base.OnInitialized();
         OnChange = EventCallback.Factory.Create(this, async (InputFileChangeEventArgs args) => await OnUploadFilesHandlerAsync(args));
         if (!OnInputFileChange.HasDelegate) {
+            _defaultHandler = true;
             OnInputFileChange = EventCallback.Factory.Create<InputFileChangeEventArgs>(this, OnUploadFilesHandlerAsync);
         }
     }
@@ -537,6 +540,10 @@ public partial class TnTInputFile {
 
         if (OnCompleted.HasDelegate) {
             await OnCompleted.InvokeAsync([.. uploadedFiles]);
+        }
+
+        if(!_defaultHandler && OnInputFileChange.HasDelegate) {
+            await OnInputFileChange.InvokeAsync(e);
         }
     }
 
