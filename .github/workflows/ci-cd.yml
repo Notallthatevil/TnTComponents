@@ -76,7 +76,7 @@ jobs:
     - name: Run npm tests
       run: |
         npm install
-        npm test
+        npm test 
 
     #- name: Bump version and push tag
     #  if: github.ref == 'refs/heads/main'
