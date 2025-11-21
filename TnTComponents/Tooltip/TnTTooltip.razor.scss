@@ -31,6 +31,7 @@ $pointer-position: var(--pointer-position, bottom);
     white-space:pre-line;
     left: -9999px;
     top: -9999px;
+    max-width:75vh;
 
     @include elevation.tnt-elevation(2, false);
 
