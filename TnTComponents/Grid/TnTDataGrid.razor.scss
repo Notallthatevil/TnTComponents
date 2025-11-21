@@ -49,15 +49,6 @@
                     overflow: clip;
                     height: 32px;
                 }
-
-                @media #{measurements.$medium-and-up} {
-                    &:hover {
-                        td {
-                            white-space: revert;
-                            text-overflow: revert;
-                        }
-                    }
-                }
             }
         }
     }

@@ -30,7 +30,7 @@ public enum DataGridAppearance {
     Stripped = 1,
 
     /// <summary>
-    ///     Applies a compact row style.
+    ///     Applies a compact row style. Must be used in conjunction with <see cref="TnTColumnBase{TGridItem}.MaxWidth"/> to be effective.
     /// </summary>
     Compact = 2,
 

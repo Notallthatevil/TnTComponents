@@ -27,9 +27,8 @@ $pointer-position: var(--pointer-position, bottom);
     pointer-events: none;
     opacity: 0;
     z-index: 10000;
-    white-space: nowrap;
     transition: opacity 200ms ease-in-out;
-    // Ensure initial position is off-screen
+    white-space:pre-line;
     left: -9999px;
     top: -9999px;
 

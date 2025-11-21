@@ -5,11 +5,22 @@
 
 @if (RendererInfo.IsInteractive) {
 
+	<label>
+
+		<input type="checkbox" @bind="_a" /> Stripped
+	</label>
+	<label>
+		<input type="checkbox" @bind="_b" /> Compact
+	</label>
+	<label>
+		<input type="checkbox" @bind="_c" /> TableLayoutFixed
+	</label>
+
 	<div style="height: 60vh; overflow-y:scroll">
-		<TnTDataGrid Items="@Items" OnRowClicked="RowClicked" BackgroundColor="TnTColor.SecondaryContainer" TextColor="TnTColor.OnSecondaryContainer" TGridItem="DataGridItem" DataGridAppearance="DataGridAppearance.Stripped | DataGridAppearance.Compact" Resizable="true">
+		<TnTDataGrid Items="@Items" OnRowClicked="RowClicked" BackgroundColor="TnTColor.SecondaryContainer" TextColor="TnTColor.OnSecondaryContainer" TGridItem="DataGridItem" DataGridAppearance="@BuildAppearance()">
 			<TnTPropertyColumn Property="@(x => x.Column1)" Sortable="true" IsDefaultSortColumn="true" Width="600" />
-			<TnTPropertyColumn Property="@(x => x.Column2)" Sortable="true" TextAlign="TextAlign.Center" IsDefaultSortColumn="true" HeaderAlignment="TextAlign.Left" Width="75" ShowContentAsTooltip="true" />
-			<TnTPropertyColumn Property="@(x => x.Column3)" Format="MM/yyyy" HeaderAlignment="TextAlign.Right" MaxWidth="50"/>
+			<TnTPropertyColumn Property="@(x => x.Column2)" Sortable="true" TextAlign="TextAlign.Center" IsDefaultSortColumn="true" HeaderAlignment="TextAlign.Left"  MaxWidth="75" ShowContentAsTooltip="true" />
+			<TnTPropertyColumn Property="@(x => x.Column3)" Format="MM/yyyy" HeaderAlignment="TextAlign.Right" MaxWidth="50" />
 			<TnTTemplateColumn>
 				<TnTButton Appearance="ButtonAppearance.Text" TextColor="TnTColor.OnSurface" BackgroundColor="TnTColor.Surface" StopPropagation="true" OnClickCallback="@(() => ItemClicked(context))">
 					<MaterialIcon Icon="@MaterialIcon.Edit" />
@@ -18,6 +29,9 @@
 			</TnTTemplateColumn>
 		</TnTDataGrid>
 	</div>
+}
+else {
+	<TnTSkeleton style="height: 60vh" />
 }
 
 
@@ -34,10 +48,10 @@
 		lock (_locker) {
 			if (_items == null) {
 				var list = new List<DataGridItem>();
-				foreach (var i in Enumerable.Range(1, 1000)) {
+				foreach (var i in Enumerable.Range(1, 50)) {
 					list.Add(new DataGridItem() {
 						Column1 = Random.Shared.Next(1, 10),
-						Column2 = Guid.NewGuid().ToString(),
+						Column2 = string.Join('\n', Enumerable.Range(1, 20).Select(_ => Guid.NewGuid().ToString())),
 						Column3 = new DateTime(Random.Shared.Next(1, 10000), Random.Shared.Next(1, 13), Random.Shared.Next(1, 29))
 					});
 				}
@@ -64,6 +78,24 @@
 		public string Column2 { get; set; } = default!;
 
 		public DateTime Column3 { get; set; }
+	}
+
+	private bool _a;
+	private bool _b;
+	private bool _c;
+
+	private DataGridAppearance BuildAppearance() {
+		DataGridAppearance appearance = DataGridAppearance.Default;
+		if (_a) {
+			appearance |= DataGridAppearance.Stripped;
+		}
+		if (_b) {
+			appearance |= DataGridAppearance.Compact;
+		}
+		if (_c) {
+			appearance |= DataGridAppearance.TableLayoutFixed;
+		}
+		return appearance;
 	}
 
 
