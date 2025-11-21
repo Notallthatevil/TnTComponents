@@ -8,7 +8,7 @@
 	<div style="height: 60vh; overflow-y:scroll">
 		<TnTDataGrid Items="@Items" OnRowClicked="RowClicked" BackgroundColor="TnTColor.SecondaryContainer" TextColor="TnTColor.OnSecondaryContainer" TGridItem="DataGridItem" DataGridAppearance="DataGridAppearance.Stripped | DataGridAppearance.Compact" Resizable="true">
 			<TnTPropertyColumn Property="@(x => x.Column1)" Sortable="true" IsDefaultSortColumn="true" Width="600" />
-			<TnTPropertyColumn Property="@(x => x.Column2)" Sortable="true" TextAlign="TextAlign.Center" IsDefaultSortColumn="true" HeaderAlignment="TextAlign.Left" Width="75" />
+			<TnTPropertyColumn Property="@(x => x.Column2)" Sortable="true" TextAlign="TextAlign.Center" IsDefaultSortColumn="true" HeaderAlignment="TextAlign.Left" Width="75" ShowContentAsTooltip="true" />
 			<TnTPropertyColumn Property="@(x => x.Column3)" Format="MM/yyyy" HeaderAlignment="TextAlign.Right" MaxWidth="50"/>
 			<TnTTemplateColumn>
 				<TnTButton Appearance="ButtonAppearance.Text" TextColor="TnTColor.OnSurface" BackgroundColor="TnTColor.Surface" StopPropagation="true" OnClickCallback="@(() => ItemClicked(context))">

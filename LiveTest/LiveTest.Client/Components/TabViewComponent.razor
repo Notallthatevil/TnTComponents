@@ -1,10 +1,16 @@
-@using TnTComponents
+﻿@using TnTComponents
 <TnTTabView Appearance="@(Alternative ? TabViewAppearance.Secondary : TabViewAppearance.Primary)">
     @for (var i = 0; i < TabCount; ++i) {
         var j = i;
         var header = $"Header{j + 1}";
         <TnTTabChild Label="@header" Icon="@(new MaterialIcon{ Icon = MaterialIcon.Flight })" Disabled="@((j % 5) == 0 || Disabled)">
+            <HeaderTooltip>
+                This is the tooltip for @(header)
+            </HeaderTooltip>
+            <ChildContent>
+
             Content@(j + 1)
+            </ChildContent>
         </TnTTabChild>
 
     }
