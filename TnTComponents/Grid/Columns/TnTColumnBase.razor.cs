@@ -43,6 +43,12 @@ public abstract partial class TnTColumnBase<[DynamicallyAccessedMembers(Dynamica
     public RenderFragment<TnTColumnBase<TGridItem>>? HeaderCellItemTemplate { get; set; }
 
     /// <summary>
+    ///     The content to display as a tooltip for the header.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? HeaderToolip { get; set; }
+
+    /// <summary>
     ///     The initial sort direction for the column.
     /// </summary>
     [Parameter]
@@ -70,6 +76,12 @@ public abstract partial class TnTColumnBase<[DynamicallyAccessedMembers(Dynamica
     /// </summary>
     [Parameter]
     public int Order { get; set; }
+
+    /// <summary>
+    ///     Indicates whether the component's content is displayed as a tooltip when hovered over.
+    /// </summary>
+    [Parameter]
+    public bool ShowContentAsTooltip { get; set; } = false;
 
     /// <summary>
     ///     Indicates whether the column is sortable.

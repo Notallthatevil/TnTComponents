@@ -37,6 +37,14 @@ $on-tint-color: var(--tnt-input-on-tint-color);
         grid-template-columns: 16px 1fr 16px 24px 12px;
     }
 
+    &:has(.tnt-tooltip-icon) {
+        width: calc(100% - 50px);
+    }
+
+    &:has(.tnt-tooltip-icon) {
+        width: calc(100% - 50px);
+    }
+
     @include base.disabled-and-readonly;
 
     ::deep {
@@ -62,6 +70,12 @@ $on-tint-color: var(--tnt-input-on-tint-color);
 
         @include base.default-icon;
         @include base.supporting-text;
+
+        .tnt-tooltip-icon {
+            position: absolute;
+            right: -28px;
+            top: 0;
+        }
     }
 
     @include base.invalid;

@@ -34,6 +34,10 @@
         grid-template-columns: 16px 1fr 16px 24px 12px;
     }
 
+    &:has(.tnt-tooltip-icon) {
+        width: calc(100% - 50px);
+    }
+
     ::deep {
         input {
             @include base.default-input;
@@ -42,9 +46,10 @@
                 padding-left: 16px;
             }
 
-            &[type="time"]{
+            &[type="time"] {
                 padding-left: 28px;
             }
+
             &::-webkit-calendar-picker-indicator {
                 border-radius: 50%;
                 background-color: color-mix(in srgb, #ffffff 50%, base.$background-color);
@@ -53,6 +58,11 @@
             }
         }
 
+        .tnt-tooltip-icon {
+            position: absolute;
+            right: -28px;
+            top: 0;
+        }
 
         @include base.default-icon;
         @include base.supporting-text;

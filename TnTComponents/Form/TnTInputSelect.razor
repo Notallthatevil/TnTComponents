@@ -25,6 +25,10 @@
 		</span>
 	}
 
+	@if (Tooltip is not null) {
+		@TooltipIcon.Render()
+	}
+
 	@if (EndIcon is not null) {
 		@EndIcon.Render("tnt-end-icon")
 	}

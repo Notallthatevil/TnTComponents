@@ -6,7 +6,14 @@
 
 
 @code {
-    public override RenderFragment RenderCellContent(TGridItem gridItem) => (__builder) => {
-        <text>@_cellTextFunc?.Invoke(gridItem)</text>
-    };
+	public override RenderFragment RenderCellContent(TGridItem gridItem) => (__builder) => {
+		var content = _cellTextFunc?.Invoke(gridItem);
+		if (ShowContentAsTooltip) {
+			<TnTTooltip>
+				@content
+			</TnTTooltip>
+		}
+
+		<text>@content</text>
+	};
 }

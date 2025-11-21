@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using TnTComponents.Core;
 using TnTComponents.Interfaces;
@@ -57,10 +57,10 @@ public partial class TnTTabChild {
     public TnTColor? OnTintColor { get; set; }
 
     /// <summary>
-    ///     Gets or sets the template for the tab header.
+    ///     Gets or sets the tooltip for the tab header.
     /// </summary>
     [Parameter]
-    public RenderFragment? TabHeaderTemplate { get; set; }
+    public RenderFragment? HeaderTooltip { get; set; }
 
     /// <inheritdoc />
     [Parameter]

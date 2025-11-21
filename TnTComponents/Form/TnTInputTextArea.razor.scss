@@ -37,6 +37,10 @@
 
     @include base.disabled-and-readonly;
 
+    &:has(.tnt-tooltip-icon) {
+        width: calc(100% - 50px);
+    }
+
     ::deep {
         textarea {
             @include base.default-input;
@@ -45,6 +49,12 @@
 
         @include base.default-icon;
         @include base.supporting-text;
+
+        .tnt-tooltip-icon {
+            position: absolute;
+            right: -28px;
+            top: 0;
+        }
     }
 
     @include base.tnt-input-length;

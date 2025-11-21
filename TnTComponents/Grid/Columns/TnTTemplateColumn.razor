@@ -4,5 +4,12 @@
 @inherits TnTColumnBase<TGridItem>
 
 @code {
-    public override RenderFragment RenderCellContent(TGridItem gridItem) => ChildContent(gridItem);
+	public override RenderFragment RenderCellContent(TGridItem gridItem) => (__builder) => {
+		if (ShowContentAsTooltip) {
+			<TnTTooltip>
+				@ChildContent(gridItem)
+			</TnTTooltip>
+		}
+		@ChildContent(gridItem)
+	};
 }

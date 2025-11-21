@@ -16,7 +16,11 @@
             @onclick="OnClickCallback"
             @onclick:stopPropagation="StopPropagation"
             @ref="Element">
-
+        @if (Tooltip is not null) {
+            <TnTTooltip>
+                @Tooltip
+            </TnTTooltip>
+        }
         @ChildContent
         @if (EnableRipple) {
             <TnTRippleEffect />

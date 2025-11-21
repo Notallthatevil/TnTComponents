@@ -29,21 +29,7 @@ public enum IconAppearance {
     /// </summary>
     Sharp
 }
-/// <summary>
-///     Specifies the type of icon to be used.
-/// </summary>
-public enum IconType {
 
-    /// <summary>
-    ///     Represents Material Icons.
-    /// </summary>
-    MaterialIcons,
-
-    /// <summary>
-    ///     Represents Font Awesome icons.
-    /// </summary>
-    FontAwesome
-}
 /// <summary>
 ///     Defines the size options available for TnTIcon components.
 /// </summary>
@@ -68,6 +54,22 @@ public enum IconSize {
     ///     Extra large icon size, suitable for featured or hero UI elements.
     /// </summary>
     ExtraLarge
+}
+
+/// <summary>
+///     Specifies the type of icon to be used.
+/// </summary>
+public enum IconType {
+
+    /// <summary>
+    ///     Represents Material Icons.
+    /// </summary>
+    MaterialIcons,
+
+    /// <summary>
+    ///     Represents Font Awesome icons.
+    /// </summary>
+    FontAwesome
 }
 
 /// <summary>
@@ -107,6 +109,12 @@ public abstract class TnTIcon : TnTComponentBase {
     public IconSize Size { get; set; } = IconSize.Medium;
 
     /// <summary>
+    ///     The content to display as a tooltip for the component.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Tooltip { get; set; }
+
+    /// <summary>
     ///     Additional CSS class to be applied to the icon element.
     /// </summary>
     internal string? AdditionalClass { get; set; }
@@ -139,6 +147,7 @@ public abstract class TnTIcon : TnTComponentBase {
         }
         return new(BuildRenderTree);
     }
+
     /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenElement(0, "span");
@@ -146,10 +155,16 @@ public abstract class TnTIcon : TnTComponentBase {
         builder.AddAttribute(20, "class", ElementClass);
         builder.AddAttribute(30, "style", ElementStyle);
         builder.AddAttribute(40, "id", ElementId);
-        builder.AddAttribute(50, "title", ElementTitle ?? Icon);
+        builder.AddAttribute(50, "title", Tooltip is null ? ElementTitle ?? Icon : null);
         builder.AddElementReferenceCapture(60, e => Element = e);
 
-        builder.AddContent(70, Icon);
+        if (Tooltip is not null) {
+            builder.OpenComponent<TnTTooltip>(70);
+            builder.AddComponentParameter(80, nameof(TnTTooltip.ChildContent), Tooltip);
+            builder.CloseComponent();
+        }
+
+        builder.AddContent(90, Icon);
 
         builder.CloseElement();
     }

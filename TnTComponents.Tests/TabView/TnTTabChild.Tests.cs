@@ -93,7 +93,7 @@ public class TnTTabChild_Tests : BunitContext {
         tabChild.Icon.Should().BeNull();
         tabChild.OnTintColor.Should().BeNull();
         tabChild.TintColor.Should().BeNull();
-        tabChild.TabHeaderTemplate.Should().BeNull();
+        tabChild.HeaderTooltip.Should().BeNull();
     }
 
     [Fact]

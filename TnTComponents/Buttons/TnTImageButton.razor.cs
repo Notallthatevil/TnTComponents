@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using TnTComponents.Core;
 
@@ -113,6 +113,12 @@ public partial class TnTImageButton {
     /// <inheritdoc />
     [Parameter]
     public TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
+
+    /// <summary>
+    ///     The content to display as a tooltip for the component.
+    /// </summary>
+    [Parameter]
+    public RenderFragment Tooltip { get; set; } = default!;
 
     /// <summary>
     ///     The type of the button.

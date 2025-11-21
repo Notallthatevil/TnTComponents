@@ -98,6 +98,12 @@
         .tnt-validation-message {
             color: base.$error-color;
         }
+
+        .tnt-tooltip-icon {
+            position: absolute;
+            right: -28px;
+            top: 0;
+        }
     }
 
     .tnt-checkbox-overlay {

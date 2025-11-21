@@ -36,11 +36,7 @@ namespace TnTComponents;
 ///     Provides a file input component for uploading files, supporting multiple modes and progress tracking.
 /// </summary>
 public partial class TnTInputFile {
-    /// <summary>
-    /// Text that provides additional information about the input, such as usage instructions or validation hints.
-    /// </summary>
-    [Parameter]
-    public string? SupportingText { get; set; }
+
     /// <summary>
     ///     Gets or sets the appearance of the form input.
     /// </summary>
@@ -266,6 +262,12 @@ public partial class TnTInputFile {
     public TnTIcon? StartIcon { get; set; }
 
     /// <summary>
+    ///     Text that provides additional information about the input, such as usage instructions or validation hints.
+    /// </summary>
+    [Parameter]
+    public string? SupportingText { get; set; }
+
+    /// <summary>
     ///     Gets or sets the text color for the input.
     /// </summary>
     [Parameter]
@@ -276,6 +278,18 @@ public partial class TnTInputFile {
     /// </summary>
     [Parameter]
     public TnTColor TintColor { get; set; } = TnTColor.Primary;
+
+    /// <summary>
+    ///     The content to display as a tooltip for the component.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Tooltip { get; set; }
+
+    /// <summary>
+    ///     The icon displayed alongside the tooltip text.
+    /// </summary>
+    [Parameter]
+    public TnTIcon TooltipIcon { get; set; } = MaterialIcon.Help;
 
     /// <summary>
     ///     The resource string displayed before loading starts.
@@ -310,21 +324,20 @@ public partial class TnTInputFile {
     protected IJSRuntime JSRuntime { get; private set; } = default!;
 
     /// <summary>
+    ///     Gets or sets the progress details for the current file.
+    /// </summary>
+    private ProgressFileDetails _progressFileDetails { get; set; }
+
+    /// <summary>
     ///     Gets the cascading form context, if any.
     /// </summary>
     [CascadingParameter]
     private ITnTForm? _tntForm { get; set; }
 
-    /// <summary>
-    ///     Gets or sets the progress details for the current file.
-    /// </summary>
-    private ProgressFileDetails _progressFileDetails { get; set; }
-
     private IJSObjectReference? _containerInstance;
 
-    private ElementReference _labelElement;
-
     private bool _defaultHandler;
+    private ElementReference _labelElement;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="TnTInputFile" /> class.
@@ -410,6 +423,10 @@ public partial class TnTInputFile {
         dict.TryAdd("disabled", FieldDisabled);
         dict.TryAdd("readonly", FieldReadonly);
         AdditionalAttributes = dict;
+
+        TooltipIcon.Tooltip = Tooltip;
+        TooltipIcon.AdditionalClass = "tnt-tooltip-icon";
+        TooltipIcon.Size = IconSize.Small;
     }
 
     /// <summary>
@@ -542,7 +559,7 @@ public partial class TnTInputFile {
             await OnCompleted.InvokeAsync([.. uploadedFiles]);
         }
 
-        if(!_defaultHandler && OnInputFileChange.HasDelegate) {
+        if (!_defaultHandler && OnInputFileChange.HasDelegate) {
             await OnInputFileChange.InvokeAsync(e);
         }
     }

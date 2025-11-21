@@ -59,9 +59,19 @@
 
     @include base.disabled-and-readonly;
 
+    &:has(.tnt-tooltip-icon) {
+        width: calc(100% - 50px);
+    }
+
     ::deep {
         @include base.default-icon;
         @include base.supporting-text;
+
+        .tnt-tooltip-icon {
+            position: absolute;
+            right: -28px;
+            top: 0;
+        }
     }
 
     @include base.invalid;
