@@ -327,6 +327,17 @@ public partial class TnTDataGrid<[DynamicallyAccessedMembers(DynamicallyAccessed
         }
     }
 
+    /// <inheritdoc />
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender) {
+            if(Pagination is not null && ItemsProvider is not null) {
+                await RefreshDataGridAsync();
+            }
+        }
+    }
+
     /// <summary>
     ///     Callback invoked when the pagination page is updated.
     /// </summary>
