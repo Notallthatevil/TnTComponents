@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Components.Rendering
+@using Microsoft.AspNetCore.Components.Rendering
 @using TnTComponents
 @using TnTComponents.Core
 @using TnTComponents.Interfaces
@@ -16,7 +16,7 @@
      name="@ElementName"
      @ref="@Element">
 
-    <span class="tnt-typeahead-box">
+    <span class="tnt-typeahead-box" @onkeydown:preventDefault="_shouldPreventDefault">
         <TnTInputText @bind-Value="Value"
                       Appearance="@Appearance"
                       Label="@Label"
@@ -26,7 +26,7 @@
                       Disabled="@Disabled"
                       BackgroundColor="BackgroundColor"
                       StartIcon="@MaterialIcon.Search"
-                      @onkeydown="SelectOrShiftFocusAsync"
+                      @onkeydown="OnKeyDownInternalAsync"
                       @ref="_inputBox" />
         <TnTProgressIndicator Show="@_searching" ProgressColor="ProgressColor" Size="Size.Small" />
     </span>
