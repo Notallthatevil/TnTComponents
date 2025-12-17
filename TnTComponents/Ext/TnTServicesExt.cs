@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Hosting;
 using System.Diagnostics.CodeAnalysis;
 using TnTComponents;
@@ -21,9 +21,9 @@ public static class TnTServicesExt {
     /// <param name="services">Service collection</param>
     /// <returns>The IServiceCollection instance</returns>
     public static IServiceCollection AddTnTServices(this IServiceCollection services) {
-#if DEBUG
-        services.AddSassCompiler();
-#endif
+//#if DEBUG
+//        services.AddSassCompiler();
+//#endif
         return services.AddScoped<ITnTDialogService, TnTDialogService>()
              .AddScoped<ITnTToastService, TnTToastService>()
              .AddScoped<ISessionStorageService, SessionStorageService>()

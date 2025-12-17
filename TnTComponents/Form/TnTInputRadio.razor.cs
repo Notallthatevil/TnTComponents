@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
@@ -55,6 +55,12 @@ public partial class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccess
     [Parameter]
     public string? Label { get; set; }
 
+    /// <summary>
+    ///     The callback that is invoked when the component loses focus.
+    /// </summary>
+    [Parameter]
+    public EventCallback<FocusEventArgs> OnBlurCallback { get; set; }
+
     /// <inheritdoc />
     [Parameter]
     public TnTColor? OnTintColor { get; set; }
@@ -92,6 +98,16 @@ public partial class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccess
     private bool _readOnly => _group.FieldReadonly || ReadOnly;
     private bool _trueValueToggle;
 
+    /// <summary>
+    ///     Handles the blur event asynchronously by notifying the edit context of a field change and invoking the associated blur callback.
+    /// </summary>
+    /// <param name="args">The event data associated with the blur event.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    protected async Task OnBlurAsync(FocusEventArgs args) {
+        _group?.NotifyStateChanged();
+        await OnBlurCallback.InvokeAsync(args);
+    }
+
     /// <inheritdoc />
     protected override void OnParametersSet() {
         base.OnParametersSet();
@@ -100,11 +116,10 @@ public partial class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccess
         }
     }
 
-    private string? GetValueAsString() => BindConverter.FormatValue(Value?.ToString());
-
-
     private string GetToggledTrueValue() {
         _trueValueToggle = !_trueValueToggle;
         return _trueValueToggle ? "a" : "b";
     }
+
+    private string? GetValueAsString() => BindConverter.FormatValue(Value?.ToString());
 }

@@ -45,4 +45,7 @@ app.MapPost("/submitStaticForm", async (IFormFileCollection myFiles) => {
     }
 });
 
-app.Run();
+
+await app.RunAsync();
+
+public partial class Program { }

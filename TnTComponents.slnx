@@ -2,6 +2,7 @@
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
     <File Path=".github/copilot-instructions.md" />
+    <File Path=".vscode/mcp.json" />
     <File Path="package.json" />
     <File Path="README.md" />
     <File Path="test-aot-compatibility.ps1" />

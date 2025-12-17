@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
@@ -174,12 +174,6 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public EventCallback<TInputType?> BindAfter { get; set; }
 
     /// <summary>
-    /// The icon displayed alongside the tooltip text.
-    /// </summary>
-    [Parameter]
-    public TnTIcon TooltipIcon { get; set; } = MaterialIcon.Help;
-
-    /// <summary>
     ///     Gets or sets a value indicating whether to bind on input.
     /// </summary>
     [Parameter]
@@ -273,6 +267,12 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public string? Label { get; set; }
 
     /// <summary>
+    ///     The callback that is invoked when the component loses focus.
+    /// </summary>
+    [Parameter]
+    public EventCallback<FocusEventArgs> OnBlurCallback { get; set; }
+
+    /// <summary>
     ///     Gets or sets the placeholder text of the input.
     /// </summary>
     [Parameter]
@@ -311,6 +311,12 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     /// </summary>
     [Parameter]
     public RenderFragment? Tooltip { get; set; }
+
+    /// <summary>
+    ///     The icon displayed alongside the tooltip text.
+    /// </summary>
+    [Parameter]
+    public TnTIcon TooltipIcon { get; set; } = MaterialIcon.Help;
 
     /// <inheritdoc />
     public abstract InputType Type { get; }
@@ -402,6 +408,16 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     /// </summary>
     /// <returns><c>true</c> if the input is required; otherwise, <c>false</c>.</returns>
     protected bool IsRequired() => AdditionalAttributes?.TryGetValue("required", out var _) == true || GetCustomAttributeIfExists<RequiredAttribute>() is not null;
+
+    /// <summary>
+    ///     Handles the blur event asynchronously by notifying the edit context of a field change and invoking the associated blur callback.
+    /// </summary>
+    /// <param name="args">The event data associated with the blur event.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    protected async Task OnBlurAsync(FocusEventArgs args) {
+        EditContext?.NotifyFieldChanged(FieldIdentifier);
+        await OnBlurCallback.InvokeAsync(args);
+    }
 
     /// <summary>
     ///     Updates the current value of the input asynchronously when a change event occurs.

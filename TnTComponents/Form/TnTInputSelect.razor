@@ -1,4 +1,4 @@
-﻿@namespace TnTComponents
+@namespace TnTComponents
 @using Microsoft.AspNetCore.Components.Rendering
 @typeparam TInputType
 @inherits TnTInputBase<TInputType>
@@ -51,7 +51,7 @@
 				required="@IsRequired()"
 				value="@GetValue(multiple)"
 				@onchange="@changeEventCallback"
-				@onblur="@(EditContext is not null ? (FocusEventArgs args) => EditContext.NotifyFieldChanged(FieldIdentifier) : (FocusEventArgs _) => { })"
+				@onblur="OnBlurAsync"
 				@ref="Element">
 			@if (Placeholder is not null) {
 				<option value="@(PlaceholderValue ?? string.Empty)" disabled="@(!AllowPlaceholderSelection)" selected="@ShouldHavePlaceholderSelected">@Placeholder</option>

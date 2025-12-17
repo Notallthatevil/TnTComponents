@@ -1,4 +1,4 @@
-﻿@namespace TnTComponents
+@namespace TnTComponents
 @using Microsoft.AspNetCore.Components.Rendering
 @inherits TnTInputBase<bool>
 
@@ -54,7 +54,7 @@
                value="@bool.TrueString"
                checked="@BindConverter.FormatValue(CurrentValue)"
                @onchange="@OnChangeAsync"
-               @onblur="@(EditContext is not null ? (FocusEventArgs args) => EditContext.NotifyFieldChanged(FieldIdentifier) : (FocusEventArgs _) => { })"
+               @onblur="OnBlurAsync"
                @ref="Element" />
     }
 }

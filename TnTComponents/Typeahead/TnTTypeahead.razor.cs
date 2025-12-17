@@ -152,7 +152,7 @@ public partial class TnTTypeahead<TItem> {
     private bool _itemSelected;
     private int _lastDebounceMilliseconds = -1;
     private bool _searching;
-    private bool _shouldPreventDefault;
+    private bool _focused;
 
     /// <inheritdoc />
     public void Dispose() {
@@ -162,6 +162,15 @@ public partial class TnTTypeahead<TItem> {
         GC.SuppressFinalize(this);
     }
 
+    private async Task OnFocusAsync() {
+        _focused = true;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task OnBlurAsync() {
+        _focused = false;
+        await InvokeAsync(StateHasChanged);
+    }
     /// <inheritdoc />
     protected override void OnParametersSet() {
         base.OnParametersSet();
@@ -219,15 +228,6 @@ public partial class TnTTypeahead<TItem> {
             }
             await InvokeAsync(StateHasChanged);
         });
-    }
-
-    /// <summary>
-    ///     Handles keyboard events in the typeahead box wrapper.
-    /// </summary>
-    /// <param name="args">The keyboard event arguments.</param>
-    private async Task OnKeyDownInternalAsync(KeyboardEventArgs args) {
-        _shouldPreventDefault = args.Key == "Enter" && _focusedItem is not null && !_focusedItem.Equals(default);
-        await SelectOrShiftFocusAsync(args);
     }
 
     /// <summary>
