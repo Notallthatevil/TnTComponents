@@ -37,7 +37,7 @@ public class NTWebAppFactory : WebApplicationFactory<Program> {
             var _ = base.Services;
         } catch (InvalidCastException) {
             // Expected
-        } catch (Exception) {
+        } catch  {
             // Ignore other exceptions if host is created
         }
 

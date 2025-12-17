@@ -33,7 +33,7 @@
 		<TnTProgressIndicator Show="@_searching" ProgressColor="ProgressColor" Size="Size.Small" />
 	</span>
 	@if (_focused) {
-		<button type="submit" disabled />
+		<button type="submit" disabled style="display:none" aria-hidden="true" />
 	}
 	@if (_items.Any() || (!_items.Any() && !string.IsNullOrWhiteSpace(Value) && !_searching && !_itemSelected)) {
 		<div class="tnt-typeahead-content">
