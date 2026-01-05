@@ -16,7 +16,7 @@ jobs:
           ref: ${{ github.ref }}
           fetch-depth: 0
           persist-credentials: true
-          ssh-key: ${{ secrets.INTERSECT_DEPLOY_KEY }}
+          ssh-key: ${{ secrets.NT_COMPONENTS_DEPLOY_KEY }}
       
       - name: Check if commit is tagged
         id: check-tags
