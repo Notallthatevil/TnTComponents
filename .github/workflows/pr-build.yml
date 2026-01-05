@@ -39,7 +39,7 @@ jobs:
 
       - name: Run all tests with coverage
         run: |
-          dotnet test --no-restore --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
+          dotnet test --no-restore --configuration Release 
 
       - name: Post coverage summary to PR
         if: github.event_name == 'pull_request'

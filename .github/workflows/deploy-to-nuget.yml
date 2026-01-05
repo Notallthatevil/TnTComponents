@@ -68,6 +68,9 @@ jobs:
       - name: Build
         run: dotnet build --no-restore --configuration ${{ inputs.configuration }} 
 
+      - name: Build
+        run: dotnet test --no-restore --configuration ${{ inputs.configuration }} 
+
       - name: Publish 
         run: |
             dotnet pack NTComponents/NTComponents.csproj --configuration Release --output ./nupkg /p:PackageVersion=${{ needs.retrieve-tag.outputs.tag_name }}
