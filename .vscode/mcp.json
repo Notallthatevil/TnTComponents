@@ -1,9 +1,13 @@
 {
     "servers": {
         "playwright": {
-            "command": "npx",
+            "command": "docker",
             "args": [
-                "@playwright/mcp@latest"
+                "run",
+                "-i",
+                "--rm",
+                "--init",
+                "mcr.microsoft.com/playwright/mcp"
             ]
         }
     }
