@@ -37,8 +37,8 @@ jobs:
       - name: Install dotnet-coverage
         run: dotnet tool install --global dotnet-coverage
 
-      - name: Run all 
-        #tests with coverage
+      - name: Run all tests
+        #with coverage
         run: |
           dotnet test --no-restore --configuration Release 
           #--collect:"XPlat Code Coverage" --results-directory ./TestResults
