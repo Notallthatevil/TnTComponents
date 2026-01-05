@@ -1,0 +1,210 @@
+import * as EasyMDEImport from "https://unpkg.com/easymde/dist/easymde.min.js";
+import * as HighlightImport from "https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js";
+
+const highlightJsCss = 'https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css';
+const easyMDECss = 'https://unpkg.com/easymde/dist/easymde.min.css';
+
+const markdownEditorsMap = new Map();
+const elementDotNetRefMap = new Map();
+export function onLoad(element, dotNetElementRef) {
+    const highlightLink = document.querySelector(`link[rel="stylesheet"][href*="${highlightJsCss}"]`);
+    if (!highlightLink) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = highlightJsCss;
+        document.head.appendChild(link);
+    }
+
+    const easyMDELink = document.querySelector(`link[rel="stylesheet"][href*="${easyMDECss}"]`);
+    if (!easyMDELink) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = easyMDECss;
+        document.head.appendChild(link);
+    }
+
+    if (!customElements.get('tnt-markdown-editor')) {
+        customElements.define('tnt-markdown-editor', class extends HTMLElement {
+            static observedAttributes = [NTComponents.customAttribute];
+
+            // We use attributeChangedCallback instead of connectedCallback
+            // because a page-script element might get reused between enhanced
+            // navigations.
+            attributeChangedCallback(name, oldValue, newValue) {
+                if (name !== NTComponents.customAttribute) {
+                    return;
+                }
+
+                if (elementDotNetRefMap.get(oldValue)) {
+                    elementDotNetRefMap.set(newValue, elementDotNetRefMap.get(oldValue));
+                    elementDotNetRefMap.delete(newValue);
+                }
+
+                let easyMDE = null;
+
+                if (markdownEditorsMap.get(oldValue)) {
+                    easyMDE = markdownEditorsMap.get(oldValue).mde;
+                    markdownEditorsMap.delete(oldValue);
+                }
+
+                if (easyMDE === null) {
+                    let child = this.querySelector('textarea');
+                    if (!child) {
+                        child = document.createElement('textarea');
+                        this.appendChild(child);
+                    }
+                    let initalValueElement = this.querySelector('.initial-value');
+                    let initialValue = undefined;
+                    if (initalValueElement) {
+                        initialValue = initalValueElement.innerHTML;
+                        initalValueElement.remove();
+                    }
+
+                    let self = this;
+                    easyMDE = new EasyMDE({
+                        element: child,
+                        initialValue: initialValue,
+                        sideBySideFullscreen: false,
+                        previewRender: (text) => {
+                            let attr = self.getAttribute(NTComponents.customAttribute);
+                            if (attr) {
+                                let e = markdownEditorsMap.get(attr).mde;
+                                if (e && e.markdown) {
+                                    text = e.markdown(text);
+                                }
+
+                                text = text.replace(/<tnt-left>(.+)?<\/tnt-left>/g, '<div style="text-align:left">$1</div>');
+                                text = text.replace(/<tnt-center>(.+)?<\/tnt-center>/g, '<div style="text-align:center">$1</div>');
+                                text = text.replace(/<tnt-right>(.+)?<\/tnt-right>/g, '<div style="text-align:right">$1</div>');
+                                text = text.replace(/<table>/, '<table style="width:100%">');
+                            }
+                            return text;
+                        },
+                        toolbar: [
+                            "bold",
+                            "italic",
+                            "strikethrough",
+                            "|",
+                            {
+                                name: "left-text",
+                                action: (editor) => {
+                                    let cm = editor.codemirror;
+                                    var output = '';
+                                    var selectedText = cm.getSelection();
+                                    var text = selectedText || 'align-left';
+
+                                    output = '<tnt-left>' + text + '</tnt-left>';
+                                    cm.replaceSelection(output);
+                                },
+                                className: "fa fa-align-left",
+                                text: "",
+                                title: "Align Left"
+                            },
+                            {
+                                name: "center-text",
+                                action: (editor) => {
+                                    let cm = editor.codemirror;
+                                    var output = '';
+                                    var selectedText = cm.getSelection();
+                                    var text = selectedText || 'align-center';
+
+                                    output = '<tnt-center>' + text + '</tnt-center>';
+                                    cm.replaceSelection(output);
+                                },
+                                className: "fa fa-align-center",
+                                text: "",
+                                title: "Align Center"
+                            },
+                            {
+                                name: "right-text",
+                                action: (editor) => {
+                                    let cm = editor.codemirror;
+                                    var output = '';
+                                    var selectedText = cm.getSelection();
+                                    var text = selectedText || 'align-right';
+
+                                    output = '<tnt-right>' + text + '</tnt-right>';
+                                    cm.replaceSelection(output);
+                                },
+                                className: "fa fa-align-right",
+                                text: "",
+                                title: "Align Right"
+                            },
+                            "|",
+                            "heading",
+                            "heading-smaller",
+                            "heading-bigger",
+                            "heading-1",
+                            "heading-2",
+                            "heading-3",
+                            "|",
+                            "code",
+                            "|",
+                            "quote",
+                            "|",
+                            "unordered-list",
+                            "ordered-list",
+                            "|",
+                            "clean-block",
+                            "|",
+                            "link",
+                            "image",
+                            "upload-image",
+                            "|",
+                            "table",
+                            "|",
+                            "horizontal-rule",
+                            "|",
+                            "preview",
+                            "side-by-side",
+                            "|",
+                            "guide",
+                            "|",
+                            "undo",
+                            "redo"
+                        ]
+                    });
+                    if (easyMDE.codemirror && easyMDE.codemirror.on) {
+                        easyMDE.codemirror.on("change", function () {
+                            var text = easyMDE.value();
+                            const dotNetRef = elementDotNetRefMap.get(newValue);
+                            if (dotNetRef) {
+                                dotNetRef.invokeMethodAsync("UpdateValue", text, easyMDE.options.previewRender(text));
+                            }
+                        });
+                    }
+                }
+
+                markdownEditorsMap.set(newValue, {
+                    element: this,
+                    mde: easyMDE
+                });
+            }
+
+            disconnectedCallback() {
+                let attribute = this.getAttribute(NTComponents.customAttribute);
+                if (markdownEditorsMap.get(attribute)) {
+                    markdownEditorsMap.delete(attribute);
+                }
+            }
+        });
+    }
+}
+
+export function onUpdate(element, dotNetElementRef) {
+    if (element && dotNetElementRef) {
+        const key = element.getAttribute(NTComponents.customAttribute);
+
+        if (elementDotNetRefMap.get(key)) {
+            elementDotNetRefMap.delete(key);
+        }
+        elementDotNetRefMap.set(key, dotNetElementRef);
+    }
+}
+
+export function onDispose(element, dotNetElementRef) {
+    if (element) {
+        const key = element.getAttribute(NTComponents.customAttribute);
+        elementDotNetRefMap.delete(key);
+    }
+}

@@ -1,6 +1,6 @@
-﻿@page "/Wizard"
+@page "/Wizard"
 @using System.ComponentModel.DataAnnotations
-@using TnTComponents
+@using NTComponents
 @rendermode InteractiveAuto
 <br />
 <br />
@@ -11,8 +11,8 @@
     }
 </TnTInputSelect>
 
-<TnTComponents.TnTWizard Title="Wizard" LayoutDirection="@_layoutDirection">
-    <TnTComponents.TnTWizardFormStep Model="@_model1" Title="Step 1" SubTitle="My subtitle" Icon="@MaterialIcon.Search">
+<NTComponents.TnTWizard Title="Wizard" LayoutDirection="@_layoutDirection">
+    <NTComponents.TnTWizardFormStep Model="@_model1" Title="Step 1" SubTitle="My subtitle" Icon="@MaterialIcon.Search">
         <TnTInputText @bind-Value="_model1.Name" Label="Name" Placeholder="Enter your name" />
         <TnTInputText @bind-Value="_model1.Name" Label="Name" Placeholder="Enter your name" />
         <TnTInputText @bind-Value="_model1.Name" Label="Name" Placeholder="Enter your name" />
@@ -86,15 +86,15 @@
         <TnTInputText @bind-Value="_model1.Name" Label="Name" Placeholder="Enter your name" />
         <TnTInputText @bind-Value="_model1.Name" Label="Name" Placeholder="Enter your name" />
         <TnTInputText @bind-Value="_model1.Name" Label="Name" Placeholder="Enter your name" />
-    </TnTComponents.TnTWizardFormStep>
-    <TnTComponents.TnTWizardFormStep Model="@_model2" Title="Step 2">
+    </NTComponents.TnTWizardFormStep>
+    <NTComponents.TnTWizardFormStep Model="@_model2" Title="Step 2">
         <TnTInputNumeric @bind-Value="_model2.Age" Label="Age" Placeholder="Enter your age" />
-    </TnTComponents.TnTWizardFormStep>
+    </NTComponents.TnTWizardFormStep>
 
-    <TnTComponents.TnTWizardStep Title="Step 3">
+    <NTComponents.TnTWizardStep Title="Step 3">
         I am just content
-    </TnTComponents.TnTWizardStep>
-</TnTComponents.TnTWizard>
+    </NTComponents.TnTWizardStep>
+</NTComponents.TnTWizard>
 <br />
 <br />
 <br />

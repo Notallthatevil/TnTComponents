@@ -1,8 +1,8 @@
-﻿@page "/paginated"
-@using TnTComponents
-@using TnTComponents.Core
-@using TnTComponents.Extensions
-@using TnTComponents.Grid
+@page "/paginated"
+@using NTComponents
+@using NTComponents.Core
+@using NTComponents.Extensions
+@using NTComponents.Grid
 @rendermode InteractiveServer
 
 <div>
@@ -25,7 +25,7 @@
         </TnTTemplateColumn>
     </TnTDataGrid>
 </div>
-<TnTComponents.TnTPaginationButtons PaginationState="@_paginationState" />
+<NTComponents.TnTPaginationButtons PaginationState="@_paginationState" />
 
 
 <h3>
@@ -44,7 +44,7 @@
         </TnTTemplateColumn>
     </TnTDataGrid>
 </div>
-<TnTComponents.TnTPaginationButtons PaginationState="@_paginationState" />
+<NTComponents.TnTPaginationButtons PaginationState="@_paginationState" />
 
 
 @code {
@@ -86,7 +86,7 @@
                 return new();
             }
 
-            return new TnTComponents.Virtualization.TnTItemsProviderResult<DataGridItem> {
+            return new NTComponents.Virtualization.TnTItemsProviderResult<DataGridItem> {
                 Items = items.ToList(),
                 TotalItemCount = Items.Count()
             };

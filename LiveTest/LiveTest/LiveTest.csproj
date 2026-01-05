@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFrameworks>net9.0;net10.0</TargetFrameworks>
@@ -7,8 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\TnTComponents.AspNetCore\TnTComponents.AspNetCore.csproj" />
-        <ProjectReference Include="..\..\TnTComponents.Extensions\TnTComponents.Extensions.csproj" />
+        <ProjectReference Include="..\..\NTComponents.AspNetCore\NTComponents.AspNetCore.csproj" />
+        <ProjectReference Include="..\..\NTComponents.Extensions\NTComponents.Extensions.csproj" />
         <ProjectReference Include="..\LiveTest.Client\LiveTest.Client.csproj" />
     </ItemGroup>
 
