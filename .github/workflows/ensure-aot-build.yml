@@ -1,4 +1,4 @@
-﻿name: Publish AOTCompatibility testApp
+name: Publish AOTCompatibility testApp
 
 on:
   push:
@@ -33,12 +33,7 @@ jobs:
     - name: Setup dotnet
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
-
-    - name: Setup dotnet
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
+        dotnet-version: 8.0.x
 
     - name: Setup dotnet
       uses: actions/setup-dotnet@v4
