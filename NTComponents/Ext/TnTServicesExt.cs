@@ -1,8 +1,5 @@
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.Hosting;
 using System.Diagnostics.CodeAnalysis;
 using NTComponents;
-using NTComponents.Core;
 using NTComponents.Dialog;
 using NTComponents.Storage;
 using NTComponents.Toast;
