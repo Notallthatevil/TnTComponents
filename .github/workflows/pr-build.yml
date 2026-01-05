@@ -15,9 +15,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.wfcc-actions-token }}
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
