@@ -71,6 +71,13 @@ jobs:
       - name: Test
         run: dotnet test --no-restore --configuration ${{ inputs.configuration }} 
 
+      - uses: actions/setup-node@v5
+        with:
+          node-version: lts/*
+
+      - name: run node tests
+        run: npm test
+
       - name: Publish 
         run: |
             dotnet pack NTComponents/NTComponents.csproj --configuration Release --output ./nupkg /p:PackageVersion=${{ needs.retrieve-tag.outputs.tag_name }}
