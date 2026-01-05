@@ -1,0 +1,60 @@
+@namespace NTComponents
+@using Microsoft.AspNetCore.Components.Rendering
+@inherits TnTInputBase<bool>
+
+<label class="@ElementClass" title="@ElementTitle" lang="@ElementLang" id="@ElementId" style="@ElementStyle">
+    <span class="tnt-switch-overlay">
+    </span>
+    @if (StartIcon is not null) {
+        @StartIcon.Render("tnt-start-icon")
+    }
+
+    @RenderInputElement
+
+    @if (!string.IsNullOrWhiteSpace(SupportingText)) {
+        <span class="tnt-supporting-text">
+            @SupportingText
+        </span>
+    }
+
+    @if (EditContext is not null && !DisableValidationMessage && ValueExpression is not null) {
+        <ValidationMessage TValue="@bool" For="@ValueExpression" class="tnt-components tnt-supporting-text tnt-validation-message" style="color: var(--tnt-color-error)" />
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Label)) {
+        <span class="tnt-label">
+            @Label
+        </span>
+    }
+
+    @if (Tooltip is not null) {
+        @TooltipIcon.Render()
+    }
+
+    @if (EndIcon is not null) {
+        @EndIcon.Render("tnt-end-icon")
+    }
+</label>
+
+@code {
+    protected override void RenderInputElement(RenderTreeBuilder __builder) {
+        <input type="@Type.ToInputTypeString()"
+               @attributes="AdditionalAttributes"
+               name="@ElementName"
+               title="@FieldIdentifier.FieldName"
+               autofocus="@AutoFocus"
+               autocomplete="@AutoComplete"
+               readonly="@FieldReadonly"
+               disabled="@FieldDisabled"
+               required="@IsRequired()"
+               minlength="@GetMinLength()"
+               maxlength="@GetMaxLength()"
+               min="@GetMinValue()"
+               max="@GetMaxValue()"
+               value="@bool.TrueString"
+               checked="@BindConverter.FormatValue(CurrentValue)"
+               @onchange="@OnChangeAsync"
+               @onblur="OnBlurAsync"
+               @ref="Element" />
+    }
+}

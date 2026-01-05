@@ -1,25 +1,25 @@
-﻿@using LiveTest.Client.Pages
-@using TnTComponents
-@using TnTComponents.Dialog
+@using LiveTest.Client.Pages
+@using NTComponents
+@using NTComponents.Dialog
 @rendermode InteractiveAuto
 <h3>DialogComponent</h3>
 
-<TnTComponents.TnTButton OnClickCallback="OpenDialog">
+<NTComponents.TnTButton OnClickCallback="OpenDialog">
     Open
-</TnTComponents.TnTButton>
+</NTComponents.TnTButton>
 
-<TnTComponents.TnTButton OnClickCallback="OpenCloseDialog">
+<NTComponents.TnTButton OnClickCallback="OpenCloseDialog">
     Open Close Dialog @index
-</TnTComponents.TnTButton>
+</NTComponents.TnTButton>
 
-<TnTComponents.TnTButton OnClickCallback="OpenOtherDialog">
+<NTComponents.TnTButton OnClickCallback="OpenOtherDialog">
     Open Other Dialog
-</TnTComponents.TnTButton>
+</NTComponents.TnTButton>
 
 @if (_dialog is not null) {
-    <TnTComponents.TnTButton OnClickCallback="Close">
+    <NTComponents.TnTButton OnClickCallback="Close">
         Close
-    </TnTComponents.TnTButton>
+    </NTComponents.TnTButton>
 }
 
 @code {

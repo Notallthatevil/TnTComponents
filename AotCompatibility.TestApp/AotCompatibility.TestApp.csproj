@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
@@ -10,8 +10,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\TnTComponents\TnTComponents.csproj" />
-		<TrimmerRootAssembly Include="TnTComponents" />
+		<ProjectReference Include="..\NTComponents\NTComponents.csproj" />
+		<TrimmerRootAssembly Include="NTComponents" />
 	</ItemGroup>
 
 </Project>

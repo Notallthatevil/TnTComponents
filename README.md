@@ -1,8 +1,8 @@
-﻿# TnTComponents
-[![Deploy](https://github.com/Notallthatevil/TnTComponents/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Notallthatevil/TnTComponents/actions/workflows/ci-cd.yml)
-[![Publish AOTCompatibility](https://github.com/Notallthatevil/TnTComponents/actions/workflows/ci-aot.yml/badge.svg)](https://github.com/Notallthatevil/TnTComponents/actions/workflows/ci-aot.yml)
+# NTComponents
+[![Deploy](https://github.com/Notallthatevil/NTComponents/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Notallthatevil/NTComponents/actions/workflows/ci-cd.yml)
+[![Publish AOTCompatibility](https://github.com/Notallthatevil/NTComponents/actions/workflows/ci-aot.yml/badge.svg)](https://github.com/Notallthatevil/NTComponents/actions/workflows/ci-aot.yml)
 
-TnTComponents is a Blazor WebAssembly project that provides a set of reusable UI components for building modern web applications based on Google's Material 3 spec. The components are designed to be highly customizable and easy to use.
+NTComponents is a Blazor WebAssembly project that provides a set of reusable UI components for building modern web applications based on Google's Material 3 spec. The components are designed to be highly customizable and easy to use.
 
 ## Features
 
@@ -20,10 +20,10 @@ TnTComponents is a Blazor WebAssembly project that provides a set of reusable UI
 
 ### Install
 
-Install from NuGet (package id: `TnTComponents`):
+Install from NuGet (package id: `NTComponents`):
 
 ```
-dotnet add package TnTComponents
+dotnet add package NTComponents
 ```
 
 Or add the package reference in your project file.
@@ -44,7 +44,7 @@ In your `Program.cs` file add the following to register any library services (se
 
 ```csharp
 // builder is the WebAssemblyHostBuilder or WebApplicationBuilder
-builder.Services.AddTnTComponents();
+builder.Services.AddNTComponents();
 ```
 
 Then use components in your pages (see `LiveTest` samples for exact component names and parameters):
@@ -59,7 +59,7 @@ Then use components in your pages (see `LiveTest` samples for exact component na
 Themes can be generated using Google's Material 3 designer. Export your theme as a json file and drop it in the `wwwroot` folder. Inside your `App.razor` file, add the following code:
 
 ```razor
-<TnTComponents.TnTThemeDesign ThemeFile="your-theme.json" />
+<NTComponents.TnTThemeDesign ThemeFile="your-theme.json" />
 ```
 
 Dark, light, and system themes can be applied by setting the `Theme` property of the `TnTThemeDesign` component.

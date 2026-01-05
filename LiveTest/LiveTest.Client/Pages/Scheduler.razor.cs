@@ -1,5 +1,5 @@
-﻿using TnTComponents.Scheduler.Events;
-using TnTComponents.Scheduler;
+using NTComponents.Scheduler.Events;
+using NTComponents.Scheduler;
 
 namespace LiveTest.Client.Pages;
 public partial class Scheduler {

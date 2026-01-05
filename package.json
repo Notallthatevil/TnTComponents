@@ -13,20 +13,20 @@
   "jest": {
     "testEnvironment": "jsdom",
     "roots": [
-      "<rootDir>/TnTComponents/Carousel/__tests__",
-      "<rootDir>/TnTComponents/Core/__tests__",
-      "<rootDir>/TnTComponents/Accordion/__tests__",
-      "<rootDir>/TnTComponents/Animation/__tests__",
-      "<rootDir>/TnTComponents/Editors/__tests__",
-      "<rootDir>/TnTComponents/TabView/__tests__",
-      "<rootDir>/TnTComponents/Theming/__tests__",
-      "<rootDir>/TnTComponents.Tests/wwwroot"
+      "<rootDir>/NTComponents/Carousel/__tests__",
+      "<rootDir>/NTComponents/Core/__tests__",
+      "<rootDir>/NTComponents/Accordion/__tests__",
+      "<rootDir>/NTComponents/Animation/__tests__",
+      "<rootDir>/NTComponents/Editors/__tests__",
+      "<rootDir>/NTComponents/TabView/__tests__",
+      "<rootDir>/NTComponents/Theming/__tests__",
+      "<rootDir>/NTComponents.Tests/wwwroot"
     ],
     "setupFiles": [
-      "<rootDir>/TnTComponents/Carousel/jest.setup.js"
+      "<rootDir>/NTComponents/Carousel/jest.setup.js"
     ],
     "setupFilesAfterEnv": [
-      "<rootDir>/TnTComponents/Editors/__tests__/jest.setup.js"
+      "<rootDir>/NTComponents/Editors/__tests__/jest.setup.js"
     ],
     "moduleFileExtensions": [
       "js",
@@ -36,7 +36,7 @@
     "testMatch": [
       "**/__tests__/**/*.test.js",
       "**/__tests__/**/*.spec.js",
-      "**/TnTComponents.Tests/**/*.test.js"
+      "**/NTComponents.Tests/**/*.test.js"
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",

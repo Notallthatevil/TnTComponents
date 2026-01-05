@@ -1,0 +1,14 @@
+@namespace NTComponents
+@using NTComponents.Core
+@inherits TnTPageScriptComponent<TnTMarkdownEditor>
+
+<tnt-markdown-editor @attributes="AdditionalAttributes" @ref="Element">
+    <textarea style="display:none;" />
+    @if(!string.IsNullOrWhiteSpace(InitialValue)) {
+    <div class="initial-value" style="display:none">
+        @InitialValue
+    </div>
+    }
+</tnt-markdown-editor>
+
+@PageScript

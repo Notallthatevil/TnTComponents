@@ -1,7 +1,7 @@
-﻿@page "/virtualizedGrid"
-@using TnTComponents
-@using TnTComponents.Extensions
-@using TnTComponents.Grid
+@page "/virtualizedGrid"
+@using NTComponents
+@using NTComponents.Extensions
+@using NTComponents.Grid
 @rendermode InteractiveServer
 <div>
     <label>
@@ -68,7 +68,7 @@
                 return new();
             }
 
-            return new TnTComponents.Virtualization.TnTItemsProviderResult<DataGridItem> {
+            return new NTComponents.Virtualization.TnTItemsProviderResult<DataGridItem> {
                 Items = items.ToList(),
                 TotalItemCount = Items.Count()
             };
