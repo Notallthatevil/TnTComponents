@@ -68,7 +68,7 @@ jobs:
       - name: Build
         run: dotnet build --no-restore --configuration ${{ inputs.configuration }} 
 
-      - name: Build
+      - name: Test
         run: dotnet test --no-restore --configuration ${{ inputs.configuration }} 
 
       - name: Publish 
