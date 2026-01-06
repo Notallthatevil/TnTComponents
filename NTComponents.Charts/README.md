@@ -48,11 +48,15 @@ Full control over the look and feel of your visualizations:
 ### Don't Repeat Yourself (DRY)
 The codebase is built on a foundation of reusable abstractions. Shared logic for coordinate systems, legend rendering, and animation loops is centralized in base classes and utility services to ensure consistency and maintainability.
 
-### Encapsulation & Inheritance
-Following clean code principles, the library utilizes:
-- **Encapsulation**: Component state and rendering internals are managed internally, exposing only necessary parameters to the user.
-- **Inheritance & Hierarchy**: The library uses a multi-layered inheritance model. While specialized abstractions like `CartesianChartBase` or `PolarChartBase` are encouraged to share logic for specific coordinate systems, **every chart must ultimately inherit from `NTChartBase`**.
-- **Base Chart Rendering**: `NTChartBase` serves as the root of the component hierarchy. it contains the primary render logic that delivers the HTML structure (container and SkiaSharp canvas), ensuring consistency across all visualizations. Derived classes implement the abstract `Render` method to define their specific canvas rendering logic.
+### Declarative Architecture
+The library follows a declarative, component-based architecture for building visualizations:
+
+- **NTChart**: The primary container and base class for all charts. It holds all basic rendering and layout information and manages event registration for tracking mouse movement and click events. It houses every chart and provides the core HTML structure and SkiaSharp canvas.
+- **Child Content Integration**: `NTChart` allows `ChildContent` to be rendered, enabling a modular approach. These child elements represent the data and decorative components to be rendered on the chart.
+- **Series-Based Data Visualization**: Data is represented by series components that inherit from a common hierarchy:
+    - **NTBaseSeries**: The abstract base for all data series, representing the data to be rendered.
+    - **NTCartesianSeries**: A specialized abstraction for cartesian plots using X and Y value selectors.
+    - **Concrete Implementations**: Specific series types like `PointSeries`, `LineSeries`, `BarSeries`, etc., provide the final rendering logic.
 
 ### Built for Testability
 The library is designed to be highly testable:
