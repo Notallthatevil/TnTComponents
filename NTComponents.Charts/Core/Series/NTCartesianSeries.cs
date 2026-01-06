@@ -1,16 +1,9 @@
 using Microsoft.AspNetCore.Components;
-using NTComponents.Charts.Core;
 using SkiaSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NTComponents.Charts.Core.Series;
 
-public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData : class
-{
+public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData : class {
 
     /// <inheritdoc />
     public override ChartCoordinateSystem CoordinateSystem => ChartCoordinateSystem.Cartesian;
@@ -67,47 +60,42 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
     protected double[]? AnimationCurrentValues { get; set; }
 
     /// <inheritdoc />
-    protected override void OnDataChanged()
-    {
-        if (AnimationCurrentValues != null)
-        {
+    protected override void OnDataChanged() {
+        if (AnimationCurrentValues != null) {
             AnimationStartValues = AnimationCurrentValues;
         }
         AnimationCurrentValues = null;
         base.OnDataChanged();
     }
 
-    protected void RenderDataLabel(SKCanvas canvas, float x, float y, double value, SKColor? overrideColor = null)
-    {
-        if (overrideColor == null && !ShowDataLabels)
+    protected void RenderDataLabel(SKCanvas canvas, float x, float y, double value, SKColor? overrideColor = null) {
+        if (overrideColor == null && !ShowDataLabels) {
             return;
+        }
 
         var color = overrideColor ?? Chart.GetThemeColor(DataLabelColor ?? Chart.TextColor);
 
-        using var paint = new SKPaint
-        {
+        using var paint = new SKPaint {
             Color = color,
             IsAntialias = true
         };
 
-        using var font = new SKFont
-        {
+        using var font = new SKFont {
             Size = DataLabelSize
         };
 
         var text = string.Format(DataLabelFormat, value);
-        canvas.DrawText(text, x, y - (PointSize / 2 + 5), SKTextAlign.Center, font, paint);
+        canvas.DrawText(text, x, y - ((PointSize / 2) + 5), SKTextAlign.Center, font, paint);
     }
 
-    protected void RenderPoint(SKCanvas canvas, float x, float y, SKColor color)
-    {
-        if (PointStyle == PointStyle.None)
+    protected void RenderPoint(SKCanvas canvas, float x, float y, SKColor color) {
+        if (PointStyle == PointStyle.None) {
             return;
+        }
 
         var shape = PointShape ?? (PointShape)(Chart.GetSeriesIndex(this) % Enum.GetValues<PointShape>().Length);
 
-        using var paint = new SKPaint
-        {
+        using var paint = new SKPaint {
             Color = color,
             IsAntialias = true,
             Style = PointStyle == PointStyle.Filled ? SKPaintStyle.Fill : SKPaintStyle.Stroke,
@@ -116,8 +104,7 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
 
         var halfSize = PointSize / 2;
 
-        switch (shape)
-        {
+        switch (shape) {
             case Series.PointShape.Circle:
                 canvas.DrawCircle(x, y, halfSize, paint);
                 break;
@@ -125,8 +112,7 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
                 canvas.DrawRect(x - halfSize, y - halfSize, PointSize, PointSize, paint);
                 break;
             case Series.PointShape.Triangle:
-                using (var path = new SKPath())
-                {
+                using (var path = new SKPath()) {
                     path.MoveTo(x, y - halfSize);
                     path.LineTo(x + halfSize, y + halfSize);
                     path.LineTo(x - halfSize, y + halfSize);
@@ -135,8 +121,7 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
                 }
                 break;
             case Series.PointShape.Diamond:
-                using (var path = new SKPath())
-                {
+                using (var path = new SKPath()) {
                     path.MoveTo(x, y - halfSize);
                     path.LineTo(x + halfSize, y);
                     path.LineTo(x, y + halfSize);
