@@ -109,6 +109,10 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
     protected SKPoint? LastMousePosition { get; private set; }
 
+    protected string CanvasStyle => $"cursor: {(_isHovering ? "pointer" : "default")};";
+
+    private bool _isHovering;
+
     internal NTBaseSeries<TData>? HoveredSeries { get; private set; }
 
     internal int? HoveredPointIndex { get; private set; }
@@ -213,22 +217,23 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
     protected virtual void OnClick(MouseEventArgs e)
     {
-        Console.WriteLine("Clicked");
         // Handle click hit-testing in subclasses if needed
     }
 
     protected virtual void OnMouseMove(MouseEventArgs e)
     {
-        Console.WriteLine($"Mouse Move: {e.OffsetX}, {e.OffsetY}");
+        LastMousePosition = new SKPoint((float)e.OffsetX, (float)e.OffsetY);
+        StateHasChanged();
     }
 
     protected virtual void OnMouseOut(MouseEventArgs e)
     {
-        Console.WriteLine("Mouse Out");
         LastMousePosition = null;
         HoveredSeries = null;
         HoveredPointIndex = null;
         HoveredDataPoint = null;
+        _isHovering = false;
+        StateHasChanged();
     }
 
     /// <summary>
@@ -281,22 +286,86 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             axis.Render(canvas, plotArea, accessibleArea);
         }
 
-        // Pass 4: Render legend
-        if (ShowLegend && LegendPosition != LegendPosition.None)
-        {
-            if (LegendPosition == LegendPosition.Floating)
-                RenderLegend(canvas, plotArea, totalArea);
-            else
-                RenderLegend(canvas, plotArea, legendDrawArea);
-        }
-
-        // Pass 5: Hit testing and Tooltip Prep
+        // Pass 4: Hit testing and Tooltip Prep
         if (LastMousePosition.HasValue)
         {
             var mousePoint = LastMousePosition.Value;
-            
-            // Check series/points first
-            if (plotArea.Contains(mousePoint))
+
+            // Check legend items for hover first (so they take precedence over lines)
+            if (ShowLegend && LegendPosition != LegendPosition.None)
+            {
+                using var paint = new SKPaint { TextSize = LegendFontSize };
+
+                // Handle Horizontal (Top/Bottom)
+                if (LegendPosition == LegendPosition.Top || LegendPosition == LegendPosition.Bottom)
+                {
+                    var rows = GetLegendRows(paint, legendDrawArea.Width);
+                    float rowHeight = LegendFontSize + 10;
+                    for (int r = 0; r < rows.Count; r++)
+                    {
+                        var rowItems = rows[r];
+                        float totalRowWidth = rowItems.Sum(i => paint.MeasureText(i.Label) + LegendIconSize + 10) + (rowItems.Count - 1) * LegendItemSpacing;
+                        float startX = (LegendPosition == LegendPosition.Bottom)
+                            ? plotArea.Left + (plotArea.Width - totalRowWidth) / 2
+                            : legendDrawArea.Left + (legendDrawArea.Width - totalRowWidth) / 2;
+
+                        float y = legendDrawArea.Top + 5 + LegendFontSize + (r * rowHeight);
+                        float currentX = startX;
+
+                        foreach (var item in rowItems)
+                        {
+                            var itemWidth = paint.MeasureText(item.Label) + LegendIconSize + 10;
+                            var itemRect = new SKRect(currentX, y - LegendFontSize, currentX + itemWidth, y + 5);
+                            if (itemRect.Contains(mousePoint))
+                            {
+                                HoveredSeries = item.Series;
+                                break;
+                            }
+                            currentX += itemWidth + LegendItemSpacing;
+                        }
+                        if (HoveredSeries != null) break;
+                    }
+                }
+                // Handle Vertical (Left/Right)
+                else if (LegendPosition == LegendPosition.Left || LegendPosition == LegendPosition.Right)
+                {
+                    float x = legendDrawArea.Left + 5;
+                    float currentY = legendDrawArea.Top + 20;
+                    foreach (var series in Series)
+                    {
+                        var label = series.Title ?? $"Series {Series.IndexOf(series) + 1}";
+                        float itemWidth = paint.MeasureText(label) + LegendIconSize + 10;
+                        var itemRect = new SKRect(x - 2, currentY - LegendFontSize, x + itemWidth, currentY + 5);
+                        if (itemRect.Contains(mousePoint))
+                        {
+                            HoveredSeries = series;
+                            break;
+                        }
+                        currentY += LegendFontSize + 10;
+                    }
+                }
+                // Handle Floating
+                else if (LegendPosition == LegendPosition.Floating)
+                {
+                    float x = plotArea.Right - 100;
+                    float y = plotArea.Top + 20;
+                    foreach (var series in Series)
+                    {
+                        var label = series.Title ?? $"Series {Series.IndexOf(series) + 1}";
+                        float itemWidth = paint.MeasureText(label) + LegendIconSize + 10;
+                        var itemRect = new SKRect(x - 2, y - LegendFontSize, x + itemWidth, y + 5);
+                        if (itemRect.Contains(mousePoint))
+                        {
+                            HoveredSeries = series;
+                            break;
+                        }
+                        y += LegendFontSize + 5;
+                    }
+                }
+            }
+
+            // Check series/points if legend wasn't hit
+            if (HoveredSeries == null && plotArea.Contains(mousePoint))
             {
                 foreach (var series in Series.AsEnumerable().Reverse())
                 {
@@ -310,6 +379,15 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                     }
                 }
             }
+        }
+
+        // Pass 5: Render legend (Now after hit testing so it can react to hovered series)
+        if (ShowLegend && LegendPosition != LegendPosition.None)
+        {
+            if (LegendPosition == LegendPosition.Floating)
+                RenderLegend(canvas, plotArea, totalArea);
+            else
+                RenderLegend(canvas, plotArea, legendDrawArea);
         }
 
         canvas.Save();
@@ -331,6 +409,14 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         {
             RenderTooltip(canvas, plotArea);
         }
+
+        // Pass 7: Update cursor if needed
+        bool currentHover = HoveredSeries != null;
+        if (_isHovering != currentHover)
+        {
+            _isHovering = currentHover;
+            _ = InvokeAsync(StateHasChanged);
+        }
     }
 
     private void RenderTooltip(SKCanvas canvas, SKRect plotArea)
@@ -339,7 +425,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
         var mousePoint = LastMousePosition.Value;
         var title = HoveredSeries.Title ?? "Series";
-        
+
         // Use reflection or cast to get Values if it's Cartesian
         string labelValue = "";
         if (HoveredSeries is NTCartesianSeries<TData> cartesian)
@@ -375,7 +461,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             Style = SKPaintStyle.Fill
         };
         canvas.DrawRoundRect(rect, 4, 4, bgPaint);
-        
+
         // Draw border
         using var borderPaint = new SKPaint
         {
@@ -529,23 +615,30 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                 {
                     var itemWidth = textPaint.MeasureText(item.Label) + LegendIconSize + 10;
                     var itemRect = new SKRect(currentX, y - LegendFontSize, currentX + itemWidth, y + 5);
-                    
-                    if (LastMousePosition.HasValue && itemRect.Contains(LastMousePosition.Value))
+
+                    var hasHover = HoveredSeries != null;
+                    var isItemHovered = HoveredSeries == item.Series;
+                    var iconColor = item.Color;
+                    var currentTextColor = GetThemeColor(TextColor);
+
+                    if (hasHover && !isItemHovered)
                     {
-                        HoveredSeries = item.Series;
+                        iconColor = iconColor.WithAlpha((byte)(iconColor.Alpha * 0.15f));
+                        currentTextColor = currentTextColor.WithAlpha((byte)(currentTextColor.Alpha * 0.15f));
                     }
 
-                    using var iconPaint = new SKPaint { Color = item.Color, Style = SKPaintStyle.Fill };
-                    
+                    using var iconPaint = new SKPaint { Color = iconColor, Style = SKPaintStyle.Fill };
+                    using var currentTextPaint = new SKPaint { Color = currentTextColor, TextSize = LegendFontSize, IsAntialias = true };
+
                     // Highlight if hovered
-                    if (HoveredSeries == item.Series)
+                    if (isItemHovered)
                     {
                         using var highlightPaint = new SKPaint { Color = item.Color.WithAlpha(40), Style = SKPaintStyle.Fill };
                         canvas.DrawRoundRect(itemRect, 4, 4, highlightPaint);
                     }
 
                     canvas.DrawRect(currentX, y - LegendIconSize + 2, LegendIconSize, LegendIconSize, iconPaint);
-                    canvas.DrawText(item.Label, currentX + LegendIconSize + 5, y, textPaint);
+                    canvas.DrawText(item.Label, currentX + LegendIconSize + 5, y, currentTextPaint);
                     currentX += itemWidth + LegendItemSpacing;
                 }
             }
@@ -559,25 +652,32 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             {
                 var label = series.Title ?? $"Series {Series.IndexOf(series) + 1}";
                 var color = GetSeriesColor(series);
-                
+
                 var itemWidth = textPaint.MeasureText(label) + LegendIconSize + 10;
                 var itemRect = new SKRect(x - 2, currentY - LegendFontSize, x + itemWidth, currentY + 5);
 
-                if (LastMousePosition.HasValue && itemRect.Contains(LastMousePosition.Value))
+                var hasHover = HoveredSeries != null;
+                var isItemHovered = HoveredSeries == series;
+                var iconColor = color;
+                var currentTextColor = GetThemeColor(TextColor);
+
+                if (hasHover && !isItemHovered)
                 {
-                    HoveredSeries = series;
+                    iconColor = iconColor.WithAlpha((byte)(iconColor.Alpha * 0.15f));
+                    currentTextColor = currentTextColor.WithAlpha((byte)(currentTextColor.Alpha * 0.15f));
                 }
 
                 // Highlight if hovered
-                if (HoveredSeries == series)
+                if (isItemHovered)
                 {
                     using var highlightPaint = new SKPaint { Color = color.WithAlpha(40), Style = SKPaintStyle.Fill };
                     canvas.DrawRoundRect(itemRect, 4, 4, highlightPaint);
                 }
 
-                using var iconPaint = new SKPaint { Color = color, Style = SKPaintStyle.Fill };
+                using var iconPaint = new SKPaint { Color = iconColor, Style = SKPaintStyle.Fill };
+                using var currentTextPaint = new SKPaint { Color = currentTextColor, TextSize = LegendFontSize, IsAntialias = true };
                 canvas.DrawRect(x, currentY - LegendIconSize + 2, LegendIconSize, LegendIconSize, iconPaint);
-                canvas.DrawText(label, x + LegendIconSize + 5, currentY, textPaint);
+                canvas.DrawText(label, x + LegendIconSize + 5, currentY, currentTextPaint);
                 currentY += LegendFontSize + 10;
             }
         }
@@ -605,21 +705,28 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                 var itemWidth = textPaint.MeasureText(label) + LegendIconSize + 10;
                 var itemRect = new SKRect(x - 2, y - LegendFontSize, x + itemWidth, y + 5);
 
-                if (LastMousePosition.HasValue && itemRect.Contains(LastMousePosition.Value))
+                var hasHover = HoveredSeries != null;
+                var isItemHovered = HoveredSeries == series;
+                var iconColor = color;
+                var currentTextColor = GetThemeColor(TextColor);
+
+                if (hasHover && !isItemHovered)
                 {
-                    HoveredSeries = series;
+                    iconColor = iconColor.WithAlpha((byte)(iconColor.Alpha * 0.15f));
+                    currentTextColor = currentTextColor.WithAlpha((byte)(currentTextColor.Alpha * 0.15f));
                 }
 
                 // Highlight if hovered
-                if (HoveredSeries == series)
+                if (isItemHovered)
                 {
                     using var highlightPaint = new SKPaint { Color = color.WithAlpha(40), Style = SKPaintStyle.Fill };
                     canvas.DrawRoundRect(itemRect, 4, 4, highlightPaint);
                 }
 
-                using var iconPaint = new SKPaint { Color = color, Style = SKPaintStyle.Fill };
+                using var iconPaint = new SKPaint { Color = iconColor, Style = SKPaintStyle.Fill };
+                using var currentTextPaint = new SKPaint { Color = currentTextColor, TextSize = LegendFontSize, IsAntialias = true };
                 canvas.DrawRect(x, y - LegendIconSize + 2, LegendIconSize, LegendIconSize, iconPaint);
-                canvas.DrawText(label, x + LegendIconSize + 5, y, textPaint);
+                canvas.DrawText(label, x + LegendIconSize + 5, y, currentTextPaint);
                 y += LegendFontSize + 5;
             }
         }

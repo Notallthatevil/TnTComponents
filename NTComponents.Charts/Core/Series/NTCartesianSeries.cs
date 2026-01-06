@@ -77,14 +77,16 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
         base.OnDataChanged();
     }
 
-    protected void RenderDataLabel(SKCanvas canvas, float x, float y, double value)
+    protected void RenderDataLabel(SKCanvas canvas, float x, float y, double value, SKColor? overrideColor = null)
     {
-        if (!ShowDataLabels)
+        if (overrideColor == null && !ShowDataLabels)
             return;
+
+        var color = overrideColor ?? Chart.GetThemeColor(DataLabelColor ?? Chart.TextColor);
 
         using var paint = new SKPaint
         {
-            Color = Chart.GetThemeColor(DataLabelColor ?? Chart.TextColor),
+            Color = color,
             IsAntialias = true,
             TextSize = DataLabelSize,
             TextAlign = SKTextAlign.Center
