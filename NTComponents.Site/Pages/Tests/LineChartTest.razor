@@ -1,0 +1,27 @@
+@page "/tests/line-chart"
+@using NTComponents.Charts
+
+<div id="test-container" style="width: 800px; height: 400px;">
+    <NTLineChart @ref="_chart"
+                 Title="Test Chart"
+                 Data="_data"
+                 CategorySelector="x => x.Label"
+                 AnimationDuration="0">
+        <NTLineSeries TData="ChartPoint"
+                      ValueSelector="x => x.Value"
+                      Label="Series 1"
+                      Color="blue" />
+    </NTLineChart>
+</div>
+
+@code {
+    private NTLineChart<ChartPoint> _chart = default!;
+    private List<ChartPoint> _data = new()
+    {
+        new("A", 10),
+        new("B", 20),
+        new("C", 15)
+    };
+
+    public record ChartPoint(string Label, double Value);
+}

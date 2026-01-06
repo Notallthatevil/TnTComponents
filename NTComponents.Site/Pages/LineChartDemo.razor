@@ -1,0 +1,108 @@
+@page "/line-chart"
+@using NTComponents.Charts
+<div class="container py-4">
+    <h1>Line Chart Demo</h1>
+    <p class="lead">Examples and configurations for the Line Chart component.</p>
+
+    <div class="row mt-4">
+        <div class="col-md-6 mb-4">
+            <div class="card p-3 shadow-sm">
+                <h3>Basic Line Chart</h3>
+                <div style="height: 300px;">
+                    <LineChart Title="Basic Data" Series="@_basicSeries" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card p-3 shadow-sm">
+                <h3>Multiple Series</h3>
+                <div style="height: 300px;">
+                    <LineChart Title="Comparison" Series="@_multiSeries" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6 mb-4">
+            <div class="card p-3 shadow-sm">
+                <h3>Markers & Stroke Width</h3>
+                <div style="height: 300px;">
+                    <LineChart Title="Customized" 
+                              Series="@_customSeries" 
+                              ShowMarkers="true" 
+                              MarkerRadius="6" 
+                              StrokeWidth="4" />
+                </div>
+                <div class="mt-2 text-muted">
+                    Custom Marker Radius (6) and Stroke Width (4).
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card p-3 shadow-sm">
+                <h3>Smooth Animations</h3>
+                <div style="height: 300px;">
+                    <LineChart Title="Animated Entry" Series="@_animatedSeries" />
+                </div>
+                <button class="btn btn-primary mt-2" @onclick="() => _key++">Restart Animation</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12 mb-4">
+            <div class="card p-3 shadow-sm">
+                <h3>Themed Palette</h3>
+                <div style="height: 300px;">
+                    @* Re-renders on key change *@
+                    <LineChart @key="_key" Title="Natural Growth" Series="@_themedSeries" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private int _key = 0;
+    
+    private List<ChartSeries<CartesianPoint>> _basicSeries = [
+        new NTLineSeries { 
+            Name = "Revenue",
+            Points = Enumerable.Range(1, 10).Select(i => new CartesianPoint(i, i * 1.5 + Random.Shared.Next(0, 5)))
+        }
+    ];
+
+    private List<ChartSeries<CartesianPoint>> _multiSeries = [
+        new NTLineSeries { 
+            Name = "Product A",
+            Points = [new(1, 10), new(2, 25), new(3, 15), new(4, 30), new(5, 45)]
+        },
+        new NTLineSeries { 
+            Name = "Product B",
+            Points = [new(1, 20), new(2, 10), new(3, 40), new(4, 20), new(5, 30)]
+        }
+    ];
+
+    private List<ChartSeries<CartesianPoint>> _customSeries = [
+        new NTLineSeries { 
+            Name = "Goal",
+            Color = "#FF5722",
+            Points = [new(1, 20), new(2, 20), new(3, 40), new(4, 40), new(5, 60), new(6, 60)]
+        }
+    ];
+
+    private List<ChartSeries<CartesianPoint>> _animatedSeries = [
+        new NTLineSeries { 
+            Name = "Trajectory",
+            Points = Enumerable.Range(0, 20).Select(i => new CartesianPoint(i, Math.Sin(i * 0.3) * 50 + 50))
+        }
+    ];
+
+    private List<ChartSeries<CartesianPoint>> _themedSeries = Enumerable.Range(0, 3).Select(s => new NTLineSeries {
+        Name = $"Series {s + 1}",
+        Points = Enumerable.Range(1, 8).Select(i => new CartesianPoint(i, (i * (s+1)) + Random.Shared.Next(0, 10)))
+    }).Cast<ChartSeries<CartesianPoint>>().ToList();
+}

@@ -7,7 +7,8 @@ namespace NTComponents.Charts.Core.Cartesian;
 /// A base class for charts that use a Cartesian coordinate system (X and Y axes).
 /// </summary>
 /// <typeparam name="TPoint">The type of data points in the series.</typeparam>
-public abstract class CartesianChartBase<TPoint> : NTChartBase {
+public abstract class NTCartesianChartBase<TPoint> : NTChartBase
+{
    /// <summary>
    /// Gets or sets the X-axis configuration.
    /// </summary>
@@ -31,7 +32,8 @@ public abstract class CartesianChartBase<TPoint> : NTChartBase {
    /// </summary>
    protected SKRect PlotArea { get; private set; }
 
-   protected override void Render(SKCanvas canvas, SKImageInfo info) {
+   protected override void Render(SKCanvas canvas, SKImageInfo info)
+   {
       CalculateLayout(info);
 
       DrawAxes(canvas, info);
@@ -48,7 +50,8 @@ public abstract class CartesianChartBase<TPoint> : NTChartBase {
    /// Calculates the layout of the chart components.
    /// </summary>
    /// <param name="info">The image info.</param>
-   protected virtual void CalculateLayout(SKImageInfo info) {
+   protected virtual void CalculateLayout(SKImageInfo info)
+   {
       // Simple initial implementation: use margins and fixed axis sizes
       float axisSize = 40; // Default axis width/height
 
@@ -63,7 +66,8 @@ public abstract class CartesianChartBase<TPoint> : NTChartBase {
    /// <summary>
    /// Draws the axes and gridlines.
    /// </summary>
-   protected virtual void DrawAxes(SKCanvas canvas, SKImageInfo info) {
+   protected virtual void DrawAxes(SKCanvas canvas, SKImageInfo info)
+   {
       // Future: use PlotArea to draw axes and gridlines
    }
 
@@ -75,7 +79,8 @@ public abstract class CartesianChartBase<TPoint> : NTChartBase {
    /// <summary>
    /// Draws the legend.
    /// </summary>
-   protected virtual void DrawLegend(SKCanvas canvas, SKImageInfo info) {
+   protected virtual void DrawLegend(SKCanvas canvas, SKImageInfo info)
+   {
       if (!Legend.IsVisible) return;
       // Future: Legend rendering logic
    }
