@@ -39,6 +39,30 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
     [Parameter]
     public float PointSize { get; set; } = 8.0f;
 
+    /// <summary>
+    ///     Gets or sets whether to show data labels for each point.
+    /// </summary>
+    [Parameter]
+    public bool ShowDataLabels { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the format for the data labels.
+    /// </summary>
+    [Parameter]
+    public string DataLabelFormat { get; set; } = "{0:0.#}";
+
+    /// <summary>
+    ///     Gets or sets the size of the data labels.
+    /// </summary>
+    [Parameter]
+    public float DataLabelSize { get; set; } = 12.0f;
+
+    /// <summary>
+    ///     Gets or sets the color of the data labels. If null, the chart's text color will be used.
+    /// </summary>
+    [Parameter]
+    public TnTColor? DataLabelColor { get; set; }
+
     protected double[]? AnimationStartValues { get; set; }
     protected double[]? AnimationCurrentValues { get; set; }
 
@@ -51,6 +75,23 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
         }
         AnimationCurrentValues = null;
         base.OnDataChanged();
+    }
+
+    protected void RenderDataLabel(SKCanvas canvas, float x, float y, double value)
+    {
+        if (!ShowDataLabels)
+            return;
+
+        using var paint = new SKPaint
+        {
+            Color = Chart.GetThemeColor(DataLabelColor ?? Chart.TextColor),
+            IsAntialias = true,
+            TextSize = DataLabelSize,
+            TextAlign = SKTextAlign.Center
+        };
+
+        var text = string.Format(DataLabelFormat, value);
+        canvas.DrawText(text, x, y - (PointSize / 2 + 5), paint);
     }
 
     protected void RenderPoint(SKCanvas canvas, float x, float y, SKColor color)

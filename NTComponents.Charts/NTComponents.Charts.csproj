@@ -13,16 +13,27 @@
     <ItemGroup>
       <None Include="compilerconfig.json" />
     </ItemGroup>
-
-
-    <ItemGroup>
-        <SupportedPlatform Include="browser" />
-    </ItemGroup>
-
+	
+	<ItemGroup>
+		<SupportedPlatform Include="browser" />
+	</ItemGroup>
+	
     <ItemGroup>
         <PackageReference Include="SkiaSharp.Views.Blazor" Version="3.119.2-preview.1" />
     </ItemGroup>
+	
+	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly">
+			<Version>9.0.11</Version>
+		</PackageReference>
+	</ItemGroup>
 
+	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly">
+			<Version>10.0.0</Version>
+		</PackageReference>
+	</ItemGroup>
+	
     <ItemGroup>
       <ProjectReference Include="..\NTComponents\NTComponents.csproj" />
     </ItemGroup>

@@ -31,6 +31,18 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     public string? Title { get; set; }
 
     /// <summary>
+    ///     Gets or sets the background color of the tooltip for this series.
+    /// </summary>
+    [Parameter]
+    public TnTColor? TooltipBackgroundColor { get; set; }
+
+    /// <summary>
+    ///    Gets or sets the text color of the tooltip for this series.
+    /// </summary>
+    [Parameter]
+    public TnTColor? TooltipTextColor { get; set; }
+
+    /// <summary>
     ///     Gets or sets whether animation is enabled for this series.
     /// </summary>
     [Parameter]
@@ -105,6 +117,14 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     }
 
     public abstract void Render(SKCanvas canvas, SKRect renderArea);
+
+    /// <summary>
+    ///     Performs a hit test on the series.
+    /// </summary>
+    /// <param name="point">The mouse point.</param>
+    /// <param name="renderArea">The plot area.</param>
+    /// <returns>The index and data of the hit point, or null if no hit.</returns>
+    public abstract (int Index, TData? Data)? HitTest(SKPoint point, SKRect renderArea);
 
     public void Dispose()
     {

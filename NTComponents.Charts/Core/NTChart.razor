@@ -1,9 +1,9 @@
 @inherits NTComponents.Core.TnTComponentBase
 @typeparam TData
 
-<div class="@ElementClass" id="@ElementId" lang="@ElementLang" style="@ElementStyle" @ref="@Element">
+<div class="@ElementClass" id="@ElementId" lang="@ElementLang" style="@ElementStyle" @ref="@Element"  >
 	<CascadingValue Value="this" IsFixed="true">
 		@ChildContent
 	</CascadingValue>
-	<SKGLView EnableRenderLoop="true" IgnorePixelScaling="false" OnPaintSurface="@OnPaintSurface" @onmousemove="OnMouseMove" @onmouseout="OnMouseOut" @onclick="OnClick" />
+	<SKGLView EnableRenderLoop="true" IgnorePixelScaling="true" OnPaintSurface="@OnPaintSurface" />
 </div>
