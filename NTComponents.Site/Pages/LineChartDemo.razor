@@ -74,10 +74,85 @@
             </div>
         </div>
     </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6 mb-4">
+            <div class="card p-3 shadow-sm">
+                <h3>Interpolation Modes</h3>
+                <div style="height: 300px;">
+                    <NTChart TData="CartesianPoint" Title="Curved vs Step">
+                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" />
+                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" />
+                        <NTLineSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
+                            YValueSelector="@(p => p.Y)" Color="TnTColor.Primary"
+                            Interpolation="LineInterpolation.Curved" Title="Curved" />
+                        <NTLineSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
+                            YValueSelector="@(p => p.Y)" Color="TnTColor.Warning" Interpolation="LineInterpolation.Step"
+                            Title="Step" />
+                    </NTChart>
+                </div>
+                <div class="mt-2 text-muted">
+                    Showing Curved (Blue) and Step (Yellow) interpolation.
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card p-3 shadow-sm">
+                <h3>Dashed & Scatter Styles</h3>
+                <div style="height: 300px;">
+                    <NTChart TData="CartesianPoint" Title="Styles">
+                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" />
+                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" />
+                        <NTLineSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
+                            YValueSelector="@(p => p.Y)" Color="TnTColor.Secondary" LineStyle="LineStyle.Dashed"
+                            Interpolation="LineInterpolation.Smoothed" />
+                        <NTLineSeries TData="CartesianPoint" Data="@_productB" XValueSelector="@(p => p.X)"
+                            YValueSelector="@(p => p.Y)" Color="TnTColor.Error" LineStyle="LineStyle.None"
+                            PointStyle="PointStyle.Filled" PointShape="PointShape.Circle" />
+                    </NTChart>
+                </div>
+                <div class="mt-2 text-muted">
+                    Dashed with Smoothed corners (Purple) and Scatter mode (Red points, no line).
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12 mb-4">
+            <div class="card p-3 shadow-sm">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3>Animation Transition</h3>
+                    <button class="btn btn-primary" @onclick="UpdateData">Randomize Data</button>
+                </div>
+                <div style="height: 400px;">
+                    <NTChart TData="CartesianPoint" Title="Overshoot Animation Demo">
+                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" />
+                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" />
+                        <NTLineSeries TData="CartesianPoint" Data="@_dynamicData" XValueSelector="@(p => p.X)"
+                            YValueSelector="@(p => p.Y)" Color="TnTColor.Primary"
+                            Interpolation="LineInterpolation.Curved" PointStyle="PointStyle.Filled" />
+                    </NTChart>
+                </div>
+                <div class="mt-2 text-muted">
+                    Click "Randomize Data" to see the "Back-Out" overshoot animation smoothly transition between states.
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @code {
     public record CartesianPoint(double X, double Y);
+
+    private List<CartesianPoint> _dynamicData = Enumerable.Range(1, 10).Select(i => new CartesianPoint(i,
+    Random.Shared.Next(10, 90))).ToList();
+
+    private void UpdateData()
+    {
+        _dynamicData = Enumerable.Range(1, 10).Select(i => new CartesianPoint(i, Random.Shared.Next(10, 90))).ToList();
+    }
 
     private List<CartesianPoint> _basicData = Enumerable.Range(1, 10)
     .Select(i => new CartesianPoint(i, i * 1.5 + Random.Shared.Next(0, 5)))

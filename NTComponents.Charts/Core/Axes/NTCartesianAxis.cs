@@ -33,8 +33,10 @@ public class NTCartesianAxis<TData> : NTAxis<TData> where TData : class
    /// <inheritdoc />
    public override void Render(SKCanvas canvas, SKRect plotArea, SKRect totalArea)
    {
-      var (xMin, xMax) = Chart.GetXRange();
-      var (yMin, yMax) = Chart.GetYRange();
+      var (xMin, xMax) = Chart.GetXRange(true);
+      var (yMin, yMax) = Chart.GetYRange(true);
+      var (xMinReal, xMaxReal) = Chart.GetXRange(false);
+      var (yMinReal, yMaxReal) = Chart.GetYRange(false);
 
       using var textPaint = new SKPaint
       {
@@ -71,8 +73,8 @@ public class NTCartesianAxis<TData> : NTAxis<TData> where TData : class
          for (int i = 0; i < labelCount; i++)
          {
             float t = i / (float)(labelCount - 1);
-            var x = plotArea.Left + t * plotArea.Width;
-            var val = xMin + t * (xMax - xMin);
+            var val = xMinReal + t * (xMaxReal - xMinReal);
+            var x = plotArea.Left + (float)((val - xMin) / (xMax - xMin)) * plotArea.Width;
 
             if (i == 0) textPaint.TextAlign = SKTextAlign.Left;
             else if (i == labelCount - 1) textPaint.TextAlign = SKTextAlign.Right;
@@ -97,8 +99,8 @@ public class NTCartesianAxis<TData> : NTAxis<TData> where TData : class
          for (int i = 0; i < labelCount; i++)
          {
             float t = i / (float)(labelCount - 1);
-            var y = plotArea.Bottom - t * plotArea.Height;
-            var val = yMin + t * (yMax - yMin);
+            var val = yMinReal + t * (yMaxReal - yMinReal);
+            var y = plotArea.Bottom - (float)((val - yMin) / (yMax - yMin)) * plotArea.Height;
 
             float yOffset = 5;
             if (i == 0) yOffset = 0;

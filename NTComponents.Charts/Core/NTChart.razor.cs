@@ -45,6 +45,12 @@ public partial class NTChart<TData> : TnTComponentBase where TData : class
     [Parameter]
     public string? Title { get; set; }
 
+    /// <summary>
+    ///    Gets or sets the padding percentage for the axis ranges (0 to 1).
+    /// </summary>
+    [Parameter]
+    public double RangePadding { get; set; } = 0.05;
+
     protected SKPoint? LastMousePosition { get; private set; }
 
     private List<NTAxis<TData>> Axes { get; } = [];
@@ -85,10 +91,13 @@ public partial class NTChart<TData> : TnTComponentBase where TData : class
             axis.Render(canvas, plotArea, totalArea);
         }
 
+        canvas.Save();
+        canvas.ClipRect(plotArea);
         foreach (var series in Series)
         {
             series.Render(canvas, plotArea);
         }
+        canvas.Restore();
     }
 
     internal void AddAxis(NTAxis<TData> axis)
@@ -130,7 +139,7 @@ public partial class NTChart<TData> : TnTComponentBase where TData : class
 
     internal int GetSeriesIndex(NTBaseSeries<TData> series) => Series.IndexOf(series);
 
-    public (double Min, double Max) GetXRange()
+    public (double Min, double Max) GetXRange(bool padded = false)
     {
         var cartesianSeries = Series.OfType<NTCartesianSeries<TData>>().ToList();
         if (!cartesianSeries.Any()) return (0, 1);
@@ -145,10 +154,16 @@ public partial class NTChart<TData> : TnTComponentBase where TData : class
             min = Math.Min(min, values.Min());
             max = Math.Max(max, values.Max());
         }
-        return min == double.MaxValue ? (0, 1) : (min, max);
+
+        if (min == double.MaxValue) return (0, 1);
+        if (!padded) return (min, max);
+
+        var range = max - min;
+        if (range == 0) range = 1;
+        return (min - range * RangePadding, max + range * RangePadding);
     }
 
-    public (double Min, double Max) GetYRange()
+    public (double Min, double Max) GetYRange(bool padded = false)
     {
         var cartesianSeries = Series.OfType<NTCartesianSeries<TData>>().ToList();
         if (!cartesianSeries.Any()) return (0, 1);
@@ -163,6 +178,12 @@ public partial class NTChart<TData> : TnTComponentBase where TData : class
             min = Math.Min(min, values.Min());
             max = Math.Max(max, values.Max());
         }
-        return min == double.MaxValue ? (0, 1) : (min, max);
+
+        if (min == double.MaxValue) return (0, 1);
+        if (!padded) return (min, max);
+
+        var range = max - min;
+        if (range == 0) range = 1;
+        return (min - range * RangePadding, max + range * RangePadding);
     }
 }

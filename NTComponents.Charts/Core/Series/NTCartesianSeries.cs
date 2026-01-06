@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 
 namespace NTComponents.Charts.Core.Series;
 
-public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData : class {
+public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData : class
+{
 
     /// <inheritdoc />
     public override ChartCoordinateSystem CoordinateSystem => ChartCoordinateSystem.Cartesian;
@@ -38,13 +39,29 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
     [Parameter]
     public float PointSize { get; set; } = 8.0f;
 
-    protected void RenderPoint(SKCanvas canvas, float x, float y, SKColor color) {
+    protected double[]? AnimationStartValues { get; set; }
+    protected double[]? AnimationCurrentValues { get; set; }
+
+    /// <inheritdoc />
+    protected override void OnDataChanged()
+    {
+        if (AnimationCurrentValues != null)
+        {
+            AnimationStartValues = AnimationCurrentValues;
+        }
+        AnimationCurrentValues = null;
+        base.OnDataChanged();
+    }
+
+    protected void RenderPoint(SKCanvas canvas, float x, float y, SKColor color)
+    {
         if (PointStyle == PointStyle.None)
             return;
 
         var shape = PointShape ?? (PointShape)(Chart.GetSeriesIndex(this) % Enum.GetValues<PointShape>().Length);
 
-        using var paint = new SKPaint {
+        using var paint = new SKPaint
+        {
             Color = color,
             IsAntialias = true,
             Style = PointStyle == PointStyle.Filled ? SKPaintStyle.Fill : SKPaintStyle.Stroke,
@@ -53,7 +70,8 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
 
         var halfSize = PointSize / 2;
 
-        switch (shape) {
+        switch (shape)
+        {
             case Series.PointShape.Circle:
                 canvas.DrawCircle(x, y, halfSize, paint);
                 break;
@@ -61,7 +79,8 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
                 canvas.DrawRect(x - halfSize, y - halfSize, PointSize, PointSize, paint);
                 break;
             case Series.PointShape.Triangle:
-                using (var path = new SKPath()) {
+                using (var path = new SKPath())
+                {
                     path.MoveTo(x, y - halfSize);
                     path.LineTo(x + halfSize, y + halfSize);
                     path.LineTo(x - halfSize, y + halfSize);
@@ -70,7 +89,8 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
                 }
                 break;
             case Series.PointShape.Diamond:
-                using (var path = new SKPath()) {
+                using (var path = new SKPath())
+                {
                     path.MoveTo(x, y - halfSize);
                     path.LineTo(x + halfSize, y);
                     path.LineTo(x, y + halfSize);
