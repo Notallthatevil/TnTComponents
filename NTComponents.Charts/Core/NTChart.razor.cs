@@ -49,7 +49,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     ///     Gets or sets the margin around the chart.
     /// </summary>
     [Parameter]
-    public ChartMargin Margin { get; set; } = ChartMargin.All(20);
+    public ChartMargin Margin { get; set; } = ChartMargin.All(10);
 
     /// <summary>
     ///     Gets or sets the title of the chart.
@@ -105,7 +105,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     ///     Gets or sets the spacing between legend items.
     /// </summary>
     [Parameter]
-    public float LegendItemSpacing { get; set; } = 20.0f;
+    public float LegendItemSpacing { get; set; } = 15.0f;
 
     [Inject]
     protected IJSRuntime JSRuntime { get; set; } = default!;
@@ -128,13 +128,18 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
     private readonly Dictionary<TnTColor, SKColor> _resolvedColors = new();
 
+    private List<double>? _cachedAllX;
+
     private IJSObjectReference? _themeListener;
     private DotNetObjectReference<NTChart<TData>>? _objRef;
+
+    private float _density = 1.0f;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
+            _density = await JSRuntime.InvokeAsync<float>("eval", "window.devicePixelRatio || 1");
             _objRef = DotNetObjectReference.Create(this);
             _themeListener = await JSRuntime.InvokeAsync<IJSObjectReference>("NTComponents.onThemeChanged", _objRef);
             await ResolveColorsAsync();
@@ -220,12 +225,96 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
     protected virtual void OnClick(MouseEventArgs e)
     {
-        // Handle click hit-testing in subclasses if needed
+        var point = new SKPoint((float)e.OffsetX * _density, (float)e.OffsetY * _density);
+
+        if (ShowLegend && LegendPosition != LegendPosition.None)
+        {
+            // Always hit-test the legend on click, regardless of HoveredSeries state
+            var clickedSeries = GetLegendSeriesAtPoint(point);
+
+            if (clickedSeries != null)
+            {
+                clickedSeries.Visible = !clickedSeries.Visible;
+                StateHasChanged();
+                return;
+            }
+        }
     }
+
+    private NTBaseSeries<TData>? GetLegendSeriesAtPoint(SKPoint point)
+    {
+        if (!ShowLegend || LegendPosition == LegendPosition.None) return null;
+
+        using var font = new SKFont { Size = LegendFontSize };
+        var totalArea = new SKRect(Margin.Left, Margin.Top, _lastWidth - Margin.Right, _lastHeight - Margin.Bottom);
+        if (!string.IsNullOrEmpty(Title))
+        {
+            totalArea = new SKRect(totalArea.Left, totalArea.Top + 30, totalArea.Right, totalArea.Bottom);
+        }
+
+        var (plotArea, legendDrawArea) = MeasureLegendWithArea(totalArea);
+
+        // Handle Horizontal (Top/Bottom)
+        if (LegendPosition == LegendPosition.Top || LegendPosition == LegendPosition.Bottom)
+        {
+            var rows = GetLegendRows(font, legendDrawArea.Width);
+            float rowHeight = LegendFontSize + 10;
+            for (int r = 0; r < rows.Count; r++)
+            {
+                var rowItems = rows[r];
+                float totalRowWidth = rowItems.Sum(i => font.MeasureText(i.Label) + LegendIconSize + 10) + (rowItems.Count - 1) * LegendItemSpacing;
+                float startX = (LegendPosition == LegendPosition.Bottom)
+                    ? plotArea.Left + (plotArea.Width - totalRowWidth) / 2
+                    : legendDrawArea.Left + (legendDrawArea.Width - totalRowWidth) / 2;
+
+                float y = legendDrawArea.Top + 5 + LegendFontSize + (r * rowHeight);
+                float currentX = startX;
+
+                foreach (var item in rowItems)
+                {
+                    var itemWidth = font.MeasureText(item.Label) + LegendIconSize + 10;
+                    var itemRect = new SKRect(currentX, y - LegendFontSize, currentX + itemWidth, y + 5);
+                    if (itemRect.Contains(point)) return item.Series;
+                    currentX += itemWidth + LegendItemSpacing;
+                }
+            }
+        }
+        else if (LegendPosition == LegendPosition.Left || LegendPosition == LegendPosition.Right)
+        {
+            float x = legendDrawArea.Left + 5;
+            float currentY = legendDrawArea.Top + 20;
+            foreach (var series in Series)
+            {
+                var label = series.Title ?? $"Series {Series.IndexOf(series) + 1}";
+                float itemWidth = font.MeasureText(label) + LegendIconSize + 10;
+                var itemRect = new SKRect(x - 2, currentY - LegendFontSize, x + itemWidth, currentY + 5);
+                if (itemRect.Contains(point)) return series;
+                currentY += LegendFontSize + 10;
+            }
+        }
+        else if (LegendPosition == LegendPosition.Floating)
+        {
+            float x = plotArea.Right - 100;
+            float y = plotArea.Top + 20;
+            foreach (var series in Series)
+            {
+                var label = series.Title ?? $"Series {Series.IndexOf(series) + 1}";
+                float itemWidth = font.MeasureText(label) + LegendIconSize + 10;
+                var itemRect = new SKRect(x - 2, y - LegendFontSize, x + itemWidth, y + 5);
+                if (itemRect.Contains(point)) return series;
+                y += LegendFontSize + 5;
+            }
+        }
+
+        return null;
+    }
+
+    private float _lastWidth;
+    private float _lastHeight;
 
     protected virtual void OnMouseMove(MouseEventArgs e)
     {
-        LastMousePosition = new SKPoint((float)e.OffsetX, (float)e.OffsetY);
+        LastMousePosition = new SKPoint((float)e.OffsetX * _density, (float)e.OffsetY * _density);
         StateHasChanged();
     }
 
@@ -239,11 +328,13 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         StateHasChanged();
     }
 
-    protected void OnPaintSurface(SKPaintGLSurfaceEventArgs e) {
+    protected void OnPaintSurface(SKPaintGLSurfaceEventArgs e)
+    {
         OnPaintSurface(e.Surface.Canvas, e.Info);
     }
 
-    protected void OnPaintSurface(SKPaintSurfaceEventArgs  e) {
+    protected void OnPaintSurface(SKPaintSurfaceEventArgs e)
+    {
         OnPaintSurface(e.Surface.Canvas, e.Info);
     }
 
@@ -253,14 +344,27 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     /// <param name="e">The paint surface event arguments.</param>
     protected void OnPaintSurface(SKCanvas canvas, SKImageInfo info)
     {
-        // Reset hover state for this frame calculation
+        _lastWidth = info.Width;
+        _lastHeight = info.Height;
+
+        // Reset hover state and cache for this frame calculation
         HoveredSeries = null;
         HoveredPointIndex = null;
         HoveredDataPoint = null;
+        _cachedAllX = null;
 
         canvas.Clear(GetThemeColor(BackgroundColor));
 
+        if (!string.IsNullOrEmpty(Title))
+        {
+            RenderTitle(canvas, info);
+        }
+
         var totalArea = new SKRect(Margin.Left, Margin.Top, info.Width - Margin.Right, info.Height - Margin.Bottom);
+        if (!string.IsNullOrEmpty(Title))
+        {
+            totalArea = new SKRect(totalArea.Left, totalArea.Top + 30, totalArea.Right, totalArea.Bottom);
+        }
         var plotArea = totalArea;
         var accessibleArea = totalArea; // Area available for axes and legend
 
@@ -303,17 +407,18 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             // Check legend items for hover first (so they take precedence over lines)
             if (ShowLegend && LegendPosition != LegendPosition.None)
             {
-                using var paint = new SKPaint { TextSize = LegendFontSize };
+                using var font = new SKFont { Size = LegendFontSize };
+                using var paint = new SKPaint();
 
                 // Handle Horizontal (Top/Bottom)
                 if (LegendPosition == LegendPosition.Top || LegendPosition == LegendPosition.Bottom)
                 {
-                    var rows = GetLegendRows(paint, legendDrawArea.Width);
+                    var rows = GetLegendRows(font, legendDrawArea.Width);
                     float rowHeight = LegendFontSize + 10;
                     for (int r = 0; r < rows.Count; r++)
                     {
                         var rowItems = rows[r];
-                        float totalRowWidth = rowItems.Sum(i => paint.MeasureText(i.Label) + LegendIconSize + 10) + (rowItems.Count - 1) * LegendItemSpacing;
+                        float totalRowWidth = rowItems.Sum(i => font.MeasureText(i.Label) + LegendIconSize + 10) + (rowItems.Count - 1) * LegendItemSpacing;
                         float startX = (LegendPosition == LegendPosition.Bottom)
                             ? plotArea.Left + (plotArea.Width - totalRowWidth) / 2
                             : legendDrawArea.Left + (legendDrawArea.Width - totalRowWidth) / 2;
@@ -323,7 +428,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
                         foreach (var item in rowItems)
                         {
-                            var itemWidth = paint.MeasureText(item.Label) + LegendIconSize + 10;
+                            var itemWidth = font.MeasureText(item.Label) + LegendIconSize + 10;
                             var itemRect = new SKRect(currentX, y - LegendFontSize, currentX + itemWidth, y + 5);
                             if (itemRect.Contains(mousePoint))
                             {
@@ -343,7 +448,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                     foreach (var series in Series)
                     {
                         var label = series.Title ?? $"Series {Series.IndexOf(series) + 1}";
-                        float itemWidth = paint.MeasureText(label) + LegendIconSize + 10;
+                        float itemWidth = font.MeasureText(label) + LegendIconSize + 10;
                         var itemRect = new SKRect(x - 2, currentY - LegendFontSize, x + itemWidth, currentY + 5);
                         if (itemRect.Contains(mousePoint))
                         {
@@ -361,7 +466,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                     foreach (var series in Series)
                     {
                         var label = series.Title ?? $"Series {Series.IndexOf(series) + 1}";
-                        float itemWidth = paint.MeasureText(label) + LegendIconSize + 10;
+                        float itemWidth = font.MeasureText(label) + LegendIconSize + 10;
                         var itemRect = new SKRect(x - 2, y - LegendFontSize, x + itemWidth, y + 5);
                         if (itemRect.Contains(mousePoint))
                         {
@@ -376,7 +481,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             // Check series/points if legend wasn't hit
             if (HoveredSeries == null && plotArea.Contains(mousePoint))
             {
-                foreach (var series in Series.AsEnumerable().Reverse())
+                foreach (var series in Series.AsEnumerable().Reverse().Where(s => s.Visible))
                 {
                     var hit = series.HitTest(mousePoint, plotArea);
                     if (hit != null)
@@ -402,19 +507,19 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         canvas.Save();
         canvas.ClipRect(plotArea);
         // Render inactive series first
-        foreach (var series in Series.Where(s => s != HoveredSeries))
+        foreach (var series in Series.Where(s => s != HoveredSeries && s.IsEffectivelyVisible))
         {
             series.Render(canvas, plotArea);
         }
         // Render active series last (on top)
-        if (HoveredSeries != null)
+        if (HoveredSeries != null && HoveredSeries.IsEffectivelyVisible)
         {
             HoveredSeries.Render(canvas, plotArea);
         }
         canvas.Restore();
 
         // Pass 6: Render Tooltip
-        if (HoveredDataPoint != null && LastMousePosition.HasValue)
+        if (HoveredDataPoint != null && LastMousePosition.HasValue && HoveredSeries != null && HoveredSeries.Visible)
         {
             RenderTooltip(canvas, plotArea);
         }
@@ -451,11 +556,15 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         using var textPaint = new SKPaint
         {
             Color = textColor,
-            TextSize = 12,
             IsAntialias = true
         };
 
-        var textWidth = textPaint.MeasureText(tooltipText);
+        using var font = new SKFont
+        {
+            Size = 12
+        };
+
+        var textWidth = font.MeasureText(tooltipText);
         var rect = new SKRect(mousePoint.X + 10, mousePoint.Y - 25, mousePoint.X + 20 + textWidth, mousePoint.Y - 5);
 
         // Keep tooltip within canvas
@@ -481,20 +590,40 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         };
         canvas.DrawRoundRect(rect, 4, 4, borderPaint);
 
-        canvas.DrawText(tooltipText, rect.Left + 5, rect.Bottom - 5, textPaint);
+        canvas.DrawText(tooltipText, rect.Left + 5, rect.Bottom - 5, SKTextAlign.Left, font, textPaint);
+    }
+
+    private void RenderTitle(SKCanvas canvas, SKImageInfo info)
+    {
+        using var paint = new SKPaint
+        {
+            Color = GetThemeColor(TextColor),
+            IsAntialias = true,
+            Style = SKPaintStyle.Fill
+        };
+
+        using var font = new SKFont
+        {
+            Size = 20,
+            Embolden = true
+        };
+
+        float x = Margin.Left + (info.Width - Margin.Left - Margin.Right) / 2;
+        float y = Margin.Top + 20;
+
+        canvas.DrawText(Title!, x, y, SKTextAlign.Center, font, paint);
     }
 
     private (SKRect PlotArea, SKRect LegendArea) MeasureLegendWithArea(SKRect currentArea)
     {
-        using var paint = new SKPaint
+        using var font = new SKFont
         {
-            TextSize = LegendFontSize,
-            IsAntialias = true
+            Size = LegendFontSize
         };
 
         if (LegendPosition == LegendPosition.Top || LegendPosition == LegendPosition.Bottom)
         {
-            var rows = GetLegendRows(paint, currentArea.Width);
+            var rows = GetLegendRows(font, currentArea.Width);
             float legendHeight = rows.Count * (LegendFontSize + 10);
 
             if (LegendPosition == LegendPosition.Top)
@@ -517,7 +646,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             foreach (var series in Series)
             {
                 var label = series.Title ?? $"Series {GetSeriesIndex(series) + 1}";
-                legendWidth = Math.Max(legendWidth, paint.MeasureText(label) + LegendIconSize + 15);
+                legendWidth = Math.Max(legendWidth, font.MeasureText(label) + LegendIconSize + 15);
             }
             legendWidth += 10; // padding
 
@@ -538,7 +667,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         return (currentArea, SKRect.Empty);
     }
 
-    private List<List<LegendItemInfo>> GetLegendRows(SKPaint paint, float maxWidth)
+    private List<List<LegendItemInfo>> GetLegendRows(SKFont font, float maxWidth)
     {
         var rows = new List<List<LegendItemInfo>>();
         var currentRow = new List<LegendItemInfo>();
@@ -553,7 +682,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
         foreach (var item in items)
         {
-            float itemWidth = paint.MeasureText(item.Label) + LegendIconSize + 10;
+            float itemWidth = font.MeasureText(item.Label) + LegendIconSize + 10;
             if (currentRow.Any() && currentRowWidth + LegendItemSpacing + itemWidth > maxWidth)
             {
                 rows.Add(currentRow);
@@ -585,22 +714,20 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
     private void RenderLegend(SKCanvas canvas, SKRect plotArea, SKRect targetArea)
     {
-        using var textPaint = new SKPaint
+        using var font = new SKFont
         {
-            Color = GetThemeColor(TextColor),
-            TextSize = LegendFontSize,
-            IsAntialias = true
+            Size = LegendFontSize
         };
 
         if (LegendPosition == LegendPosition.Top || LegendPosition == LegendPosition.Bottom)
         {
-            var rows = GetLegendRows(textPaint, targetArea.Width);
+            var rows = GetLegendRows(font, targetArea.Width);
             float rowHeight = LegendFontSize + 10;
 
             for (int r = 0; r < rows.Count; r++)
             {
                 var rowItems = rows[r];
-                float totalRowWidth = rowItems.Sum(i => textPaint.MeasureText(i.Label) + LegendIconSize + 10) + (rowItems.Count - 1) * LegendItemSpacing;
+                float totalRowWidth = rowItems.Sum(i => font.MeasureText(i.Label) + LegendIconSize + 10) + (rowItems.Count - 1) * LegendItemSpacing;
 
                 float startX;
                 if (LegendPosition == LegendPosition.Bottom)
@@ -622,7 +749,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                 float currentX = startX;
                 foreach (var item in rowItems)
                 {
-                    var itemWidth = textPaint.MeasureText(item.Label) + LegendIconSize + 10;
+                    var itemWidth = font.MeasureText(item.Label) + LegendIconSize + 10;
                     var itemRect = new SKRect(currentX, y - LegendFontSize, currentX + itemWidth, y + 5);
 
                     var hasHover = HoveredSeries != null;
@@ -636,18 +763,24 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                         currentTextColor = currentTextColor.WithAlpha((byte)(currentTextColor.Alpha * 0.15f));
                     }
 
-                    using var iconPaint = new SKPaint { Color = iconColor, Style = SKPaintStyle.Fill };
-                    using var currentTextPaint = new SKPaint { Color = currentTextColor, TextSize = LegendFontSize, IsAntialias = true };
+                    if (item.Series != null && !item.Series.Visible)
+                    {
+                        iconColor = iconColor.WithAlpha((byte)(iconColor.Alpha * 0.3f));
+                        currentTextColor = currentTextColor.WithAlpha((byte)(currentTextColor.Alpha * 0.3f));
+                    }
+
+                    using var iconPaint = new SKPaint { Color = iconColor, Style = SKPaintStyle.Fill, IsAntialias = true };
+                    using var currentTextPaint = new SKPaint { Color = currentTextColor, IsAntialias = true };
 
                     // Highlight if hovered
                     if (isItemHovered)
                     {
-                        using var highlightPaint = new SKPaint { Color = item.Color.WithAlpha(40), Style = SKPaintStyle.Fill };
+                        using var highlightPaint = new SKPaint { Color = item.Color.WithAlpha(40), Style = SKPaintStyle.Fill, IsAntialias = true };
                         canvas.DrawRoundRect(itemRect, 4, 4, highlightPaint);
                     }
 
                     canvas.DrawRect(currentX, y - LegendIconSize + 2, LegendIconSize, LegendIconSize, iconPaint);
-                    canvas.DrawText(item.Label, currentX + LegendIconSize + 5, y, currentTextPaint);
+                    canvas.DrawText(item.Label, currentX + LegendIconSize + 5, y, SKTextAlign.Left, font, currentTextPaint);
                     currentX += itemWidth + LegendItemSpacing;
                 }
             }
@@ -662,7 +795,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                 var label = series.Title ?? $"Series {Series.IndexOf(series) + 1}";
                 var color = GetSeriesColor(series);
 
-                var itemWidth = textPaint.MeasureText(label) + LegendIconSize + 10;
+                var itemWidth = font.MeasureText(label) + LegendIconSize + 10;
                 var itemRect = new SKRect(x - 2, currentY - LegendFontSize, x + itemWidth, currentY + 5);
 
                 var hasHover = HoveredSeries != null;
@@ -676,17 +809,23 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                     currentTextColor = currentTextColor.WithAlpha((byte)(currentTextColor.Alpha * 0.15f));
                 }
 
+                if (!series.Visible)
+                {
+                    iconColor = iconColor.WithAlpha((byte)(iconColor.Alpha * 0.3f));
+                    currentTextColor = currentTextColor.WithAlpha((byte)(currentTextColor.Alpha * 0.3f));
+                }
+
                 // Highlight if hovered
                 if (isItemHovered)
                 {
-                    using var highlightPaint = new SKPaint { Color = color.WithAlpha(40), Style = SKPaintStyle.Fill };
+                    using var highlightPaint = new SKPaint { Color = color.WithAlpha(40), Style = SKPaintStyle.Fill, IsAntialias = true };
                     canvas.DrawRoundRect(itemRect, 4, 4, highlightPaint);
                 }
 
-                using var iconPaint = new SKPaint { Color = iconColor, Style = SKPaintStyle.Fill };
-                using var currentTextPaint = new SKPaint { Color = currentTextColor, TextSize = LegendFontSize, IsAntialias = true };
+                using var iconPaint = new SKPaint { Color = iconColor, Style = SKPaintStyle.Fill, IsAntialias = true };
+                using var currentTextPaint = new SKPaint { Color = currentTextColor, IsAntialias = true };
                 canvas.DrawRect(x, currentY - LegendIconSize + 2, LegendIconSize, LegendIconSize, iconPaint);
-                canvas.DrawText(label, x + LegendIconSize + 5, currentY, currentTextPaint);
+                canvas.DrawText(label, x + LegendIconSize + 5, currentY, SKTextAlign.Left, font, currentTextPaint);
                 currentY += LegendFontSize + 10;
             }
         }
@@ -696,13 +835,14 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             float y = plotArea.Top + 20;
 
             // Draw a small background for floating
-            float maxWidth = Series.Any() ? Series.Max(s => textPaint.MeasureText(s.Title ?? "Series")) + LegendIconSize + 20 : 100;
+            float maxWidth = Series.Any() ? Series.Max(s => font.MeasureText(s.Title ?? "Series")) + LegendIconSize + 20 : 100;
             float totalHeight = Series.Count * (LegendFontSize + 5) + 10;
 
             using var bgPaint = new SKPaint
             {
                 Color = GetThemeColor(BackgroundColor).WithAlpha(200),
-                Style = SKPaintStyle.Fill
+                Style = SKPaintStyle.Fill,
+                IsAntialias = true
             };
             canvas.DrawRect(x - 5, y - LegendFontSize, maxWidth, totalHeight, bgPaint);
 
@@ -711,7 +851,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                 var label = series.Title ?? $"Series {Series.IndexOf(series) + 1}";
                 var color = GetSeriesColor(series);
 
-                var itemWidth = textPaint.MeasureText(label) + LegendIconSize + 10;
+                var itemWidth = font.MeasureText(label) + LegendIconSize + 10;
                 var itemRect = new SKRect(x - 2, y - LegendFontSize, x + itemWidth, y + 5);
 
                 var hasHover = HoveredSeries != null;
@@ -725,17 +865,23 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                     currentTextColor = currentTextColor.WithAlpha((byte)(currentTextColor.Alpha * 0.15f));
                 }
 
+                if (!series.Visible)
+                {
+                    iconColor = iconColor.WithAlpha((byte)(iconColor.Alpha * 0.3f));
+                    currentTextColor = currentTextColor.WithAlpha((byte)(currentTextColor.Alpha * 0.3f));
+                }
+
                 // Highlight if hovered
                 if (isItemHovered)
                 {
-                    using var highlightPaint = new SKPaint { Color = color.WithAlpha(40), Style = SKPaintStyle.Fill };
+                    using var highlightPaint = new SKPaint { Color = color.WithAlpha(40), Style = SKPaintStyle.Fill, IsAntialias = true };
                     canvas.DrawRoundRect(itemRect, 4, 4, highlightPaint);
                 }
 
-                using var iconPaint = new SKPaint { Color = iconColor, Style = SKPaintStyle.Fill };
-                using var currentTextPaint = new SKPaint { Color = currentTextColor, TextSize = LegendFontSize, IsAntialias = true };
+                using var iconPaint = new SKPaint { Color = iconColor, Style = SKPaintStyle.Fill, IsAntialias = true };
+                using var currentTextPaint = new SKPaint { Color = currentTextColor, IsAntialias = true };
                 canvas.DrawRect(x, y - LegendIconSize + 2, LegendIconSize, LegendIconSize, iconPaint);
-                canvas.DrawText(label, x + LegendIconSize + 5, y, currentTextPaint);
+                canvas.DrawText(label, x + LegendIconSize + 5, y, SKTextAlign.Left, font, currentTextPaint);
                 y += LegendFontSize + 5;
             }
         }
@@ -780,9 +926,87 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
     internal int GetSeriesIndex(NTBaseSeries<TData> series) => Series.IndexOf(series);
 
+    internal float GetBarSeriesTotalWeight() => Series.OfType<NTBarSeries<TData>>().Sum(s => s.VisibilityFactor);
+
+    internal float GetBarSeriesOffsetWeight(NTBarSeries<TData> series)
+    {
+        float weight = 0;
+        foreach (var s in Series.OfType<NTBarSeries<TData>>())
+        {
+            if (s == series) return weight;
+            weight += s.VisibilityFactor;
+        }
+        return weight;
+    }
+
+    /// <summary>
+    ///    Gets or sets whether to use a categorical scale for the X axis.
+    ///    If true, every unique X value will be shown and spaced equally.
+    /// </summary>
+    [Parameter]
+    public bool IsCategoricalX { get; set; }
+
+    /// <summary>
+    ///     Returns a list of all unique X values across all cartesian series, sorted.
+    /// </summary>
+    public List<double> GetAllXValues()
+    {
+        if (_cachedAllX != null) return _cachedAllX;
+
+        var cartesianSeries = Series.OfType<NTCartesianSeries<TData>>().Where(s => s.IsEffectivelyVisible).ToList();
+        var allX = new HashSet<double>();
+        foreach (var s in cartesianSeries)
+        {
+            if (s.Data == null) continue;
+            foreach (var item in s.Data)
+            {
+                allX.Add(s.XValueSelector(item));
+            }
+        }
+        _cachedAllX = allX.OrderBy(x => x).ToList();
+        return _cachedAllX;
+    }
+
+    internal double GetScaledXValue(double originalX)
+    {
+        if (IsCategoricalX)
+        {
+            var allX = GetAllXValues();
+            int index = allX.IndexOf(originalX);
+            return index >= 0 ? index : originalX;
+        }
+        return originalX;
+    }
+
+    public float ScaleX(double x, SKRect plotArea)
+    {
+        var (min, max) = GetXRange(true);
+        var range = max - min;
+        if (range <= 0) return plotArea.Left;
+        return (float)(plotArea.Left + (x - min) / range * plotArea.Width);
+    }
+
+    public float ScaleY(double y, SKRect plotArea)
+    {
+        var (min, max) = GetYRange(true);
+        var range = max - min;
+        if (range <= 0) return plotArea.Bottom;
+        return (float)(plotArea.Bottom - (y - min) / range * plotArea.Height);
+    }
+
     public (double Min, double Max) GetXRange(bool padded = false)
     {
-        var cartesianSeries = Series.OfType<NTCartesianSeries<TData>>().ToList();
+        if (IsCategoricalX)
+        {
+            var allX = GetAllXValues();
+            if (!allX.Any()) return (0, 1);
+            if (!padded) return (0, Math.Max(1, allX.Count - 1));
+
+            var catRange = Math.Max(1, allX.Count - 1);
+            return (-catRange * RangePadding, catRange + catRange * RangePadding);
+        }
+
+        var cartesianSeries = Series.OfType<NTCartesianSeries<TData>>().Where(s => s.IsEffectivelyVisible).ToList();
         if (!cartesianSeries.Any()) return (0, 1);
 
         double min = double.MaxValue;
@@ -806,7 +1030,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
     public (double Min, double Max) GetYRange(bool padded = false)
     {
-        var cartesianSeries = Series.OfType<NTCartesianSeries<TData>>().ToList();
+        var cartesianSeries = Series.OfType<NTCartesianSeries<TData>>().Where(s => s.IsEffectivelyVisible).ToList();
         if (!cartesianSeries.Any()) return (0, 1);
 
         double min = double.MaxValue;
@@ -814,17 +1038,28 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         foreach (var s in cartesianSeries)
         {
             if (s.Data == null || !s.Data.Any()) continue;
-            var values = s.Data.Select(s.YValueSelector).ToList();
+            var values = s.Data.Select(item => s.YValueSelector(item) * s.VisibilityFactor).ToList();
             if (!values.Any()) continue;
             min = Math.Min(min, values.Min());
             max = Math.Max(max, values.Max());
         }
 
         if (min == double.MaxValue) return (0, 1);
+
+        // Bar charts should generally start at 0
+        if (Series.Any(s => s is NTBarSeries<TData> && s.IsEffectivelyVisible))
+        {
+            min = Math.Min(0, min);
+        }
+
         if (!padded) return (min, max);
 
         var range = max - min;
         if (range == 0) range = 1;
-        return (min - range * RangePadding, max + range * RangePadding);
+
+        var minPad = min - (range * RangePadding);
+        if (min >= 0 && minPad < 0) minPad = 0;
+
+        return (minPad, max + range * RangePadding);
     }
 }

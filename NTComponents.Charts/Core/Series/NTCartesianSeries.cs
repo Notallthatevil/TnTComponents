@@ -87,13 +87,16 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
         using var paint = new SKPaint
         {
             Color = color,
-            IsAntialias = true,
-            TextSize = DataLabelSize,
-            TextAlign = SKTextAlign.Center
+            IsAntialias = true
+        };
+
+        using var font = new SKFont
+        {
+            Size = DataLabelSize
         };
 
         var text = string.Format(DataLabelFormat, value);
-        canvas.DrawText(text, x, y - (PointSize / 2 + 5), paint);
+        canvas.DrawText(text, x, y - (PointSize / 2 + 5), SKTextAlign.Center, font, paint);
     }
 
     protected void RenderPoint(SKCanvas canvas, float x, float y, SKColor color)

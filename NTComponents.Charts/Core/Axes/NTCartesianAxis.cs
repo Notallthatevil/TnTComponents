@@ -16,14 +16,14 @@ public class NTCartesianAxis<TData> : NTAxis<TData> where TData : class
    {
       if (Direction == AxisDirection.X)
       {
-         float labelHeight = 20;
-         float titleHeight = string.IsNullOrEmpty(Title) ? 0 : 25;
-         float totalAxisHeight = labelHeight + titleHeight + 5;
+         float labelHeight = 18;
+         float titleHeight = string.IsNullOrEmpty(Title) ? 0 : 20;
+         float totalAxisHeight = labelHeight + titleHeight + 2;
          return new SKRect(renderArea.Left, renderArea.Top, renderArea.Right, renderArea.Bottom - totalAxisHeight);
       }
       else
       {
-         float labelWidth = 40;
+         float labelWidth = 35;
          float titleWidth = string.IsNullOrEmpty(Title) ? 0 : 25;
          float totalAxisWidth = labelWidth + titleWidth + 5;
          return new SKRect(renderArea.Left + totalAxisWidth, renderArea.Top, renderArea.Right, renderArea.Bottom);
@@ -41,18 +41,24 @@ public class NTCartesianAxis<TData> : NTAxis<TData> where TData : class
       using var textPaint = new SKPaint
       {
          Color = Chart.GetThemeColor(Chart.TextColor),
-         TextSize = 12,
-         IsAntialias = true,
-         TextAlign = SKTextAlign.Center
+         IsAntialias = true
+      };
+
+      using var textFont = new SKFont
+      {
+         Size = 12
       };
 
       using var titlePaint = new SKPaint
       {
          Color = Chart.GetThemeColor(Chart.TextColor),
-         TextSize = 16,
-         IsAntialias = true,
-         TextAlign = SKTextAlign.Center,
-         FakeBoldText = true
+         IsAntialias = true
+      };
+
+      using var titleFont = new SKFont
+      {
+         Size = 16,
+         Embolden = true
       };
 
       using var linePaint = new SKPaint
@@ -69,23 +75,29 @@ public class NTCartesianAxis<TData> : NTAxis<TData> where TData : class
          canvas.DrawLine(plotArea.Left, yLine, plotArea.Right, yLine, linePaint);
 
          // Draw labels
-         int labelCount = 5;
-         for (int i = 0; i < labelCount; i++)
+         var allX = Chart.GetAllXValues();
+         if (allX.Any())
          {
-            float t = i / (float)(labelCount - 1);
-            var val = xMinReal + t * (xMaxReal - xMinReal);
-            var x = plotArea.Left + (float)((val - xMin) / (xMax - xMin)) * plotArea.Width;
+            for (int i = 0; i < allX.Count; i++)
+            {
+               double val = Chart.IsCategoricalX ? i : allX[i];
+               float x = Chart.ScaleX(val, plotArea);
+               var label = allX[i].ToString("0.#");
 
-            if (i == 0) textPaint.TextAlign = SKTextAlign.Left;
-            else if (i == labelCount - 1) textPaint.TextAlign = SKTextAlign.Right;
-            else textPaint.TextAlign = SKTextAlign.Center;
+               SKTextAlign textAlign = SKTextAlign.Center;
+               if (!Chart.IsCategoricalX)
+               {
+                  if (i == 0 && allX.Count > 1) textAlign = SKTextAlign.Left;
+                  else if (i == allX.Count - 1 && allX.Count > 1) textAlign = SKTextAlign.Right;
+               }
 
-            canvas.DrawText(val.ToString("0.#"), x, yLine + 15, textPaint);
+               canvas.DrawText(label, x, yLine + 14, textAlign, textFont, textPaint);
+            }
          }
 
          if (!string.IsNullOrEmpty(Title))
          {
-            canvas.DrawText(Title, plotArea.Left + plotArea.Width / 2, totalArea.Bottom - 5, titlePaint);
+            canvas.DrawText(Title, plotArea.Left + plotArea.Width / 2, plotArea.Bottom + 34, SKTextAlign.Center, titleFont, titlePaint);
          }
       }
       else
@@ -95,7 +107,6 @@ public class NTCartesianAxis<TData> : NTAxis<TData> where TData : class
 
          // Draw labels
          int labelCount = 5;
-         textPaint.TextAlign = SKTextAlign.Right;
          for (int i = 0; i < labelCount; i++)
          {
             float t = i / (float)(labelCount - 1);
@@ -106,16 +117,16 @@ public class NTCartesianAxis<TData> : NTAxis<TData> where TData : class
             if (i == 0) yOffset = 0;
             else if (i == labelCount - 1) yOffset = 10;
 
-            canvas.DrawText(val.ToString("0.#"), xLine - 5, y + yOffset, textPaint);
+            canvas.DrawText(val.ToString("0.#"), xLine - 5, y + yOffset, SKTextAlign.Right, textFont, textPaint);
          }
 
          if (!string.IsNullOrEmpty(Title))
          {
-            var xTitle = totalArea.Left + 15;
+            var xTitle = totalArea.Left + 8;
             var yTitle = plotArea.Top + plotArea.Height / 2;
             canvas.Save();
             canvas.RotateDegrees(-90, xTitle, yTitle);
-            canvas.DrawText(Title, xTitle, yTitle, titlePaint);
+            canvas.DrawText(Title, xTitle, yTitle, SKTextAlign.Center, titleFont, titlePaint);
             canvas.Restore();
          }
       }

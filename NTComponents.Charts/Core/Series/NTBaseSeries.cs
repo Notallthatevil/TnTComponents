@@ -49,19 +49,88 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     public bool AnimationEnabled { get; set; } = true;
 
     /// <summary>
+    ///     Gets or sets whether the series is visible.
+    /// </summary>
+    [Parameter]
+    public bool Visible
+    {
+        get => _visible;
+        set
+        {
+            if (_visible != value)
+            {
+                _visible = value;
+                OnVisibilityChanged();
+            }
+        }
+    }
+
+    private bool _visible = true;
+
+    /// <summary>
     ///     Gets or sets the duration of the animation.
     /// </summary>
     [Parameter]
-    public TimeSpan AnimationDuration { get; set; } = TimeSpan.FromMilliseconds(1000);
+    public TimeSpan AnimationDuration { get; set; } = TimeSpan.FromMilliseconds(500);
 
     /// <summary>
-    ///     Gets the coordinate system used by this series.
+    ///     Gets the start time of the animation.
+    /// </summary>
+    protected DateTime AnimationStartTime { get; set; } = DateTime.Now;
+
+    /// <summary>
+    ///     Gets or sets the previous data.
+    /// </summary>
+    protected IEnumerable<TData>? PreviousData { get; set; }
+
+    /// <summary>
+    ///     Gets the coordinate system of the series.
     /// </summary>
     public abstract ChartCoordinateSystem CoordinateSystem { get; }
 
-    protected DateTime AnimationStartTime { get; private set; } = DateTime.Now;
+    private float _currentVisibility = 1f;
+    private float _startVisibility = 1f;
+    private DateTime? _visibilityAnimationStartTime;
 
-    protected IEnumerable<TData> PreviousData { get; private set; } = [];
+    private void OnVisibilityChanged()
+    {
+        _startVisibility = VisibilityFactor;
+        _visibilityAnimationStartTime = DateTime.Now;
+
+        // We also want to reset the primary data animation if we are appearing
+        if (Visible)
+        {
+            ResetAnimation();
+        }
+    }
+
+    /// <summary>
+    ///     Gets the current visibility factor (0.0 to 1.0) for animation.
+    /// </summary>
+    public float VisibilityFactor
+    {
+        get
+        {
+            if (!AnimationEnabled) return Visible ? 1f : 0f;
+            if (_visibilityAnimationStartTime == null) return Visible ? 1f : 0f;
+
+            var elapsed = DateTime.Now - _visibilityAnimationStartTime.Value;
+            var progress = (float)(elapsed.TotalMilliseconds / AnimationDuration.TotalMilliseconds);
+            progress = Math.Clamp(progress, 0, 1);
+
+            // Use simple linear for visibility factor transition
+            _currentVisibility = _startVisibility + ((Visible ? 1f : 0f) - _startVisibility) * progress;
+
+            if (progress >= 1) _visibilityAnimationStartTime = null;
+
+            return _currentVisibility;
+        }
+    }
+
+    /// <summary>
+    ///     Returns true if the series is visible or currently animating visibility.
+    /// </summary>
+    public bool IsEffectivelyVisible => Visible || (VisibilityFactor > 0.001f);
 
     protected override void OnInitialized()
     {
@@ -76,6 +145,7 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
+
         if (!ReferenceEquals(PreviousData, Data))
         {
             OnDataChanged();

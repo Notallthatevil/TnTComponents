@@ -47,10 +47,15 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
         var isHovered = Chart.HoveredSeries == this;
         var hasHover = Chart.HoveredSeries != null;
         var color = Chart.GetSeriesColor(this);
+        var visibilityFactor = VisibilityFactor;
 
         if (hasHover && !isHovered)
         {
-            color = color.WithAlpha((byte)(color.Alpha * 0.15f));
+            color = color.WithAlpha((byte)(color.Alpha * 0.15f * visibilityFactor));
+        }
+        else
+        {
+            color = color.WithAlpha((byte)(color.Alpha * visibilityFactor));
         }
 
         using var paint = new SKPaint
@@ -109,8 +114,6 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
         var points = new List<SKPoint>();
         var progress = GetAnimationProgress();
         var easedProgress = BackEase(progress);
-        var xRange = Math.Max(0.0001, xMax - xMin);
-        var yRange = Math.Max(0.0001, yMax - yMin);
 
         if (AnimationCurrentValues == null || AnimationCurrentValues.Length != dataList.Count)
         {
@@ -119,7 +122,8 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
 
         for (int i = 0; i < dataList.Count; i++)
         {
-            var xValue = XValueSelector(dataList[i]);
+            var originalX = XValueSelector(dataList[i]);
+            var xValue = Chart.GetScaledXValue(originalX);
             var targetYValue = YValueSelector(dataList[i]);
 
             var startYValue = (AnimationStartValues != null && i < AnimationStartValues.Length)
@@ -127,10 +131,15 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
                 : yMin;
 
             var currentYValue = startYValue + (targetYValue - startYValue) * easedProgress;
+
+            // We use VisibilityFactor^2 for the value to ensure it shrinks to zero 
+            // even as the axis range (which uses linear VisibilityFactor) also shrinks.
+            var vFactor = VisibilityFactor;
+            currentYValue *= vFactor * vFactor;
             AnimationCurrentValues[i] = currentYValue;
 
-            var x = renderArea.Left + (float)((xValue - xMin) / xRange) * renderArea.Width;
-            var y = renderArea.Bottom - (float)((currentYValue - yMin) / yRange) * renderArea.Height;
+            var x = Chart.ScaleX(xValue, renderArea);
+            var y = Chart.ScaleY(currentYValue, renderArea);
 
             points.Add(new SKPoint(x, y));
         }
