@@ -34,6 +34,12 @@ public partial class NTChart<TData> : TnTComponentBase where TData : class
         .Build();
 
     /// <summary>
+    ///     Gets or sets the margin around the chart.
+    /// </summary>
+    [Parameter]
+    public ChartMargin Margin { get; set; } = ChartMargin.All(20);
+
+    /// <summary>
     ///     Gets or sets the title of the chart.
     /// </summary>
     [Parameter]
@@ -64,17 +70,24 @@ public partial class NTChart<TData> : TnTComponentBase where TData : class
         canvas.Clear();
 
         var info = e.Info;
-        var renderArea = new SKRect(0, 0, info.Width, info.Height);
+        var totalArea = new SKRect(Margin.Left, Margin.Top, info.Width - Margin.Right, info.Height - Margin.Bottom);
+        var plotArea = totalArea;
 
-        // Render axes first and update renderArea
+        // Pass 1: Measure axes and update plotArea
         foreach (var axis in Axes.Where(a => a.Visible))
         {
-            renderArea = axis.Render(canvas, renderArea);
+            plotArea = axis.Measure(plotArea);
+        }
+
+        // Pass 2: Render axes using the final plotArea
+        foreach (var axis in Axes.Where(a => a.Visible))
+        {
+            axis.Render(canvas, plotArea, totalArea);
         }
 
         foreach (var series in Series)
         {
-            series.Render(canvas, renderArea);
+            series.Render(canvas, plotArea);
         }
     }
 
@@ -113,5 +126,43 @@ public partial class NTChart<TData> : TnTComponentBase where TData : class
         {
             Series.Remove(series);
         }
+    }
+
+    internal int GetSeriesIndex(NTBaseSeries<TData> series) => Series.IndexOf(series);
+
+    public (double Min, double Max) GetXRange()
+    {
+        var cartesianSeries = Series.OfType<NTCartesianSeries<TData>>().ToList();
+        if (!cartesianSeries.Any()) return (0, 1);
+
+        double min = double.MaxValue;
+        double max = double.MinValue;
+        foreach (var s in cartesianSeries)
+        {
+            if (s.Data == null || !s.Data.Any()) continue;
+            var values = s.Data.Select(s.XValueSelector).ToList();
+            if (!values.Any()) continue;
+            min = Math.Min(min, values.Min());
+            max = Math.Max(max, values.Max());
+        }
+        return min == double.MaxValue ? (0, 1) : (min, max);
+    }
+
+    public (double Min, double Max) GetYRange()
+    {
+        var cartesianSeries = Series.OfType<NTCartesianSeries<TData>>().ToList();
+        if (!cartesianSeries.Any()) return (0, 1);
+
+        double min = double.MaxValue;
+        double max = double.MinValue;
+        foreach (var s in cartesianSeries)
+        {
+            if (s.Data == null || !s.Data.Any()) continue;
+            var values = s.Data.Select(s.YValueSelector).ToList();
+            if (!values.Any()) continue;
+            min = Math.Min(min, values.Min());
+            max = Math.Max(max, values.Max());
+        }
+        return min == double.MaxValue ? (0, 1) : (min, max);
     }
 }

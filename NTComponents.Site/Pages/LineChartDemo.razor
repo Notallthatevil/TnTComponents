@@ -1,24 +1,41 @@
 @page "/line-chart"
 @using NTComponents.Charts
+@using NTComponents.Charts.Core
+@using NTComponents.Charts.Core.Axes
+@using NTComponents.Charts.Core.Series
+
 <div class="container py-4">
     <h1>Line Chart Demo</h1>
-    <p class="lead">Examples and configurations for the Line Chart component.</p>
+    <p class="lead">Examples and configurations for the new declarative NTLineSeries component.</p>
 
     <div class="row mt-4">
         <div class="col-md-6 mb-4">
             <div class="card p-3 shadow-sm">
                 <h3>Basic Line Chart</h3>
                 <div style="height: 300px;">
-                    <LineChart Title="Basic Data" Series="@_basicSeries" />
+                    <NTChart TData="CartesianPoint" Title="Basic Data">
+                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="X Axis" />
+                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Y Axis" />
+                        <NTLineSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
+                            YValueSelector="@(p => p.Y)" Color="TnTColor.Primary" PointStyle="PointStyle.Filled"
+                            PointSize="10" />
+                    </NTChart>
                 </div>
             </div>
         </div>
 
         <div class="col-md-6 mb-4">
             <div class="card p-3 shadow-sm">
-                <h3>Multiple Series</h3>
+                <h3>Multiple Series (Auto Shapes)</h3>
                 <div style="height: 300px;">
-                    <LineChart Title="Comparison" Series="@_multiSeries" />
+                    <NTChart TData="CartesianPoint" Title="Comparison">
+                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="X Axis" />
+                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Y Axis" />
+                        <NTLineSeries TData="CartesianPoint" Data="@_productA" XValueSelector="@(p => p.X)"
+                            YValueSelector="@(p => p.Y)" Color="TnTColor.Primary" PointStyle="PointStyle.Filled" />
+                        <NTLineSeries TData="CartesianPoint" Data="@_productB" XValueSelector="@(p => p.X)"
+                            YValueSelector="@(p => p.Y)" Color="TnTColor.Secondary" PointStyle="PointStyle.Outlined" />
+                    </NTChart>
                 </div>
             </div>
         </div>
@@ -27,38 +44,32 @@
     <div class="row mt-4">
         <div class="col-md-6 mb-4">
             <div class="card p-3 shadow-sm">
-                <h3>Markers & Stroke Width</h3>
+                <h3>Custom Point Shapes</h3>
                 <div style="height: 300px;">
-                    <LineChart Title="Customized" 
-                              Series="@_customSeries" 
-                              ShowMarkers="true" 
-                              MarkerRadius="6" 
-                              StrokeWidth="4" />
+                    <NTChart TData="CartesianPoint" Title="Customized">
+                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="Sequence" />
+                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Value" />
+                        <NTLineSeries TData="CartesianPoint" Data="@_customData" XValueSelector="@(p => p.X)"
+                            YValueSelector="@(p => p.Y)" Color="TnTColor.Error" StrokeWidth="5"
+                            PointStyle="PointStyle.Filled" PointShape="PointShape.Diamond" PointSize="12" />
+                    </NTChart>
                 </div>
                 <div class="mt-2 text-muted">
-                    Custom Marker Radius (6) and Stroke Width (4).
+                    Custom Stroke Width (5), Diamond Shape, and Large Points.
                 </div>
             </div>
         </div>
 
         <div class="col-md-6 mb-4">
             <div class="card p-3 shadow-sm">
-                <h3>Smooth Animations</h3>
+                <h3>Mathematical Functions</h3>
                 <div style="height: 300px;">
-                    <LineChart Title="Animated Entry" Series="@_animatedSeries" />
-                </div>
-                <button class="btn btn-primary mt-2" @onclick="() => _key++">Restart Animation</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mt-4">
-        <div class="col-12 mb-4">
-            <div class="card p-3 shadow-sm">
-                <h3>Themed Palette</h3>
-                <div style="height: 300px;">
-                    @* Re-renders on key change *@
-                    <LineChart @key="_key" Title="Natural Growth" Series="@_themedSeries" />
+                    <NTChart TData="CartesianPoint" Title="Sine Wave">
+                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="Radians" />
+                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Amplitude" />
+                        <NTLineSeries TData="CartesianPoint" Data="@_animatedData" XValueSelector="@(p => p.X)"
+                            YValueSelector="@(p => p.Y)" Color="TnTColor.Success" />
+                    </NTChart>
                 </div>
             </div>
         </div>
@@ -66,43 +77,18 @@
 </div>
 
 @code {
-    private int _key = 0;
-    
-    private List<ChartSeries<CartesianPoint>> _basicSeries = [
-        new NTLineSeries { 
-            Name = "Revenue",
-            Points = Enumerable.Range(1, 10).Select(i => new CartesianPoint(i, i * 1.5 + Random.Shared.Next(0, 5)))
-        }
-    ];
+    public record CartesianPoint(double X, double Y);
 
-    private List<ChartSeries<CartesianPoint>> _multiSeries = [
-        new NTLineSeries { 
-            Name = "Product A",
-            Points = [new(1, 10), new(2, 25), new(3, 15), new(4, 30), new(5, 45)]
-        },
-        new NTLineSeries { 
-            Name = "Product B",
-            Points = [new(1, 20), new(2, 10), new(3, 40), new(4, 20), new(5, 30)]
-        }
-    ];
+    private List<CartesianPoint> _basicData = Enumerable.Range(1, 10)
+    .Select(i => new CartesianPoint(i, i * 1.5 + Random.Shared.Next(0, 5)))
+    .ToList();
 
-    private List<ChartSeries<CartesianPoint>> _customSeries = [
-        new NTLineSeries { 
-            Name = "Goal",
-            Color = "#FF5722",
-            Points = [new(1, 20), new(2, 20), new(3, 40), new(4, 40), new(5, 60), new(6, 60)]
-        }
-    ];
+    private List<CartesianPoint> _productA = [new(1, 10), new(2, 25), new(3, 15), new(4, 30), new(5, 45)];
+    private List<CartesianPoint> _productB = [new(1, 20), new(2, 10), new(3, 40), new(4, 20), new(5, 30)];
 
-    private List<ChartSeries<CartesianPoint>> _animatedSeries = [
-        new NTLineSeries { 
-            Name = "Trajectory",
-            Points = Enumerable.Range(0, 20).Select(i => new CartesianPoint(i, Math.Sin(i * 0.3) * 50 + 50))
-        }
-    ];
+    private List<CartesianPoint> _customData = [new(1, 20), new(2, 20), new(3, 40), new(4, 40), new(5, 60), new(6, 60)];
 
-    private List<ChartSeries<CartesianPoint>> _themedSeries = Enumerable.Range(0, 3).Select(s => new NTLineSeries {
-        Name = $"Series {s + 1}",
-        Points = Enumerable.Range(1, 8).Select(i => new CartesianPoint(i, (i * (s+1)) + Random.Shared.Next(0, 10)))
-    }).Cast<ChartSeries<CartesianPoint>>().ToList();
+    private List<CartesianPoint> _animatedData = Enumerable.Range(0, 50)
+    .Select(i => new CartesianPoint(i * 0.2, Math.Sin(i * 0.2) * 50 + 50))
+    .ToList();
 }

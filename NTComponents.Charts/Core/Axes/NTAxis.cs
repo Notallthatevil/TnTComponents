@@ -45,9 +45,16 @@ public abstract class NTAxis<TData> : ComponentBase, IDisposable where TData : c
    ///     Renders the axis on the canvas.
    /// </summary>
    /// <param name="canvas">The canvas to render on.</param>
-   /// <param name="renderArea">The total area of the chart.</param>
-   /// <returns>The remaining area for the chart content after rendering the axis.</returns>
-   public abstract SKRect Render(SKCanvas canvas, SKRect renderArea);
+   /// <param name="plotArea">The area of the chart content.</param>
+   /// <param name="totalArea">The total area of the chart.</param>
+   public abstract void Render(SKCanvas canvas, SKRect plotArea, SKRect totalArea);
+
+   /// <summary>
+   ///    Measures the axis and returns the remaining area.
+   /// </summary>
+   /// <param name="renderArea">The current available area.</param>
+   /// <returns>The remaining area after the axis has taken its space.</returns>
+   public abstract SKRect Measure(SKRect renderArea);
 
    public void Dispose()
    {

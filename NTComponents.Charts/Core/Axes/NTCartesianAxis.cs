@@ -12,39 +12,110 @@ public class NTCartesianAxis<TData> : NTAxis<TData> where TData : class
 {
 
    /// <inheritdoc />
-   public override SKRect Render(SKCanvas canvas, SKRect renderArea)
+   public override SKRect Measure(SKRect renderArea)
    {
-      if (string.IsNullOrEmpty(Title))
+      if (Direction == AxisDirection.X)
       {
-         return renderArea;
+         float labelHeight = 20;
+         float titleHeight = string.IsNullOrEmpty(Title) ? 0 : 25;
+         float totalAxisHeight = labelHeight + titleHeight + 5;
+         return new SKRect(renderArea.Left, renderArea.Top, renderArea.Right, renderArea.Bottom - totalAxisHeight);
       }
+      else
+      {
+         float labelWidth = 40;
+         float titleWidth = string.IsNullOrEmpty(Title) ? 0 : 25;
+         float totalAxisWidth = labelWidth + titleWidth + 5;
+         return new SKRect(renderArea.Left + totalAxisWidth, renderArea.Top, renderArea.Right, renderArea.Bottom);
+      }
+   }
 
-      using var paint = new SKPaint
+   /// <inheritdoc />
+   public override void Render(SKCanvas canvas, SKRect plotArea, SKRect totalArea)
+   {
+      var (xMin, xMax) = Chart.GetXRange();
+      var (yMin, yMax) = Chart.GetYRange();
+
+      using var textPaint = new SKPaint
       {
          Color = SKColors.Black,
-         TextSize = 16,
+         TextSize = 12,
          IsAntialias = true,
          TextAlign = SKTextAlign.Center
       };
 
+      using var titlePaint = new SKPaint
+      {
+         Color = SKColors.Black,
+         TextSize = 16,
+         IsAntialias = true,
+         TextAlign = SKTextAlign.Center,
+         FakeBoldText = true
+      };
+
+      using var linePaint = new SKPaint
+      {
+         Color = SKColors.Gray,
+         StrokeWidth = 1,
+         Style = SKPaintStyle.Stroke,
+         IsAntialias = true
+      };
+
       if (Direction == AxisDirection.X)
       {
-         var x = renderArea.Left + (renderArea.Width / 2);
-         var y = renderArea.Bottom - 5;
-         canvas.DrawText(Title, x, y, paint);
-         return new SKRect(renderArea.Left, renderArea.Top, renderArea.Right, renderArea.Bottom - 25);
+         var yLine = plotArea.Bottom;
+         canvas.DrawLine(plotArea.Left, yLine, plotArea.Right, yLine, linePaint);
+
+         // Draw labels
+         int labelCount = 5;
+         for (int i = 0; i < labelCount; i++)
+         {
+            float t = i / (float)(labelCount - 1);
+            var x = plotArea.Left + t * plotArea.Width;
+            var val = xMin + t * (xMax - xMin);
+
+            if (i == 0) textPaint.TextAlign = SKTextAlign.Left;
+            else if (i == labelCount - 1) textPaint.TextAlign = SKTextAlign.Right;
+            else textPaint.TextAlign = SKTextAlign.Center;
+
+            canvas.DrawText(val.ToString("0.#"), x, yLine + 15, textPaint);
+         }
+
+         if (!string.IsNullOrEmpty(Title))
+         {
+            canvas.DrawText(Title, plotArea.Left + plotArea.Width / 2, totalArea.Bottom - 5, titlePaint);
+         }
       }
       else
       {
-         var x = renderArea.Left + 15;
-         var y = renderArea.Top + (renderArea.Height / 2);
+         var xLine = plotArea.Left;
+         canvas.DrawLine(xLine, plotArea.Top, xLine, plotArea.Bottom, linePaint);
 
-         canvas.Save();
-         canvas.RotateDegrees(-90, x, y);
-         canvas.DrawText(Title, x, y, paint);
-         canvas.Restore();
+         // Draw labels
+         int labelCount = 5;
+         textPaint.TextAlign = SKTextAlign.Right;
+         for (int i = 0; i < labelCount; i++)
+         {
+            float t = i / (float)(labelCount - 1);
+            var y = plotArea.Bottom - t * plotArea.Height;
+            var val = yMin + t * (yMax - yMin);
 
-         return new SKRect(renderArea.Left + 25, renderArea.Top, renderArea.Right, renderArea.Bottom);
+            float yOffset = 5;
+            if (i == 0) yOffset = 0;
+            else if (i == labelCount - 1) yOffset = 10;
+
+            canvas.DrawText(val.ToString("0.#"), xLine - 5, y + yOffset, textPaint);
+         }
+
+         if (!string.IsNullOrEmpty(Title))
+         {
+            var xTitle = totalArea.Left + 15;
+            var yTitle = plotArea.Top + plotArea.Height / 2;
+            canvas.Save();
+            canvas.RotateDegrees(-90, xTitle, yTitle);
+            canvas.DrawText(Title, xTitle, yTitle, titlePaint);
+            canvas.Restore();
+         }
       }
    }
 }
