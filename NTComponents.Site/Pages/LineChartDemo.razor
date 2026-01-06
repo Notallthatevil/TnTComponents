@@ -8,12 +8,24 @@
     <h1>Line Chart Demo</h1>
     <p class="lead">Examples and configurations for the new declarative NTLineSeries component.</p>
 
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card p-3 shadow-sm">
+                <h5>Global Settings</h5>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" @bind="_enableHardwareAcceleration" id="hwAccelCheck">
+                    <label class="form-check-label" for="hwAccelCheck">Enable Hardware Acceleration for Charts</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row mt-4">
         <div class="col-md-6 mb-4">
             <div class="card p-3 shadow-sm">
                 <h3>Basic Line Chart</h3>
                 <div style="height: 300px;">
-                    <NTChart TData="CartesianPoint" Title="Basic Data">
+                    <NTChart TData="CartesianPoint" Title="Basic Data" EnableHardwareAcceleration="@_enableHardwareAcceleration">
                         <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="X Axis" />
                         <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Y Axis" />
                         <NTLineSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
@@ -28,7 +40,7 @@
             <div class="card p-3 shadow-sm">
                 <h3>Multiple Series (Auto Shapes)</h3>
                 <div style="height: 300px;">
-                    <NTChart TData="CartesianPoint" Title="Comparison" Palette="@_customPalette">
+                    <NTChart TData="CartesianPoint" Title="Comparison" Palette="@_customPalette" EnableHardwareAcceleration="@_enableHardwareAcceleration">
                         <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="X Axis" />
                         <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Y Axis" />
                         <NTLineSeries TData="CartesianPoint" Data="@_productA" XValueSelector="@(p => p.X)"
@@ -46,7 +58,7 @@
             <div class="card p-3 shadow-sm">
                 <h3>Custom Point Shapes</h3>
                 <div style="height: 300px;">
-                    <NTChart TData="CartesianPoint" Title="Customized">
+                    <NTChart TData="CartesianPoint" Title="Customized" EnableHardwareAcceleration="@_enableHardwareAcceleration">
                         <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="Sequence" />
                         <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Value" />
                         <NTLineSeries TData="CartesianPoint" Data="@_customData" XValueSelector="@(p => p.X)"
@@ -64,7 +76,7 @@
             <div class="card p-3 shadow-sm">
                 <h3>Mathematical Functions</h3>
                 <div style="height: 300px;">
-                    <NTChart TData="CartesianPoint" Title="Sine Wave">
+                    <NTChart TData="CartesianPoint" Title="Sine Wave" EnableHardwareAcceleration="@_enableHardwareAcceleration">
                         <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="Radians" />
                         <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Amplitude" />
                         <NTLineSeries TData="CartesianPoint" Data="@_animatedData" XValueSelector="@(p => p.X)"
@@ -80,7 +92,7 @@
             <div class="card p-3 shadow-sm">
                 <h3>Interpolation Modes</h3>
                 <div style="height: 300px;">
-                    <NTChart TData="CartesianPoint" Title="Curved vs Step">
+                    <NTChart TData="CartesianPoint" Title="Curved vs Step" EnableHardwareAcceleration="@_enableHardwareAcceleration">
                         <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" />
                         <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" />
                         <NTLineSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
@@ -101,7 +113,7 @@
             <div class="card p-3 shadow-sm">
                 <h3>Dashed & Scatter Styles</h3>
                 <div style="height: 300px;">
-                    <NTChart TData="CartesianPoint" Title="Styles">
+                    <NTChart TData="CartesianPoint" Title="Styles" EnableHardwareAcceleration="@_enableHardwareAcceleration">
                         <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" />
                         <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" />
                         <NTLineSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
@@ -144,7 +156,7 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <div style="height: 500px;" class="border rounded bg-light p-2 shadow-inner">
-                            <NTChart TData="CartesianPoint" Title="Interactive Sandbox" RangePadding="0.1"
+                            <NTChart TData="CartesianPoint" Title="Interactive Sandbox" RangePadding="0.1" EnableHardwareAcceleration="@_enableHardwareAcceleration"
                                 ShowLegend="@_showLegend" LegendPosition="@_legendPosition">
                                 <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="Time" />
                                 <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Value" />
@@ -281,6 +293,7 @@
 
     private bool _showLegend = true;
     private LegendPosition _legendPosition = LegendPosition.Bottom;
+    private bool _enableHardwareAcceleration = true;
 
     // Sandbox Logic
     private List<SeriesSandboxConfig> _sandboxSeries = new();

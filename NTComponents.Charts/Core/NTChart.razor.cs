@@ -26,6 +26,9 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     [Parameter]
     public TnTColor TextColor { get; set; } = TnTColor.OnSurface;
 
+    [Parameter]
+    public bool EnableHardwareAcceleration { get; set; } = true;
+
     /// <summary>
     ///     Gets or sets the child content.
     /// </summary>
@@ -66,12 +69,12 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     [Parameter]
     public List<TnTColor> Palette { get; set; } = new()
     {
+        TnTColor.PrimaryFixed,
+        TnTColor.SecondaryFixed,
+        TnTColor.TertiaryFixed,
         TnTColor.Primary,
         TnTColor.Secondary,
-        TnTColor.Tertiary,
-        TnTColor.OnPrimaryContainer,
-        TnTColor.OnSecondaryContainer,
-        TnTColor.OnTertiaryContainer
+        TnTColor.Tertiary
     };
 
     /// <summary>
@@ -236,21 +239,27 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         StateHasChanged();
     }
 
+    protected void OnPaintSurface(SKPaintGLSurfaceEventArgs e) {
+        OnPaintSurface(e.Surface.Canvas, e.Info);
+    }
+
+    protected void OnPaintSurface(SKPaintSurfaceEventArgs  e) {
+        OnPaintSurface(e.Surface.Canvas, e.Info);
+    }
+
     /// <summary>
     ///     Handles the paint surface event from the SkiaSharp view.
     /// </summary>
     /// <param name="e">The paint surface event arguments.</param>
-    protected virtual void OnPaintSurface(SKPaintGLSurfaceEventArgs e)
+    protected void OnPaintSurface(SKCanvas canvas, SKImageInfo info)
     {
         // Reset hover state for this frame calculation
         HoveredSeries = null;
         HoveredPointIndex = null;
         HoveredDataPoint = null;
 
-        var canvas = e.Surface.Canvas;
         canvas.Clear(GetThemeColor(BackgroundColor));
 
-        var info = e.Info;
         var totalArea = new SKRect(Margin.Left, Margin.Top, info.Width - Margin.Right, info.Height - Margin.Bottom);
         var plotArea = totalArea;
         var accessibleArea = totalArea; // Area available for axes and legend

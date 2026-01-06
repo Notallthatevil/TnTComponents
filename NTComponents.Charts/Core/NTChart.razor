@@ -5,6 +5,12 @@
 	<CascadingValue Value="this" IsFixed="true">
 		@ChildContent
 	</CascadingValue>
-	<SKGLView EnableRenderLoop="true" IgnorePixelScaling="false" OnPaintSurface="@OnPaintSurface"
-		@onmouseout="OnMouseOut" @onclick="OnClick" @onmousemove="OnMouseMove" style="@CanvasStyle" />
+	@if (EnableHardwareAcceleration) {
+		<SKGLView EnableRenderLoop="true" IgnorePixelScaling="false" OnPaintSurface="@OnPaintSurface"
+				  @onmouseout="OnMouseOut" @onclick="OnClick" @onmousemove="OnMouseMove" style="@CanvasStyle" />
+	}
+	else {
+		<SKCanvasView EnableRenderLoop="true" IgnorePixelScaling="false" OnPaintSurface="@OnPaintSurface"
+					  @onmouseout="OnMouseOut" @onclick="OnClick" @onmousemove="OnMouseMove" style="@CanvasStyle" />
+	}
 </div>
