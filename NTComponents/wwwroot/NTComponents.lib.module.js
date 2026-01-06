@@ -386,5 +386,14 @@ window.NTComponents = {
                 toggler.classList.add('tnt-toggle');
             }
         }
+    },
+    onThemeChanged: (dotNetHelper) => {
+        const callback = () => {
+            dotNetHelper.invokeMethodAsync('OnThemeChanged');
+        };
+        document.addEventListener('tnt-theme-changed', callback);
+        return {
+            dispose: () => document.removeEventListener('tnt-theme-changed', callback)
+        };
     }
 }

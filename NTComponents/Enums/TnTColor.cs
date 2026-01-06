@@ -11,7 +11,8 @@ namespace NTComponents;
 /// <summary>
 ///     Represents the various color options available in the NTComponents.
 /// </summary>
-public enum TnTColor {
+public enum TnTColor
+{
 
     /// <summary>
     ///     No color specified, represents the default color state.
@@ -336,14 +337,35 @@ public enum TnTColor {
     /// <summary>
     ///     Color used for content that appears on information containers.
     /// </summary>
-    OnInfoContainer
+    OnInfoContainer,
+
+    /// <summary>
+    ///     Assert color, used for assertive states and elements.
+    /// </summary>
+    Assert,
+
+    /// <summary>
+    ///    Color used for content that appears on the assert color.
+    /// </summary>
+    OnAssert,
+
+    /// <summary>
+    ///    Container color for the assert color.
+    /// </summary>
+    AssertContainer,
+
+    /// <summary>
+    ///    Color used for content that appears on assert containers.
+    /// </summary>
+    OnAssertContainer
 }
 
 /// <summary>
 ///     Provides extension methods for the <see cref="TnTColor" /> enum.
 /// </summary>
 [ExcludeFromCodeCoverage]
-public static partial class TnTColorEnumExt {
+public static partial class TnTColorEnumExt
+{
 
     /// <summary>
     ///     Converts a nullable <see cref="TnTColor" /> enum value to its corresponding CSS class name.
@@ -364,7 +386,8 @@ public static partial class TnTColorEnumExt {
     /// </summary>
     /// <param name="tnTColorEnum">The <see cref="TnTColor" /> enum value.</param>
     /// <returns>The css variable</returns>
-    public static string ToCssTnTColorVariable(this TnTColor? tnTColorEnum) {
+    public static string ToCssTnTColorVariable(this TnTColor? tnTColorEnum)
+    {
         return tnTColorEnum.HasValue
             ? $"var(--tnt-color-{tnTColorEnum.Value.ToCssClassName()})"
             : string.Empty;

@@ -109,6 +109,12 @@ class TnTThemeToggleElement extends HTMLElement {
         const exists = await this.cssFileExists(cssHref);
 
         await this.updateThemeLink(cssHref, exists);
+
+        // Dispatch theme changed event
+        document.dispatchEvent(new CustomEvent('tnt-theme-changed', {
+            detail: { theme: actualTheme, contrast: actualContrast }
+        }));
+
         return actualTheme;
     }
 

@@ -19,6 +19,12 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     public IEnumerable<TData> Data { get; set; } = [];
 
     /// <summary>
+    ///     Gets or sets the color of the series. If null or <see cref="TnTColor.None"/>, a color will be chosen from the chart's palette.
+    /// </summary>
+    [Parameter]
+    public TnTColor? Color { get; set; }
+
+    /// <summary>
     ///     Gets or sets the title of the series.
     /// </summary>
     [Parameter]

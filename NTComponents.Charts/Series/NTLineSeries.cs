@@ -14,12 +14,6 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
 {
 
     /// <summary>
-    ///     Gets or sets the color of the line.
-    /// </summary>
-    [Parameter]
-    public TnTColor Color { get; set; } = TnTColor.Primary;
-
-    /// <summary>
     ///     Gets or sets the width of the line.
     /// </summary>
     [Parameter]
@@ -54,7 +48,7 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
         using var paint = new SKPaint
         {
             Style = SKPaintStyle.Stroke,
-            Color = SKColors.RoyalBlue, // Default for now until ThemeHelper is ready
+            Color = Chart.GetSeriesColor(this),
             StrokeWidth = StrokeWidth,
             IsAntialias = true,
             StrokeCap = SKStrokeCap.Round,

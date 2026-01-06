@@ -28,13 +28,13 @@
             <div class="card p-3 shadow-sm">
                 <h3>Multiple Series (Auto Shapes)</h3>
                 <div style="height: 300px;">
-                    <NTChart TData="CartesianPoint" Title="Comparison">
+                    <NTChart TData="CartesianPoint" Title="Comparison" Palette="@_customPalette">
                         <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="X Axis" />
                         <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Y Axis" />
                         <NTLineSeries TData="CartesianPoint" Data="@_productA" XValueSelector="@(p => p.X)"
-                            YValueSelector="@(p => p.Y)" Color="TnTColor.Primary" PointStyle="PointStyle.Filled" />
+                            YValueSelector="@(p => p.Y)" PointStyle="PointStyle.Filled" />
                         <NTLineSeries TData="CartesianPoint" Data="@_productB" XValueSelector="@(p => p.X)"
-                            YValueSelector="@(p => p.Y)" Color="TnTColor.Secondary" PointStyle="PointStyle.Outlined" />
+                            YValueSelector="@(p => p.Y)" PointStyle="PointStyle.Outlined" />
                     </NTChart>
                 </div>
             </div>
@@ -146,12 +146,15 @@
 @code {
     public record CartesianPoint(double X, double Y);
 
+    private List<TnTColor> _customPalette = new() { TnTColor.Tertiary, TnTColor.Success };
+
     private List<CartesianPoint> _dynamicData = Enumerable.Range(1, 10).Select(i => new CartesianPoint(i,
     Random.Shared.Next(10, 90))).ToList();
 
     private void UpdateData()
     {
-        _dynamicData = Enumerable.Range(1, 10).Select(i => new CartesianPoint(i, Random.Shared.Next(10, 90))).ToList();
+        int count = Random.Shared.Next(5, 20);
+        _dynamicData = Enumerable.Range(1, count).Select(i => new CartesianPoint(i, Random.Shared.Next(10, 90))).ToList();
     }
 
     private List<CartesianPoint> _basicData = Enumerable.Range(1, 10)

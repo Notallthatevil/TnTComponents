@@ -40,7 +40,7 @@ public class NTCartesianAxis<TData> : NTAxis<TData> where TData : class
 
       using var textPaint = new SKPaint
       {
-         Color = SKColors.Black,
+         Color = Chart.GetThemeColor(Chart.TextColor),
          TextSize = 12,
          IsAntialias = true,
          TextAlign = SKTextAlign.Center
@@ -48,7 +48,7 @@ public class NTCartesianAxis<TData> : NTAxis<TData> where TData : class
 
       using var titlePaint = new SKPaint
       {
-         Color = SKColors.Black,
+         Color = Chart.GetThemeColor(Chart.TextColor),
          TextSize = 16,
          IsAntialias = true,
          TextAlign = SKTextAlign.Center,
@@ -57,7 +57,7 @@ public class NTCartesianAxis<TData> : NTAxis<TData> where TData : class
 
       using var linePaint = new SKPaint
       {
-         Color = SKColors.Gray,
+         Color = Chart.GetThemeColor(TnTColor.Outline),
          StrokeWidth = 1,
          Style = SKPaintStyle.Stroke,
          IsAntialias = true
