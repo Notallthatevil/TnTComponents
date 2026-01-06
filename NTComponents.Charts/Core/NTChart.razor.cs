@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
+using NTComponents.Charts.Core.Axes;
 using NTComponents.Charts.Core.Series;
 using NTComponents.Core;
 using SkiaSharp;
@@ -12,7 +13,9 @@ namespace NTComponents.Charts.Core;
 /// <summary>
 ///     The base class for all charts in the NTComponents.Charts library.
 /// </summary>
-public partial class NTChart<TData> : TnTComponentBase where TData : class {
+[CascadingTypeParameter(nameof(TData))]
+public partial class NTChart<TData> : TnTComponentBase where TData : class
+{
 
     /// <summary>
     ///     Gets or sets the child content.
@@ -38,9 +41,12 @@ public partial class NTChart<TData> : TnTComponentBase where TData : class {
 
     protected SKPoint? LastMousePosition { get; private set; }
 
+    private List<NTAxis<TData>> Axes { get; } = [];
+
     private List<NTBaseSeries<TData>> Series { get; } = [];
 
-    protected virtual void OnClick(MouseEventArgs e) {
+    protected virtual void OnClick(MouseEventArgs e)
+    {
         // Handle click hit-testing in subclasses if needed
     }
 
@@ -52,17 +58,59 @@ public partial class NTChart<TData> : TnTComponentBase where TData : class {
     ///     Handles the paint surface event from the SkiaSharp view.
     /// </summary>
     /// <param name="e">The paint surface event arguments.</param>
-    protected virtual void OnPaintSurface(SKPaintGLSurfaceEventArgs e) {
+    protected virtual void OnPaintSurface(SKPaintGLSurfaceEventArgs e)
+    {
+        var canvas = e.Surface.Canvas;
+        canvas.Clear();
+
+        var info = e.Info;
+        var renderArea = new SKRect(0, 0, info.Width, info.Height);
+
+        // Render axes first and update renderArea
+        foreach (var axis in Axes.Where(a => a.Visible))
+        {
+            renderArea = axis.Render(canvas, renderArea);
+        }
+
+        foreach (var series in Series)
+        {
+            series.Render(canvas, renderArea);
+        }
     }
 
-    internal void AddSeries(NTBaseSeries<TData> series) {
-        if (!Series.Contains(series)) {
+    internal void AddAxis(NTAxis<TData> axis)
+    {
+        if (!Axes.Contains(axis))
+        {
+            Axes.Add(axis);
+        }
+    }
+
+    internal void AddSeries(NTBaseSeries<TData> series)
+    {
+        if (Series.Count > 0 && Series[0].CoordinateSystem != series.CoordinateSystem)
+        {
+            throw new InvalidOperationException($"Cannot combine series with different coordinate systems. Currently using {Series[0].CoordinateSystem}, but tried to add {series.CoordinateSystem}.");
+        }
+
+        if (!Series.Contains(series))
+        {
             Series.Add(series);
         }
     }
 
-    internal void RemoveSeries(NTBaseSeries<TData> series) {
-        if (Series.Contains(series)) {
+    internal void RemoveAxis(NTAxis<TData> axis)
+    {
+        if (Axes.Contains(axis))
+        {
+            Axes.Remove(axis);
+        }
+    }
+
+    internal void RemoveSeries(NTBaseSeries<TData> series)
+    {
+        if (Series.Contains(series))
+        {
             Series.Remove(series);
         }
     }

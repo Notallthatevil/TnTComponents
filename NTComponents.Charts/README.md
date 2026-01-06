@@ -52,11 +52,13 @@ The codebase is built on a foundation of reusable abstractions. Shared logic for
 The library follows a declarative, component-based architecture for building visualizations:
 
 - **NTChart**: The primary container and base class for all charts. It holds all basic rendering and layout information and manages event registration for tracking mouse movement and click events. It houses every chart and provides the core HTML structure and SkiaSharp canvas.
-- **Child Content Integration**: `NTChart` allows `ChildContent` to be rendered, enabling a modular approach. These child elements represent the data and decorative components to be rendered on the chart.
+- **Child Content Integration**: `NTChart` allows `ChildContent` to be rendered, enabling a modular approach. These child elements represent the data (series) and decorative components (axes, legends, etc.) to be rendered on the chart.
+- **Axes & Scales**: Cartesian charts support declarative axes via `NTCartesianAxis`. Axes are responsible for rendering their own labels and titles, and they automatically adjust the remaining render area for the data series.
 - **Series-Based Data Visualization**: Data is represented by series components that inherit from a common hierarchy:
-    - **NTBaseSeries**: The abstract base for all data series, representing the data to be rendered.
+    - **NTBaseSeries**: The abstract base for all data series, representing the data to be rendered. Each series defines its compatible `ChartCoordinateSystem`.
     - **NTCartesianSeries**: A specialized abstraction for cartesian plots using X and Y value selectors.
     - **Concrete Implementations**: Specific series types like `PointSeries`, `LineSeries`, `BarSeries`, etc., provide the final rendering logic.
+- **Series Compatibility**: To ensure visual consistency, `NTChart` enforces that all child series share the same `ChartCoordinateSystem`. For example, multiple `LineSeries` (Cartesian) can be combined, but mixing a `LineSeries` with a `PieSeries` (Circular) will result in an exception.
 
 ### Built for Testability
 The library is designed to be highly testable:
