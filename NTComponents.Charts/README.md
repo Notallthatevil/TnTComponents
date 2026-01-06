@@ -33,7 +33,13 @@ Charts are designed to be fully interactive with seamless, animated responses to
 ### Granular Customization
 Full control over the look and feel of your visualizations:
 - **Labels & Titles**: Customize fonts, positioning, and content for all text elements.
-- **Colors & Palettes**: Colors are configured using **CSS variable names** for seamless theme integration. The library avoids predefined palettes to ensure full compatibility with your application's design system.
+- **Colors & Palettes**: All chart colors must be defined via **CSS variables** sourced from theme files within a specified theme folder (e.g., `LiveTest/LiveTest/wwwroot/Themes/`). The library avoids hardcoded values to ensure full compatibility with your application's theme. For instance, a theme like `light.css` specifies variables on the `:root`:
+    ```css
+    :root {
+        --tnt-color-primary: rgb(84 90 146);
+        --tnt-color-secondary: rgb(92 93 114);
+    }
+    ```
 - **Axis Details**: Configure scales, grid lines, tick marks, and crosshairs.
 - **Sizing & Responsiveness**: Responsive layouts that adapt to container size with customizable aspect ratios.
 
@@ -45,7 +51,8 @@ The codebase is built on a foundation of reusable abstractions. Shared logic for
 ### Encapsulation & Inheritance
 Following clean code principles, the library utilizes:
 - **Encapsulation**: Component state and rendering internals are managed internally, exposing only necessary parameters to the user.
-- **Inheritance**: Specific chart types inherit from generalized base components (e.g., `CartesianChartBase`, `PolarChartBase`), allowing for rapid development of new types while maintaining a unified API.
+- **Inheritance & Hierarchy**: The library uses a multi-layered inheritance model. While specialized abstractions like `CartesianChartBase` or `PolarChartBase` are encouraged to share logic for specific coordinate systems, **every chart must ultimately inherit from `NTChartBase`**.
+- **Base Chart Rendering**: `NTChartBase` serves as the root of the component hierarchy. it contains the primary render logic that delivers the HTML structure (container and SkiaSharp canvas), ensuring consistency across all visualizations. Derived classes implement the abstract `Render` method to define their specific canvas rendering logic.
 
 ### Built for Testability
 The library is designed to be highly testable:

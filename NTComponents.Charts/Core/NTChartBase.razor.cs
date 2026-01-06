@@ -3,9 +3,10 @@ using SkiaSharp.Views.Blazor;
 
 namespace NTComponents.Charts.Core;
 
-public abstract partial class TnTChartBase {
+public abstract partial class NTChartBase {
     [Parameter, EditorRequired]
     public string Title { get; set;  }
+
     protected abstract void Render(SKPaintGLSurfaceEventArgs e);
 
 
