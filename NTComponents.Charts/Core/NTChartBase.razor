@@ -2,5 +2,12 @@
 
 
 <div class="@ElementClass" id="@ElementId" lang="@ElementLang" style="@ElementStyle" @ref="@Element">
-	<SkiaSharp.Views.Blazor.SKGLView AdditionalAttributes="AdditionalAttributes" EnableRenderLoop="true" IgnorePixelScaling="false" OnPaintSurface="@OnPaintSurface" />
+<SkiaSharp.Views.Blazor.SKGLView 
+        AdditionalAttributes="AdditionalAttributes" 
+        EnableRenderLoop="true" 
+        IgnorePixelScaling="false" 
+        OnPaintSurface="@OnPaintSurface"
+        @onmousemove="OnMouseMove" 
+        @onmouseout="OnMouseOut" 
+        @onclick="OnClick" />
 </div>
