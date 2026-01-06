@@ -104,7 +104,7 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
             {
                 for (int i = 1; i < points.Count; i++)
                 {
-                    path.LineTo(points[i].X, points[i - 1].Y);
+                    path.LineTo(points[i - 1].X, points[i].Y);
                     path.LineTo(points[i]);
                 }
             }
@@ -126,13 +126,59 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
             }
             else if (Interpolation == LineInterpolation.Smoothed)
             {
-                for (int i = 1; i < points.Count; i++)
+                int n = points.Count;
+                if (n > 2)
                 {
-                    path.LineTo(points[i]);
+                    // Calculate slopes of segments
+                    float[] slopes = new float[n - 1];
+                    for (int i = 0; i < n - 1; i++)
+                    {
+                        slopes[i] = (points[i + 1].Y - points[i].Y) / (points[i + 1].X - points[i].X + 1e-6f);
+                    }
+
+                    // Calculate tangents using Monotone Cubic Spline (Fritsch-Butland)
+                    // This ensures C1 continuity, hits all points exactly, and prevents overshoots/bumps.
+                    float[] tangents = new float[n];
+                    for (int i = 1; i < n - 1; i++)
+                    {
+                        if (Math.Sign(slopes[i - 1]) != Math.Sign(slopes[i]))
+                        {
+                            tangents[i] = 0;
+                        }
+                        else
+                        {
+                            float dxPrev = points[i].X - points[i - 1].X;
+                            float dxCurr = points[i + 1].X - points[i].X;
+                            float w1 = 2 * dxCurr + dxPrev;
+                            float w2 = dxCurr + 2 * dxPrev;
+                            
+                            // Safe harmonic mean to avoid division by zero
+                            if (Math.Abs(slopes[i - 1]) > 1e-6f && Math.Abs(slopes[i]) > 1e-6f)
+                            {
+                                tangents[i] = (w1 + w2) / (w1 / slopes[i - 1] + w2 / slopes[i]);
+                            }
+                            else
+                            {
+                                tangents[i] = 0;
+                            }
+                        }
+                    }
+                    tangents[0] = slopes[0];
+                    tangents[n - 1] = slopes[n - 2];
+
+                    path.MoveTo(points[0]);
+                    for (int i = 0; i < n - 1; i++)
+                    {
+                        float xSpan = (points[i + 1].X - points[i].X) / 3f;
+                        var cp1 = new SKPoint(points[i].X + xSpan, points[i].Y + tangents[i] * xSpan);
+                        var cp2 = new SKPoint(points[i + 1].X - xSpan, points[i + 1].Y - tangents[i + 1] * xSpan);
+                        path.CubicTo(cp1, cp2, points[i + 1]);
+                    }
                 }
-                paint.PathEffect = LineStyle == LineStyle.Dashed
-                    ? SKPathEffect.CreateCompose(paint.PathEffect, SKPathEffect.CreateCorner(10))
-                    : SKPathEffect.CreateCorner(10);
+                else
+                {
+                    path.LineTo(points[1]);
+                }
             }
 
             canvas.DrawPath(path, paint);

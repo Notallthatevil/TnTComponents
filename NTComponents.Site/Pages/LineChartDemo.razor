@@ -121,22 +121,97 @@
 
     <div class="row mt-4">
         <div class="col-12 mb-4">
-            <div class="card p-3 shadow-sm">
+            <div class="card p-4 shadow-sm border-0 bg-white">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h3>Animation Transition</h3>
-                    <button class="btn btn-primary" @onclick="UpdateData">Randomize Data</button>
+                    <div>
+                        <h3 class="mb-0">Chart Sandbox</h3>
+                        <p class="text-muted small">Dynamic series management and property customization.</p>
+                    </div>
+                    <div class="btn-group shadow-sm">
+                        <button class="btn btn-outline-primary" @onclick="RandomizeSandbox"
+                            title="Randomize all series data">
+                            Randomize Data
+                        </button>
+                        <button class="btn btn-success" @onclick="AddSeries" disabled="@(_sandboxSeries.Count >= 10)">
+                            Add Series
+                        </button>
+                        <button class="btn btn-danger" @onclick="RemoveSeries" disabled="@(_sandboxSeries.Count <= 1)">
+                            Remove Series
+                        </button>
+                    </div>
                 </div>
-                <div style="height: 400px;">
-                    <NTChart TData="CartesianPoint" Title="Overshoot Animation Demo">
-                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" />
-                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" />
-                        <NTLineSeries TData="CartesianPoint" Data="@_dynamicData" XValueSelector="@(p => p.X)"
-                            YValueSelector="@(p => p.Y)" Color="TnTColor.Primary"
-                            Interpolation="LineInterpolation.Curved" PointStyle="PointStyle.Filled" />
-                    </NTChart>
-                </div>
-                <div class="mt-2 text-muted">
-                    Click "Randomize Data" to see the "Back-Out" overshoot animation smoothly transition between states.
+
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div style="height: 500px;" class="border rounded bg-light p-2 shadow-inner">
+                            <NTChart TData="CartesianPoint" Title="Interactive Sandbox" RangePadding="0.1">
+                                <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="Time" />
+                                <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Value" />
+                                @foreach (var config in _sandboxSeries)
+                                {
+                                    <NTLineSeries TData="CartesianPoint" Data="@config.Data" XValueSelector="@(p => p.X)"
+                                        YValueSelector="@(p => p.Y)" Title="@config.Title"
+                                        Interpolation="@config.Interpolation" LineStyle="@config.LineStyle"
+                                        PointShape="@config.PointShape" PointStyle="@config.PointStyle" />
+                                }
+                            </NTChart>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div style="max-height: 500px; overflow-y: auto;" class="pe-2 custom-scrollbar">
+                            @for (int i = 0; i < _sandboxSeries.Count; i++)
+                            {
+                                var index = i;
+                                var config = _sandboxSeries[i];
+                                <div class="card mb-3 border-start border-4 @GetBorderClass(index) shadow-sm">
+                                    <div class="card-body p-2">
+                                        <h6 class="card-title d-flex justify-content-between align-items-center">
+                                            <span>Series @(index + 1)</span>
+                                            <span class="badge @GetBadgeClass(index)">Series @(index + 1) Color</span>
+                                        </h6>
+                                        <div class="row g-2">
+                                            <div class="col-6">
+                                                <label class="small text-muted fw-bold d-block">Interpolation</label>
+                                                <select class="form-select form-select-sm" @bind="config.Interpolation">
+                                                    @foreach (var val in Enum.GetValues<LineInterpolation>())
+                                                    {
+                                                        <option value="@val">@val</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="small text-muted fw-bold d-block">Line Style</label>
+                                                <select class="form-select form-select-sm" @bind="config.LineStyle">
+                                                    @foreach (var val in Enum.GetValues<LineStyle>())
+                                                    {
+                                                        <option value="@val">@val</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="small text-muted fw-bold d-block">Point Shape</label>
+                                                <select class="form-select form-select-sm" @bind="config.PointShape">
+                                                    @foreach (var val in Enum.GetValues<PointShape>())
+                                                    {
+                                                        <option value="@val">@val</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="small text-muted fw-bold d-block">Point Style</label>
+                                                <select class="form-select form-select-sm" @bind="config.PointStyle">
+                                                    @foreach (var val in Enum.GetValues<PointStyle>())
+                                                    {
+                                                        <option value="@val">@val</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -169,4 +244,79 @@
     private List<CartesianPoint> _animatedData = Enumerable.Range(0, 50)
     .Select(i => new CartesianPoint(i * 0.2, Math.Sin(i * 0.2) * 50 + 50))
     .ToList();
+
+    // Sandbox Logic
+    private List<SeriesSandboxConfig> _sandboxSeries = new();
+
+    protected override void OnInitialized()
+    {
+        AddSeries(); // Start with one
+    }
+
+    private void AddSeries()
+    {
+        if (_sandboxSeries.Count >= 10) return;
+
+        var config = new SeriesSandboxConfig
+        {
+            Title = $"Series {_sandboxSeries.Count + 1}",
+            Interpolation = (LineInterpolation)(_sandboxSeries.Count % 4),
+            Data = GenerateRandomData()
+        };
+        _sandboxSeries.Add(config);
+    }
+
+    private void RemoveSeries()
+    {
+        if (_sandboxSeries.Count > 1)
+        {
+            _sandboxSeries.RemoveAt(_sandboxSeries.Count - 1);
+        }
+    }
+
+    private void RandomizeSandbox()
+    {
+        foreach (var s in _sandboxSeries)
+        {
+            s.Data = GenerateRandomData();
+        }
+    }
+
+    private List<CartesianPoint> GenerateRandomData()
+    {
+        int count = Random.Shared.Next(5, 15);
+        return Enumerable.Range(1, count)
+        .Select(i => new CartesianPoint(i, Random.Shared.Next(5, 95)))
+        .ToList();
+    }
+
+    private string GetBorderClass(int index) => (index % 6) switch
+    {
+        0 => "border-primary",
+        1 => "border-secondary",
+        2 => "border-info",
+        3 => "border-success",
+        4 => "border-warning",
+        _ => "border-danger"
+    };
+
+    private string GetBadgeClass(int index) => (index % 6) switch
+    {
+        0 => "bg-primary text-white",
+        1 => "bg-secondary text-white",
+        2 => "bg-info text-dark",
+        3 => "bg-success text-white",
+        4 => "bg-warning text-dark",
+        _ => "bg-danger text-white"
+    };
+
+    public class SeriesSandboxConfig
+    {
+        public string Title { get; set; } = string.Empty;
+        public List<CartesianPoint> Data { get; set; } = new();
+        public LineInterpolation Interpolation { get; set; } = LineInterpolation.Straight;
+        public LineStyle LineStyle { get; set; } = LineStyle.Solid;
+        public PointShape PointShape { get; set; } = PointShape.Circle;
+        public PointStyle PointStyle { get; set; } = PointStyle.Filled;
+    }
 }
