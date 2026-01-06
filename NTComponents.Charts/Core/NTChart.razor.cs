@@ -744,7 +744,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                     var itemRect = new SKRect(currentX, y - LegendFontSize, currentX + itemWidth, y + 5);
 
                     var hasHover = HoveredSeries != null;
-                    var isItemHovered = (item.Index.HasValue) 
+                    var isItemHovered = (item.Index.HasValue)
                         ? (HoveredSeries == item.Series && HoveredPointIndex == item.Index.Value)
                         : (HoveredSeries == item.Series);
 
@@ -794,10 +794,10 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                 var itemRect = new SKRect(x - 2, currentY - LegendFontSize, x + itemWidth, currentY + 5);
 
                 var hasHover = HoveredSeries != null;
-                var isItemHovered = (item.Index.HasValue) 
+                var isItemHovered = (item.Index.HasValue)
                     ? (HoveredSeries == item.Series && HoveredPointIndex == item.Index.Value)
                     : (HoveredSeries == item.Series);
-                
+
                 var iconColor = color;
                 var currentTextColor = GetThemeColor(TextColor);
 
@@ -854,7 +854,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                 var itemRect = new SKRect(x - 2, y - LegendFontSize, x + itemWidth, y + 5);
 
                 var hasHover = HoveredSeries != null;
-                var isItemHovered = (item.Index.HasValue) 
+                var isItemHovered = (item.Index.HasValue)
                     ? (HoveredSeries == item.Series && HoveredPointIndex == item.Index.Value)
                     : (HoveredSeries == item.Series);
 
