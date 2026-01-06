@@ -45,17 +45,9 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     ///     Gets or sets whether the series is visible.
     /// </summary>
     [Parameter]
-    public bool Visible {
-        get => _visible;
-        set {
-            if (_visible != value) {
-                _visible = value;
-                OnVisibilityChanged();
-            }
-        }
-    }
+    public bool Visible { get; set; } = true;
 
-    private bool _visible = true;
+    private bool _lastVisible = true;
 
     /// <summary>
     ///     Gets or sets the duration of the animation.
@@ -136,6 +128,11 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     protected override void OnParametersSet() {
         base.OnParametersSet();
 
+        if (Visible != _lastVisible) {
+            OnVisibilityChanged();
+            _lastVisible = Visible;
+        }
+
         if (!ReferenceEquals(PreviousData, Data)) {
             OnDataChanged();
             PreviousData = Data;
@@ -174,6 +171,33 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     }
 
     public abstract void Render(SKCanvas canvas, SKRect renderArea);
+
+    /// <summary>
+    ///     Returns the legend items for this series.
+    /// </summary>
+    /// <returns>The legend items.</returns>
+    internal virtual IEnumerable<LegendItemInfo<TData>> GetLegendItems()
+    {
+        yield return new LegendItemInfo<TData>
+        {
+            Label = Title ?? $"Series {Chart.GetSeriesIndex(this) + 1}",
+            Color = Chart.GetSeriesColor(this),
+            Series = this,
+            IsVisible = Visible
+        };
+    }
+
+    /// <summary>
+    ///     Toggles the visibility of a legend item.
+    /// </summary>
+    /// <param name="index">The index of the item, if applicable.</param>
+    internal virtual void ToggleLegendItem(int? index)
+    {
+        if (index == null)
+        {
+            Visible = !Visible;
+        }
+    }
 
     /// <summary>
     ///     Performs a hit test on the series.
