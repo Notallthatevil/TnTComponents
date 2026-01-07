@@ -1,0 +1,34 @@
+@page "/treemap"
+@using NTComponents.Charts
+@using NTComponents.Charts.Core
+
+<div class="p-4">
+   <h3>Treemap Demo</h3>
+   <p>Visualizing storage usage by category.</p>
+
+   <div style="height: 500px; width: 100%;" class="mt-4 border rounded p-2">
+      <NTChart TData="StorageItem" Title="Storage Usage (GB)" ShowLegend="true">
+         <NTTreeMapSeries TData="StorageItem" Data="@Data" ValueSelector="@(d => d.SizeGb)"
+            LabelSelector="@(d => d.Category)" Color="TnTColor.Primary" DataLabelFormat="{0:F1} GB" />
+      </NTChart>
+   </div>
+</div>
+
+@code {
+   public class StorageItem
+   {
+      public string Category { get; set; } = string.Empty;
+      public double SizeGb { get; set; }
+   }
+
+   private List<StorageItem> Data = new()
+{
+new StorageItem { Category = "Videos", SizeGb = 450.5 },
+new StorageItem { Category = "Photos", SizeGb = 120.3 },
+new StorageItem { Category = "Documents", SizeGb = 45.2 },
+new StorageItem { Category = "Games", SizeGb = 850.0 },
+new StorageItem { Category = "System", SizeGb = 64.0 },
+new StorageItem { Category = "Music", SizeGb = 32.5 },
+new StorageItem { Category = "Other", SizeGb = 15.0 },
+};
+}

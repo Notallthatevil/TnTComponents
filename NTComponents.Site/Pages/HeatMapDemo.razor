@@ -1,0 +1,48 @@
+@page "/heatmap"
+@using NTComponents.Charts
+@using NTComponents.Charts.Core
+@using NTComponents.Charts.Core.Axes
+
+<div class="p-4">
+   <h3>Heatmap Demo</h3>
+   <p>Visualizing activity intensity across the week.</p>
+
+   <div style="height: 500px; width: 100%;" class="mt-4 border rounded p-2">
+      <NTChart TData="ActivityPoint" Title="Weekly Commits" IsCategoricalX="true" IsCategoricalY="true">
+         <NTCartesianAxis TData="ActivityPoint" Direction="AxisDirection.X" Title="Day" />
+         <NTCartesianAxis TData="ActivityPoint" Direction="AxisDirection.Y" Title="Hour" />
+
+         <NTHeatMapSeries TData="ActivityPoint" Data="@Data" XValueSelector="@(d => (double)d.DayIndex)"
+            YValueSelector="@(d => (double)d.HourIndex)" WeightSelector="@(d => (double)d.Commits)"
+            MinColor="TnTColor.SurfaceVariant" MaxColor="TnTColor.Primary" Title="Commits" />
+      </NTChart>
+   </div>
+</div>
+
+@code {
+   public class ActivityPoint
+   {
+      public int DayIndex { get; set; }
+      public int HourIndex { get; set; }
+      public double Commits { get; set; }
+   }
+
+   private List<ActivityPoint> Data = new();
+
+   protected override void OnInitialized()
+   {
+      var rng = new Random();
+      for (int d = 0; d < 7; d++)
+      {
+         for (int h = 0; h < 24; h++)
+         {
+            Data.Add(new ActivityPoint
+            {
+               DayIndex = d,
+               HourIndex = h,
+               Commits = rng.Next(0, 50)
+            });
+         }
+      }
+   }
+}

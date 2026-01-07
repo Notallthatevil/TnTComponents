@@ -130,6 +130,8 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
     private List<double>? _cachedAllX;
 
+    private List<double>? _cachedAllY;
+
     private IJSObjectReference? _themeListener;
     private DotNetObjectReference<NTChart<TData>>? _objRef;
 
@@ -360,6 +362,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         HoveredPointIndex = null;
         HoveredDataPoint = null;
         _cachedAllX = null;
+        _cachedAllY = null;
 
         canvas.Clear(GetThemeColor(BackgroundColor));
 
@@ -949,6 +952,13 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     public bool IsCategoricalX { get; set; }
 
     /// <summary>
+    ///    Gets or sets whether to use a categorical scale for the Y axis.
+    ///    If true, every unique Y value will be shown and spaced equally.
+    /// </summary>
+    [Parameter]
+    public bool IsCategoricalY { get; set; }
+
+    /// <summary>
     ///     Returns a list of all unique X values across all cartesian series, sorted.
     /// </summary>
     public List<double> GetAllXValues()
@@ -969,6 +979,27 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         return _cachedAllX;
     }
 
+    /// <summary>
+    ///     Returns a list of all unique Y values across all cartesian series, sorted.
+    /// </summary>
+    public List<double> GetAllYValues()
+    {
+        if (_cachedAllY != null) return _cachedAllY;
+
+        var cartesianSeries = Series.OfType<NTCartesianSeries<TData>>().Where(s => s.IsEffectivelyVisible).ToList();
+        var allY = new HashSet<double>();
+        foreach (var s in cartesianSeries)
+        {
+            if (s.Data == null) continue;
+            foreach (var item in s.Data)
+            {
+                allY.Add(s.YValueSelector(item));
+            }
+        }
+        _cachedAllY = allY.OrderBy(y => y).ToList();
+        return _cachedAllY;
+    }
+
     internal double GetScaledXValue(double originalX)
     {
         if (IsCategoricalX)
@@ -980,8 +1011,20 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         return originalX;
     }
 
+    internal double GetScaledYValue(double originalY)
+    {
+        if (IsCategoricalY)
+        {
+            var allY = GetAllYValues();
+            int index = allY.IndexOf(originalY);
+            return index >= 0 ? index : originalY;
+        }
+        return originalY;
+    }
+
     public float ScaleX(double x, SKRect plotArea)
     {
+        x = GetScaledXValue(x);
         var (min, max) = GetXRange(true);
         var range = max - min;
         if (range <= 0) return plotArea.Left;
@@ -990,6 +1033,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
     public float ScaleY(double y, SKRect plotArea)
     {
+        y = GetScaledYValue(y);
         var (min, max) = GetYRange(true);
         var range = max - min;
         if (range <= 0) return plotArea.Bottom;
@@ -1032,6 +1076,16 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
     public (double Min, double Max) GetYRange(bool padded = false)
     {
+        if (IsCategoricalY)
+        {
+            var allY = GetAllYValues();
+            if (!allY.Any()) return (0, 1);
+            if (!padded) return (0, Math.Max(1, allY.Count - 1));
+
+            var catRange = Math.Max(1, allY.Count - 1);
+            return (-catRange * RangePadding, catRange + catRange * RangePadding);
+        }
+
         var cartesianSeries = Series.OfType<NTCartesianSeries<TData>>().Where(s => s.IsEffectivelyVisible).ToList();
         if (!cartesianSeries.Any()) return (0, 1);
 
@@ -1040,10 +1094,28 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         foreach (var s in cartesianSeries)
         {
             if (s.Data == null || !s.Data.Any()) continue;
-            var values = s.Data.Select(item => s.YValueSelector(item) * s.VisibilityFactor).ToList();
-            if (!values.Any()) continue;
-            min = Math.Min(min, values.Min());
-            max = Math.Max(max, values.Max());
+
+            if (s is NTBoxPlotSeries<TData> boxPlot)
+            {
+                foreach (var item in s.Data)
+                {
+                    var values = boxPlot.BoxValueSelector(item);
+                    min = Math.Min(min, values.Min);
+                    max = Math.Max(max, values.Max);
+                    if (values.Outliers != null && values.Outliers.Any())
+                    {
+                        min = Math.Min(min, values.Outliers.Min());
+                        max = Math.Max(max, values.Outliers.Max());
+                    }
+                }
+            }
+            else
+            {
+                var values = s.Data.Select(item => s.YValueSelector(item) * s.VisibilityFactor).ToList();
+                if (!values.Any()) continue;
+                min = Math.Min(min, values.Min());
+                max = Math.Max(max, values.Max());
+            }
         }
 
         if (min == double.MaxValue) return (0, 1);
