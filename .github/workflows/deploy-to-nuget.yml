@@ -66,10 +66,10 @@ jobs:
         run: dotnet restore
       
       - name: Build
-        run: dotnet build --no-restore --configuration ${{ inputs.configuration }} 
+        run: dotnet build --no-restore --configuration Release
 
       - name: Test
-        run: dotnet test --no-restore --configuration ${{ inputs.configuration }} 
+        run: dotnet test --no-restore --configuration Release
 
       - uses: actions/setup-node@v5
         with:
