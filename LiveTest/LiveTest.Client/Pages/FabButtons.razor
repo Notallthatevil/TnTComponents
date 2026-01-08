@@ -1,7 +1,6 @@
 @page "/FabButtons"
 @using NTComponents
 
-
 @rendermode InteractiveAuto
 <select @bind="Size">
 	@foreach (var appearance in Enum.GetValues<Size>().Distinct()) {
@@ -27,17 +26,24 @@
 	End Icon
 </label>
 
+<label>
+	<input type="checkbox" @bind="Direction" />
+	Vertical?
+</label>
+
 
 <TnTDivider style="margin-top:36px;margin-bottom:36px;" />
-<TnTRow>
-	<TnTColumn S="12">
+
+<TnTFabContainer ExpandMode="FabExpandMode.SmallScreens" Position="Corner.BottomRight" Direction="@(Direction ? LayoutDirection.Vertical : LayoutDirection.Horizontal)">
+	
+	<ChildContent>
 		<TnTFabButton ButtonSize="@Size" Disabled="Disabled">
 			<ChildContent>
 				@if (StartIcon) {
 					<MaterialIcon Icon="@MaterialIcon.CloudySnowing" />
 				}
 				@if (ShowText) {
-					<text>Button Text</text>
+					<text>First Button Text</text>
 				}
 				@if (EndIcon) {
 					<MaterialIcon Icon="@MaterialIcon.SunnySnowing" />
@@ -52,14 +58,55 @@
 				My tooltip content
 			</Tooltip>
 		</TnTFabButton>
-	</TnTColumn>
-</TnTRow>
+		<TnTFabButton ButtonSize="@Size" Disabled="Disabled">
+			<ChildContent>
+				@if (StartIcon) {
+					<MaterialIcon Icon="@MaterialIcon.Radar" />
+				}
+				@if (ShowText) {
+					<text>Second Button Text</text>
+				}
+				@if (EndIcon) {
+					<MaterialIcon Icon="@MaterialIcon.Radio" />
+				}
+				<TnTBadge>
+					100
+				</TnTBadge>
+				<TnTProgressIndicator ProgressColor="TnTColor.Error" />
+			</ChildContent>
 
+			<Tooltip>
+				My tooltip content
+			</Tooltip>
+		</TnTFabButton>
+		<TnTFabButton ButtonSize="@Size" Disabled="Disabled">
+			<ChildContent>
+				@if (StartIcon) {
+					<MaterialIcon Icon="@MaterialIcon.Blender" />
+				}
+				@if (ShowText) {
+					<text>Third Button Text</text>
+				}
+				@if (EndIcon) {
+					<MaterialIcon Icon="@MaterialIcon.QrCode" />
+				}
+				<TnTBadge>
+					100
+				</TnTBadge>
+				<TnTProgressIndicator ProgressColor="TnTColor.Error" />
+			</ChildContent>
+
+			<Tooltip>
+				My tooltip content
+			</Tooltip>
+		</TnTFabButton>
+	</ChildContent>
+</TnTFabContainer>
 
 @code {
 	private Size Size { get; set; } = Size.Small;
 
-
+	private bool Direction{ get; set; }
 	private bool Disabled { get; set; }
 
 	private bool StartIcon { get; set; }

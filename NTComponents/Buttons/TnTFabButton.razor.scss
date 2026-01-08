@@ -1,4 +1,4 @@
-﻿@use '../Styles/_Variables/_colors.scss' as colors;
+@use '../Styles/_Variables/_colors.scss' as colors;
 @use '../Styles/_Variables/_textAlignments.scss' as textAlignments;
 @use '../Styles/_Variables/_typescale.scss' as typescale;
 @use '../Styles/_Variables/_interactable.scss' as interactable;
@@ -10,12 +10,15 @@ $tint-color: var(--tnt-button-tint-color);
 $on-tint-color: var(--tnt-button-on-tint-color);
 
 .tnt-fab-button-container {
-    position: fixed;
-    right: 16px;
-    bottom: 16px;
-    z-index: 1000;
+    &:not(:has(.tnt-in-container)) {
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+        z-index: 1000;
+    }
 
     .tnt-fab-button {
+        position: relative;
         outline: none;
         border: none;
         display: flex;
@@ -166,7 +169,7 @@ $on-tint-color: var(--tnt-button-on-tint-color);
 }
 
 body:has(.tnt-footer) {
-    .tnt-fab-button-container {
+    .tnt-fab-button-container:not(:has(.tnt-in-container)) {
         bottom: calc(var(--tnt-footer-height) + 16px);
     }
 }

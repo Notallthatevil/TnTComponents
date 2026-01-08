@@ -9,6 +9,12 @@ namespace NTComponents;
 /// </summary>
 public partial class TnTFabButton {
 
+    /// <summary>
+    ///    The container that the button is inside of.
+    /// </summary>
+    [CascadingParameter]
+    public TnTFabContainer? Container { get; set; }
+
     /// <inheritdoc />
     [Parameter]
     public TnTColor BackgroundColor { get; set; } = TnTColor.Primary;
@@ -39,6 +45,7 @@ public partial class TnTFabButton {
         .AddRipple(EnableRipple)
         .AddClass("tnt-button-tint-color", TintColor.HasValue)
         .AddClass("tnt-button-on-tint-color", OnTintColor.HasValue)
+        .AddClass("tnt-in-container", Container is not null)
         .Build();
 
     /// <inheritdoc />

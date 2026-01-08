@@ -31,10 +31,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Remove="compilerconfig.json" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<SupportedPlatform Include="browser" />
 	</ItemGroup>
 
@@ -63,7 +59,6 @@
 		  <PackagePath>\</PackagePath>
 		</None>
 		<None Include="..\README.md" Pack="true" PackagePath="\" />
-		<None Include="compilerconfig.json" />
 	</ItemGroup>
 
 	<Target Name="DeleteCssFiles" BeforeTargets="BeforeClean">
