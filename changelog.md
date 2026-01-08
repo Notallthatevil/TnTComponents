@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/Notallthatevil/NTComponents/compare/v1.3.0...v1.4.0) (2026-01-08)
+
+
+### Features
+
+* **fab:** add FAB container with layout and expansion ([1977272](https://github.com/Notallthatevil/NTComponents/commit/1977272254a073f572e5de6b0d365ce13e33cbd0))
+
 # [1.3.0](https://github.com/Notallthatevil/NTComponents/compare/v1.2.22...v1.3.0) (2026-01-05)
 
 
