@@ -1,4 +1,4 @@
-name: Deploy To Staging
+name: Deploy To Nuget
 on:
   push:
     tags:
