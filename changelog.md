@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/Notallthatevil/NTComponents/compare/v1.5.0...v1.5.1) (2026-01-09)
+
+
+### Bug Fixes
+
+* **ci:** Added playwright dependency to ci/cd ([13cc70b](https://github.com/Notallthatevil/NTComponents/commit/13cc70bd294bc4735e559223645ac67547fb4620))
+
 # [1.5.0](https://github.com/Notallthatevil/NTComponents/compare/v1.4.0...v1.5.0) (2026-01-09)
 
 
