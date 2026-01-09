@@ -1,4 +1,4 @@
-﻿@use '_inputBase.scss' as base;
+@use '_inputBase.scss' as base;
 @use '../Styles/_Variables/_colors.scss' as colors;
 @use '../Styles/_Variables/_typescale.scss' as typescale;
 
@@ -206,6 +206,14 @@
                     color: base.$tint-color;
                 }
             }
+        }
+    }
+
+    &.tnt-form-compact {
+
+        ::deep .tnt-radio-input {
+            @include base.tnt-form-compact;
+            margin: 2px 0;
         }
     }
 }

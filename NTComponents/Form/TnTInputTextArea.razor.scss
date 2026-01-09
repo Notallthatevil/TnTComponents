@@ -1,5 +1,6 @@
-﻿@use '_inputBase.scss' as base;
+@use '_inputBase.scss' as base;
 @use '../Styles/_Variables/_colors.scss' as colors;
+@use '../Styles/_Variables/_typescale.scss' as typescale;
 
 .tnt-input {
     position: relative;
@@ -181,6 +182,18 @@
                     color: base.$tint-color;
                 }
             }
+        }
+    }
+
+    &.tnt-form-compact {
+        margin-bottom: 26px;
+
+        .tnt-label {
+            @include typescale.tnt-body-medium;
+        }
+
+        ::deep input {
+            @include typescale.tnt-body-medium;
         }
     }
 }

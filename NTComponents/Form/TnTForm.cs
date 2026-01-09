@@ -48,9 +48,9 @@ public sealed class TnTForm : EditForm, ITnTForm {
     /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenComponent<CascadingValue<ITnTForm>>(0);
-        builder.AddComponentParameter(10, nameof(CascadingValue<ITnTForm>.Value), this);
-        builder.AddComponentParameter(20, nameof(CascadingValue<ITnTForm>.IsFixed), true);
-        builder.AddComponentParameter(30, nameof(CascadingValue<ITnTForm>.ChildContent), new RenderFragment(base.BuildRenderTree));
+        builder.AddComponentParameter(10, nameof(CascadingValue<>.Value), this);
+        builder.AddComponentParameter(20, nameof(CascadingValue<>.IsFixed), true);
+        builder.AddComponentParameter(30, nameof(CascadingValue<>.ChildContent), new RenderFragment(base.BuildRenderTree));
         builder.CloseComponent();
     }
 }
@@ -68,5 +68,15 @@ public enum FormAppearance {
     /// <summary>
     ///     The form has a filled appearance.
     /// </summary>
-    Filled
+    Filled,
+
+    /// <summary>
+    ///     Same as <see cref="Outlined" /> but with more compact spacing."/&gt;
+    /// </summary>
+    OutlinedCompact,
+
+    /// <summary>
+    ///     Same as <see cref="Filled" /> but with more compact spacing."/&gt;
+    /// </summary>
+    FilledCompact
 }

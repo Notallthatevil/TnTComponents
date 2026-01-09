@@ -1,4 +1,4 @@
-﻿@use '_inputBase.scss' as base;
+@use '_inputBase.scss' as base;
 @use '../Styles/_Variables/_typescale.scss' as typescale;
 @use '../Styles/_Variables/_colors.scss' as colors;
 
@@ -15,6 +15,8 @@
     min-height: 48px;
     position: relative;
     margin-bottom: 32px;
+
+
 
     &:has(.tnt-start-icon):has(.tnt-end-icon) {
         grid-template-areas: "start-icon checkbox end-icon";
@@ -203,5 +205,9 @@
                 color: base.$error-color;
             }
         }
+    }
+
+    &.tnt-form-compact {
+        margin-bottom: 20px;
     }
 }

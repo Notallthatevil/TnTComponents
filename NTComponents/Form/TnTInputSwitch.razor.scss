@@ -1,4 +1,4 @@
-﻿@use '_inputBase.scss' as base;
+@use '_inputBase.scss' as base;
 @use '../Styles/_Variables/_typescale.scss' as typescale;
 @use '../Styles/_Variables/_colors.scss' as colors;
 
@@ -206,5 +206,9 @@
                 color: base.$error-color;
             }
         }
+    }
+
+    &.tnt-form-compact {
+        margin-bottom: 20px;
     }
 }

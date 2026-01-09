@@ -1,4 +1,4 @@
-﻿@use '_inputBase.scss' as base;
+@use '_inputBase.scss' as base;
 @use '../Styles/_Variables/_colors.scss' as colors;
 
 .tnt-input {
@@ -261,5 +261,9 @@
                 }
             }
         }
+    }
+
+    &.tnt-form-compact{
+        @include base.tnt-form-compact(select);
     }
 }

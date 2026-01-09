@@ -203,8 +203,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass(CssClass)
         .AddClass("tnt-input")
-        .AddClass("tnt-form-filled", _tntForm is not null ? _tntForm.Appearance == FormAppearance.Filled : Appearance == FormAppearance.Filled)
-        .AddClass("tnt-form-outlined", _tntForm is not null ? _tntForm.Appearance == FormAppearance.Outlined : Appearance == FormAppearance.Outlined)
+        .AddClass(GetAppearanceClass(_tntForm, Appearance))
         .AddRipple(EnableRipple)
         .AddDisabled(FieldDisabled)
         .AddClass("tnt-placeholder", !string.IsNullOrEmpty(Placeholder))
@@ -479,6 +478,33 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
             }
         }
         return null;
+    }
+
+    /// <summary>
+    ///     Returns the CSS class name that corresponds to the specified form appearance style.
+    /// </summary>
+    /// <remarks>
+    ///     Use this method to map a <see cref="FormAppearance" /> value to its corresponding CSS class for styling form controls. Compact variants include an additional class to indicate compact styling.
+    /// </remarks>
+    /// <param name="parentForm">The parent form implementing <see cref="ITnTForm" /> from which the appearance context may be derived.</param>
+    /// <param name="appearance">The form appearance value for which to retrieve the associated CSS class. Must be a defined value of the <see cref="FormAppearance" /> enumeration.</param>
+    /// <returns>A string containing the CSS class name that represents the given form appearance. The returned value reflects whether the appearance is filled, outlined, or compact.</returns>
+    /// <exception cref="NotSupportedException">Thrown if <paramref name="appearance" /> is not a supported <see cref="FormAppearance" /> value.</exception>
+    protected static string GetAppearanceClass(ITnTForm? parentForm, FormAppearance appearance) {
+        var effectiveAppearance = parentForm is not null ? parentForm.Appearance : appearance;
+
+        var appearanceClass = effectiveAppearance switch {
+            FormAppearance.Filled => "tnt-form-filled",
+            FormAppearance.FilledCompact => "tnt-form-filled",
+            FormAppearance.Outlined => "tnt-form-outlined",
+            FormAppearance.OutlinedCompact => "tnt-form-outlined",
+            _ => throw new NotSupportedException()
+        };
+
+        if (effectiveAppearance is FormAppearance.FilledCompact or FormAppearance.OutlinedCompact) {
+            appearanceClass += " tnt-form-compact";
+        }
+        return appearanceClass;
     }
 }
 

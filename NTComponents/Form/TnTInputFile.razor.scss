@@ -1,4 +1,4 @@
-﻿@use '_inputBase.scss' as base;
+@use '_inputBase.scss' as base;
 @use '../Styles/_Variables/_colors.scss' as colors;
 @use '../Styles/_Variables/_interactable.scss' as interactable;
 @use '../Styles/_Variables/_typescale.scss' as typescale;
@@ -232,5 +232,16 @@ $on-tint-color: var(--tnt-input-on-tint-color);
             @include typescale.tnt-label-large;
             text-align: center;
         }
+    }
+
+    &.tnt-form-compact {
+        @include base.tnt-form-compact;
+
+        ::deep input::file-selector-button {
+            height: 24px;
+            border-radius: 16px;
+            padding: 0 8px;
+        }
+
     }
 }

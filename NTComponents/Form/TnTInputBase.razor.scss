@@ -1,4 +1,4 @@
-﻿@use '_inputBase.scss' as base;
+@use '_inputBase.scss' as base;
 
 .tnt-input {
     position: relative;
@@ -72,4 +72,8 @@
     @include base.invalid;
     @include base.outlined;
     @include base.filled;
+
+    &.tnt-form-compact{
+        @include base.tnt-form-compact;
+    }
 }
