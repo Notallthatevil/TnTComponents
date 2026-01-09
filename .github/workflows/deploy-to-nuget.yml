@@ -64,20 +64,23 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore
-      
-      - name: Build
-        run: dotnet build --no-restore --configuration Release
-
-      - name: Test
-        run: dotnet test --no-restore --configuration Release
 
       - uses: actions/setup-node@v5
         with:
           node-version: lts/*
 
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+      
+      - name: Ensure browsers are installed
+        run: pwsh bin/Debug/net8.0/playwright.ps1 install --with-deps
+      
+      - name: Test
+        run: dotnet test --no-restore --configuration Release
+
       - name: run node tests
         run: npm test
-
+      
       - name: Publish 
         run: |
             dotnet pack NTComponents/NTComponents.csproj --configuration Release --output ./nupkg /p:PackageVersion=${{ needs.retrieve-tag.outputs.tag_name }}
@@ -121,7 +124,6 @@ jobs:
       with:
         name: NTComponents.Extensions.nupkg
     
-
     - name: Publish NTComponents to NuGet
       env:
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
