@@ -40,7 +40,7 @@ jobs:
           echo "Found tag: ${TAG}"
           echo "tag_name=${TAG}" >> "$GITHUB_OUTPUT"
 
-  pack-nuget-packages:
+  pack-and-publish-nuget-packages:
     runs-on: ubuntu-latest
     needs: retrieve-tag
     steps:
@@ -89,45 +89,6 @@ jobs:
             dotnet pack NTComponents/NTComponents.csproj --configuration Release --output ./nupkg /p:PackageVersion=${{ needs.retrieve-tag.outputs.tag_name }}
             dotnet pack NTComponents.AspNetCore/NTComponents.AspNetCore.csproj --configuration Release --output ./nupkg /p:PackageVersion=${{ needs.retrieve-tag.outputs.tag_name }}
             dotnet pack NTComponents.Extensions/NTComponents.Extensions.csproj --configuration Release --output ./nupkg /p:PackageVersion=${{ needs.retrieve-tag.outputs.tag_name }}
-        
-      - name: Upload NTComponents
-        uses: actions/upload-artifact@v4
-        with:
-          name: NTComponents.nupkg
-          path: ./nupkg/NTComponents.*.nupkg
 
-      - name: Upload NTComponents.AspNetCore
-        uses: actions/upload-artifact@v4
-        with:
-          name: NTComponents.AspNetCore.nupkg
-          path: ./nupkg/NTComponents.AspNetCore.*.nupkg
-
-      - name: Upload NTComponents.Extensions
-        uses: actions/upload-artifact@v4
-        with:
-          name: NTComponents.Extensions.nupkg
-          path: ./nupkg/NTComponents.Extensions.*.nupkg
-
-  publish-nuget-packages:
-    needs: pack-nuget-packages
-    runs-on: ubuntu-latest
-    steps:
-    - name: Download NTComponents.nupkg
-      uses: actions/download-artifact@v4
-      with:
-        name: NTComponents.nupkg
-
-    - name: Download NTComponents.AspNetCore.nupkg
-      uses: actions/download-artifact@v4
-      with:
-        name: NTComponents.AspNetCore.nupkg
-    
-    - name: Download NTComponents.Extensions.nupkg
-      uses: actions/download-artifact@v4
-      with:
-        name: NTComponents.Extensions.nupkg
-    
-    - name: Publish NTComponents to NuGet
-      env:
-        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-      run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+      - name: Upload NTComponents.nupkg
+        run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
