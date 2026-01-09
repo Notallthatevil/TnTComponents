@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/Notallthatevil/NTComponents/compare/v1.4.0...v1.5.0) (2026-01-09)
+
+
+### Features
+
+* **form:** Added compact form layout ([e7b5198](https://github.com/Notallthatevil/NTComponents/commit/e7b51987b3403a7e112a39d2a2c984d4be6aa9f3))
+
 # [1.4.0](https://github.com/Notallthatevil/NTComponents/compare/v1.3.0...v1.4.0) (2026-01-08)
 
 
