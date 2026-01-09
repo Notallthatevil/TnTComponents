@@ -1,3 +1,10 @@
+## [1.5.2](https://github.com/Notallthatevil/NTComponents/compare/v1.5.1...v1.5.2) (2026-01-09)
+
+
+### Bug Fixes
+
+* **ci:** Updated search folder for playwright setup ([9aae1de](https://github.com/Notallthatevil/NTComponents/commit/9aae1de9783e6de7a6db28b824fdec7341865daf))
+
 ## [1.5.1](https://github.com/Notallthatevil/NTComponents/compare/v1.5.0...v1.5.1) (2026-01-09)
 
 
