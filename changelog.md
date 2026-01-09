@@ -1,3 +1,10 @@
+## [1.5.4](https://github.com/Notallthatevil/NTComponents/compare/v1.5.3...v1.5.4) (2026-01-09)
+
+
+### Bug Fixes
+
+* **ci:** add Node.js install and test steps to workflow ([638e39e](https://github.com/Notallthatevil/NTComponents/commit/638e39e8260f8436698d3099b90ff6e69efb9012))
+
 ## [1.5.3](https://github.com/Notallthatevil/NTComponents/compare/v1.5.2...v1.5.3) (2026-01-09)
 
 
