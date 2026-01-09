@@ -78,6 +78,9 @@ jobs:
       - name: Test
         run: dotnet test --no-restore --configuration Release
 
+      - name: Install node dependencies
+        run: npm install
+
       - name: run node tests
         run: npm test
       
