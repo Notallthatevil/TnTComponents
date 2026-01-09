@@ -1,3 +1,10 @@
+## [1.5.3](https://github.com/Notallthatevil/NTComponents/compare/v1.5.2...v1.5.3) (2026-01-09)
+
+
+### Bug Fixes
+
+* **ci:** update workflow name and trigger conditions ([160d139](https://github.com/Notallthatevil/NTComponents/commit/160d139aecde680755073ef28bade04add1afe37))
+
 ## [1.5.2](https://github.com/Notallthatevil/NTComponents/compare/v1.5.1...v1.5.2) (2026-01-09)
 
 
