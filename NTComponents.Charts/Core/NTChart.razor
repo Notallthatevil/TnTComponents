@@ -5,6 +5,17 @@
 	<CascadingValue Value="this" IsFixed="true">
 		@ChildContent
 	</CascadingValue>
+	@if (AllowExport || EnablePan || EnableZoom) {
+		<div class="nt-chart-buttons">
+			@if (AllowExport) {
+				<TnTImageButton ButtonSize="Size.Smallest" Icon="@MaterialIcon.Download" OnClickCallback="@(() => ExportAsPngAsync())" />
+			}
+
+			@if (EnablePan || EnableZoom) {
+				<TnTImageButton ButtonSize="Size.Smallest" Icon="@MaterialIcon.Refresh" OnClickCallback="@(() => ResetView())" />
+			}
+		</div>
+	}
 	<div @onmouseout="OnMouseOut" @onclick="OnClick" @onmousemove="OnMouseMove"
 		 @onmousedown="OnMouseDown" @onmouseup="OnMouseUp" @onwheel="OnWheel" @onwheel:preventDefault="EnableZoom"
 		 style="width: 100%; height: 100%; @CanvasStyle">

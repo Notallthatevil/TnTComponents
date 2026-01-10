@@ -15,9 +15,17 @@
     overflow: hidden;
     animation: nt-chart-fade-in 500ms ease-out;
 
-    ::deep canvas {
-        display: block;
-        width: 100%;
-        height: 100%;
+    ::deep {
+        .nt-chart-buttons {
+            position: absolute;
+            bottom: 0;
+            right: 8px;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
     }
 }

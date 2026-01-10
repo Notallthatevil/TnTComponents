@@ -4,9 +4,11 @@ using Microsoft.JSInterop;
 using NTComponents.Charts.Core.Axes;
 using NTComponents.Charts.Core.Series;
 using NTComponents.Core;
+using NTComponents.Ext;
 using SkiaSharp;
 using SkiaSharp.Views.Blazor;
 using System.Diagnostics;
+using System.IO;
 
 namespace NTComponents.Charts.Core;
 
@@ -40,6 +42,12 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     /// </summary>
     [Parameter]
     public bool EnableZoom { get; set; }
+
+    /// <summary>
+    ///    Gets or sets whether to allow exporting the chart as a PNG.
+    /// </summary>
+    [Parameter]
+    public bool AllowExport { get; set; } = true;
 
     /// <summary>
     ///     Gets or sets whether to use "nice" numbers for axis scales.
@@ -258,7 +266,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     /// <summary>
     ///     Resets the view to the default range.
     /// </summary>
-    public void ResetZoom()
+    public void ResetView()
     {
         _viewXMin = null;
         _viewXMax = null;
@@ -1381,5 +1389,28 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         }
 
         return niceFraction * Math.Pow(10, exponent);
+    }
+
+    /// <summary>
+    ///     Exports the current chart as a PNG image.
+    /// </summary>
+    /// <param name="fileName">The name of the file to download. Defaults to "[Title].png" or "chart.png".</param>
+    /// <returns>A <see cref="Task" /> representing the export operation.</returns>
+    public async Task ExportAsPngAsync(string? fileName = null)
+    {
+        if (_lastWidth <= 0 || _lastHeight <= 0) return;
+
+        var info = new SKImageInfo((int)_lastWidth, (int)_lastHeight);
+        using var surface = SKSurface.Create(info);
+        if (surface == null) return;
+
+        OnPaintSurface(surface.Canvas, info);
+
+        using var image = surface.Snapshot();
+        using var data = image.Encode(SKEncodedImageFormat.Png, 100);
+        if (data == null) return;
+
+        using var stream = data.AsStream();
+        await JSRuntime.DownloadFileFromStreamAsync(stream, fileName ?? $"{Title ?? "chart"}.png");
     }
 }

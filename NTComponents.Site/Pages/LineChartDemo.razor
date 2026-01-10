@@ -165,9 +165,9 @@
             <div class="card p-3 shadow-sm">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <h3>Pan & Zoom</h3>
-                    <button class="btn btn-sm btn-outline-secondary" @onclick="() => interactiveChart.ResetZoom()">Reset View</button>
+                    <button class="btn btn-sm btn-outline-secondary" @onclick="() => interactiveChart.ResetView()">Reset View</button>
                 </div>
-                <div style="height: 300px;">
+                <div style="height: 800px;">
                     <NTChart @ref="interactiveChart" TData="CartesianPoint" Title="Interactive Chart" 
                              EnablePan="true" EnableZoom="true"
                              EnableHardwareAcceleration="@_enableHardwareAcceleration">
