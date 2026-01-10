@@ -30,6 +30,18 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     public bool EnableHardwareAcceleration { get; set; } = true;
 
     /// <summary>
+    ///     Gets or sets whether panning is enabled.
+    /// </summary>
+    [Parameter]
+    public bool EnablePan { get; set; }
+
+    /// <summary>
+    ///    Gets or sets whether zooming is enabled.
+    /// </summary>
+    [Parameter]
+    public bool EnableZoom { get; set; }
+
+    /// <summary>
     ///     Gets or sets the child content.
     /// </summary>
     [Parameter]
@@ -112,7 +124,9 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
     protected SKPoint? LastMousePosition { get; private set; }
 
-    protected string CanvasStyle => $"cursor: {(_isHovering ? "pointer" : "default")};";
+    protected SKRect LastPlotArea { get; private set; }
+
+    protected string CanvasStyle => $"cursor: {(_isHovering ? "pointer" : (_isPanning ? "grabbing" : (EnablePan ? "grab" : "default")))};";
 
     private bool _isHovering;
 
@@ -121,6 +135,16 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     internal int? HoveredPointIndex { get; private set; }
 
     internal TData? HoveredDataPoint { get; private set; }
+
+    private double? _viewXMin;
+    private double? _viewXMax;
+    private double? _viewYMin;
+    private double? _viewYMax;
+
+    private bool _isPanning;
+    private SKPoint _panStartPoint;
+    private (double Min, double Max)? _panStartXRange;
+    private (double Min, double Max)? _panStartYRange;
 
     private List<NTAxis<TData>> Axes { get; } = [];
 
@@ -225,6 +249,18 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         }
     }
 
+    /// <summary>
+    ///     Resets the view to the default range.
+    /// </summary>
+    public void ResetZoom()
+    {
+        _viewXMin = null;
+        _viewXMax = null;
+        _viewYMin = null;
+        _viewYMax = null;
+        StateHasChanged();
+    }
+
     protected virtual void OnClick(MouseEventArgs e)
     {
         var point = new SKPoint((float)e.OffsetX * _density, (float)e.OffsetY * _density);
@@ -325,6 +361,72 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     protected virtual void OnMouseMove(MouseEventArgs e)
     {
         LastMousePosition = new SKPoint((float)e.OffsetX * _density, (float)e.OffsetY * _density);
+
+        if (_isPanning && LastPlotArea != default)
+        {
+            var currentPoint = LastMousePosition.Value;
+            var dx = _panStartPoint.X - currentPoint.X;
+            var dy = currentPoint.Y - _panStartPoint.Y; // Y is inverted in screen coords
+
+            if (_panStartXRange.HasValue)
+            {
+                var dataDx = (dx / LastPlotArea.Width) * (_panStartXRange.Value.Max - _panStartXRange.Value.Min);
+                _viewXMin = _panStartXRange.Value.Min + dataDx;
+                _viewXMax = _panStartXRange.Value.Max + dataDx;
+            }
+
+            if (_panStartYRange.HasValue)
+            {
+                var dataDy = (dy / LastPlotArea.Height) * (_panStartYRange.Value.Max - _panStartYRange.Value.Min);
+                _viewYMin = _panStartYRange.Value.Min + dataDy;
+                _viewYMax = _panStartYRange.Value.Max + dataDy;
+            }
+        }
+
+        StateHasChanged();
+    }
+
+    protected virtual void OnMouseDown(MouseEventArgs e)
+    {
+        if (EnablePan)
+        {
+            _isPanning = true;
+            _panStartPoint = new SKPoint((float)e.OffsetX * _density, (float)e.OffsetY * _density);
+            _panStartXRange = GetXRange(true);
+            _panStartYRange = GetYRange(true);
+        }
+    }
+
+    protected virtual void OnMouseUp(MouseEventArgs e)
+    {
+        _isPanning = false;
+    }
+
+    protected virtual void OnWheel(WheelEventArgs e)
+    {
+        if (!EnableZoom || LastPlotArea == default) return;
+
+        var mousePoint = new SKPoint((float)e.OffsetX * _density, (float)e.OffsetY * _density);
+        if (!LastPlotArea.Contains(mousePoint)) return;
+
+        var zoomFactor = e.DeltaY > 0 ? 1.1 : 0.9;
+        var xVal = ScaleXInverse(mousePoint.X, LastPlotArea);
+        var yVal = ScaleYInverse(mousePoint.Y, LastPlotArea);
+
+        var (xMin, xMax) = GetXRange(true);
+        var (yMin, yMax) = GetYRange(true);
+
+        var newXRange = (xMax - xMin) * zoomFactor;
+        var newYRange = (yMax - yMin) * zoomFactor;
+
+        var xPct = (xVal - xMin) / (xMax - xMin);
+        var yPct = (yVal - yMin) / (yMax - yMin);
+
+        _viewXMin = xVal - (newXRange * xPct);
+        _viewXMax = xVal + (newXRange * (1 - xPct));
+        _viewYMin = yVal - (newYRange * yPct);
+        _viewYMax = yVal + (newYRange * (1 - yPct));
+
         StateHasChanged();
     }
 
@@ -403,6 +505,8 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         {
             plotArea = axis.Measure(plotArea);
         }
+
+        LastPlotArea = plotArea;
 
         // Pass 3: Render axes using the final plotArea and the adjusted accessibleArea
         foreach (var axis in Axes.Where(a => a.Visible))
@@ -495,7 +599,8 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             }
 
             // Check series/points if legend wasn't hit
-            if (HoveredSeries == null && plotArea.Contains(mousePoint))
+            if (HoveredSeries == null && plotArea.Contains(mousePoint)
+)
             {
                 foreach (var series in Series.AsEnumerable().Reverse().Where(s => s.Visible))
                 {
@@ -975,6 +1080,15 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                 allX.Add(s.XValueSelector(item));
             }
         }
+
+        foreach (var axis in Axes.Where(a => a.Direction == AxisDirection.X && a.Visible && a.ValuesToShow != null))
+        {
+            foreach (var val in axis.ValuesToShow!)
+            {
+                allX.Add(val);
+            }
+        }
+
         _cachedAllX = allX.OrderBy(x => x).ToList();
         return _cachedAllX;
     }
@@ -996,6 +1110,15 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                 allY.Add(s.YValueSelector(item));
             }
         }
+
+        foreach (var axis in Axes.Where(a => a.Direction == AxisDirection.Y && a.Visible && a.ValuesToShow != null))
+        {
+            foreach (var val in axis.ValuesToShow!)
+            {
+                allY.Add(val);
+            }
+        }
+
         _cachedAllY = allY.OrderBy(y => y).ToList();
         return _cachedAllY;
     }
@@ -1040,8 +1163,35 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         return (float)(plotArea.Bottom - (y - min) / range * plotArea.Height);
     }
 
+    /// <summary>
+    ///     Converts a screen X coordinate back to a data value.
+    /// </summary>
+    public double ScaleXInverse(float x, SKRect plotArea)
+    {
+        var (min, max) = GetXRange(true);
+        var range = max - min;
+        if (plotArea.Width <= 0) return min;
+        return min + (x - plotArea.Left) / plotArea.Width * range;
+    }
+
+    /// <summary>
+    ///     Converts a screen Y coordinate back to a data value.
+    /// </summary>
+    public double ScaleYInverse(float y, SKRect plotArea)
+    {
+        var (min, max) = GetYRange(true);
+        var range = max - min;
+        if (plotArea.Height <= 0) return min;
+        return min + (plotArea.Bottom - y) / plotArea.Height * range;
+    }
+
     public (double Min, double Max) GetXRange(bool padded = false)
     {
+        if (_viewXMin.HasValue && _viewXMax.HasValue)
+        {
+            return (_viewXMin.Value, _viewXMax.Value);
+        }
+
         if (IsCategoricalX)
         {
             var allX = GetAllXValues();
@@ -1052,11 +1202,10 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             return (-catRange * RangePadding, catRange + catRange * RangePadding);
         }
 
-        var cartesianSeries = Series.OfType<NTCartesianSeries<TData>>().Where(s => s.IsEffectivelyVisible).ToList();
-        if (!cartesianSeries.Any()) return (0, 1);
-
         double min = double.MaxValue;
         double max = double.MinValue;
+
+        var cartesianSeries = Series.OfType<NTCartesianSeries<TData>>().Where(s => s.IsEffectivelyVisible).ToList();
         foreach (var s in cartesianSeries)
         {
             if (s.Data == null || !s.Data.Any()) continue;
@@ -1064,6 +1213,15 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             if (!values.Any()) continue;
             min = Math.Min(min, values.Min());
             max = Math.Max(max, values.Max());
+        }
+
+        foreach (var axis in Axes.Where(a => a.Direction == AxisDirection.X && a.Visible && a.ValuesToShow != null))
+        {
+            if (axis.ValuesToShow!.Any())
+            {
+                min = Math.Min(min, axis.ValuesToShow.Min());
+                max = Math.Max(max, axis.ValuesToShow.Max());
+            }
         }
 
         if (min == double.MaxValue) return (0, 1);
@@ -1076,6 +1234,11 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
     public (double Min, double Max) GetYRange(bool padded = false)
     {
+        if (_viewYMin.HasValue && _viewYMax.HasValue)
+        {
+            return (_viewYMin.Value, _viewYMax.Value);
+        }
+
         if (IsCategoricalY)
         {
             var allY = GetAllYValues();
@@ -1086,11 +1249,10 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             return (-catRange * RangePadding, catRange + catRange * RangePadding);
         }
 
-        var cartesianSeries = Series.OfType<NTCartesianSeries<TData>>().Where(s => s.IsEffectivelyVisible).ToList();
-        if (!cartesianSeries.Any()) return (0, 1);
-
         double min = double.MaxValue;
         double max = double.MinValue;
+
+        var cartesianSeries = Series.OfType<NTCartesianSeries<TData>>().Where(s => s.IsEffectivelyVisible).ToList();
         foreach (var s in cartesianSeries)
         {
             if (s.Data == null || !s.Data.Any()) continue;
@@ -1115,6 +1277,15 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                 if (!values.Any()) continue;
                 min = Math.Min(min, values.Min());
                 max = Math.Max(max, values.Max());
+            }
+        }
+
+        foreach (var axis in Axes.Where(a => a.Direction == AxisDirection.Y && a.Visible && a.ValuesToShow != null))
+        {
+            if (axis.ValuesToShow!.Any())
+            {
+                min = Math.Min(min, axis.ValuesToShow.Min());
+                max = Math.Max(max, axis.ValuesToShow.Max());
             }
         }
 

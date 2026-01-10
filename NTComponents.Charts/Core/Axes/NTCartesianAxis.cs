@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Components;
 using SkiaSharp;
 
 namespace NTComponents.Charts.Core.Axes;
@@ -61,24 +62,51 @@ public class NTCartesianAxis<TData> : NTAxis<TData> where TData : class {
             canvas.DrawLine(plotArea.Left, yLine, plotArea.Right, yLine, linePaint);
 
             // Draw labels
-            var allX = Chart.GetAllXValues();
-            if (allX.Any()) {
-                for (var i = 0; i < allX.Count; i++) {
-                    var val = Chart.IsCategoricalX ? i : allX[i];
+            if (ValuesToShow != null || Chart.IsCategoricalX) {
+                var allX = ValuesToShow ?? Chart.GetAllXValues();
+                if (allX.Any()) {
+                    for (var i = 0; i < allX.Count; i++) {
+                        var val = allX[i];
+                        var x = Chart.ScaleX(val, plotArea);
+
+                        // Only draw if within reasonable bounds of the plot area
+                        if (x < plotArea.Left - 1 || x > plotArea.Right + 1) continue;
+
+                        var label = val.ToString("0.#");
+
+                        SKTextAlign textAlign = SKTextAlign.Center;
+                        if (!Chart.IsCategoricalX) {
+                            if (i == 0 && allX.Count > 1) {
+                                textAlign = SKTextAlign.Left;
+                            }
+                            else if (i == allX.Count - 1 && allX.Count > 1) {
+                                textAlign = SKTextAlign.Right;
+                            }
+                        }
+
+                        canvas.DrawText(label, x, yLine + 14, textAlign, textFont, textPaint);
+                    }
+                }
+            }
+            else {
+                var labelCount = 5;
+                for (var i = 0; i < labelCount; i++) {
+                    var t = i / (float)(labelCount - 1);
+                    var val = xMinReal + (t * (xMaxReal - xMinReal));
                     var x = Chart.ScaleX(val, plotArea);
-                    var label = allX[i].ToString("0.#");
+
+                    // Only draw if within reasonable bounds of the plot area
+                    if (x < plotArea.Left - 1 || x > plotArea.Right + 1) continue;
 
                     SKTextAlign textAlign = SKTextAlign.Center;
-                    if (!Chart.IsCategoricalX) {
-                        if (i == 0 && allX.Count > 1) {
-                            textAlign = SKTextAlign.Left;
-                        }
-                        else if (i == allX.Count - 1 && allX.Count > 1) {
-                            textAlign = SKTextAlign.Right;
-                        }
+                    if (i == 0) {
+                        textAlign = SKTextAlign.Left;
+                    }
+                    else if (i == labelCount - 1) {
+                        textAlign = SKTextAlign.Right;
                     }
 
-                    canvas.DrawText(label, x, yLine + 14, textAlign, textFont, textPaint);
+                    canvas.DrawText(val.ToString("0.#"), x, yLine + 14, textAlign, textFont, textPaint);
                 }
             }
 
@@ -91,21 +119,45 @@ public class NTCartesianAxis<TData> : NTAxis<TData> where TData : class {
             canvas.DrawLine(xLine, plotArea.Top, xLine, plotArea.Bottom, linePaint);
 
             // Draw labels
-            var labelCount = 5;
-            for (var i = 0; i < labelCount; i++) {
-                var t = i / (float)(labelCount - 1);
-                var val = yMinReal + (t * (yMaxReal - yMinReal));
-                var y = plotArea.Bottom - ((float)((val - yMin) / (yMax - yMin)) * plotArea.Height);
+            if (ValuesToShow != null) {
+                for (var i = 0; i < ValuesToShow.Count; i++) {
+                    var val = ValuesToShow[i];
+                    var y = Chart.ScaleY(val, plotArea);
 
-                float yOffset = 5;
-                if (i == 0) {
-                    yOffset = 0;
-                }
-                else if (i == labelCount - 1) {
-                    yOffset = 10;
-                }
+                    // Only draw if within reasonable bounds of the plot area
+                    if (y < plotArea.Top - 1 || y > plotArea.Bottom + 1) continue;
 
-                canvas.DrawText(val.ToString("0.#"), xLine - 5, y + yOffset, SKTextAlign.Right, textFont, textPaint);
+                    float yOffset = 5;
+                    if (i == 0) {
+                        yOffset = 0;
+                    }
+                    else if (i == ValuesToShow.Count - 1) {
+                        yOffset = 10;
+                    }
+
+                    canvas.DrawText(val.ToString("0.#"), xLine - 5, y + yOffset, SKTextAlign.Right, textFont, textPaint);
+                }
+            }
+            else {
+                var labelCount = 5;
+                for (var i = 0; i < labelCount; i++) {
+                    var t = i / (float)(labelCount - 1);
+                    var val = yMinReal + (t * (yMaxReal - yMinReal));
+                    var y = plotArea.Bottom - ((float)((val - yMin) / (yMax - yMin)) * plotArea.Height);
+
+                    // Only draw if within reasonable bounds of the plot area
+                    if (y < plotArea.Top - 1 || y > plotArea.Bottom + 1) continue;
+
+                    float yOffset = 5;
+                    if (i == 0) {
+                        yOffset = 0;
+                    }
+                    else if (i == labelCount - 1) {
+                        yOffset = 10;
+                    }
+
+                    canvas.DrawText(val.ToString("0.#"), xLine - 5, y + yOffset, SKTextAlign.Right, textFont, textPaint);
+                }
             }
 
             if (!string.IsNullOrEmpty(Title)) {

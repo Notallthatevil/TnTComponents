@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using SkiaSharp;
 using System;
+using System.Collections.Generic;
 
 namespace NTComponents.Charts.Core.Axes;
 
@@ -11,6 +12,12 @@ public abstract class NTAxis<TData> : ComponentBase, IDisposable where TData : c
 
     [CascadingParameter]
     protected NTChart<TData> Chart { get; set; } = default!;
+
+    /// <summary>
+    ///    Gets or sets the values to show on the axis.
+    /// </summary>
+    [Parameter]
+    public List<double>? ValuesToShow { get; set; }
 
     /// <summary>
     ///     Gets or sets the direction of the axis.

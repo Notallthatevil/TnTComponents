@@ -30,7 +30,7 @@
                         EnableHardwareAcceleration="@_enableHardwareAcceleration">
                         <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="X Axis" />
                         <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Y Axis" />
-                        <NTLineSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
+                        <NTLineSeries TData="CartesianPoint" Data="@_basicData" Title="My data" XValueSelector="@(p => p.X)"
                             YValueSelector="@(p => p.Y)" Color="TnTColor.Primary" PointStyle="PointStyle.Filled"
                             PointSize="10" />
                     </NTChart>
@@ -133,6 +133,52 @@
                 </div>
                 <div class="mt-2 text-muted">
                     Dashed with Smoothed corners (Purple) and Scatter mode (Red points, no line).
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12 mb-4">
+            <div class="card p-3 shadow-sm">
+                <h3>Custom Axis Values</h3>
+                <div style="height: 300px;">
+                    <NTChart TData="CartesianPoint" Title="Explicit Labels"
+                        EnableHardwareAcceleration="@_enableHardwareAcceleration">
+                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X"
+                            ValuesToShow="@(Enumerable.Range(0, 11).Select(i => (double)i * 10).ToList())" Title="Selected X" />
+                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y"
+                            ValuesToShow="@(Enumerable.Range(0, 11).Select(i => (double)i * 10).ToList())" Title="Major Y" />
+                        <NTLineSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
+                            YValueSelector="@(p => p.Y)" Color="TnTColor.Primary" />
+                    </NTChart>
+                </div>
+                <div class="mt-2 text-muted">
+                    Demonstrating explicit axis labels (0 to 100 on both axes).
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12 mb-4">
+            <div class="card p-3 shadow-sm">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h3>Pan & Zoom</h3>
+                    <button class="btn btn-sm btn-outline-secondary" @onclick="() => interactiveChart.ResetZoom()">Reset View</button>
+                </div>
+                <div style="height: 300px;">
+                    <NTChart @ref="interactiveChart" TData="CartesianPoint" Title="Interactive Chart" 
+                             EnablePan="true" EnableZoom="true"
+                             EnableHardwareAcceleration="@_enableHardwareAcceleration">
+                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="X Axis (Scroll to zoom, Drag to pan)" />
+                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Y Axis" />
+                        <NTLineSeries TData="CartesianPoint" Data="@_animatedData" XValueSelector="@(p => p.X)"
+                                      YValueSelector="@(p => p.Y)" Color="TnTColor.Primary" />
+                    </NTChart>
+                </div>
+                <div class="mt-2 text-muted">
+                    Use mouse wheel to zoom (centered on mouse) and click-drag to pan.
                 </div>
             </div>
         </div>
@@ -274,6 +320,8 @@
 
 @code {
     public record CartesianPoint(double X, double Y);
+
+    private NTChart<CartesianPoint> interactiveChart = default!;
 
     private List<TnTColor> _customPalette = new() { TnTColor.Tertiary, TnTColor.Success };
 
