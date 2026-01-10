@@ -42,6 +42,12 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     public bool EnableZoom { get; set; }
 
     /// <summary>
+    ///     Gets or sets whether to use "nice" numbers for axis scales.
+    /// </summary>
+    [Parameter]
+    public bool UseNiceNumbers { get; set; } = true;
+
+    /// <summary>
     ///     Gets or sets the child content.
     /// </summary>
     [Parameter]
@@ -1225,6 +1231,12 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         if (min == double.MaxValue) return (0, 1);
         if (!padded) return (min, max);
 
+        if (UseNiceNumbers)
+        {
+            var (niceMin, niceMax, _) = CalculateNiceScaling(min, max);
+            return (niceMin, niceMax);
+        }
+
         var range = max - min;
         if (range == 0) range = 1;
         return (min - range * RangePadding, max + range * RangePadding);
@@ -1297,6 +1309,12 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
         if (!padded) return (min, max);
 
+        if (UseNiceNumbers)
+        {
+            var (niceMin, niceMax, _) = CalculateNiceScaling(min, max);
+            return (niceMin, niceMax);
+        }
+
         var range = max - min;
         if (range == 0) range = 1;
 
@@ -1304,5 +1322,45 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         if (min >= 0 && minPad < 0) minPad = 0;
 
         return (minPad, max + range * RangePadding);
+    }
+
+    public (double Min, double Max, double Spacing) CalculateNiceScaling(double min, double max, int maxTicks = 5)
+    {
+        if (min == max)
+        {
+            max = min + 1;
+        }
+
+        var range = CalculateNiceNumber(max - min, false);
+        var tickSpacing = CalculateNiceNumber(range / (maxTicks - 1), true);
+
+        var niceMin = Math.Floor(min / tickSpacing) * tickSpacing;
+        var niceMax = Math.Ceiling(max / tickSpacing) * tickSpacing;
+
+        return (niceMin, niceMax, tickSpacing);
+    }
+
+    private double CalculateNiceNumber(double range, bool round)
+    {
+        var exponent = Math.Floor(Math.Log10(range));
+        var fraction = range / Math.Pow(10, exponent);
+        double niceFraction;
+
+        if (round)
+        {
+            if (fraction < 1.5) niceFraction = 1;
+            else if (fraction < 3) niceFraction = 2;
+            else if (fraction < 7) niceFraction = 5;
+            else niceFraction = 10;
+        }
+        else
+        {
+            if (fraction <= 1) niceFraction = 1;
+            else if (fraction <= 2) niceFraction = 2;
+            else if (fraction <= 5) niceFraction = 5;
+            else niceFraction = 10;
+        }
+
+        return niceFraction * Math.Pow(10, exponent);
     }
 }

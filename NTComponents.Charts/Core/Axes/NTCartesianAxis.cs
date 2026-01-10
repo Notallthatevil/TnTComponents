@@ -88,6 +88,27 @@ public class NTCartesianAxis<TData> : NTAxis<TData> where TData : class {
                     }
                 }
             }
+            else if (Chart.UseNiceNumbers) {
+                var (niceMin, niceMax, spacing) = Chart.CalculateNiceScaling(xMinReal, xMaxReal);
+                int totalLabels = (int)Math.Round((niceMax - niceMin) / spacing) + 1;
+                for (int i = 0; i < totalLabels; i++) {
+                    double val = niceMin + i * spacing;
+                    var x = Chart.ScaleX(val, plotArea);
+
+                    // Only draw if within reasonable bounds of the plot area
+                    if (x < plotArea.Left - 1 || x > plotArea.Right + 1) continue;
+
+                    SKTextAlign textAlign = SKTextAlign.Center;
+                    if (i == 0) {
+                        textAlign = SKTextAlign.Left;
+                    }
+                    else if (i == totalLabels - 1) {
+                        textAlign = SKTextAlign.Right;
+                    }
+
+                    canvas.DrawText(val.ToString("0.#"), x, yLine + 14, textAlign, textFont, textPaint);
+                }
+            }
             else {
                 var labelCount = 5;
                 for (var i = 0; i < labelCount; i++) {
@@ -139,6 +160,27 @@ public class NTCartesianAxis<TData> : NTAxis<TData> where TData : class {
 
                         canvas.DrawText(val.ToString("0.#"), xLine - 5, y + yOffset, SKTextAlign.Right, textFont, textPaint);
                     }
+                }
+            }
+            else if (Chart.UseNiceNumbers) {
+                var (niceMin, niceMax, spacing) = Chart.CalculateNiceScaling(yMinReal, yMaxReal);
+                int totalLabels = (int)Math.Round((niceMax - niceMin) / spacing) + 1;
+                for (int i = 0; i < totalLabels; i++) {
+                    double val = niceMin + i * spacing;
+                    var y = Chart.ScaleY(val, plotArea);
+
+                    // Only draw if within reasonable bounds of the plot area
+                    if (y < plotArea.Top - 1 || y > plotArea.Bottom + 1) continue;
+
+                    float yOffset = 5;
+                    if (i == 0) {
+                        yOffset = 0;
+                    }
+                    else if (i == totalLabels - 1) {
+                        yOffset = 10;
+                    }
+
+                    canvas.DrawText(val.ToString("0.#"), xLine - 5, y + yOffset, SKTextAlign.Right, textFont, textPaint);
                 }
             }
             else {
