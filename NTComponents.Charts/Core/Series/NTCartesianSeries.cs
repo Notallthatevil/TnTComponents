@@ -56,6 +56,18 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
     [Parameter]
     public TnTColor? DataLabelColor { get; set; }
 
+    /// <summary>
+    ///     Gets or sets whether to show a background for data labels.
+    /// </summary>
+    [Parameter]
+    public bool ShowDataLabelBackground { get; set; } = true;
+
+    /// <summary>
+    ///     Gets or sets the background color for data labels. If null, the chart's background color will be used.
+    /// </summary>
+    [Parameter]
+    public TnTColor? DataLabelBackgroundColor { get; set; }
+
     protected double[]? AnimationStartValues { get; set; }
     protected double[]? AnimationCurrentValues { get; set; }
 
@@ -75,23 +87,52 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
 
         var color = overrideColor ?? Chart.GetThemeColor(DataLabelColor ?? Chart.TextColor);
 
+        using var font = new SKFont {
+            Size = DataLabelSize
+        };
+
         using var paint = new SKPaint {
             Color = color,
             IsAntialias = true
         };
 
-        using var font = new SKFont {
-            Size = DataLabelSize
-        };
-
         var text = string.Format(DataLabelFormat, value);
+        var textWidth = font.MeasureText(text);
         var textHeight = font.Size;
+        
+        var paddingX = 6f;
+        var paddingY = 2f;
         var drawY = y - ((PointSize / 2) + 5);
 
         // Check if label would be cut off at the top
         if (drawY - textHeight < renderArea.Top) {
             // Shift label below the point if it would be cut off
             drawY = y + ((PointSize / 2) + textHeight + 5);
+        }
+
+        if (ShowDataLabelBackground) {
+            var bgColor = Chart.GetThemeColor(DataLabelBackgroundColor ?? Chart.BackgroundColor).WithAlpha(230);
+            using var bgPaint = new SKPaint {
+                Color = bgColor,
+                Style = SKPaintStyle.Fill,
+                IsAntialias = true
+            };
+
+            var bgRect = new SKRect(
+                x - (textWidth / 2) - paddingX,
+                drawY - textHeight - paddingY,
+                x + (textWidth / 2) + paddingX,
+                drawY + paddingY);
+
+            canvas.DrawRoundRect(bgRect, 4, 4, bgPaint);
+
+            using var borderPaint = new SKPaint {
+                Color = Chart.GetThemeColor(TnTColor.OutlineVariant),
+                Style = SKPaintStyle.Stroke,
+                StrokeWidth = 1,
+                IsAntialias = true
+            };
+            canvas.DrawRoundRect(bgRect, 4, 4, borderPaint);
         }
 
         canvas.DrawText(text, x, drawY, SKTextAlign.Center, font, paint);
