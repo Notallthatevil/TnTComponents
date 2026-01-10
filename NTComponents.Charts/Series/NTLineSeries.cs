@@ -94,7 +94,7 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
 
                 if (ShowDataLabels || isPointHovered)
                 {
-                    RenderDataLabel(canvas, point.X, point.Y, YValueSelector(dataList[i]), pointColor);
+                    RenderDataLabel(canvas, point.X, point.Y, YValueSelector(dataList[i]), renderArea, pointColor);
                 }
             }
         }

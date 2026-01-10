@@ -74,7 +74,7 @@ public class NTHeatMapSeries<TData> : NTCartesianSeries<TData> where TData : cla
 
          if (ShowDataLabels)
          {
-            RenderDataLabel(canvas, x, y + 5, weight, SKColors.White); // Assuming dark heat usually
+            RenderDataLabel(canvas, x, y + 5, weight, renderArea, SKColors.White); // Assuming dark heat usually
          }
       }
    }

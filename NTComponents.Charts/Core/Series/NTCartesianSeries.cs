@@ -68,7 +68,7 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
         base.OnDataChanged();
     }
 
-    protected void RenderDataLabel(SKCanvas canvas, float x, float y, double value, SKColor? overrideColor = null) {
+    protected void RenderDataLabel(SKCanvas canvas, float x, float y, double value, SKRect renderArea, SKColor? overrideColor = null) {
         if (overrideColor == null && !ShowDataLabels) {
             return;
         }
@@ -85,7 +85,16 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
         };
 
         var text = string.Format(DataLabelFormat, value);
-        canvas.DrawText(text, x, y - ((PointSize / 2) + 5), SKTextAlign.Center, font, paint);
+        var textHeight = font.Size;
+        var drawY = y - ((PointSize / 2) + 5);
+
+        // Check if label would be cut off at the top
+        if (drawY - textHeight < renderArea.Top) {
+            // Shift label below the point if it would be cut off
+            drawY = y + ((PointSize / 2) + textHeight + 5);
+        }
+
+        canvas.DrawText(text, x, drawY, SKTextAlign.Center, font, paint);
     }
 
     protected void RenderPoint(SKCanvas canvas, float x, float y, SKColor color) {

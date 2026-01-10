@@ -63,7 +63,7 @@ public class NTBarSeries<TData> : NTCartesianSeries<TData> where TData : class {
 
             if (ShowDataLabels || isPointHovered) {
                 var labelColor = isPointHovered ? color.WithAlpha(255) : color;
-                RenderDataLabel(canvas, rect.MidX, rect.Top - 5, YValueSelector(dataList[i]), labelColor);
+                RenderDataLabel(canvas, rect.MidX, rect.Top - 5, YValueSelector(dataList[i]), renderArea, labelColor);
             }
         }
     }
