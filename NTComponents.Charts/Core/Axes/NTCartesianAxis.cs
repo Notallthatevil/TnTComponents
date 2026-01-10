@@ -67,7 +67,7 @@ public class NTCartesianAxis<TData> : NTAxis<TData> where TData : class {
                 if (allX.Any()) {
                     for (var i = 0; i < allX.Count; i++) {
                         var val = allX[i];
-                        var x = Chart.ScaleX(val, plotArea);
+                        var x = Chart.ScaleX(Chart.GetScaledXValue(val), plotArea);
 
                         // Only draw if within reasonable bounds of the plot area
                         if (x < plotArea.Left - 1 || x > plotArea.Right + 1) continue;
@@ -119,23 +119,26 @@ public class NTCartesianAxis<TData> : NTAxis<TData> where TData : class {
             canvas.DrawLine(xLine, plotArea.Top, xLine, plotArea.Bottom, linePaint);
 
             // Draw labels
-            if (ValuesToShow != null) {
-                for (var i = 0; i < ValuesToShow.Count; i++) {
-                    var val = ValuesToShow[i];
-                    var y = Chart.ScaleY(val, plotArea);
+            if (ValuesToShow != null || Chart.IsCategoricalY) {
+                var allY = ValuesToShow ?? Chart.GetAllYValues();
+                if (allY.Any()) {
+                    for (var i = 0; i < allY.Count; i++) {
+                        var val = allY[i];
+                        var y = Chart.ScaleY(Chart.GetScaledYValue(val), plotArea);
 
-                    // Only draw if within reasonable bounds of the plot area
-                    if (y < plotArea.Top - 1 || y > plotArea.Bottom + 1) continue;
+                        // Only draw if within reasonable bounds of the plot area
+                        if (y < plotArea.Top - 1 || y > plotArea.Bottom + 1) continue;
 
-                    float yOffset = 5;
-                    if (i == 0) {
-                        yOffset = 0;
+                        float yOffset = 5;
+                        if (i == 0) {
+                            yOffset = 0;
+                        }
+                        else if (i == allY.Count - 1) {
+                            yOffset = 10;
+                        }
+
+                        canvas.DrawText(val.ToString("0.#"), xLine - 5, y + yOffset, SKTextAlign.Right, textFont, textPaint);
                     }
-                    else if (i == ValuesToShow.Count - 1) {
-                        yOffset = 10;
-                    }
-
-                    canvas.DrawText(val.ToString("0.#"), xLine - 5, y + yOffset, SKTextAlign.Right, textFont, textPaint);
                 }
             }
             else {

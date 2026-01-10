@@ -1123,7 +1123,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         return _cachedAllY;
     }
 
-    internal double GetScaledXValue(double originalX)
+    public double GetScaledXValue(double originalX)
     {
         if (IsCategoricalX)
         {
@@ -1134,7 +1134,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         return originalX;
     }
 
-    internal double GetScaledYValue(double originalY)
+    public double GetScaledYValue(double originalY)
     {
         if (IsCategoricalY)
         {
@@ -1147,7 +1147,6 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
     public float ScaleX(double x, SKRect plotArea)
     {
-        x = GetScaledXValue(x);
         var (min, max) = GetXRange(true);
         var range = max - min;
         if (range <= 0) return plotArea.Left;
@@ -1156,7 +1155,6 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
     public float ScaleY(double y, SKRect plotArea)
     {
-        y = GetScaledYValue(y);
         var (min, max) = GetYRange(true);
         var range = max - min;
         if (range <= 0) return plotArea.Bottom;
