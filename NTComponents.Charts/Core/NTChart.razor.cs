@@ -789,7 +789,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         if (LegendPosition == LegendPosition.Top || LegendPosition == LegendPosition.Bottom)
         {
             // Reduce maxWidth if AllowExport is true to avoid overlapping buttons
-            float maxWidth = currentArea.Width - (AllowExport ? 40 : 0);
+            float maxWidth = currentArea.Width - 40;
             var rows = GetLegendRows(font, maxWidth);
             float legendHeight = rows.Count * (LegendFontSize + 10);
 
@@ -801,7 +801,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             }
             else
             {
-                var legendArea = new SKRect(currentArea.Left, currentArea.Bottom - legendHeight, currentArea.Right, currentArea.Bottom);
+                var legendArea = new SKRect(currentArea.Left, currentArea.Bottom - legendHeight, currentArea.Right - 40, currentArea.Bottom);
                 var plotArea = new SKRect(currentArea.Left, currentArea.Top, currentArea.Right, currentArea.Bottom - legendHeight);
                 return (plotArea, legendArea);
             }
