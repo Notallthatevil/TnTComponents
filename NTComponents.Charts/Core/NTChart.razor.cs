@@ -640,7 +640,12 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         }
 
         canvas.Save();
-        canvas.ClipRect(plotArea);
+        
+        // Inflate the clip rect slightly so we don't cutoff line thickness or point markers
+        var clipArea = plotArea;
+        clipArea.Inflate(2, 2);
+        canvas.ClipRect(clipArea);
+
         // Render inactive series first
         foreach (var series in Series.Where(s => s != HoveredSeries && s.IsEffectivelyVisible))
         {
@@ -783,7 +788,9 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
         if (LegendPosition == LegendPosition.Top || LegendPosition == LegendPosition.Bottom)
         {
-            var rows = GetLegendRows(font, currentArea.Width);
+            // Reduce maxWidth if AllowExport is true to avoid overlapping buttons
+            float maxWidth = currentArea.Width - (AllowExport ? 40 : 0);
+            var rows = GetLegendRows(font, maxWidth);
             float legendHeight = rows.Count * (LegendFontSize + 10);
 
             if (LegendPosition == LegendPosition.Top)
@@ -1183,7 +1190,12 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         var (min, max) = GetXRange(true);
         var range = max - min;
         if (range <= 0) return plotArea.Left;
-        return (float)(plotArea.Left + (x - min) / range * plotArea.Width);
+
+        const float p = 3f; // 3 pixels of air
+        var left = plotArea.Left + p;
+        var width = plotArea.Width - (p * 2);
+
+        return (float)(left + (x - min) / range * width);
     }
 
     public float ScaleY(double y, SKRect plotArea)
@@ -1191,7 +1203,12 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         var (min, max) = GetYRange(true);
         var range = max - min;
         if (range <= 0) return plotArea.Bottom;
-        return (float)(plotArea.Bottom - (y - min) / range * plotArea.Height);
+
+        const float p = 3f; // 3 pixels of air
+        var bottom = plotArea.Bottom - p;
+        var height = plotArea.Height - (p * 2);
+
+        return (float)(bottom - (y - min) / range * height);
     }
 
     /// <summary>
@@ -1201,8 +1218,13 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     {
         var (min, max) = GetXRange(true);
         var range = max - min;
-        if (plotArea.Width <= 0) return min;
-        return min + (x - plotArea.Left) / plotArea.Width * range;
+        
+        const float p = 3f;
+        var left = plotArea.Left + p;
+        var width = plotArea.Width - (p * 2);
+
+        if (width <= 0) return min;
+        return min + (x - left) / width * range;
     }
 
     /// <summary>
@@ -1212,8 +1234,13 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     {
         var (min, max) = GetYRange(true);
         var range = max - min;
-        if (plotArea.Height <= 0) return min;
-        return min + (plotArea.Bottom - y) / plotArea.Height * range;
+
+        const float p = 3f;
+        var bottom = plotArea.Bottom - p;
+        var height = plotArea.Height - (p * 2);
+
+        if (height <= 0) return min;
+        return min + (bottom - y) / height * range;
     }
 
     public (double Min, double Max) GetXRange(bool padded = false)
