@@ -789,7 +789,10 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         if (LegendPosition == LegendPosition.Top || LegendPosition == LegendPosition.Bottom)
         {
             // Reduce maxWidth if AllowExport is true to avoid overlapping buttons
-            float maxWidth = currentArea.Width - 40;
+            // We need enough padding on both sides if we want to keep it centered
+            // The export button is on the right (~40px wide/margin)
+            // To keep it centered, we need at least 40px on both sides = 80px total reduction
+            float maxWidth = currentArea.Width - (AllowExport ? 100 : 0);
             var rows = GetLegendRows(font, maxWidth);
             float legendHeight = rows.Count * (LegendFontSize + 10);
 
@@ -801,7 +804,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             }
             else
             {
-                var legendArea = new SKRect(currentArea.Left, currentArea.Bottom - legendHeight, currentArea.Right - 40, currentArea.Bottom);
+                var legendArea = new SKRect(currentArea.Left, currentArea.Bottom - legendHeight, currentArea.Right, currentArea.Bottom);
                 var plotArea = new SKRect(currentArea.Left, currentArea.Top, currentArea.Right, currentArea.Bottom - legendHeight);
                 return (plotArea, legendArea);
             }
@@ -871,7 +874,9 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
         if (LegendPosition == LegendPosition.Top || LegendPosition == LegendPosition.Bottom)
         {
-            var rows = GetLegendRows(font, targetArea.Width);
+            // Use the same maxWidth logic as MeasureLegendWithArea to ensure consistent wrapping
+            float maxWidth = targetArea.Width - (AllowExport ? 100 : 0);
+            var rows = GetLegendRows(font, maxWidth);
             float rowHeight = LegendFontSize + 10;
 
             for (int r = 0; r < rows.Count; r++)
@@ -879,9 +884,8 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                 var rowItems = rows[r];
                 float totalRowWidth = rowItems.Sum(i => font.MeasureText(i.Label) + LegendIconSize + 10) + (rowItems.Count - 1) * LegendItemSpacing;
 
-                float startX = (LegendPosition == LegendPosition.Bottom)
-                    ? plotArea.Left + (plotArea.Width - totalRowWidth) / 2
-                    : targetArea.Left + (targetArea.Width - totalRowWidth) / 2;
+                // Center the legend row horizontally in the target area (the full width of the chart)
+                float startX = targetArea.Left + (targetArea.Width - totalRowWidth) / 2;
 
                 float y = targetArea.Top + 5 + LegendFontSize + (r * rowHeight);
 
