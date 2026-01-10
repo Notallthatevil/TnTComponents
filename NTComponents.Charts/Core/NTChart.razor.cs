@@ -666,22 +666,29 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
         var mousePoint = LastMousePosition.Value;
         var title = HoveredSeries.Title ?? "Series";
+        List<string> lines = new();
 
         // Use reflection or cast to get Values if it's Cartesian
-        string labelValue = "";
         if (HoveredSeries is NTCartesianSeries<TData> cartesian)
         {
+            var xValue = cartesian.XValueSelector(HoveredDataPoint);
             var yValue = cartesian.YValueSelector(HoveredDataPoint);
-            labelValue = string.Format(cartesian.DataLabelFormat, yValue);
+            lines.Add($"{title}: {xValue:0.#}");
+            lines.Add(string.Format(cartesian.DataLabelFormat, yValue));
         }
         else if (HoveredSeries is NTCircularSeries<TData> circular)
         {
             var value = circular.ValueSelector(HoveredDataPoint);
-            labelValue = string.Format(circular.DataLabelFormat, value);
-            title = circular.LabelSelector?.Invoke(HoveredDataPoint) ?? title;
+            var labelValue = string.Format(circular.DataLabelFormat, value);
+            var label = circular.LabelSelector?.Invoke(HoveredDataPoint) ?? title;
+            lines.Add($"{label}: {labelValue}");
+        }
+        else
+        {
+            lines.Add(title);
         }
 
-        var tooltipText = $"{title}: {labelValue}";
+        if (lines.Count == 0) return;
 
         var bgColor = GetThemeColor(HoveredSeries.TooltipBackgroundColor ?? TnTColor.SurfaceContainerLowest);
         var textColor = GetThemeColor(HoveredSeries.TooltipTextColor ?? TnTColor.OnSurface);
@@ -697,13 +704,20 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             Size = 12
         };
 
-        var textWidth = font.MeasureText(tooltipText);
-        var rect = new SKRect(mousePoint.X + 10, mousePoint.Y - 25, mousePoint.X + 20 + textWidth, mousePoint.Y - 5);
+        float lineHeight = font.Size + 4;
+        float textWidth = lines.Max(l => font.MeasureText(l));
+        float totalHeight = lines.Count * lineHeight + 5;
+        
+        var rect = new SKRect(mousePoint.X + 10, mousePoint.Y - totalHeight - 5, mousePoint.X + 20 + textWidth, mousePoint.Y - 5);
 
         // Keep tooltip within canvas
         if (rect.Right > plotArea.Right + Margin.Right)
         {
             rect.Offset(-(rect.Width + 20), 0);
+        }
+        if (rect.Top < plotArea.Top)
+        {
+            rect.Offset(0, rect.Height + 10);
         }
 
         using var bgPaint = new SKPaint
@@ -723,7 +737,12 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         };
         canvas.DrawRoundRect(rect, 4, 4, borderPaint);
 
-        canvas.DrawText(tooltipText, rect.Left + 5, rect.Bottom - 5, SKTextAlign.Left, font, textPaint);
+        float currentY = rect.Top + 5 + font.Size;
+        foreach (var line in lines)
+        {
+            canvas.DrawText(line, rect.Left + 5, (float)Math.Round(currentY), SKTextAlign.Left, font, textPaint);
+            currentY += lineHeight;
+        }
     }
 
     private void RenderTitle(SKCanvas canvas, SKImageInfo info)
