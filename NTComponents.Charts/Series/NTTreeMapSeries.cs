@@ -61,13 +61,9 @@ public class NTTreeMapSeries<TData> : NTBaseSeries<TData> where TData : class
             rect = new SKRect(centerX - w / 2, centerY - h / 2, centerX + w / 2, centerY + h / 2);
          }
 
-         var color = item.Color.WithAlpha((byte)(item.Color.Alpha * visibilityFactor));
          var isHovered = Chart.HoveredSeries == this && Chart.HoveredPointIndex == item.Index;
-
-         if (Chart.HoveredSeries != null && !isHovered)
-         {
-            color = color.WithAlpha((byte)(color.Alpha * 0.3f));
-         }
+         var hoverFactor = (isHovered) ? 1.0f : HoverFactor;
+         var color = item.Color.WithAlpha((byte)(item.Color.Alpha * visibilityFactor * hoverFactor));
 
          using var paint = new SKPaint
          {

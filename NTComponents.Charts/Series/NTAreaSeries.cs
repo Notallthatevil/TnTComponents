@@ -37,13 +37,11 @@ public class NTAreaSeries<TData> : NTLineSeries<TData> where TData : class
       }
 
       var isHovered = Chart.HoveredSeries == this;
-      var hasHover = Chart.HoveredSeries != null;
       var color = Chart.GetSeriesColor(this);
       var visibilityFactor = VisibilityFactor;
+      var hoverFactor = HoverFactor;
 
-      var strokeColor = hasHover && !isHovered
-          ? color.WithAlpha((byte)(color.Alpha * 0.15f * visibilityFactor))
-          : color.WithAlpha((byte)(color.Alpha * visibilityFactor));
+      var strokeColor = color.WithAlpha((byte)(color.Alpha * hoverFactor * visibilityFactor));
 
       var fillColor = strokeColor.WithAlpha((byte)(strokeColor.Alpha * AreaOpacity));
 

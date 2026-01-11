@@ -91,7 +91,7 @@ public class NTPieSeries<TData> : NTCircularSeries<TData> where TData : class
             }
             else if (isOtherSeriesHovered)
             {
-               dimFactor = 0.15f;
+               dimFactor = HoverFactor;
             }
          }
 

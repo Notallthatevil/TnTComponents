@@ -39,8 +39,10 @@ public class NTRadarSeries<TData> : NTCircularSeries<TData> where TData : class
 
       var progress = GetAnimationProgress();
       var visibilityFactor = VisibilityFactor;
+      var hoverFactor = HoverFactor;
+
       var color = Chart.GetSeriesColor(this);
-      color = color.WithAlpha((byte)(color.Alpha * visibilityFactor));
+      color = color.WithAlpha((byte)(color.Alpha * visibilityFactor * hoverFactor));
 
       var points = new SKPoint[count];
       for (int i = 0; i < count; i++)

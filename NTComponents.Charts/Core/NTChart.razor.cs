@@ -133,6 +133,12 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     [Parameter]
     public float LegendItemSpacing { get; set; } = 15.0f;
 
+    /// <summary>
+    ///    Gets or sets the duration of the hover animation.
+    /// </summary>
+    [Parameter]
+    public TimeSpan HoverAnimationDuration { get; set; } = TimeSpan.FromMilliseconds(250);
+
     [Inject]
     protected IJSRuntime JSRuntime { get; set; } = default!;
 
@@ -901,10 +907,11 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                     var iconColor = item.Color;
                     var currentTextColor = GetThemeColor(TextColor);
 
-                    if (hasHover && !isItemHovered)
+                    if (item.Series != null)
                     {
-                        iconColor = iconColor.WithAlpha((byte)(iconColor.Alpha * 0.15f));
-                        currentTextColor = currentTextColor.WithAlpha((byte)(currentTextColor.Alpha * 0.15f));
+                        var hoverFactor = item.Series.HoverFactor;
+                        iconColor = iconColor.WithAlpha((byte)(iconColor.Alpha * hoverFactor));
+                        currentTextColor = currentTextColor.WithAlpha((byte)(currentTextColor.Alpha * hoverFactor));
                     }
 
                     if (!item.IsVisible)
@@ -913,15 +920,15 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                         currentTextColor = currentTextColor.WithAlpha((byte)(currentTextColor.Alpha * 0.3f));
                     }
 
-                    using var iconPaint = new SKPaint { Color = iconColor, Style = SKPaintStyle.Fill, IsAntialias = true };
-                    using var currentTextPaint = new SKPaint { Color = currentTextColor, IsAntialias = true };
-
                     // Highlight if hovered
                     if (isItemHovered)
                     {
                         using var highlightPaint = new SKPaint { Color = item.Color.WithAlpha(40), Style = SKPaintStyle.Fill, IsAntialias = true };
                         canvas.DrawRoundRect(itemRect, 4, 4, highlightPaint);
                     }
+
+                    using var iconPaint = new SKPaint { Color = iconColor, Style = SKPaintStyle.Fill, IsAntialias = true };
+                    using var currentTextPaint = new SKPaint { Color = currentTextColor, IsAntialias = true };
 
                     canvas.DrawRect(currentX, y - LegendIconSize + 2, LegendIconSize, LegendIconSize, iconPaint);
                     canvas.DrawText(item.Label, currentX + LegendIconSize + 5, y, SKTextAlign.Left, font, currentTextPaint);
@@ -951,10 +958,11 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                 var iconColor = color;
                 var currentTextColor = GetThemeColor(TextColor);
 
-                if (hasHover && !isItemHovered)
+                if (item.Series != null)
                 {
-                    iconColor = iconColor.WithAlpha((byte)(iconColor.Alpha * 0.15f));
-                    currentTextColor = currentTextColor.WithAlpha((byte)(currentTextColor.Alpha * 0.15f));
+                    var hoverFactor = item.Series.HoverFactor;
+                    iconColor = iconColor.WithAlpha((byte)(iconColor.Alpha * hoverFactor));
+                    currentTextColor = currentTextColor.WithAlpha((byte)(currentTextColor.Alpha * hoverFactor));
                 }
 
                 if (!item.IsVisible)
@@ -1011,10 +1019,11 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
                 var iconColor = color;
                 var currentTextColor = GetThemeColor(TextColor);
 
-                if (hasHover && !isItemHovered)
+                if (item.Series != null)
                 {
-                    iconColor = iconColor.WithAlpha((byte)(iconColor.Alpha * 0.15f));
-                    currentTextColor = currentTextColor.WithAlpha((byte)(currentTextColor.Alpha * 0.15f));
+                    var hoverFactor = item.Series.HoverFactor;
+                    iconColor = iconColor.WithAlpha((byte)(iconColor.Alpha * hoverFactor));
+                    currentTextColor = currentTextColor.WithAlpha((byte)(currentTextColor.Alpha * hoverFactor));
                 }
 
                 if (!item.IsVisible)

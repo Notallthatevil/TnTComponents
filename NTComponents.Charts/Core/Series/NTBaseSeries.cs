@@ -75,6 +75,11 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     private float _startVisibility = 1f;
     private DateTime? _visibilityAnimationStartTime;
 
+    private float _currentHoverFactor = 1f;
+    private float _startHoverFactor = 1f;
+    private float _targetHoverFactor = 1f;
+    private DateTime? _hoverAnimationStartTime;
+
     private void OnVisibilityChanged()
     {
         _startVisibility = VisibilityFactor;
@@ -124,6 +129,50 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     ///     Returns true if the series is visible or currently animating visibility.
     /// </summary>
     public bool IsEffectivelyVisible => Visible || (VisibilityFactor > 0.001f);
+
+    /// <summary>
+    ///     Gets the current hover factor (0.15 to 1.0) for animation.
+    /// </summary>
+    public float HoverFactor
+    {
+        get
+        {
+            // Target is 1.0 if this series is hovered OR if nothing is hovered.
+            // Target is 0.15 if another series is hovered.
+            float target = (Chart.HoveredSeries == null || Chart.HoveredSeries == this) ? 1f : 0.15f;
+
+            if (!AnimationEnabled)
+            {
+                return target;
+            }
+
+            if (Math.Abs(_targetHoverFactor - target) > 0.001f)
+            {
+                _startHoverFactor = _currentHoverFactor;
+                _targetHoverFactor = target;
+                _hoverAnimationStartTime = DateTime.Now;
+            }
+
+            if (_hoverAnimationStartTime == null)
+            {
+                return _currentHoverFactor = target;
+            }
+
+            var elapsed = DateTime.Now - _hoverAnimationStartTime.Value;
+            var duration = Chart.HoverAnimationDuration;
+            var progress = (float)(elapsed.TotalMilliseconds / duration.TotalMilliseconds);
+            progress = Math.Clamp(progress, 0, 1);
+
+            _currentHoverFactor = _startHoverFactor + ((_targetHoverFactor - _startHoverFactor) * progress);
+
+            if (progress >= 1)
+            {
+                _hoverAnimationStartTime = null;
+            }
+
+            return _currentHoverFactor;
+        }
+    }
 
     protected override void OnInitialized()
     {

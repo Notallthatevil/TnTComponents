@@ -46,16 +46,22 @@ public class NTHeatMapSeries<TData> : NTCartesianSeries<TData> where TData : cla
       var skMaxColor = Chart.GetThemeColor(MaxColor);
 
       var visibilityFactor = VisibilityFactor;
+      var hoverFactor = HoverFactor;
 
-      foreach (var item in dataList)
+      for (int i = 0; i < dataList.Count; i++)
       {
+         var item = dataList[i];
          var xVal = Chart.GetScaledXValue(XValueSelector(item));
          var yVal = Chart.GetScaledYValue(YValueSelector(item));
          var weight = WeightSelector(item);
 
          float t = weightRange > 0 ? (float)((weight - minWeight) / weightRange) : 1.0f;
          var color = InterpolateColor(skMinColor, skMaxColor, t);
-         color = color.WithAlpha((byte)(color.Alpha * visibilityFactor));
+         
+         var isPointHovered = Chart.HoveredSeries == this && Chart.HoveredPointIndex == i;
+         
+         float currentHoverFactor = isPointHovered ? 1f : hoverFactor;
+         color = color.WithAlpha((byte)(color.Alpha * visibilityFactor * currentHoverFactor));
 
          float x = Chart.ScaleX(xVal, renderArea);
          float y = Chart.ScaleY(yVal, renderArea);

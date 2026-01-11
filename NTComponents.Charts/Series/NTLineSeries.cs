@@ -42,13 +42,11 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
         var points = GetPoints(renderArea, xMin, xMax, yMin, yMax);
 
         var isHovered = Chart.HoveredSeries == this;
-        var hasHover = Chart.HoveredSeries != null;
         var color = Chart.GetSeriesColor(this);
         var visibilityFactor = VisibilityFactor;
+        var hoverFactor = HoverFactor;
 
-        color = hasHover && !isHovered
-            ? color.WithAlpha((byte)(color.Alpha * 0.15f * visibilityFactor))
-            : color.WithAlpha((byte)(color.Alpha * visibilityFactor));
+        color = color.WithAlpha((byte)(color.Alpha * hoverFactor * visibilityFactor));
 
         using var paint = new SKPaint
         {

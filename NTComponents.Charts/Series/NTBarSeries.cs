@@ -28,13 +28,11 @@ public class NTBarSeries<TData> : NTCartesianSeries<TData> where TData : class {
         var barRects = GetBarRects(renderArea, xMin, xMax, yMin, yMax, yBase);
 
         var isHovered = Chart.HoveredSeries == this;
-        var hasHover = Chart.HoveredSeries != null;
         var color = Chart.GetSeriesColor(this);
         var myVisibilityFactor = VisibilityFactor;
+        var hoverFactor = HoverFactor;
 
-        color = hasHover && !isHovered
-            ? color.WithAlpha((byte)(color.Alpha * 0.15f * myVisibilityFactor))
-            : color.WithAlpha((byte)(color.Alpha * myVisibilityFactor));
+        color = color.WithAlpha((byte)(color.Alpha * hoverFactor * myVisibilityFactor));
 
         using var paint = new SKPaint {
             Color = color,

@@ -68,8 +68,8 @@ public class NTBoxPlotSeries<TData> : NTCartesianSeries<TData> where TData : cla
          float yMaxPos = Chart.ScaleY(animMax * visibilityFactor, renderArea);
 
          var isPointHovered = Chart.HoveredSeries == this && Chart.HoveredPointIndex == i;
-         var color = (hasHover && !isHovered) ? baseColor.WithAlpha((byte)(baseColor.Alpha * 0.15f)) : baseColor;
-         if (isPointHovered) color = baseColor.WithAlpha(255);
+         var hoverFactor = HoverFactor;
+         var color = (isPointHovered) ? baseColor : baseColor.WithAlpha((byte)(baseColor.Alpha * hoverFactor));
 
          using var strokePaint = new SKPaint
          {
