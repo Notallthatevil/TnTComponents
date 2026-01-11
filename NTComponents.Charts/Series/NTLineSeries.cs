@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Components;
+using NTComponents.Charts.Core.Axes;
+using NTComponents.Charts.Core;
 using NTComponents.Charts.Core.Series;
 using SkiaSharp;
 
@@ -191,10 +193,16 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
             currentYValue *= vFactor * vFactor;
             AnimationCurrentValues[i] = currentYValue;
 
-            var x = Chart.ScaleX(xValue, renderArea);
-            var y = Chart.ScaleY(currentYValue, renderArea);
+            var screenXCoord = Chart.ScaleX(xValue, renderArea);
+            var screenYCoord = Chart.ScaleY(currentYValue, renderArea);
 
-            points.Add(new SKPoint(x, y));
+            if (Chart.Orientation == NTChartOrientation.Vertical) {
+                points.Add(new SKPoint(screenXCoord, screenYCoord));
+            }
+            else {
+                // Horizontal: ScaleX returns vertical coord, ScaleY returns horizontal coord
+                points.Add(new SKPoint(screenYCoord, screenXCoord));
+            }
         }
         return points;
     }

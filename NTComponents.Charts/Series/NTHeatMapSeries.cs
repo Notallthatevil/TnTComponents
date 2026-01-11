@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using NTComponents.Charts.Core.Series;
+using NTComponents.Charts.Core;
 using SkiaSharp;
 
 namespace NTComponents.Charts;
@@ -35,8 +36,12 @@ public class NTHeatMapSeries<TData> : NTCartesianSeries<TData> where TData : cla
 
       if (!allX.Any() || !allY.Any()) return;
 
-      float cellWidth = renderArea.Width / allX.Count;
-      float cellHeight = renderArea.Height / allY.Count;
+      float cellWidth = Chart.Orientation == NTChartOrientation.Vertical 
+         ? renderArea.Width / allX.Count 
+         : renderArea.Width / allY.Count;
+      float cellHeight = Chart.Orientation == NTChartOrientation.Vertical 
+         ? renderArea.Height / allY.Count 
+         : renderArea.Height / allX.Count;
 
       double minWeight = dataList.Min(WeightSelector);
       double maxWeight = dataList.Max(WeightSelector);
@@ -73,8 +78,11 @@ public class NTHeatMapSeries<TData> : NTCartesianSeries<TData> where TData : cla
          float currentHoverFactor = isPointHovered ? 1f : hoverFactor;
          color = color.WithAlpha((byte)(color.Alpha * visibilityFactor * currentHoverFactor));
 
-         float x = Chart.ScaleX(xVal, renderArea);
-         float y = Chart.ScaleY(yVal, renderArea);
+         float screenXCoord = Chart.ScaleX(xVal, renderArea);
+         float screenYCoord = Chart.ScaleY(yVal, renderArea);
+
+         float x = Chart.Orientation == NTChartOrientation.Vertical ? screenXCoord : screenYCoord;
+         float y = Chart.Orientation == NTChartOrientation.Vertical ? screenYCoord : screenXCoord;
 
          var cellRect = new SKRect(x - cellWidth / 2, y - cellHeight / 2, x + cellWidth / 2, y + cellHeight / 2);
          cellRect.Inflate(-cellWidth * CellPadding / 2, -cellHeight * CellPadding / 2);
@@ -114,8 +122,12 @@ public class NTHeatMapSeries<TData> : NTCartesianSeries<TData> where TData : cla
       var allY = Chart.GetAllYValues();
       if (!allX.Any() || !allY.Any()) return null;
 
-      float cellWidth = renderArea.Width / allX.Count;
-      float cellHeight = renderArea.Height / allY.Count;
+      float cellWidth = Chart.Orientation == NTChartOrientation.Vertical 
+         ? renderArea.Width / allX.Count 
+         : renderArea.Width / allY.Count;
+      float cellHeight = Chart.Orientation == NTChartOrientation.Vertical 
+         ? renderArea.Height / allY.Count 
+         : renderArea.Height / allX.Count;
 
       for (int i = 0; i < dataList.Count; i++)
       {
@@ -123,8 +135,11 @@ public class NTHeatMapSeries<TData> : NTCartesianSeries<TData> where TData : cla
          var xVal = Chart.GetScaledXValue(XValueSelector(item));
          var yVal = Chart.GetScaledYValue(YValueSelector(item));
 
-         float x = Chart.ScaleX(xVal, renderArea);
-         float y = Chart.ScaleY(yVal, renderArea);
+         float screenXCoord = Chart.ScaleX(xVal, renderArea);
+         float screenYCoord = Chart.ScaleY(yVal, renderArea);
+
+         float x = Chart.Orientation == NTChartOrientation.Vertical ? screenXCoord : screenYCoord;
+         float y = Chart.Orientation == NTChartOrientation.Vertical ? screenYCoord : screenXCoord;
 
          var cellRect = new SKRect(x - cellWidth / 2, y - cellHeight / 2, x + cellWidth / 2, y + cellHeight / 2);
          if (cellRect.Contains(point)) return (i, item);

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using NTComponents.Charts.Core;
 using NTComponents.Charts.Core.Series;
 using SkiaSharp;
 
@@ -76,7 +77,16 @@ public class NTBarSeries<TData> : NTCartesianSeries<TData> where TData : class {
             if (ShowDataLabels || isPointHovered) {
                 var labelColor = args.DataLabelColor ?? (isPointHovered ? pointColor.WithAlpha(255) : pointColor);
                 var labelSize = args.DataLabelSize ?? DataLabelSize;
-                RenderDataLabel(canvas, rect.MidX, rect.Top - 5, YValueSelector(dataList[i]), renderArea, labelColor, labelSize);
+                
+                if (Chart.Orientation == NTChartOrientation.Vertical) {
+                    RenderDataLabel(canvas, rect.MidX, rect.Top - 5, YValueSelector(dataList[i]), renderArea, labelColor, labelSize);
+                }
+                else {
+                    // For horizontal bars, we want the label to the right of the bar
+                    // RenderDataLabel is designed for vertical positioning, so we'll do it manually here or enhance it.
+                    // Let's enhance NTCartesianSeries.RenderDataLabel to support alignment.
+                    RenderDataLabel(canvas, rect.Right + 5, rect.MidY + (labelSize / 2), YValueSelector(dataList[i]), renderArea, labelColor, labelSize);
+                }
             }
         }
     }
@@ -105,6 +115,8 @@ public class NTBarSeries<TData> : NTCartesianSeries<TData> where TData : class {
 
         // Calculate available width for each categorical slot
         float slotWidth;
+        var plotWidth = Chart.Orientation == NTChartOrientation.Vertical ? renderArea.Width : renderArea.Height;
+
         if (Chart.IsCategoricalX) {
             var x0 = Chart.ScaleX(0, renderArea);
             var x1 = Chart.ScaleX(1, renderArea);
@@ -112,8 +124,8 @@ public class NTBarSeries<TData> : NTCartesianSeries<TData> where TData : class {
         }
         else {
             slotWidth = dataList.Count > 1
-                ? (renderArea.Width / xRange)
-                : renderArea.Width * 0.1f;
+                ? (plotWidth / xRange)
+                : plotWidth * 0.1f;
         }
 
         // Group width is 80% of the slot to allow spacing between categories
@@ -141,17 +153,23 @@ public class NTBarSeries<TData> : NTCartesianSeries<TData> where TData : class {
             var currentYValue = startYValue + ((targetYValue - startYValue) * easedProgress);
             AnimationCurrentValues[i] = currentYValue;
 
-            var centerX = Chart.ScaleX(xValue, renderArea);
+            var centerPos = Chart.ScaleX(xValue, renderArea);
 
-            // Calculate the horizontal start position for this series' bar within the group
-            // The group is centered at centerX
-            var groupStart = centerX - (groupWidth / 2);
-            var barX = groupStart + (barSeriesOffsetWeight * (groupWidth / barSeriesWeightTotal)) + (barWidth / 2);
+            // Calculate the start position for this series' bar within the group
+            // The group is centered at centerPos
+            var groupStart = centerPos - (groupWidth / 2);
+            var barPos = groupStart + (barSeriesOffsetWeight * (groupWidth / barSeriesWeightTotal)) + (barWidth / 2);
 
-            var yTop = Chart.ScaleY(currentYValue, renderArea);
-            var yBottom = Chart.ScaleY(yBase, renderArea);
+            var topPos = Chart.ScaleY(currentYValue, renderArea);
+            var bottomPos = Chart.ScaleY(yBase, renderArea);
 
-            rects.Add(new SKRect(barX - (barWidth / 2), Math.Min(yTop, yBottom), barX + (barWidth / 2), Math.Max(yTop, yBottom)));
+            if (Chart.Orientation == NTChartOrientation.Vertical) {
+                rects.Add(new SKRect(barPos - (barWidth / 2), Math.Min(topPos, bottomPos), barPos + (barWidth / 2), Math.Max(topPos, bottomPos)));
+            }
+            else {
+                // Horizontal: barPos is Y coordinate, topPos/bottomPos are X coordinates
+                rects.Add(new SKRect(Math.Min(topPos, bottomPos), barPos - (barWidth / 2), Math.Max(topPos, bottomPos), barPos + (barWidth / 2)));
+            }
         }
 
         return rects;

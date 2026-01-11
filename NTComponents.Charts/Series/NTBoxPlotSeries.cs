@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using NTComponents.Charts.Core.Series;
+using NTComponents.Charts.Core;
 using SkiaSharp;
 
 namespace NTComponents.Charts;
@@ -43,7 +44,8 @@ public class NTBoxPlotSeries<TData> : NTCartesianSeries<TData> where TData : cla
 
       // Determine available width for each categorical item
       var allX = Chart.GetAllXValues();
-      float itemWidth = renderArea.Width / Math.Max(1, allX.Count);
+      float plotWidth = Chart.Orientation == NTChartOrientation.Vertical ? renderArea.Width : renderArea.Height;
+      float itemWidth = plotWidth / Math.Max(1, allX.Count);
       float boxWidth = itemWidth * BoxWidthRatio;
 
       for (int i = 0; i < dataList.Count; i++)
@@ -62,7 +64,7 @@ public class NTBoxPlotSeries<TData> : NTCartesianSeries<TData> where TData : cla
          var xVal = Chart.GetScaledXValue(XValueSelector(item));
          var boxValues = BoxValueSelector(item);
 
-         float cx = Chart.ScaleX(xVal, renderArea);
+         float centerPos = Chart.ScaleX(xVal, renderArea);
 
          // Animation: scale values from median or 0
          double animMin = boxValues.Median + (boxValues.Min - boxValues.Median) * easedProgress;
@@ -71,11 +73,11 @@ public class NTBoxPlotSeries<TData> : NTCartesianSeries<TData> where TData : cla
          double animMax = boxValues.Median + (boxValues.Max - boxValues.Median) * easedProgress;
          double animMedian = boxValues.Median;
 
-         float yMinPos = Chart.ScaleY(animMin * visibilityFactor, renderArea);
-         float yQ1Pos = Chart.ScaleY(animQ1 * visibilityFactor, renderArea);
-         float yMedianPos = Chart.ScaleY(animMedian * visibilityFactor, renderArea);
-         float yQ3Pos = Chart.ScaleY(animQ3 * visibilityFactor, renderArea);
-         float yMaxPos = Chart.ScaleY(animMax * visibilityFactor, renderArea);
+         float minPos = Chart.ScaleY(animMin * visibilityFactor, renderArea);
+         float q1Pos = Chart.ScaleY(animQ1 * visibilityFactor, renderArea);
+         float medianPos = Chart.ScaleY(animMedian * visibilityFactor, renderArea);
+         float q3Pos = Chart.ScaleY(animQ3 * visibilityFactor, renderArea);
+         float maxPos = Chart.ScaleY(animMax * visibilityFactor, renderArea);
 
          var isPointHovered = Chart.HoveredSeries == this && Chart.HoveredPointIndex == i;
          var hoverFactor = HoverFactor;
@@ -97,29 +99,58 @@ public class NTBoxPlotSeries<TData> : NTCartesianSeries<TData> where TData : cla
             IsAntialias = true
          };
 
-         // Draw Box
-         var boxRect = new SKRect(cx - boxWidth / 2, yQ3Pos, cx + boxWidth / 2, yQ1Pos);
-         canvas.DrawRect(boxRect, fillPaint);
-         canvas.DrawRect(boxRect, strokePaint);
+         if (Chart.Orientation == NTChartOrientation.Vertical) {
+            // Draw Box
+            var boxRect = new SKRect(centerPos - boxWidth / 2, q3Pos, centerPos + boxWidth / 2, q1Pos);
+            canvas.DrawRect(boxRect, fillPaint);
+            canvas.DrawRect(boxRect, strokePaint);
 
-         // Draw Median
-         canvas.DrawLine(cx - boxWidth / 2, yMedianPos, cx + boxWidth / 2, yMedianPos, strokePaint);
+            // Draw Median
+            canvas.DrawLine(centerPos - boxWidth / 2, medianPos, centerPos + boxWidth / 2, medianPos, strokePaint);
 
-         // Draw Whiskers
-         canvas.DrawLine(cx, yQ3Pos, cx, yMaxPos, strokePaint);
-         canvas.DrawLine(cx, yQ1Pos, cx, yMinPos, strokePaint);
+            // Draw Whiskers
+            canvas.DrawLine(centerPos, q3Pos, centerPos, maxPos, strokePaint);
+            canvas.DrawLine(centerPos, q1Pos, centerPos, minPos, strokePaint);
 
-         float whiskerWidth = boxWidth * WhiskerWidthRatio;
-         canvas.DrawLine(cx - whiskerWidth / 2, yMaxPos, cx + whiskerWidth / 2, yMaxPos, strokePaint);
-         canvas.DrawLine(cx - whiskerWidth / 2, yMinPos, cx + whiskerWidth / 2, yMinPos, strokePaint);
+            float whiskerWidth = boxWidth * WhiskerWidthRatio;
+            canvas.DrawLine(centerPos - whiskerWidth / 2, maxPos, centerPos + whiskerWidth / 2, maxPos, strokePaint);
+            canvas.DrawLine(centerPos - whiskerWidth / 2, minPos, centerPos + whiskerWidth / 2, minPos, strokePaint);
 
-         // Outliers
-         if (boxValues.Outliers != null)
-         {
-            foreach (var outlier in boxValues.Outliers)
+            // Outliers
+            if (boxValues.Outliers != null)
             {
-               float oy = Chart.ScaleY(outlier * visibilityFactor, renderArea);
-               RenderPoint(canvas, cx, oy, color);
+               foreach (var outlier in boxValues.Outliers)
+               {
+                  float oy = Chart.ScaleY(outlier * visibilityFactor, renderArea);
+                  RenderPoint(canvas, centerPos, oy, color);
+               }
+            }
+         }
+         else {
+            // Horizontal: centerPos is Y coordinate, Pos variables are X coordinates
+            var boxRect = new SKRect(Math.Min(q1Pos, q3Pos), centerPos - boxWidth / 2, Math.Max(q1Pos, q3Pos), centerPos + boxWidth / 2);
+            canvas.DrawRect(boxRect, fillPaint);
+            canvas.DrawRect(boxRect, strokePaint);
+
+            // Draw Median
+            canvas.DrawLine(medianPos, centerPos - boxWidth / 2, medianPos, centerPos + boxWidth / 2, strokePaint);
+
+            // Draw Whiskers
+            canvas.DrawLine(q3Pos, centerPos, maxPos, centerPos, strokePaint);
+            canvas.DrawLine(q1Pos, centerPos, minPos, centerPos, strokePaint);
+
+            float whiskerWidth = boxWidth * WhiskerWidthRatio;
+            canvas.DrawLine(maxPos, centerPos - whiskerWidth / 2, maxPos, centerPos + whiskerWidth / 2, strokePaint);
+            canvas.DrawLine(minPos, centerPos - whiskerWidth / 2, minPos, centerPos + whiskerWidth / 2, strokePaint);
+
+            // Outliers
+            if (boxValues.Outliers != null)
+            {
+               foreach (var outlier in boxValues.Outliers)
+               {
+                  float ox = Chart.ScaleY(outlier * visibilityFactor, renderArea);
+                  RenderPoint(canvas, ox, centerPos, color);
+               }
             }
          }
       }
@@ -130,7 +161,8 @@ public class NTBoxPlotSeries<TData> : NTCartesianSeries<TData> where TData : cla
       if (Data == null || !Data.Any()) return null;
       var dataList = Data.ToList();
       var allX = Chart.GetAllXValues();
-      float itemWidth = renderArea.Width / Math.Max(1, allX.Count);
+      float plotWidth = Chart.Orientation == NTChartOrientation.Vertical ? renderArea.Width : renderArea.Height;
+      float itemWidth = plotWidth / Math.Max(1, allX.Count);
       float boxWidth = itemWidth * BoxWidthRatio;
 
       for (int i = 0; i < dataList.Count; i++)
@@ -138,12 +170,19 @@ public class NTBoxPlotSeries<TData> : NTCartesianSeries<TData> where TData : cla
          var item = dataList[i];
          var xVal = Chart.GetScaledXValue(XValueSelector(item));
          var boxValues = BoxValueSelector(item);
-         float cx = Chart.ScaleX(xVal, renderArea);
+         float centerPos = Chart.ScaleX(xVal, renderArea);
 
-         float yMinPos = Chart.ScaleY(boxValues.Min, renderArea);
-         float yMaxPos = Chart.ScaleY(boxValues.Max, renderArea);
+         float minPos = Chart.ScaleY(boxValues.Min, renderArea);
+         float maxPos = Chart.ScaleY(boxValues.Max, renderArea);
 
-         var hitRect = new SKRect(cx - boxWidth / 2, Math.Min(yMinPos, yMaxPos), cx + boxWidth / 2, Math.Max(yMinPos, yMaxPos));
+         SKRect hitRect;
+         if (Chart.Orientation == NTChartOrientation.Vertical) {
+            hitRect = new SKRect(centerPos - boxWidth / 2, Math.Min(minPos, maxPos), centerPos + boxWidth / 2, Math.Max(minPos, maxPos));
+         }
+         else {
+            hitRect = new SKRect(Math.Min(minPos, maxPos), centerPos - boxWidth / 2, Math.Max(minPos, maxPos), centerPos + boxWidth / 2);
+         }
+         
          if (hitRect.Contains(point)) return (i, item);
       }
 

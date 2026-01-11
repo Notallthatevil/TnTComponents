@@ -211,7 +211,7 @@
                         <div style="height: 500px;" class="border rounded bg-light p-2 shadow-inner">
                             <NTChart TData="CartesianPoint" Title="Interactive Sandbox" RangePadding="0.1"
                                 EnableHardwareAcceleration="@_enableHardwareAcceleration" ShowLegend="@_showLegend"
-                                LegendPosition="@_legendPosition">
+                                LegendPosition="@_legendPosition" Orientation="@_orientation">
                                 <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="Time" />
                                 <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Value" />
                                 @foreach (var config in _sandboxSeries)
@@ -242,6 +242,177 @@
                                         <label class="small text-muted fw-bold d-block">Legend Position</label>
                                         <select class="form-select form-select-sm" @bind="_legendPosition">
                                             @foreach (var val in Enum.GetValues<LegendPosition>())
+                                            {
+                                                <option value="@val">@val</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="small text-muted fw-bold d-block">Orientation</label>
+                                        <select class="form-select form-select-sm" @bind="_orientation">
+                                            @foreach (var val in Enum.GetValues<NTChartOrientation>())
+                                            {
+                                                <option value="@val">@val</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="max-height: 400px; overflow-y: auto;" class="pe-2 custom-scrollbar">
+                            @for (int i = 0; i < _sandboxSeries.Count; i++)
+                            {
+                                var index = i;
+                                var config = _sandboxSeries[i];
+                                <div class="card mb-3 border-start border-4 @GetBorderClass(index) shadow-sm">
+                                    <div class="card-body p-2">
+                                        <h6 class="card-title d-flex justify-content-between align-items-center">
+                                            <span>Series @(index + 1)</span>
+                                            <span class="badge @GetBadgeClass(index)">Series @(index + 1) Color</span>
+                                        </h6>
+                                        <div class="row g-2">
+                                            <div class="col-6">
+                                                <label class="small text-muted fw-bold d-block">Interpolation</label>
+                                                <select class="form-select form-select-sm" @bind="config.Interpolation">
+                                                    @foreach (var val in Enum.GetValues<LineInterpolation>())
+                                                    {
+                                                        <option value="@val">@val</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="small text-muted fw-bold d-block">Line Style</label>
+                                                <select class="form-select form-select-sm" @bind="config.LineStyle">
+                                                    @foreach (var val in Enum.GetValues<LineStyle>())
+                                                    {
+                                                        <option value="@val">@val</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="small text-muted fw-bold d-block">Point Shape</label>
+                                                <select class="form-select form-select-sm" @bind="config.PointShape">
+                                                    @foreach (var val in Enum.GetValues<PointShape>())
+                                                    {
+                                                        <option value="@val">@val</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="small text-muted fw-bold d-block">Point Style</label>
+                                                <select class="form-select form-select-sm" @bind="config.PointStyle">
+                                                    @foreach (var val in Enum.GetValues<PointStyle>())
+                                                    {
+                                                        <option value="@val">@val</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-12 mt-2">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        @bind="config.ShowDataLabels" id="@($"labelCheck{index}")">
+                                                    <label class="form-check-label small" for="@($"labelCheck{index}")">Show
+                                                        Data Labels</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12 mb-4">
+            <div class="card p-3 shadow-sm">
+                <h3>Horizontal Trend (Swapped Axes)</h3>
+                <div style="height: 300px;">
+                    <NTChart TData="CartesianPoint" Title="Horizontal Progress" Orientation="NTChartOrientation.Horizontal"
+                        EnableHardwareAcceleration="@_enableHardwareAcceleration">
+                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="Independent (X)" />
+                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Dependent (Y)" />
+                        <NTLineSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
+                            YValueSelector="@(p => p.Y)" Color="TnTColor.Info" PointStyle="PointStyle.Filled" />
+                    </NTChart>
+                </div>
+                <div class="mt-2 text-muted">
+                    Demonstrating a line chart in horizontal orientation. The independent variable (X) is on the vertical axis.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12 mb-4">
+            <div class="card p-4 shadow-sm border-0 bg-white">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h3 class="mb-0">Chart Sandbox</h3>
+                        <p class="text-muted small">Dynamic series management and property customization.</p>
+                    </div>
+                    <div class="btn-group shadow-sm">
+                        <button class="btn btn-outline-primary" @onclick="RandomizeSandbox"
+                            title="Randomize all series data">
+                            Randomize Data
+                        </button>
+                        <button class="btn btn-success" @onclick="AddSeries" disabled="@(_sandboxSeries.Count >= 10)">
+                            Add Series
+                        </button>
+                        <button class="btn btn-danger" @onclick="RemoveSeries" disabled="@(_sandboxSeries.Count <= 1)">
+                            Remove Series
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div style="height: 500px;" class="border rounded bg-light p-2 shadow-inner">
+                            <NTChart TData="CartesianPoint" Title="Interactive Sandbox" RangePadding="0.1"
+                                EnableHardwareAcceleration="@_enableHardwareAcceleration" ShowLegend="@_showLegend"
+                                LegendPosition="@_legendPosition" Orientation="@_orientation">
+                                <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="Time" />
+                                <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Value" />
+                                @foreach (var config in _sandboxSeries)
+                                {
+                                    <NTLineSeries TData="CartesianPoint" Data="@config.Data" XValueSelector="@(p => p.X)"
+                                        YValueSelector="@(p => p.Y)" Title="@config.Title"
+                                        Interpolation="@config.Interpolation" LineStyle="@config.LineStyle"
+                                        PointShape="@config.PointShape" PointStyle="@config.PointStyle"
+                                        ShowDataLabels="@config.ShowDataLabels" />
+                                }
+                            </NTChart>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card mb-3 shadow-sm border-primary">
+                            <div class="card-body p-2">
+                                <h6 class="card-title">Global Chart Settings</h6>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <div class="form-check form-switch mt-2">
+                                            <input class="form-check-input" type="checkbox" @bind="_showLegend"
+                                                id="showLegendCheck">
+                                            <label class="form-check-label small" for="showLegendCheck">Show
+                                                Legend</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="small text-muted fw-bold d-block">Legend Position</label>
+                                        <select class="form-select form-select-sm" @bind="_legendPosition">
+                                            @foreach (var val in Enum.GetValues<LegendPosition>())
+                                            {
+                                                <option value="@val">@val</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="small text-muted fw-bold d-block">Orientation</label>
+                                        <select class="form-select form-select-sm" @bind="_orientation">
+                                            @foreach (var val in Enum.GetValues<NTChartOrientation>())
                                             {
                                                 <option value="@val">@val</option>
                                             }
@@ -358,6 +529,7 @@
 
     private bool _showLegend = true;
     private LegendPosition _legendPosition = LegendPosition.Bottom;
+    private NTChartOrientation _orientation = NTChartOrientation.Vertical;
     private bool _enableHardwareAcceleration = true;
 
     // Sandbox Logic

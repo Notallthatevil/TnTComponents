@@ -72,6 +72,12 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         .Build();
 
     /// <summary>
+    ///     Gets or sets the orientation of the chart (Vertical or Horizontal).
+    /// </summary>
+    [Parameter]
+    public NTChartOrientation Orientation { get; set; } = NTChartOrientation.Vertical;
+
+    /// <summary>
     ///     Gets or sets the margin around the chart.
     /// </summary>
     [Parameter]
@@ -390,14 +396,20 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
             if (_panStartXRange.HasValue)
             {
-                var dataDx = (dx / LastPlotArea.Width) * (_panStartXRange.Value.Max - _panStartXRange.Value.Min);
+                var xRangeSize = _panStartXRange.Value.Max - _panStartXRange.Value.Min;
+                var dataDx = (Orientation == NTChartOrientation.Vertical)
+                    ? (dx / LastPlotArea.Width) * xRangeSize
+                    : -(dy / LastPlotArea.Height) * xRangeSize;
                 _viewXMin = _panStartXRange.Value.Min + dataDx;
                 _viewXMax = _panStartXRange.Value.Max + dataDx;
             }
 
             if (_panStartYRange.HasValue)
             {
-                var dataDy = (dy / LastPlotArea.Height) * (_panStartYRange.Value.Max - _panStartYRange.Value.Min);
+                var yRangeSize = _panStartYRange.Value.Max - _panStartYRange.Value.Min;
+                var dataDy = (Orientation == NTChartOrientation.Vertical)
+                    ? (dy / LastPlotArea.Height) * yRangeSize
+                    : (dx / LastPlotArea.Width) * yRangeSize;
                 _viewYMin = _panStartYRange.Value.Min + dataDy;
                 _viewYMax = _panStartYRange.Value.Max + dataDy;
             }
@@ -430,8 +442,10 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         if (!LastPlotArea.Contains(mousePoint)) return;
 
         var zoomFactor = e.DeltaY > 0 ? 1.1 : 0.9;
-        var xVal = ScaleXInverse(mousePoint.X, LastPlotArea);
-        var yVal = ScaleYInverse(mousePoint.Y, LastPlotArea);
+        
+        // Use ScaleXInverse/ScaleYInverse which already handle orientation
+        var xVal = ScaleXInverse(Orientation == NTChartOrientation.Vertical ? mousePoint.X : mousePoint.Y, LastPlotArea);
+        var yVal = ScaleYInverse(Orientation == NTChartOrientation.Vertical ? mousePoint.Y : mousePoint.X, LastPlotArea);
 
         var (xMin, xMax) = GetXRange(true);
         var (yMin, yMax) = GetYRange(true);
@@ -1200,58 +1214,92 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     {
         var (min, max) = GetXRange(true);
         var range = max - min;
-        if (range <= 0) return plotArea.Left;
+        if (range <= 0) return (Orientation == NTChartOrientation.Vertical) ? plotArea.Left : plotArea.Bottom;
 
         const float p = 3f; // 3 pixels of air
-        var left = plotArea.Left + p;
-        var width = plotArea.Width - (p * 2);
-
-        return (float)(left + (x - min) / range * width);
+        if (Orientation == NTChartOrientation.Vertical)
+        {
+            var left = plotArea.Left + p;
+            var width = plotArea.Width - (p * 2);
+            return (float)(left + (x - min) / range * width);
+        }
+        else
+        {
+            var bottom = plotArea.Bottom - p;
+            var height = plotArea.Height - (p * 2);
+            return (float)(bottom - (x - min) / range * height);
+        }
     }
 
     public float ScaleY(double y, SKRect plotArea)
     {
         var (min, max) = GetYRange(true);
         var range = max - min;
-        if (range <= 0) return plotArea.Bottom;
+        if (range <= 0) return (Orientation == NTChartOrientation.Vertical) ? plotArea.Bottom : plotArea.Left;
 
         const float p = 3f; // 3 pixels of air
-        var bottom = plotArea.Bottom - p;
-        var height = plotArea.Height - (p * 2);
-
-        return (float)(bottom - (y - min) / range * height);
+        if (Orientation == NTChartOrientation.Vertical)
+        {
+            var bottom = plotArea.Bottom - p;
+            var height = plotArea.Height - (p * 2);
+            return (float)(bottom - (y - min) / range * height);
+        }
+        else
+        {
+            var left = plotArea.Left + p;
+            var width = plotArea.Width - (p * 2);
+            return (float)(left + (y - min) / range * width);
+        }
     }
 
     /// <summary>
-    ///     Converts a screen X coordinate back to a data value.
+    ///     Converts a screen coordinate back to a data X value.
     /// </summary>
-    public double ScaleXInverse(float x, SKRect plotArea)
+    public double ScaleXInverse(float coord, SKRect plotArea)
     {
         var (min, max) = GetXRange(true);
         var range = max - min;
         
         const float p = 3f;
-        var left = plotArea.Left + p;
-        var width = plotArea.Width - (p * 2);
-
-        if (width <= 0) return min;
-        return min + (x - left) / width * range;
+        if (Orientation == NTChartOrientation.Vertical)
+        {
+            var left = plotArea.Left + p;
+            var width = plotArea.Width - (p * 2);
+            if (width <= 0) return min;
+            return min + (coord - left) / width * range;
+        }
+        else
+        {
+            var bottom = plotArea.Bottom - p;
+            var height = plotArea.Height - (p * 2);
+            if (height <= 0) return min;
+            return min + (bottom - coord) / height * range;
+        }
     }
 
     /// <summary>
-    ///     Converts a screen Y coordinate back to a data value.
+    ///     Converts a screen coordinate back to a data Y value.
     /// </summary>
-    public double ScaleYInverse(float y, SKRect plotArea)
+    public double ScaleYInverse(float coord, SKRect plotArea)
     {
         var (min, max) = GetYRange(true);
         var range = max - min;
 
         const float p = 3f;
-        var bottom = plotArea.Bottom - p;
-        var height = plotArea.Height - (p * 2);
-
-        if (height <= 0) return min;
-        return min + (bottom - y) / height * range;
+        if (Orientation == NTChartOrientation.Vertical)
+        {
+            var bottom = plotArea.Bottom - p;
+            var height = plotArea.Height - (p * 2);
+            if (height <= 0) return min;
+            return min + (bottom - coord) / height * range;
+        }
+        else
+        {
+            var left = plotArea.Left + p;
+            var width = plotArea.Width - (p * 2);
+            if (width <= 0) return min;
+            return min + (coord - left) / width * range;
+        }
     }
 
     public (double Min, double Max) GetXRange(bool padded = false)

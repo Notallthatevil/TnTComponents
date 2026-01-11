@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using NTComponents.Charts.Core.Series;
+using NTComponents.Charts.Core;
 using SkiaSharp;
 
 namespace NTComponents.Charts;
@@ -80,10 +81,15 @@ public class NTAreaSeries<TData> : NTLineSeries<TData> where TData : class
          var vFactor = VisibilityFactor;
          currentYValue *= vFactor * vFactor;
 
-         var x = Chart.ScaleX(xValue, renderArea);
-         var y = Chart.ScaleY(currentYValue, renderArea);
+         var screenXCoord = Chart.ScaleX(xValue, renderArea);
+         var screenYCoord = Chart.ScaleY(currentYValue, renderArea);
 
-         points.Add(new SKPoint(x, y));
+         if (Chart.Orientation == NTChartOrientation.Vertical) {
+            points.Add(new SKPoint(screenXCoord, screenYCoord));
+         }
+         else {
+            points.Add(new SKPoint(screenYCoord, screenXCoord));
+         }
       }
       return points;
    }
@@ -94,10 +100,17 @@ public class NTAreaSeries<TData> : NTLineSeries<TData> where TData : class
       if (points.Count < 2) return path;
 
       // Close the path to the baseline
-      float baselineY = Chart.ScaleY(BaselineValue, renderArea);
+      float baselineCoord = Chart.ScaleY(BaselineValue, renderArea);
 
-      path.LineTo(points.Last().X, baselineY);
-      path.LineTo(points.First().X, baselineY);
+      if (Chart.Orientation == NTChartOrientation.Vertical) {
+         path.LineTo(points.Last().X, baselineCoord);
+         path.LineTo(points.First().X, baselineCoord);
+      }
+      else {
+         // Horizontal: baselineCoord is X coordinate
+         path.LineTo(baselineCoord, points.Last().Y);
+         path.LineTo(baselineCoord, points.First().Y);
+      }
       path.Close();
 
       return path;
