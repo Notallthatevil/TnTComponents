@@ -788,11 +788,9 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
         if (LegendPosition == LegendPosition.Top || LegendPosition == LegendPosition.Bottom)
         {
-            // Reduce maxWidth if AllowExport is true to avoid overlapping buttons
-            // We need enough padding on both sides if we want to keep it centered
-            // The export button is on the right (~40px wide/margin)
-            // To keep it centered, we need at least 40px on both sides = 80px total reduction
-            float maxWidth = currentArea.Width - (AllowExport ? 100 : 0);
+            // Reduce maxWidth to consistently leave room in the corners (e.g. for the export button)
+            // Even if export is disabled, this provides a healthy margin.
+            float maxWidth = currentArea.Width - 100;
             var rows = GetLegendRows(font, maxWidth);
             float legendHeight = rows.Count * (LegendFontSize + 10);
 
@@ -875,7 +873,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         if (LegendPosition == LegendPosition.Top || LegendPosition == LegendPosition.Bottom)
         {
             // Use the same maxWidth logic as MeasureLegendWithArea to ensure consistent wrapping
-            float maxWidth = targetArea.Width - (AllowExport ? 100 : 0);
+            float maxWidth = targetArea.Width - 100;
             var rows = GetLegendRows(font, maxWidth);
             float rowHeight = LegendFontSize + 10;
 
