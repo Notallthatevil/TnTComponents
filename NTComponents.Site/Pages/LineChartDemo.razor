@@ -319,6 +319,15 @@
 </div>
 
 @code {
+    private void OnConditionRender(NTDataPointRenderArgs<CartesianPoint> args)
+    {
+        if (args.Data.Y > 40)
+        {
+            args.Color = SkiaSharp.SKColors.Orange;
+            args.LineStyle = LineStyle.Dashed;
+        }
+    }
+
     public record CartesianPoint(double X, double Y);
 
     private NTChart<CartesianPoint> interactiveChart = default!;

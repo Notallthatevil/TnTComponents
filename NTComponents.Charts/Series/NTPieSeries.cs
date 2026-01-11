@@ -78,7 +78,17 @@ public class NTPieSeries<TData> : NTCircularSeries<TData> where TData : class
          var isOtherPointHovered = isAnyHovered && Chart.HoveredSeries == this && Chart.HoveredPointIndex != slice.Index;
 
          var baseColor = Chart.GetThemeColor(Chart.Palette[slice.Index % Chart.Palette.Count]);
-         var color = baseColor;
+
+         var args = new NTDataPointRenderArgs<TData>
+         {
+            Data = slice.Data,
+            Index = slice.Index,
+            Color = baseColor,
+            GetThemeColor = Chart.GetThemeColor
+         };
+         OnDataPointRender?.Invoke(args);
+
+         var color = args.Color ?? baseColor;
 
          // Use currentFactor for smooth color transition too
          float dimFactor = 1.0f;
@@ -121,7 +131,7 @@ public class NTPieSeries<TData> : NTCircularSeries<TData> where TData : class
             if (currentFactor > 0)
             {
                var alpha = (byte)((color.Alpha / dimFactor) * (dimFactor + (1f - dimFactor) * currentFactor));
-               paint.Color = baseColor.WithAlpha(alpha);
+               paint.Color = color.WithAlpha(alpha);
             }
          }
 
@@ -144,12 +154,12 @@ public class NTPieSeries<TData> : NTCircularSeries<TData> where TData : class
 
          if (ShowDataLabels && progress >= 1.0f)
          {
-            RenderSliceLabel(canvas, slice, centerX, centerY, currentRadius, currentInnerRadius, color);
+            RenderSliceLabel(canvas, slice, centerX, centerY, currentRadius, currentInnerRadius, color, args);
          }
       }
    }
 
-   private void RenderSliceLabel(SKCanvas canvas, PieSliceInfo slice, float centerX, float centerY, float radius, float innerRadius, SKColor color)
+   private void RenderSliceLabel(SKCanvas canvas, PieSliceInfo slice, float centerX, float centerY, float radius, float innerRadius, SKColor color, NTDataPointRenderArgs<TData>? args)
    {
       float midAngle = slice.StartAngle + slice.SweepAngle / 2f;
       float rad = midAngle * (float)Math.PI / 180f;
@@ -162,14 +172,15 @@ public class NTPieSeries<TData> : NTCircularSeries<TData> where TData : class
 
       var text = string.Format(DataLabelFormat, slice.Value);
 
-      var labelColor = Chart.GetThemeColor(DataLabelColor ?? Chart.BackgroundColor);
+      var labelColor = args?.DataLabelColor ?? Chart.GetThemeColor(DataLabelColor ?? Chart.BackgroundColor);
+      var labelSize = args?.DataLabelSize ?? DataLabelSize;
 
       using var paint = new SKPaint
       {
          Color = labelColor,
          IsAntialias = true
       };
-      using var font = new SKFont { Size = DataLabelSize };
+      using var font = new SKFont { Size = labelSize };
 
       canvas.DrawText(text, lx, ly, SKTextAlign.Center, font, paint);
    }

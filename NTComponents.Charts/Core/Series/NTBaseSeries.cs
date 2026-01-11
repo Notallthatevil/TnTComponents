@@ -48,6 +48,12 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     [Parameter]
     public bool Visible { get; set; } = true;
 
+    /// <summary>
+    ///     Gets or sets a callback that allows for custom rendering of individual data points.
+    /// </summary>
+    [Parameter]
+    public Action<NTDataPointRenderArgs<TData>>? OnDataPointRender { get; set; }
+
     private bool _lastVisible = true;
 
     /// <summary>

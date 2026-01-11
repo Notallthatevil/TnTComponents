@@ -88,9 +88,35 @@ public class NTRadarSeries<TData> : NTCircularSeries<TData> where TData : class
       // Points and Labels
       for (int i = 0; i < count; i++)
       {
+         var item = dataList[i];
+         var args = new NTDataPointRenderArgs<TData>
+         {
+            Data = item,
+            Index = i,
+            Color = color,
+            GetThemeColor = Chart.GetThemeColor
+         };
+         OnDataPointRender?.Invoke(args);
+
+         var pointColor = args.Color ?? color;
          var p = points[i];
-         RenderPoint(canvas, p.X, p.Y, color);
+         RenderPoint(canvas, p.X, p.Y, pointColor);
+         
+         if (ShowDataLabels)
+         {
+            var labelColor = args.DataLabelColor ?? pointColor;
+            var labelSize = args.DataLabelSize ?? 12f;
+            RenderDataLabel(canvas, p.X, p.Y - 10, ValueSelector(item), labelColor, labelSize);
+         }
       }
+   }
+
+   private void RenderDataLabel(SKCanvas canvas, float x, float y, double value, SKColor color, float fontSize)
+   {
+      var text = string.Format("{0:N0}", value);
+      using var paint = new SKPaint { Color = color, IsAntialias = true };
+      using var font = new SKFont { Size = fontSize };
+      canvas.DrawText(text, x, y, SKTextAlign.Center, font, paint);
    }
 
    private void RenderPoint(SKCanvas canvas, float x, float y, SKColor color)

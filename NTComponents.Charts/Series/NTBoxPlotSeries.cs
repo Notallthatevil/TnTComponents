@@ -49,6 +49,16 @@ public class NTBoxPlotSeries<TData> : NTCartesianSeries<TData> where TData : cla
       for (int i = 0; i < dataList.Count; i++)
       {
          var item = dataList[i];
+         
+         var args = new NTDataPointRenderArgs<TData>
+         {
+            Data = item,
+            Index = i,
+            Color = baseColor,
+            GetThemeColor = Chart.GetThemeColor
+         };
+         OnDataPointRender?.Invoke(args);
+
          var xVal = Chart.GetScaledXValue(XValueSelector(item));
          var boxValues = BoxValueSelector(item);
 
@@ -69,7 +79,8 @@ public class NTBoxPlotSeries<TData> : NTCartesianSeries<TData> where TData : cla
 
          var isPointHovered = Chart.HoveredSeries == this && Chart.HoveredPointIndex == i;
          var hoverFactor = HoverFactor;
-         var color = (isPointHovered) ? baseColor : baseColor.WithAlpha((byte)(baseColor.Alpha * hoverFactor));
+         var currentColor = args.Color ?? baseColor;
+         var color = (isPointHovered) ? currentColor : currentColor.WithAlpha((byte)(currentColor.Alpha * hoverFactor));
 
          using var strokePaint = new SKPaint
          {

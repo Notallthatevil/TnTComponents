@@ -61,9 +61,20 @@ public class NTTreeMapSeries<TData> : NTBaseSeries<TData> where TData : class
             rect = new SKRect(centerX - w / 2, centerY - h / 2, centerX + w / 2, centerY + h / 2);
          }
 
+         var baseColor = item.Color;
+         var args = new NTDataPointRenderArgs<TData>
+         {
+            Data = item.Data,
+            Index = item.Index,
+            Color = baseColor,
+            GetThemeColor = Chart.GetThemeColor
+         };
+         OnDataPointRender?.Invoke(args);
+
          var isHovered = Chart.HoveredSeries == this && Chart.HoveredPointIndex == item.Index;
          var hoverFactor = (isHovered) ? 1.0f : HoverFactor;
-         var color = item.Color.WithAlpha((byte)(item.Color.Alpha * visibilityFactor * hoverFactor));
+         var pointColor = args.Color ?? baseColor;
+         var color = pointColor.WithAlpha((byte)(pointColor.Alpha * visibilityFactor * hoverFactor));
 
          using var paint = new SKPaint
          {
@@ -76,12 +87,12 @@ public class NTTreeMapSeries<TData> : NTBaseSeries<TData> where TData : class
 
          if (ShowLabels && rect.Width > 40 && rect.Height > 20)
          {
-            RenderLabel(canvas, rect, item.Data, color);
+            RenderLabel(canvas, rect, item.Data, color, args);
          }
       }
    }
 
-   private void RenderLabel(SKCanvas canvas, SKRect rect, TData data, SKColor bgColor)
+   private void RenderLabel(SKCanvas canvas, SKRect rect, TData data, SKColor bgColor, NTDataPointRenderArgs<TData>? args)
    {
       var label = LabelSelector(data);
       var value = ValueSelector(data);
@@ -89,7 +100,9 @@ public class NTTreeMapSeries<TData> : NTBaseSeries<TData> where TData : class
 
       // Determine text color based on background brightness
       var luminance = 0.2126f * bgColor.Red + 0.7152f * bgColor.Green + 0.0722f * bgColor.Blue;
-      var textColor = luminance > 128 ? SKColors.Black : SKColors.White;
+      var defaultTextColor = luminance > 128 ? SKColors.Black : SKColors.White;
+      var textColor = args?.DataLabelColor ?? defaultTextColor;
+      var fontSize = args?.DataLabelSize ?? 12;
 
       using var paint = new SKPaint
       {
@@ -99,7 +112,7 @@ public class NTTreeMapSeries<TData> : NTBaseSeries<TData> where TData : class
 
       using var font = new SKFont
       {
-         Size = 12
+         Size = fontSize
       };
 
       // Clip text to rect

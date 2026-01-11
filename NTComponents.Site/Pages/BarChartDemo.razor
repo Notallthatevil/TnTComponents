@@ -93,6 +93,26 @@
    </div>
 
    <div class="row mt-4">
+      <div class="col-md-6 mb-4">
+         <div class="card p-3 shadow-sm">
+            <h3>Conditional Styling</h3>
+            <div style="height: 300px;">
+               <NTChart TData="CartesianPoint" Title="Health Status" IsCategoricalX="true"
+                  EnableHardwareAcceleration="@_enableHardwareAcceleration">
+                  <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" />
+                  <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" />
+                  <NTBarSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
+                     YValueSelector="@(p => p.Y)" OnDataPointRender="@OnConditionRender" />
+               </NTChart>
+            </div>
+            <div class="mt-2 text-muted">
+               Bars color based on value: <span style="color:red">Red</span> if &lt;= 20, else <span style="color:green">Green</span>.
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div class="row mt-4">
       <div class="col-12 mb-4">
          <div class="card p-4 shadow-sm border-0 bg-white">
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -193,6 +213,11 @@
 </div>
 
 @code {
+   private void OnConditionRender(NTDataPointRenderArgs<CartesianPoint> args)
+   {
+      args.Color = args.Data.Y <= 20 ? SkiaSharp.SKColors.Red : SkiaSharp.SKColors.Green;
+   }
+
    public record CartesianPoint(double X, double Y);
 
    private List<CartesianPoint> _basicData = Enumerable.Range(1, 10)

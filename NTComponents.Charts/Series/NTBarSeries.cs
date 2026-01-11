@@ -42,26 +42,41 @@ public class NTBarSeries<TData> : NTCartesianSeries<TData> where TData : class {
 
         var dataList = Data.ToList();
         for (var i = 0; i < barRects.Count; i++) {
+            var item = dataList[i];
+            var args = new NTDataPointRenderArgs<TData> {
+                Data = item,
+                Index = i,
+                Color = color,
+                GetThemeColor = Chart.GetThemeColor
+            };
+            OnDataPointRender?.Invoke(args);
+
             var rect = barRects[i];
             var isPointHovered = isHovered && Chart.HoveredPointIndex == i;
-            var currentPaint = paint;
+            var pointColor = args.Color ?? color;
 
             if (isPointHovered) {
                 // Highlight hovered bar
                 using var highlightPaint = new SKPaint {
-                    Color = color.WithAlpha(255),
+                    Color = pointColor.WithAlpha(255),
                     IsAntialias = true,
                     Style = SKPaintStyle.Fill
                 };
                 DrawBar(canvas, rect, highlightPaint);
             }
             else {
-                DrawBar(canvas, rect, paint);
+                using var barPaint = new SKPaint {
+                    Color = pointColor,
+                    IsAntialias = true,
+                    Style = SKPaintStyle.Fill
+                };
+                DrawBar(canvas, rect, barPaint);
             }
 
             if (ShowDataLabels || isPointHovered) {
-                var labelColor = isPointHovered ? color.WithAlpha(255) : color;
-                RenderDataLabel(canvas, rect.MidX, rect.Top - 5, YValueSelector(dataList[i]), renderArea, labelColor);
+                var labelColor = args.DataLabelColor ?? (isPointHovered ? pointColor.WithAlpha(255) : pointColor);
+                var labelSize = args.DataLabelSize ?? DataLabelSize;
+                RenderDataLabel(canvas, rect.MidX, rect.Top - 5, YValueSelector(dataList[i]), renderArea, labelColor, labelSize);
             }
         }
     }

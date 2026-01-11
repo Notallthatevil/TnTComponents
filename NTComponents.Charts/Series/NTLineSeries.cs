@@ -65,8 +65,53 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
 
         if (LineStyle != LineStyle.None && points.Count > 1)
         {
-            using var path = BuildPath(points);
-            canvas.DrawPath(path, paint);
+            if (OnDataPointRender == null)
+            {
+                using var path = BuildPath(points);
+                canvas.DrawPath(path, paint);
+            }
+            else
+            {
+                // Draw segment by segment to allow for per-point line styling
+                var dataList = Data.ToList();
+                for (var i = 1; i < points.Count; i++)
+                {
+                    var args = new NTDataPointRenderArgs<TData>
+                    {
+                        Data = dataList[i],
+                        Index = i,
+                        Color = color,
+                        LineStyle = LineStyle,
+                        StrokeWidth = StrokeWidth,
+                        GetThemeColor = Chart.GetThemeColor
+                    };
+                    OnDataPointRender.Invoke(args);
+
+                    var segmentColor = args.Color ?? color;
+                    var segmentStyle = args.LineStyle ?? LineStyle;
+                    var segmentWidth = args.StrokeWidth ?? StrokeWidth;
+
+                    if (segmentStyle == LineStyle.None) continue;
+
+                    using var segmentPaint = new SKPaint
+                    {
+                        Style = SKPaintStyle.Stroke,
+                        Color = segmentColor,
+                        StrokeWidth = segmentWidth,
+                        IsAntialias = true,
+                        StrokeCap = SKStrokeCap.Round,
+                        StrokeJoin = SKStrokeJoin.Round
+                    };
+
+                    if (segmentStyle == LineStyle.Dashed)
+                    {
+                        segmentPaint.PathEffect = SKPathEffect.CreateDash([10, 5], 0);
+                    }
+
+                    // For now, segment-based styling only supports straight lines
+                    canvas.DrawLine(points[i - 1], points[i], segmentPaint);
+                }
+            }
         }
 
         if (PointStyle != PointStyle.None || ShowDataLabels)
@@ -74,25 +119,43 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
             var dataList = Data.ToList();
             for (var i = 0; i < points.Count; i++)
             {
+                var item = dataList[i];
+                var args = new NTDataPointRenderArgs<TData>
+                {
+                    Data = item,
+                    Index = i,
+                    Color = color,
+                    PointSize = PointSize,
+                    PointShape = PointShape,
+                    GetThemeColor = Chart.GetThemeColor
+                };
+                OnDataPointRender?.Invoke(args);
+
                 var point = points[i];
                 var isPointHovered = Chart.HoveredSeries == this && Chart.HoveredPointIndex == i;
-                var pointColor = paint.Color;
-                var pointSize = PointSize;
+                
+                var pointColor = args.Color ?? color;
+                var pointStrokeColor = args.StrokeColor ?? pointColor;
+                var currentPointSize = args.PointSize ?? PointSize;
+                var currentPointShape = args.PointShape ?? PointShape;
 
                 if (isPointHovered)
                 {
                     pointColor = pointColor.WithAlpha(255);
-                    pointSize *= 1.5f;
+                    pointStrokeColor = pointStrokeColor.WithAlpha(255);
+                    currentPointSize *= 1.5f;
                 }
 
                 if (PointStyle != PointStyle.None)
                 {
-                    RenderPoint(canvas, point.X, point.Y, pointColor);
+                    RenderPoint(canvas, point.X, point.Y, pointColor, currentPointSize, currentPointShape, pointStrokeColor);
                 }
 
                 if (ShowDataLabels || isPointHovered)
                 {
-                    RenderDataLabel(canvas, point.X, point.Y, YValueSelector(dataList[i]), renderArea, pointColor);
+                    var labelColor = args.DataLabelColor ?? pointColor;
+                    var labelSize = args.DataLabelSize ?? DataLabelSize;
+                    RenderDataLabel(canvas, point.X, point.Y, YValueSelector(dataList[i]), renderArea, labelColor, labelSize);
                 }
             }
         }

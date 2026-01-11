@@ -80,15 +80,16 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
         base.OnDataChanged();
     }
 
-    protected void RenderDataLabel(SKCanvas canvas, float x, float y, double value, SKRect renderArea, SKColor? overrideColor = null) {
+    protected void RenderDataLabel(SKCanvas canvas, float x, float y, double value, SKRect renderArea, SKColor? overrideColor = null, float? overrideFontSize = null) {
         if (overrideColor == null && !ShowDataLabels) {
             return;
         }
 
         var color = overrideColor ?? Chart.GetThemeColor(DataLabelColor ?? Chart.TextColor);
+        var size = overrideFontSize ?? DataLabelSize;
 
         using var font = new SKFont {
-            Size = DataLabelSize
+            Size = size
         };
 
         using var paint = new SKPaint {
@@ -102,12 +103,12 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
         
         var paddingX = 6f;
         var paddingY = 2f;
-        var drawY = y - ((PointSize / 2) + 5);
+        var drawY = y - ((size / 2) + 5);
 
         // Check if label would be cut off at the top
         if (drawY - textHeight < renderArea.Top) {
             // Shift label below the point if it would be cut off
-            drawY = y + ((PointSize / 2) + textHeight + 5);
+            drawY = y + ((size / 2) + textHeight + 5);
         }
 
         if (ShowDataLabelBackground) {
@@ -138,12 +139,13 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
         canvas.DrawText(text, x, drawY, SKTextAlign.Center, font, paint);
     }
 
-    protected void RenderPoint(SKCanvas canvas, float x, float y, SKColor color) {
+    protected void RenderPoint(SKCanvas canvas, float x, float y, SKColor color, float? pointSize = null, PointShape? pointShape = null, SKColor? strokeColor = null) {
         if (PointStyle == PointStyle.None) {
             return;
         }
 
-        var shape = PointShape ?? (PointShape)(Chart.GetSeriesIndex(this) % Enum.GetValues<PointShape>().Length);
+        var size = pointSize ?? PointSize;
+        var shape = pointShape ?? PointShape ?? (PointShape)(Chart.GetSeriesIndex(this) % Enum.GetValues<PointShape>().Length);
 
         using var paint = new SKPaint {
             Color = color,
@@ -152,14 +154,14 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
             StrokeWidth = 2
         };
 
-        var halfSize = PointSize / 2;
+        var halfSize = size / 2;
 
         switch (shape) {
             case Series.PointShape.Circle:
                 canvas.DrawCircle(x, y, halfSize, paint);
                 break;
             case Series.PointShape.Square:
-                canvas.DrawRect(x - halfSize, y - halfSize, PointSize, PointSize, paint);
+                canvas.DrawRect(x - halfSize, y - halfSize, size, size, paint);
                 break;
             case Series.PointShape.Triangle:
                 using (var path = new SKPath()) {
@@ -180,6 +182,14 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
                     canvas.DrawPath(path, paint);
                 }
                 break;
+        }
+
+        if (PointStyle == PointStyle.Outlined && strokeColor.HasValue)
+        {
+            paint.Color = strokeColor.Value;
+            paint.Style = SKPaintStyle.Stroke;
+            // Redraw with stroke color if explicitly requested? 
+            // Actually, the base paint already did it if Style was Stroke.
         }
     }
 }

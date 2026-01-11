@@ -56,8 +56,18 @@ public class NTHeatMapSeries<TData> : NTCartesianSeries<TData> where TData : cla
          var weight = WeightSelector(item);
 
          float t = weightRange > 0 ? (float)((weight - minWeight) / weightRange) : 1.0f;
-         var color = InterpolateColor(skMinColor, skMaxColor, t);
+         var baseColor = InterpolateColor(skMinColor, skMaxColor, t);
          
+         var args = new NTDataPointRenderArgs<TData>
+         {
+            Data = item,
+            Index = i,
+            Color = baseColor,
+            GetThemeColor = Chart.GetThemeColor
+         };
+         OnDataPointRender?.Invoke(args);
+
+         var color = args.Color ?? baseColor;
          var isPointHovered = Chart.HoveredSeries == this && Chart.HoveredPointIndex == i;
          
          float currentHoverFactor = isPointHovered ? 1f : hoverFactor;
@@ -80,7 +90,9 @@ public class NTHeatMapSeries<TData> : NTCartesianSeries<TData> where TData : cla
 
          if (ShowDataLabels)
          {
-            RenderDataLabel(canvas, x, y + 5, weight, renderArea, SKColors.White); // Assuming dark heat usually
+            var labelColor = args.DataLabelColor ?? SKColors.White;
+            var labelSize = args.DataLabelSize ?? DataLabelSize;
+            RenderDataLabel(canvas, x, y + 5, weight, renderArea, labelColor, labelSize);
          }
       }
    }
