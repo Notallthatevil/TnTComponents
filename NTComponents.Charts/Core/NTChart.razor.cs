@@ -234,20 +234,36 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     }
 
     internal SKColor GetSeriesTextColor(NTBaseSeries<TData> series) {
-        var color = series.TextColor ?? TnTColor.None;
-        if (color == TnTColor.None) {
-            var index = GetSeriesIndex(series);
-            if (index >= 0) {
-                color = Palette[index % Palette.Count].Text;
+        if (series.TextColor.HasValue && series.TextColor != TnTColor.None) {
+            return GetThemeColor(series.TextColor.Value);
+        }
+
+        var index = GetSeriesIndex(series);
+        if (index >= 0) {
+            var color = Palette[index % Palette.Count].Text;
+            if (_resolvedColors.TryGetValue(color, out var skColor)) {
+                return skColor;
             }
         }
 
-        return _resolvedColors.TryGetValue(color, out var skColor) ? skColor : GetThemeColor(TextColor);
+        // Final fallback: Use black or white based on series background color brightness
+        var bgColor = GetSeriesColor(series);
+        var luminance = (0.2126f * bgColor.Red) + (0.7152f * bgColor.Green) + (0.0722f * bgColor.Blue);
+        return luminance > 128 ? SKColors.Black : SKColors.White;
     }
 
     internal SKColor GetPaletteColor(int index) => _resolvedColors.TryGetValue(Palette[index % Palette.Count].Background, out var skColor) ? skColor : SKColors.Gray;
 
-    internal SKColor GetPaletteTextColor(int index) => _resolvedColors.TryGetValue(Palette[index % Palette.Count].Text, out var skColor) ? skColor : GetThemeColor(TextColor);
+    internal SKColor GetPaletteTextColor(int index) {
+        var color = Palette[index % Palette.Count].Text;
+        if (_resolvedColors.TryGetValue(color, out var skColor)) {
+            return skColor;
+        }
+
+        var bgColor = GetPaletteColor(index);
+        var luminance = (0.2126f * bgColor.Red) + (0.7152f * bgColor.Green) + (0.0722f * bgColor.Blue);
+        return luminance > 128 ? SKColors.Black : SKColors.White;
+    }
 
     internal SKColor GetThemeColor(TnTColor color) => _resolvedColors.TryGetValue(color, out var skColor) ? skColor : SKColors.Gray;
 
@@ -580,7 +596,9 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         var bgColor = HoveredSeries.TooltipBackgroundColor.HasValue
             ? GetThemeColor(HoveredSeries.TooltipBackgroundColor.Value)
             : GetSeriesColor(HoveredSeries);
-        var textColor = GetThemeColor(HoveredSeries.TooltipTextColor ?? TextColor);
+        var textColor = HoveredSeries.TooltipTextColor.HasValue
+            ? GetThemeColor(HoveredSeries.TooltipTextColor.Value)
+            : GetSeriesTextColor(HoveredSeries);
 
         using var textPaint = new SKPaint {
             Color = textColor,
