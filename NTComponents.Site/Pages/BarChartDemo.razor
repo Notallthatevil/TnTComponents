@@ -159,8 +159,12 @@
                   <div style="height: 500px;" class="border rounded bg-light p-2 shadow-inner">
                      <NTChart TData="CartesianPoint" Title="Interactive Bar Sandbox" RangePadding="0.1"
                         IsCategoricalX="true" EnableHardwareAcceleration="@_enableHardwareAcceleration"
-                        ShowLegend="@_showLegend" LegendPosition="@_legendPosition"
                         Orientation="@_orientation">
+                        @if (_showLegend)
+                        {
+                            <NTLegend TData="CartesianPoint" Position="@_legendPosition" 
+                                      BackgroundColor="@_legendBgColor" />
+                        }
                         <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="Category" />
                         <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Value" />
                         @foreach (var config in _sandboxSeries)
@@ -184,17 +188,26 @@
                                  <label class="form-check-label small" for="showLegendCheck">Show Legend</label>
                               </div>
                            </div>
-                           <div class="col-6">
-                              <label class="small text-muted fw-bold d-block">Legend Position</label>
-                              <select class="form-select form-select-sm" @bind="_legendPosition">
-                                 @foreach (var val in Enum.GetValues<LegendPosition>())
-                                 {
-                                    <option value="@val">@val</option>
-                                 }
-                              </select>
-                           </div>
-                           <div class="col-12">
-                              <label class="small text-muted fw-bold d-block">Orientation</label>
+                            <div class="col-6">
+                               <label class="small text-muted fw-bold d-block">Legend Position</label>
+                               <select class="form-select form-select-sm" @bind="_legendPosition">
+                                  @foreach (var val in Enum.GetValues<LegendPosition>())
+                                  {
+                                     <option value="@val">@val</option>
+                                  }
+                               </select>
+                            </div>
+                            <div class="col-6">
+                               <label class="small text-muted fw-bold d-block">Legend BG</label>
+                               <select class="form-select form-select-sm" @bind="_legendBgColor">
+                                  <option value="@TnTColor.None">Default</option>
+                                  <option value="@TnTColor.Surface">Surface</option>
+                                  <option value="@TnTColor.SurfaceContainer">Surface Container</option>
+                                  <option value="@TnTColor.TertiaryContainer">Tertiary Container</option>
+                               </select>
+                            </div>
+                            <div class="col-6">
+                               <label class="small text-muted fw-bold d-block">Orientation</label>
                               <select class="form-select form-select-sm" @bind="_orientation">
                                  @foreach (var val in Enum.GetValues<NTChartOrientation>())
                                  {
@@ -260,6 +273,7 @@
 
    private bool _showLegend = true;
    private LegendPosition _legendPosition = LegendPosition.Bottom;
+   private TnTColor _legendBgColor = TnTColor.None;
    private NTChartOrientation _orientation = NTChartOrientation.Vertical;
    private bool _enableHardwareAcceleration = true;
 

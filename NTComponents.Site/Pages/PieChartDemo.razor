@@ -69,15 +69,18 @@
 
             <div class="row">
                <div class="col-lg-8">
-                  <div style="height: 500px;" class="border rounded bg-light p-2">
-                     <NTChart TData="SalesData" Title="Interactive Sandbox"
-                        EnableHardwareAcceleration="@_enableHardwareAcceleration" ShowLegend="@_showLegend"
-                        LegendPosition="@_legendPosition">
-                        <NTPieSeries TData="SalesData" Data="@_sandboxData" ValueSelector="@(d => d.Amount)"
-                           LabelSelector="@(d => d.Category)" InnerRadiusRatio="@_innerRadius"
-                           ExplosionDistance="@_explosionDistance" ExplosionOnEntry="@_explosionOnEntry" />
-                     </NTChart>
-                  </div>
+                   <div style="height: 500px;" class="border rounded bg-light p-2">
+                      <NTChart TData="SalesData" Title="Interactive Sandbox"
+                         EnableHardwareAcceleration="@_enableHardwareAcceleration">
+                         @if (_showLegend)
+                         {
+                             <NTLegend TData="SalesData" Position="@_legendPosition" />
+                         }
+                         <NTPieSeries TData="SalesData" Data="@_sandboxData" ValueSelector="@(d => d.Amount)"
+                            LabelSelector="@(d => d.Category)" InnerRadiusRatio="@_innerRadius"
+                            ExplosionDistance="@_explosionDistance" ExplosionOnEntry="@_explosionOnEntry" />
+                      </NTChart>
+                   </div>
                </div>
                <div class="col-lg-4">
                   <div class="card shadow-sm border-info">

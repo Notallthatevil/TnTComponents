@@ -26,8 +26,8 @@
             <h3>Mixed Line and Bar Series</h3>
             <div style="height: 400px;">
                <NTChart TData="CartesianPoint" Title="Budget vs Actual" IsCategoricalX="true"
-                  EnableHardwareAcceleration="@_enableHardwareAcceleration" ShowLegend="true"
-                  LegendPosition="LegendPosition.Bottom">
+                  EnableHardwareAcceleration="@_enableHardwareAcceleration">
+                  <NTLegend TData="CartesianPoint" Position="LegendPosition.Bottom" />
                   <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="Month" />
                   <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Amount ($)" />
 
@@ -75,7 +75,8 @@
             <h3>Data Sandbox (Mixed)</h3>
             <div style="height: 350px;">
                <NTChart TData="CartesianPoint" Title="Interactive Mixed Chart" IsCategoricalX="true"
-                  EnableHardwareAcceleration="@_enableHardwareAcceleration" ShowLegend="true">
+                  EnableHardwareAcceleration="@_enableHardwareAcceleration">
+                  <NTLegend TData="CartesianPoint" />
                   <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" />
                   <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" />
 

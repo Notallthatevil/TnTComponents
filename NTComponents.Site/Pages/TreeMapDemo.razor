@@ -7,7 +7,8 @@
    <p>Visualizing storage usage by category.</p>
 
    <div style="height: 500px; width: 100%;" class="mt-4 border rounded p-2">
-      <NTChart TData="StorageItem" Title="Storage Usage (GB)" ShowLegend="true">
+      <NTChart TData="StorageItem" Title="Storage Usage (GB)">
+         <NTLegend TData="StorageItem" />
          <NTTreeMapSeries TData="StorageItem" Data="@Data" ValueSelector="@(d => d.SizeGb)"
             LabelSelector="@(d => d.Category)" Color="TnTColor.Primary" DataLabelFormat="{0:F1} GB" />
       </NTChart>
