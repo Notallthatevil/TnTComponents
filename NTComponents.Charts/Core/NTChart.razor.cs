@@ -487,7 +487,8 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             // Check series/points if legend wasn't hit
             if (HoveredSeries == null && plotArea.Contains(mousePoint)) {
                 foreach (var series in Series.AsEnumerable().Reverse().Where(s => s.Visible)) {
-                    var hit = series.HitTest(mousePoint, plotArea);
+                    var seriesRenderArea = GetSeriesRenderArea(series, plotArea, totalArea);
+                    var hit = series.HitTest(mousePoint, seriesRenderArea);
                     if (hit != null) {
                         HoveredSeries = series;
                         HoveredPointIndex = hit.Value.Index;
@@ -508,11 +509,13 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
         // Render inactive series first
         foreach (var series in Series.Where(s => s != HoveredSeries && s.IsEffectivelyVisible)) {
-            series.Render(canvas, plotArea);
+            var seriesRenderArea = GetSeriesRenderArea(series, plotArea, totalArea);
+            series.Render(canvas, seriesRenderArea);
         }
         // Render active series last (on top)
         if (HoveredSeries != null && HoveredSeries.IsEffectivelyVisible) {
-            HoveredSeries.Render(canvas, plotArea);
+            var seriesRenderArea = GetSeriesRenderArea(HoveredSeries, plotArea, totalArea);
+            HoveredSeries.Render(canvas, seriesRenderArea);
         }
         canvas.Restore();
 
@@ -599,22 +602,29 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             Color = bgColor.WithAlpha(230), // Slightly more opaque since it's "lowest"
             Style = SKPaintStyle.Fill
         };
+
         canvas.DrawRoundRect(rect, 4, 4, bgPaint);
 
-        // Draw border
-        using var borderPaint = new SKPaint {
-            Color = GetThemeColor(TnTColor.OutlineVariant),
-            Style = SKPaintStyle.Stroke,
-            StrokeWidth = 1,
-            IsAntialias = true
-        };
-        canvas.DrawRoundRect(rect, 4, 4, borderPaint);
-
-        var currentY = rect.Top + 5 + font.Size;
+        var y = rect.Top + lineHeight;
         foreach (var line in lines) {
-            canvas.DrawText(line, rect.Left + 5, (float)Math.Round(currentY), SKTextAlign.Left, font, textPaint);
-            currentY += lineHeight;
+            canvas.DrawText(line, rect.Left + 10, y, SKTextAlign.Left, font, textPaint);
+            y += lineHeight;
         }
+    }
+
+    private SKRect GetSeriesRenderArea(NTBaseSeries<TData> series, SKRect plotArea, SKRect totalArea) {
+        if (series.CoordinateSystem == ChartCoordinateSystem.Circular &&
+            Legend != null && Legend.Visible && (Legend.Position == LegendPosition.Left || Legend.Position == LegendPosition.Right)) {
+
+            var centerX = totalArea.MidX;
+            var centerY = totalArea.MidY;
+
+            var dx = Math.Min(centerX - plotArea.Left, plotArea.Right - centerX);
+            var dy = Math.Min(centerY - plotArea.Top, plotArea.Bottom - centerY);
+
+            return new SKRect(centerX - dx, centerY - dy, centerX + dx, centerY + dy);
+        }
+        return plotArea;
     }
 
     private void RenderTitle(SKCanvas canvas, SKImageInfo info) {
