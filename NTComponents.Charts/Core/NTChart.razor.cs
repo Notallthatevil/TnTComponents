@@ -96,14 +96,14 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     ///     Gets or sets the default color palette for the chart.
     /// </summary>
     [Parameter]
-    public List<TnTColor> Palette { get; set; } =
+    public List<(TnTColor Background, TnTColor Text)> Palette { get; set; } =
     [
-        TnTColor.PrimaryFixed,
-        TnTColor.SecondaryFixed,
-        TnTColor.TertiaryFixed,
-        TnTColor.Primary,
-        TnTColor.Secondary,
-        TnTColor.Tertiary
+        (TnTColor.PrimaryFixed, TnTColor.OnPrimaryFixed),
+        (TnTColor.SecondaryFixed, TnTColor.OnSecondaryFixed),
+        (TnTColor.TertiaryFixed, TnTColor.OnTertiaryFixed),
+        (TnTColor.Primary, TnTColor.OnPrimary),
+        (TnTColor.Secondary, TnTColor.OnSecondary),
+        (TnTColor.Tertiary, TnTColor.OnTertiary)
     ];
 
     /// <summary>
@@ -226,12 +226,28 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         if (color == TnTColor.None) {
             var index = GetSeriesIndex(series);
             if (index >= 0) {
-                color = Palette[index % Palette.Count];
+                color = Palette[index % Palette.Count].Background;
             }
         }
 
         return _resolvedColors.TryGetValue(color, out var skColor) ? skColor : SKColors.Gray;
     }
+
+    internal SKColor GetSeriesTextColor(NTBaseSeries<TData> series) {
+        var color = series.TextColor ?? TnTColor.None;
+        if (color == TnTColor.None) {
+            var index = GetSeriesIndex(series);
+            if (index >= 0) {
+                color = Palette[index % Palette.Count].Text;
+            }
+        }
+
+        return _resolvedColors.TryGetValue(color, out var skColor) ? skColor : GetThemeColor(TextColor);
+    }
+
+    internal SKColor GetPaletteColor(int index) => _resolvedColors.TryGetValue(Palette[index % Palette.Count].Background, out var skColor) ? skColor : SKColors.Gray;
+
+    internal SKColor GetPaletteTextColor(int index) => _resolvedColors.TryGetValue(Palette[index % Palette.Count].Text, out var skColor) ? skColor : GetThemeColor(TextColor);
 
     internal SKColor GetThemeColor(TnTColor color) => _resolvedColors.TryGetValue(color, out var skColor) ? skColor : SKColors.Gray;
 
@@ -555,32 +571,16 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         }
 
         var mousePoint = LastMousePosition.Value;
-        var title = HoveredSeries.Title ?? "Series";
-        List<string> lines = [];
-
-        // Use reflection or cast to get Values if it's Cartesian
-        if (HoveredSeries is NTCartesianSeries<TData> cartesian) {
-            var xValue = cartesian.XValueSelector(HoveredDataPoint);
-            var yValue = cartesian.YValueSelector(HoveredDataPoint);
-            lines.Add($"{title}: {xValue:0.#}");
-            lines.Add(string.Format(cartesian.DataLabelFormat, yValue));
-        }
-        else if (HoveredSeries is NTCircularSeries<TData> circular) {
-            var value = circular.ValueSelector(HoveredDataPoint);
-            var labelValue = string.Format(circular.DataLabelFormat, value);
-            var label = circular.LabelSelector?.Invoke(HoveredDataPoint) ?? title;
-            lines.Add($"{label}: {labelValue}");
-        }
-        else {
-            lines.Add(title);
-        }
+        var lines = HoveredSeries.GetTooltipLines(HoveredDataPoint);
 
         if (lines.Count == 0) {
             return;
         }
 
-        var bgColor = GetThemeColor(HoveredSeries.TooltipBackgroundColor ?? TnTColor.SurfaceContainerLowest);
-        var textColor = GetThemeColor(HoveredSeries.TooltipTextColor ?? TnTColor.OnSurface);
+        var bgColor = HoveredSeries.TooltipBackgroundColor.HasValue
+            ? GetThemeColor(HoveredSeries.TooltipBackgroundColor.Value)
+            : GetSeriesColor(HoveredSeries);
+        var textColor = GetThemeColor(HoveredSeries.TooltipTextColor ?? TextColor);
 
         using var textPaint = new SKPaint {
             Color = textColor,
@@ -595,7 +595,9 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         var textWidth = lines.Max(l => font.MeasureText(l));
         var totalHeight = (lines.Count * lineHeight) + 5;
 
-        var rect = new SKRect(mousePoint.X + 10, mousePoint.Y - totalHeight - 5, mousePoint.X + 20 + textWidth, mousePoint.Y - 5);
+        // X starts at mousePoint + 10. Text starts at rect.Left + 10.
+        // So we add 10 to the left and provide 15 on the right.
+        var rect = new SKRect(mousePoint.X + 10, mousePoint.Y - totalHeight - 5, mousePoint.X + 20 + textWidth + 15, mousePoint.Y - 5);
 
         // Keep tooltip within canvas
         if (rect.Right > plotArea.Right + Margin.Right) {
@@ -606,11 +608,22 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         }
 
         using var bgPaint = new SKPaint {
-            Color = bgColor.WithAlpha(230), // Slightly more opaque since it's "lowest"
-            Style = SKPaintStyle.Fill
+            Color = bgColor,
+            Style = SKPaintStyle.Fill,
+            IsAntialias = true,
+            ImageFilter = SKImageFilter.CreateDropShadow(2, 2, 4, 4, SKColors.Black.WithAlpha(80))
         };
 
-        canvas.DrawRoundRect(rect, 4, 4, bgPaint);
+        canvas.DrawRoundRect(rect, 6, 6, bgPaint);
+
+        using var borderPaint = new SKPaint {
+            Color = GetThemeColor(TnTColor.Outline),
+            Style = SKPaintStyle.Stroke,
+            StrokeWidth = 1,
+            IsAntialias = true
+        };
+
+        canvas.DrawRoundRect(rect, 6, 6, borderPaint);
 
         var y = rect.Top + lineHeight;
         foreach (var line in lines) {
@@ -708,7 +721,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             if (!_treeMapAreas.TryGetValue(series, out var area)) continue;
 
             using var paint = new SKPaint {
-                Color = GetThemeColor(TextColor),
+                Color = GetSeriesTextColor(series).WithAlpha((byte)(255 * series.VisibilityFactor)),
                 IsAntialias = true,
                 Style = SKPaintStyle.Fill
             };

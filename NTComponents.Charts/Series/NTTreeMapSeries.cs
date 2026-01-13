@@ -26,6 +26,16 @@ public class NTTreeMapSeries<TData> : NTBaseSeries<TData> where TData : class
    [Parameter]
    public bool ShowLabels { get; set; } = true;
 
+   /// <inheritdoc />
+   internal override List<string> GetTooltipLines(TData data)
+   {
+      var value = ValueSelector(data);
+      var labelValue = string.Format(DataLabelFormat, value);
+      var label = LabelSelector(data);
+      if (string.IsNullOrEmpty(label)) label = Title ?? "Series";
+      return [$"{label}: {labelValue}"];
+   }
+
    public override ChartCoordinateSystem CoordinateSystem => ChartCoordinateSystem.TreeMap;
 
    internal override double GetTotalValue() => Data?.Sum(ValueSelector) ?? 0;
@@ -100,15 +110,13 @@ public class NTTreeMapSeries<TData> : NTBaseSeries<TData> where TData : class
       var value = ValueSelector(data);
       var valueText = string.Format(DataLabelFormat, value);
 
-      // Determine text color based on background brightness
-      var luminance = 0.2126f * bgColor.Red + 0.7152f * bgColor.Green + 0.0722f * bgColor.Blue;
-      var defaultTextColor = luminance > 128 ? SKColors.Black : SKColors.White;
-      var textColor = args?.DataLabelColor ?? defaultTextColor;
+      // Default to series text color from palette
+      var textColor = args?.DataLabelColor ?? Chart.GetSeriesTextColor(this);
       var fontSize = args?.DataLabelSize ?? 12;
 
       using var paint = new SKPaint
       {
-         Color = textColor,
+         Color = textColor.WithAlpha((byte)(textColor.Alpha * VisibilityFactor)),
          IsAntialias = true
       };
 
@@ -206,20 +214,13 @@ public class NTTreeMapSeries<TData> : NTBaseSeries<TData> where TData : class
 
    internal override IEnumerable<LegendItemInfo<TData>> GetLegendItems()
    {
-      if (Data == null) yield break;
-
-      var dataList = Data.ToList();
-      for (int i = 0; i < dataList.Count; i++)
+      yield return new LegendItemInfo<TData>
       {
-         var item = dataList[i];
-         yield return new LegendItemInfo<TData>
-         {
-            Label = LabelSelector(item),
-            Color = Chart.GetSeriesColor(this).WithAlpha((byte)(255 * (0.4 + 0.6 * ValueSelector(item) / dataList.Max(ValueSelector)))),
-            Series = this,
-            Index = i,
-            IsVisible = Visible
-         };
-      }
+         Label = Title ?? "Series",
+         Color = Chart.GetSeriesColor(this),
+         Series = this,
+         Index = null,
+         IsVisible = Visible
+      };
    }
 }

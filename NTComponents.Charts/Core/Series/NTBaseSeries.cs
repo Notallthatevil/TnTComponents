@@ -19,6 +19,12 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     public TnTColor? Color { get; set; }
 
     /// <summary>
+    ///    Gets or sets the text color of the series. If null or <see cref="TnTColor.None"/>, a color will be chosen from the chart's palette.
+    /// </summary>
+    [Parameter]
+    public TnTColor? TextColor { get; set; }
+
+    /// <summary>
     ///     Gets or sets the title of the series.
     /// </summary>
     [Parameter]
@@ -82,6 +88,13 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     /// </summary>
     /// <returns>The total value of the series.</returns>
     internal virtual double GetTotalValue() => 0;
+
+    /// <summary>
+    ///    Gets the tooltip lines for a specific data point.
+    /// </summary>
+    /// <param name="data">The data point.</param>
+    /// <returns>A list of strings to display in the tooltip.</returns>
+    internal virtual List<string> GetTooltipLines(TData data) => [Title ?? "Series"];
 
     private float _currentVisibility = 1f;
     private float _startVisibility = 1f;

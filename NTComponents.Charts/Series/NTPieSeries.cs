@@ -74,12 +74,12 @@ public class NTPieSeries<TData> : NTCircularSeries<TData> where TData : class
          if (sweep <= 0) continue;
 
          var isAnyHovered = Chart.HoveredSeries != null;
-         var isOtherSeriesHovered = isAnyHovered && Chart.HoveredSeries != this;
-         var isOtherPointHovered = isAnyHovered && Chart.HoveredSeries == this && Chart.HoveredPointIndex != slice.Index;
+          var isOtherSeriesHovered = isAnyHovered && Chart.HoveredSeries != this;
+          var isOtherPointHovered = isAnyHovered && Chart.HoveredSeries == this && Chart.HoveredPointIndex != slice.Index;
 
-         var baseColor = Chart.GetThemeColor(Chart.Palette[slice.Index % Chart.Palette.Count]);
+          var baseColor = Chart.GetThemeColor(Chart.Palette[slice.Index % Chart.Palette.Count].Background);
 
-         var args = new NTDataPointRenderArgs<TData>
+          var args = new NTDataPointRenderArgs<TData>
          {
             Data = slice.Data,
             Index = slice.Index,
@@ -172,7 +172,7 @@ public class NTPieSeries<TData> : NTCircularSeries<TData> where TData : class
 
       var text = string.Format(DataLabelFormat, slice.Value);
 
-      var labelColor = args?.DataLabelColor ?? Chart.GetThemeColor(DataLabelColor ?? Chart.BackgroundColor);
+      var labelColor = args?.DataLabelColor ?? (DataLabelColor.HasValue ? Chart.GetThemeColor(DataLabelColor.Value) : Chart.GetPaletteTextColor(slice.Index));
       var labelSize = args?.DataLabelSize ?? DataLabelSize;
 
       using var paint = new SKPaint

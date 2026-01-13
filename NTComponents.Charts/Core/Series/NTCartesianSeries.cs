@@ -14,6 +14,18 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
     [Parameter, EditorRequired]
     public Func<TData, double> YValueSelector { get; set; } = default!;
 
+    /// <inheritdoc />
+    internal override List<string> GetTooltipLines(TData data)
+    {
+        var xValue = XValueSelector(data);
+        var yValue = YValueSelector(data);
+        return
+        [
+            $"{Title ?? "Series"}: {xValue:0.#}",
+            string.Format(DataLabelFormat, yValue)
+        ];
+    }
+
     /// <summary>
     ///    Gets or sets the style of the data points.
     /// </summary>
@@ -63,7 +75,7 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
     public bool ShowDataLabelBackground { get; set; } = true;
 
     /// <summary>
-    ///     Gets or sets the background color for data labels. If null, the chart's background color will be used.
+    ///     Gets or sets the background color for data labels. If null, the series' color will be used.
     /// </summary>
     [Parameter]
     public TnTColor? DataLabelBackgroundColor { get; set; }
@@ -85,7 +97,7 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
             return;
         }
 
-        var color = overrideColor ?? Chart.GetThemeColor(DataLabelColor ?? Chart.TextColor);
+        var color = overrideColor ?? (DataLabelColor.HasValue ? Chart.GetThemeColor(DataLabelColor.Value) : Chart.GetSeriesTextColor(this));
         var size = overrideFontSize ?? DataLabelSize;
 
         using var font = new SKFont {
@@ -112,28 +124,32 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
         }
 
         if (ShowDataLabelBackground) {
-            var bgColor = Chart.GetThemeColor(DataLabelBackgroundColor ?? Chart.BackgroundColor).WithAlpha(230);
+            var bgColor = DataLabelBackgroundColor.HasValue
+                ? Chart.GetThemeColor(DataLabelBackgroundColor.Value)
+                : Chart.GetSeriesColor(this);
+
             using var bgPaint = new SKPaint {
                 Color = bgColor,
                 Style = SKPaintStyle.Fill,
-                IsAntialias = true
+                IsAntialias = true,
+                ImageFilter = SKImageFilter.CreateDropShadow(2, 2, 4, 4, SKColors.Black.WithAlpha(80))
             };
 
             var bgRect = new SKRect(
                 x - (textWidth / 2) - paddingX,
                 drawY - textHeight - paddingY,
-                x + (textWidth / 2) + paddingX,
+                x + (textWidth / 2) + paddingX + 2, // Added a little bit more padding on the right side
                 drawY + paddingY);
 
-            canvas.DrawRoundRect(bgRect, 4, 4, bgPaint);
+            canvas.DrawRoundRect(bgRect, 6, 6, bgPaint);
 
             using var borderPaint = new SKPaint {
-                Color = Chart.GetThemeColor(TnTColor.OutlineVariant),
+                Color = Chart.GetThemeColor(TnTColor.Outline),
                 Style = SKPaintStyle.Stroke,
                 StrokeWidth = 1,
                 IsAntialias = true
             };
-            canvas.DrawRoundRect(bgRect, 4, 4, borderPaint);
+            canvas.DrawRoundRect(bgRect, 6, 6, borderPaint);
         }
 
         canvas.DrawText(text, x, drawY, SKTextAlign.Center, font, paint);

@@ -75,7 +75,7 @@ public class NTBarSeries<TData> : NTCartesianSeries<TData> where TData : class {
             }
 
             if (ShowDataLabels || isPointHovered) {
-                var labelColor = args.DataLabelColor ?? (isPointHovered ? pointColor.WithAlpha(255) : pointColor);
+                var labelColor = args.DataLabelColor;
                 var labelSize = args.DataLabelSize ?? DataLabelSize;
                 
                 if (Chart.Orientation == NTChartOrientation.Vertical) {

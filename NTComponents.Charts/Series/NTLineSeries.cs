@@ -155,7 +155,7 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
 
                 if (ShowDataLabels || isPointHovered)
                 {
-                    var labelColor = args.DataLabelColor ?? pointColor;
+                    var labelColor = args.DataLabelColor;
                     var labelSize = args.DataLabelSize ?? DataLabelSize;
                     RenderDataLabel(canvas, point.X, point.Y, YValueSelector(dataList[i]), renderArea, labelColor, labelSize);
                 }

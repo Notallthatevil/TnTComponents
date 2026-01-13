@@ -365,7 +365,7 @@
 
     private NTChart<CartesianPoint> interactiveChart = default!;
 
-    private List<TnTColor> _customPalette = new() { TnTColor.Tertiary, TnTColor.Success };
+    private List<(TnTColor Background, TnTColor Text)> _customPalette = new() { (TnTColor.Tertiary, TnTColor.OnTertiary), (TnTColor.Success, TnTColor.OnSuccess) };
 
     private List<CartesianPoint> _dynamicData = Enumerable.Range(1, 10).Select(i => new CartesianPoint(i,
     Random.Shared.Next(10, 90))).ToList();

@@ -18,6 +18,15 @@ public abstract class NTCircularSeries<TData> : NTBaseSeries<TData> where TData 
    [Parameter]
    public Func<TData, string>? LabelSelector { get; set; }
 
+   /// <inheritdoc />
+   internal override List<string> GetTooltipLines(TData data)
+   {
+      var value = ValueSelector(data);
+      var labelValue = string.Format(DataLabelFormat, value);
+      var label = LabelSelector?.Invoke(data) ?? Title ?? "Series";
+      return [$"{label}: {labelValue}"];
+   }
+
    /// <summary>
    ///     Gets or sets the format for the data labels.
    /// </summary>
@@ -86,7 +95,7 @@ public abstract class NTCircularSeries<TData> : NTBaseSeries<TData> where TData 
       {
          var item = dataList[i];
          var label = LabelSelector?.Invoke(item) ?? $"Item {i + 1}";
-         var color = Chart.Palette[i % Chart.Palette.Count];
+         var color = Chart.Palette[i % Chart.Palette.Count].Background;
 
          yield return new LegendItemInfo<TData>
          {

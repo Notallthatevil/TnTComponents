@@ -98,7 +98,7 @@ public class NTHeatMapSeries<TData> : NTCartesianSeries<TData> where TData : cla
 
          if (ShowDataLabels)
          {
-            var labelColor = args.DataLabelColor ?? SKColors.White;
+            var labelColor = args.DataLabelColor;
             var labelSize = args.DataLabelSize ?? DataLabelSize;
             RenderDataLabel(canvas, x, y + 5, weight, renderArea, labelColor, labelSize);
          }
