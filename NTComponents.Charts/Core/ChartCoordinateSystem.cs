@@ -23,5 +23,10 @@ public enum ChartCoordinateSystem
    /// <summary>
    ///     A part-to-whole visualization (e.g., Pie Chart).
    /// </summary>
-   Circular
+   Circular,
+
+   /// <summary>
+   ///     A hierarchical visualization using nested rectangles.
+   /// </summary>
+   TreeMap
 }

@@ -77,6 +77,12 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     /// </summary>
     public abstract ChartCoordinateSystem CoordinateSystem { get; }
 
+    /// <summary>
+    ///    Gets the total value of the series (used for partitioning areas in TreeMap/Circular charts).
+    /// </summary>
+    /// <returns>The total value of the series.</returns>
+    internal virtual double GetTotalValue() => 0;
+
     private float _currentVisibility = 1f;
     private float _startVisibility = 1f;
     private DateTime? _visibilityAnimationStartTime;

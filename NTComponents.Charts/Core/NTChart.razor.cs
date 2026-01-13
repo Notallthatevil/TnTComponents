@@ -163,6 +163,8 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
     private readonly Dictionary<TnTColor, SKColor> _resolvedColors = [];
 
+    private readonly Dictionary<NTBaseSeries<TData>, SKRect> _treeMapAreas = [];
+
     private List<double>? _cachedAllX;
 
     private List<double>? _cachedAllY;
@@ -413,6 +415,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         HoveredPointIndex = null;
         HoveredDataPoint = null;
         _isHoveringLegend = false;
+        _treeMapAreas.Clear();
         _cachedAllX = null;
         _cachedAllY = null;
 
@@ -459,6 +462,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         }
 
         LastPlotArea = plotArea;
+        CalculateTreeMapAreas(plotArea);
 
         // Pass 3: Render axes using the final plotArea and the adjusted accessibleArea
         foreach (var axis in Axes.Where(a => a.Visible)) {
@@ -519,12 +523,15 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         }
         canvas.Restore();
 
-        // Pass 6: Render Tooltip
+        // Pass 6: Render TreeMap group labels if needed
+        RenderTreeMapGroupLabels(canvas);
+
+        // Pass 7: Render Tooltip
         if (HoveredDataPoint != null && LastMousePosition.HasValue && HoveredSeries != null && HoveredSeries.Visible) {
             RenderTooltip(canvas, plotArea);
         }
 
-        // Pass 7: Render legend (Now after hit testing so it can react to hovered series)
+        // Pass 8: Render legend (Now after hit testing so it can react to hovered series)
         if (Legend != null && Legend.Visible && Legend.Position != LegendPosition.None) {
             if (Legend.Position == LegendPosition.Floating) {
                 Legend.Render(canvas, plotArea, totalArea);
@@ -534,7 +541,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             }
         }
 
-        // Pass 8: Update cursor if needed
+        // Pass 9: Update cursor if needed
         var currentHover = HoveredSeries != null || _isHoveringLegend || _isPanning;
         if (_isHovering != currentHover) {
             _isHovering = currentHover;
@@ -613,6 +620,17 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     }
 
     private SKRect GetSeriesRenderArea(NTBaseSeries<TData> series, SKRect plotArea, SKRect totalArea) {
+        if (series.CoordinateSystem == ChartCoordinateSystem.TreeMap) {
+            if (_treeMapAreas.TryGetValue(series, out var area)) {
+                var treeMapSeries = Series.Where(s => s.CoordinateSystem == ChartCoordinateSystem.TreeMap && s.IsEffectivelyVisible).ToList();
+                if (treeMapSeries.Count > 1) {
+                    // Shave off top for series title
+                    return new SKRect(area.Left, area.Top + 20, area.Right, area.Bottom);
+                }
+                return area;
+            }
+        }
+
         if (series.CoordinateSystem == ChartCoordinateSystem.Circular &&
             Legend != null && Legend.Visible && (Legend.Position == LegendPosition.Left || Legend.Position == LegendPosition.Right)) {
 
@@ -625,6 +643,89 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             return new SKRect(centerX - dx, centerY - dy, centerX + dx, centerY + dy);
         }
         return plotArea;
+    }
+
+    private record SeriesLayoutItem(NTBaseSeries<TData> Series, double Value);
+
+    private void CalculateTreeMapAreas(SKRect plotArea) {
+        _treeMapAreas.Clear();
+        var treeMapSeries = Series.Where(s => s.CoordinateSystem == ChartCoordinateSystem.TreeMap && s.IsEffectivelyVisible).ToList();
+        if (!treeMapSeries.Any()) return;
+
+        if (treeMapSeries.Count == 1) {
+            _treeMapAreas[treeMapSeries[0]] = plotArea;
+            return;
+        }
+
+        var seriesData = treeMapSeries.Select(s => new SeriesLayoutItem(s, s.GetTotalValue())).ToList();
+        var totalValue = seriesData.Sum(s => s.Value);
+        if (totalValue <= 0) {
+            totalValue = seriesData.Count;
+            seriesData = treeMapSeries.Select(s => new SeriesLayoutItem(s, 1.0)).ToList();
+        }
+
+        PartitionArea(seriesData, plotArea, totalValue, true);
+    }
+
+    private void PartitionArea(List<SeriesLayoutItem> items, SKRect area, double totalValue, bool horizontal) {
+        if (!items.Any()) return;
+        if (items.Count == 1) {
+            _treeMapAreas[items[0].Series] = area;
+            return;
+        }
+
+        int mid = items.Count / 2;
+        var leftItems = items.Take(mid).ToList();
+        var rightItems = items.Skip(mid).ToList();
+
+        double leftValue = leftItems.Sum(x => x.Value);
+        double rightValue = rightItems.Sum(x => x.Value);
+        double total = leftValue + rightValue;
+
+        if (total <= 0) return;
+
+        if (horizontal) {
+            float leftWidth = (float)(area.Width * (leftValue / total));
+            var leftArea = new SKRect(area.Left, area.Top, area.Left + leftWidth, area.Bottom);
+            var rightArea = new SKRect(area.Left + leftWidth, area.Top, area.Right, area.Bottom);
+            PartitionArea(leftItems, leftArea, leftValue, !horizontal);
+            PartitionArea(rightItems, rightArea, rightValue, !horizontal);
+        }
+        else {
+            float topHeight = (float)(area.Height * (leftValue / total));
+            var topArea = new SKRect(area.Left, area.Top, area.Right, area.Top + topHeight);
+            var bottomArea = new SKRect(area.Left, area.Top + topHeight, area.Right, area.Bottom);
+            PartitionArea(leftItems, topArea, leftValue, !horizontal);
+            PartitionArea(rightItems, bottomArea, rightValue, !horizontal);
+        }
+    }
+
+    private void RenderTreeMapGroupLabels(SKCanvas canvas) {
+        var treeMapSeries = Series.Where(s => s.CoordinateSystem == ChartCoordinateSystem.TreeMap && s.IsEffectivelyVisible).ToList();
+        if (treeMapSeries.Count <= 1) return;
+
+        foreach (var series in treeMapSeries) {
+            if (!_treeMapAreas.TryGetValue(series, out var area)) continue;
+
+            using var paint = new SKPaint {
+                Color = GetThemeColor(TextColor),
+                IsAntialias = true,
+                Style = SKPaintStyle.Fill
+            };
+
+            using var font = new SKFont {
+                Size = 14,
+                Embolden = true
+            };
+
+            var title = series.Title ?? "Series";
+            // Measure text to make sure it fits
+            var textWidth = font.MeasureText(title);
+            if (area.Width < textWidth + 10 || area.Height < 20) continue;
+
+            // Draw at top left of the area with a small offset
+            canvas.DrawText(title, area.Left + 5, area.Top + 15, SKTextAlign.Left, font, paint);
+        }
     }
 
     private void RenderTitle(SKCanvas canvas, SKImageInfo info) {

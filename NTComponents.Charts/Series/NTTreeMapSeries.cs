@@ -26,7 +26,9 @@ public class NTTreeMapSeries<TData> : NTBaseSeries<TData> where TData : class
    [Parameter]
    public bool ShowLabels { get; set; } = true;
 
-   public override ChartCoordinateSystem CoordinateSystem => ChartCoordinateSystem.None;
+   public override ChartCoordinateSystem CoordinateSystem => ChartCoordinateSystem.TreeMap;
+
+   internal override double GetTotalValue() => Data?.Sum(ValueSelector) ?? 0;
 
    private List<TreeMapRect> _lastRects = [];
 
