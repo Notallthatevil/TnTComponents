@@ -106,6 +106,10 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         (TnTColor.Tertiary, TnTColor.OnTertiary)
     ];
 
+    private static readonly SKTypeface _defaultTypeface = SKTypeface.FromFamilyName("Roboto", SKFontStyleWeight.Bold, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
+
+    internal SKTypeface DefaultTypeface => _defaultTypeface;
+
     /// <summary>
     ///    Gets or sets the duration of the hover animation.
     /// </summary>
@@ -606,7 +610,8 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         };
 
         using var font = new SKFont {
-            Size = 12
+            Size = 12,
+            Typeface = DefaultTypeface
         };
 
         var lineHeight = font.Size + 4;
@@ -746,7 +751,8 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
             using var font = new SKFont {
                 Size = 14,
-                Embolden = true
+                Embolden = true,
+                Typeface = DefaultTypeface
             };
 
             var title = series.Title ?? "Series";
@@ -768,7 +774,8 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
         using var font = new SKFont {
             Size = 20,
-            Embolden = true
+            Embolden = true,
+            Typeface = DefaultTypeface
         };
 
         var x = Margin.Left + ((info.Width - Margin.Left - Margin.Right) / 2);

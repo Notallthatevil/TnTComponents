@@ -180,7 +180,7 @@ public class NTPieSeries<TData> : NTCircularSeries<TData> where TData : class
          Color = labelColor,
          IsAntialias = true
       };
-      using var font = new SKFont { Size = labelSize };
+      using var font = new SKFont { Size = labelSize, Typeface = Chart.DefaultTypeface };
 
       canvas.DrawText(text, lx, ly, SKTextAlign.Center, font, paint);
    }

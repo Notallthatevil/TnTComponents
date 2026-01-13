@@ -122,7 +122,8 @@ public class NTTreeMapSeries<TData> : NTBaseSeries<TData> where TData : class
 
       using var font = new SKFont
       {
-         Size = fontSize
+         Size = fontSize,
+         Typeface = Chart.DefaultTypeface
       };
 
       // Clip text to rect

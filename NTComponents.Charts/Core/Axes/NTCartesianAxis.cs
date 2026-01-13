@@ -41,7 +41,8 @@ public class NTCartesianAxis<TData> : NTAxis<TData> where TData : class {
         };
 
         using var textFont = new SKFont {
-            Size = 12
+            Size = 12,
+            Typeface = Chart.DefaultTypeface
         };
 
         using var titlePaint = new SKPaint {
@@ -51,7 +52,8 @@ public class NTCartesianAxis<TData> : NTAxis<TData> where TData : class {
 
         using var titleFont = new SKFont {
             Size = 16,
-            Embolden = true
+            Embolden = true,
+            Typeface = Chart.DefaultTypeface
         };
 
         using var linePaint = new SKPaint {

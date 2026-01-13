@@ -75,7 +75,7 @@ public class NTLegend<TData> : ComponentBase, IDisposable where TData : class {
             return SKRect.Empty;
         }
 
-        using var font = new SKFont { Size = FontSize };
+        using var font = new SKFont { Size = FontSize, Typeface = Chart.DefaultTypeface };
         var items = Chart.Series.SelectMany(s => s.GetLegendItems()).ToList();
         var maxWidth = items.Any() ? items.Max(s => font.MeasureText(s.Label)) + IconSize + 25 : 100;
         var totalHeight = (items.Count * (FontSize + 5)) + 15;
@@ -99,7 +99,7 @@ public class NTLegend<TData> : ComponentBase, IDisposable where TData : class {
             return null;
         }
 
-        using var font = new SKFont { Size = FontSize };
+        using var font = new SKFont { Size = FontSize, Typeface = Chart.DefaultTypeface };
 
         // Handle Horizontal (Top/Bottom)
         if (Position is LegendPosition.Top or LegendPosition.Bottom) {
@@ -167,7 +167,8 @@ public class NTLegend<TData> : ComponentBase, IDisposable where TData : class {
         }
 
         using var font = new SKFont {
-            Size = FontSize
+            Size = FontSize,
+            Typeface = Chart.DefaultTypeface
         };
 
         if (Position is LegendPosition.Top or LegendPosition.Bottom) {
@@ -216,7 +217,8 @@ public class NTLegend<TData> : ComponentBase, IDisposable where TData : class {
         }
 
         using var font = new SKFont {
-            Size = FontSize
+            Size = FontSize,
+            Typeface = Chart.DefaultTypeface
         };
 
         if (Position is LegendPosition.Top or LegendPosition.Bottom) {

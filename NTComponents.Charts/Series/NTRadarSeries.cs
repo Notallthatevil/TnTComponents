@@ -115,7 +115,7 @@ public class NTRadarSeries<TData> : NTCircularSeries<TData> where TData : class
    {
       var text = string.Format("{0:N0}", value);
       using var paint = new SKPaint { Color = color, IsAntialias = true };
-      using var font = new SKFont { Size = fontSize };
+      using var font = new SKFont { Size = fontSize, Typeface = Chart.DefaultTypeface };
       canvas.DrawText(text, x, y, SKTextAlign.Center, font, paint);
    }
 

@@ -101,7 +101,8 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
         var size = overrideFontSize ?? DataLabelSize;
 
         using var font = new SKFont {
-            Size = size
+            Size = size,
+            Typeface = Chart.DefaultTypeface
         };
 
         using var paint = new SKPaint {
