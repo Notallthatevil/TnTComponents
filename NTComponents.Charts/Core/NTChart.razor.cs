@@ -127,11 +127,19 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
     protected string CanvasStyle {
         get {
-            if (HoveredSeries != null) return "cursor: pointer;";
-            if (_isDraggingLegend || _isHoveringLegend) return "cursor: move;";
-            if (_isPanning) return "cursor: grabbing;";
-            if (EnablePan) return "cursor: grab;";
-            return "cursor: default;";
+            if (HoveredSeries != null) {
+                return "cursor: pointer;";
+            }
+
+            if (_isDraggingLegend || _isHoveringLegend) {
+                return "cursor: move;";
+            }
+
+            if (_isPanning) {
+                return "cursor: grabbing;";
+            }
+
+            return EnablePan ? "cursor: grab;" : "cursor: default;";
         }
     }
 
@@ -319,7 +327,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
         if (_isDraggingLegend && Legend != null && LastPlotArea != default) {
             var currentPoint = LastMousePosition.Value;
-            
+
             // Check for a small movement threshold to allow clicking
             if (!_hasDraggedLegend) {
                 var dx = currentPoint.X - _legendDragStartMousePos.X;
@@ -686,7 +694,9 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     private void CalculateTreeMapAreas(SKRect plotArea) {
         _treeMapAreas.Clear();
         var treeMapSeries = Series.Where(s => s.CoordinateSystem == ChartCoordinateSystem.TreeMap && s.IsEffectivelyVisible).ToList();
-        if (!treeMapSeries.Any()) return;
+        if (!treeMapSeries.Any()) {
+            return;
+        }
 
         if (treeMapSeries.Count == 1) {
             _treeMapAreas[treeMapSeries[0]] = plotArea;
@@ -704,31 +714,36 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     }
 
     private void PartitionArea(List<SeriesLayoutItem> items, SKRect area, double totalValue, bool horizontal) {
-        if (!items.Any()) return;
+        if (!items.Any()) {
+            return;
+        }
+
         if (items.Count == 1) {
             _treeMapAreas[items[0].Series] = area;
             return;
         }
 
-        int mid = items.Count / 2;
+        var mid = items.Count / 2;
         var leftItems = items.Take(mid).ToList();
         var rightItems = items.Skip(mid).ToList();
 
-        double leftValue = leftItems.Sum(x => x.Value);
-        double rightValue = rightItems.Sum(x => x.Value);
-        double total = leftValue + rightValue;
+        var leftValue = leftItems.Sum(x => x.Value);
+        var rightValue = rightItems.Sum(x => x.Value);
+        var total = leftValue + rightValue;
 
-        if (total <= 0) return;
+        if (total <= 0) {
+            return;
+        }
 
         if (horizontal) {
-            float leftWidth = (float)(area.Width * (leftValue / total));
+            var leftWidth = (float)(area.Width * (leftValue / total));
             var leftArea = new SKRect(area.Left, area.Top, area.Left + leftWidth, area.Bottom);
             var rightArea = new SKRect(area.Left + leftWidth, area.Top, area.Right, area.Bottom);
             PartitionArea(leftItems, leftArea, leftValue, !horizontal);
             PartitionArea(rightItems, rightArea, rightValue, !horizontal);
         }
         else {
-            float topHeight = (float)(area.Height * (leftValue / total));
+            var topHeight = (float)(area.Height * (leftValue / total));
             var topArea = new SKRect(area.Left, area.Top, area.Right, area.Top + topHeight);
             var bottomArea = new SKRect(area.Left, area.Top + topHeight, area.Right, area.Bottom);
             PartitionArea(leftItems, topArea, leftValue, !horizontal);
@@ -738,10 +753,14 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
     private void RenderTreeMapGroupLabels(SKCanvas canvas) {
         var treeMapSeries = Series.Where(s => s.CoordinateSystem == ChartCoordinateSystem.TreeMap && s.IsEffectivelyVisible).ToList();
-        if (treeMapSeries.Count <= 1) return;
+        if (treeMapSeries.Count <= 1) {
+            return;
+        }
 
         foreach (var series in treeMapSeries) {
-            if (!_treeMapAreas.TryGetValue(series, out var area)) continue;
+            if (!_treeMapAreas.TryGetValue(series, out var area)) {
+                continue;
+            }
 
             using var paint = new SKPaint {
                 Color = GetSeriesTextColor(series).WithAlpha((byte)(255 * series.VisibilityFactor)),
@@ -758,7 +777,9 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             var title = series.Title ?? "Series";
             // Measure text to make sure it fits
             var textWidth = font.MeasureText(title);
-            if (area.Width < textWidth + 10 || area.Height < 20) continue;
+            if (area.Width < textWidth + 10 || area.Height < 20) {
+                continue;
+            }
 
             // Draw at top left of the area with a small offset
             canvas.DrawText(title, area.Left + 5, area.Top + 15, SKTextAlign.Left, font, paint);
@@ -812,9 +833,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         }
     }
 
-    internal void SetLegend(NTLegend<TData> legend) {
-        Legend = legend;
-    }
+    internal void SetLegend(NTLegend<TData> legend) => Legend = legend;
 
     internal void RemoveLegend(NTLegend<TData> legend) {
         if (Legend == legend) {
@@ -1049,7 +1068,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
         foreach (var axis in Axes.Where(a => a.Direction == AxisDirection.X && a.Visible && a.ValuesToShow != null)) {
             if (axis.ValuesToShow!.Any()) {
-                min = Math.Min(min, axis.ValuesToShow.Min());
+                min = Math.Min(min, axis!!.ValuesToShow.Min());
                 max = Math.Max(max, axis.ValuesToShow.Max());
             }
         }
@@ -1127,7 +1146,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
         foreach (var axis in Axes.Where(a => a.Direction == AxisDirection.Y && a.Visible && a.ValuesToShow != null)) {
             if (axis.ValuesToShow!.Any()) {
-                min = Math.Min(min, axis.ValuesToShow.Min());
+                min = Math.Min(min, axis!!.ValuesToShow.Min());
                 max = Math.Max(max, axis.ValuesToShow.Max());
             }
         }
@@ -1186,22 +1205,16 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             if (fraction < 1.5) {
                 niceFraction = 1;
             }
-            else if (fraction < 3) {
-                niceFraction = 2;
-            }
             else {
-                niceFraction = fraction < 7 ? 5 : 10;
+                niceFraction = fraction < 3 ? 2 : fraction < 7 ? 5 : 10;
             }
         }
         else {
             if (fraction <= 1) {
                 niceFraction = 1;
             }
-            else if (fraction <= 2) {
-                niceFraction = 2;
-            }
             else {
-                niceFraction = fraction <= 5 ? 5 : 10;
+                niceFraction = fraction <= 2 ? 2 : fraction <= 5 ? 5 : 10;
             }
         }
 
