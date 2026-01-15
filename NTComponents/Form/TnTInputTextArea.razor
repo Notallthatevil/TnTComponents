@@ -20,7 +20,7 @@
 	}
 
 
-	@if (GetMaxLength() > 0 && RendererInfo.IsInteractive) {
+	@if (GetMaxLength() > 0 && RendererInfo.IsInteractive && ShowInputLength) {
 		<span class="tnt-input-length">
 			@(CurrentValueAsString?.Length ?? 0)/@(GetMaxLength())
 		</span>

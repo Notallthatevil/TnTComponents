@@ -162,6 +162,12 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public bool? AutoFocus { get; set; }
 
     /// <summary>
+    /// A value indicating whether the input length should be displayed to the user. Only shows when the field can and does a have a max length.
+    /// </summary>
+    [Parameter]
+    public bool ShowInputLength { get; set; } = true;
+
+    /// <summary>
     ///     Gets or sets the background color of the input.
     /// </summary>
     [Parameter]
