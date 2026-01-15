@@ -1068,7 +1068,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
         foreach (var axis in Axes.Where(a => a.Direction == AxisDirection.X && a.Visible && a.ValuesToShow != null)) {
             if (axis.ValuesToShow!.Any()) {
-                min = Math.Min(min, axis!!.ValuesToShow.Min());
+                min = Math.Min(min, axis!.ValuesToShow.Min());
                 max = Math.Max(max, axis.ValuesToShow.Max());
             }
         }
@@ -1146,7 +1146,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
         foreach (var axis in Axes.Where(a => a.Direction == AxisDirection.Y && a.Visible && a.ValuesToShow != null)) {
             if (axis.ValuesToShow!.Any()) {
-                min = Math.Min(min, axis!!.ValuesToShow.Min());
+                min = Math.Min(min, axis!.ValuesToShow.Min());
                 max = Math.Max(max, axis.ValuesToShow.Max());
             }
         }
