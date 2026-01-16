@@ -4,13 +4,13 @@ namespace NTComponents.Charts.Core.Axes;
 ///     Defines the scale used by an axis.
 /// </summary>
 public enum NTAxisScale {
-   /// <summary>
-   ///     Linear scaling.
-   /// </summary>
-   Linear,
+    /// <summary>
+    ///     Linear scaling.
+    /// </summary>
+    Linear,
 
-   /// <summary>
-   ///     Logarithmic scaling.
-   /// </summary>
-   Logarithmic
+    /// <summary>
+    ///     Logarithmic scaling.
+    /// </summary>
+    Logarithmic
 }
