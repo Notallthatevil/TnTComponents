@@ -77,40 +77,30 @@ $background-color: var(--tnt-input-background-color);
     }
 }
 
-@mixin supporting-text($width: null) {
+@mixin supporting-text {
+
     .tnt-supporting-text {
-        position: absolute;
-        top: calc(100% + 4px);
-        left: 16px;
-
-        @if $width == null {
-            width: calc(100% - 32px - 7ch);
-        }
-        @else {
-            width: $width;
-        }
-
+        grid-area: supporting-text;
+        width: 100%;
         text-wrap: wrap;
         color: $text-color;
+        padding-left:16px;
         @include typescale.tnt-body-small;
     }
 
-    @for $i from 1 through 5 {
-        *:nth-child(#{$i} of .tnt-supporting-text) {
-            transform: translateY(calc(12px * ($i - 1))) !important;
-        }
-    }
+    ::deep {
 
-    .tnt-validation-message {
-        color: $error-color;
+        .tnt-validation-message {
+            color: $error-color;
+        }
     }
 }
 
 @mixin tnt-input-length {
     .tnt-input-length {
-        position: absolute;
-        top: calc(100% + 4px);
-        right: 16px;
+        grid-area: input-length;
+        justify-self: end;
+        padding: 0 16px;
         @include typescale.tnt-body-small;
     }
 }
@@ -308,8 +298,6 @@ $background-color: var(--tnt-input-background-color);
 }
 
 @mixin tnt-form-compact($element: input) {
-    margin-bottom: 26px;
-
     &.tnt-form-outlined {
         grid-template-rows: 38px;
 

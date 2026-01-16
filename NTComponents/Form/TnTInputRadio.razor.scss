@@ -67,7 +67,6 @@
 
     ::deep {
         @include base.default-icon;
-        @include base.supporting-text;
     }
 
     &:has(input:checked) {

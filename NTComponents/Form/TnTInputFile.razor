@@ -3,45 +3,48 @@
 @inherits InputFile
 @implements ITnTPageScriptComponent<TnTInputFile>
 @implements IAsyncDisposable
+<div class="tnt-input-container" style="@ElementStyle">
 
-<label class="@ElementClass" title="@ElementTitle" lang="@ElementLang" id="@ElementId" style="@ElementStyle" @ref="_labelElement">
-    @if (StartIcon is not null) {
-        @StartIcon.Render("tnt-start-icon")
-    }
+	<label class="@ElementClass" title="@ElementTitle" lang="@ElementLang" id="@ElementId" @ref="_labelElement">
+		@if (StartIcon is not null) {
+			@StartIcon.Render("tnt-start-icon")
+		}
 
-    @base.BuildRenderTree
+		@base.BuildRenderTree
 
-    @if (!string.IsNullOrWhiteSpace(SupportingText)) {
-        <span class="tnt-supporting-text">
-            @SupportingText
-        </span>
-    }
 
-    @if (!string.IsNullOrWhiteSpace(Label)) {
-        <span class="tnt-label">
-            @Label
-        </span>
-    }
+		@if (!string.IsNullOrWhiteSpace(Label)) {
+			<span class="tnt-label">
+				@Label
+			</span>
+		}
 
-    @if (Tooltip is not null) {
-        @TooltipIcon.Render()
-    }
-    @if (EndIcon is not null) {
-        @EndIcon.Render("tnt-end-icon")
-    }
+		@if (EndIcon is not null) {
+			@EndIcon.Render("tnt-end-icon")
+		}
 
-    @if (ShowProgress && !string.IsNullOrWhiteSpace(ProgressTitle)) {
-        <div class="tnt-input-progress">
-            @if (ProgressTemplate is not null) {
-                @ProgressTemplate(ProgressPercent > 0 ? _progressFileDetails with { Percentage = ProgressPercent } : new ProgressFileDetails())
-            }
-            else {
-                <div class="tnt-input-file-progress-title">
-                    @ProgressTitle
-                </div>
-                <TnTProgressIndicator Appearance="ProgressAppearance.Linear" Value="@ProgressPercent" Max="100" min="0" />
-            }
-        </div>
-    }
-</label>
+		@if (ShowProgress && !string.IsNullOrWhiteSpace(ProgressTitle)) {
+			<div class="tnt-input-progress">
+				@if (ProgressTemplate is not null) {
+					@ProgressTemplate(ProgressPercent > 0 ? _progressFileDetails with { Percentage = ProgressPercent } : new ProgressFileDetails())
+				}
+				else {
+					<div class="tnt-input-file-progress-title">
+						@ProgressTitle
+					</div>
+					<TnTProgressIndicator Appearance="ProgressAppearance.Linear" Value="@ProgressPercent" Max="100" min="0" />
+				}
+			</div>
+		}
+	</label>
 
+	@if (Tooltip is not null) {
+		@TooltipIcon.Render()
+	}
+
+	@if (!string.IsNullOrWhiteSpace(SupportingText)) {
+		<span class="tnt-supporting-text">
+			@SupportingText
+		</span>
+	}
+</div>

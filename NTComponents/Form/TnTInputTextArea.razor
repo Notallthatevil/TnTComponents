@@ -1,46 +1,45 @@
 @namespace NTComponents
 @using Microsoft.AspNetCore.Components.Rendering
 @inherits TnTInputBase<string?>
+<div class="tnt-input-container" style="@ElementStyle">
+	<label class="@ElementClass" title="@ElementTitle" lang="@ElementLang" id="@ElementId">
+		@if (StartIcon is not null) {
+			@StartIcon.Render("tnt-start-icon")
+		}
 
-<label class="@ElementClass" title="@ElementTitle" lang="@ElementLang" id="@ElementId" style="@ElementStyle">
-	@if (StartIcon is not null) {
-		@StartIcon.Render("tnt-start-icon")
-	}
+		@RenderInputElement
 
-	@RenderInputElement
+		@if (!string.IsNullOrWhiteSpace(Label)) {
+			<span class="tnt-label">
+				@Label
+			</span>
+		}
 
-	@if (!string.IsNullOrWhiteSpace(SupportingText)) {
-		<span class="tnt-supporting-text">
-			@SupportingText
-		</span>
-	}
-
-	@if (EditContext is not null && !DisableValidationMessage && ValueExpression is not null) {
-		<ValidationMessage TValue="@string" For="@ValueExpression" class="tnt-components tnt-supporting-text tnt-validation-message" style="color: var(--tnt-color-error)" />
-	}
-
-
-	@if (GetMaxLength() > 0 && RendererInfo.IsInteractive && ShowInputLength) {
-		<span class="tnt-input-length">
-			@(CurrentValueAsString?.Length ?? 0)/@(GetMaxLength())
-		</span>
-	}
-
-	@if (!string.IsNullOrWhiteSpace(Label)) {
-		<span class="tnt-label">
-			@Label
-		</span>
-	}
-
+		@if (EndIcon is not null) {
+			@EndIcon.Render("tnt-end-icon")
+		}
+	</label>
 	@if (Tooltip is not null) {
 		@TooltipIcon.Render()
 	}
 
-	@if (EndIcon is not null) {
-		@EndIcon.Render("tnt-end-icon")
+	@if (!string.IsNullOrWhiteSpace(SupportingText) || (EditContext is not null && !DisableValidationMessage && ValueExpression is not null)) {
+		<span class="tnt-supporting-text">
+			@if (EditContext is not null && !DisableValidationMessage && ValueExpression is not null) {
+				<ValidationMessage TValue="@(string)" For="@ValueExpression" class="tnt-components tnt-validation-message" />
+			}
+			@SupportingText
+		</span>
 	}
-</label>
 
+	@if (GetMaxLength() > 0 && RendererInfo.IsInteractive && ShowInputLength) {
+		<span class="tnt-input-length">
+			@if (!RendererInfo.IsInteractive) {
+				<text>@(CurrentValueAsString?.Length ?? 0)/@(GetMaxLength())</text>
+			}
+		</span>
+	}
+</div>
 @code {
 	protected override void RenderInputElement(RenderTreeBuilder __builder) {
 		<textarea @attributes="AdditionalAttributes"
@@ -56,6 +55,7 @@
 				  maxlength="@GetMaxLength()"
 				  min="@GetMinValue()"
 				  max="@GetMaxValue()"
+				  onkeydown="NTComponents.formKeyDownSupportingTextHandler(event)"
 				  @bind-value:get="@CurrentValueAsString"
 				  @bind-value:set="(newValue) => OnInputAsync(newValue)"
 				  @bind-value:event="@(BindOnInput ? "oninput" : "onchange")"

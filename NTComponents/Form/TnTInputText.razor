@@ -21,7 +21,7 @@
                    maxlength="@GetMaxLength()"
                    min="@GetMinValue()"
                    max="@GetMaxValue()"
-                   onkeydown="NTComponents.enforcePhoneFormat(event)"
+                   onkeydown="NTComponents.enforcePhoneFormat(event); NTComponents.formKeyDownSupportingTextHandler(event)"
                    onkeyup="NTComponents.formatToPhone(event)"
                    @bind-value:get="@CurrentValueAsString"
                    @bind-value:set="(newValue) => OnInputAsync(newValue)"

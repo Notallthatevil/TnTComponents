@@ -386,5 +386,19 @@ window.NTComponents = {
                 toggler.classList.add('tnt-toggle');
             }
         }
+    },
+    formKeyDownSupportingTextHandler: (event) => {
+        const input = event.target;
+        const container = input.closest('.tnt-input-container');
+        if (!container) return;
+
+        const supportingText = container.querySelector('.tnt-input-length');
+        const maxLength = input.getAttribute('maxlength');
+
+        if (supportingText && maxLength) {
+            setTimeout(() => {
+                supportingText.innerText = `${input.value.length}/${maxLength}`;
+            }, 0);
+        }
     }
 }

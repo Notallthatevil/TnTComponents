@@ -2,212 +2,198 @@
 @use '../Styles/_Variables/_typescale.scss' as typescale;
 @use '../Styles/_Variables/_colors.scss' as colors;
 
-.tnt-input {
-    grid-template-areas: "checkbox";
-    grid-template-columns: 48px;
-    grid-template-rows: 48px;
-    display: inline-grid;
-    box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    cursor: pointer;
-    min-width: 48px;
-    min-height: 48px;
-    position: relative;
-    margin-bottom: 32px;
+.tnt-input-container {
+display: grid;
+grid-template-areas: "container-input tooltip-icon" "supporting-text supporting-text";
+grid-template-rows: auto auto;
+grid-template-columns: min-content minmax(0, auto);
 
-
-
-    &:has(.tnt-start-icon):has(.tnt-end-icon) {
-        grid-template-areas: "start-icon checkbox end-icon";
-        grid-template-columns: 24px 48px 24px;
-    }
-
-    &:has(.tnt-start-icon):not(:has(.tnt-end-icon)) {
-        grid-template-areas: "start-icon checkbox";
-        grid-template-columns: 24px 48px;
-    }
-
-    &:has(.tnt-end-icon):not(:has(.tnt-start-icon)) {
-        grid-template-areas: "checkbox end-icon";
-        grid-template-columns: 48px 24px;
-    }
-
-    &:has(.tnt-start-icon):has(.tnt-end-icon):has(.tnt-label) {
-        grid-template-areas: "start-icon checkbox label pad1 end-icon";
-        grid-template-columns: 24px 48px auto 12px 24px;
-    }
-
-    &:has(.tnt-start-icon):not(:has(.tnt-end-icon)):has(.tnt-label) {
-        grid-template-areas: "start-icon checkbox label";
-        grid-template-columns: 24px 48px auto;
-    }
-
-    &:has(.tnt-end-icon):not(:has(.tnt-start-icon)):has(.tnt-label) {
-        grid-template-areas: "checkbox label pad1 end-icon";
-        grid-template-columns: 48px auto 12px 24px;
-    }
-
-    &:has(.tnt-label):not(:has(.tnt-start-icon)):not(:has(.tnt-end-icon)) {
-        grid-template-areas: "checkbox label";
-        grid-template-columns: 48px auto;
-    }
-
-    .tnt-label {
-        grid-area: label;
-        justify-self: center;
-        align-self: center;
-        color: base.$text-color;
-
-        @include typescale.tnt-body-large;
-    }
-
-    &:has(input[readonly]) {
-        pointer-events: none;
-        opacity: 0.7;
-    }
-
-    &.tnt-disabled {
-        pointer-events: none;
-        opacity: 0.5 !important;
-        user-select: none;
-    }
-
-    input {
-        appearance: none;
-        grid-area: checkbox;
-        position: absolute;
-    }
+    @include base.supporting-text;
 
     ::deep {
-        @include base.default-icon;
-
-        .tnt-supporting-text {
-            position: absolute;
-            bottom: -14px;
-            left: 16px;
-            white-space: nowrap;
-            color: base.$text-color;
-            @include typescale.tnt-body-small;
-        }
-
-        @for $i from 1 through 5 {
-            *:nth-child(#{$i} of .tnt-supporting-text) {
-                transform: translateY(calc(12px * ($i - 1))) !important;
-            }
-        }
-
-        .tnt-validation-message {
-            color: base.$error-color;
-        }
-
         .tnt-tooltip-icon {
-            position: absolute;
-            right: -28px;
-            top: 0;
+            grid-area: tooltip-icon;
+            padding: 0 8px;
         }
     }
 
-    .tnt-checkbox-overlay {
-        position: absolute;
-        grid-area: checkbox;
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background-color: transparent;
-        transition: 250ms ease-in-out;
+    .tnt-input {
+        grid-area: container-input;
+        justify-self: start;
+        grid-template-areas: "checkbox";
+        grid-template-columns: 48px;
+        grid-template-rows: 48px;
+        display: inline-grid;
         box-sizing: border-box;
-        align-self: center;
-        justify-self: center;
-    }
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        cursor: pointer;
+        min-width: 48px;
+        min-height: 48px;
+        position: relative;
 
-    &:hover {
+        &:has(.tnt-start-icon):has(.tnt-end-icon) {
+            grid-template-areas: "start-icon checkbox end-icon";
+            grid-template-columns: 24px 48px 24px;
+        }
+
+        &:has(.tnt-start-icon):not(:has(.tnt-end-icon)) {
+            grid-template-areas: "start-icon checkbox";
+            grid-template-columns: 24px 48px;
+        }
+
+        &:has(.tnt-end-icon):not(:has(.tnt-start-icon)) {
+            grid-template-areas: "checkbox end-icon";
+            grid-template-columns: 48px 24px;
+        }
+
+        &:has(.tnt-start-icon):has(.tnt-end-icon):has(.tnt-label) {
+            grid-template-areas: "start-icon checkbox label pad1 end-icon";
+            grid-template-columns: 24px 48px auto 12px 24px;
+        }
+
+        &:has(.tnt-start-icon):not(:has(.tnt-end-icon)):has(.tnt-label) {
+            grid-template-areas: "start-icon checkbox label";
+            grid-template-columns: 24px 48px auto;
+        }
+
+        &:has(.tnt-end-icon):not(:has(.tnt-start-icon)):has(.tnt-label) {
+            grid-template-areas: "checkbox label pad1 end-icon";
+            grid-template-columns: 48px auto 12px 24px;
+        }
+
+        &:has(.tnt-label):not(:has(.tnt-start-icon)):not(:has(.tnt-end-icon)) {
+            grid-template-areas: "checkbox label";
+            grid-template-columns: 48px auto;
+        }
+
+        .tnt-label {
+            grid-area: label;
+            justify-self: center;
+            align-self: center;
+            color: base.$text-color;
+
+            @include typescale.tnt-body-large;
+        }
+
+        &:has(input[readonly]) {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        &.tnt-disabled {
+            pointer-events: none;
+            opacity: 0.5 !important;
+            user-select: none;
+        }
+
+        input {
+            appearance: none;
+            grid-area: checkbox;
+            position: absolute;
+        }
+
+        ::deep {
+            @include base.default-icon;
+        }
+
         .tnt-checkbox-overlay {
-            background-color: color-mix(in srgb, colors.$tnt-color-scrim 20%, transparent);
-        }
-    }
-
-    &:focus-within {
-        .tnt-checkbox-overlay {
-            border: 2px solid colors.$tnt-color-outline;
-        }
-    }
-
-    &:before {
-        content: '';
-        grid-area: checkbox;
-        height: 18px;
-        width: 18px;
-        border: 2px solid base.$text-color;
-        border-radius: 4px;
-        background-color: transparent;
-        transition: 250ms ease-in-out;
-        align-self: center;
-        justify-self: center;
-        pointer-events: none;
-        z-index: 1;
-    }
-
-    &:after {
-        content: '';
-        grid-area: checkbox;
-        height: 14px;
-        width: 7px;
-        border-right: 2px solid base.$background-color;
-        border-bottom: 3px solid base.$background-color;
-        background-color: transparent;
-        transition: 250ms ease-in-out;
-        align-self: center;
-        justify-self: center;
-        z-index: 2;
-        transform: translateY(-4px) rotateZ(45deg) rotateY(90deg);
-        pointer-events: none;
-    }
-
-    &:has(input:checked) {
-        &:before {
-            background-color: base.$tint-color;
-            border-color: base.$tint-color;
-        }
-
-        &:after {
-            transform: translateY(-4px) rotateZ(45deg);
-        }
-    }
-
-    &.modified.invalid {
-
-        &:has(input:checked) {
-            &:before {
-                background-color: base.$error-color;
-                border-color: base.$error-color;
-            }
-        }
-
-        &:not(:has(input:checked)) {
-            &:before {
-                border-color: base.$error-color;
-            }
+            position: absolute;
+            grid-area: checkbox;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: transparent;
+            transition: 250ms ease-in-out;
+            box-sizing: border-box;
+            align-self: center;
+            justify-self: center;
         }
 
         &:hover {
             .tnt-checkbox-overlay {
-                background-color: color-mix(in srgb, base.$error-color 20%, transparent);
+                background-color: color-mix(in srgb, colors.$tnt-color-scrim 20%, transparent);
             }
         }
 
-        .tnt-label {
-            color: base.$error-color;
+        &:focus-within {
+            .tnt-checkbox-overlay {
+                border: 2px solid colors.$tnt-color-outline;
+            }
         }
 
-        ::deep {
-            .tnt-end-icon {
+        &:before {
+            content: '';
+            grid-area: checkbox;
+            height: 18px;
+            width: 18px;
+            border: 2px solid base.$text-color;
+            border-radius: 4px;
+            background-color: transparent;
+            transition: 250ms ease-in-out;
+            align-self: center;
+            justify-self: center;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        &:after {
+            content: '';
+            grid-area: checkbox;
+            height: 14px;
+            width: 7px;
+            border-right: 2px solid base.$background-color;
+            border-bottom: 3px solid base.$background-color;
+            background-color: transparent;
+            transition: 250ms ease-in-out;
+            align-self: center;
+            justify-self: center;
+            z-index: 2;
+            transform: translateY(-4px) rotateZ(45deg) rotateY(90deg);
+            pointer-events: none;
+        }
+
+        &:has(input:checked) {
+            &:before {
+                background-color: base.$tint-color;
+                border-color: base.$tint-color;
+            }
+
+            &:after {
+                transform: translateY(-2px) rotateZ(45deg);
+            }
+        }
+
+        &.modified.invalid {
+
+            &:has(input:checked) {
+                &:before {
+                    background-color: base.$error-color;
+                    border-color: base.$error-color;
+                }
+            }
+
+            &:not(:has(input:checked)) {
+                &:before {
+                    border-color: base.$error-color;
+                }
+            }
+
+            &:hover {
+                .tnt-checkbox-overlay {
+                    background-color: color-mix(in srgb, base.$error-color 20%, transparent);
+                }
+            }
+
+            .tnt-label {
                 color: base.$error-color;
             }
-        }
-    }
 
-    &.tnt-form-compact {
-        margin-bottom: 20px;
+            ::deep {
+                .tnt-end-icon {
+                    color: base.$error-color;
+                }
+            }
+        }
     }
 }

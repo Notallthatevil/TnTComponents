@@ -2,38 +2,40 @@
 @typeparam TInputType
 @inherits TnTInputBase<TInputType>
 
+<div class="tnt-input-container" style="@ElementStyle">
 
-<fieldset class="@ElementClass" title="@ElementTitle" lang="@ElementLang" id="@ElementId" style="@ElementStyle" @ref="Element">
-    @if (StartIcon is not null) {
-        @StartIcon.Render("tnt-start-icon")
-    }
+	<fieldset class="@ElementClass" title="@ElementTitle" lang="@ElementLang" id="@ElementId" @ref="Element">
+		@if (StartIcon is not null) {
+			@StartIcon.Render("tnt-start-icon")
+		}
 
-    <div class="tnt-radio-buttons">
-        <CascadingValue Value="this" IsFixed="true">
-            @ChildContent
-        </CascadingValue>
-    </div>
+		<div class="tnt-radio-buttons">
+			<CascadingValue Value="this" IsFixed="true">
+				@ChildContent
+			</CascadingValue>
+		</div>
 
-    @if (!string.IsNullOrWhiteSpace(SupportingText)) {
-        <span class="tnt-supporting-text">
-            @SupportingText
-        </span>
-    }
-    @if (EditContext is not null && !DisableValidationMessage && ValueExpression is not null) {
-        <ValidationMessage TValue="@TInputType" For="@ValueExpression" class="tnt-components tnt-supporting-text tnt-validation-message" style="color: var(--tnt-color-error)" />
-    }
+		@if (!string.IsNullOrWhiteSpace(Label)) {
+			<legend class="tnt-label">
+				@Label
+			</legend>
+		}
 
-    @if (!string.IsNullOrWhiteSpace(Label)) {
-        <legend class="tnt-label">
-            @Label
-        </legend>
-    }
+		@if (EndIcon is not null) {
+			@EndIcon.Render("tnt-end-icon")
+		}
+	</fieldset>
 
-    @if (Tooltip is not null) {
-        @TooltipIcon.Render()
-    }
+	@if (Tooltip is not null) {
+		@TooltipIcon.Render()
+	}
 
-    @if (EndIcon is not null) {
-        @EndIcon.Render("tnt-end-icon")
-    }
-</fieldset>
+	@if (!string.IsNullOrWhiteSpace(SupportingText) || (EditContext is not null && !DisableValidationMessage && ValueExpression is not null)) {
+		<span class="tnt-supporting-text">
+			@if (EditContext is not null && !DisableValidationMessage && ValueExpression is not null) {
+				<ValidationMessage TValue="@TInputType" For="@ValueExpression" class="tnt-components tnt-validation-message" />
+			}
+			@SupportingText
+		</span>
+	}
+</div>

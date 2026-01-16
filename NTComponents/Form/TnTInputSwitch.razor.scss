@@ -2,213 +2,201 @@
 @use '../Styles/_Variables/_typescale.scss' as typescale;
 @use '../Styles/_Variables/_colors.scss' as colors;
 
-.tnt-input {
-    grid-template-areas: "switch";
-    grid-template-columns: 52px;
-    grid-template-rows: 48px;
-    display: inline-grid;
-    box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    cursor: pointer;
-    min-width: 48px;
-    min-height: 48px;
-    position: relative;
-    margin-bottom: 32px;
+.tnt-input-container {
+display: grid;
+grid-template-areas: "container-input tooltip-icon" "supporting-text supporting-text";
+grid-template-rows: auto auto;
+grid-template-columns: min-content minmax(0, auto);
 
-    &:has(.tnt-start-icon):has(.tnt-end-icon) {
-        grid-template-areas: "start-icon switch end-icon";
-        grid-template-columns: 24px 52px 24px;
-    }
-
-    &:has(.tnt-start-icon):not(:has(.tnt-end-icon)) {
-        grid-template-areas: "start-icon switch";
-        grid-template-columns: 24px 52px;
-    }
-
-    &:has(.tnt-end-icon):not(:has(.tnt-start-icon)) {
-        grid-template-areas: "switch end-icon";
-        grid-template-columns: 52px 24px;
-    }
-
-    &:has(.tnt-start-icon):has(.tnt-end-icon):has(.tnt-label) {
-        grid-template-areas: "start-icon switch label pad1 end-icon";
-        grid-template-columns: 24px 52px auto 12px 24px;
-    }
-
-    &:has(.tnt-start-icon):not(:has(.tnt-end-icon)):has(.tnt-label) {
-        grid-template-areas: "start-icon switch label";
-        grid-template-columns: 24px 52px auto;
-    }
-
-    &:has(.tnt-end-icon):not(:has(.tnt-start-icon)):has(.tnt-label) {
-        grid-template-areas: "switch label pad1 end-icon";
-        grid-template-columns: 52px auto 12px 24px;
-    }
-
-    &:has(.tnt-label):not(:has(.tnt-start-icon)):not(:has(.tnt-end-icon)) {
-        grid-template-areas: "switch label";
-        grid-template-columns: 52px auto;
-    }
-
-    .tnt-label {
-        grid-area: label;
-        justify-self: center;
-        align-self: center;
-        color: base.$text-color;
-
-        @include typescale.tnt-body-large;
-    }
-
-    @include base.disabled-and-readonly;
-
-    input {
-        appearance: none;
-        grid-area: switch;
-        position: absolute;
-    }
+    @include base.supporting-text;
 
     ::deep {
-        @include base.default-icon;
-
-        .tnt-supporting-text {
-            position: absolute;
-            bottom: -14px;
-            left: 16px;
-            white-space: nowrap;
-            color: base.$text-color;
-            @include typescale.tnt-body-small;
-        }
-
-        @for $i from 1 through 5 {
-            *:nth-child(#{$i} of .tnt-supporting-text) {
-                transform: translateY(calc(12px * ($i - 1))) !important;
-            }
-        }
-
-        .tnt-validation-message {
-            color: base.$error-color;
-        }
-
         .tnt-tooltip-icon {
-            position: absolute;
-            right: -28px;
-            top: 0;
+            grid-area: tooltip-icon;
+            padding: 0 8px;
         }
     }
 
-
-    .tnt-switch-overlay {
-        position: absolute;
-        grid-area: switch;
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background-color: transparent;
-        transition: 250ms ease-in-out;
+    .tnt-input {
+        grid-area: container-input;
+        justify-self: start;
+        grid-template-areas: "switch";
+        grid-template-columns: 52px;
+        grid-template-rows: 48px;
+        display: inline-grid;
         box-sizing: border-box;
-        align-self: center;
-        justify-self: center;
-        transform: translateX(-10px);
-        z-index: 2;
-    }
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        cursor: pointer;
+        min-width: 48px;
+        min-height: 48px;
+        position: relative;
 
-    &:hover {
+        &:has(.tnt-start-icon):has(.tnt-end-icon) {
+            grid-template-areas: "start-icon switch end-icon";
+            grid-template-columns: 24px 52px 24px;
+        }
+
+        &:has(.tnt-start-icon):not(:has(.tnt-end-icon)) {
+            grid-template-areas: "start-icon switch";
+            grid-template-columns: 24px 52px;
+        }
+
+        &:has(.tnt-end-icon):not(:has(.tnt-start-icon)) {
+            grid-template-areas: "switch end-icon";
+            grid-template-columns: 52px 24px;
+        }
+
+        &:has(.tnt-start-icon):has(.tnt-end-icon):has(.tnt-label) {
+            grid-template-areas: "start-icon switch label pad1 end-icon";
+            grid-template-columns: 24px 52px auto 12px 24px;
+        }
+
+        &:has(.tnt-start-icon):not(:has(.tnt-end-icon)):has(.tnt-label) {
+            grid-template-areas: "start-icon switch label";
+            grid-template-columns: 24px 52px auto;
+        }
+
+        &:has(.tnt-end-icon):not(:has(.tnt-start-icon)):has(.tnt-label) {
+            grid-template-areas: "switch label pad1 end-icon";
+            grid-template-columns: 52px auto 12px 24px;
+        }
+
+        &:has(.tnt-label):not(:has(.tnt-start-icon)):not(:has(.tnt-end-icon)) {
+            grid-template-areas: "switch label";
+            grid-template-columns: 52px auto;
+        }
+
+        .tnt-label {
+            grid-area: label;
+            justify-self: center;
+            align-self: center;
+            color: base.$text-color;
+
+            @include typescale.tnt-body-large;
+        }
+
+        @include base.disabled-and-readonly;
+
+        input {
+            appearance: none;
+            grid-area: switch;
+            position: absolute;
+        }
+
+        ::deep {
+            @include base.default-icon;
+        }
+
+
         .tnt-switch-overlay {
-            background-color: color-mix(in srgb, colors.$tnt-color-scrim 20%, transparent);
-        }
-    }
-
-    &:focus-within {
-        .tnt-switch-overlay {
-            border: 2px solid colors.$tnt-color-outline;
-        }
-    }
-
-    &:before {
-        content: '';
-        grid-area: switch;
-        height: 18px;
-        width: 36px;
-        background-color: red;
-        transition: 250ms ease-in-out;
-        border: 2px solid colors.$tnt-color-outline;
-        background-color: base.$background-color;
-        border-radius: 22px / 100%;
-        align-self: center;
-        justify-self: center;
-        z-index: 1;
-        pointer-events: none;
-    }
-
-    &:after {
-        content: '';
-        grid-area: switch;
-        height: 12px;
-        width: 12px;
-        background-color: base.$tint-color;
-        transition: 250ms ease-in-out;
-        align-self: center;
-        justify-self: center;
-        border-radius: 50%;
-        transform: translateX(-10px);
-        z-index: 3;
-        pointer-events: none;
-    }
-
-    &:has(input:checked) {
-        &:before {
-            background-color: base.$tint-color;
-            border-color: base.$tint-color;
-        }
-
-        &:after {
-            background-color: base.$background-color;
-            transform: translateX(10px) scale(1.4);
-        }
-
-        .tnt-switch-overlay {
-            transform: translateX(10px);
-        }
-    }
-
-    &.modified.invalid {
-
-        &:has(input:checked) {
-            &:before {
-                background-color: base.$error-color;
-                border-color: base.$error-color;
-            }
-        }
-
-        &:not(:has(input:checked)) {
-            &:before {
-                border-color: base.$error-color;
-            }
-
-            &:after {
-                background-color: base.$error-color;
-            }
+            position: absolute;
+            grid-area: switch;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: transparent;
+            transition: 250ms ease-in-out;
+            box-sizing: border-box;
+            align-self: center;
+            justify-self: center;
+            transform: translateX(-10px);
+            z-index: 2;
         }
 
         &:hover {
             .tnt-switch-overlay {
-                background-color: color-mix(in srgb,base.$error-color 20%, transparent);
+                background-color: color-mix(in srgb, colors.$tnt-color-scrim 20%, transparent);
             }
         }
 
-        .tnt-label {
-            color: base.$error-color;
+        &:focus-within {
+            .tnt-switch-overlay {
+                border: 2px solid colors.$tnt-color-outline;
+            }
         }
 
-        ::deep {
-            .tnt-end-icon {
+        &:before {
+            content: '';
+            grid-area: switch;
+            height: 18px;
+            width: 36px;
+            background-color: red;
+            transition: 250ms ease-in-out;
+            border: 2px solid colors.$tnt-color-outline;
+            background-color: base.$background-color;
+            border-radius: 22px / 100%;
+            align-self: center;
+            justify-self: center;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        &:after {
+            content: '';
+            grid-area: switch;
+            height: 12px;
+            width: 12px;
+            background-color: base.$tint-color;
+            transition: 250ms ease-in-out;
+            align-self: center;
+            justify-self: center;
+            border-radius: 50%;
+            transform: translateX(-10px);
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        &:has(input:checked) {
+            &:before {
+                background-color: base.$tint-color;
+                border-color: base.$tint-color;
+            }
+
+            &:after {
+                background-color: base.$background-color;
+                transform: translateX(10px) scale(1.4);
+            }
+
+            .tnt-switch-overlay {
+                transform: translateX(10px);
+            }
+        }
+
+        &.modified.invalid {
+
+            &:has(input:checked) {
+                &:before {
+                    background-color: base.$error-color;
+                    border-color: base.$error-color;
+                }
+            }
+
+            &:not(:has(input:checked)) {
+                &:before {
+                    border-color: base.$error-color;
+                }
+
+                &:after {
+                    background-color: base.$error-color;
+                }
+            }
+
+            &:hover {
+                .tnt-switch-overlay {
+                    background-color: color-mix(in srgb,base.$error-color 20%, transparent);
+                }
+            }
+
+            .tnt-label {
                 color: base.$error-color;
             }
-        }
-    }
 
-    &.tnt-form-compact {
-        margin-bottom: 20px;
+            ::deep {
+                .tnt-end-icon {
+                    color: base.$error-color;
+                }
+            }
+        }
     }
 }
