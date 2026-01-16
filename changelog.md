@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/Notallthatevil/NTComponents/compare/v1.6.0...v1.7.0) (2026-01-16)
+
+
+### Features
+
+* **input:** refactor to grid-based input container ([a1a79ef](https://github.com/Notallthatevil/NTComponents/commit/a1a79efa8f1e9f35a38e94e6660ac5f32af98f21))
+
 # [1.6.0](https://github.com/Notallthatevil/NTComponents/compare/v1.5.5...v1.6.0) (2026-01-15)
 
 
