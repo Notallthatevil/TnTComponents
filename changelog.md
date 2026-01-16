@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/Notallthatevil/NTComponents/compare/v1.5.5...v1.6.0) (2026-01-15)
+
+
+### Features
+
+* **input:** add ShowInputLength parameter for input length ([fe1179f](https://github.com/Notallthatevil/NTComponents/commit/fe1179fac76d4c3cbc0720bef088a72d099335df))
+
 ## [1.5.5](https://github.com/Notallthatevil/NTComponents/compare/v1.5.4...v1.5.5) (2026-01-09)
 
 
