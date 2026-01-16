@@ -1,5 +1,9 @@
 using Microsoft.AspNetCore.Components;
+using NTComponents.Charts.Core.Axes;
 using SkiaSharp;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NTComponents.Charts.Core.Series;
 
@@ -14,9 +18,20 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
     [Parameter, EditorRequired]
     public Func<TData, double> YValueSelector { get; set; } = default!;
 
+    /// <summary>
+    ///     Gets or sets the X axis options.
+    /// </summary>
+    [Parameter]
+    public NTXAxisOptions XAxis { get; set; } = new();
+
+    /// <summary>
+    ///    Gets or sets the Y axis options.
+    /// </summary>
+    [Parameter]
+    public NTYAxisOptions YAxis { get; set; } = new();
+
     /// <inheritdoc />
-    internal override List<string> GetTooltipLines(TData data)
-    {
+    internal override List<string> GetTooltipLines(TData data) {
         var xValue = XValueSelector(data);
         var yValue = YValueSelector(data);
         return
@@ -24,6 +39,96 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
             $"{Title ?? "Series"}: {xValue:0.#}",
             string.Format(DataLabelFormat, yValue)
         ];
+    }
+
+    /// <inheritdoc />
+    internal override SKRect Measure(SKRect renderArea, HashSet<object> measured) {
+        if (!IsEffectivelyVisible) return renderArea;
+        var rect = renderArea;
+        if (XAxis != null && XAxis.Visible && measured.Add(XAxis)) {
+            rect = XAxis.Measure(rect, Chart);
+        }
+        if (YAxis != null && YAxis.Visible && measured.Add(YAxis)) {
+            rect = YAxis.Measure(rect, Chart);
+        }
+        return rect;
+    }
+
+    /// <inheritdoc />
+    internal override void RenderAxes(SKCanvas canvas, SKRect plotArea, SKRect totalArea, HashSet<object> rendered) {
+        if (!IsEffectivelyVisible) return;
+        if (XAxis != null && XAxis.Visible && rendered.Add(XAxis)) {
+            XAxis.Render(canvas, plotArea, totalArea, Chart);
+        }
+        if (YAxis != null && YAxis.Visible && rendered.Add(YAxis)) {
+            YAxis.Render(canvas, plotArea, totalArea, Chart);
+        }
+    }
+
+    /// <inheritdoc />
+    internal override (double Min, double Max)? GetXRange() {
+        if (Data == null || !Data.Any()) return null;
+        var values = Data.Select(XValueSelector).ToList();
+        var min = values.Min();
+        var max = values.Max();
+        if (XAxis != null && XAxis.Visible && XAxis.ValuesToShow != null && XAxis.ValuesToShow.Any()) {
+            min = Math.Min(min, XAxis.ValuesToShow.Min());
+            max = Math.Max(max, XAxis.ValuesToShow.Max());
+        }
+        return (min, max);
+    }
+
+    /// <inheritdoc />
+    internal override (double Min, double Max)? GetYRange() {
+        if (Data == null || !Data.Any()) return null;
+        var min = double.MaxValue;
+        var max = double.MinValue;
+
+        if (this is NTBoxPlotSeries<TData> boxPlot) {
+            foreach (var item in Data) {
+                var values = boxPlot.BoxValueSelector(item);
+                min = Math.Min(min, values.Min);
+                max = Math.Max(max, values.Max);
+                if (values.Outliers != null && values.Outliers.Any()) {
+                    min = Math.Min(min, values.Outliers.Min());
+                    max = Math.Max(max, values.Outliers.Max());
+                }
+            }
+        }
+        else {
+            var values = Data.Select(item => YValueSelector(item) * VisibilityFactor).ToList();
+            min = values.Min();
+            max = values.Max();
+        }
+
+        if (YAxis != null && YAxis.Visible && YAxis.ValuesToShow != null && YAxis.ValuesToShow.Any()) {
+            min = Math.Min(min, YAxis.ValuesToShow.Min());
+            max = Math.Max(max, YAxis.ValuesToShow.Max());
+        }
+
+        return (min, max);
+    }
+
+    /// <inheritdoc />
+    internal override void RegisterXValues(HashSet<double> values) {
+        if (Data == null) return;
+        foreach (var item in Data) {
+            values.Add(XValueSelector(item));
+        }
+        if (XAxis != null && XAxis.Visible && XAxis.ValuesToShow != null) {
+            foreach (var val in XAxis.ValuesToShow) values.Add(val);
+        }
+    }
+
+    /// <inheritdoc />
+    internal override void RegisterYValues(HashSet<double> values) {
+        if (Data == null) return;
+        foreach (var item in Data) {
+            values.Add(YValueSelector(item));
+        }
+        if (YAxis != null && YAxis.Visible && YAxis.ValuesToShow != null) {
+            foreach (var val in YAxis.ValuesToShow) values.Add(val);
+        }
     }
 
     /// <summary>
@@ -113,7 +218,7 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
         var text = string.Format(DataLabelFormat, value);
         var textWidth = font.MeasureText(text);
         var textHeight = font.Size;
-        
+
         var paddingX = 6f;
         var paddingY = 2f;
         var drawY = y - ((size / 2) + 5);
@@ -201,8 +306,7 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
                 break;
         }
 
-        if (PointStyle == PointStyle.Outlined && strokeColor.HasValue)
-        {
+        if (PointStyle == PointStyle.Outlined && strokeColor.HasValue) {
             paint.Color = strokeColor.Value;
             paint.Style = SKPaintStyle.Stroke;
             // Redraw with stroke color if explicitly requested? 

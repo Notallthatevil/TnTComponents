@@ -7,7 +7,8 @@
 
 <div class="container py-4">
     <h1>Advanced Data Point Rendering</h1>
-    <p class="lead">Examples showing how to use the <code>OnDataPointRender</code> callback to dynamically style individual data points based on their values or metadata.</p>
+    <p class="lead">Examples showing how to use the <code>OnDataPointRender</code> callback to dynamically style
+        individual data points based on their values or metadata.</p>
 
     <div class="row">
         <!-- Conditional Bar Highlights -->
@@ -16,18 +17,14 @@
                 <h3>Conditional Bar Highlights</h3>
                 <div style="height: 300px;">
                     <NTChart TData="SalesData" Title="Sales Performance" IsCategoricalX="true">
-                        <NTCartesianAxis TData="SalesData" Direction="AxisDirection.X" />
-                        <NTCartesianAxis TData="SalesData" Direction="AxisDirection.Y" Title="Units" />
-                        <NTBarSeries TData="SalesData" 
-                                     Data="@_salesPerformance" 
-                                     XValueSelector="@(d => d.MonthIndex)" 
-                                     YValueSelector="@(d => d.Units)"
-                                     OnDataPointRender="@OnSalesBarRender"
-                                     ShowDataLabels="true" />
+                        <NTBarSeries TData="SalesData" Data="@_salesPerformance" XValueSelector="@(d => d.MonthIndex)"
+                            YValueSelector="@(d => d.Units)" OnDataPointRender="@OnSalesBarRender" ShowDataLabels="true"
+                            XAxis="@(new NTXAxisOptions())" YAxis="@(new NTYAxisOptions { Title = "Units" })" />
                     </NTChart>
                 </div>
                 <div class="mt-2 text-muted small">
-                    Bars are colored <span style="color: #4CAF50; font-weight: bold;">Green</span> for targets met (&gt; 80) 
+                    Bars are colored <span style="color: #4CAF50; font-weight: bold;">Green</span> for targets met (&gt;
+                    80)
                     and <span style="color: #F44336; font-weight: bold;">Red</span> for targets missed (&lt; 40).
                 </div>
             </div>
@@ -39,20 +36,15 @@
                 <h3>Dynamic Line & Point Styling</h3>
                 <div style="height: 300px;">
                     <NTChart TData="SensorReading" Title="Sensor Thresholds">
-                        <NTCartesianAxis TData="SensorReading" Direction="AxisDirection.X" />
-                        <NTCartesianAxis TData="SensorReading" Direction="AxisDirection.Y" Title="Temp °C" />
-                        <NTLineSeries TData="SensorReading" 
-                                      Data="@_sensorReadings" 
-                                      XValueSelector="@(d => d.Timestamp)" 
-                                      YValueSelector="@(d => d.Value)"
-                                      StrokeWidth="3"
-                                      PointStyle="PointStyle.Filled"
-                                      OnDataPointRender="@OnSensorLineRender"
-                                      ShowDataLabels="true" />
+                        <NTLineSeries TData="SensorReading" Data="@_sensorReadings" XValueSelector="@(d => d.Timestamp)"
+                            YValueSelector="@(d => d.Value)" StrokeWidth="3" PointStyle="PointStyle.Filled"
+                            OnDataPointRender="@OnSensorLineRender" ShowDataLabels="true"
+                            XAxis="@(new NTXAxisOptions())" YAxis="@(new NTYAxisOptions { Title = "Temp °C" })" />
                     </NTChart>
                 </div>
                 <div class="mt-2 text-muted small">
-                    Line segments and markers turn <span style="color: #FF9800; font-weight: bold;">Orange</span> and become <b>Dashed</b> when readings exceed 75°C.
+                    Line segments and markers turn <span style="color: #FF9800; font-weight: bold;">Orange</span> and
+                    become <b>Dashed</b> when readings exceed 75°C.
                 </div>
             </div>
         </div>
@@ -65,14 +57,9 @@
                 <h3>Custom Label Typography</h3>
                 <div style="height: 300px;">
                     <NTChart TData="MetricData" Title="Priority Focus">
-                        <NTCartesianAxis TData="MetricData" Direction="AxisDirection.X" />
-                        <NTCartesianAxis TData="MetricData" Direction="AxisDirection.Y" />
-                        <NTLineSeries TData="MetricData" 
-                                      Data="@_metricData" 
-                                      XValueSelector="@(d => d.Id)" 
-                                      YValueSelector="@(d => d.Value)"
-                                      OnDataPointRender="@OnMetricLabelRender"
-                                      ShowDataLabels="true" />
+                        <NTLineSeries TData="MetricData" Data="@_metricData" XValueSelector="@(d => d.Id)"
+                            YValueSelector="@(d => d.Value)" OnDataPointRender="@OnMetricLabelRender"
+                            ShowDataLabels="true" XAxis="@(new NTXAxisOptions())" YAxis="@(new NTYAxisOptions())" />
                     </NTChart>
                 </div>
                 <div class="mt-2 text-muted small">
@@ -87,11 +74,8 @@
                 <h3>Metadata-Driven Treemap</h3>
                 <div style="height: 300px;">
                     <NTChart TData="InventoryItem" Title="Stock by Category">
-                        <NTTreeMapSeries TData="InventoryItem" 
-                                         Data="@_inventory" 
-                                         ValueSelector="@(d => d.Count)" 
-                                         LabelSelector="@(d => d.Name)"
-                                         OnDataPointRender="@OnInventoryTreeMapRender" />
+                        <NTTreeMapSeries TData="InventoryItem" Data="@_inventory" ValueSelector="@(d => d.Count)"
+                            LabelSelector="@(d => d.Name)" OnDataPointRender="@OnInventoryTreeMapRender" />
                     </NTChart>
                 </div>
                 <div class="mt-2 text-muted small">
@@ -111,36 +95,39 @@
     protected override void OnInitialized()
     {
         // Sample Sales Data
-        _salesPerformance = Enumerable.Range(1, 12).Select(i => new SalesData { 
-            MonthIndex = i, 
-            Units = Random.Shared.Next(20, 100) 
+        _salesPerformance = Enumerable.Range(1, 12).Select(i => new SalesData
+        {
+            MonthIndex = i,
+            Units = Random.Shared.Next(20, 100)
         }).ToList();
 
         // Sample Sensor Readings
-        _sensorReadings = Enumerable.Range(0, 20).Select(i => new SensorReading { 
-            Timestamp = i, 
-            Value = 50 + (Math.Sin(i * 0.5) * 30) + Random.Shared.Next(-5, 5) 
+        _sensorReadings = Enumerable.Range(0, 20).Select(i => new SensorReading
+        {
+            Timestamp = i,
+            Value = 50 + (Math.Sin(i * 0.5) * 30) + Random.Shared.Next(-5, 5)
         }).ToList();
 
         // Sample Metric Data
-        _metricData = Enumerable.Range(1, 10).Select(i => new MetricData { 
-            Id = i, 
-            Value = Random.Shared.Next(10, 100) 
+        _metricData = Enumerable.Range(1, 10).Select(i => new MetricData
+        {
+            Id = i,
+            Value = Random.Shared.Next(10, 100)
         }).ToList();
 
         // Sample Inventory
         _inventory = new List<InventoryItem>
-        {
-            new("Laptop", 50, "Electronics"),
-            new("Monitor", 80, "Electronics"),
-            new("Keyboard", 120, "Electronics"),
-            new("Chair", 45, "Furniture"),
-            new("Desk", 30, "Furniture"),
-            new("Pen", 500, "Office"),
-            new("Paper", 300, "Office"),
-            new("Table", 15, "Furniture"),
-            new("Phone", 60, "Electronics")
-        };
+{
+new("Laptop", 50, "Electronics"),
+new("Monitor", 80, "Electronics"),
+new("Keyboard", 120, "Electronics"),
+new("Chair", 45, "Furniture"),
+new("Desk", 30, "Furniture"),
+new("Pen", 500, "Office"),
+new("Paper", 300, "Office"),
+new("Table", 15, "Furniture"),
+new("Phone", 60, "Electronics")
+};
     }
 
     private void OnSalesBarRender(NTDataPointRenderArgs<SalesData> args)

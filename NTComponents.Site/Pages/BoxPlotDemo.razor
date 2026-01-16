@@ -10,23 +10,21 @@
 
    <div style="height: 500px; width: 100%;" class="mt-4 border rounded p-2">
       <NTChart TData="ExperimentResult" Title="Experiment Results by Group" IsCategoricalX="true" RangePadding="0.1">
-         <NTCartesianAxis TData="ExperimentResult" Direction="AxisDirection.X" Title="Group" />
-         <NTCartesianAxis TData="ExperimentResult" Direction="AxisDirection.Y" Title="Value" />
-
          <NTBoxPlotSeries TData="ExperimentResult" Data="@Data" XValueSelector="@(d => (double)d.GroupId)"
             YValueSelector="@(d => d.Stats.Median)" BoxValueSelector="@(d => d.Stats)" Title="Experiment Groups"
-            Color="TnTColor.Tertiary" />
+            Color="TnTColor.Tertiary" XAxis="@(new NTXAxisOptions { Title = "Group" })"
+            YAxis="@(new NTYAxisOptions { Title = "Value" })" />
       </NTChart>
    </div>
 </div>
 
 @code {
-    public class ExperimentResult
-    {
-        public int GroupId { get; set; }
-        public string GroupName { get; set; } = string.Empty;
-        public BoxPlotValues Stats { get; set; } = default!;
-    }
+   public class ExperimentResult
+   {
+      public int GroupId { get; set; }
+      public string GroupName { get; set; } = string.Empty;
+      public BoxPlotValues Stats { get; set; } = default!;
+   }
 
    private List<ExperimentResult> Data = new()
 {

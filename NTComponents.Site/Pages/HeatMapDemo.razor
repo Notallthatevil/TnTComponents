@@ -9,12 +9,10 @@
 
    <div style="height: 500px; width: 100%;" class="mt-4 border rounded p-2">
       <NTChart TData="ActivityPoint" Title="Weekly Commits" IsCategoricalX="true" IsCategoricalY="true">
-         <NTCartesianAxis TData="ActivityPoint" Direction="AxisDirection.X" Title="Day" />
-         <NTCartesianAxis TData="ActivityPoint" Direction="AxisDirection.Y" Title="Hour" />
-
          <NTHeatMapSeries TData="ActivityPoint" Data="@Data" XValueSelector="@(d => (double)d.DayIndex)"
             YValueSelector="@(d => (double)d.HourIndex)" WeightSelector="@(d => (double)d.Commits)"
-            MinColor="TnTColor.SurfaceVariant" MaxColor="TnTColor.Primary" Title="Commits" />
+            MinColor="TnTColor.SurfaceVariant" MaxColor="TnTColor.Primary" Title="Commits"
+            XAxis="@(new NTXAxisOptions { Title = "Day" })" YAxis="@(new NTYAxisOptions { Title = "Hour" })" />
       </NTChart>
    </div>
 </div>

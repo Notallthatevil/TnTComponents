@@ -27,10 +27,10 @@
             <div style="height: 300px;">
                <NTChart TData="CartesianPoint" Title="Revenue" IsCategoricalX="true"
                   EnableHardwareAcceleration="@_enableHardwareAcceleration">
-                  <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="Month" />
-                  <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Total ($)" />
                   <NTBarSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
-                     YValueSelector="@(p => p.Y)" Color="TnTColor.Primary" />
+                     YValueSelector="@(p => p.Y)" Color="TnTColor.Primary"
+                     XAxis="@(new NTXAxisOptions { Title = "Month" })"
+                     YAxis="@(new NTYAxisOptions { Title = "Total ($)" })" />
                </NTChart>
             </div>
          </div>
@@ -42,10 +42,9 @@
             <div style="height: 300px;">
                <NTChart TData="CartesianPoint" Title="Rounded Bars" IsCategoricalX="true"
                   EnableHardwareAcceleration="@_enableHardwareAcceleration">
-                  <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" />
-                  <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" />
                   <NTBarSeries TData="CartesianPoint" Data="@_productA" XValueSelector="@(p => p.X)"
-                     YValueSelector="@(p => p.Y)" Color="TnTColor.Secondary" CornerRadius="8" />
+                     YValueSelector="@(p => p.Y)" Color="TnTColor.Secondary" CornerRadius="8"
+                     XAxis="@(new NTXAxisOptions())" YAxis="@(new NTYAxisOptions())" />
                </NTChart>
             </div>
             <div class="mt-2 text-muted">
@@ -62,10 +61,9 @@
             <div style="height: 300px;">
                <NTChart TData="CartesianPoint" Title="Multi-Series" IsCategoricalX="true"
                   EnableHardwareAcceleration="@_enableHardwareAcceleration">
-                  <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" />
-                  <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" />
                   <NTBarSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
-                     YValueSelector="@(p => p.Y)" Color="TnTColor.Primary" />
+                     YValueSelector="@(p => p.Y)" Color="TnTColor.Primary" XAxis="@(new NTXAxisOptions())"
+                     YAxis="@(new NTYAxisOptions())" />
                   <NTBarSeries TData="CartesianPoint" Data="@_customData" XValueSelector="@(p => p.X)"
                      YValueSelector="@(p => p.Y)" Color="TnTColor.Secondary" />
                </NTChart>
@@ -82,10 +80,9 @@
             <div style="height: 300px;">
                <NTChart TData="CartesianPoint" Title="Stats" RangePadding="0.1" IsCategoricalX="true"
                   EnableHardwareAcceleration="@_enableHardwareAcceleration">
-                  <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" />
-                  <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" />
                   <NTBarSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
-                     YValueSelector="@(p => p.Y)" Color="TnTColor.Info" ShowDataLabels="true" />
+                     YValueSelector="@(p => p.Y)" Color="TnTColor.Info" ShowDataLabels="true"
+                     XAxis="@(new NTXAxisOptions())" YAxis="@(new NTYAxisOptions())" />
                </NTChart>
             </div>
          </div>
@@ -99,14 +96,14 @@
             <div style="height: 300px;">
                <NTChart TData="CartesianPoint" Title="Health Status" IsCategoricalX="true"
                   EnableHardwareAcceleration="@_enableHardwareAcceleration">
-                  <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" />
-                  <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" />
                   <NTBarSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
-                     YValueSelector="@(p => p.Y)" OnDataPointRender="@OnConditionRender" />
+                     YValueSelector="@(p => p.Y)" OnDataPointRender="@OnConditionRender" XAxis="@(new NTXAxisOptions())"
+                     YAxis="@(new NTYAxisOptions())" />
                </NTChart>
             </div>
             <div class="mt-2 text-muted">
-               Bars color based on value: <span style="color:red">Red</span> if &lt;= 20, else <span style="color:green">Green</span>.
+               Bars color based on value: <span style="color:red">Red</span> if &lt;= 20, else <span
+                  style="color:green">Green</span>.
             </div>
          </div>
       </div>
@@ -117,13 +114,12 @@
          <div class="card p-3 shadow-sm">
             <h3>Horizontal Bars</h3>
             <div style="height: 300px;">
-               <NTChart TData="CartesianPoint" Title="Horizontal View" IsCategoricalX="true" 
-                        Orientation="NTChartOrientation.Horizontal"
-                        EnableHardwareAcceleration="@_enableHardwareAcceleration">
-                  <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="Categories" />
-                  <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Units Sold" />
+               <NTChart TData="CartesianPoint" Title="Horizontal View" IsCategoricalX="true"
+                  Orientation="NTChartOrientation.Horizontal" EnableHardwareAcceleration="@_enableHardwareAcceleration">
                   <NTBarSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
-                     YValueSelector="@(p => p.Y)" Color="TnTColor.Tertiary" />
+                     YValueSelector="@(p => p.Y)" Color="TnTColor.Tertiary"
+                     XAxis="@(new NTXAxisOptions { Title = "Categories" })"
+                     YAxis="@(new NTYAxisOptions { Title = "Units Sold" })" />
                </NTChart>
             </div>
             <div class="mt-2 text-muted">
@@ -162,16 +158,18 @@
                         Orientation="@_orientation">
                         @if (_showLegend)
                         {
-                            <NTLegend TData="CartesianPoint" Position="@_legendPosition" 
-                                      BackgroundColor="@_legendBgColor" />
+                           <NTLegend TData="CartesianPoint" Position="@_legendPosition"
+                              BackgroundColor="@_legendBgColor" />
                         }
-                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="Category" />
-                        <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Value" />
+                        @{
+                           var sandboxXAxis = new NTXAxisOptions { Title = "Category" };
+                           var sandboxYAxis = new NTYAxisOptions { Title = "Value" };
+                        }
                         @foreach (var config in _sandboxSeries)
                         {
                            <NTBarSeries TData="CartesianPoint" Data="@config.Data" XValueSelector="@(p => p.X)"
                               YValueSelector="@(p => p.Y)" Title="@config.Title" CornerRadius="@config.CornerRadius"
-                              ShowDataLabels="@config.ShowDataLabels" />
+                              ShowDataLabels="@config.ShowDataLabels" XAxis="@sandboxXAxis" YAxis="@sandboxYAxis" />
                         }
                      </NTChart>
                   </div>
@@ -188,26 +186,26 @@
                                  <label class="form-check-label small" for="showLegendCheck">Show Legend</label>
                               </div>
                            </div>
-                            <div class="col-6">
-                               <label class="small text-muted fw-bold d-block">Legend Position</label>
-                               <select class="form-select form-select-sm" @bind="_legendPosition">
-                                  @foreach (var val in Enum.GetValues<LegendPosition>())
-                                  {
-                                     <option value="@val">@val</option>
-                                  }
-                               </select>
-                            </div>
-                            <div class="col-6">
-                               <label class="small text-muted fw-bold d-block">Legend BG</label>
-                               <select class="form-select form-select-sm" @bind="_legendBgColor">
-                                  <option value="@TnTColor.None">Default</option>
-                                  <option value="@TnTColor.Surface">Surface</option>
-                                  <option value="@TnTColor.SurfaceContainer">Surface Container</option>
-                                  <option value="@TnTColor.TertiaryContainer">Tertiary Container</option>
-                               </select>
-                            </div>
-                            <div class="col-6">
-                               <label class="small text-muted fw-bold d-block">Orientation</label>
+                           <div class="col-6">
+                              <label class="small text-muted fw-bold d-block">Legend Position</label>
+                              <select class="form-select form-select-sm" @bind="_legendPosition">
+                                 @foreach (var val in Enum.GetValues<LegendPosition>())
+                                 {
+                                    <option value="@val">@val</option>
+                                 }
+                              </select>
+                           </div>
+                           <div class="col-6">
+                              <label class="small text-muted fw-bold d-block">Legend BG</label>
+                              <select class="form-select form-select-sm" @bind="_legendBgColor">
+                                 <option value="@TnTColor.None">Default</option>
+                                 <option value="@TnTColor.Surface">Surface</option>
+                                 <option value="@TnTColor.SurfaceContainer">Surface Container</option>
+                                 <option value="@TnTColor.TertiaryContainer">Tertiary Container</option>
+                              </select>
+                           </div>
+                           <div class="col-6">
+                              <label class="small text-muted fw-bold d-block">Orientation</label>
                               <select class="form-select form-select-sm" @bind="_orientation">
                                  @foreach (var val in Enum.GetValues<NTChartOrientation>())
                                  {

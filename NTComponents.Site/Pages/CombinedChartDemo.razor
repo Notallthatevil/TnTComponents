@@ -28,11 +28,10 @@
                <NTChart TData="CartesianPoint" Title="Budget vs Actual" IsCategoricalX="true"
                   EnableHardwareAcceleration="@_enableHardwareAcceleration">
                   <NTLegend TData="CartesianPoint" Position="LegendPosition.Bottom" />
-                  <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" Title="Month" />
-                  <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" Title="Amount ($)" />
-
                   <NTBarSeries TData="CartesianPoint" Data="@_budgetData" XValueSelector="@(p => p.X)"
-                     YValueSelector="@(p => p.Y)" Color="TnTColor.Primary" Title="Budget" CornerRadius="4" />
+                     YValueSelector="@(p => p.Y)" Color="TnTColor.Primary" Title="Budget" CornerRadius="4"
+                     XAxis="@(new NTXAxisOptions { Title = "Month" })"
+                     YAxis="@(new NTYAxisOptions { Title = "Amount ($)" })" />
 
                   <NTLineSeries TData="CartesianPoint" Data="@_actualData" XValueSelector="@(p => p.X)"
                      YValueSelector="@(p => p.Y)" Color="TnTColor.Secondary" Title="Actual"
@@ -54,11 +53,9 @@
             <div style="height: 350px;">
                <NTChart TData="CartesianPoint" Title="Sales Volume & Average" IsCategoricalX="true"
                   EnableHardwareAcceleration="@_enableHardwareAcceleration">
-                  <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" />
-                  <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" />
-
                   <NTBarSeries TData="CartesianPoint" Data="@_storeAData" XValueSelector="@(p => p.X)"
-                     YValueSelector="@(p => p.Y)" Color="TnTColor.Info" Title="Store A" />
+                     YValueSelector="@(p => p.Y)" Color="TnTColor.Info" Title="Store A" XAxis="@(new NTXAxisOptions())"
+                     YAxis="@(new NTYAxisOptions())" />
                   <NTBarSeries TData="CartesianPoint" Data="@_storeBData" XValueSelector="@(p => p.X)"
                      YValueSelector="@(p => p.Y)" Color="TnTColor.Warning" Title="Store B" />
 
@@ -77,20 +74,21 @@
                <NTChart TData="CartesianPoint" Title="Interactive Mixed Chart" IsCategoricalX="true"
                   EnableHardwareAcceleration="@_enableHardwareAcceleration">
                   <NTLegend TData="CartesianPoint" />
-                  <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.X" />
-                  <NTCartesianAxis TData="CartesianPoint" Direction="AxisDirection.Y" />
-
+                  @{
+                     var sandboxXAxis = new NTXAxisOptions();
+                     var sandboxYAxis = new NTYAxisOptions();
+                  }
                   @foreach (var config in _sandboxSeries)
                   {
                      @if (config.Type == SeriesType.Bar)
                      {
                         <NTBarSeries TData="CartesianPoint" Data="@config.Data" XValueSelector="@(p => p.X)"
-                           YValueSelector="@(p => p.Y)" Title="@config.Title" />
+                           YValueSelector="@(p => p.Y)" Title="@config.Title" XAxis="@sandboxXAxis" YAxis="@sandboxYAxis" />
                      }
                      else
                      {
                         <NTLineSeries TData="CartesianPoint" Data="@config.Data" XValueSelector="@(p => p.X)"
-                           YValueSelector="@(p => p.Y)" Title="@config.Title" />
+                           YValueSelector="@(p => p.Y)" Title="@config.Title" XAxis="@sandboxXAxis" YAxis="@sandboxYAxis" />
                      }
                   }
                </NTChart>

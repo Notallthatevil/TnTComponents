@@ -167,8 +167,6 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     private SKPoint _legendMouseOffset;
     private SKPoint _legendDragStartMousePos;
 
-    private List<NTAxis<TData>> Axes { get; } = [];
-
     internal List<NTBaseSeries<TData>> Series { get; } = [];
 
     internal NTLegend<TData>? Legend { get; private set; }
@@ -500,17 +498,19 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
         LastLegendDrawArea = legendDrawArea;
 
-        // Pass 2: Measure axes and update plotArea
-        foreach (var axis in Axes.Where(a => a.Visible)) {
-            plotArea = axis.Measure(plotArea);
+        // Pass 2: Measure series (axes etc) and update plotArea
+        var measured = new HashSet<object>();
+        foreach (var series in Series.Where(s => s.Visible)) {
+            plotArea = series.Measure(plotArea, measured);
         }
 
         LastPlotArea = plotArea;
         CalculateTreeMapAreas(plotArea);
 
         // Pass 3: Render axes using the final plotArea and the adjusted accessibleArea
-        foreach (var axis in Axes.Where(a => a.Visible)) {
-            axis.Render(canvas, plotArea, accessibleArea);
+        var rendered = new HashSet<object>();
+        foreach (var series in Series.Where(s => s.Visible)) {
+            series.RenderAxes(canvas, plotArea, accessibleArea, rendered);
         }
 
         // Pass 4: Hit testing and Tooltip Prep
@@ -805,12 +805,6 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         canvas.DrawText(Title!, x, y, SKTextAlign.Center, font, paint);
     }
 
-    internal void AddAxis(NTAxis<TData> axis) {
-        if (!Axes.Contains(axis)) {
-            Axes.Add(axis);
-        }
-    }
-
     internal void AddSeries(NTBaseSeries<TData> series) {
         if (Series.Count > 0 && Series[0].CoordinateSystem != series.CoordinateSystem) {
             throw new InvalidOperationException($"Cannot combine series with different coordinate systems. Currently using {Series[0].CoordinateSystem}, but tried to add {series.CoordinateSystem}.");
@@ -818,12 +812,6 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
         if (!Series.Contains(series)) {
             Series.Add(series);
-        }
-    }
-
-    internal void RemoveAxis(NTAxis<TData> axis) {
-        if (Axes.Contains(axis)) {
-            Axes.Remove(axis);
         }
     }
 
@@ -879,22 +867,9 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             return _cachedAllX;
         }
 
-        var cartesianSeries = Series.OfType<NTCartesianSeries<TData>>().Where(s => s.IsEffectivelyVisible).ToList();
         var allX = new HashSet<double>();
-        foreach (var s in cartesianSeries) {
-            if (s.Data == null) {
-                continue;
-            }
-
-            foreach (var item in s.Data) {
-                allX.Add(s.XValueSelector(item));
-            }
-        }
-
-        foreach (var axis in Axes.Where(a => a.Direction == AxisDirection.X && a.Visible && a.ValuesToShow != null)) {
-            foreach (var val in axis.ValuesToShow!) {
-                allX.Add(val);
-            }
+        foreach (var s in Series.Where(s => s.IsEffectivelyVisible)) {
+            s.RegisterXValues(allX);
         }
 
         _cachedAllX = allX.OrderBy(x => x).ToList();
@@ -909,22 +884,9 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             return _cachedAllY;
         }
 
-        var cartesianSeries = Series.OfType<NTCartesianSeries<TData>>().Where(s => s.IsEffectivelyVisible).ToList();
         var allY = new HashSet<double>();
-        foreach (var s in cartesianSeries) {
-            if (s.Data == null) {
-                continue;
-            }
-
-            foreach (var item in s.Data) {
-                allY.Add(s.YValueSelector(item));
-            }
-        }
-
-        foreach (var axis in Axes.Where(a => a.Direction == AxisDirection.Y && a.Visible && a.ValuesToShow != null)) {
-            foreach (var val in axis.ValuesToShow!) {
-                allY.Add(val);
-            }
+        foreach (var s in Series.Where(s => s.IsEffectivelyVisible)) {
+            s.RegisterYValues(allY);
         }
 
         _cachedAllY = allY.OrderBy(y => y).ToList();
@@ -949,43 +911,77 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         return originalY;
     }
 
+    /// <summary>
+    ///    Gets the scale used for the X axis.
+    /// </summary>
+    public NTAxisScale GetXScale() => Series.OfType<NTCartesianSeries<TData>>().FirstOrDefault(s => s.XAxis != null)?.XAxis!.Scale ?? NTAxisScale.Linear;
+
+    /// <summary>
+    ///    Gets the scale used for the Y axis.
+    /// </summary>
+    public NTAxisScale GetYScale() => Series.OfType<NTCartesianSeries<TData>>().FirstOrDefault(s => s.YAxis != null)?.YAxis!.Scale ?? NTAxisScale.Linear;
+
     public float ScaleX(double x, SKRect plotArea) {
         var (min, max) = GetXRange(true);
-        var range = max - min;
-        if (range <= 0) {
-            return (Orientation == NTChartOrientation.Vertical) ? plotArea.Left : plotArea.Bottom;
+        var scale = GetXScale();
+
+        double t;
+        if (scale == NTAxisScale.Logarithmic) {
+            min = Math.Max(0.000001, min);
+            max = Math.Max(min * 1.1, max);
+            x = Math.Max(min, x);
+            t = (Math.Log10(x) - Math.Log10(min)) / (Math.Log10(max) - Math.Log10(min));
+        }
+        else {
+            var range = max - min;
+            if (range <= 0) {
+                return (Orientation == NTChartOrientation.Vertical) ? plotArea.Left : plotArea.Bottom;
+            }
+            t = (x - min) / range;
         }
 
         const float p = 3f; // 3 pixels of air
         if (Orientation == NTChartOrientation.Vertical) {
             var left = plotArea.Left + p;
             var width = plotArea.Width - (p * 2);
-            return (float)(left + ((x - min) / range * width));
+            return (float)(left + (t * width));
         }
         else {
             var bottom = plotArea.Bottom - p;
             var height = plotArea.Height - (p * 2);
-            return (float)(bottom - ((x - min) / range * height));
+            return (float)(bottom - (t * height));
         }
     }
 
     public float ScaleY(double y, SKRect plotArea) {
         var (min, max) = GetYRange(true);
-        var range = max - min;
-        if (range <= 0) {
-            return (Orientation == NTChartOrientation.Vertical) ? plotArea.Bottom : plotArea.Left;
+        var scale = GetYScale();
+
+        double t;
+        if (scale == NTAxisScale.Logarithmic) {
+            min = Math.Max(0.000001, min);
+            max = Math.Max(min * 1.1, max);
+            y = Math.Max(min, y);
+            t = (Math.Log10(y) - Math.Log10(min)) / (Math.Log10(max) - Math.Log10(min));
+        }
+        else {
+            var range = max - min;
+            if (range <= 0) {
+                return (Orientation == NTChartOrientation.Vertical) ? plotArea.Bottom : plotArea.Left;
+            }
+            t = (y - min) / range;
         }
 
         const float p = 3f; // 3 pixels of air
         if (Orientation == NTChartOrientation.Vertical) {
             var bottom = plotArea.Bottom - p;
             var height = plotArea.Height - (p * 2);
-            return (float)(bottom - ((y - min) / range * height));
+            return (float)(bottom - (t * height));
         }
         else {
             var left = plotArea.Left + p;
             var width = plotArea.Width - (p * 2);
-            return (float)(left + ((y - min) / range * width));
+            return (float)(left + (t * width));
         }
     }
 
@@ -994,19 +990,27 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     /// </summary>
     public double ScaleXInverse(float coord, SKRect plotArea) {
         var (min, max) = GetXRange(true);
-        var range = max - min;
+        var scale = GetXScale();
 
         const float p = 3f;
+        double t;
         if (Orientation == NTChartOrientation.Vertical) {
             var left = plotArea.Left + p;
             var width = plotArea.Width - (p * 2);
-            return width <= 0 ? min : min + ((coord - left) / width * range);
+            t = width <= 0 ? 0 : (coord - left) / width;
         }
         else {
             var bottom = plotArea.Bottom - p;
             var height = plotArea.Height - (p * 2);
-            return height <= 0 ? min : min + ((bottom - coord) / height * range);
+            t = height <= 0 ? 0 : (bottom - coord) / height;
         }
+
+        if (scale == NTAxisScale.Logarithmic) {
+            min = Math.Max(0.000001, min);
+            max = Math.Max(min * 1.1, max);
+            return Math.Pow(10, Math.Log10(min) + (t * (Math.Log10(max) - Math.Log10(min))));
+        }
+        return min + (t * (max - min));
     }
 
     /// <summary>
@@ -1014,19 +1018,27 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     /// </summary>
     public double ScaleYInverse(float coord, SKRect plotArea) {
         var (min, max) = GetYRange(true);
-        var range = max - min;
+        var scale = GetYScale();
 
         const float p = 3f;
+        double t;
         if (Orientation == NTChartOrientation.Vertical) {
             var bottom = plotArea.Bottom - p;
             var height = plotArea.Height - (p * 2);
-            return height <= 0 ? min : min + ((bottom - coord) / height * range);
+            t = height <= 0 ? 0 : (bottom - coord) / height;
         }
         else {
             var left = plotArea.Left + p;
             var width = plotArea.Width - (p * 2);
-            return width <= 0 ? min : min + ((coord - left) / width * range);
+            t = width <= 0 ? 0 : (coord - left) / width;
         }
+
+        if (scale == NTAxisScale.Logarithmic) {
+            min = Math.Max(0.000001, min);
+            max = Math.Max(min * 1.1, max);
+            return Math.Pow(10, Math.Log10(min) + (t * (Math.Log10(max) - Math.Log10(min))));
+        }
+        return min + (t * (max - min));
     }
 
     public (double Min, double Max) GetXRange(bool padded = false) {
@@ -1051,25 +1063,11 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         var min = double.MaxValue;
         var max = double.MinValue;
 
-        var cartesianSeries = Series.OfType<NTCartesianSeries<TData>>().Where(s => s.IsEffectivelyVisible).ToList();
-        foreach (var s in cartesianSeries) {
-            if (s.Data == null || !s.Data.Any()) {
-                continue;
-            }
-
-            var values = s.Data.Select(s.XValueSelector).ToList();
-            if (!values.Any()) {
-                continue;
-            }
-
-            min = Math.Min(min, values.Min());
-            max = Math.Max(max, values.Max());
-        }
-
-        foreach (var axis in Axes.Where(a => a.Direction == AxisDirection.X && a.Visible && a.ValuesToShow != null)) {
-            if (axis.ValuesToShow!.Any()) {
-                min = Math.Min(min, axis!.ValuesToShow.Min());
-                max = Math.Max(max, axis.ValuesToShow.Max());
+        foreach (var s in Series.Where(s => s.IsEffectivelyVisible)) {
+            var seriesRange = s.GetXRange();
+            if (seriesRange.HasValue) {
+                min = Math.Min(min, seriesRange.Value.Min);
+                max = Math.Max(max, seriesRange.Value.Max);
             }
         }
 
@@ -1116,38 +1114,11 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         var min = double.MaxValue;
         var max = double.MinValue;
 
-        var cartesianSeries = Series.OfType<NTCartesianSeries<TData>>().Where(s => s.IsEffectivelyVisible).ToList();
-        foreach (var s in cartesianSeries) {
-            if (s.Data == null || !s.Data.Any()) {
-                continue;
-            }
-
-            if (s is NTBoxPlotSeries<TData> boxPlot) {
-                foreach (var item in s.Data) {
-                    var values = boxPlot.BoxValueSelector(item);
-                    min = Math.Min(min, values.Min);
-                    max = Math.Max(max, values.Max);
-                    if (values.Outliers != null && values.Outliers.Any()) {
-                        min = Math.Min(min, values.Outliers.Min());
-                        max = Math.Max(max, values.Outliers.Max());
-                    }
-                }
-            }
-            else {
-                var values = s.Data.Select(item => s.YValueSelector(item) * s.VisibilityFactor).ToList();
-                if (!values.Any()) {
-                    continue;
-                }
-
-                min = Math.Min(min, values.Min());
-                max = Math.Max(max, values.Max());
-            }
-        }
-
-        foreach (var axis in Axes.Where(a => a.Direction == AxisDirection.Y && a.Visible && a.ValuesToShow != null)) {
-            if (axis.ValuesToShow!.Any()) {
-                min = Math.Min(min, axis!.ValuesToShow.Min());
-                max = Math.Max(max, axis.ValuesToShow.Max());
+        foreach (var s in Series.Where(s => s.IsEffectivelyVisible)) {
+            var seriesRange = s.GetYRange();
+            if (seriesRange.HasValue) {
+                min = Math.Min(min, seriesRange.Value.Min);
+                max = Math.Max(max, seriesRange.Value.Max);
             }
         }
 

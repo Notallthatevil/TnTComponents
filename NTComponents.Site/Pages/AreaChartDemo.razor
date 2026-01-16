@@ -8,11 +8,9 @@
 
    <div style="height: 500px; width: 100%;" class="mt-4 border rounded p-2">
       <NTChart TData="DataItem" Title="Revenue vs Costs Over Time" RangePadding="0.05">
-         <NTCartesianAxis TData="DataItem" Direction="AxisDirection.X" Title="Month" />
-         <NTCartesianAxis TData="DataItem" Direction="AxisDirection.Y" Title="Value ($)" />
-
          <NTAreaSeries TData="DataItem" Data="@Data" XValueSelector="@(d => d.Id)" YValueSelector="@(d => d.Revenue)"
-            Title="Revenue" Color="TnTColor.Primary" AreaOpacity="0.3f" />
+            Title="Revenue" Color="TnTColor.Primary" AreaOpacity="0.3f"
+            XAxis="@(new NTXAxisOptions { Title = "Month" })" YAxis="@(new NTYAxisOptions { Title = "Value ($)" })" />
 
          <NTAreaSeries TData="DataItem" Data="@Data" XValueSelector="@(d => d.Id)" YValueSelector="@(d => d.Costs)"
             Title="Costs" Color="TnTColor.Error" AreaOpacity="0.3f" />

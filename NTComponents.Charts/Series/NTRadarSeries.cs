@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using NTComponents.Charts.Core.Series;
+using NTComponents.Charts.Core.Axes;
 using SkiaSharp;
 
 namespace NTComponents.Charts;
@@ -8,8 +9,7 @@ namespace NTComponents.Charts;
 ///     Represents a radar series in a circular chart.
 /// </summary>
 /// <typeparam name="TData">The type of the data.</typeparam>
-public class NTRadarSeries<TData> : NTCircularSeries<TData> where TData : class
-{
+public class NTRadarSeries<TData> : NTCircularSeries<TData> where TData : class {
    [Parameter]
    public float StrokeWidth { get; set; } = 2f;
 
@@ -22,8 +22,30 @@ public class NTRadarSeries<TData> : NTCircularSeries<TData> where TData : class
    [Parameter]
    public double? MaxValue { get; set; }
 
-   public override void Render(SKCanvas canvas, SKRect renderArea)
-   {
+   /// <summary>
+   ///    Gets or sets the radial axis options for this series.
+   /// </summary>
+   [Parameter]
+   public NTRadialAxisOptions RadialAxis { get; set; } = new();
+
+   /// <inheritdoc />
+   internal override SKRect Measure(SKRect renderArea, HashSet<object> measured) {
+      if (RadialAxis != null && RadialAxis.Visible && !measured.Contains(RadialAxis)) {
+         measured.Add(RadialAxis);
+         return RadialAxis.Measure(renderArea, Chart);
+      }
+      return renderArea;
+   }
+
+   /// <inheritdoc />
+   internal override void RenderAxes(SKCanvas canvas, SKRect plotArea, SKRect totalArea, HashSet<object> rendered) {
+      if (RadialAxis != null && RadialAxis.Visible && !rendered.Contains(RadialAxis)) {
+         rendered.Add(RadialAxis);
+         RadialAxis.Render(canvas, plotArea, totalArea, Chart);
+      }
+   }
+
+   public override void Render(SKCanvas canvas, SKRect renderArea) {
       if (Data == null || !Data.Any()) return;
 
       var dataList = Data.ToList();
@@ -45,8 +67,7 @@ public class NTRadarSeries<TData> : NTCircularSeries<TData> where TData : class
       color = color.WithAlpha((byte)(color.Alpha * visibilityFactor * hoverFactor));
 
       var points = new SKPoint[count];
-      for (int i = 0; i < count; i++)
-      {
+      for (int i = 0; i < count; i++) {
          float angle = (i * 360f / count) - 90f;
          float rad = angle * (float)Math.PI / 180f;
 
@@ -63,34 +84,28 @@ public class NTRadarSeries<TData> : NTCircularSeries<TData> where TData : class
       path.AddPoly(points, true);
 
       // Fill
-      using (var fillPaint = new SKPaint
-      {
+      using (var fillPaint = new SKPaint {
          Style = SKPaintStyle.Fill,
          Color = color.WithAlpha((byte)(color.Alpha * AreaOpacity)),
          IsAntialias = true
-      })
-      {
+      }) {
          canvas.DrawPath(path, fillPaint);
       }
 
       // Stroke
-      using (var strokePaint = new SKPaint
-      {
+      using (var strokePaint = new SKPaint {
          Style = SKPaintStyle.Stroke,
          Color = color,
          StrokeWidth = StrokeWidth,
          IsAntialias = true
-      })
-      {
+      }) {
          canvas.DrawPath(path, strokePaint);
       }
 
       // Points and Labels
-      for (int i = 0; i < count; i++)
-      {
+      for (int i = 0; i < count; i++) {
          var item = dataList[i];
-         var args = new NTDataPointRenderArgs<TData>
-         {
+         var args = new NTDataPointRenderArgs<TData> {
             Data = item,
             Index = i,
             Color = color,
@@ -101,9 +116,8 @@ public class NTRadarSeries<TData> : NTCircularSeries<TData> where TData : class
          var pointColor = args.Color ?? color;
          var p = points[i];
          RenderPoint(canvas, p.X, p.Y, pointColor);
-         
-         if (ShowDataLabels)
-         {
+
+         if (ShowDataLabels) {
             var labelColor = args.DataLabelColor ?? pointColor;
             var labelSize = args.DataLabelSize ?? 12f;
             RenderDataLabel(canvas, p.X, p.Y - 10, ValueSelector(item), labelColor, labelSize);
@@ -111,22 +125,19 @@ public class NTRadarSeries<TData> : NTCircularSeries<TData> where TData : class
       }
    }
 
-   private void RenderDataLabel(SKCanvas canvas, float x, float y, double value, SKColor color, float fontSize)
-   {
+   private void RenderDataLabel(SKCanvas canvas, float x, float y, double value, SKColor color, float fontSize) {
       var text = string.Format("{0:N0}", value);
       using var paint = new SKPaint { Color = color, IsAntialias = true };
       using var font = new SKFont { Size = fontSize, Typeface = Chart.DefaultTypeface };
       canvas.DrawText(text, x, y, SKTextAlign.Center, font, paint);
    }
 
-   private void RenderPoint(SKCanvas canvas, float x, float y, SKColor color)
-   {
+   private void RenderPoint(SKCanvas canvas, float x, float y, SKColor color) {
       using var paint = new SKPaint { Color = color, IsAntialias = true };
       canvas.DrawCircle(x, y, 4, paint);
    }
 
-   public override (int Index, TData? Data)? HitTest(SKPoint point, SKRect renderArea)
-   {
+   public override (int Index, TData? Data)? HitTest(SKPoint point, SKRect renderArea) {
       // Radar hit testing is usually proximity based
       var dataList = Data.ToList();
       float centerX = renderArea.MidX;
@@ -135,8 +146,7 @@ public class NTRadarSeries<TData> : NTCircularSeries<TData> where TData : class
       double max = MaxValue ?? dataList.Max(ValueSelector);
       if (max <= 0) max = 1;
 
-      for (int i = 0; i < dataList.Count; i++)
-      {
+      for (int i = 0; i < dataList.Count; i++) {
          float angle = (i * 360f / dataList.Count) - 90f;
          float rad = angle * (float)Math.PI / 180f;
          double val = ValueSelector(dataList[i]);

@@ -7,7 +7,8 @@
    <p>Comparing player attributes in a RPG.</p>
 
    <div style="height: 500px; width: 100%;" class="mt-4 border rounded p-2">
-      <NTChart TData="AttributeData" Title="Character Attributes">
+      <NTChart TData="AttributeData" Title="Character Attributes"
+         RadialAxis="@(new NTRadialAxisOptions { Title = "Attributes" })">
          <NTLegend TData="AttributeData" />
          <NTRadarSeries TData="AttributeData" Data="@Hero1" ValueSelector="@(d => d.Value)"
             LabelSelector="@(d => d.Name)" Title="Warrior" Color="TnTColor.Primary" AreaOpacity="0.4f" MaxValue="100" />

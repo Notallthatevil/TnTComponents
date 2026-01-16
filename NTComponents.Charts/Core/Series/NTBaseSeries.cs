@@ -3,8 +3,7 @@ using SkiaSharp;
 
 namespace NTComponents.Charts.Core.Series;
 
-public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TData : class
-{
+public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TData : class {
 
     [CascadingParameter]
     protected NTChart<TData> Chart { get; set; } = default!;
@@ -105,14 +104,12 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     private float _targetHoverFactor = 1f;
     private DateTime? _hoverAnimationStartTime;
 
-    private void OnVisibilityChanged()
-    {
+    private void OnVisibilityChanged() {
         _startVisibility = VisibilityFactor;
         _visibilityAnimationStartTime = DateTime.Now;
 
         // We also want to reset the primary data animation if we are appearing
-        if (Visible)
-        {
+        if (Visible) {
             ResetAnimation();
         }
     }
@@ -120,17 +117,13 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     /// <summary>
     ///     Gets the current visibility factor (0.0 to 1.0) for animation.
     /// </summary>
-    public float VisibilityFactor
-    {
-        get
-        {
-            if (!AnimationEnabled)
-            {
+    public float VisibilityFactor {
+        get {
+            if (!AnimationEnabled) {
                 return Visible ? 1f : 0f;
             }
 
-            if (_visibilityAnimationStartTime == null)
-            {
+            if (_visibilityAnimationStartTime == null) {
                 return Visible ? 1f : 0f;
             }
 
@@ -141,8 +134,7 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
             // Use simple linear for visibility factor transition
             _currentVisibility = _startVisibility + (((Visible ? 1f : 0f) - _startVisibility) * progress);
 
-            if (progress >= 1)
-            {
+            if (progress >= 1) {
                 _visibilityAnimationStartTime = null;
             }
 
@@ -158,28 +150,23 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     /// <summary>
     ///     Gets the current hover factor (0.15 to 1.0) for animation.
     /// </summary>
-    public float HoverFactor
-    {
-        get
-        {
+    public float HoverFactor {
+        get {
             // Target is 1.0 if this series is hovered OR if nothing is hovered.
             // Target is 0.15 if another series is hovered.
             float target = (Chart.HoveredSeries == null || Chart.HoveredSeries == this) ? 1f : 0.15f;
 
-            if (!AnimationEnabled)
-            {
+            if (!AnimationEnabled) {
                 return target;
             }
 
-            if (Math.Abs(_targetHoverFactor - target) > 0.001f)
-            {
+            if (Math.Abs(_targetHoverFactor - target) > 0.001f) {
                 _startHoverFactor = _currentHoverFactor;
                 _targetHoverFactor = target;
                 _hoverAnimationStartTime = DateTime.Now;
             }
 
-            if (_hoverAnimationStartTime == null)
-            {
+            if (_hoverAnimationStartTime == null) {
                 return _currentHoverFactor = target;
             }
 
@@ -190,8 +177,7 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
 
             _currentHoverFactor = _startHoverFactor + ((_targetHoverFactor - _startHoverFactor) * progress);
 
-            if (progress >= 1)
-            {
+            if (progress >= 1) {
                 _hoverAnimationStartTime = null;
             }
 
@@ -199,28 +185,23 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
         }
     }
 
-    protected override void OnInitialized()
-    {
+    protected override void OnInitialized() {
         base.OnInitialized();
-        if (Chart is null)
-        {
+        if (Chart is null) {
             throw new ArgumentNullException(nameof(Chart), $"Series must be used within a {nameof(NTChart<TData>)}.");
         }
         Chart.AddSeries(this);
     }
 
-    protected override void OnParametersSet()
-    {
+    protected override void OnParametersSet() {
         base.OnParametersSet();
 
-        if (Visible != _lastVisible)
-        {
+        if (Visible != _lastVisible) {
             OnVisibilityChanged();
             _lastVisible = Visible;
         }
 
-        if (!ReferenceEquals(PreviousData, Data))
-        {
+        if (!ReferenceEquals(PreviousData, Data)) {
             OnDataChanged();
             PreviousData = Data;
         }
@@ -236,10 +217,8 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     /// </summary>
     public void ResetAnimation() => AnimationStartTime = DateTime.Now;
 
-    protected float GetAnimationProgress()
-    {
-        if (!AnimationEnabled)
-        {
+    protected float GetAnimationProgress() {
+        if (!AnimationEnabled) {
             return 1.0f;
         }
 
@@ -253,8 +232,7 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     /// </summary>
     /// <param name="t">The progress value between 0 and 1.</param>
     /// <returns>The eased progress value.</returns>
-    protected float BackEase(float t)
-    {
+    protected float BackEase(float t) {
         const float c1 = 1.70158f;
         const float c3 = c1 + 1;
         return 1 + (c3 * MathF.Pow(t - 1, 3)) + (c1 * MathF.Pow(t - 1, 2));
@@ -263,13 +241,48 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     public abstract void Render(SKCanvas canvas, SKRect renderArea);
 
     /// <summary>
+    ///    Measures any decorators or axes the series might have and returns the remaining area.
+    /// </summary>
+    /// <param name="renderArea">The current available area.</param>
+    /// <param name="measured">A set of objects already measured to avoid double measuring shared axes.</param>
+    /// <returns>The remaining area after the series has taken its space.</returns>
+    internal virtual SKRect Measure(SKRect renderArea, HashSet<object> measured) => renderArea;
+
+    /// <summary>
+    ///    Renders any decorators or axes the series might have.
+    /// </summary>
+    /// <param name="canvas">The canvas to render on.</param>
+    /// <param name="plotArea">The area of the chart content.</param>
+    /// <param name="totalArea">The total area of the chart.</param>
+    /// <param name="rendered">A set of objects already rendered to avoid double rendering shared axes.</param>
+    internal virtual void RenderAxes(SKCanvas canvas, SKRect plotArea, SKRect totalArea, HashSet<object> rendered) { }
+
+    /// <summary>
+    ///    Gets the data bounds for the X axis.
+    /// </summary>
+    internal virtual (double Min, double Max)? GetXRange() => null;
+
+    /// <summary>
+    ///    Gets the data bounds for the Y axis.
+    /// </summary>
+    internal virtual (double Min, double Max)? GetYRange() => null;
+
+    /// <summary>
+    ///    Registers any categorical X values the series has.
+    /// </summary>
+    internal virtual void RegisterXValues(HashSet<double> values) { }
+
+    /// <summary>
+    ///    Registers any categorical Y values the series has.
+    /// </summary>
+    internal virtual void RegisterYValues(HashSet<double> values) { }
+
+    /// <summary>
     ///     Returns the legend items for this series.
     /// </summary>
     /// <returns>The legend items.</returns>
-    internal virtual IEnumerable<LegendItemInfo<TData>> GetLegendItems()
-    {
-        yield return new LegendItemInfo<TData>
-        {
+    internal virtual IEnumerable<LegendItemInfo<TData>> GetLegendItems() {
+        yield return new LegendItemInfo<TData> {
             Label = Title ?? $"Series {Chart.GetSeriesIndex(this) + 1}",
             Color = Chart.GetSeriesColor(this),
             Series = this,
@@ -281,10 +294,8 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     ///     Toggles the visibility of a legend item.
     /// </summary>
     /// <param name="index">The index of the item, if applicable.</param>
-    internal virtual void ToggleLegendItem(int? index)
-    {
-        if (index == null)
-        {
+    internal virtual void ToggleLegendItem(int? index) {
+        if (index == null) {
             Visible = !Visible;
         }
     }
@@ -297,8 +308,7 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     /// <returns>The index and data of the hit point, or null if no hit.</returns>
     public abstract (int Index, TData? Data)? HitTest(SKPoint point, SKRect renderArea);
 
-    public void Dispose()
-    {
+    public void Dispose() {
         GC.SuppressFinalize(this);
         Chart?.RemoveSeries(this);
     }
