@@ -61,7 +61,7 @@ public class NTBoxPlotSeries<TData> : NTCartesianSeries<TData> where TData : cla
          };
          OnDataPointRender?.Invoke(args);
 
-         var xVal = Chart.GetScaledXValue(XValueSelector(item));
+         var xVal = XValueSelector(item);
          var boxValues = BoxValueSelector(item);
 
          float centerPos = Chart.ScaleX(xVal, renderArea);
@@ -168,7 +168,7 @@ public class NTBoxPlotSeries<TData> : NTCartesianSeries<TData> where TData : cla
       for (int i = 0; i < dataList.Count; i++)
       {
          var item = dataList[i];
-         var xVal = Chart.GetScaledXValue(XValueSelector(item));
+         var xVal = XValueSelector(item);
          var boxValues = BoxValueSelector(item);
          float centerPos = Chart.ScaleX(xVal, renderArea);
 

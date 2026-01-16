@@ -26,7 +26,7 @@
             <div class="card p-3 shadow-sm">
                 <h3>Basic Line Chart</h3>
                 <div style="height: 300px;">
-                    <NTChart TData="CartesianPoint" Title="Basic Data" IsCategoricalX="true"
+                    <NTChart TData="CartesianPoint" Title="Basic Data"
                         EnableHardwareAcceleration="@_enableHardwareAcceleration">
                         <NTLineSeries TData="CartesianPoint" Data="@_basicData" Title="My data"
                             XValueSelector="@(p => p.X)" YValueSelector="@(p => p.Y)" Color="TnTColor.Primary"
@@ -40,7 +40,7 @@
             <div class="card p-3 shadow-sm">
                 <h3>Multiple Series (Auto Shapes)</h3>
                 <div style="height: 300px;">
-                    <NTChart TData="CartesianPoint" Title="Comparison" Palette="@_customPalette" IsCategoricalX="true"
+                    <NTChart TData="CartesianPoint" Title="Comparison" Palette="@_customPalette"
                         EnableHardwareAcceleration="@_enableHardwareAcceleration">
                         <NTLineSeries TData="CartesianPoint" Data="@_productA" XValueSelector="@(p => p.X)"
                             YValueSelector="@(p => p.Y)" PointStyle="PointStyle.Filled"

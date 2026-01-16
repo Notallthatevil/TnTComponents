@@ -846,20 +846,6 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     }
 
     /// <summary>
-    ///    Gets or sets whether to use a categorical scale for the X axis.
-    ///    If true, every unique X value will be shown and spaced equally.
-    /// </summary>
-    [Parameter]
-    public bool IsCategoricalX { get; set; }
-
-    /// <summary>
-    ///    Gets or sets whether to use a categorical scale for the Y axis.
-    ///    If true, every unique Y value will be shown and spaced equally.
-    /// </summary>
-    [Parameter]
-    public bool IsCategoricalY { get; set; }
-
-    /// <summary>
     ///     Returns a list of all unique X values across all cartesian series, sorted.
     /// </summary>
     public List<double> GetAllXValues() {
@@ -891,24 +877,6 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
         _cachedAllY = allY.OrderBy(y => y).ToList();
         return _cachedAllY;
-    }
-
-    public double GetScaledXValue(double originalX) {
-        if (IsCategoricalX) {
-            var allX = GetAllXValues();
-            var index = allX.IndexOf(originalX);
-            return index >= 0 ? index : originalX;
-        }
-        return originalX;
-    }
-
-    public double GetScaledYValue(double originalY) {
-        if (IsCategoricalY) {
-            var allY = GetAllYValues();
-            var index = allY.IndexOf(originalY);
-            return index >= 0 ? index : originalY;
-        }
-        return originalY;
     }
 
     /// <summary>
@@ -1046,20 +1014,6 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             return (_viewXMin.Value, _viewXMax.Value);
         }
 
-        if (IsCategoricalX) {
-            var allX = GetAllXValues();
-            if (!allX.Any()) {
-                return (0, 1);
-            }
-
-            if (!padded) {
-                return (0, Math.Max(1, allX.Count - 1));
-            }
-
-            var catRange = Math.Max(1, allX.Count - 1);
-            return (-catRange * RangePadding, catRange + (catRange * RangePadding));
-        }
-
         var min = double.MaxValue;
         var max = double.MinValue;
 
@@ -1095,20 +1049,6 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     public (double Min, double Max) GetYRange(bool padded = false) {
         if (_viewYMin.HasValue && _viewYMax.HasValue) {
             return (_viewYMin.Value, _viewYMax.Value);
-        }
-
-        if (IsCategoricalY) {
-            var allY = GetAllYValues();
-            if (!allY.Any()) {
-                return (0, 1);
-            }
-
-            if (!padded) {
-                return (0, Math.Max(1, allY.Count - 1));
-            }
-
-            var catRange = Math.Max(1, allY.Count - 1);
-            return (-catRange * RangePadding, catRange + (catRange * RangePadding));
         }
 
         var min = double.MaxValue;

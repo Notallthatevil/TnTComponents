@@ -117,16 +117,9 @@ public class NTBarSeries<TData> : NTCartesianSeries<TData> where TData : class {
         float slotWidth;
         var plotWidth = Chart.Orientation == NTChartOrientation.Vertical ? renderArea.Width : renderArea.Height;
 
-        if (Chart.IsCategoricalX) {
-            var x0 = Chart.ScaleX(0, renderArea);
-            var x1 = Chart.ScaleX(1, renderArea);
-            slotWidth = Math.Abs(x1 - x0);
-        }
-        else {
-            slotWidth = dataList.Count > 1
-                ? (plotWidth / xRange)
-                : plotWidth * 0.1f;
-        }
+        slotWidth = dataList.Count > 1
+            ? (plotWidth / xRange)
+            : plotWidth * 0.1f;
 
         // Group width is 80% of the slot to allow spacing between categories
         var groupWidth = slotWidth * 0.8f;
@@ -140,7 +133,7 @@ public class NTBarSeries<TData> : NTCartesianSeries<TData> where TData : class {
 
         for (var i = 0; i < dataList.Count; i++) {
             var originalX = XValueSelector(dataList[i]);
-            var xValue = Chart.GetScaledXValue(originalX);
+            var xValue = originalX;
 
             // We use VisibilityFactor^2 for the height to ensure it shrinks to zero 
             // even as the axis range (which uses linear VisibilityFactor) also shrinks.

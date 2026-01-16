@@ -178,7 +178,7 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
         for (var i = 0; i < dataList.Count; i++)
         {
             var originalX = XValueSelector(dataList[i]);
-            var xValue = Chart.GetScaledXValue(originalX);
+            var xValue = originalX;
             var targetYValue = YValueSelector(dataList[i]);
 
             var startYValue = (AnimationStartValues != null && i < AnimationStartValues.Length)

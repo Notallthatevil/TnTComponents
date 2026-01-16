@@ -56,8 +56,8 @@ public class NTHeatMapSeries<TData> : NTCartesianSeries<TData> where TData : cla
       for (int i = 0; i < dataList.Count; i++)
       {
          var item = dataList[i];
-         var xVal = Chart.GetScaledXValue(XValueSelector(item));
-         var yVal = Chart.GetScaledYValue(YValueSelector(item));
+         var xVal = XValueSelector(item);
+         var yVal = YValueSelector(item);
          var weight = WeightSelector(item);
 
          float t = weightRange > 0 ? (float)((weight - minWeight) / weightRange) : 1.0f;
@@ -132,8 +132,8 @@ public class NTHeatMapSeries<TData> : NTCartesianSeries<TData> where TData : cla
       for (int i = 0; i < dataList.Count; i++)
       {
          var item = dataList[i];
-         var xVal = Chart.GetScaledXValue(XValueSelector(item));
-         var yVal = Chart.GetScaledYValue(YValueSelector(item));
+         var xVal = XValueSelector(item);
+         var yVal = YValueSelector(item);
 
          float screenXCoord = Chart.ScaleX(xVal, renderArea);
          float screenYCoord = Chart.ScaleY(yVal, renderArea);

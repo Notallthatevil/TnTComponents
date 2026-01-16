@@ -72,7 +72,7 @@ public class NTAreaSeries<TData> : NTLineSeries<TData> where TData : class
       for (var i = 0; i < dataList.Count; i++)
       {
          var originalX = XValueSelector(dataList[i]);
-         var xValue = Chart.GetScaledXValue(originalX);
+         var xValue = originalX;
          var targetYValue = YValueSelector(dataList[i]);
 
          // Area animations often start from the baseline

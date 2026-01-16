@@ -63,32 +63,24 @@ public class NTXAxisOptions : NTAxisOptions {
          var yLine = plotArea.Bottom;
          canvas.DrawLine(plotArea.Left, yLine, plotArea.Right, yLine, linePaint);
 
-         var isCategorical = chart.IsCategoricalX;
+         if (ValuesToShow != null) {
+            for (var i = 0; i < ValuesToShow.Count; i++) {
+               var val = ValuesToShow[i];
+               var screenCoord = chart.ScaleX(val, plotArea);
 
-         if (ValuesToShow != null || isCategorical) {
-            var allValues = ValuesToShow ?? chart.GetAllXValues();
-            if (allValues.Any()) {
-               for (var i = 0; i < allValues.Count; i++) {
-                  var val = allValues[i];
-                  var scaledVal = chart.GetScaledXValue(val);
-                  var screenCoord = chart.ScaleX(scaledVal, plotArea);
+               if (screenCoord < plotArea.Left - 1 || screenCoord > plotArea.Right + 1) continue;
 
-                  if (screenCoord < plotArea.Left - 1 || screenCoord > plotArea.Right + 1) continue;
+               var label = val.ToString("0.#");
 
-                  var label = val.ToString("0.#");
-
-                  SKTextAlign textAlign = SKTextAlign.Center;
-                  if (!isCategorical) {
-                     if (i == 0 && allValues.Count > 1) {
-                        textAlign = SKTextAlign.Left;
-                     }
-                     else if (i == allValues.Count - 1 && allValues.Count > 1) {
-                        textAlign = SKTextAlign.Right;
-                     }
-                  }
-
-                  canvas.DrawText(label, screenCoord, yLine + 14, textAlign, textFont, textPaint);
+               SKTextAlign textAlign = SKTextAlign.Center;
+               if (i == 0 && ValuesToShow.Count > 1) {
+                  textAlign = SKTextAlign.Left;
                }
+               else if (i == ValuesToShow.Count - 1 && ValuesToShow.Count > 1) {
+                  textAlign = SKTextAlign.Right;
+               }
+
+               canvas.DrawText(label, screenCoord, yLine + 14, textAlign, textFont, textPaint);
             }
          }
          else if (Scale == NTAxisScale.Logarithmic) {
@@ -158,28 +150,22 @@ public class NTXAxisOptions : NTAxisOptions {
          var xLine = plotArea.Left;
          canvas.DrawLine(xLine, plotArea.Top, xLine, plotArea.Bottom, linePaint);
 
-         var isCategorical = chart.IsCategoricalX;
+         if (ValuesToShow != null && ValuesToShow.Any()) {
+            for (var i = 0; i < ValuesToShow.Count; i++) {
+               var val = ValuesToShow[i];
+               var screenCoord = chart.ScaleX(val, plotArea);
 
-         if (ValuesToShow != null || isCategorical) {
-            var allValues = ValuesToShow ?? chart.GetAllXValues();
-            if (allValues.Any()) {
-               for (var i = 0; i < allValues.Count; i++) {
-                  var val = allValues[i];
-                  var scaledVal = chart.GetScaledXValue(val);
-                  var screenCoord = chart.ScaleX(scaledVal, plotArea);
+               if (screenCoord < plotArea.Top - 1 || screenCoord > plotArea.Bottom + 1) continue;
 
-                  if (screenCoord < plotArea.Top - 1 || screenCoord > plotArea.Bottom + 1) continue;
-
-                  float yOffset = 5;
-                  if (i == 0 && !isCategorical) {
-                     yOffset = 0;
-                  }
-                  else if (i == allValues.Count - 1 && !isCategorical) {
-                     yOffset = 10;
-                  }
-
-                  canvas.DrawText(val.ToString("0.#"), xLine - 5, screenCoord + yOffset, SKTextAlign.Right, textFont, textPaint);
+               float yOffset = 5;
+               if (i == 0) {
+                  yOffset = 0;
                }
+               else if (i == ValuesToShow.Count - 1) {
+                  yOffset = 10;
+               }
+
+               canvas.DrawText(val.ToString("0.#"), xLine - 5, screenCoord + yOffset, SKTextAlign.Right, textFont, textPaint);
             }
          }
          else if (Scale == NTAxisScale.Logarithmic) {
