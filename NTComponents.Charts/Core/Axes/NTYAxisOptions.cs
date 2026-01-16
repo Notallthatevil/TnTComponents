@@ -63,27 +63,7 @@ public class NTYAxisOptions : NTAxisOptions {
          var yLine = plotArea.Bottom;
          canvas.DrawLine(plotArea.Left, yLine, plotArea.Right, yLine, linePaint);
 
-         if (ValuesToShow != null) {
-            for (var i = 0; i < ValuesToShow.Count; i++) {
-               var val = ValuesToShow[i];
-               var screenCoord = chart.ScaleY(val, plotArea);
-
-               if (screenCoord < plotArea.Left - 1 || screenCoord > plotArea.Right + 1) continue;
-
-               var label = val.ToString("0.#");
-
-               SKTextAlign textAlign = SKTextAlign.Center;
-               if (i == 0 && ValuesToShow.Count > 1) {
-                  textAlign = SKTextAlign.Left;
-               }
-               else if (i == ValuesToShow.Count - 1 && ValuesToShow.Count > 1) {
-                  textAlign = SKTextAlign.Right;
-               }
-
-               canvas.DrawText(label, screenCoord, yLine + 14, textAlign, textFont, textPaint);
-            }
-         }
-         else if (Scale == NTAxisScale.Logarithmic) {
+         if (Scale == NTAxisScale.Logarithmic) {
             var (min, max) = chart.GetYRange(true);
             min = Math.Max(0.000001, min);
             max = Math.Max(min * 1.1, max);
@@ -150,25 +130,7 @@ public class NTYAxisOptions : NTAxisOptions {
          var xLine = plotArea.Left;
          canvas.DrawLine(xLine, plotArea.Top, xLine, plotArea.Bottom, linePaint);
 
-         if (ValuesToShow != null && ValuesToShow.Any()) {
-            for (var i = 0; i < ValuesToShow.Count; i++) {
-               var val = ValuesToShow[i];
-               var screenCoord = chart.ScaleY(val, plotArea);
-
-               if (screenCoord < plotArea.Top - 1 || screenCoord > plotArea.Bottom + 1) continue;
-
-               var yOffset = 5;
-               if (i == 0) {
-                  yOffset = 0;
-               }
-               else if (i == ValuesToShow.Count - 1) {
-                  yOffset = 10;
-               }
-
-               canvas.DrawText(val.ToString("0.#"), xLine - 5, screenCoord + yOffset, SKTextAlign.Right, textFont, textPaint);
-            }
-         }
-         else if (Scale == NTAxisScale.Logarithmic) {
+          if (Scale == NTAxisScale.Logarithmic) {
             var (min, max) = chart.GetYRange(true);
             min = Math.Max(0.000001, min);
             max = Math.Max(min * 1.1, max);

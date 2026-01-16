@@ -137,26 +137,6 @@
     <div class="row mt-4">
         <div class="col-12 mb-4">
             <div class="card p-3 shadow-sm">
-                <h3>Custom Axis Values</h3>
-                <div style="height: 300px;">
-                    <NTChart TData="CartesianPoint" Title="Explicit Labels"
-                        EnableHardwareAcceleration="@_enableHardwareAcceleration">
-                        <NTLineSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
-                            YValueSelector="@(p => p.Y)" Color="TnTColor.Primary"
-                            XAxis="@(new NTXAxisOptions { Title = "Selected X", ValuesToShow = Enumerable.Range(0, 11).Select(i => (double)i * 10).ToList() })"
-                            YAxis="@(new NTYAxisOptions { Title = "Major Y", ValuesToShow = Enumerable.Range(0, 11).Select(i => (double)i * 10).ToList() })" />
-                    </NTChart>
-                </div>
-                <div class="mt-2 text-muted">
-                    Demonstrating explicit axis labels (0 to 100 on both axes).
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mt-4">
-        <div class="col-12 mb-4">
-            <div class="card p-3 shadow-sm">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <h3>Pan & Zoom</h3>
                     <button class="btn btn-sm btn-outline-secondary" @onclick="() => interactiveChart.ResetView()">Reset

@@ -71,10 +71,6 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
         var values = Data.Select(XValueSelector).ToList();
         var min = values.Min();
         var max = values.Max();
-        if (XAxis != null && XAxis.Visible && XAxis.ValuesToShow != null && XAxis.ValuesToShow.Any()) {
-            min = Math.Min(min, XAxis.ValuesToShow.Min());
-            max = Math.Max(max, XAxis.ValuesToShow.Max());
-        }
         return (min, max);
     }
 
@@ -101,11 +97,6 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
             max = values.Max();
         }
 
-        if (YAxis != null && YAxis.Visible && YAxis.ValuesToShow != null && YAxis.ValuesToShow.Any()) {
-            min = Math.Min(min, YAxis.ValuesToShow.Min());
-            max = Math.Max(max, YAxis.ValuesToShow.Max());
-        }
-
         return (min, max);
     }
 
@@ -115,9 +106,6 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
         foreach (var item in Data) {
             values.Add(XValueSelector(item));
         }
-        if (XAxis != null && XAxis.Visible && XAxis.ValuesToShow != null) {
-            foreach (var val in XAxis.ValuesToShow) values.Add(val);
-        }
     }
 
     /// <inheritdoc />
@@ -125,9 +113,6 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
         if (Data == null) return;
         foreach (var item in Data) {
             values.Add(YValueSelector(item));
-        }
-        if (YAxis != null && YAxis.Visible && YAxis.ValuesToShow != null) {
-            foreach (var val in YAxis.ValuesToShow) values.Add(val);
         }
     }
 

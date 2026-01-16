@@ -8,11 +8,6 @@ namespace NTComponents.Charts.Core.Axes;
 public abstract class NTAxisOptions {
 
    /// <summary>
-   ///    Gets or sets the values to show on the axis.
-   /// </summary>
-   public List<double>? ValuesToShow { get; set; }
-
-   /// <summary>
    ///    Gets or sets the title of the axis.
    /// </summary>
    public string? Title { get; set; }
