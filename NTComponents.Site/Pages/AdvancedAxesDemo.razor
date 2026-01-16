@@ -52,7 +52,7 @@
                         RadialAxis="@(new NTRadialAxisOptions { 
                             Title = "Abilities",
                             Levels = 5,
-                            Shape = RadialAxisShape.Polygon,
+                            Shape = NTRadialAxisShape.Polygon,
                             Labels = _radarLabels 
                         })">
                         <NTRadarSeries TData="RadarPoint" Data="@_radarData1" Title="Developer A"
@@ -77,7 +77,7 @@
                     <NTChart TData="RadarPoint" Title="Circular Profile" 
                         RadialAxis="@(new NTRadialAxisOptions { 
                             Levels = 4,
-                            Shape = RadialAxisShape.Circle,
+                            Shape = NTRadialAxisShape.Circle,
                             Labels = _radarLabels 
                         })">
                         <NTRadarSeries TData="RadarPoint" Data="@_radarData1" Title="Group 1"
