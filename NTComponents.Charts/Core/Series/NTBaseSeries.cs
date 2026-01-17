@@ -278,6 +278,16 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     internal virtual void RegisterYValues(HashSet<double> values) { }
 
     /// <summary>
+    ///    Gets the tick values for the X axis.
+    /// </summary>
+    internal virtual IEnumerable<double> GetXTicks() => [];
+
+    /// <summary>
+    ///    Gets the tick values for the Y axis.
+    /// </summary>
+    internal virtual IEnumerable<double> GetYTicks() => [];
+
+    /// <summary>
     ///     Returns the legend items for this series.
     /// </summary>
     /// <returns>The legend items.</returns>

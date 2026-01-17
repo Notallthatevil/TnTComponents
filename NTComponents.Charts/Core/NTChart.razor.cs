@@ -219,23 +219,6 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         }
     }
 
-    internal string GetXLabel(double val) {
-        var scale = GetXScale();
-        var format = XAxis?.LabelFormat ?? "0.#";
-        return val.ToString(format);
-    }
-
-    internal string GetYLabel(double val) {
-        var scale = GetYScale();
-        var format = YAxis?.LabelFormat ?? "0.#";
-        return val.ToString(format);
-    }
-
-    internal object? GetXValueObject(double val) {
-        var scale = GetXScale();
-        return val;
-    }
-
     private IJSObjectReference? _themeListener;
     private DotNetObjectReference<NTChart<TData>>? _objRef;
 
@@ -581,17 +564,8 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         LastPlotArea = plotArea;
         CalculateTreeMapAreas(plotArea);
 
-        // Pass 3: Render axes using the final plotArea and the adjusted accessibleArea
+        // Pass 3: Render axes via series
         var rendered = new HashSet<object>();
-        if (XAxis != null && XAxis.Visible && rendered.Add(XAxis)) {
-            XAxis.Render(canvas, plotArea, accessibleArea);
-        }
-        if (YAxis != null && YAxis.Visible && rendered.Add(YAxis)) {
-            YAxis.Render(canvas, plotArea, accessibleArea);
-        }
-        if (RadialAxis != null && RadialAxis.Visible && rendered.Add(RadialAxis)) {
-            RadialAxis.Render(canvas, plotArea, accessibleArea);
-        }
         foreach (var series in Series.Where(s => s.Visible)) {
             series.RenderAxes(canvas, plotArea, accessibleArea, rendered);
         }

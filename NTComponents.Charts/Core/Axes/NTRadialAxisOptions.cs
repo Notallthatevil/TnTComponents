@@ -76,7 +76,7 @@ public class NTRadialAxisOptions<TChartData> : NTAxisOptions<TChartData> where T
     }
 
     /// <inheritdoc />
-    internal override void Render(SKCanvas canvas, SKRect plotArea, SKRect totalArea) {
+    internal override void Render(SKCanvas canvas, SKRect plotArea, SKRect totalArea, IEnumerable<double> tickValues) {
         var series = Chart.Series.OfType<NTRadarSeries<TChartData>>().FirstOrDefault();
         if (series == null) {
             return;
@@ -96,9 +96,17 @@ public class NTRadialAxisOptions<TChartData> : NTAxisOptions<TChartData> where T
             max = 1;
         }
 
+        var values = tickValues.ToList();
+        if (!values.Any()) {
+            // Fallback to Levels if no ticks provided
+            for (var i = 1; i <= Levels; i++) {
+                values.Add(max / Levels * i);
+            }
+        }
+
         // Draw concentric rings
-        for (var i = 1; i <= Levels; i++) {
-            var r = radius / Levels * i;
+        foreach (var val in values) {
+            var r = (float)(radius * (val / max));
             if (Shape == NTRadialAxisShape.Circle) {
                 canvas.DrawCircle(centerX, centerY, r, _linePaint);
             }
@@ -107,7 +115,6 @@ public class NTRadialAxisOptions<TChartData> : NTAxisOptions<TChartData> where T
             }
 
             // Draw value label on the first axis
-            var val = max / Levels * i;
             var angle = -90f;
             var rad = angle * (float)Math.PI / 180f;
             canvas.DrawText(val.ToString("0.#"), centerX + ((float)Math.Cos(rad) * r), centerY + ((float)Math.Sin(rad) * r), SKTextAlign.Left, _textFont, _textPaint);

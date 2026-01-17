@@ -53,7 +53,8 @@ public abstract class NTAxisOptions<TChartData> : IDisposable where TChartData :
     /// <param name="canvas">   The canvas to render on.</param>
     /// <param name="plotArea"> The area of the chart content.</param>
     /// <param name="totalArea">The total area of the chart.</param>
-    internal abstract void Render(SKCanvas canvas, SKRect plotArea, SKRect totalArea);
+    /// <param name="tickValues">The values to render as ticks on the axis.</param>
+    internal abstract void Render(SKCanvas canvas, SKRect plotArea, SKRect totalArea, IEnumerable<double> tickValues);
 
     internal void SetChart(NTChart<TChartData> chart) {
         Chart = chart;

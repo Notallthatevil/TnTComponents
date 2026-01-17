@@ -92,7 +92,7 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
     internal override List<string> GetTooltipLines(TData data) {
         var xVal = XValueSelector(data);
         var yValue = YValueSelector(data);
-        var xLabel = Chart.GetXLabel(Chart.MapXValue(xVal));
+        var xLabel = XAxis.FormatLabel(Chart.MapXValue(xVal));
         return
         [
             $"{Title ?? "Series"}: {xLabel}",
@@ -177,10 +177,82 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
         if (!IsEffectivelyVisible)
             return;
         if (XAxis != null && XAxis.Visible && rendered.Add(XAxis)) {
-            XAxis.Render(canvas, plotArea, totalArea);
+            XAxis.Render(canvas, plotArea, totalArea, GetXTicks());
         }
         if (YAxis != null && YAxis.Visible && rendered.Add(YAxis)) {
-            YAxis.Render(canvas, plotArea, totalArea);
+            YAxis.Render(canvas, plotArea, totalArea, GetYTicks());
+        }
+    }
+
+    /// <inheritdoc />
+    internal override IEnumerable<double> GetXTicks() {
+        if (XAxis == null || !XAxis.Visible) return [];
+
+        var (min, max) = Chart.GetXRange(false);
+        if (XAxis.Scale == NTAxisScale.Logarithmic) {
+            var (minP, maxP) = Chart.GetXRange(true);
+            minP = Math.Max(0.000001, minP);
+            maxP = Math.Max(minP * 1.1, maxP);
+            var startLog = (int)Math.Floor(Math.Log10(minP));
+            var endLog = (int)Math.Ceiling(Math.Log10(maxP));
+            var ticks = new List<double>();
+            for (var log = startLog; log <= endLog; log++) {
+                var val = Math.Pow(10, log);
+                if (val >= minP && val <= maxP) ticks.Add(val);
+            }
+            return ticks;
+        }
+        else if (Chart.UseNiceNumbers) {
+            var (niceMin, niceMax, spacing) = Chart.CalculateNiceScaling(min, max);
+            var totalLabels = (int)Math.Round((niceMax - niceMin) / spacing) + 1;
+            var ticks = new List<double>();
+            for (var i = 0; i < totalLabels; i++) ticks.Add(niceMin + (i * spacing));
+            return ticks;
+        }
+        else {
+            var ticks = new List<double>();
+            var labelCount = 5;
+            for (var i = 0; i < labelCount; i++) {
+                var t = i / (float)(labelCount - 1);
+                ticks.Add(min + (t * (max - min)));
+            }
+            return ticks;
+        }
+    }
+
+    /// <inheritdoc />
+    internal override IEnumerable<double> GetYTicks() {
+        if (YAxis == null || !YAxis.Visible) return [];
+
+        var (min, max) = Chart.GetYRange(false);
+        if (YAxis.Scale == NTAxisScale.Logarithmic) {
+            var (minP, maxP) = Chart.GetYRange(true);
+            minP = Math.Max(0.000001, minP);
+            maxP = Math.Max(minP * 1.1, maxP);
+            var startLog = (int)Math.Floor(Math.Log10(minP));
+            var endLog = (int)Math.Ceiling(Math.Log10(maxP));
+            var ticks = new List<double>();
+            for (var log = startLog; log <= endLog; log++) {
+                var val = Math.Pow(10, log);
+                if (val >= minP && val <= maxP) ticks.Add(val);
+            }
+            return ticks;
+        }
+        else if (Chart.UseNiceNumbers) {
+            var (niceMin, niceMax, spacing) = Chart.CalculateNiceScaling(min, max);
+            var totalLabels = (int)Math.Round((niceMax - niceMin) / spacing) + 1;
+            var ticks = new List<double>();
+            for (var i = 0; i < totalLabels; i++) ticks.Add(niceMin + (i * spacing));
+            return ticks;
+        }
+        else {
+            var ticks = new List<double>();
+            var labelCount = 5;
+            for (var i = 0; i < labelCount; i++) {
+                var t = i / (float)(labelCount - 1);
+                ticks.Add(min + (t * (max - min)));
+            }
+            return ticks;
         }
     }
 

@@ -39,10 +39,21 @@ public class NTRadarSeries<TData> : NTCircularSeries<TData> where TData : class 
 
    /// <inheritdoc />
    internal override void RenderAxes(SKCanvas canvas, SKRect plotArea, SKRect totalArea, HashSet<object> rendered) {
-      if (RadialAxis != null && RadialAxis.Visible && !rendered.Contains(RadialAxis)) {
-         rendered.Add(RadialAxis);
-         RadialAxis.Render(canvas, plotArea, totalArea);
+      if (RadialAxis != null && RadialAxis.Visible && rendered.Add(RadialAxis)) {
+         RadialAxis.Render(canvas, plotArea, totalArea, GetRadialTicks());
       }
+   }
+
+   private IEnumerable<double> GetRadialTicks() {
+      if (Data == null || !Data.Any()) return [];
+      var max = MaxValue ?? Data.Max(ValueSelector);
+      if (max <= 0) max = 1;
+      var ticks = new List<double>();
+      var levels = RadialAxis?.Levels ?? 5;
+      for (var i = 1; i <= levels; i++) {
+         ticks.Add(max / levels * i);
+      }
+      return ticks;
    }
 
    public override void Render(SKCanvas canvas, SKRect renderArea) {

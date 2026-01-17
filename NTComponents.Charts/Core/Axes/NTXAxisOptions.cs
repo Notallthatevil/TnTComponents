@@ -70,77 +70,28 @@ public class NTXAxisOptions<TChartData> : NTAxisOptions<TChartData> where TChart
     }
 
     /// <inheritdoc />
-    internal override void Render(SKCanvas canvas, SKRect plotArea, SKRect totalArea) {
-        var (xMinReal, xMaxReal) = Chart.GetXRange(false);
-
+    internal override void Render(SKCanvas canvas, SKRect plotArea, SKRect totalArea, IEnumerable<double> tickValues) {
         var yLine = plotArea.Bottom;
         canvas.DrawLine(plotArea.Left, yLine, plotArea.Right, yLine, _linePaint);
 
-        if (Scale == NTAxisScale.Logarithmic) {
-            var (min, max) = Chart.GetXRange(true);
-            min = Math.Max(0.000001, min);
-            max = Math.Max(min * 1.1, max);
+        var values = tickValues.ToList();
+        for (var i = 0; i < values.Count; i++) {
+            var val = values[i];
+            var screenCoord = Chart.ScaleX(val, plotArea);
 
-            var startLog = (int)Math.Floor(Math.Log10(min));
-            var endLog = (int)Math.Ceiling(Math.Log10(max));
-
-            for (var log = startLog; log <= endLog; log++) {
-                var val = Math.Pow(10, log);
-                if (val < min || val > max) {
-                    continue;
-                }
-
-                var screenCoord = Chart.ScaleX(val, plotArea);
-                if (screenCoord < plotArea.Left - 1 || screenCoord > plotArea.Right + 1) {
-                    continue;
-                }
-
-                canvas.DrawText(FormatLabel(val, Chart), screenCoord, yLine + 14, SKTextAlign.Center, _textFont, _textPaint);
+            if (screenCoord < plotArea.Left - 1 || screenCoord > plotArea.Right + 1) {
+                continue;
             }
-        }
-        else if (Chart.UseNiceNumbers) {
-            var (niceMin, niceMax, spacing) = Chart.CalculateNiceScaling(xMinReal, xMaxReal);
-            var totalLabels = (int)Math.Round((niceMax - niceMin) / spacing) + 1;
-            for (var i = 0; i < totalLabels; i++) {
-                var val = niceMin + (i * spacing);
-                var screenCoord = Chart.ScaleX(val, plotArea);
 
-                if (screenCoord < plotArea.Left - 1 || screenCoord > plotArea.Right + 1) {
-                    continue;
-                }
-
-                var textAlign = SKTextAlign.Center;
-                if (i == 0) {
-                    textAlign = SKTextAlign.Left;
-                }
-                else if (i == totalLabels - 1) {
-                    textAlign = SKTextAlign.Right;
-                }
-
-                canvas.DrawText(FormatLabel(val, Chart), screenCoord, yLine + 14, textAlign, _textFont, _textPaint);
+            var textAlign = SKTextAlign.Center;
+            if (i == 0) {
+                textAlign = SKTextAlign.Left;
             }
-        }
-        else {
-            var labelCount = 5;
-            for (var i = 0; i < labelCount; i++) {
-                var t = i / (float)(labelCount - 1);
-                var val = xMinReal + (t * (xMaxReal - xMinReal));
-                var screenCoord = Chart.ScaleX(val, plotArea);
-
-                if (screenCoord < plotArea.Left - 1 || screenCoord > plotArea.Right + 1) {
-                    continue;
-                }
-
-                var textAlign = SKTextAlign.Center;
-                if (i == 0) {
-                    textAlign = SKTextAlign.Left;
-                }
-                else if (i == labelCount - 1) {
-                    textAlign = SKTextAlign.Right;
-                }
-
-                canvas.DrawText(FormatLabel(val, Chart), screenCoord, yLine + 14, textAlign, _textFont, _textPaint);
+            else if (i == values.Count - 1) {
+                textAlign = SKTextAlign.Right;
             }
+
+            canvas.DrawText(FormatLabel(val), screenCoord, yLine + 14, textAlign, _textFont, _textPaint);
         }
 
         if (!string.IsNullOrEmpty(Title)) {
@@ -148,8 +99,9 @@ public class NTXAxisOptions<TChartData> : NTAxisOptions<TChartData> where TChart
         }
     }
 
-    internal virtual string FormatLabel<TData>(double value, NTChart<TData> chart) where TData : class {
-        return chart.GetXLabel(value);
+    internal virtual string FormatLabel(double value) {
+        var format = LabelFormat ?? "0.#";
+        return value.ToString(format);
     }
 
 }
