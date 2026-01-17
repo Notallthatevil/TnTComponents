@@ -12,7 +12,7 @@
          <NTHeatMapSeries TData="ActivityPoint" Data="@Data" XValueSelector="@(d => (double)d.DayIndex)"
             YValueSelector="@(d => (double)d.HourIndex)" WeightSelector="@(d => (double)d.Commits)"
             MinColor="TnTColor.SurfaceVariant" MaxColor="TnTColor.Primary" Title="Commits"
-            XAxis="@(new NTXAxisOptions { Title = "Day" })" YAxis="@(new NTYAxisOptions { Title = "Hour" })" />
+            XAxis="@(new NTXAxisOptions<ActivityPoint> { Title = "Day" })" YAxis="@(new NTYAxisOptions<ActivityPoint> { Title = "Hour" })" />
       </NTChart>
    </div>
 </div>

@@ -1,14 +1,68 @@
 using SkiaSharp;
+using System.Runtime.InteropServices;
 
 namespace NTComponents.Charts.Core.Axes;
 
 /// <summary>
 ///     Options for the X axis of a cartesian chart.
 /// </summary>
-public class NTXAxisOptions : NTAxisOptions {
+public class NTXAxisOptions<TChartData> : NTAxisOptions<TChartData> where TChartData : class {
 
+    private SKFont _textFont = default!;
+    private SKPaint _titlePaint = default!;
+    private SKFont _titleFont = default!;
+    private SKPaint _linePaint = default!;
+    private SKPaint _textPaint = default!;
+
+    public NTXAxisOptions(NTChart<TChartData> chart) : base(chart) {
+        Refresh();
+    }
+
+    public NTXAxisOptions() : base() { }
+
+    private void DisposeSKResources() {
+        _textFont?.Dispose();
+        _titlePaint?.Dispose();
+        _titleFont?.Dispose();
+        _linePaint?.Dispose();
+        _textPaint?.Dispose();
+    }
+    public override void Dispose() {
+        DisposeSKResources();
+    }
+
+    public override void Refresh() {
+        if (Chart == null) return;
+        DisposeSKResources();
+        _textFont = new SKFont {
+            Size = 12,
+            Typeface = Chart.DefaultTypeface
+        };
+
+        _titlePaint = new SKPaint {
+            Color = Chart.GetThemeColor(Chart.TextColor),
+            IsAntialias = true
+        };
+
+        _titleFont = new SKFont {
+            Size = 16,
+            Embolden = true,
+            Typeface = Chart.DefaultTypeface
+        };
+
+        _linePaint = new SKPaint {
+            Color = Chart.GetThemeColor(TnTColor.Outline),
+            StrokeWidth = 1,
+            Style = SKPaintStyle.Stroke,
+            IsAntialias = true
+        };
+        _textPaint = new SKPaint {
+            Color = Chart.GetThemeColor(Chart.TextColor),
+            IsAntialias = true
+        };
+    }
     /// <inheritdoc />
-    internal override SKRect Measure<TData>(SKRect renderArea, NTChart<TData> chart) {
+    internal override SKRect Measure(SKRect renderArea) {
         float labelHeight = 18;
         float titleHeight = string.IsNullOrEmpty(Title) ? 0 : 20;
         var totalAxisHeight = labelHeight + titleHeight + 2;
@@ -16,42 +70,14 @@ public class NTXAxisOptions : NTAxisOptions {
     }
 
     /// <inheritdoc />
-    internal override void Render<TData>(SKCanvas canvas, SKRect plotArea, SKRect totalArea, NTChart<TData> chart) {
-        var (xMinReal, xMaxReal) = chart.GetXRange(false);
-
-        using var textPaint = new SKPaint {
-            Color = chart.GetThemeColor(chart.TextColor),
-            IsAntialias = true
-        };
-
-        using var textFont = new SKFont {
-            Size = 12,
-            Typeface = chart.DefaultTypeface
-        };
-
-        using var titlePaint = new SKPaint {
-            Color = chart.GetThemeColor(chart.TextColor),
-            IsAntialias = true
-        };
-
-        using var titleFont = new SKFont {
-            Size = 16,
-            Embolden = true,
-            Typeface = chart.DefaultTypeface
-        };
-
-        using var linePaint = new SKPaint {
-            Color = chart.GetThemeColor(TnTColor.Outline),
-            StrokeWidth = 1,
-            Style = SKPaintStyle.Stroke,
-            IsAntialias = true
-        };
+    internal override void Render(SKCanvas canvas, SKRect plotArea, SKRect totalArea) {
+        var (xMinReal, xMaxReal) = Chart.GetXRange(false);
 
         var yLine = plotArea.Bottom;
-        canvas.DrawLine(plotArea.Left, yLine, plotArea.Right, yLine, linePaint);
+        canvas.DrawLine(plotArea.Left, yLine, plotArea.Right, yLine, _linePaint);
 
         if (Scale == NTAxisScale.Logarithmic) {
-            var (min, max) = chart.GetXRange(true);
+            var (min, max) = Chart.GetXRange(true);
             min = Math.Max(0.000001, min);
             max = Math.Max(min * 1.1, max);
 
@@ -64,20 +90,20 @@ public class NTXAxisOptions : NTAxisOptions {
                     continue;
                 }
 
-                var screenCoord = chart.ScaleX(val, plotArea);
+                var screenCoord = Chart.ScaleX(val, plotArea);
                 if (screenCoord < plotArea.Left - 1 || screenCoord > plotArea.Right + 1) {
                     continue;
                 }
 
-                canvas.DrawText(val.ToString("G"), screenCoord, yLine + 14, SKTextAlign.Center, textFont, textPaint);
+                canvas.DrawText(FormatLabel(val, Chart), screenCoord, yLine + 14, SKTextAlign.Center, _textFont, _textPaint);
             }
         }
-        else if (chart.UseNiceNumbers) {
-            var (niceMin, niceMax, spacing) = chart.CalculateNiceScaling(xMinReal, xMaxReal);
+        else if (Chart.UseNiceNumbers) {
+            var (niceMin, niceMax, spacing) = Chart.CalculateNiceScaling(xMinReal, xMaxReal);
             var totalLabels = (int)Math.Round((niceMax - niceMin) / spacing) + 1;
             for (var i = 0; i < totalLabels; i++) {
                 var val = niceMin + (i * spacing);
-                var screenCoord = chart.ScaleX(val, plotArea);
+                var screenCoord = Chart.ScaleX(val, plotArea);
 
                 if (screenCoord < plotArea.Left - 1 || screenCoord > plotArea.Right + 1) {
                     continue;
@@ -91,7 +117,7 @@ public class NTXAxisOptions : NTAxisOptions {
                     textAlign = SKTextAlign.Right;
                 }
 
-                canvas.DrawText(val.ToString("0.#"), screenCoord, yLine + 14, textAlign, textFont, textPaint);
+                canvas.DrawText(FormatLabel(val, Chart), screenCoord, yLine + 14, textAlign, _textFont, _textPaint);
             }
         }
         else {
@@ -99,7 +125,7 @@ public class NTXAxisOptions : NTAxisOptions {
             for (var i = 0; i < labelCount; i++) {
                 var t = i / (float)(labelCount - 1);
                 var val = xMinReal + (t * (xMaxReal - xMinReal));
-                var screenCoord = chart.ScaleX(val, plotArea);
+                var screenCoord = Chart.ScaleX(val, plotArea);
 
                 if (screenCoord < plotArea.Left - 1 || screenCoord > plotArea.Right + 1) {
                     continue;
@@ -113,12 +139,18 @@ public class NTXAxisOptions : NTAxisOptions {
                     textAlign = SKTextAlign.Right;
                 }
 
-                canvas.DrawText(val.ToString("0.#"), screenCoord, yLine + 14, textAlign, textFont, textPaint);
+                canvas.DrawText(FormatLabel(val, Chart), screenCoord, yLine + 14, textAlign, _textFont, _textPaint);
             }
         }
 
         if (!string.IsNullOrEmpty(Title)) {
-            canvas.DrawText(Title, plotArea.Left + (plotArea.Width / 2), plotArea.Bottom + 34, SKTextAlign.Center, titleFont, titlePaint);
+            canvas.DrawText(Title, plotArea.Left + (plotArea.Width / 2), plotArea.Bottom + 34, SKTextAlign.Center, _titleFont, _titlePaint);
         }
     }
+
+    internal virtual string FormatLabel<TData>(double value, NTChart<TData> chart) where TData : class {
+        return chart.GetXLabel(value);
+    }
+
 }
+

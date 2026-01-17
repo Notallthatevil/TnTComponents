@@ -5,7 +5,48 @@ namespace NTComponents.Charts.Core.Axes;
 /// <summary>
 ///     Options for a radial axis (used in radar charts).
 /// </summary>
-public class NTRadialAxisOptions : NTAxisOptions {
+public class NTRadialAxisOptions<TChartData> : NTAxisOptions<TChartData> where TChartData : class {
+
+    private SKPaint _linePaint = default!;
+    private SKPaint _textPaint = default!;
+    private SKFont _textFont = default!;
+
+    public NTRadialAxisOptions(NTChart<TChartData> chart) : base(chart) {
+        Refresh();
+    }
+
+    public NTRadialAxisOptions() : base() { }
+
+    private void DisposeSKResources() {
+        _linePaint?.Dispose();
+        _textPaint?.Dispose();
+        _textFont?.Dispose();
+    }
+
+    public override void Dispose() {
+        DisposeSKResources();
+    }
+
+    public override void Refresh() {
+        if (Chart == null) return;
+        DisposeSKResources();
+        _linePaint = new SKPaint {
+            Color = Chart.GetThemeColor(TnTColor.OutlineVariant),
+            StrokeWidth = 1,
+            Style = SKPaintStyle.Stroke,
+            IsAntialias = true
+        };
+
+        _textPaint = new SKPaint {
+            Color = Chart.GetThemeColor(Chart.TextColor),
+            IsAntialias = true
+        };
+
+        _textFont = new SKFont {
+            Size = 12,
+            Typeface = Chart.DefaultTypeface
+        };
+    }
 
     /// <summary>
     ///    Gets or sets the number of concentric circles to draw.
@@ -23,7 +64,7 @@ public class NTRadialAxisOptions : NTAxisOptions {
     public List<string>? Labels { get; set; }
 
     /// <inheritdoc />
-    internal override SKRect Measure<TData>(SKRect renderArea, NTChart<TData> chart) {
+    internal override SKRect Measure(SKRect renderArea) {
         // Add padding for labels around the perimeter
         float padding = 60; // More padding for labels
         return new SKRect(
@@ -35,8 +76,8 @@ public class NTRadialAxisOptions : NTAxisOptions {
     }
 
     /// <inheritdoc />
-    internal override void Render<TData>(SKCanvas canvas, SKRect plotArea, SKRect totalArea, NTChart<TData> chart) {
-        var series = chart.Series.OfType<NTRadarSeries<TData>>().FirstOrDefault();
+    internal override void Render(SKCanvas canvas, SKRect plotArea, SKRect totalArea) {
+        var series = Chart.Series.OfType<NTRadarSeries<TChartData>>().FirstOrDefault();
         if (series == null) {
             return;
         }
@@ -55,38 +96,21 @@ public class NTRadialAxisOptions : NTAxisOptions {
             max = 1;
         }
 
-        using var linePaint = new SKPaint {
-            Color = chart.GetThemeColor(TnTColor.OutlineVariant),
-            StrokeWidth = 1,
-            Style = SKPaintStyle.Stroke,
-            IsAntialias = true
-        };
-
-        using var textPaint = new SKPaint {
-            Color = chart.GetThemeColor(chart.TextColor),
-            IsAntialias = true
-        };
-
-        using var textFont = new SKFont {
-            Size = 12,
-            Typeface = chart.DefaultTypeface
-        };
-
         // Draw concentric rings
         for (var i = 1; i <= Levels; i++) {
             var r = radius / Levels * i;
             if (Shape == NTRadialAxisShape.Circle) {
-                canvas.DrawCircle(centerX, centerY, r, linePaint);
+                canvas.DrawCircle(centerX, centerY, r, _linePaint);
             }
             else {
-                DrawPolygon(canvas, centerX, centerY, r, dataList.Count, linePaint);
+                DrawPolygon(canvas, centerX, centerY, r, dataList.Count, _linePaint);
             }
 
             // Draw value label on the first axis
             var val = max / Levels * i;
             var angle = -90f;
             var rad = angle * (float)Math.PI / 180f;
-            canvas.DrawText(val.ToString("0.#"), centerX + ((float)Math.Cos(rad) * r), centerY + ((float)Math.Sin(rad) * r), SKTextAlign.Left, textFont, textPaint);
+            canvas.DrawText(val.ToString("0.#"), centerX + ((float)Math.Cos(rad) * r), centerY + ((float)Math.Sin(rad) * r), SKTextAlign.Left, _textFont, _textPaint);
         }
 
         // Draw spokes and category labels
@@ -97,7 +121,7 @@ public class NTRadialAxisOptions : NTAxisOptions {
             var x = centerX + ((float)Math.Cos(rad) * radius);
             var y = centerY + ((float)Math.Sin(rad) * radius);
 
-            canvas.DrawLine(centerX, centerY, x, y, linePaint);
+            canvas.DrawLine(centerX, centerY, x, y, _linePaint);
 
             // Label
             var label = Labels != null && i < Labels.Count ? Labels[i] : series.LabelSelector?.Invoke(dataList[i]) ?? $"Item {i + 1}";
@@ -110,7 +134,7 @@ public class NTRadialAxisOptions : NTAxisOptions {
                 textAlign = Math.Cos(rad) > 0 ? SKTextAlign.Left : SKTextAlign.Right;
             }
 
-            canvas.DrawText(label, labelX, labelY + 5, textAlign, textFont, textPaint);
+            canvas.DrawText(label, labelX, labelY + 5, textAlign, _textFont, _textPaint);
         }
     }
 

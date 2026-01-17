@@ -270,7 +270,7 @@ public abstract class NTBaseSeries<TData> : ComponentBase, IDisposable where TDa
     /// <summary>
     ///    Registers any categorical X values the series has.
     /// </summary>
-    internal virtual void RegisterXValues(HashSet<double> values) { }
+    internal virtual void RegisterXValues(HashSet<object> values) { }
 
     /// <summary>
     ///    Registers any categorical Y values the series has.

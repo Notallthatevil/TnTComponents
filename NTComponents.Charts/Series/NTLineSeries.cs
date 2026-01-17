@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Components;
-using NTComponents.Charts.Core.Axes;
 using NTComponents.Charts.Core;
 using NTComponents.Charts.Core.Series;
 using SkiaSharp;
@@ -9,8 +8,7 @@ namespace NTComponents.Charts;
 /// <summary>
 ///     Represents a line series in a cartesian chart.
 /// </summary>
-public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
-{
+public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class {
 
     /// <summary>
     ///     Gets or sets the width of the line.
@@ -31,10 +29,8 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
     public LineInterpolation Interpolation { get; set; } = LineInterpolation.Straight;
 
     /// <inheritdoc />
-    public override void Render(SKCanvas canvas, SKRect renderArea)
-    {
-        if (Data == null || !Data.Any())
-        {
+    public override void Render(SKCanvas canvas, SKRect renderArea) {
+        if (Data == null || !Data.Any()) {
             return;
         }
 
@@ -50,8 +46,7 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
 
         color = color.WithAlpha((byte)(color.Alpha * hoverFactor * visibilityFactor));
 
-        using var paint = new SKPaint
-        {
+        using var paint = new SKPaint {
             Style = SKPaintStyle.Stroke,
             Color = color,
             StrokeWidth = StrokeWidth,
@@ -60,26 +55,20 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
             StrokeJoin = SKStrokeJoin.Round
         };
 
-        if (LineStyle == LineStyle.Dashed)
-        {
+        if (LineStyle == LineStyle.Dashed) {
             paint.PathEffect = SKPathEffect.CreateDash([10, 5], 0);
         }
 
-        if (LineStyle != LineStyle.None && points.Count > 1)
-        {
-            if (OnDataPointRender == null)
-            {
+        if (LineStyle != LineStyle.None && points.Count > 1) {
+            if (OnDataPointRender == null) {
                 using var path = BuildPath(points);
                 canvas.DrawPath(path, paint);
             }
-            else
-            {
+            else {
                 // Draw segment by segment to allow for per-point line styling
                 var dataList = Data.ToList();
-                for (var i = 1; i < points.Count; i++)
-                {
-                    var args = new NTDataPointRenderArgs<TData>
-                    {
+                for (var i = 1; i < points.Count; i++) {
+                    var args = new NTDataPointRenderArgs<TData> {
                         Data = dataList[i],
                         Index = i,
                         Color = color,
@@ -93,10 +82,11 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
                     var segmentStyle = args.LineStyle ?? LineStyle;
                     var segmentWidth = args.StrokeWidth ?? StrokeWidth;
 
-                    if (segmentStyle == LineStyle.None) continue;
+                    if (segmentStyle == LineStyle.None) {
+                        continue;
+                    }
 
-                    using var segmentPaint = new SKPaint
-                    {
+                    using var segmentPaint = new SKPaint {
                         Style = SKPaintStyle.Stroke,
                         Color = segmentColor,
                         StrokeWidth = segmentWidth,
@@ -105,8 +95,7 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
                         StrokeJoin = SKStrokeJoin.Round
                     };
 
-                    if (segmentStyle == LineStyle.Dashed)
-                    {
+                    if (segmentStyle == LineStyle.Dashed) {
                         segmentPaint.PathEffect = SKPathEffect.CreateDash([10, 5], 0);
                     }
 
@@ -116,14 +105,11 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
             }
         }
 
-        if (PointStyle != PointStyle.None || ShowDataLabels)
-        {
+        if (PointStyle != PointStyle.None || ShowDataLabels) {
             var dataList = Data.ToList();
-            for (var i = 0; i < points.Count; i++)
-            {
+            for (var i = 0; i < points.Count; i++) {
                 var item = dataList[i];
-                var args = new NTDataPointRenderArgs<TData>
-                {
+                var args = new NTDataPointRenderArgs<TData> {
                     Data = item,
                     Index = i,
                     Color = color,
@@ -135,26 +121,23 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
 
                 var point = points[i];
                 var isPointHovered = Chart.HoveredSeries == this && Chart.HoveredPointIndex == i;
-                
+
                 var pointColor = args.Color ?? color;
                 var pointStrokeColor = args.StrokeColor ?? pointColor;
                 var currentPointSize = args.PointSize ?? PointSize;
                 var currentPointShape = args.PointShape ?? PointShape;
 
-                if (isPointHovered)
-                {
+                if (isPointHovered) {
                     pointColor = pointColor.WithAlpha(255);
                     pointStrokeColor = pointStrokeColor.WithAlpha(255);
                     currentPointSize *= 1.5f;
                 }
 
-                if (PointStyle != PointStyle.None)
-                {
+                if (PointStyle != PointStyle.None) {
                     RenderPoint(canvas, point.X, point.Y, pointColor, currentPointSize, currentPointShape, pointStrokeColor);
                 }
 
-                if (ShowDataLabels || isPointHovered)
-                {
+                if (ShowDataLabels || isPointHovered) {
                     var labelColor = args.DataLabelColor;
                     var labelSize = args.DataLabelSize ?? DataLabelSize;
                     RenderDataLabel(canvas, point.X, point.Y, YValueSelector(dataList[i]), renderArea, labelColor, labelSize);
@@ -163,22 +146,18 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
         }
     }
 
-    protected List<SKPoint> GetPoints(SKRect renderArea, double xMin, double xMax, double yMin, double yMax)
-    {
+    protected List<SKPoint> GetPoints(SKRect renderArea, double xMin, double xMax, double yMin, double yMax) {
         var dataList = Data.ToList();
         var points = new List<SKPoint>();
         var progress = GetAnimationProgress();
         var easedProgress = BackEase(progress);
 
-        if (AnimationCurrentValues == null || AnimationCurrentValues.Length != dataList.Count)
-        {
+        if (AnimationCurrentValues == null || AnimationCurrentValues.Length != dataList.Count) {
             AnimationCurrentValues = new double[dataList.Count];
         }
 
-        for (var i = 0; i < dataList.Count; i++)
-        {
-            var originalX = XValueSelector(dataList[i]);
-            var xValue = originalX;
+        for (var i = 0; i < dataList.Count; i++) {
+            var xValue = Chart.MapXValue(XValueSelector(dataList[i]));
             var targetYValue = YValueSelector(dataList[i]);
 
             var startYValue = (AnimationStartValues != null && i < AnimationStartValues.Length)
@@ -207,35 +186,27 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
         return points;
     }
 
-    protected SKPath BuildPath(List<SKPoint> points)
-    {
+    protected SKPath BuildPath(List<SKPoint> points) {
         var path = new SKPath();
-        if (points.Count < 2)
-        {
+        if (points.Count < 2) {
             return path;
         }
 
         path.MoveTo(points[0]);
 
-        if (Interpolation == LineInterpolation.Straight)
-        {
-            for (var i = 1; i < points.Count; i++)
-            {
+        if (Interpolation == LineInterpolation.Straight) {
+            for (var i = 1; i < points.Count; i++) {
                 path.LineTo(points[i]);
             }
         }
-        else if (Interpolation == LineInterpolation.Step)
-        {
-            for (var i = 1; i < points.Count; i++)
-            {
+        else if (Interpolation == LineInterpolation.Step) {
+            for (var i = 1; i < points.Count; i++) {
                 path.LineTo(points[i - 1].X, points[i].Y);
                 path.LineTo(points[i]);
             }
         }
-        else if (Interpolation == LineInterpolation.Curved)
-        {
-            for (var i = 0; i < points.Count - 1; i++)
-            {
+        else if (Interpolation == LineInterpolation.Curved) {
+            for (var i = 0; i < points.Count - 1; i++) {
                 var p0 = points[Math.Max(i - 1, 0)];
                 var p1 = points[i];
                 var p2 = points[i + 1];
@@ -247,26 +218,20 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
                 path.CubicTo(cp1, cp2, p2);
             }
         }
-        else if (Interpolation == LineInterpolation.Smoothed)
-        {
+        else if (Interpolation == LineInterpolation.Smoothed) {
             var n = points.Count;
-            if (n > 2)
-            {
+            if (n > 2) {
                 var slopes = new float[n - 1];
-                for (var i = 0; i < n - 1; i++)
-                {
+                for (var i = 0; i < n - 1; i++) {
                     slopes[i] = (points[i + 1].Y - points[i].Y) / (points[i + 1].X - points[i].X + 1e-6f);
                 }
 
                 var tangents = new float[n];
-                for (var i = 1; i < n - 1; i++)
-                {
-                    if (Math.Sign(slopes[i - 1]) != Math.Sign(slopes[i]))
-                    {
+                for (var i = 1; i < n - 1; i++) {
+                    if (Math.Sign(slopes[i - 1]) != Math.Sign(slopes[i])) {
                         tangents[i] = 0;
                     }
-                    else
-                    {
+                    else {
                         var dxPrev = points[i].X - points[i - 1].X;
                         var dxCurr = points[i + 1].X - points[i].X;
                         var w1 = (2 * dxCurr) + dxPrev;
@@ -278,16 +243,14 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
                 tangents[0] = slopes[0];
                 tangents[n - 1] = slopes[n - 2];
 
-                for (var i = 0; i < n - 1; i++)
-                {
+                for (var i = 0; i < n - 1; i++) {
                     var xSpan = (points[i + 1].X - points[i].X) / 3f;
                     var cp1 = new SKPoint(points[i].X + xSpan, points[i].Y + (tangents[i] * xSpan));
                     var cp2 = new SKPoint(points[i + 1].X - xSpan, points[i + 1].Y - (tangents[i + 1] * xSpan));
                     path.CubicTo(cp1, cp2, points[i + 1]);
                 }
             }
-            else
-            {
+            else {
                 path.LineTo(points[1]);
             }
         }
@@ -296,10 +259,8 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
     }
 
     /// <inheritdoc />
-    public override (int Index, TData? Data)? HitTest(SKPoint point, SKRect renderArea)
-    {
-        if (Data == null || !Data.Any())
-        {
+    public override (int Index, TData? Data)? HitTest(SKPoint point, SKRect renderArea) {
+        if (Data == null || !Data.Any()) {
             return null;
         }
 
@@ -308,21 +269,17 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
         var points = GetPoints(renderArea, xMin, xMax, yMin, yMax);
         var dataList = Data.ToList();
 
-        for (var i = 0; i < points.Count; i++)
-        {
+        for (var i = 0; i < points.Count; i++) {
             var p = points[i];
             var distance = Math.Sqrt(Math.Pow(p.X - point.X, 2) + Math.Pow(p.Y - point.Y, 2));
-            if (distance < PointSize + 5)
-            {
+            if (distance < PointSize + 5) {
                 return (i, dataList[i]);
             }
         }
 
-        if (points.Count > 1 && LineStyle != LineStyle.None)
-        {
+        if (points.Count > 1 && LineStyle != LineStyle.None) {
             using var path = BuildPath(points);
-            using var paint = new SKPaint
-            {
+            using var paint = new SKPaint {
                 Style = SKPaintStyle.Stroke,
                 StrokeWidth = StrokeWidth + 10, // Wider tolerance for hovering
                 StrokeCap = SKStrokeCap.Round,
@@ -332,8 +289,7 @@ public class NTLineSeries<TData> : NTCartesianSeries<TData> where TData : class
             using var strokePath = new SKPath();
             paint.GetFillPath(path, strokePath);
 
-            if (strokePath.Contains(point.X, point.Y))
-            {
+            if (strokePath.Contains(point.X, point.Y)) {
                 return (-1, null);
             }
         }

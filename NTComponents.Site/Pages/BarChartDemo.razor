@@ -29,8 +29,8 @@
                   EnableHardwareAcceleration="@_enableHardwareAcceleration">
                   <NTBarSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
                      YValueSelector="@(p => p.Y)" Color="TnTColor.Primary"
-                     XAxis="@(new NTXAxisOptions { Title = "Month" })"
-                     YAxis="@(new NTYAxisOptions { Title = "Total ($)" })" />
+                     XAxis="@(new NTXAxisOptions<CartesianPoint> { Title = "Month" })"
+                     YAxis="@(new NTYAxisOptions<CartesianPoint> { Title = "Total ($)" })" />
                </NTChart>
             </div>
          </div>
@@ -42,9 +42,9 @@
             <div style="height: 300px;">
                <NTChart TData="CartesianPoint" Title="Rounded Bars" IsCategoricalX="true"
                   EnableHardwareAcceleration="@_enableHardwareAcceleration">
-                  <NTBarSeries TData="CartesianPoint" Data="@_productA" XValueSelector="@(p => p.X)"
-                     YValueSelector="@(p => p.Y)" Color="TnTColor.Secondary" CornerRadius="8"
-                     XAxis="@(new NTXAxisOptions())" YAxis="@(new NTYAxisOptions())" />
+                      <NTBarSeries TData="CartesianPoint" Data="@_productA" XValueSelector="@(p => p.X)"
+                        YValueSelector="@(p => p.Y)" Color="TnTColor.Secondary" CornerRadius="8"
+                        XAxis="@(new NTXAxisOptions<CartesianPoint>())" YAxis="@(new NTYAxisOptions<CartesianPoint>())" />
                </NTChart>
             </div>
             <div class="mt-2 text-muted">
@@ -61,9 +61,9 @@
             <div style="height: 300px;">
                <NTChart TData="CartesianPoint" Title="Multi-Series" IsCategoricalX="true"
                   EnableHardwareAcceleration="@_enableHardwareAcceleration">
-                  <NTBarSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
-                     YValueSelector="@(p => p.Y)" Color="TnTColor.Primary" XAxis="@(new NTXAxisOptions())"
-                     YAxis="@(new NTYAxisOptions())" />
+                   <NTBarSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
+                     YValueSelector="@(p => p.Y)" Color="TnTColor.Primary" XAxis="@(new NTXAxisOptions<CartesianPoint>())"
+                     YAxis="@(new NTYAxisOptions<CartesianPoint>())" />
                   <NTBarSeries TData="CartesianPoint" Data="@_customData" XValueSelector="@(p => p.X)"
                      YValueSelector="@(p => p.Y)" Color="TnTColor.Secondary" />
                </NTChart>
@@ -80,9 +80,9 @@
             <div style="height: 300px;">
                <NTChart TData="CartesianPoint" Title="Stats" RangePadding="0.1" IsCategoricalX="true"
                   EnableHardwareAcceleration="@_enableHardwareAcceleration">
-                  <NTBarSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
+                   <NTBarSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
                      YValueSelector="@(p => p.Y)" Color="TnTColor.Info" ShowDataLabels="true"
-                     XAxis="@(new NTXAxisOptions())" YAxis="@(new NTYAxisOptions())" />
+                     XAxis="@(new NTXAxisOptions<CartesianPoint>())" YAxis="@(new NTYAxisOptions<CartesianPoint>())" />
                </NTChart>
             </div>
          </div>
@@ -96,9 +96,9 @@
             <div style="height: 300px;">
                <NTChart TData="CartesianPoint" Title="Health Status" IsCategoricalX="true"
                   EnableHardwareAcceleration="@_enableHardwareAcceleration">
-                  <NTBarSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
-                     YValueSelector="@(p => p.Y)" OnDataPointRender="@OnConditionRender" XAxis="@(new NTXAxisOptions())"
-                     YAxis="@(new NTYAxisOptions())" />
+                   <NTBarSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
+                     YValueSelector="@(p => p.Y)" OnDataPointRender="@OnConditionRender" XAxis="@(new NTXAxisOptions<CartesianPoint>())"
+                     YAxis="@(new NTYAxisOptions<CartesianPoint>())" />
                </NTChart>
             </div>
             <div class="mt-2 text-muted">
@@ -116,10 +116,10 @@
             <div style="height: 300px;">
                <NTChart TData="CartesianPoint" Title="Horizontal View" IsCategoricalX="true"
                   Orientation="NTChartOrientation.Horizontal" EnableHardwareAcceleration="@_enableHardwareAcceleration">
-                  <NTBarSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
-                     YValueSelector="@(p => p.Y)" Color="TnTColor.Tertiary"
-                     XAxis="@(new NTXAxisOptions { Title = "Categories" })"
-                     YAxis="@(new NTYAxisOptions { Title = "Units Sold" })" />
+                      <NTBarSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
+                        YValueSelector="@(p => p.Y)" Color="TnTColor.Tertiary"
+                        XAxis="@(new NTXAxisOptions<CartesianPoint> { Title = "Categories" })"
+                        YAxis="@(new NTYAxisOptions<CartesianPoint> { Title = "Units Sold" })" />
                </NTChart>
             </div>
             <div class="mt-2 text-muted">
@@ -162,8 +162,8 @@
                               BackgroundColor="@_legendBgColor" />
                         }
                         @{
-                           var sandboxXAxis = new NTXAxisOptions { Title = "Category" };
-                           var sandboxYAxis = new NTYAxisOptions { Title = "Value" };
+                           var sandboxXAxis = new NTXAxisOptions<CartesianPoint> { Title = "Category" };
+                           var sandboxYAxis = new NTYAxisOptions<CartesianPoint> { Title = "Value" };
                         }
                         @foreach (var config in _sandboxSeries)
                         {

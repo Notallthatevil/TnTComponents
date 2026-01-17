@@ -116,6 +116,24 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     [Parameter]
     public TimeSpan HoverAnimationDuration { get; set; } = TimeSpan.FromMilliseconds(250);
 
+    /// <summary>
+    ///     Gets or sets the X axis options.
+    /// </summary>
+    [Parameter]
+    public NTXAxisOptions<TData>? XAxis { get; set; }
+
+    /// <summary>
+    ///    Gets or sets the Y axis options.
+    /// </summary>
+    [Parameter]
+    public NTYAxisOptions<TData>? YAxis { get; set; }
+
+    /// <summary>
+    ///    Gets or sets the radial axis options.
+    /// </summary>
+    [Parameter]
+    public NTRadialAxisOptions<TData>? RadialAxis { get; set; }
+
     [Inject]
     protected IJSRuntime JSRuntime { get; set; } = default!;
 
@@ -179,10 +197,56 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
     private List<double>? _cachedAllY;
 
+    private List<object>? _categoryXValues;
+
+    private void EnsureCategoricalMap() {
+        if (_categoryXValues != null) return;
+        var allXRaw = new HashSet<object>();
+        foreach (var s in Series.Where(s => s.IsEffectivelyVisible)) {
+            s.RegisterXValues(allXRaw);
+        }
+        _categoryXValues = allXRaw.ToList(); // Could sort if needed
+    }
+
+    internal double MapXValue(object? val) {
+        if (val == null) return 0;
+        var scale = GetXScale();
+        try {
+            return Convert.ToDouble(val);
+        }
+        catch {
+            return 0;
+        }
+    }
+
+    internal string GetXLabel(double val) {
+        var scale = GetXScale();
+        var format = XAxis?.LabelFormat ?? "0.#";
+        return val.ToString(format);
+    }
+
+    internal string GetYLabel(double val) {
+        var scale = GetYScale();
+        var format = YAxis?.LabelFormat ?? "0.#";
+        return val.ToString(format);
+    }
+
+    internal object? GetXValueObject(double val) {
+        var scale = GetXScale();
+        return val;
+    }
+
     private IJSObjectReference? _themeListener;
     private DotNetObjectReference<NTChart<TData>>? _objRef;
 
     private float _density = 1.0f;
+
+    protected override void OnParametersSet() {
+        base.OnParametersSet();
+        XAxis?.SetChart(this);
+        YAxis?.SetChart(this);
+        RadialAxis?.SetChart(this);
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         if (firstRender) {
@@ -460,6 +524,7 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
         _treeMapAreas.Clear();
         _cachedAllX = null;
         _cachedAllY = null;
+        _categoryXValues = null;
 
         canvas.Clear(GetThemeColor(BackgroundColor));
 
@@ -500,6 +565,15 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
         // Pass 2: Measure series (axes etc) and update plotArea
         var measured = new HashSet<object>();
+        if (XAxis != null && XAxis.Visible && measured.Add(XAxis)) {
+            plotArea = XAxis.Measure(plotArea);
+        }
+        if (YAxis != null && YAxis.Visible && measured.Add(YAxis)) {
+            plotArea = YAxis.Measure(plotArea);
+        }
+        if (RadialAxis != null && RadialAxis.Visible && measured.Add(RadialAxis)) {
+            plotArea = RadialAxis.Measure(plotArea);
+        }
         foreach (var series in Series.Where(s => s.Visible)) {
             plotArea = series.Measure(plotArea, measured);
         }
@@ -509,6 +583,15 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
 
         // Pass 3: Render axes using the final plotArea and the adjusted accessibleArea
         var rendered = new HashSet<object>();
+        if (XAxis != null && XAxis.Visible && rendered.Add(XAxis)) {
+            XAxis.Render(canvas, plotArea, accessibleArea);
+        }
+        if (YAxis != null && YAxis.Visible && rendered.Add(YAxis)) {
+            YAxis.Render(canvas, plotArea, accessibleArea);
+        }
+        if (RadialAxis != null && RadialAxis.Visible && rendered.Add(RadialAxis)) {
+            RadialAxis.Render(canvas, plotArea, accessibleArea);
+        }
         foreach (var series in Series.Where(s => s.Visible)) {
             series.RenderAxes(canvas, plotArea, accessibleArea, rendered);
         }
@@ -853,9 +936,15 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
             return _cachedAllX;
         }
 
+        var scale = GetXScale();
+
         var allX = new HashSet<double>();
         foreach (var s in Series.Where(s => s.IsEffectivelyVisible)) {
-            s.RegisterXValues(allX);
+            if (s is NTCartesianSeries<TData> cartesian) {
+                foreach (var item in cartesian.Data ?? []) {
+                    allX.Add(MapXValue(cartesian.XValueSelector(item)));
+                }
+            }
         }
 
         _cachedAllX = allX.OrderBy(x => x).ToList();
@@ -882,12 +971,12 @@ public partial class NTChart<TData> : TnTComponentBase, IAsyncDisposable where T
     /// <summary>
     ///    Gets the scale used for the X axis.
     /// </summary>
-    public NTAxisScale GetXScale() => Series.OfType<NTCartesianSeries<TData>>().FirstOrDefault(s => s.XAxis != null)?.XAxis!.Scale ?? NTAxisScale.Linear;
+    public NTAxisScale GetXScale() => XAxis?.Scale ?? Series.OfType<NTCartesianSeries<TData>>().FirstOrDefault(s => s.XAxis != null)?.XAxis!.Scale ?? NTAxisScale.Linear;
 
     /// <summary>
     ///    Gets the scale used for the Y axis.
     /// </summary>
-    public NTAxisScale GetYScale() => Series.OfType<NTCartesianSeries<TData>>().FirstOrDefault(s => s.YAxis != null)?.YAxis!.Scale ?? NTAxisScale.Linear;
+    public NTAxisScale GetYScale() => YAxis?.Scale ?? Series.OfType<NTCartesianSeries<TData>>().FirstOrDefault(s => s.YAxis != null)?.YAxis!.Scale ?? NTAxisScale.Linear;
 
     public float ScaleX(double x, SKRect plotArea) {
         var (min, max) = GetXRange(true);

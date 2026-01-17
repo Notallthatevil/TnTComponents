@@ -22,17 +22,17 @@ public class NTRadarSeries<TData> : NTCircularSeries<TData> where TData : class 
    [Parameter]
    public double? MaxValue { get; set; }
 
-   /// <summary>
-   ///    Gets or sets the radial axis options for this series.
-   /// </summary>
-   [Parameter]
-   public NTRadialAxisOptions RadialAxis { get; set; } = new();
+    /// <summary>
+    ///    Gets or sets the radial axis options for this series.
+    /// </summary>
+    [Parameter]
+    public NTRadialAxisOptions<TData> RadialAxis { get; set; } = default!;
 
    /// <inheritdoc />
    internal override SKRect Measure(SKRect renderArea, HashSet<object> measured) {
       if (RadialAxis != null && RadialAxis.Visible && !measured.Contains(RadialAxis)) {
          measured.Add(RadialAxis);
-         return RadialAxis.Measure(renderArea, Chart);
+         return RadialAxis.Measure(renderArea);
       }
       return renderArea;
    }
@@ -41,7 +41,7 @@ public class NTRadarSeries<TData> : NTCircularSeries<TData> where TData : class 
    internal override void RenderAxes(SKCanvas canvas, SKRect plotArea, SKRect totalArea, HashSet<object> rendered) {
       if (RadialAxis != null && RadialAxis.Visible && !rendered.Contains(RadialAxis)) {
          rendered.Add(RadialAxis);
-         RadialAxis.Render(canvas, plotArea, totalArea, Chart);
+         RadialAxis.Render(canvas, plotArea, totalArea);
       }
    }
 

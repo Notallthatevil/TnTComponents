@@ -12,63 +12,99 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
     /// <inheritdoc />
     public override ChartCoordinateSystem CoordinateSystem => ChartCoordinateSystem.Cartesian;
 
-    [Parameter, EditorRequired]
-    public Func<TData, double> XValueSelector { get; set; } = default!;
+    /// <summary>
+    ///     Gets or sets the background color for data labels. If null, the series' color will be used.
+    /// </summary>
+    [Parameter]
+    public TnTColor? DataLabelBackgroundColor { get; set; }
 
-    [Parameter, EditorRequired]
-    public Func<TData, double> YValueSelector { get; set; } = default!;
+    /// <summary>
+    ///     Gets or sets the color of the data labels. If null, the chart's text color will be used.
+    /// </summary>
+    [Parameter]
+    public TnTColor? DataLabelColor { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the format for the data labels.
+    /// </summary>
+    [Parameter]
+    public string DataLabelFormat { get; set; } = "{0:0.#}";
+
+    /// <summary>
+    ///     Gets or sets the size of the data labels.
+    /// </summary>
+    [Parameter]
+    public float DataLabelSize { get; set; } = 12.0f;
+
+    /// <summary>
+    ///     Gets or sets the shape of the data points. If null, a shape will be assigned based on the series index.
+    /// </summary>
+    [Parameter]
+    public PointShape? PointShape { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the size of the data points.
+    /// </summary>
+    [Parameter]
+    public float PointSize { get; set; } = 8.0f;
+
+    /// <summary>
+    ///     Gets or sets the style of the data points.
+    /// </summary>
+    [Parameter]
+    public PointStyle PointStyle { get; set; } = PointStyle.Filled;
+
+    /// <summary>
+    ///     Gets or sets whether to show a background for data labels.
+    /// </summary>
+    [Parameter]
+    public bool ShowDataLabelBackground { get; set; } = true;
+
+    /// <summary>
+    ///     Gets or sets whether to show data labels for each point.
+    /// </summary>
+    [Parameter]
+    public bool ShowDataLabels { get; set; }
 
     /// <summary>
     ///     Gets or sets the X axis options.
     /// </summary>
     [Parameter]
-    public NTXAxisOptions XAxis { get; set; } = new();
+    public NTXAxisOptions<TData> XAxis { get; set; } = new();
+
+    [Parameter, EditorRequired]
+    public Func<TData, object> XValueSelector { get; set; } = default!;
 
     /// <summary>
-    ///    Gets or sets the Y axis options.
+    ///     Gets or sets the Y axis options.
     /// </summary>
     [Parameter]
-    public NTYAxisOptions YAxis { get; set; } = new();
+    public NTYAxisOptions<TData> YAxis { get; set; } = new();
+
+    [Parameter, EditorRequired]
+    public Func<TData, double> YValueSelector { get; set; } = default!;
+
+    protected double[]? AnimationCurrentValues { get; set; }
+
+    protected double[]? AnimationStartValues { get; set; }
 
     /// <inheritdoc />
     internal override List<string> GetTooltipLines(TData data) {
-        var xValue = XValueSelector(data);
+        var xVal = XValueSelector(data);
         var yValue = YValueSelector(data);
+        var xLabel = Chart.GetXLabel(Chart.MapXValue(xVal));
         return
         [
-            $"{Title ?? "Series"}: {xValue:0.#}",
+            $"{Title ?? "Series"}: {xLabel}",
             string.Format(DataLabelFormat, yValue)
         ];
     }
 
     /// <inheritdoc />
-    internal override SKRect Measure(SKRect renderArea, HashSet<object> measured) {
-        if (!IsEffectivelyVisible) return renderArea;
-        var rect = renderArea;
-        if (XAxis != null && XAxis.Visible && measured.Add(XAxis)) {
-            rect = XAxis.Measure(rect, Chart);
-        }
-        if (YAxis != null && YAxis.Visible && measured.Add(YAxis)) {
-            rect = YAxis.Measure(rect, Chart);
-        }
-        return rect;
-    }
-
-    /// <inheritdoc />
-    internal override void RenderAxes(SKCanvas canvas, SKRect plotArea, SKRect totalArea, HashSet<object> rendered) {
-        if (!IsEffectivelyVisible) return;
-        if (XAxis != null && XAxis.Visible && rendered.Add(XAxis)) {
-            XAxis.Render(canvas, plotArea, totalArea, Chart);
-        }
-        if (YAxis != null && YAxis.Visible && rendered.Add(YAxis)) {
-            YAxis.Render(canvas, plotArea, totalArea, Chart);
-        }
-    }
-
-    /// <inheritdoc />
     internal override (double Min, double Max)? GetXRange() {
-        if (Data == null || !Data.Any()) return null;
-        var values = Data.Select(XValueSelector).ToList();
+        if (Data == null || !Data.Any())
+            return null;
+        var values = Data.Select(d => Chart.MapXValue(XValueSelector(d))).ToList();
         var min = values.Min();
         var max = values.Max();
         return (min, max);
@@ -76,7 +112,8 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
 
     /// <inheritdoc />
     internal override (double Min, double Max)? GetYRange() {
-        if (Data == null || !Data.Any()) return null;
+        if (Data == null || !Data.Any())
+            return null;
         var min = double.MaxValue;
         var max = double.MinValue;
 
@@ -101,77 +138,51 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
     }
 
     /// <inheritdoc />
-    internal override void RegisterXValues(HashSet<double> values) {
-        if (Data == null) return;
+    internal override SKRect Measure(SKRect renderArea, HashSet<object> measured) {
+        if (!IsEffectivelyVisible)
+            return renderArea;
+        var rect = renderArea;
+        if (XAxis != null && XAxis.Visible && measured.Add(XAxis)) {
+            rect = XAxis.Measure(rect);
+        }
+        if (YAxis != null && YAxis.Visible && measured.Add(YAxis)) {
+            rect = YAxis.Measure(rect);
+        }
+        return rect;
+    }
+
+    /// <inheritdoc />
+    internal override void RegisterXValues(HashSet<object> values) {
+        if (Data == null)
+            return;
         foreach (var item in Data) {
-            values.Add(XValueSelector(item));
+            var val = XValueSelector(item);
+            if (val != null) {
+                values.Add(val);
+            }
         }
     }
 
     /// <inheritdoc />
     internal override void RegisterYValues(HashSet<double> values) {
-        if (Data == null) return;
+        if (Data == null)
+            return;
         foreach (var item in Data) {
             values.Add(YValueSelector(item));
         }
     }
 
-    /// <summary>
-    ///    Gets or sets the style of the data points.
-    /// </summary>
-    [Parameter]
-    public PointStyle PointStyle { get; set; } = PointStyle.Filled;
-
-    /// <summary>
-    ///     Gets or sets the shape of the data points. If null, a shape will be assigned based on the series index.
-    /// </summary>
-    [Parameter]
-    public PointShape? PointShape { get; set; }
-
-    /// <summary>
-    ///    Gets or sets the size of the data points.
-    /// </summary>
-    [Parameter]
-    public float PointSize { get; set; } = 8.0f;
-
-    /// <summary>
-    ///     Gets or sets whether to show data labels for each point.
-    /// </summary>
-    [Parameter]
-    public bool ShowDataLabels { get; set; }
-
-    /// <summary>
-    ///     Gets or sets the format for the data labels.
-    /// </summary>
-    [Parameter]
-    public string DataLabelFormat { get; set; } = "{0:0.#}";
-
-    /// <summary>
-    ///     Gets or sets the size of the data labels.
-    /// </summary>
-    [Parameter]
-    public float DataLabelSize { get; set; } = 12.0f;
-
-    /// <summary>
-    ///     Gets or sets the color of the data labels. If null, the chart's text color will be used.
-    /// </summary>
-    [Parameter]
-    public TnTColor? DataLabelColor { get; set; }
-
-    /// <summary>
-    ///     Gets or sets whether to show a background for data labels.
-    /// </summary>
-    [Parameter]
-    public bool ShowDataLabelBackground { get; set; } = true;
-
-    /// <summary>
-    ///     Gets or sets the background color for data labels. If null, the series' color will be used.
-    /// </summary>
-    [Parameter]
-    public TnTColor? DataLabelBackgroundColor { get; set; }
-
-    protected double[]? AnimationStartValues { get; set; }
-    protected double[]? AnimationCurrentValues { get; set; }
+    /// <inheritdoc />
+    internal override void RenderAxes(SKCanvas canvas, SKRect plotArea, SKRect totalArea, HashSet<object> rendered) {
+        if (!IsEffectivelyVisible)
+            return;
+        if (XAxis != null && XAxis.Visible && rendered.Add(XAxis)) {
+            XAxis.Render(canvas, plotArea, totalArea);
+        }
+        if (YAxis != null && YAxis.Visible && rendered.Add(YAxis)) {
+            YAxis.Render(canvas, plotArea, totalArea);
+        }
+    }
 
     /// <inheritdoc />
     protected override void OnDataChanged() {
@@ -180,6 +191,12 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
         }
         AnimationCurrentValues = null;
         base.OnDataChanged();
+    }
+
+    protected override void OnParametersSet() {
+        base.OnParametersSet();
+        XAxis.SetChart(Chart);
+        YAxis.SetChart(Chart);
     }
 
     protected void RenderDataLabel(SKCanvas canvas, float x, float y, double value, SKRect renderArea, SKColor? overrideColor = null, float? overrideFontSize = null) {
@@ -267,9 +284,11 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
             case Series.PointShape.Circle:
                 canvas.DrawCircle(x, y, halfSize, paint);
                 break;
+
             case Series.PointShape.Square:
                 canvas.DrawRect(x - halfSize, y - halfSize, size, size, paint);
                 break;
+
             case Series.PointShape.Triangle:
                 using (var path = new SKPath()) {
                     path.MoveTo(x, y - halfSize);
@@ -279,6 +298,7 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
                     canvas.DrawPath(path, paint);
                 }
                 break;
+
             case Series.PointShape.Diamond:
                 using (var path = new SKPath()) {
                     path.MoveTo(x, y - halfSize);
@@ -294,8 +314,7 @@ public abstract class NTCartesianSeries<TData> : NTBaseSeries<TData> where TData
         if (PointStyle == PointStyle.Outlined && strokeColor.HasValue) {
             paint.Color = strokeColor.Value;
             paint.Style = SKPaintStyle.Stroke;
-            // Redraw with stroke color if explicitly requested? 
-            // Actually, the base paint already did it if Style was Stroke.
+            // Redraw with stroke color if explicitly requested? Actually, the base paint already did it if Style was Stroke.
         }
     }
 }

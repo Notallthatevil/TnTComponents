@@ -132,8 +132,7 @@ public class NTBarSeries<TData> : NTCartesianSeries<TData> where TData : class {
         }
 
         for (var i = 0; i < dataList.Count; i++) {
-            var originalX = XValueSelector(dataList[i]);
-            var xValue = originalX;
+            var xValue = Chart.MapXValue(XValueSelector(dataList[i]));
 
             // We use VisibilityFactor^2 for the height to ensure it shrinks to zero 
             // even as the axis range (which uses linear VisibilityFactor) also shrinks.

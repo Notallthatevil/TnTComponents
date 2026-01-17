@@ -44,8 +44,8 @@
                         EnableHardwareAcceleration="@_enableHardwareAcceleration">
                         <NTLineSeries TData="CartesianPoint" Data="@_productA" XValueSelector="@(p => p.X)"
                             YValueSelector="@(p => p.Y)" PointStyle="PointStyle.Filled"
-                            XAxis="@(new NTXAxisOptions { Title = "X Axis" })"
-                            YAxis="@(new NTYAxisOptions { Title = "Y Axis" })" />
+                            XAxis="@(new NTXAxisOptions<CartesianPoint> { Title = "X Axis" })"
+                            YAxis="@(new NTYAxisOptions<CartesianPoint> { Title = "Y Axis" })" />
                         <NTLineSeries TData="CartesianPoint" Data="@_productB" XValueSelector="@(p => p.X)"
                             YValueSelector="@(p => p.Y)" PointStyle="PointStyle.Outlined" />
                     </NTChart>
@@ -64,8 +64,8 @@
                         <NTLineSeries TData="CartesianPoint" Data="@_customData" XValueSelector="@(p => p.X)"
                             YValueSelector="@(p => p.Y)" Color="TnTColor.Error" StrokeWidth="5"
                             PointStyle="PointStyle.Filled" PointShape="PointShape.Diamond" PointSize="12"
-                            XAxis="@(new NTXAxisOptions { Title = "Sequence" })"
-                            YAxis="@(new NTYAxisOptions { Title = "Value" })" />
+                            XAxis="@(new NTXAxisOptions<CartesianPoint> { Title = "Sequence" })"
+                            YAxis="@(new NTYAxisOptions<CartesianPoint> { Title = "Value" })" />
                     </NTChart>
                 </div>
                 <div class="mt-2 text-muted">
@@ -82,8 +82,8 @@
                         EnableHardwareAcceleration="@_enableHardwareAcceleration">
                         <NTLineSeries TData="CartesianPoint" Data="@_animatedData" XValueSelector="@(p => p.X)"
                             YValueSelector="@(p => p.Y)" Color="TnTColor.Success"
-                            XAxis="@(new NTXAxisOptions { Title = "Radians" })"
-                            YAxis="@(new NTYAxisOptions { Title = "Amplitude" })" />
+                            XAxis="@(new NTXAxisOptions<CartesianPoint> { Title = "Radians" })"
+                            YAxis="@(new NTYAxisOptions<CartesianPoint> { Title = "Amplitude" })" />
                     </NTChart>
                 </div>
             </div>
@@ -99,8 +99,8 @@
                         EnableHardwareAcceleration="@_enableHardwareAcceleration">
                         <NTLineSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
                             YValueSelector="@(p => p.Y)" Color="TnTColor.Primary"
-                            Interpolation="LineInterpolation.Curved" Title="Curved" XAxis="@(new NTXAxisOptions())"
-                            YAxis="@(new NTYAxisOptions())" />
+                            Interpolation="LineInterpolation.Curved" Title="Curved" XAxis="@(new NTXAxisOptions<CartesianPoint>())"
+                            YAxis="@(new NTYAxisOptions<CartesianPoint>())" />
                         <NTLineSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
                             YValueSelector="@(p => p.Y)" Color="TnTColor.Warning" Interpolation="LineInterpolation.Step"
                             Title="Step" />
@@ -120,8 +120,8 @@
                         EnableHardwareAcceleration="@_enableHardwareAcceleration">
                         <NTLineSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
                             YValueSelector="@(p => p.Y)" Color="TnTColor.Secondary" LineStyle="LineStyle.Dashed"
-                            Interpolation="LineInterpolation.Smoothed" XAxis="@(new NTXAxisOptions())"
-                            YAxis="@(new NTYAxisOptions())" />
+                            Interpolation="LineInterpolation.Smoothed" XAxis="@(new NTXAxisOptions<CartesianPoint>())"
+                            YAxis="@(new NTYAxisOptions<CartesianPoint>())" />
                         <NTLineSeries TData="CartesianPoint" Data="@_productB" XValueSelector="@(p => p.X)"
                             YValueSelector="@(p => p.Y)" Color="TnTColor.Error" LineStyle="LineStyle.None"
                             PointStyle="PointStyle.Filled" PointShape="PointShape.Circle" />
@@ -147,8 +147,8 @@
                         EnableZoom="true" EnableHardwareAcceleration="@_enableHardwareAcceleration">
                         <NTLineSeries TData="CartesianPoint" Data="@_animatedData" XValueSelector="@(p => p.X)"
                             YValueSelector="@(p => p.Y)" Color="TnTColor.Primary"
-                            XAxis="@(new NTXAxisOptions { Title = "X Axis (Scroll to zoom, Drag to pan)" })"
-                            YAxis="@(new NTYAxisOptions { Title = "Y Axis" })" />
+                            XAxis="@(new NTXAxisOptions<CartesianPoint> { Title = "X Axis (Scroll to zoom, Drag to pan)" })"
+                            YAxis="@(new NTYAxisOptions<CartesianPoint> { Title = "Y Axis" })" />
                     </NTChart>
                 </div>
                 <div class="mt-2 text-muted">
@@ -190,8 +190,8 @@
                                     <NTLegend TData="CartesianPoint" Position="@_legendPosition" />
                                 }
                                 @{
-                                    var sandboxXAxis = new NTXAxisOptions { Title = "Time" };
-                                    var sandboxYAxis = new NTYAxisOptions { Title = "Value" };
+                                    var sandboxXAxis = new NTXAxisOptions<CartesianPoint> { Title = "Time" };
+                                    var sandboxYAxis = new NTYAxisOptions<CartesianPoint> { Title = "Value" };
                                 }
                                 @foreach (var config in _sandboxSeries)
                                 {
@@ -316,8 +316,8 @@
                         EnableHardwareAcceleration="@_enableHardwareAcceleration">
                         <NTLineSeries TData="CartesianPoint" Data="@_basicData" XValueSelector="@(p => p.X)"
                             YValueSelector="@(p => p.Y)" Color="TnTColor.Info" PointStyle="PointStyle.Filled"
-                            XAxis="@(new NTXAxisOptions { Title = "Independent (X)" })"
-                            YAxis="@(new NTYAxisOptions { Title = "Dependent (Y)" })" />
+                            XAxis="@(new NTXAxisOptions<CartesianPoint> { Title = "Independent (X)" })"
+                            YAxis="@(new NTYAxisOptions<CartesianPoint> { Title = "Dependent (Y)" })" />
                     </NTChart>
                 </div>
                 <div class="mt-2 text-muted">

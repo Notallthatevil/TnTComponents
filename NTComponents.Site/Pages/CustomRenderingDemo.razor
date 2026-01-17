@@ -19,7 +19,7 @@
                     <NTChart TData="SalesData" Title="Sales Performance" IsCategoricalX="true">
                         <NTBarSeries TData="SalesData" Data="@_salesPerformance" XValueSelector="@(d => d.MonthIndex)"
                             YValueSelector="@(d => d.Units)" OnDataPointRender="@OnSalesBarRender" ShowDataLabels="true"
-                            XAxis="@(new NTXAxisOptions())" YAxis="@(new NTYAxisOptions { Title = "Units" })" />
+                            XAxis="@(new NTXAxisOptions<SalesData>())" YAxis="@(new NTYAxisOptions<SalesData> { Title = "Units" })" />
                     </NTChart>
                 </div>
                 <div class="mt-2 text-muted small">
@@ -39,7 +39,7 @@
                         <NTLineSeries TData="SensorReading" Data="@_sensorReadings" XValueSelector="@(d => d.Timestamp)"
                             YValueSelector="@(d => d.Value)" StrokeWidth="3" PointStyle="PointStyle.Filled"
                             OnDataPointRender="@OnSensorLineRender" ShowDataLabels="true"
-                            XAxis="@(new NTXAxisOptions())" YAxis="@(new NTYAxisOptions { Title = "Temp °C" })" />
+                            XAxis="@(new NTXAxisOptions<SensorReading>())" YAxis="@(new NTYAxisOptions<SensorReading> { Title = "Temp °C" })" />
                     </NTChart>
                 </div>
                 <div class="mt-2 text-muted small">
@@ -59,7 +59,7 @@
                     <NTChart TData="MetricData" Title="Priority Focus">
                         <NTLineSeries TData="MetricData" Data="@_metricData" XValueSelector="@(d => d.Id)"
                             YValueSelector="@(d => d.Value)" OnDataPointRender="@OnMetricLabelRender"
-                            ShowDataLabels="true" XAxis="@(new NTXAxisOptions())" YAxis="@(new NTYAxisOptions())" />
+                            ShowDataLabels="true" XAxis="@(new NTXAxisOptions<MetricData>())" YAxis="@(new NTYAxisOptions<MetricData>())" />
                     </NTChart>
                 </div>
                 <div class="mt-2 text-muted small">

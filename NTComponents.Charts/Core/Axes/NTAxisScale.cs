@@ -1,7 +1,7 @@
 namespace NTComponents.Charts.Core.Axes;
 
 /// <summary>
-///     Defines the scale used by an axis.
+///     Defines the mathematical scaling mode for numeric axes.
 /// </summary>
 public enum NTAxisScale {
     /// <summary>

@@ -69,11 +69,10 @@ public class NTAreaSeries<TData> : NTLineSeries<TData> where TData : class
       var progress = GetAnimationProgress();
       var easedProgress = BackEase(progress);
 
-      for (var i = 0; i < dataList.Count; i++)
-      {
-         var originalX = XValueSelector(dataList[i]);
-         var xValue = originalX;
-         var targetYValue = YValueSelector(dataList[i]);
+        for (var i = 0; i < dataList.Count; i++)
+        {
+            var xValue = Chart.MapXValue(XValueSelector(dataList[i]));
+            var targetYValue = YValueSelector(dataList[i]);
 
          // Area animations often start from the baseline
          var currentYValue = BaselineValue + ((targetYValue - BaselineValue) * easedProgress);

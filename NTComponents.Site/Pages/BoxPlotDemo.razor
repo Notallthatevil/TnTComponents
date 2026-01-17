@@ -12,8 +12,8 @@
       <NTChart TData="ExperimentResult" Title="Experiment Results by Group" IsCategoricalX="true" RangePadding="0.1">
          <NTBoxPlotSeries TData="ExperimentResult" Data="@Data" XValueSelector="@(d => (double)d.GroupId)"
             YValueSelector="@(d => d.Stats.Median)" BoxValueSelector="@(d => d.Stats)" Title="Experiment Groups"
-            Color="TnTColor.Tertiary" XAxis="@(new NTXAxisOptions { Title = "Group" })"
-            YAxis="@(new NTYAxisOptions { Title = "Value" })" />
+            Color="TnTColor.Tertiary" XAxis="@(new NTXAxisOptions<ExperimentResult> { Title = "Group" })"
+            YAxis="@(new NTYAxisOptions<ExperimentResult> { Title = "Value" })" />
       </NTChart>
    </div>
 </div>

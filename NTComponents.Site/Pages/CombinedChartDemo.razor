@@ -30,8 +30,8 @@
                   <NTLegend TData="CartesianPoint" Position="LegendPosition.Bottom" />
                   <NTBarSeries TData="CartesianPoint" Data="@_budgetData" XValueSelector="@(p => p.X)"
                      YValueSelector="@(p => p.Y)" Color="TnTColor.Primary" Title="Budget" CornerRadius="4"
-                     XAxis="@(new NTXAxisOptions { Title = "Month" })"
-                     YAxis="@(new NTYAxisOptions { Title = "Amount ($)" })" />
+                     XAxis="@(new NTXAxisOptions<CartesianPoint> { Title = "Month" })"
+                     YAxis="@(new NTYAxisOptions<CartesianPoint> { Title = "Amount ($)" })" />
 
                   <NTLineSeries TData="CartesianPoint" Data="@_actualData" XValueSelector="@(p => p.X)"
                      YValueSelector="@(p => p.Y)" Color="TnTColor.Secondary" Title="Actual"
@@ -54,8 +54,8 @@
                <NTChart TData="CartesianPoint" Title="Sales Volume & Average" IsCategoricalX="true"
                   EnableHardwareAcceleration="@_enableHardwareAcceleration">
                   <NTBarSeries TData="CartesianPoint" Data="@_storeAData" XValueSelector="@(p => p.X)"
-                     YValueSelector="@(p => p.Y)" Color="TnTColor.Info" Title="Store A" XAxis="@(new NTXAxisOptions())"
-                     YAxis="@(new NTYAxisOptions())" />
+                     YValueSelector="@(p => p.Y)" Color="TnTColor.Info" Title="Store A" XAxis="@(new NTXAxisOptions<CartesianPoint>())"
+                     YAxis="@(new NTYAxisOptions<CartesianPoint>())" />
                   <NTBarSeries TData="CartesianPoint" Data="@_storeBData" XValueSelector="@(p => p.X)"
                      YValueSelector="@(p => p.Y)" Color="TnTColor.Warning" Title="Store B" />
 
@@ -75,8 +75,8 @@
                   EnableHardwareAcceleration="@_enableHardwareAcceleration">
                   <NTLegend TData="CartesianPoint" />
                   @{
-                     var sandboxXAxis = new NTXAxisOptions();
-                     var sandboxYAxis = new NTYAxisOptions();
+                     var sandboxXAxis = new NTXAxisOptions<CartesianPoint>();
+                     var sandboxYAxis = new NTYAxisOptions<CartesianPoint>();
                   }
                   @foreach (var config in _sandboxSeries)
                   {

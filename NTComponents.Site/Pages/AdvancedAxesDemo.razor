@@ -1,5 +1,6 @@
 @page "/advanced-axes"
 @* Demo for advanced axis features *@
+@using NTComponents.Charts.Core.Axes
 
 <div class="container py-4">
     <h1>Advanced Axes Demo</h1>
@@ -11,8 +12,8 @@
                 <h3>Logarithmic Y Axis</h3>
                 <div style="height: 400px;">
                     <NTChart TData="DataPoint" Title="Exponential Growth"
-                        XAxis="@(new NTXAxisOptions { Title = "X Axis" })"
-                        YAxis="@(new NTYAxisOptions { Title = "Logarithmic Y", Scale = NTAxisScale.Logarithmic })">
+                        XAxis="@(new NTXAxisOptions<DataPoint> { Title = "X Axis" })"
+                        YAxis="@(new NTYAxisOptions<DataPoint> { Title = "Logarithmic Y", Scale = NTAxisScale.Logarithmic })">
                         <NTLineSeries TData="DataPoint" Data="@_exponentialData" Title="Exponential"
                             XValueSelector="@(p => p.X)" YValueSelector="@(p => p.Y)" Color="TnTColor.Primary"
                             PointStyle="PointStyle.Filled" />
@@ -29,8 +30,8 @@
                 <h3>Logarithmic X Axis</h3>
                 <div style="height: 400px;">
                     <NTChart TData="DataPoint" Title="Logarithmic Timeline"
-                        XAxis="@(new NTXAxisOptions { Title = "Log Scale (X)", Scale = NTAxisScale.Logarithmic })"
-                        YAxis="@(new NTYAxisOptions { Title = "Linear Value" })">
+                        XAxis="@(new NTXAxisOptions<DataPoint> { Title = "Log Scale (X)", Scale = NTAxisScale.Logarithmic })"
+                        YAxis="@(new NTYAxisOptions<DataPoint> { Title = "Linear Value" })">
                         <NTLineSeries TData="DataPoint" Data="@_logXData" Title="Frequency Response"
                             XValueSelector="@(p => p.X)" YValueSelector="@(p => p.Y)" Color="TnTColor.Success"
                             PointStyle="PointStyle.Filled" />
@@ -49,7 +50,7 @@
                 <h3>Radar Chart (Radial Axis)</h3>
                 <div style="height: 500px;">
                     <NTChart TData="RadarPoint" Title="Skill Matrix" 
-                        RadialAxis="@(new NTRadialAxisOptions { 
+                        RadialAxis="@(new NTRadialAxisOptions<RadarPoint> { 
                             Title = "Abilities",
                             Levels = 5,
                             Shape = NTRadialAxisShape.Polygon,
@@ -75,7 +76,7 @@
                 <h3>Circular Radial Axis</h3>
                 <div style="height: 400px;">
                     <NTChart TData="RadarPoint" Title="Circular Profile" 
-                        RadialAxis="@(new NTRadialAxisOptions { 
+                        RadialAxis="@(new NTRadialAxisOptions<RadarPoint> { 
                             Levels = 4,
                             Shape = NTRadialAxisShape.Circle,
                             Labels = _radarLabels 
