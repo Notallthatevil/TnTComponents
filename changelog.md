@@ -1,3 +1,10 @@
+## [1.7.5](https://github.com/Notallthatevil/NTComponents/compare/v1.7.4...v1.7.5) (2026-01-19)
+
+
+### Bug Fixes
+
+* **styles:** add margin when label is floated in inputs ([14ca53b](https://github.com/Notallthatevil/NTComponents/commit/14ca53b55d0eba75cb1d7e348a2557a9f6927421))
+
 ## [1.7.4](https://github.com/Notallthatevil/NTComponents/compare/v1.7.3...v1.7.4) (2026-01-19)
 
 
