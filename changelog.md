@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/Notallthatevil/NTComponents/compare/v1.7.0...v1.7.1) (2026-01-19)
+
+
+### Bug Fixes
+
+* **input:** Fixed broken tests ([19d75a9](https://github.com/Notallthatevil/NTComponents/commit/19d75a9d97b5e50b7e088ecd6da920f7488ae982))
+
 # [1.7.0](https://github.com/Notallthatevil/NTComponents/compare/v1.6.0...v1.7.0) (2026-01-16)
 
 
