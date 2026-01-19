@@ -1,3 +1,10 @@
+## [1.7.4](https://github.com/Notallthatevil/NTComponents/compare/v1.7.3...v1.7.4) (2026-01-19)
+
+
+### Bug Fixes
+
+* **style:** add consistent margin-bottom to containers ([47fad7a](https://github.com/Notallthatevil/NTComponents/commit/47fad7aa0af336dbb46c841d3c8dd433c5022a79))
+
 ## [1.7.3](https://github.com/Notallthatevil/NTComponents/compare/v1.7.2...v1.7.3) (2026-01-19)
 
 
