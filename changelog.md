@@ -1,3 +1,10 @@
+## [1.7.3](https://github.com/Notallthatevil/NTComponents/compare/v1.7.2...v1.7.3) (2026-01-19)
+
+
+### Bug Fixes
+
+* **styles:** improve input container grid responsiveness ([f426621](https://github.com/Notallthatevil/NTComponents/commit/f426621349e0d383c2bda0fa8d32dca13da97f3e))
+
 ## [1.7.2](https://github.com/Notallthatevil/NTComponents/compare/v1.7.1...v1.7.2) (2026-01-19)
 
 
