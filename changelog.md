@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/Notallthatevil/NTComponents/compare/v1.7.1...v1.7.2) (2026-01-19)
+
+
+### Bug Fixes
+
+* **form,inputs:** add full-row layout and improve spacing ([7d9dae2](https://github.com/Notallthatevil/NTComponents/commit/7d9dae21f9713975afd421672e70cf374df035c4))
+
 ## [1.7.1](https://github.com/Notallthatevil/NTComponents/compare/v1.7.0...v1.7.1) (2026-01-19)
 
 
