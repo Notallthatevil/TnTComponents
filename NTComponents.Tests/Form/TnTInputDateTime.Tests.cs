@@ -89,8 +89,8 @@ public class TnTInputDateTime_Tests : BunitContext {
             .Add(c => c.BackgroundColor, TnTColor.Surface)
             .Add(c => c.TextColor, TnTColor.OnSurface)
             .Add(c => c.ErrorColor, TnTColor.Error));
-        var label = cut.Find("label");
-        var style = label.GetAttribute("style")!;
+        var container = cut.Find(".tnt-input-container");
+        var style = container.GetAttribute("style")!;
 
         // Assert
         style.Should().Contain("--tnt-input-tint-color:var(--tnt-color-primary)");

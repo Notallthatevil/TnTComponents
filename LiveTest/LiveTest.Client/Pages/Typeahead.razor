@@ -1,19 +1,29 @@
 @page "/typeahead"
+@using LiveTest.Client.Components
 @using NTComponents
 @rendermode InteractiveServer
 
 <h3>Typeahead</h3>
 
-<TnTTypeahead ItemsLookupFunc="SearchFunc" Label="Typeahead" ItemSelectedCallback="@((Item item) => SelectedItems.Add(item))">
-    <ResultTemplate>
-        @context.Name @context.Email
-    </ResultTemplate>
+<label>
+	Appearance
+	<select @bind="@Appearance">
+		@foreach (var appearance in Enum.GetValues<FormAppearance>()) {
+			<option value="@appearance">@appearance</option>
+		}
+	</select>
+</label>
+
+<TnTTypeahead ItemsLookupFunc="SearchFunc" Label="Typeahead" Appearance="@Appearance" ItemSelectedCallback="@((Item item) => SelectedItems.Add(item))">
+	<ResultTemplate>
+		@context.Name @context.Email
+	</ResultTemplate>
 </TnTTypeahead>
 
 @foreach (var item in SelectedItems) {
-    <span>
-        @item.Name @item.Age
-    </span>
+	<span>
+		@item.Name @item.Age
+	</span>
 }
 
 <br />
@@ -27,48 +37,49 @@ Value: @_value;
 <br />
 
 
-<TnTTypeahead @bind-Value="_value" ItemsLookupFunc="SearchFunc" ValueToStringFunc="@(item => item.Name)" ResetValueOnSelect="false" ItemSelectedCallback="@((Item item) => SelectedItems.Add(item))" />
+<TnTTypeahead @bind-Value="_value" ItemsLookupFunc="SearchFunc" Appearance="@Appearance" ValueToStringFunc="@(item => item.Name)" ResetValueOnSelect="false" ItemSelectedCallback="@((Item item) => SelectedItems.Add(item))" />
 
 @foreach (var item in SelectedItems) {
-    <span>
-        @item.Name @item.Age
-    </span>
+	<span>
+		@item.Name @item.Age
+	</span>
 }
 
 @code {
-    private string? _value;
+	private string? _value;
 
-    private IQueryable<Item> Items = new List<Item>().AsQueryable();
+	private IQueryable<Item> Items = new List<Item>().AsQueryable();
 
-    private List<Item> SelectedItems = [];
+	private List<Item> SelectedItems = [];
+	private FormAppearance Appearance = FormAppearance.Outlined;
 
-    private class Item {
-        public required string Name { get; set; }
-        public required string Email { get; set; }
-        public required int Age { get; set; }
-    }
+	private class Item {
+		public required string Name { get; set; }
+		public required string Email { get; set; }
+		public required int Age { get; set; }
+	}
 
-    protected override void OnInitialized() {
-        base.OnInitialized();
+	protected override void OnInitialized() {
+		base.OnInitialized();
 
-        var items = new List<Item>();
-        foreach (var index in Enumerable.Range(1, 100)) {
-            items.Add(new Item {
-                Name = $"Name {index}",
-                Email = $"Email {index}",
-                Age = index
-            });
-        }
+		var items = new List<Item>();
+		foreach (var index in Enumerable.Range(1, 100)) {
+			items.Add(new Item {
+				Name = $"Name {index}",
+				Email = $"Email {index}",
+				Age = index
+			});
+		}
 
-        Items = items.AsQueryable();
-    }
+		Items = items.AsQueryable();
+	}
 
-    private async Task<IEnumerable<Item>> SearchFunc(string? search, CancellationToken cancellationToken = default) {
-        await Task.Delay(1000, cancellationToken);
-        if (!string.IsNullOrWhiteSpace(search)) {
-            return Items.Where(x => x.Name.Contains(search, StringComparison.OrdinalIgnoreCase));
-        }
-        return [];
-    }
+	private async Task<IEnumerable<Item>> SearchFunc(string? search, CancellationToken cancellationToken = default) {
+		await Task.Delay(1000, cancellationToken);
+		if (!string.IsNullOrWhiteSpace(search)) {
+			return Items.Where(x => x.Name.Contains(search, StringComparison.OrdinalIgnoreCase));
+		}
+		return [];
+	}
 
 }

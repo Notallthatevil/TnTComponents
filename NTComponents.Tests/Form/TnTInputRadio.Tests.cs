@@ -86,8 +86,8 @@ public class TnTInputRadio_Tests : BunitContext {
             .Add(c => c.BackgroundColor, TnTColor.Surface)
             .Add(c => c.TextColor, TnTColor.OnSurface)
             .Add(c => c.ErrorColor, TnTColor.Error));
-        var fieldset = cut.Find("fieldset");
-        var style = fieldset.GetAttribute("style")!;
+        var container = cut.Find(".tnt-input-container");
+        var style = container.GetAttribute("style")!;
 
         // Assert
         style.Should().Contain("--tnt-input-tint-color:var(--tnt-color-primary)");
@@ -100,8 +100,8 @@ public class TnTInputRadio_Tests : BunitContext {
     public void Default_Color_Style_Variables_Are_Set() {
         // Arrange & Act
         var cut = RenderInputRadioGroup();
-        var fieldset = cut.Find("fieldset");
-        var style = fieldset.GetAttribute("style")!;
+        var container = cut.Find(".tnt-input-container");
+        var style = container.GetAttribute("style")!;
 
         // Assert
         style.Should().Contain("--tnt-input-tint-color:var(--tnt-color-primary)");
@@ -267,10 +267,10 @@ public class TnTInputRadio_Tests : BunitContext {
 
         // Act
         var cut = RenderInputRadioGroup(configure: p => p.Add(c => c.AdditionalAttributes, attrs));
-        var fieldset = cut.Find("fieldset");
+        var container = cut.Find(".tnt-input-container");
 
         // Assert
-        var style = fieldset.GetAttribute("style")!;
+        var style = container.GetAttribute("style")!;
         style.Should().Contain("margin:10px");
         style.Should().Contain("--tnt-input-tint-color");
     }
