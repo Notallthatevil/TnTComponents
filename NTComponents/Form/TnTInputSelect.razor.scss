@@ -216,6 +216,8 @@
 
             &:has(.tnt-label) {
                 &:has(option:checked), &:has(select:focus), &:has(select:active), &.tnt-placeholder {
+                    margin-top: 10px;
+
                     .tnt-label {
                         transform-origin: left;
                         transform: scale(0.75) translateY(-38px);

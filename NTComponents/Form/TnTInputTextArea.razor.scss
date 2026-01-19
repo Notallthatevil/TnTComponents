@@ -178,6 +178,8 @@
 
             &:has(.tnt-label) {
                 &:has(textarea:not(:placeholder-shown)), &:has(textarea:focus), &:has(textarea:active), &.tnt-placeholder {
+                    margin-top: 10px;
+
                     .tnt-label {
                         transform-origin: left;
                         align-self: start;
