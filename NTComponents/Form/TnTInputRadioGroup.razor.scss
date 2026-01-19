@@ -7,7 +7,7 @@
     grid-template-areas: "container-input container-input tooltip-icon" "supporting-text input-length tooltip-icon";
     grid-template-rows: auto auto;
     grid-template-columns: 1fr minmax(auto, 8ch) minmax(0, auto);
-
+    width: 100%;
     @include base.tnt-input-length;
     @include base.supporting-text;
 
@@ -133,8 +133,9 @@
                     }
                 }
             }
+
             &:has(.tnt-start-icon) {
-                .tnt-label{
+                .tnt-label {
                     left: 32px;
                 }
             }

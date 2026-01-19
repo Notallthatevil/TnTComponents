@@ -3,10 +3,11 @@
 @use '../Styles/_Variables/_colors.scss' as colors;
 
 .tnt-input-container {
-display: grid;
-grid-template-areas: "container-input tooltip-icon" "supporting-text supporting-text";
-grid-template-rows: auto auto;
-grid-template-columns: min-content minmax(0, auto);
+    display: grid;
+    grid-template-areas: "container-input tooltip-icon" "supporting-text supporting-text";
+    grid-template-rows: auto auto;
+    grid-template-columns: 1fr minmax(0, auto);
+    width:100%;
 
     @include base.supporting-text;
 
