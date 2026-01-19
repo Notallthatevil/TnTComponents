@@ -34,6 +34,7 @@
         appearance: none;
         border: none;
         outline: none;
+        margin-top: 10px;
 
         &:has(.tnt-start-icon):has(.tnt-end-icon) {
             grid-template-areas: "pad1 start-icon pad2 radio pad3 end-icon pad4";

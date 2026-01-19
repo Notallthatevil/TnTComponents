@@ -138,6 +138,7 @@ $background-color: var(--tnt-input-background-color);
 }
 
 @mixin outlined {
+
     &.tnt-form-outlined {
         border-radius: 4px;
         background-color: transparent;
@@ -193,6 +194,8 @@ $background-color: var(--tnt-input-background-color);
 
         &:has(.tnt-label) {
             &:has(input:not(:placeholder-shown)), &:has(input:focus), &:has(input:active), &.tnt-placeholder {
+                margin-top: 10px;
+
                 .tnt-label {
                     transform-origin: left;
                     transform: scale(0.75) translateY(-38px);
