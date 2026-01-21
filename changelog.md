@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/Notallthatevil/NTComponents/compare/v1.8.0...v1.8.1) (2026-01-21)
+
+
+### Bug Fixes
+
+* **input:** standardize margin-top to 6px for inputs ([d7d1458](https://github.com/Notallthatevil/NTComponents/commit/d7d1458cfb0de79f83a79892dac4209a69a49d9c))
+
 # [1.8.0](https://github.com/Notallthatevil/NTComponents/compare/v1.7.5...v1.8.0) (2026-01-19)
 
 
