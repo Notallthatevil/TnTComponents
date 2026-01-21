@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/Notallthatevil/NTComponents/compare/v1.8.1...v1.9.0) (2026-01-21)
+
+
+### Features
+
+* **form:** add novalidate logic and TnTForm tests ([44cca9c](https://github.com/Notallthatevil/NTComponents/commit/44cca9cd556feaa645c4592858cc75e62c885b2e))
+
 ## [1.8.1](https://github.com/Notallthatevil/NTComponents/compare/v1.8.0...v1.8.1) (2026-01-21)
 
 
