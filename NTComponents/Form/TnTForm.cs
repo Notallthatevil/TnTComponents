@@ -46,6 +46,20 @@ public sealed class TnTForm : EditForm, ITnTForm {
     public bool ReadOnly { get; set; }
 
     /// <inheritdoc />
+    protected override void OnInitialized() {
+        base.OnInitialized();
+        if (RendererInfo.IsInteractive && AdditionalAttributes?.TryGetValue("novalidate", out var _) != true) {
+            if (AdditionalAttributes is null) {
+                AdditionalAttributes = new Dictionary<string, object>() { { "novalidate", true } };
+            }
+            else {
+                var attributes = new Dictionary<string, object>(AdditionalAttributes) { { "novalidate", true } };
+                AdditionalAttributes = attributes;
+            }
+        }
+    }
+
+    /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder) {
         builder.OpenComponent<CascadingValue<ITnTForm>>(0);
         builder.AddComponentParameter(10, nameof(CascadingValue<>.Value), this);

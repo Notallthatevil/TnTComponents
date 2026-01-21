@@ -13,6 +13,7 @@ public class TnTWizardFormStep_Tests : BunitContext {
         rippleModule.SetupVoid("onLoad", _ => true);
         rippleModule.SetupVoid("onUpdate", _ => true);
         rippleModule.SetupVoid("onDispose", _ => true);
+        SetRendererInfo(new RendererInfo("WebAssembly", true));
     }
 
     [Fact]
