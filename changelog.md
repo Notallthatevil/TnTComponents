@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/Notallthatevil/NTComponents/compare/v1.7.5...v1.8.0) (2026-01-19)
+
+
+### Features
+
+* **external-click:** improve detection logic and add demo ([2fd7c21](https://github.com/Notallthatevil/NTComponents/commit/2fd7c21de735945183065c8004d1a64b3729b119))
+
 ## [1.7.5](https://github.com/Notallthatevil/NTComponents/compare/v1.7.4...v1.7.5) (2026-01-19)
 
 
