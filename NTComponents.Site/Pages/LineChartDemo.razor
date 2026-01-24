@@ -164,12 +164,13 @@
 					</button>
 				</div>
 				<div style="height: 800px;">
-					<NTChart @ref="interactiveChart" TData="CartesianPoint" Title="Interactive Chart" EnablePan="true"
-							 EnableZoom="true" EnableHardwareAcceleration="@_enableHardwareAcceleration">
+					<NTChart @ref="interactiveChart" TData="CartesianPoint" Title="Interactive Chart"
+							 EnableHardwareAcceleration="@_enableHardwareAcceleration">
 						<NTLineSeries TData="CartesianPoint" Data="@_animatedData" XValue="@(p => p.X)"
 									  YValueSelector="@(p => p.Y)" Color="TnTColor.Primary"
 									  XAxis="@(new NTXAxisOptions { Title = "X Axis (Scroll to zoom, Drag to pan)" })"
-									  YAxis="@(new NTYAxisOptions { Title = "Y Axis" })" />
+									  YAxis="@(new NTYAxisOptions { Title = "Y Axis" })" 
+									  EnableXPan="true" EnableYPan="true" EnableXZoom="true" EnableYZoom="true"/>
 					</NTChart>
 				</div>
 				<div class="mt-2 text-muted">
