@@ -1,0 +1,3 @@
+[submodule "Submodules/NTComponents.Charts"]
+	path = Submodules/NTComponents.Charts
+	url = https://github.com/NT-Technologies/NTComponents.Charts.git
