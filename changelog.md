@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/Notallthatevil/NTComponents/compare/v1.9.0...v1.10.0) (2026-01-24)
+
+
+### Features
+
+* **theme:** add theme change event and .NET interop ([0e6b767](https://github.com/Notallthatevil/NTComponents/commit/0e6b7674bf563b3ba4f9ac4319e46278e9779a98))
+
 # [1.9.0](https://github.com/Notallthatevil/NTComponents/compare/v1.8.1...v1.9.0) (2026-01-21)
 
 
