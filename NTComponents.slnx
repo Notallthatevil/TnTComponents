@@ -23,8 +23,9 @@
   <Project Path="LiveTest/LiveTest.Client/LiveTest.Client.csproj" />
   <Project Path="LiveTest/LiveTest/LiveTest.csproj" />
   <Project Path="NTComponents.AspNetCore/NTComponents.AspNetCore.csproj" />
-  <Project Path="NTComponents.Charts/NTComponents.Charts.csproj" Id="30f8f9ba-ebf5-497f-ae8d-b3c185b97697" />
   <Project Path="NTComponents.Extensions/NTComponents.Extensions.csproj" />
+  <Project Path="NTComponents.Site/NTComponents.Site.csproj" />
   <Project Path="NTComponents.Tests/NTComponents.Tests.csproj" />
   <Project Path="NTComponents/NTComponents.csproj" />
+  <Project Path="Submodules/NTComponents.Charts/NTComponents.Charts/NTComponents.Charts.csproj" />
 </Solution>

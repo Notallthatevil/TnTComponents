@@ -1,0 +1,46 @@
+@page "/radar-chart"
+@using NTComponents.Charts
+@using NTComponents.Charts.Core
+
+<div class="p-4">
+   <h3>Radar Chart Demo</h3>
+   <p>Comparing player attributes in a RPG.</p>
+
+   <div style="height: 500px; width: 100%;" class="mt-4 border rounded p-2">
+      <NTChart TData="AttributeData" Title="Character Attributes"
+         RadialAxis="@(new NTRadialAxisOptions { Title = "Attributes" })">
+         <NTLegend TData="AttributeData" />
+         <NTRadarSeries TData="AttributeData" Data="@Hero1" ValueSelector="@(d => d.Value)"
+            XValue="@(d => d.Name)" Title="Warrior" Color="TnTColor.Primary" AreaOpacity="0.4f" MaxValue="100m" />
+
+         <NTRadarSeries TData="AttributeData" Data="@Hero2" ValueSelector="@(d => d.Value)"
+            XValue="@(d => d.Name)" Title="Mage" Color="TnTColor.Secondary" AreaOpacity="0.4f" MaxValue="100m" />
+      </NTChart>
+   </div>
+</div>
+
+@code {
+   public class AttributeData
+   {
+      public string Name { get; set; } = string.Empty;
+      public decimal Value { get; set; }
+   }
+
+   private List<AttributeData> Hero1 = new()
+{
+new AttributeData { Name = "Strength", Value = 90m },
+new AttributeData { Name = "Intelligence", Value = 30m },
+new AttributeData { Name = "Speed", Value = 50m },
+new AttributeData { Name = "Luck", Value = 40m },
+new AttributeData { Name = "Defense", Value = 85m },
+};
+
+   private List<AttributeData> Hero2 = new()
+{
+new AttributeData { Name = "Strength", Value = 20m },
+new AttributeData { Name = "Intelligence", Value = 95m },
+new AttributeData { Name = "Speed", Value = 60m },
+new AttributeData { Name = "Luck", Value = 70m },
+new AttributeData { Name = "Defense", Value = 30m },
+};
+}

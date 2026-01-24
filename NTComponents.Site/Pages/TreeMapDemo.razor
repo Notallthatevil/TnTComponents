@@ -1,0 +1,62 @@
+@page "/treemap"
+@using NTComponents.Charts
+@using NTComponents.Charts.Core
+
+<TnTButton BackgroundColor="TnTColor.PrimaryFixed" TextColor="TnTColor.OnPrimaryFixed">
+	Primary Fixed
+</TnTButton>
+<TnTButton BackgroundColor="TnTColor.SecondaryFixed" TextColor="TnTColor.OnSecondaryFixed">
+	SecondaryFixed
+</TnTButton>
+<TnTButton BackgroundColor="TnTColor.TertiaryFixed" TextColor="TnTColor.OnTertiaryFixed">
+	Tertiary Fixed
+</TnTButton>
+<TnTButton BackgroundColor="TnTColor.Primary" TextColor="TnTColor.OnPrimary">
+	Primary
+</TnTButton>
+<TnTButton BackgroundColor="TnTColor.Secondary" TextColor="TnTColor.OnSecondary">
+	Secondary
+</TnTButton>
+<TnTButton BackgroundColor="TnTColor.Tertiary" TextColor="TnTColor.OnTertiary">
+	Tertiary
+</TnTButton>
+
+<div class="p-4">
+	<h3>Treemap Demo</h3>
+	<p>Visualizing storage usage by category.</p>
+
+	<div style="height: 600px; width: 100%;" class="mt-4 border rounded p-2">
+		<NTChart TData="StorageItem" Title="Storage Usage (GB)">
+			<NTLegend TData="StorageItem" />
+			<NTTreeMapSeries TData="StorageItem" Title="Main Drive" Data="@Data" ValueSelector="@(d => d.SizeGb)"
+							 XValue="@(d => d.Category)" DataLabelFormat="{0:F1} GB" />
+			<NTTreeMapSeries TData="StorageItem" Title="External Backup" Data="@OtherData" ValueSelector="@(d => d.SizeGb)"
+							 XValue="@(d => d.Category)" DataLabelFormat="{0:F1} GB" />
+		</NTChart>
+	</div>
+</div>
+
+@code {
+	public class StorageItem {
+		public string Category { get; set; } = string.Empty;
+		public decimal SizeGb { get; set; }
+	}
+
+	private List<StorageItem> Data = new()
+	{
+	  new StorageItem { Category = "Videos", SizeGb = 450.5m },
+	  new StorageItem { Category = "Photos", SizeGb = 120.3m },
+	  new StorageItem { Category = "Documents", SizeGb = 45.2m },
+	  new StorageItem { Category = "Games", SizeGb = 850.0m },
+	  new StorageItem { Category = "System", SizeGb = 64.0m },
+	  new StorageItem { Category = "Music", SizeGb = 32.5m },
+	  new StorageItem { Category = "Other", SizeGb = 15.0m },
+   };
+
+	private List<StorageItem> OtherData = new()
+	{
+	  new StorageItem { Category = "Backups", SizeGb = 1200.0m },
+	  new StorageItem { Category = "Archives", SizeGb = 600.0m },
+	  new StorageItem { Category = "Logs", SizeGb = 150.0m },
+   };
+}

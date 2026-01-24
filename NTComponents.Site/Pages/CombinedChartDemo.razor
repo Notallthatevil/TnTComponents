@@ -1,0 +1,186 @@
+@page "/combined-chart"
+@using NTComponents.Charts
+@using NTComponents.Charts.Core
+@using NTComponents.Charts.Core.Axes
+@using NTComponents.Charts.Core.Series
+
+<div class="container py-4">
+   <h1>Combined Chart Demo</h1>
+   <p class="lead">Demonstrating the ability to mix multiple series types (Line and Bar) in a single chart.</p>
+
+   <div class="row mb-4">
+      <div class="col-12">
+         <div class="card p-3 shadow-sm">
+            <h5>Global Settings</h5>
+            <div class="form-check form-switch">
+               <input class="form-check-input" type="checkbox" @bind="_enableHardwareAcceleration" id="hwAccelCheck">
+               <label class="form-check-label" for="hwAccelCheck">Enable Hardware Acceleration for Charts</label>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div class="row mt-4">
+      <div class="col-12 mb-4">
+         <div class="card p-3 shadow-sm">
+            <h3>Mixed Line and Bar Series</h3>
+            <div style="height: 400px;">
+               <NTChart TData="CartesianPoint" Title="Budget vs Actual" IsCategoricalX="true"
+                  EnableHardwareAcceleration="@_enableHardwareAcceleration">
+                  <NTLegend TData="CartesianPoint" Position="LegendPosition.Bottom" />
+                  @{
+                     var sharedXAxis = new NTXAxisOptions { Title = "Month" };
+                     var sharedYAxis = new NTYAxisOptions { Title = "Amount ($)" };
+                  }
+                  <NTBarSeries TData="CartesianPoint" Data="@_budgetData" XValue="@(p => p.X)"
+                     YValueSelector="@(p => p.Y)" Color="TnTColor.Primary" Title="Budget" CornerRadius="4"
+                     XAxis="@sharedXAxis" YAxis="@sharedYAxis" />
+
+                  <NTLineSeries TData="CartesianPoint" Data="@_actualData" XValue="@(p => p.X)"
+                     YValueSelector="@(p => p.Y)" Color="TnTColor.Secondary" Title="Actual"
+                     PointStyle="PointStyle.Filled" PointShape="PointShape.Circle" PointSize="8"
+                     XAxis="@sharedXAxis" YAxis="@sharedYAxis" />
+               </NTChart>
+            </div>
+            <div class="mt-2 text-muted">
+               This chart uses <code>NTBarSeries</code> for budget and <code>NTLineSeries</code> for actual spending,
+               allowing for easy comparison across categories.
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div class="row mt-4">
+      <div class="col-lg-6 mb-4">
+         <div class="card p-3 shadow-sm">
+            <h3>Multiple Bars with a Trend Line</h3>
+            <div style="height: 350px;">
+               <NTChart TData="CartesianPoint" Title="Sales Volume & Average" IsCategoricalX="true"
+                  EnableHardwareAcceleration="@_enableHardwareAcceleration">
+                  @{
+                     var trendXAxis = new NTXAxisOptions();
+                     var trendYAxis = new NTYAxisOptions();
+                  }
+                  <NTBarSeries TData="CartesianPoint" Data="@_storeAData" XValue="@(p => p.X)"
+                     YValueSelector="@(p => p.Y)" Color="TnTColor.Info" Title="Store A" XAxis="@trendXAxis"
+                     YAxis="@trendYAxis" />
+                  <NTBarSeries TData="CartesianPoint" Data="@_storeBData" XValue="@(p => p.X)"
+                     YValueSelector="@(p => p.Y)" Color="TnTColor.Warning" Title="Store B" XAxis="@trendXAxis"
+                     YAxis="@trendYAxis" />
+
+                  <NTLineSeries TData="CartesianPoint" Data="@_trendData" XValue="@(p => p.X)"
+                     YValueSelector="@(p => p.Y)" Color="TnTColor.Error" Title="Overall Trend"
+                     Interpolation="LineInterpolation.Smoothed" StrokeWidth="3" XAxis="@trendXAxis"
+                     YAxis="@trendYAxis" />
+               </NTChart>
+            </div>
+         </div>
+      </div>
+
+      <div class="col-lg-6 mb-4">
+         <div class="card p-3 shadow-sm">
+            <h3>Data Sandbox (Mixed)</h3>
+            <div style="height: 350px;">
+               <NTChart TData="CartesianPoint" Title="Interactive Mixed Chart" IsCategoricalX="true"
+                  EnableHardwareAcceleration="@_enableHardwareAcceleration">
+                  <NTLegend TData="CartesianPoint" />
+                  @{
+                     var sandboxXAxis = new NTXAxisOptions();
+                     var sandboxYAxis = new NTYAxisOptions();
+                  }
+                  @foreach (var config in _sandboxSeries)
+                  {
+                     @if (config.Type == SeriesType.Bar)
+                     {
+                        <NTBarSeries TData="CartesianPoint" Data="@config.Data" XValue="@(p => p.X)"
+                           YValueSelector="@(p => p.Y)" Title="@config.Title" XAxis="@sandboxXAxis" YAxis="@sandboxYAxis" />
+                     }
+                     else
+                     {
+                        <NTLineSeries TData="CartesianPoint" Data="@config.Data" XValue="@(p => p.X)"
+                           YValueSelector="@(p => p.Y)" Title="@config.Title" XAxis="@sandboxXAxis" YAxis="@sandboxYAxis" />
+                     }
+                  }
+               </NTChart>
+            </div>
+            <div class="mt-3 d-flex gap-2">
+               <button class="btn btn-sm btn-outline-primary" @onclick="RandomizeSandbox">Randomize All</button>
+               <button class="btn btn-sm btn-success" @onclick="() => AddSeries(SeriesType.Bar)">Add Bar</button>
+               <button class="btn btn-sm btn-info" @onclick="() => AddSeries(SeriesType.Line)">Add Line</button>
+               <button class="btn btn-sm btn-danger" @onclick="RemoveSeries"
+                  disabled="@(_sandboxSeries.Count <= 1)">Remove Last</button>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+@code {
+   public record CartesianPoint(double X, decimal Y);
+
+   private bool _enableHardwareAcceleration = true;
+
+   private List<CartesianPoint> _budgetData = Enumerable.Range(1, 6)
+   .Select(i => new CartesianPoint(i, (decimal)(40 + Random.Shared.Next(0, 40))))
+   .ToList();
+
+   private List<CartesianPoint> _actualData = Enumerable.Range(1, 6)
+   .Select(i => new CartesianPoint(i, (decimal)(35 + Random.Shared.Next(0, 50))))
+   .ToList();
+
+   private List<CartesianPoint> _storeAData = Enumerable.Range(1, 8)
+   .Select(i => new CartesianPoint(i, (decimal)(20 + Random.Shared.Next(0, 30))))
+   .ToList();
+
+   private List<CartesianPoint> _storeBData = Enumerable.Range(1, 8)
+   .Select(i => new CartesianPoint(i, (decimal)(15 + Random.Shared.Next(0, 40))))
+   .ToList();
+
+   private List<CartesianPoint> _trendData = Enumerable.Range(1, 8)
+   .Select(i => new CartesianPoint(i, (decimal)(40 + (i * 2) + Random.Shared.Next(-5, 5))))
+   .ToList();
+
+   // Sandbox
+   private enum SeriesType { Bar, Line }
+   private class SandboxConfig
+   {
+      public string Title { get; set; } = string.Empty;
+      public List<CartesianPoint> Data { get; set; } = new();
+      public SeriesType Type { get; set; }
+   }
+
+   private List<SandboxConfig> _sandboxSeries = new();
+
+   protected override void OnInitialized()
+   {
+      AddSeries(SeriesType.Bar);
+      AddSeries(SeriesType.Line);
+   }
+
+   private void AddSeries(SeriesType type)
+   {
+      if (_sandboxSeries.Count >= 6) return;
+      _sandboxSeries.Add(new SandboxConfig
+      {
+         Title = $"{type} Series {_sandboxSeries.Count + 1}",
+         Type = type,
+         Data = Enumerable.Range(1, 8).Select(i => new CartesianPoint(i, (decimal)Random.Shared.Next(10, 90))).ToList()
+      });
+   }
+
+   private void RemoveSeries()
+   {
+      if (_sandboxSeries.Count > 1)
+      {
+         _sandboxSeries.RemoveAt(_sandboxSeries.Count - 1);
+      }
+   }
+
+   private void RandomizeSandbox()
+   {
+      foreach (var s in _sandboxSeries)
+      {
+         s.Data = Enumerable.Range(1, 8).Select(i => new CartesianPoint(i, (decimal)Random.Shared.Next(10, 90))).ToList();
+      }
+   }
+}
