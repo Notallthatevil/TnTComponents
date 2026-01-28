@@ -1,3 +1,11 @@
+## [1.11.1](https://github.com/Notallthatevil/NTComponents/compare/v1.11.0...v1.11.1) (2026-01-28)
+
+
+### Bug Fixes
+
+* **layout:** improve side nav toggle and layout handling ([bc379e0](https://github.com/Notallthatevil/NTComponents/commit/bc379e010b8d30f7d14c263b5ca4a247a7385463))
+* **LineChartDemo:** add axis-specific pan and zoom controls ([3eef616](https://github.com/Notallthatevil/NTComponents/commit/3eef616b963bfd6df47f33b4ba5f68bd2b0aaf6c))
+
 # [1.11.0](https://github.com/Notallthatevil/NTComponents/compare/v1.10.0...v1.11.0) (2026-01-24)
 
 
