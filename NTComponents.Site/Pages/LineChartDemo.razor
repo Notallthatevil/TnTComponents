@@ -13,8 +13,7 @@
 			<div class="card p-3 shadow-sm">
 				<h5>Global Settings</h5>
 				<div class="form-check form-switch">
-					<input class="form-check-input" type="checkbox" @bind="_enableHardwareAcceleration"
-						   id="hwAccelCheck">
+					<input class="form-check-input" type="checkbox" @bind="_enableHardwareAcceleration" id="hwAccelCheck">
 					<label class="form-check-label" for="hwAccelCheck">Enable Hardware Acceleration for Charts</label>
 				</div>
 			</div>
@@ -27,10 +26,10 @@
 				<h3>Basic Line Chart</h3>
 				<div style="height: 300px;">
 					<NTChart TData="CartesianPoint" Title="Basic Data" IsCategoricalX="true"
-							 EnableHardwareAcceleration="@_enableHardwareAcceleration">
-						<NTLineSeries TData="CartesianPoint" Data="@_basicData" Title="My data"
-									  XValue="@(p => p.X)" YValueSelector="@(p => p.Y)" Color="TnTColor.Primary"
-									  PointStyle="PointStyle.Filled" PointSize="10" />
+						EnableHardwareAcceleration="@_enableHardwareAcceleration" DebugView="true">
+						<NTLineSeries TData="CartesianPoint" Data="@_basicData" Title="My data" XValue="@(p => p.X)"
+							YValueSelector="@(p => p.Y)" Color="TnTColor.Primary" PointStyle="PointStyle.Filled"
+							PointSize="10" />
 					</NTChart>
 				</div>
 			</div>
@@ -41,13 +40,12 @@
 				<h3>Multiple Series (Auto Shapes)</h3>
 				<div style="height: 300px;">
 					<NTChart TData="CartesianPoint" Title="Comparison" Palette="@_customPalette" IsCategoricalX="true"
-							 EnableHardwareAcceleration="@_enableHardwareAcceleration">
+						EnableHardwareAcceleration="@_enableHardwareAcceleration" DebugView="true">
 						<NTLineSeries TData="CartesianPoint" Data="@_productA" XValue="@(p => p.X)"
-									  YValueSelector="@(p => p.Y)" PointStyle="PointStyle.Filled"
-									  XAxis="@sharedXAxis" YAxis="@yAxis1" />
+							YValueSelector="@(p => p.Y)" PointStyle="PointStyle.Filled" XAxis="@sharedXAxis" YAxis="@yAxis1" />
 						<NTLineSeries TData="CartesianPoint" Data="@_productB" XValue="@(p => p.X)"
-									  YValueSelector="@(p => p.Y)" PointStyle="PointStyle.Outlined"
-									  XAxis="@sharedXAxis" YAxis="@yAxis2" />
+							YValueSelector="@(p => p.Y)" PointStyle="PointStyle.Outlined" XAxis="@sharedXAxis"
+							YAxis="@yAxis2" />
 
 					</NTChart>
 				</div>
@@ -61,12 +59,11 @@
 				<h3>Custom Point Shapes</h3>
 				<div style="height: 300px;">
 					<NTChart TData="CartesianPoint" Title="Customized"
-							 EnableHardwareAcceleration="@_enableHardwareAcceleration">
+						EnableHardwareAcceleration="@_enableHardwareAcceleration" DebugView="true">
 						<NTLineSeries TData="CartesianPoint" Data="@_customData" XValue="@(p => p.X)"
-									  YValueSelector="@(p => p.Y)" Color="TnTColor.Error" StrokeWidth="5"
-									  PointStyle="PointStyle.Filled" PointShape="PointShape.Diamond" PointSize="12"
-									  XAxis="@(new NTXAxisOptions { Title = "Sequence" })"
-									  YAxis="@(new NTYAxisOptions { Title = "Value" })" />
+							YValueSelector="@(p => p.Y)" Color="TnTColor.Error" StrokeWidth="5" PointStyle="PointStyle.Filled"
+							PointShape="PointShape.Diamond" PointSize="12" XAxis="@(new NTXAxisOptions { Title = "Sequence" })"
+							YAxis="@(new NTYAxisOptions { Title = "Value" })" />
 					</NTChart>
 				</div>
 				<div class="mt-2 text-muted">
@@ -80,11 +77,11 @@
 				<h3>Mathematical Functions</h3>
 				<div style="height: 300px;">
 					<NTChart TData="CartesianPoint" Title="Sine Wave"
-							 EnableHardwareAcceleration="@_enableHardwareAcceleration">
+						EnableHardwareAcceleration="@_enableHardwareAcceleration" DebugView="true">
 						<NTLineSeries TData="CartesianPoint" Data="@_animatedData" XValue="@(p => p.X)"
-									  YValueSelector="@(p => p.Y)" Color="TnTColor.Success"
-									  XAxis="@(new NTXAxisOptions { Title = "Radians" })"
-									  YAxis="@(new NTYAxisOptions { Title = "Amplitude" })" />
+							YValueSelector="@(p => p.Y)" Color="TnTColor.Success"
+							XAxis="@(new NTXAxisOptions { Title = "Radians" })"
+							YAxis="@(new NTYAxisOptions { Title = "Amplitude" })" />
 					</NTChart>
 				</div>
 			</div>
@@ -97,13 +94,13 @@
 				<h3>Interpolation Modes</h3>
 				<div style="height: 300px;">
 					<NTChart TData="CartesianPoint" Title="Curved vs Step"
-							 EnableHardwareAcceleration="@_enableHardwareAcceleration">
+						EnableHardwareAcceleration="@_enableHardwareAcceleration" DebugView="true">
 						<NTLineSeries TData="CartesianPoint" Data="@_basicData" XValue="@(p => p.X)"
-									  YValueSelector="@(p => p.Y)" Color="TnTColor.Primary"
-									  Interpolation="LineInterpolation.Curved" Title="Curved"  />
+							YValueSelector="@(p => p.Y)" Color="TnTColor.Primary" Interpolation="LineInterpolation.Curved"
+							Title="Curved" />
 						<NTLineSeries TData="CartesianPoint" Data="@_basicData" XValue="@(p => p.X)"
-									  YValueSelector="@(p => p.Y)" Color="TnTColor.Warning" Interpolation="LineInterpolation.Step"
-									  Title="Step" />
+							YValueSelector="@(p => p.Y)" Color="TnTColor.Warning" Interpolation="LineInterpolation.Step"
+							Title="Step" />
 					</NTChart>
 				</div>
 				<div class="mt-2 text-muted">
@@ -116,14 +113,14 @@
 			<div class="card p-3 shadow-sm">
 				<h3>Dashed & Scatter Styles</h3>
 				<div style="height: 300px;">
-					<NTChart TData="CartesianPoint" Title="Styles"
-							 EnableHardwareAcceleration="@_enableHardwareAcceleration">
+					<NTChart TData="CartesianPoint" Title="Styles" EnableHardwareAcceleration="@_enableHardwareAcceleration"
+						DebugView="true">
 						<NTLineSeries TData="CartesianPoint" Data="@_basicData" XValue="@(p => p.X)"
-									  YValueSelector="@(p => p.Y)" Color="TnTColor.Secondary" LineStyle="LineStyle.Dashed"
-									  Interpolation="LineInterpolation.Smoothed" />
+							YValueSelector="@(p => p.Y)" Color="TnTColor.Secondary" LineStyle="LineStyle.Dashed"
+							Interpolation="LineInterpolation.Smoothed" />
 						<NTLineSeries TData="CartesianPoint" Data="@_productB" XValue="@(p => p.X)"
-									  YValueSelector="@(p => p.Y)" Color="TnTColor.Error" LineStyle="LineStyle.None"
-									  PointStyle="PointStyle.Filled" PointShape="PointShape.Circle" />
+							YValueSelector="@(p => p.Y)" Color="TnTColor.Error" LineStyle="LineStyle.None"
+							PointStyle="PointStyle.Filled" PointShape="PointShape.Circle" />
 					</NTChart>
 				</div>
 				<div class="mt-2 text-muted">
@@ -139,11 +136,11 @@
 				<h3>Custom Axis Values</h3>
 				<div style="height: 300px;">
 					<NTChart TData="CartesianPoint" Title="Explicit Labels"
-							 EnableHardwareAcceleration="@_enableHardwareAcceleration">
+						EnableHardwareAcceleration="@_enableHardwareAcceleration" DebugView="true">
 						<NTLineSeries TData="CartesianPoint" Data="@_basicData" XValue="@(p => p.X)"
-									  YValueSelector="@(p => p.Y)" Color="TnTColor.Primary"
-									  XAxis="@(new NTXAxisOptions { Title = "Selected X" })"
-									  YAxis="@(new NTYAxisOptions { Title = "Major Y" })" />
+							YValueSelector="@(p => p.Y)" Color="TnTColor.Primary"
+							XAxis="@(new NTXAxisOptions { Title = "Selected X" })"
+							YAxis="@(new NTYAxisOptions { Title = "Major Y" })" />
 					</NTChart>
 				</div>
 				<div class="mt-2 text-muted">
@@ -165,12 +162,12 @@
 				</div>
 				<div style="height: 800px;">
 					<NTChart @ref="interactiveChart" TData="CartesianPoint" Title="Interactive Chart"
-							 EnableHardwareAcceleration="@_enableHardwareAcceleration">
+						EnableHardwareAcceleration="@_enableHardwareAcceleration" DebugView="true">
 						<NTLineSeries TData="CartesianPoint" Data="@_animatedData" XValue="@(p => p.X)"
-									  YValueSelector="@(p => p.Y)" Color="TnTColor.Primary"
-									  XAxis="@(new NTXAxisOptions { Title = "X Axis (Scroll to zoom, Drag to pan)" })"
-									  YAxis="@(new NTYAxisOptions { Title = "Y Axis" })" 
-									  EnableXPan="true" EnableYPan="true" EnableXZoom="true" EnableYZoom="true"/>
+							YValueSelector="@(p => p.Y)" Color="TnTColor.Primary"
+							XAxis="@(new NTXAxisOptions { Title = "X Axis (Scroll to zoom, Drag to pan)" })"
+							YAxis="@(new NTYAxisOptions { Title = "Y Axis" })"
+							Interactions="@(ChartInteractions.XPan | ChartInteractions.YPan | ChartInteractions.XZoom | ChartInteractions.YZoom)" />
 					</NTChart>
 				</div>
 				<div class="mt-2 text-muted">
@@ -189,8 +186,7 @@
 						<p class="text-muted small">Dynamic series management and property customization.</p>
 					</div>
 					<div class="btn-group shadow-sm">
-						<button class="btn btn-outline-primary" @onclick="RandomizeSandbox"
-								title="Randomize all series data">
+						<button class="btn btn-outline-primary" @onclick="RandomizeSandbox" title="Randomize all series data">
 							Randomize Data
 						</button>
 						<button class="btn btn-success" @onclick="AddSeries" disabled="@(_sandboxSeries.Count >= 10)">
@@ -206,19 +202,20 @@
 					<div class="col-lg-8">
 						<div style="height: 500px;" class="border rounded bg-light p-2 shadow-inner">
 							<NTChart TData="CartesianPoint" Title="Interactive Sandbox" RangePadding="0.1"
-									 EnableHardwareAcceleration="@_enableHardwareAcceleration" Orientation="@_orientation">
-								@if (_showLegend) {
+								EnableHardwareAcceleration="@_enableHardwareAcceleration" Orientation="@_orientation"
+								DebugView="true">
+								@if (_showLegend)
+								{
 									<NTLegend TData="CartesianPoint" Position="@_legendPosition" />
 								}
 
 
-								@foreach (var config in _sandboxSeries) {
+								@foreach (var config in _sandboxSeries)
+								{
 									<NTLineSeries TData="CartesianPoint" Data="@config.Data" XValue="@(p => p.X)"
-												  YValueSelector="@(p => p.Y)" Title="@config.Title"
-												  Interpolation="@config.Interpolation" LineStyle="@config.LineStyle"
-												  PointShape="@config.PointShape" PointStyle="@config.PointStyle"
-												  ShowDataLabels="@config.ShowDataLabels" XAxis="@sandboxXAxis"
-												  YAxis="@sandboxYAxis" />
+										YValueSelector="@(p => p.Y)" Title="@config.Title" Interpolation="@config.Interpolation"
+										LineStyle="@config.LineStyle" PointShape="@config.PointShape" PointStyle="@config.PointStyle"
+										ShowDataLabels="@config.ShowDataLabels" XAxis="@sandboxXAxis" YAxis="@sandboxYAxis" />
 								}
 							</NTChart>
 						</div>
@@ -231,7 +228,7 @@
 									<div class="col-6">
 										<div class="form-check form-switch mt-2">
 											<input class="form-check-input" type="checkbox" @bind="_showLegend"
-												   id="showLegendCheck">
+												id="showLegendCheck">
 											<label class="form-check-label small" for="showLegendCheck">
 												Show
 												Legend
@@ -241,7 +238,8 @@
 									<div class="col-6">
 										<label class="small text-muted fw-bold d-block">Legend Position</label>
 										<select class="form-select form-select-sm" @bind="_legendPosition">
-											@foreach (var val in Enum.GetValues<LegendPosition>()) {
+											@foreach (var val in Enum.GetValues<LegendPosition>())
+											{
 												<option value="@val">@val</option>
 											}
 										</select>
@@ -249,7 +247,8 @@
 									<div class="col-12">
 										<label class="small text-muted fw-bold d-block">Orientation</label>
 										<select class="form-select form-select-sm" @bind="_orientation">
-											@foreach (var val in Enum.GetValues<NTChartOrientation>()) {
+											@foreach (var val in Enum.GetValues<NTChartOrientation>())
+											{
 												<option value="@val">@val</option>
 											}
 										</select>
@@ -258,7 +257,8 @@
 							</div>
 						</div>
 						<div style="max-height: 400px; overflow-y: auto;" class="pe-2 custom-scrollbar">
-							@for (int i = 0; i < _sandboxSeries.Count; i++) {
+							@for (int i = 0; i < _sandboxSeries.Count; i++)
+							{
 								var index = i;
 								var config = _sandboxSeries[i];
 								<div class="card mb-3 border-start border-4 @GetBorderClass(index) shadow-sm">
@@ -271,7 +271,8 @@
 											<div class="col-6">
 												<label class="small text-muted fw-bold d-block">Interpolation</label>
 												<select class="form-select form-select-sm" @bind="config.Interpolation">
-													@foreach (var val in Enum.GetValues<LineInterpolation>()) {
+													@foreach (var val in Enum.GetValues<LineInterpolation>())
+													{
 														<option value="@val">@val</option>
 													}
 												</select>
@@ -279,7 +280,8 @@
 											<div class="col-6">
 												<label class="small text-muted fw-bold d-block">Line Style</label>
 												<select class="form-select form-select-sm" @bind="config.LineStyle">
-													@foreach (var val in Enum.GetValues<LineStyle>()) {
+													@foreach (var val in Enum.GetValues<LineStyle>())
+													{
 														<option value="@val">@val</option>
 													}
 												</select>
@@ -287,7 +289,8 @@
 											<div class="col-6">
 												<label class="small text-muted fw-bold d-block">Point Shape</label>
 												<select class="form-select form-select-sm" @bind="config.PointShape">
-													@foreach (var val in Enum.GetValues<PointShape>()) {
+													@foreach (var val in Enum.GetValues<PointShape>())
+													{
 														<option value="@val">@val</option>
 													}
 												</select>
@@ -295,15 +298,16 @@
 											<div class="col-6">
 												<label class="small text-muted fw-bold d-block">Point Style</label>
 												<select class="form-select form-select-sm" @bind="config.PointStyle">
-													@foreach (var val in Enum.GetValues<PointStyle>()) {
+													@foreach (var val in Enum.GetValues<PointStyle>())
+													{
 														<option value="@val">@val</option>
 													}
 												</select>
 											</div>
 											<div class="col-12 mt-2">
 												<div class="form-check form-switch">
-													<input class="form-check-input" type="checkbox"
-														   @bind="config.ShowDataLabels" id="@($"labelCheck{index}")">
+													<input class="form-check-input" type="checkbox" @bind="config.ShowDataLabels"
+														id="@($"labelCheck{index}")">
 													<label class="form-check-label small" for="@($"labelCheck{index}")">
 														Show
 														Data Labels
@@ -326,13 +330,12 @@
 			<div class="card p-3 shadow-sm">
 				<h3>Horizontal Trend (Swapped Axes)</h3>
 				<div style="height: 300px;">
-					<NTChart TData="CartesianPoint" Title="Horizontal Progress"
-							 Orientation="NTChartOrientation.Horizontal"
-							 EnableHardwareAcceleration="@_enableHardwareAcceleration">
+					<NTChart TData="CartesianPoint" Title="Horizontal Progress" Orientation="NTChartOrientation.Horizontal"
+						EnableHardwareAcceleration="@_enableHardwareAcceleration" DebugView="true">
 						<NTLineSeries TData="CartesianPoint" Data="@_basicData" XValue="@(p => p.X)"
-									  YValueSelector="@(p => p.Y)" Color="TnTColor.Info" PointStyle="PointStyle.Filled"
-									  XAxis="@(new NTXAxisOptions { Title = "Independent (X)" })"
-									  YAxis="@(new NTYAxisOptions { Title = "Dependent (Y)" })" />
+							YValueSelector="@(p => p.Y)" Color="TnTColor.Info" PointStyle="PointStyle.Filled"
+							XAxis="@(new NTXAxisOptions { Title = "Independent (X)" })"
+							YAxis="@(new NTYAxisOptions { Title = "Dependent (Y)" })" />
 					</NTChart>
 				</div>
 				<div class="mt-2 text-muted">
@@ -345,8 +348,10 @@
 </div>
 
 @code {
-	private void OnConditionRender(NTDataPointRenderArgs<CartesianPoint> args) {
-		if (args.Data.Y > 40m) {
+	private void OnConditionRender(NTDataPointRenderArgs<CartesianPoint> args)
+	{
+		if (args.Data.Y > 40m)
+		{
 			args.Color = SkiaSharp.SKColors.Orange;
 			args.LineStyle = LineStyle.Dashed;
 		}
@@ -364,7 +369,8 @@
 	private List<CartesianPoint> _dynamicData = Enumerable.Range(1, 10).Select(i => new CartesianPoint(i,
 	Random.Shared.Next(10, 90))).ToList();
 
-	private void UpdateData() {
+	private void UpdateData()
+	{
 		int count = Random.Shared.Next(5, 20);
 		_dynamicData = Enumerable.Range(1, count).Select(i => new CartesianPoint(i, Random.Shared.Next(10, 90))).ToList();
 	}
@@ -376,7 +382,8 @@
 	private List<CartesianPoint> _productA = [new(1, 10m), new(2, 25m), new(3, 15m), new(4, 30m), new(5, 45m)];
 	private List<CartesianPoint> _productB = [new(1, 20m), new(2, 10m), new(3, 40m), new(4, 20m), new(5, 30m)];
 
-	private List<CartesianPoint> _customData = [new(1, 20m), new(2, 20m), new(3, 40m), new(4, 40m), new(5, 60m), new(6, 60m)];
+	private List<CartesianPoint> _customData = [new(1, 20m), new(2, 20m), new(3, 40m), new(4, 40m), new(5, 60m), new(6,
+60m)];
 
 	private List<CartesianPoint> _animatedData = Enumerable.Range(0, 50)
 	.Select(i => new CartesianPoint(i * 0.2, (decimal)(Math.Sin(i * 0.2) * 50 + 50)))
@@ -390,15 +397,18 @@
 	// Sandbox Logic
 	private List<SeriesSandboxConfig> _sandboxSeries = new();
 
-	protected override void OnInitialized() {
+	protected override void OnInitialized()
+	{
 		AddSeries(); // Start with one
 	}
 
-	private void AddSeries() {
+	private void AddSeries()
+	{
 		if (_sandboxSeries.Count >= 10)
 			return;
 
-		var config = new SeriesSandboxConfig {
+		var config = new SeriesSandboxConfig
+		{
 			Title = $"Series {_sandboxSeries.Count + 1}",
 			Interpolation = (LineInterpolation)(_sandboxSeries.Count % 4),
 			Data = GenerateRandomData()
@@ -406,26 +416,32 @@
 		_sandboxSeries.Add(config);
 	}
 
-	private void RemoveSeries() {
-		if (_sandboxSeries.Count > 1) {
+	private void RemoveSeries()
+	{
+		if (_sandboxSeries.Count > 1)
+		{
 			_sandboxSeries.RemoveAt(_sandboxSeries.Count - 1);
 		}
 	}
 
-	private void RandomizeSandbox() {
-		foreach (var s in _sandboxSeries) {
+	private void RandomizeSandbox()
+	{
+		foreach (var s in _sandboxSeries)
+		{
 			s.Data = GenerateRandomData();
 		}
 	}
 
-	private List<CartesianPoint> GenerateRandomData() {
+	private List<CartesianPoint> GenerateRandomData()
+	{
 		int count = Random.Shared.Next(5, 15);
 		return Enumerable.Range(1, count)
 		.Select(i => new CartesianPoint(i, (decimal)Random.Shared.Next(5, 95)))
 		.ToList();
 	}
 
-	private string GetBorderClass(int index) => (index % 6) switch {
+	private string GetBorderClass(int index) => (index % 6) switch
+	{
 		0 => "border-primary",
 		1 => "border-secondary",
 		2 => "border-info",
@@ -434,7 +450,8 @@
 		_ => "border-danger"
 	};
 
-	private string GetBadgeClass(int index) => (index % 6) switch {
+	private string GetBadgeClass(int index) => (index % 6) switch
+	{
 		0 => "bg-primary text-white",
 		1 => "bg-secondary text-white",
 		2 => "bg-info text-dark",
@@ -443,7 +460,8 @@
 		_ => "bg-danger text-white"
 	};
 
-	public class SeriesSandboxConfig {
+	public class SeriesSandboxConfig
+	{
 		public string Title { get; set; } = string.Empty;
 		public List<CartesianPoint> Data { get; set; } = new();
 		public LineInterpolation Interpolation { get; set; } = LineInterpolation.Straight;

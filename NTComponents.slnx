@@ -28,6 +28,6 @@
   <Project Path="NTComponents.Tests/NTComponents.Tests.csproj" />
   <Project Path="NTComponents/NTComponents.csproj" />
   <Project Path="Submodules/NTComponents.Charts/NTComponents.Charts/NTComponents.Charts.csproj">
-    <Build Solution="Debug|*" Project="false" />
+    <Build Solution="Debug|*" Project="true" />
   </Project>
 </Solution>
