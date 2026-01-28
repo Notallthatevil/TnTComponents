@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/Notallthatevil/NTComponents/compare/v1.10.0...v1.11.0) (2026-01-24)
+
+
+### Features
+
+* **styles:** add theme color variables and base app styles ([46f921d](https://github.com/Notallthatevil/NTComponents/commit/46f921d2e23019846fa193e7d5e1276e0ef83d9b)), closes [hi#contrast](https://github.com/hi/issues/contrast)
+
 # [1.10.0](https://github.com/Notallthatevil/NTComponents/compare/v1.9.0...v1.10.0) (2026-01-24)
 
 
