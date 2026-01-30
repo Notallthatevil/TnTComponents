@@ -24,7 +24,7 @@ public partial class TnTDataGridVirtualizedBody<[DynamicallyAccessedMembers(Dyna
     /// <summary>
     ///     The virtualize component instance used to manage virtualization and data loading.
     /// </summary>
-    private TnTVirtualize<(int, TGridItem)> _virtualize = default!;
+    private NTVirtualize<(int, TGridItem)> _virtualize = default!;
 
     /// <inheritdoc />
     public override async Task RefreshAsync() {
@@ -37,12 +37,11 @@ public partial class TnTDataGridVirtualizedBody<[DynamicallyAccessedMembers(Dyna
     /// </summary>
     /// <param name="request">The request containing information about the items to provide.</param>
     /// <returns>A <see cref="TnTItemsProviderResult{TItem}" /> containing the items and total count for the grid.</returns>
-    private async ValueTask<TnTItemsProviderResult<(int, TGridItem)>> ProvideVirtualizedItemsAsync(
-        TnTVirtualizeItemsProviderRequest<(int, TGridItem)> request) {
+    private async ValueTask<TnTItemsProviderResult<(int, TGridItem)>> ProvideVirtualizedItemsAsync(NTVirtualizeItemsProviderRequest<(int, TGridItem)> request) {
         // Debounce the requests. This eliminates a lot of redundant queries at the cost of slight lag after interactions.
         await Task.Delay(_delay);
-        if (_delay < 2000) {
-            Interlocked.Add(ref _delay, 250);
+        if (_delay < 500) {
+            Interlocked.Add(ref _delay, 50);
         }
         var result = default(TnTItemsProviderResult<(int, TGridItem)>);
         if (!request.CancellationToken.IsCancellationRequested) {

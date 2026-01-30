@@ -1,4 +1,4 @@
-﻿@use '../Styles/_Variables/_colors.scss' as colors;
+@use '../Styles/_Variables/_colors.scss' as colors;
 @use '../Styles/_Variables/_typescale.scss' as typescale;
 @use '../Styles/_Variables/_interactable.scss' as interactable;
 @use '../Styles/_Variables/_measurements.scss' as measurements;
@@ -47,7 +47,15 @@
                     white-space: nowrap;
                     text-overflow: ellipsis;
                     overflow: clip;
-                    height: 32px;
+                    height: inherit;
+                    max-height: inherit;
+
+                    * {
+                        height: inherit;
+                        max-height: inherit;
+                        min-height: unset;
+                        margin: 0;
+                    }
                 }
             }
         }

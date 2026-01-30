@@ -252,17 +252,6 @@ public partial class TnTDataGrid<[DynamicallyAccessedMembers(DynamicallyAccessed
     internal async ValueTask<TnTItemsProviderResult<TGridItem>> ResolveItemsRequestAsync(TnTGridItemsProviderRequest<TGridItem> request) {
         TnTItemsProviderResult<TGridItem> result = new();
         if (ItemsProvider is not null) {
-            if (Virtualize) {
-                var numberOfRowsToLoad = 10;
-                if (IsolatedJsModule is not null) {
-                    var bodyHeight = await IsolatedJsModule.InvokeAsync<int>("getBodyHeight", request.CancellationToken, Element);
-
-                    if (bodyHeight >= 0) {
-                        numberOfRowsToLoad = Math.Max(bodyHeight / ItemSize, 5);
-                    }
-                }
-                request = request with { Count = numberOfRowsToLoad + OverscanCount };
-            }
             result = await ItemsProvider(request);
             ProvidedItems = result.Items;
         }
@@ -287,9 +276,7 @@ public partial class TnTDataGrid<[DynamicallyAccessedMembers(DynamicallyAccessed
             _cancellationTokenSource?.Cancel();
             _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = null;
-            if (_lastUsedPaginationState is not null) {
-                _lastUsedPaginationState.CurrentPageChangedCallback -= PaginationPageUpdatedAsync;
-            }
+            _lastUsedPaginationState?.CurrentPageChangedCallback -= PaginationPageUpdatedAsync;
         }
     }
 

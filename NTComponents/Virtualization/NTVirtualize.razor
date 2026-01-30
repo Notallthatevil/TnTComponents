@@ -1,0 +1,79 @@
+@namespace NTComponents
+@using Microsoft.AspNetCore.Components.Rendering
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using NTComponents.Core
+@using System.Diagnostics
+@typeparam TItem
+@inherits TnTPageScriptComponent<NTVirtualize<TItem>>
+
+@Render
+@code {
+	private void Render(RenderTreeBuilder builder) {
+		if (_refreshException != null) {
+			var oldRefreshException = _refreshException;
+			_refreshException = null;
+
+			throw oldRefreshException;
+		}
+
+		builder.OpenElement(0, SpacerElement);
+		builder.AddAttribute(10, "style", GetSpacerStyle(_spacerBeforeSize));
+		builder.AddAttribute(20, "aria-hidden", "true");
+		builder.AddElementReferenceCapture(3, elementReference => Element = elementReference);
+		builder.CloseElement();
+
+		var lastItemIndex = Math.Min(_itemsBefore + _visibleItemCapacity, _itemCount);
+		var renderIndex = _itemsBefore;
+		var placeholdersBeforeCount = Math.Min(_loadedItemsStartIndex, lastItemIndex);
+
+		builder.OpenRegion(30);
+
+		// Render placeholders before the loaded items.
+		for (; renderIndex < placeholdersBeforeCount; renderIndex++) {
+			// This is a rare case where it's valid for the sequence number to be programmatically incremented.
+			// This is only true because we know for certain that no other content will be alongside it.
+			builder.AddContent(renderIndex, LoadingTemplate, new PlaceholderContext(renderIndex + 2, _itemSize));
+		}
+
+		builder.CloseRegion();
+
+		_lastRenderedItemCount = 0;
+
+		if (_loadedItems != null && !_loading && _itemCount == 0 && EmptyTemplate is not null) {
+			builder.AddContent(40, EmptyTemplate);
+		}
+		else if (_loadedItems != null && ItemTemplate is not null) {
+			var itemsToShow = _loadedItems
+				.Skip(_itemsBefore - _loadedItemsStartIndex)
+				.Take(lastItemIndex - _itemsBefore);
+			builder.OpenRegion(50);
+
+			// Render the loaded items.
+			foreach (var item in itemsToShow) {
+				ItemTemplate(item)(builder);
+				_lastRenderedItemCount++;
+			}
+
+			renderIndex += _lastRenderedItemCount;
+
+			builder.CloseRegion();
+		}
+
+		_lastRenderedPlaceholderCount = Math.Max(0, lastItemIndex - _itemsBefore - _lastRenderedItemCount);
+
+		builder.OpenRegion(60);
+		// Render the placeholders after the loaded items.
+		for (; renderIndex < lastItemIndex; renderIndex++) {
+			builder.AddContent(renderIndex, LoadingTemplate, new PlaceholderContext(renderIndex + 2, _itemSize));
+		}
+
+
+		builder.CloseRegion();
+
+		builder.OpenElement(70, SpacerElement);
+		builder.AddAttribute(80, "aria-hidden", "true");
+		builder.AddAttribute(90, "style", GetSpacerStyle(_spacerAfterSize));
+		builder.AddElementReferenceCapture(100, elementReference => _afterPlaceholder = elementReference);
+		builder.CloseElement();
+	}
+}

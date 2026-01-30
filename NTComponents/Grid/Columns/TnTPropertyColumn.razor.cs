@@ -80,14 +80,20 @@ public partial class TnTPropertyColumn<[DynamicallyAccessedMembers(DynamicallyAc
                 }
 
                 _cellTextFunc = item => {
-                    var result = ((IFormattable?)compiledPropertyExpression!(item))?.ToString(Format, FormatCulture);
-                    return !string.IsNullOrEmpty(result) ? result : " ";
+                    if (item is not null) {
+                        var result = ((IFormattable?)compiledPropertyExpression!(item))?.ToString(Format, FormatCulture);
+                        return !string.IsNullOrEmpty(result) ? result : " ";
+                    }
+                    return string.Empty;
                 };
             }
             else {
                 _cellTextFunc = item => {
-                    var result = compiledPropertyExpression!(item)?.ToString();
-                    return !string.IsNullOrEmpty(result) ? result : " ";
+                    if (item is not null) {
+                        var result = compiledPropertyExpression!(item)?.ToString();
+                        return !string.IsNullOrEmpty(result) ? result : " ";
+                    }
+                    return string.Empty;
                 };
             }
             if (InitialSortDirection == SortDirection.Ascending) {

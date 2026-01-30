@@ -30,10 +30,8 @@ public class TnTDataGrid_Tests : BunitContext {
         dataGridModule.Setup<int>("getBodyHeight", _ => true).SetResult(400);
 
         // Set up Virtualization JavaScript module
-        var virtualizeModule = JSInterop.SetupModule("./_content/NTComponents/Virtualization/TnTVirtualize.razor.js");
+        var virtualizeModule = JSInterop.SetupModule("./_content/NTComponents/Virtualization/NTVirtualize.razor.js");
         virtualizeModule.SetupVoid().SetVoidResult();
-        virtualizeModule.Setup<int>("getViewportHeight", _ => true).SetResult(400);
-        virtualizeModule.Setup<int>("getScrollTop", _ => true).SetResult(0);
     }
 
     [Fact]
@@ -560,6 +558,7 @@ public class TnTDataGrid_Tests : BunitContext {
         // Assert Should render TnTDataGridVirtualizedBody instead of regular TnTDataGridBody Check that virtualization is enabled and component renders
         Assert.True(cut.Instance.Virtualize);
         cut.Markup.Should().NotBeEmpty();
+
         // The component should not throw when virtualization is enabled
     }
 
