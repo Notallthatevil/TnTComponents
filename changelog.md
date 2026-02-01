@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/Notallthatevil/NTComponents/compare/v1.11.1...v1.12.0) (2026-02-01)
+
+
+### Features
+
+* **virualization:** Added better virtualization logic. ([1445aaa](https://github.com/Notallthatevil/NTComponents/commit/1445aaa5964cc0151babc06d169b84c56ee9f2b2))
+
 ## [1.11.1](https://github.com/Notallthatevil/NTComponents/compare/v1.11.0...v1.11.1) (2026-01-28)
 
 
