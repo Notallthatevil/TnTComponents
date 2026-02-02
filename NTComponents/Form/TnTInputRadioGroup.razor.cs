@@ -45,10 +45,28 @@ public partial class TnTInputRadioGroup<[DynamicallyAccessedMembers(DynamicallyA
     /// </summary>
     internal EditContext InternalEditContext => EditContext;
 
+    private readonly List<TnTInputRadio<TInputType>> _registeredRadios = [];
+
+    /// <inheritdoc />
+    public override ValueTask SetFocusAsync() => _registeredRadios?.FirstOrDefault()?.SetFocusAsync() ?? ValueTask.CompletedTask;
+
+
     /// <summary>
     ///     Notifies that the state of the radio group has changed.
     /// </summary>
-    internal void NotifyStateChanged() => EditContext.NotifyFieldChanged(FieldIdentifier);
+    internal void NotifyStateChanged() => EditContext?.NotifyFieldChanged(FieldIdentifier);
+
+    internal void RegisterRadio(TnTInputRadio<TInputType> radio) {
+        if (!_registeredRadios.Contains(radio)) {
+            _registeredRadios.Add(radio);
+        }
+    }
+
+    internal void UnregisterRadio(TnTInputRadio<TInputType> radio) {
+        if (_registeredRadios.Contains(radio)) {
+            _registeredRadios.Remove(radio);
+        }
+    }
 
     /// <summary>
     ///     Updates the value of the radio group based on the change event arguments.

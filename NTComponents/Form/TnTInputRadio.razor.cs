@@ -99,6 +99,24 @@ public partial class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccess
     private bool _trueValueToggle;
 
     /// <summary>
+    ///     Sets focus to the associated UI element asynchronously.
+    /// </summary>
+    /// <remarks>
+    ///     Use this method to programmatically move keyboard focus to the element, such as after rendering or when user interaction is required. This is typically useful in scenarios where focus
+    ///     management is necessary for accessibility or improved user experience.
+    /// </remarks>
+    /// <returns>A task that represents the asynchronous operation of setting focus to the element.</returns>
+    public ValueTask SetFocusAsync() => Element.FocusAsync();
+
+    /// <inheritdoc />
+    protected override void Dispose(bool disposing) {
+        base.Dispose(disposing);
+        if (disposing) {
+            _group?.UnregisterRadio(this);
+        }
+    }
+
+    /// <summary>
     ///     Handles the blur event asynchronously by notifying the edit context of a field change and invoking the associated blur callback.
     /// </summary>
     /// <param name="args">The event data associated with the blur event.</param>
@@ -106,6 +124,12 @@ public partial class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccess
     protected async Task OnBlurAsync(FocusEventArgs args) {
         _group?.NotifyStateChanged();
         await OnBlurCallback.InvokeAsync(args);
+    }
+
+    /// <inheritdoc />
+    protected override void OnInitialized() {
+        base.OnInitialized();
+        _group?.RegisterRadio(this);
     }
 
     /// <inheritdoc />

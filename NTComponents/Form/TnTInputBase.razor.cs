@@ -336,7 +336,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     ///     Sets the focus to the input element.
     /// </summary>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    public ValueTask SetFocusAsync() => Element.FocusAsync();
+    public virtual ValueTask SetFocusAsync() => Element.FocusAsync();
 
     /// <summary>
     ///     Gets the maximum length of the input.

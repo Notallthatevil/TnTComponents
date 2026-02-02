@@ -398,6 +398,28 @@ window.NTComponents = {
             }, 0);
         }
     },
+    radioGroupKeyDownHandler: (event) => {
+        const group = event.currentTarget;
+        if (!group) return;
+
+        // Number keys 1-9
+        if (event.key >= '1' && event.key <= '9') {
+            const index = parseInt(event.key) - 1;
+            const radios = group.querySelectorAll('input[type="radio"]');
+
+            if (index < radios.length) {
+                const radio = radios[index];
+                // Check if the individual radio or the group fieldset is disabled/readonly
+                const isDisabled = radio.disabled || group.disabled || group.classList.contains('tnt-disabled');
+                const isReadOnly = radio.readOnly || group.classList.contains('tnt-readonly');
+
+                if (radio && !isDisabled && !isReadOnly) {
+                    radio.click();
+                    event.preventDefault();
+                }
+            }
+        }
+    },
     onThemeChanged: (dotNetHelper) => {
         const callback = () => {
             dotNetHelper.invokeMethodAsync('OnThemeChanged');

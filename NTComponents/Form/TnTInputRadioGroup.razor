@@ -4,7 +4,7 @@
 
 <div class="tnt-input-container" style="@ElementStyle">
 
-	<fieldset class="@ElementClass" title="@ElementTitle" lang="@ElementLang" id="@ElementId" @ref="Element">
+	<fieldset class="@ElementClass" title="@ElementTitle" lang="@ElementLang" id="@ElementId" @ref="Element" onkeydown="NTComponents.radioGroupKeyDownHandler(event)">
 		@if (StartIcon is not null) {
 			@StartIcon.Render("tnt-start-icon")
 		}

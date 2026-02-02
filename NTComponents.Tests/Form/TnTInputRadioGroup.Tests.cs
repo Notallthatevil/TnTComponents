@@ -250,6 +250,18 @@ public class TnTInputRadioGroup_Tests : BunitContext {
     }
 
     [Fact]
+    public void Keyboard_Navigation_Attributes_Are_Set() {
+        // Arrange & Act
+        var cut = RenderInputRadioGroup();
+        var fieldset = cut.Find("fieldset");
+
+        // Assert
+        fieldset.GetAttribute("onkeydown").Should().Contain("NTComponents.radioGroupKeyDownHandler(event)");
+        fieldset.HasAttribute("tabindex").Should().BeFalse();
+        cut.FindAll("tnt-page-script").Should().BeEmpty();
+    }
+
+    [Fact]
     public void Merges_Custom_Class_From_AdditionalAttributes() {
         // Arrange
         var attrs = new Dictionary<string, object> { { "class", "custom-radio-group" } };
