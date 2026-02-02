@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/Notallthatevil/NTComponents/compare/v1.12.0...v1.13.0) (2026-02-02)
+
+
+### Features
+
+* **radio-group:** add keyboard navigation support ([9c8923c](https://github.com/Notallthatevil/NTComponents/commit/9c8923cfbe41a74704f052777985fdcb5e39f39c))
+
 # [1.12.0](https://github.com/Notallthatevil/NTComponents/compare/v1.11.1...v1.12.0) (2026-02-01)
 
 
