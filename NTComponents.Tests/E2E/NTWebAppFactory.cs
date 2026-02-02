@@ -9,6 +9,9 @@ using System.Linq;
 
 namespace NTComponents.Tests.E2E;
 
+public partial class Program {
+    
+}
 public class NTWebAppFactory : WebApplicationFactory<Program> {
     private IHost? _host;
     private string? _serverAddress;

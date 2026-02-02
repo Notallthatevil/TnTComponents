@@ -98,6 +98,8 @@ public partial class TnTInputRadio<[DynamicallyAccessedMembers(DynamicallyAccess
     private bool _readOnly => _group.FieldReadonly || ReadOnly;
     private bool _trueValueToggle;
 
+    private bool IsChecked => EqualityComparer<TInputType>.Default.Equals(_group.InternalCurrentValue!, Value);
+
     /// <summary>
     ///     Sets focus to the associated UI element asynchronously.
     /// </summary>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Collections.Generic;
 using NTComponents.Core;
 
 namespace NTComponents;
@@ -48,8 +49,17 @@ public partial class TnTInputRadioGroup<[DynamicallyAccessedMembers(DynamicallyA
     private readonly List<TnTInputRadio<TInputType>> _registeredRadios = [];
 
     /// <inheritdoc />
-    public override ValueTask SetFocusAsync() => _registeredRadios?.FirstOrDefault()?.SetFocusAsync() ?? ValueTask.CompletedTask;
+    public override async ValueTask SetFocusAsync() {
+        TnTInputRadio<TInputType>? selectedRadio = null;
+        if (InternalCurrentValue is not null) {
+            selectedRadio = _registeredRadios.FirstOrDefault(r => EqualityComparer<TInputType>.Default.Equals(r.Value, InternalCurrentValue));
+        }
+        selectedRadio ??= _registeredRadios.FirstOrDefault();
 
+        if(selectedRadio is not null) {
+            await selectedRadio.SetFocusAsync();
+        }
+    }
 
     /// <summary>
     ///     Notifies that the state of the radio group has changed.

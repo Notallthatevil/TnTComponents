@@ -1,6 +1,7 @@
 @use '_inputBase.scss' as base;
 @use '../Styles/_Variables/_colors.scss' as colors;
 @use '../Styles/_Variables/_typescale.scss' as typescale;
+
 .tnt-radio-input {
     position: relative;
     display: inline-grid;
@@ -67,6 +68,16 @@
 
     ::deep {
         @include base.default-icon;
+    }
+
+    &:focus-within {
+        .tnt-label {
+            color: base.$tint-color;
+        }
+
+        .tnt-radio-button {
+            border-color: base.$tint-color;
+        }
     }
 
     &:has(input:checked) {
@@ -218,6 +229,4 @@
             }
         }
     }
-
-
 }

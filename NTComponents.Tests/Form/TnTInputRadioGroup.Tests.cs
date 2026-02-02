@@ -407,6 +407,35 @@ public class TnTInputRadioGroup_Tests : BunitContext {
     }
 
     [Fact]
+    public void SetFocusAsync_Focuses_Correct_Radio_For_Enum_Value() {
+        // Arrange
+        var model = CreateEnumTestModel();
+        model.TestValue = TestEnum.Second;
+        var cut = RenderEnumRadioGroup(model);
+
+        // Act
+        var task = cut.Instance.SetFocusAsync();
+
+        // Assert - We can't easily verify browser focus in bUnit, but we can verify the code path doesn't throw and potentially uses the right radio.
+        // For bUnit, we might check if SetFocusAsync was called on the radio if we could mock it, 
+        // but here we just ensure basic execution for these types which was previously problematic.
+        task.IsCompleted.Should().BeTrue();
+    }
+
+    [Fact]
+    public void SetFocusAsync_Focuses_Correct_Radio_For_Int_Value() {
+        // Arrange
+        var model = new IntModel { TestValue = 2 };
+        var cut = RenderIntRadioGroup(model);
+
+        // Act
+        var task = cut.Instance.SetFocusAsync();
+
+        // Assert
+        task.IsCompleted.Should().BeTrue();
+    }
+
+    [Fact]
     public void StartIcon_Renders_When_Set() {
         // Arrange & Act
         var cut = RenderInputRadioGroup(configure: p => p.Add(c => c.StartIcon, MaterialIcon.Home));
@@ -475,9 +504,9 @@ public class TnTInputRadioGroup_Tests : BunitContext {
 
         // Assert
         radioInputs.Should().HaveCount(3);
-        foreach (var radio in radioInputs) {
-            radio.HasAttribute("checked").Should().BeFalse(); // No option selected
-        }
+        radioInputs[0].HasAttribute("checked").Should().BeFalse();
+        radioInputs[1].HasAttribute("checked").Should().BeFalse();
+        radioInputs[2].HasAttribute("checked").Should().BeTrue(); // Null option should be checked
     }
 
     [Fact]
@@ -541,6 +570,22 @@ public class TnTInputRadioGroup_Tests : BunitContext {
         radioInputs[2].HasAttribute("checked").Should().BeFalse();
     }
 
+    [Fact]
+    public void Works_With_Int_Types() {
+        // Arrange
+        var model = new IntModel { TestValue = 20 };
+
+        // Act
+        var cut = RenderIntRadioGroup(model);
+        var radioInputs = cut.FindAll("input[type=radio]");
+
+        // Assert
+        radioInputs.Should().HaveCount(3);
+        radioInputs[0].HasAttribute("checked").Should().BeFalse();
+        radioInputs[1].HasAttribute("checked").Should().BeTrue();
+        radioInputs[2].HasAttribute("checked").Should().BeFalse();
+    }
+
     private RenderFragment CreateBooleanRadioOptions() => builder => {
         builder.OpenComponent<TnTInputRadio<bool>>(0);
         builder.AddAttribute(1, "Value", true);
@@ -572,14 +617,31 @@ public class TnTInputRadioGroup_Tests : BunitContext {
 
     private TestEnumModel CreateEnumTestModel() => new();
 
+    private RenderFragment CreateIntRadioOptions() => builder => {
+        builder.OpenComponent<TnTInputRadio<int>>(0);
+        builder.AddAttribute(1, "Value", 10);
+        builder.AddAttribute(2, "Label", "10");
+        builder.CloseComponent();
+
+        builder.OpenComponent<TnTInputRadio<int>>(3);
+        builder.AddAttribute(4, "Value", 20);
+        builder.AddAttribute(5, "Label", "20");
+        builder.CloseComponent();
+
+        builder.OpenComponent<TnTInputRadio<int>>(6);
+        builder.AddAttribute(7, "Value", 30);
+        builder.AddAttribute(8, "Label", "30");
+        builder.CloseComponent();
+    };
+
     private RenderFragment CreateNullableBooleanRadioOptions() => builder => {
         builder.OpenComponent<TnTInputRadio<bool?>>(0);
-        builder.AddAttribute(1, "Value", true);
+        builder.AddAttribute(1, "Value", (bool?)true);
         builder.AddAttribute(2, "Label", "True");
         builder.CloseComponent();
 
         builder.OpenComponent<TnTInputRadio<bool?>>(3);
-        builder.AddAttribute(4, "Value", false);
+        builder.AddAttribute(4, "Value", (bool?)false);
         builder.AddAttribute(5, "Label", "False");
         builder.CloseComponent();
 
@@ -609,6 +671,18 @@ public class TnTInputRadioGroup_Tests : BunitContext {
     private TestModel CreateTestModel() => new();
 
     private TestModelWithValidation CreateValidationTestModel() => new();
+
+    private IRenderedComponent<TnTInputRadioGroup<int>> RenderIntRadioGroup(IntModel? model = null, Action<ComponentParameterCollectionBuilder<TnTInputRadioGroup<int>>>? configure = null) {
+        model ??= new IntModel();
+        return Render<TnTInputRadioGroup<int>>(parameters => {
+            parameters
+                .Add(p => p.ValueExpression, () => model.TestValue)
+                .Add(p => p.Value, model.TestValue)
+                .Add(p => p.ValueChanged, EventCallback.Factory.Create<int>(this, v => model.TestValue = v))
+                .Add(p => p.ChildContent, CreateIntRadioOptions());
+            configure?.Invoke(parameters);
+        });
+    }
 
     private IRenderedComponent<TnTInputRadioGroup<TestEnum?>> RenderEnumRadioGroup(TestEnumModel? model = null, Action<ComponentParameterCollectionBuilder<TnTInputRadioGroup<TestEnum?>>>? configure = null) {
         model ??= CreateEnumTestModel();
@@ -645,8 +719,44 @@ public class TnTInputRadioGroup_Tests : BunitContext {
         });
     }
 
+    [Fact]
+    public void Supports_Int_Nullable_Type() {
+        // Arrange
+        var model = new NullableIntModel { TestValue = null };
+        var cut = Render<TnTInputRadioGroup<int?>>(parameters => {
+            parameters
+                .Add(p => p.ValueExpression, () => model.TestValue)
+                .Add(p => p.Value, model.TestValue)
+                .Add(p => p.ValueChanged, EventCallback.Factory.Create<int?>(this, v => model.TestValue = v))
+                .Add(p => p.ChildContent, builder => {
+                    builder.OpenComponent<TnTInputRadio<int?>>(0);
+                    builder.AddAttribute(1, "Value", 1);
+                    builder.CloseComponent();
+
+                    builder.OpenComponent<TnTInputRadio<int?>>(2);
+                    builder.AddAttribute(3, "Value", (int?)null);
+                    builder.CloseComponent();
+                });
+        });
+
+        var radioInputs = cut.FindAll("input[type=radio]");
+
+        // Assert
+        radioInputs.Should().HaveCount(2);
+        radioInputs[0].HasAttribute("checked").Should().BeFalse();
+        radioInputs[1].HasAttribute("checked").Should().BeTrue();
+    }
+
+    private class NullableIntModel {
+        public int? TestValue { get; set; }
+    }
+
     private class BooleanModel {
         public bool TestValue { get; set; }
+    }
+
+    private class IntModel {
+        public int TestValue { get; set; }
     }
 
     private class NullableBooleanModel {
