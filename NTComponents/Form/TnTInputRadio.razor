@@ -19,7 +19,7 @@
            readonly="@_readOnly"
            disabled="@_disabled"
            value="@GetValueAsString()"
-           checked="@(IsChecked ? GetToggledTrueValue() : null)"
+           checked="@(_group.InternalCurrentValue?.Equals(Value) == true ? GetToggledTrueValue() : null)"
            @onchange="@_group.UpdateValueAsync"
            @onblur="@OnBlurAsync"" />
 
