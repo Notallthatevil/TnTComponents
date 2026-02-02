@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/Notallthatevil/NTComponents/compare/v1.13.0...v1.14.0) (2026-02-02)
+
+
+### Features
+
+* **radio-group:** improve focus and int/enum support ([7760506](https://github.com/Notallthatevil/NTComponents/commit/7760506bd92f7471642eca25c07e1fcc343caaa2))
+
 # [1.13.0](https://github.com/Notallthatevil/NTComponents/compare/v1.12.0...v1.13.0) (2026-02-02)
 
 
