@@ -19,9 +19,9 @@
            readonly="@_readOnly"
            disabled="@_disabled"
            value="@GetValueAsString()"
-           checked="@(_group.InternalCurrentValue?.Equals(Value) == true ? GetToggledTrueValue() : null)"
+           checked="@(object.Equals(_group.InternalCurrentValue, Value) ? GetToggledTrueValue() : null)"
            @onchange="@_group.UpdateValueAsync"
-           @onblur="@OnBlurAsync"" />
+           @onblur="@OnBlurAsync" />
 
 
     @if (!string.IsNullOrWhiteSpace(Label)) {
