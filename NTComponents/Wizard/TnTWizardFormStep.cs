@@ -12,74 +12,111 @@ using NTComponents.Wizard;
 namespace NTComponents;
 
 /// <summary>
-///     Represents a wizard step that contains a form in the NTComponents library.
+///     Defines the contract for a wizard form step, including properties for managing form appearance, validation, and submission behavior.
 /// </summary>
-public class TnTWizardFormStep : TnTWizardStepBase {
+/// <remarks>
+///     Implementations of this interface should provide the necessary logic to handle form interactions, including managing the state of the form fields and invoking callbacks on submission events.
+/// </remarks>
+public interface ITnTWizardFormStep {
 
     /// <summary>
     ///     The child content of the form step, which is a render fragment that takes an <see cref="EditContext" />.
     /// </summary>
-    [Parameter, EditorRequired]
-    public RenderFragment<EditContext> ChildContent { get; set; } = default!;
+    RenderFragment<EditContext> ChildContent { get; set; }
 
     /// <summary>
     ///     Sets the form fields to be disabled. When set to <c>true</c>, the form cannot be interacted with.
     /// </summary>
-    [Parameter]
-    public bool Disabled { get; set; }
+    bool Disabled { get; set; }
 
     /// <summary>
     ///     The appearance of the form. <see cref="FormAppearance" />
     /// </summary>
-    [Parameter]
-    public FormAppearance FormAppearance { get; set; } = FormAppearance.Outlined;
+    FormAppearance FormAppearance { get; set; }
 
     /// <summary>
     ///     The name of the form. This is optional.
     /// </summary>
-    [Parameter]
-    public string? FormName { get; set; }
+    string? FormName { get; set; }
 
     /// <summary>
     ///     A value indicating whether to include a <see cref="DataAnnotationsValidator" /> in the form. Defaults to <c>true</c>.
     /// </summary>
-    [Parameter]
-    public bool IncludeDataAnnotationsValidator { get; set; } = true;
+    bool IncludeDataAnnotationsValidator { get; set; }
 
     /// <summary>
     ///     The model object used for data binding in the form.
     /// </summary>
-    [Parameter]
-    public object Model { get; set; } = default!;
+    object Model { get; set; }
 
     /// <summary>
     ///     The callback to invoke when the form submission is invalid.
     /// </summary>
-    [Parameter]
-    public EventCallback<object> OnInvalidSubmitCallback { get; set; }
+    EventCallback<object> OnInvalidSubmitCallback { get; set; }
 
     /// <summary>
     ///     The callback to invoke when the form submission is valid.
     /// </summary>
-    [Parameter]
-    public EventCallback<object> OnValidSubmitCallback { get; set; }
+    EventCallback<object> OnValidSubmitCallback { get; set; }
 
     /// <summary>
     ///     Sets the form fields to be read-only. When set to <c>true</c>, the form cannot be edited.
     /// </summary>
-    [Parameter]
-    public bool ReadOnly { get; set; }
-
-    /// <summary>
-    ///     Holds a reference to the <see cref="TnTForm" /> component used in this step.
-    /// </summary>
-    private TnTForm _form = default!;
+    bool ReadOnly { get; set; }
 
     /// <summary>
     ///     Validates the form and invokes the appropriate callback based on the validation result.
     /// </summary>
     /// <returns>A <see cref="Task{TResult}" /> that resolves to <c>true</c> if the form is valid; otherwise, <c>false</c>.</returns>
-    internal async Task<bool> FormValidAsync() {
+    Task<bool> FormValidAsync();
+}
+
+/// <summary>
+///     Represents a wizard step that contains a form in the NTComponents library.
+/// </summary>
+public class TnTWizardFormStep : TnTWizardStepBase, ITnTWizardFormStep {
+
+    /// <inheritdoc />
+    [Parameter, EditorRequired]
+    public RenderFragment<EditContext> ChildContent { get; set; } = default!;
+
+    /// <inheritdoc />
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    /// <inheritdoc />
+    [Parameter]
+    public FormAppearance FormAppearance { get; set; } = FormAppearance.Outlined;
+
+    /// <inheritdoc />
+    [Parameter]
+    public string? FormName { get; set; }
+
+    /// <inheritdoc />
+    [Parameter]
+    public bool IncludeDataAnnotationsValidator { get; set; } = true;
+
+    /// <inheritdoc />
+    [Parameter]
+    public object Model { get; set; } = default!;
+
+    /// <inheritdoc />
+    [Parameter]
+    public EventCallback<object> OnInvalidSubmitCallback { get; set; }
+
+    /// <inheritdoc />
+    [Parameter]
+    public EventCallback<object> OnValidSubmitCallback { get; set; }
+
+    /// <inheritdoc />
+    [Parameter]
+    public bool ReadOnly { get; set; }
+
+    /// <inheritdoc />
+    private TnTForm _form = default!;
+
+    /// <inheritdoc />
+    public async Task<bool> FormValidAsync() {
         if (_form?.EditContext?.Validate() == true) {
             await OnValidSubmitCallback.InvokeAsync(Model);
             return true;
@@ -91,7 +128,7 @@ public class TnTWizardFormStep : TnTWizardStepBase {
     }
 
     /// <inheritdoc />
-    internal override RenderFragment Render() => new(builder => {
+    public override RenderFragment Render() => new(builder => {
         builder.OpenComponent<TnTForm>(0);
         builder.AddComponentParameter(10, nameof(TnTForm.Model), Model);
         builder.AddComponentParameter(15, nameof(TnTForm.Appearance), FormAppearance);
