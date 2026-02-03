@@ -27,12 +27,19 @@ public partial class TnTSkeleton {
     [Parameter]
     public TnTColor BackgroundColor { get; set; } = TnTColor.PrimaryContainer;
 
+    /// <summary>
+    ///     If true, sets height to 100%
+    /// </summary>
+    [Parameter]
+    public bool FillHeight { get; set; }
+
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-skeleton")
         .AddClass("tnt-skeleton-round", Appearance == SkeletonAppearance.Round)
         .AddClass("tnt-animated", AnimatedColor.HasValue)
+        .AddClass("tnt-fill-height", FillHeight)
         .Build();
 
     /// <inheritdoc />
