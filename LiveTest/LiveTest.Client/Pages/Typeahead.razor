@@ -14,7 +14,8 @@
 	</select>
 </label>
 
-<TnTTypeahead ItemsLookupFunc="SearchFunc" Label="Typeahead" Appearance="@Appearance" ItemSelectedCallback="@((Item item) => SelectedItems.Add(item))">
+<TnTTypeahead ItemsLookupFunc="SearchFunc" Label="Typeahead" Appearance="@Appearance" ItemSelectedCallback="@((Item item) => SelectedItems.Add(item))"SupportingText="Support" ErrorMessage="My Error Message" >
+	<Tooltip>My tooltip</Tooltip>
 	<ResultTemplate>
 		@context.Name @context.Email
 	</ResultTemplate>

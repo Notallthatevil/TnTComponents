@@ -11,7 +11,7 @@ namespace NTComponents;
 public partial class TnTTypeahead<TItem> {
 
     /// <summary>
-    ///     Specifies the appearance style of the typeahead input.
+    ///     The background color of the typeahead component.
     /// </summary>
     [Parameter]
     public FormAppearance Appearance { get; set; }
@@ -56,6 +56,12 @@ public partial class TnTTypeahead<TItem> {
     /// </summary>
     [Parameter]
     public bool EnableRipple { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the error message to display when an error occurs.
+    /// </summary>
+    [Parameter]
+    public string? ErrorMessage { get; set; }
 
     /// <summary>
     ///     Callback invoked when an item is selected from the suggestions.
@@ -118,10 +124,29 @@ public partial class TnTTypeahead<TItem> {
     public RenderFragment<TItem>? ResultTemplate { get; set; }
 
     /// <summary>
+    ///     The supporting text that provides additional context or information related to the associated component.
+    /// </summary>
+    /// <remarks>This property can be used to display supplementary information to users, enhancing the understanding of the component's purpose or functionality.</remarks>
+    [Parameter]
+    public string? SupportingText { get; set; }
+
+    /// <summary>
     ///     The tint color applied to the component.
     /// </summary>
     [Parameter]
     public TnTColor? TintColor { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the content to be displayed as a tooltip when hovering over the associated element.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Tooltip { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the icon displayed in the tooltip.
+    /// </summary>
+    [Parameter]
+    public TnTIcon TooltipIcon { get; set; } = MaterialIcon.Help;
 
     /// <summary>
     ///     The current value of the input box.
@@ -147,12 +172,12 @@ public partial class TnTTypeahead<TItem> {
     private TItem? _focusedItem { get; set; }
 
     private TnTDebouncer _debouncer = default!;
+    private bool _focused;
     private TnTInputText _inputBox = default!;
     private IEnumerable<TItem> _items = [];
     private bool _itemSelected;
     private int _lastDebounceMilliseconds = -1;
     private bool _searching;
-    private bool _focused;
 
     /// <inheritdoc />
     public void Dispose() {
@@ -162,15 +187,6 @@ public partial class TnTTypeahead<TItem> {
         GC.SuppressFinalize(this);
     }
 
-    private async Task OnFocusAsync() {
-        _focused = true;
-        await InvokeAsync(StateHasChanged);
-    }
-
-    private async Task OnBlurAsync() {
-        _focused = false;
-        await InvokeAsync(StateHasChanged);
-    }
     /// <inheritdoc />
     protected override void OnParametersSet() {
         base.OnParametersSet();
@@ -198,6 +214,16 @@ public partial class TnTTypeahead<TItem> {
         if (RefocusAfterSelect) {
             await _inputBox.SetFocusAsync();
         }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task OnBlurAsync() {
+        _focused = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task OnFocusAsync() {
+        _focused = true;
         await InvokeAsync(StateHasChanged);
     }
 
