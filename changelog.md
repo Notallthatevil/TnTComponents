@@ -1,3 +1,18 @@
+# [1.15.0](https://github.com/Notallthatevil/NTComponents/compare/v1.14.1...v1.15.0) (2026-02-03)
+
+
+### Bug Fixes
+
+* **typeahead:** fixed default width of typeahead ([b2b3ef8](https://github.com/Notallthatevil/NTComponents/commit/b2b3ef840dafac673f02735effa17949dfee9d2d))
+
+
+### Features
+
+* **skeleton:** add FillHeight param to support full height ([04ac78f](https://github.com/Notallthatevil/NTComponents/commit/04ac78ffd9eab166958199a953f959b6f7f6662a))
+* **styles:** add compact mode for TnTInputSelect ([26f3530](https://github.com/Notallthatevil/NTComponents/commit/26f3530eaa3cc40084552d0182eb360fca54e110))
+* **typeahead:** add error, supporting text, and tooltip ([aa1ca26](https://github.com/Notallthatevil/NTComponents/commit/aa1ca2666f58cdc62fc7091bcbb2333dad288265))
+* **wizard:** introduce ITnTWizardFormStep interface ([7e37d70](https://github.com/Notallthatevil/NTComponents/commit/7e37d705f76d9c62207ebe05ed3ec3c146812bae))
+
 ## [1.14.1](https://github.com/Notallthatevil/NTComponents/compare/v1.14.0...v1.14.1) (2026-02-03)
 
 
