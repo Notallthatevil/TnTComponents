@@ -171,7 +171,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     ///     Gets or sets the background color of the input.
     /// </summary>
     [Parameter]
-    public virtual TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerHighest;
+    public TnTColor BackgroundColor { get; set; } = TnTColor.SurfaceContainerHighest;
 
     /// <summary>
     ///     Gets or sets the event callback to be invoked after binding.
@@ -214,7 +214,6 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public virtual string? ElementClass => CssClassBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass(CssClass)
-        .AddClass("invalid", !string.IsNullOrWhiteSpace(ErrorMessage))
         .AddClass("tnt-input")
         .AddClass(GetAppearanceClass(_tntForm, Appearance))
         .AddRipple(EnableRipple)
@@ -234,7 +233,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public string? ElementName => NameAttributeValue;
 
     /// <inheritdoc />
-    public virtual string? ElementStyle => CssStyleBuilder.Create()
+    public string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddVariable("tnt-input-tint-color", TintColor.ToCssTnTColorVariable())
         .AddVariable("tnt-input-background-color", BackgroundColor.ToCssTnTColorVariable())
@@ -248,7 +247,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     public string? ElementTitle { get; set; }
 
     /// <inheritdoc />
-    public virtual bool EnableRipple => false;
+    public bool EnableRipple => false;
 
     /// <summary>
     ///     Gets or sets the end icon of the input.
@@ -426,7 +425,7 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     /// </summary>
     /// <param name="args">The event data associated with the blur event.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    protected virtual async Task OnBlurAsync(FocusEventArgs args) {
+    protected async Task OnBlurAsync(FocusEventArgs args) {
         EditContext?.NotifyFieldChanged(FieldIdentifier);
         await OnBlurCallback.InvokeAsync(args);
     }
