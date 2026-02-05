@@ -26,9 +26,13 @@
 					  Disabled="@Disabled"
 					  BackgroundColor="BackgroundColor"
 					  StartIcon="@MaterialIcon.Search"
+					  Tooltip="@Tooltip"
+					  TooltipIcon="@TooltipIcon"
 					  @onkeydown="SelectOrShiftFocusAsync"
 					  @onfocus="@OnFocusAsync"
 					  OnBlurCallback="@OnBlurAsync"
+					  SupportingText="@SupportingText"
+					  ErrorMessage="@ErrorMessage"
 					  @ref="_inputBox" />
 		<TnTProgressIndicator Show="@_searching" ProgressColor="ProgressColor" Size="Size.Small" />
 	</span>

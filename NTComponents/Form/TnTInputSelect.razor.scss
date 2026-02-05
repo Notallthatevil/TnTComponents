@@ -30,7 +30,7 @@
         cursor: pointer;
         color: base.$text-color;
         transition: 250ms ease-in-out;
-        margin-top:6px;
+        margin-top: 6px;
 
         @include base.tnt-label(select);
 
@@ -229,6 +229,18 @@
                     &:has(.tnt-start-icon) {
                         .tnt-label {
                             transform: scale(0.75) translate(-50px,-38px)
+                        }
+                    }
+                }
+
+                &.tnt-form-compact {
+                    .tnt-label {
+                        transform: scale(0.75) translateY(-26px) !important;
+                    }
+
+                    &:has(.tnt-start-icon) {
+                        .tnt-label {
+                            transform: scale(0.75) translate(-50px,-26px) !important;
                         }
                     }
                 }

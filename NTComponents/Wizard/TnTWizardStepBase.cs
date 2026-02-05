@@ -46,7 +46,7 @@ public abstract class TnTWizardStepBase : ComponentBase, IDisposable {
     ///     Renders the content of the wizard step.
     /// </summary>
     /// <returns>A <see cref="RenderFragment" /> representing the content of the step.</returns>
-    internal abstract RenderFragment Render();
+    public abstract RenderFragment Render();
 
     /// <inheritdoc />
     protected override void OnInitialized() {

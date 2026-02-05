@@ -15,5 +15,5 @@ public class TnTWizardStep : TnTWizardStepBase {
     public RenderFragment ChildContent { get; set; } = default!;
 
     /// <inheritdoc />
-    internal override RenderFragment Render() => new(builder => builder.AddContent(0, ChildContent));
+    public override RenderFragment Render() => new(builder => builder.AddContent(0, ChildContent));
 }

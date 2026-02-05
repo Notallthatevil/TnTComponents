@@ -201,6 +201,12 @@ public abstract partial class TnTInputBase<TInputType> : InputBase<TInputType>, 
     [Parameter]
     public bool DisableValidationMessage { get; set; } = false;
 
+    /// <summary>
+    ///    Gets or sets a custom error message to be displayed.
+    /// </summary>
+    [Parameter]
+    public string? ErrorMessage { get; set; }
+
     /// <inheritdoc />
     public ElementReference Element { get; protected set; }
 
