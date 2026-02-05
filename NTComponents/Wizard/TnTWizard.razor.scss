@@ -26,6 +26,7 @@ $wizard-medium-screen-up-plus: measurements.$medium-screen-up + 1px;
         position: sticky;
         top: 0;
         background-color: inherit;
+
         z-index: 10;
 
         .tnt-wizard-step-indicator {
@@ -225,6 +226,13 @@ $wizard-medium-screen-up-plus: measurements.$medium-screen-up + 1px;
         grid-area: buttons;
         align-self: center;
         justify-self: end;
+    }
+
+    &:not(.tnt-layout-horizontal) {
+        .tnt-wizard-steps {
+            max-width: 250px;
+            box-sizing: border-box;
+        }
     }
 
     @media only screen and (max-width: measurements.$medium-screen-up) {
