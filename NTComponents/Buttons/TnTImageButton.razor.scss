@@ -1,4 +1,5 @@
-﻿@use '../Styles/_Variables/_colors.scss' as colors;
+@use '../Styles/_Variables/_colors.scss' as colors;
+@use '../Styles/_Variables/_measurements.scss' as measurements;
 @use '../Styles/_Variables/_textAlignments.scss' as textAlignments;
 @use '../Styles/_Variables/_typescale.scss' as typescale;
 @use '../Styles/_Variables/_interactable.scss' as interactable;
@@ -129,7 +130,7 @@ $on-tint-color: var(--tnt-button-on-tint-color);
 
     &.tnt-size-xs {
         .tnt-small-button-layer {
-            border-radius: 32px / 100%;
+            border-radius: measurements.$tnt-pill-border-radius-xs;
 
             &.tnt-image-button-round {
                 height: 32px;

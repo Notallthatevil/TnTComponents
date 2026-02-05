@@ -1,6 +1,11 @@
-﻿$tnt-side-nav-width: var(--tnt-side-nav-width, 256px);
+$tnt-side-nav-width: var(--tnt-side-nav-width, 256px);
 $tnt-header-height: var(--tnt-header-height, 64px);
 $tnt-footer-height: var(--tnt-footer-height, 64px);
+$tnt-pill-border-radius-xs: unquote('32px / 100%');
+$tnt-pill-border-radius-small: unquote('40px / 100%');
+$tnt-pill-border-radius-medium: unquote('56px / 100%');
+$tnt-pill-border-radius-large: unquote('96px / 100%');
+$tnt-pill-border-radius-xl: unquote('136px / 100%');
 
 // Media Query Ranges
 $small-screen-up: 751px !default;

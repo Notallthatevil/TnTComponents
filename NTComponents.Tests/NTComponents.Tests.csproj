@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
 		<TargetFrameworks>net9.0;net10.0</TargetFrameworks>
@@ -11,6 +11,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="AutoFixture" Version="4.17.0" />
 		<PackageReference Include="AwesomeAssertions" Version="9.3.0" />
 		<PackageReference Include="AwesomeAssertions.Analyzers" Version="9.0.8">
 			<PrivateAssets>all</PrivateAssets>

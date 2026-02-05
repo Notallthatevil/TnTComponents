@@ -1,0 +1,157 @@
+@use '../Styles/_Variables/_colors.scss' as colors;
+@use '../Styles/_Variables/_measurements.scss' as measurements;
+
+$nt-button-group-first-child-suffix: ' .tnt-small-button-layer';
+
+
+@mixin nt-button-group-connected-pill($corner-radius, $selector: '') {
+    ::deep {
+        .btn-group-btn:not(.btn-group-selected) {
+            &:not(:first-child):not(:last-child) {
+                @if $selector != '' {
+
+                    #{$selector} {
+                        border-radius: $corner-radius;
+                    }
+                }
+                @else {
+                    border-radius: $corner-radius;
+                }
+            }
+
+            &:first-child#{$selector} {
+                border-start-end-radius: $corner-radius;
+                border-end-end-radius: $corner-radius;
+            }
+
+            &:last-child#{$selector} {
+                border-start-start-radius: $corner-radius;
+                border-end-start-radius: $corner-radius;
+            }
+        }
+    }
+}
+
+.nt-button-group {
+    display: inline-flex;
+    border-radius: 16px;
+    overflow: visible;
+    gap: 8px;
+
+
+    &--connected {
+        gap: 2px;
+        overflow: hidden;
+
+        ::deep .btn-group-btn:active {
+            border-radius: 2px !important;
+
+            .tnt-small-button-layer {
+                border-radius: 2px !important;
+            }
+        }
+
+        &.nt-button-group-size-xs {
+            @include nt-button-group-connected-pill(4px, $nt-button-group-first-child-suffix);
+
+            ::deep {
+                .btn-group-btn.btn-group-selected:not(:active) .tnt-small-button-layer {
+                    border-radius: measurements.$tnt-pill-border-radius-xs !important;
+                }
+            }
+        }
+
+        &.nt-button-group-size-small {
+            @include nt-button-group-connected-pill(8px, $nt-button-group-first-child-suffix);
+
+            ::deep {
+                .btn-group-btn.btn-group-selected:not(:active) .tnt-small-button-layer {
+                    border-radius: measurements.$tnt-pill-border-radius-small !important;
+                }
+            }
+        }
+
+        &.nt-button-group-size-medium {
+            @include nt-button-group-connected-pill(8px);
+
+            ::deep {
+                .btn-group-btn.btn-group-selected:not(:active) {
+                    border-radius: measurements.$tnt-pill-border-radius-medium !important;
+                }
+            }
+        }
+
+        &.nt-button-group-size-large {
+            @include nt-button-group-connected-pill(16px);
+
+            ::deep {
+                .btn-group-btn.btn-group-selected:not(:active) {
+                    border-radius: measurements.$tnt-pill-border-radius-large !important;
+                }
+            }
+        }
+
+        &.nt-button-group-size-xl {
+            @include nt-button-group-connected-pill(20px);
+
+            ::deep {
+                .btn-group-btn.btn-group-selected:not(:active) {
+                    border-radius: measurements.$tnt-pill-border-radius-xl !important;
+                }
+            }
+        }
+    }
+
+    &--disconnected {
+        ::deep {
+            .btn-group-btn:has(+.btn-group-btn:active) {
+                transform: scaleX(0.95);
+                transform-origin: 0 50%;
+            }
+
+            .btn-group-btn:active {
+                transform: scaleX(1.1);
+
+                + .btn-group-btn {
+                    transform: scaleX(0.95);
+                    transform-origin: 100% 50%;
+                }
+            }
+        }
+
+        &.nt-button-group-size-xs, .nt-button-group-size-small {
+            gap: 4px;
+        }
+
+        &.nt-button-group-size-medium, &.nt-button-group-size-large, &.nt-button-group-size-xl {
+            gap: 8px;
+        }
+    }
+
+
+    ::deep {
+
+        & .btn-group-btn {
+            margin: 0;
+            padding-inline: 0;
+        }
+    }
+}
+
+@keyframes nt-button-group-disconnected-bounce {
+    0% {
+        transform: scaleX(1);
+    }
+
+    50% {
+        transform: scaleX(1.08);
+    }
+
+    70% {
+        transform: scaleX(0.98);
+    }
+
+    100% {
+        transform: scaleX(1);
+    }
+}

@@ -1,0 +1,131 @@
+@page "/button-group"
+@using System
+@using NTComponents
+@rendermode InteractiveAuto
+
+<div class="nt-button-group-demo">
+    <h1>NTButtonGroup</h1>
+    <p>
+        Explore the Material-style button group that composes multiple <code>TnTButton</code> elements
+        and mirrors the official Material 3 spec.
+    </p>
+
+    <TnTRow class="nt-button-group-demo__row">
+        <TnTColumn S="12" M="6">
+            <TnTCard class="nt-button-group-demo__panel">
+                <div class="tnt-card-header">
+                    <h2>Controls</h2>
+                </div>
+                <div class="nt-button-group-demo__controls">
+                    <label>
+                        Display style
+                        <select @bind="DisplayType">
+                            @foreach (var displayType in Enum.GetValues<NTButtonGroupDisplayType>()) {
+                                <option value="@displayType">@displayType</option>
+                            }
+                        </select>
+                    </label>
+                    <label>
+                        Button size
+                        <select @bind="ButtonSize">
+                            @foreach (var size in Enum.GetValues<Size>()) {
+                                <option value="@size">@size</option>
+                            }
+                        </select>
+                    </label>
+                    <label>
+                        Appearance
+                        <select @bind="Appearance">
+                            @foreach (var appearance in Enum.GetValues<ButtonAppearance>()) {
+                                <option value="@appearance">@appearance</option>
+                            }
+                        </select>
+                    </label>
+                    <label>
+                        Selected appearance
+                        <select @bind="SelectedAppearance">
+                            @foreach (var appearance in Enum.GetValues<ButtonAppearance>()) {
+                                <option value="@appearance">@appearance</option>
+                            }
+                        </select>
+                    </label>
+                    <label>
+                        Background color
+                        <select @bind="BackgroundColor">
+                            @foreach (var color in ColorSwatch) {
+                                <option value="@color">@color</option>
+                            }
+                        </select>
+                    </label>
+                    <label>
+                        Default selection
+                        <select @bind="SelectedKey">
+                            <option value="">None</option>
+                            @foreach (var item in DisplayItems) {
+                                <option value="@item.Key">@item.Label</option>
+                            }
+                        </select>
+                    </label>
+                    <label class="nt-button-group-demo__toggle">
+                        <input type="checkbox" @bind="DisableRipple" />
+                        Disable ripple
+                    </label>
+                    <label class="nt-button-group-demo__toggle">
+                        <input type="checkbox" @bind="Disabled" />
+                        Disable group
+                    </label>
+                    <label class="nt-button-group-demo__toggle">
+                        <input type="checkbox" @bind="StopPropagation" />
+                        Stop propagation
+                    </label>
+                    <label class="nt-button-group-demo__toggle">
+                        <input type="checkbox" @bind="UseImages" />
+                        Show images
+                    </label>
+                    <label class="nt-button-group-demo__toggle">
+                        <input type="checkbox" @bind="UseTintColors" />
+                        Apply tint
+                    </label>
+                    <label class="nt-button-group-demo__toggle">
+                        <input type="checkbox" @bind="UseSelectedTintColors" />
+                        Apply selected tint &amp; on tint
+                    </label>
+                    <label class="nt-button-group-demo__toggle">
+                        <input type="checkbox" @bind="UseSelectedTextColor" />
+                        Apply selected text color
+                    </label>
+                </div>
+            </TnTCard>
+        </TnTColumn>
+        <TnTColumn S="12" M="6">
+            <TnTCard class="nt-button-group-demo__panel">
+                <div class="tnt-card-header">
+                    <h2>State</h2>
+                </div>
+                <div class="nt-button-group-demo__state">
+                    <p>Selected key: <strong>@(string.IsNullOrWhiteSpace(SelectedKey) ? "None" : SelectedKey)</strong></p>
+                    <p>Display style: <strong>@DisplayType</strong></p>
+                    <p>@SelectionMessage</p>
+                </div>
+            </TnTCard>
+        </TnTColumn>
+    </TnTRow>
+
+    <TnTCard class="nt-button-group-demo__preview">
+        <div class="nt-button-group-demo__description">
+            <p>The preview below mirrors the current settings and shows how the button group responds.</p>
+        </div>
+        <NTButtonGroup
+            Items="DisplayItems"
+            TObjectType="string"
+            DisplayType="DisplayType"
+            ButtonSize="ButtonSize"
+            Appearance="Appearance"
+            SelectedKey="@SelectedKeyValue"
+            SelectedKeyChanged="HandleSelectedKeyChanged"
+            DisableRipple="DisableRipple"
+            Disabled="Disabled"
+            StopPropagation="StopPropagation"
+            OnSelectionChanged="HandleSelectionChanged" />
+    </TnTCard>
+</div>

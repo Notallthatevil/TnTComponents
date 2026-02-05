@@ -1,0 +1,54 @@
+@namespace NTComponents
+@inherits TnTComponentBase
+@using Microsoft.AspNetCore.Components.Web
+@using NTComponents.Core
+@typeparam TObjectType
+
+<div @attributes="AdditionalAttributes"
+	 class="@ElementClass"
+	 style="@ElementStyle"
+	 id="@ElementId"
+	 role="group"
+	 aria-label="@AriaLabel">
+	@foreach (var item in Items) {
+		@if (string.IsNullOrEmpty(item.Label) && item.StartIcon is not null && item.EndIcon is null) {
+			<TnTImageButton class="@($"btn-group-btn{(IsSelectedItem(item) ? " btn-group-selected" : null)}")"
+							Appearance="@Appearance"
+							BackgroundColor="@GetItemBackgroundColor(item)"
+							TextColor="@GetItemTextColor(item)"
+							TintColor="@GetItemTintColor(item)"
+							OnTintColor="@GetItemOnTintColor(item)"
+							ButtonSize="@ButtonSize"
+							Shape="@GetItemShape(item)"
+							StopPropagation="@StopPropagation"
+							Disabled="@IsButtonDisabled(item)"
+							EnableRipple="@EnableRipple"
+							Icon="@item.StartIcon"
+							OnClickCallback="@(() => HandleItemClickAsync(item))" />
+		}
+		else {
+			<TnTButton class="@($"btn-group-btn{(IsSelectedItem(item) ? " btn-group-selected" : null)}")"
+					   Appearance="@Appearance"
+					   BackgroundColor="@GetItemBackgroundColor(item)"
+					   TextColor="@GetItemTextColor(item)"
+					   TintColor="@GetItemTintColor(item)"
+					   OnTintColor="@GetItemOnTintColor(item)"
+					   ButtonSize="@ButtonSize"
+					   Shape="@GetItemShape(item)"
+					   StopPropagation="@StopPropagation"
+					   Disabled="@IsButtonDisabled(item)"
+					   EnableRipple="@EnableRipple"
+					   OnClickCallback="@(() => HandleItemClickAsync(item))">
+				@if (item.StartIcon is not null) {
+					@item.StartIcon.Render()
+				}
+				@if (!string.IsNullOrWhiteSpace(item.Label)) {
+					@item.Label
+				}
+				@if (item.EndIcon is not null) {
+					@item.EndIcon
+				}
+			</TnTButton>
+		}
+	}
+</div>
