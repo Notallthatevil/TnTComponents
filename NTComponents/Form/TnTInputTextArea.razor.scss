@@ -36,6 +36,10 @@
         margin-top: 6px;
         @include base.tnt-label;
 
+        .tnt-label {
+            top: 0;
+        }
+
 
         &:has(.tnt-start-icon):has(.tnt-end-icon) {
             grid-template-areas: "pad1 start-icon pad2 text pad3 end-icon pad4";
