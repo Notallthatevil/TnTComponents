@@ -22,6 +22,7 @@ public partial class TnTWizard : TnTComponentBase {
         .AddFromAdditionalAttributes(AdditionalAttributes)
         .AddClass("tnt-wizard")
         .AddClass("tnt-layout-horizontal", LayoutDirection == LayoutDirection.Horizontal)
+        .AddClass("tnt-vertical-on-small-screens", VerticalOnSmallScreens)
         .Build();
 
     /// <inheritdoc />
@@ -34,6 +35,12 @@ public partial class TnTWizard : TnTComponentBase {
     /// </summary>
     [Parameter]
     public LayoutDirection LayoutDirection { get; set; } = LayoutDirection.Vertical;
+
+    /// <summary>
+    ///     Determines whether the wizard should remain vertical when viewed on smaller screens.
+    /// </summary>
+    [Parameter]
+    public bool VerticalOnSmallScreens { get; set; } = true;
 
     /// <summary>
     ///     A value indicating whether the "Next" button is disabled.

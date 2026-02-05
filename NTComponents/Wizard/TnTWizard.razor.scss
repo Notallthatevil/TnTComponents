@@ -1,10 +1,11 @@
-﻿@use '../Styles/_Variables/_colors.scss' as colors;
+@use '../Styles/_Variables/_colors.scss' as colors;
 @use '../Styles/_Variables/_typescale.scss' as typescale;
 @use '../Styles/_Variables/_measurements.scss' as measurements;
 
 $wizard-title-height: 24px;
 $wizard-subtitle-height: 20px;
 $wizard-title-gap-size: 4px;
+$wizard-medium-screen-up-plus: measurements.$medium-screen-up + 1px;
 
 
 @mixin horizontal-layout {
@@ -227,11 +228,15 @@ $wizard-title-gap-size: 4px;
     }
 
     @media only screen and (max-width: measurements.$medium-screen-up) {
-        @include horizontal-layout;
+        &:not(.tnt-vertical-on-small-screens) {
+            @include horizontal-layout;
+        }
     }
 
-    &.tnt-layout-horizontal {
-        @include horizontal-layout;
+    @media only screen and (min-width: $wizard-medium-screen-up-plus) {
+        &.tnt-layout-horizontal {
+            @include horizontal-layout;
+        }
     }
 }
 
