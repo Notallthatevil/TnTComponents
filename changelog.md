@@ -1,3 +1,13 @@
+# [1.16.0](https://github.com/Notallthatevil/NTComponents/compare/v1.15.0...v1.16.0) (2026-02-05)
+
+
+### Features
+
+* **button-group:** add NTButtonGroup component and demo ([5e4a856](https://github.com/Notallthatevil/NTComponents/commit/5e4a856c5f4520d8dbc36078533012d817592dae))
+* **styles:** add label top positioning and dual icon grid ([890dac7](https://github.com/Notallthatevil/NTComponents/commit/890dac79d84b446b99c0e66dbbdf63d62c06e2a4))
+* **wizard:**  limit step width ([7cc0f56](https://github.com/Notallthatevil/NTComponents/commit/7cc0f56ba6f5b7f802f7525cfba97301b422d891))
+* **wizard:** add VerticalOnSmallScreens for responsive layout ([11c6a0d](https://github.com/Notallthatevil/NTComponents/commit/11c6a0daccd99b45e22b961ff535eb5ded6486d1))
+
 # [1.15.0](https://github.com/Notallthatevil/NTComponents/compare/v1.14.1...v1.15.0) (2026-02-03)
 
 
