@@ -18,7 +18,7 @@ public sealed class HandleItemClick_Tests : NTButtonGroupTestContext {
         var items = CreateItems();
         var recordedKeys = new List<string?>();
         var cut = Render<NTButtonGroup<string>>(parameters => parameters
-            .Add(p => p.Items, items)
+            .AddChildContent(RenderItems(items))
             .Add(p => p.SelectedKeyChanged, EventCallback.Factory.Create<string?>(this, key => recordedKeys.Add(key))));
         var buttonElements = cut.FindAll("button.btn-group-btn");
 
@@ -41,7 +41,7 @@ public sealed class HandleItemClick_Tests : NTButtonGroupTestContext {
         var items = CreateItems();
         var recordedKeys = new List<string?>();
         var cut = Render<NTButtonGroup<string>>(parameters => parameters
-            .Add(p => p.Items, items)
+            .AddChildContent(RenderItems(items))
             .Add(p => p.SelectedKey, items.First().Key)
             .Add(p => p.SelectedKeyChanged, EventCallback.Factory.Create<string?>(this, key => recordedKeys.Add(key))));
         var buttonElements = cut.FindAll("button.btn-group-btn");

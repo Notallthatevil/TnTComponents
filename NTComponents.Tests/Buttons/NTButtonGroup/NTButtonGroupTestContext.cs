@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using AutoFixture;
 using Bunit;
+using Microsoft.AspNetCore.Components;
 using NTComponents;
+using NTComponents.Core;
 using NTComponents.Tests.TestingUtility;
 using TestingUtilityHelpers = NTComponents.Tests.TestingUtility.TestingUtility;
 
@@ -30,25 +32,87 @@ public abstract class NTButtonGroupTestContext : BunitContext {
     /// <param name="iconOnlyFirstItem">Determines whether the first item renders as an icon-only button.</param>
     /// <param name="defaultSecondItem">Determines whether the second item should be marked as default selected.</param>
     /// <returns>A collection containing the generated items.</returns>
-    protected IReadOnlyCollection<NTButtonGroupItem<string>> CreateItems(bool iconOnlyFirstItem = false, bool defaultSecondItem = false) {
-        var first = new NTButtonGroupItem<string> {
+    protected IReadOnlyCollection<NTButtonGroupTestItem> CreateItems(bool iconOnlyFirstItem = false, bool defaultSecondItem = false) {
+        var first = new NTButtonGroupTestItem {
             Key = Fixture.Create<string>(),
             Label = iconOnlyFirstItem ? null : Fixture.Create<string>(),
+            StartIcon = iconOnlyFirstItem ? new MaterialIcon("home") : null,
             IsDefaultSelected = false
         };
 
-        if (iconOnlyFirstItem) {
-            first = first with {
-                StartIcon = MaterialIcon.Home
-            };
-        }
-
-        var second = new NTButtonGroupItem<string> {
+        var second = new NTButtonGroupTestItem {
             Key = Fixture.Create<string>(),
             Label = Fixture.Create<string>(),
             IsDefaultSelected = defaultSecondItem
         };
 
         return new[] { first, second };
+    }
+
+    /// <summary>
+    ///     Creates the child content needed to render each <see cref="NTButtonGroupItem{TObjectType}" /> instance.
+    /// </summary>
+    protected RenderFragment RenderItems(IEnumerable<NTButtonGroupTestItem> items) => builder => {
+        foreach (var item in items) {
+            builder.OpenComponent<NTButtonGroupItem<string>>(0);
+            builder.AddAttribute(1, nameof(NTButtonGroupItem<string>.Key), item.Key);
+
+            if (item.Label is not null) {
+                builder.AddAttribute(2, nameof(NTButtonGroupItem<string>.Label), item.Label);
+            }
+
+            if (item.StartIcon is not null) {
+                builder.AddAttribute(3, nameof(NTButtonGroupItem<string>.StartIcon), (object)item.StartIcon);
+            }
+
+            if (item.EndIcon is not null) {
+                builder.AddAttribute(4, nameof(NTButtonGroupItem<string>.EndIcon), (object)item.EndIcon);
+            }
+
+            if (item.Disabled) {
+                builder.AddAttribute(5, nameof(NTButtonGroupItem<string>.Disabled), true);
+            }
+
+            if (item.IsDefaultSelected) {
+                builder.AddAttribute(6, nameof(NTButtonGroupItem<string>.IsDefaultSelected), true);
+            }
+
+            builder.CloseComponent();
+        }
+    };
+
+    /// <summary>
+    ///     Describes the test-only data that drives each rendered item.
+    /// </summary>
+    protected sealed record NTButtonGroupTestItem {
+        /// <summary>
+        ///     A unique key for the item.
+        /// </summary>
+        public required string Key { get; init; }
+
+        /// <summary>
+        ///     Optional label text.
+        /// </summary>
+        public string? Label { get; init; }
+
+        /// <summary>
+        ///     Optional icon rendered before the label.
+        /// </summary>
+        public TnTIcon? StartIcon { get; init; }
+
+        /// <summary>
+        ///     Optional icon rendered after the label.
+        /// </summary>
+        public TnTIcon? EndIcon { get; init; }
+
+        /// <summary>
+        ///     Controls whether the item is disabled.
+        /// </summary>
+        public bool Disabled { get; init; }
+
+        /// <summary>
+        ///     Indicates whether the item should be selected by default.
+        /// </summary>
+        public bool IsDefaultSelected { get; init; }
     }
 }

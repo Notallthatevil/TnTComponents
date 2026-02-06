@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Components;
 using NTComponents;
 
@@ -19,27 +18,27 @@ public partial class NTButtonGroupDemo : ComponentBase {
         TnTColor.Error
     };
 
-    private static readonly IReadOnlyList<NTButtonGroupItem<string>> BaseButtonItems = new[] {
-        new NTButtonGroupItem<string> {
+    private static readonly IReadOnlyList<NTButtonGroupDemoItem> BaseButtonItems = new[] {
+        new NTButtonGroupDemoItem {
             Key = "mail",
             Label = "Mail",
             StartIcon = MaterialIcon.Mail
         },
-        new NTButtonGroupItem<string> {
+        new NTButtonGroupDemoItem {
             Key = "calendar",
             Label = "Calendar",
             StartIcon = MaterialIcon.CalendarMonth
         },
-        new NTButtonGroupItem<string> {
+        new NTButtonGroupDemoItem {
             Key = "spaces",
             Label = "Spaces",
             StartIcon = MaterialIcon.Groups
         },
-        new NTButtonGroupItem<string> {
+        new NTButtonGroupDemoItem {
             Key = "image1",
             StartIcon = MaterialIcon.QrCode
         },
-        new NTButtonGroupItem<string> {
+        new NTButtonGroupDemoItem {
             Key = "image2",
             StartIcon = MaterialIcon.Radar
         },
@@ -51,10 +50,7 @@ public partial class NTButtonGroupDemo : ComponentBase {
         BuildImageData("S", "#047857")
     };
 
-    private IReadOnlyList<NTButtonGroupItem<string>> DisplayItems => UseImages
-        ? BaseButtonItems.Select((item, index) => item with {
-        }).ToArray()
-        : BaseButtonItems;
+    private IReadOnlyList<NTButtonGroupDemoItem> DisplayItems => BaseButtonItems;
 
     private bool UseImages { get; set; }
 
@@ -110,5 +106,14 @@ public partial class NTButtonGroupDemo : ComponentBase {
     private static string BuildImageData(string glyph, string fillColor) {
         var svg = $"<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28'><rect width='28' height='28' rx='8' fill='{fillColor}'/><text x='50%' y='55%' font-size='14' font-weight='600' fill='white' text-anchor='middle' dominant-baseline='middle'>{glyph}</text></svg>";
         return $"data:image/svg+xml,{Uri.EscapeDataString(svg)}";
+    }
+
+    private sealed record NTButtonGroupDemoItem {
+        public required string Key { get; init; }
+        public string? Label { get; init; }
+        public TnTIcon? StartIcon { get; init; }
+        public TnTIcon? EndIcon { get; init; }
+        public bool Disabled { get; init; }
+        public bool IsDefaultSelected { get; init; }
     }
 }

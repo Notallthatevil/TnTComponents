@@ -16,7 +16,7 @@ public sealed class OnParametersSet_Tests : NTButtonGroupTestContext {
         var items = CreateItems(defaultSecondItem: true);
 
         // Act
-        var cut = Render<NTButtonGroup<string>>(parameters => parameters.Add(p => p.Items, items));
+        var cut = Render<NTButtonGroup<string>>(parameters => parameters.AddChildContent(RenderItems(items)));
         var selectedButtons = cut.FindAll("button.btn-group-selected");
 
         // Assert
@@ -35,7 +35,7 @@ public sealed class OnParametersSet_Tests : NTButtonGroupTestContext {
 
         // Act
         var cut = Render<NTButtonGroup<string>>(parameters => parameters
-            .Add(p => p.Items, items)
+            .AddChildContent(RenderItems(items))
             .Add(p => p.SelectedKey, explicitKey));
         var selectedButtons = cut.FindAll("button.btn-group-selected");
 

@@ -15,7 +15,7 @@ public sealed class Render_Tests : NTButtonGroupTestContext {
         var items = CreateItems();
 
         // Act
-        var cut = Render<NTButtonGroup<string>>(parameters => parameters.Add(p => p.Items, items));
+        var cut = Render<NTButtonGroup<string>>(parameters => parameters.AddChildContent(RenderItems(items)));
         var buttons = cut.FindAll("button.btn-group-btn");
 
         // Assert
@@ -32,7 +32,7 @@ public sealed class Render_Tests : NTButtonGroupTestContext {
 
         // Act
         var cut = Render<NTButtonGroup<string>>(parameters => parameters
-            .Add(p => p.Items, items)
+            .AddChildContent(RenderItems(items))
             .Add(p => p.DisplayType, NTButtonGroupDisplayType.Connected));
         var container = cut.Find("div.nt-button-group");
 
@@ -51,7 +51,7 @@ public sealed class Render_Tests : NTButtonGroupTestContext {
         var items = CreateItems(iconOnlyFirstItem: true);
 
         // Act
-        var cut = Render<NTButtonGroup<string>>(parameters => parameters.Add(p => p.Items, items));
+        var cut = Render<NTButtonGroup<string>>(parameters => parameters.AddChildContent(RenderItems(items)));
         var imageButton = cut.Find("button.tnt-image-button");
 
         // Assert

@@ -79,10 +79,12 @@ public partial class NTButtonGroup<TObjectType> : TnTComponentBase {
     public bool EnableRipple { get; set; } = true;
 
     /// <summary>
-    ///     The individual button descriptors that will render inside the group.
+    ///     The child content that defines the group items.
     /// </summary>
     [Parameter]
-    public IReadOnlyCollection<NTButtonGroupItem<TObjectType>> Items { get; set; } = [];
+    public RenderFragment? ChildContent { get; set; }
+
+    private readonly List<NTButtonGroupItem<TObjectType>> _items = [];
 
     /// <summary>
     ///     Invoked whenever selection toggles and passes the impacted item.
@@ -156,26 +158,41 @@ public partial class NTButtonGroup<TObjectType> : TnTComponentBase {
     [Parameter]
     public TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
 
-    private TObjectType _currentSelectedKey => SelectedKey ?? _internalSelectedKey;
-    private TObjectType _internalSelectedKey = default!;
+    /// <summary>
+    ///     Tracks a registered item so the group can render it.
+    /// </summary>
+    internal void RegisterItem(NTButtonGroupItem<TObjectType> item) {
+        if (item is not null && !_items.Contains(item)) {
+            _items.Add(item);
+            EnsureDefaultSelectionIsSet();
+            StateHasChanged();
+        }
+    }
 
-    /// <inheritdoc />
-    protected override void OnParametersSet() {
-        base.OnParametersSet();
+    /// <summary>
+    ///     Unregisters an item when it is removed from the group.
+    /// </summary>
+    internal void UnregisterItem(NTButtonGroupItem<TObjectType> item) {
+        if (item is not null && _items.Remove(item)) {
 
-        Items ??= [];
+            if (SelectedKey is not null && EqualityComparer<TObjectType>.Default.Equals(SelectedKey, item.Key)) {
+                SelectedKey = default;
+            }
+            StateHasChanged();
+        }
+    }
 
+    /// <summary>
+    ///     Ensures a default item is selected when no explicit selection exists.
+    /// </summary>
+    private void EnsureDefaultSelectionIsSet() {
         if (SelectedKey is not null) {
             return;
         }
 
-        if (_internalSelectedKey is not null) {
-            return;
-        }
-
-        var defaultItem = Items.FirstOrDefault(item => item.IsDefaultSelected);
+        var defaultItem = _items.FirstOrDefault(item => item.IsDefaultSelected);
         if (defaultItem is not null) {
-            _internalSelectedKey = defaultItem.Key;
+            SelectedKey = defaultItem.Key;
         }
     }
 
@@ -199,14 +216,14 @@ public partial class NTButtonGroup<TObjectType> : TnTComponentBase {
 
     private bool IsButtonDisabled(NTButtonGroupItem<TObjectType> item) => Disabled || item.Disabled;
 
-    private bool IsSelectedItem(NTButtonGroupItem<TObjectType> item) => item.Key is not null && _currentSelectedKey?.Equals(item.Key) == true;
+    private bool IsSelectedItem(NTButtonGroupItem<TObjectType> item) => item.Key is not null && SelectedKey?.Equals(item.Key) == true;
 
     private async Task UpdateSelectionAsync(TObjectType nextKey, NTButtonGroupItem<TObjectType>? item = null) {
-        if ((nextKey is null && _currentSelectedKey is null) || nextKey?.Equals(_currentSelectedKey) == true) {
+        if ((nextKey is null && SelectedKey is null) || nextKey?.Equals(SelectedKey) == true) {
             return;
         }
 
-        _internalSelectedKey = nextKey;
+        SelectedKey = nextKey;
 
         await SelectedKeyChanged.InvokeAsync(nextKey);
 
@@ -216,40 +233,6 @@ public partial class NTButtonGroup<TObjectType> : TnTComponentBase {
 
         await InvokeAsync(StateHasChanged);
     }
-}
-
-/// <summary>
-///     Describes a single button inside <see cref="NTButtonGroup{TObjectType}"/>
-/// </summary>
-public sealed record NTButtonGroupItem<TObjectType> {
-    /// <summary>
-    ///     A unique key used to identify the row.
-    /// </summary>
-    public required TObjectType Key { get; init; }
-
-    /// <summary>
-    ///     Optional label text, if not provided, a <see cref="TnTImageButton" /> is rendered.
-    /// </summary>
-    public string? Label { get; init; }
-
-    /// <summary>
-    ///     Optional icon rendered before the content.
-    /// </summary>
-    public TnTIcon? StartIcon { get; init; }
-    /// <summary>
-    ///     Optional icon rendered after the content.
-    /// </summary>
-    public TnTIcon? EndIcon { get; init; }
-
-    /// <summary>
-    ///     Marks the item as disabled.
-    /// </summary>
-    public bool Disabled { get; init; }
-
-    /// <summary>
-    ///     Specifies whether this item should be selected when the group first renders.
-    /// </summary>
-    public bool IsDefaultSelected { get; init; }
 }
 
 /// <summary>

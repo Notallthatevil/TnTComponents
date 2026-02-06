@@ -116,7 +116,6 @@
             <p>The preview below mirrors the current settings and shows how the button group responds.</p>
         </div>
         <NTButtonGroup
-            Items="DisplayItems"
             TObjectType="string"
             DisplayType="DisplayType"
             ButtonSize="ButtonSize"
@@ -126,6 +125,16 @@
             DisableRipple="DisableRipple"
             Disabled="Disabled"
             StopPropagation="StopPropagation"
-            OnSelectionChanged="HandleSelectionChanged" />
+            OnSelectionChanged="HandleSelectionChanged">
+            @foreach (var item in DisplayItems) {
+                <NTButtonGroupItem
+                    Key="@item.Key"
+                    Label="@item.Label"
+                    StartIcon="@item.StartIcon"
+                    EndIcon="@item.EndIcon"
+                    Disabled="@item.Disabled"
+                    IsDefaultSelected="@item.IsDefaultSelected" />
+            }
+        </NTButtonGroup>
     </TnTCard>
 </div>
