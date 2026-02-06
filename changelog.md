@@ -1,3 +1,10 @@
+## [1.16.2](https://github.com/Notallthatevil/NTComponents/compare/v1.16.1...v1.16.2) (2026-02-06)
+
+
+### Bug Fixes
+
+* **button-group:** update icon and label rendering ([af0b6a6](https://github.com/Notallthatevil/NTComponents/commit/af0b6a627c2f30f209505b1e57f9037b2652051f))
+
 # [1.16.0](https://github.com/Notallthatevil/NTComponents/compare/v1.15.0...v1.16.0) (2026-02-05)
 
 
