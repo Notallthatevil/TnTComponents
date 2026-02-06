@@ -27,12 +27,10 @@ public partial class NTButtonGroupDemo : ComponentBase {
         new NTButtonGroupDemoItem {
             Key = "calendar",
             Label = "Calendar",
-            StartIcon = MaterialIcon.CalendarMonth
         },
         new NTButtonGroupDemoItem {
             Key = "spaces",
             Label = "Spaces",
-            StartIcon = MaterialIcon.Groups
         },
         new NTButtonGroupDemoItem {
             Key = "image1",

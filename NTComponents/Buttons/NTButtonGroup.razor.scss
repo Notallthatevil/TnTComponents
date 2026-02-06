@@ -105,15 +105,15 @@ $nt-button-group-first-child-suffix: ' .tnt-small-button-layer';
     &--disconnected {
         ::deep {
             .btn-group-btn:has(+.btn-group-btn:active) {
-                transform: scaleX(0.95);
+                transform: scaleX(0.99);
                 transform-origin: 0 50%;
             }
 
             .btn-group-btn:active {
-                transform: scaleX(1.1);
+                transform: scaleX(1.03);
 
                 + .btn-group-btn {
-                    transform: scaleX(0.95);
+                    transform: scaleX(0.99);
                     transform-origin: 100% 50%;
                 }
             }

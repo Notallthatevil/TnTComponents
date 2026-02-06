@@ -45,11 +45,9 @@
 						@if (item.StartIcon is not null) {
 							@item.StartIcon.Render()
 						}
-						@if (!string.IsNullOrWhiteSpace(item.Label)) {
-							@item.Label
-						}
+						<span>@item.Label</span>
 						@if (item.EndIcon is not null) {
-							@item.EndIcon
+							@item.EndIcon.Render()
 						}
 					</TnTButton>
 				}
