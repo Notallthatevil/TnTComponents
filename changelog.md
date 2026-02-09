@@ -1,3 +1,10 @@
+## [1.17.1](https://github.com/Notallthatevil/NTComponents/compare/v1.17.0...v1.17.1) (2026-02-09)
+
+
+### Bug Fixes
+
+* **TnTInputSelect:** remove margin-top from label on select state ([9f13beb](https://github.com/Notallthatevil/NTComponents/commit/9f13beb14dad03b0ca21f2faff66d52da44c7432))
+
 # [1.17.0](https://github.com/Notallthatevil/NTComponents/compare/v1.16.2...v1.17.0) (2026-02-09)
 
 
