@@ -1,5 +1,6 @@
 @use '../Styles/_Variables/_colors.scss' as colors;
 @use '../Styles/_Variables/_measurements.scss' as measurements;
+@use '../Styles/_Variables/_typescale.scss' as typescale;
 
 $nt-button-group-first-child-suffix: ' .tnt-small-button-layer';
 
@@ -103,6 +104,8 @@ $nt-button-group-first-child-suffix: ' .tnt-small-button-layer';
     }
 
     &--disconnected {
+
+
         ::deep {
             .btn-group-btn:has(+.btn-group-btn:active) {
                 transform: scaleX(0.99);
@@ -136,6 +139,21 @@ $nt-button-group-first-child-suffix: ' .tnt-small-button-layer';
             padding-inline: 0;
         }
     }
+
+    &.invalid {
+        ::deep {
+            .tnt-button:has(.tnt-small-button-layer) .tnt-small-button-layer, .tnt-button:not(:has(.tnt-small-button-layer)) .tnt-button {
+                background-color: var(--btn-grp-error-color);
+                color: var(--btn-grp-on-error-color);
+            }
+        }
+    }
+}
+
+.tnt-supporting-text {
+    width: 100%;
+    text-wrap: wrap;
+    @include typescale.tnt-body-small;
 }
 
 @keyframes nt-button-group-disconnected-bounce {

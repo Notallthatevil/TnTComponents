@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.Forms;
 using NTComponents.Core;
+using System.Linq.Expressions;
 
 namespace NTComponents;
 
@@ -38,6 +35,12 @@ public partial class NTButtonGroup<TObjectType> : TnTComponentBase {
     public Size ButtonSize { get; set; } = Size.Small;
 
     /// <summary>
+    ///     The child content that defines the group items.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
     ///     Disables every button inside the group.
     /// </summary>
     [Parameter]
@@ -55,6 +58,12 @@ public partial class NTButtonGroup<TObjectType> : TnTComponentBase {
     [Parameter]
     public NTButtonGroupDisplayType DisplayType { get; set; } = NTButtonGroupDisplayType.Connected;
 
+    /// <summary>
+    ///     The cascading edit context from an <see cref="EditForm" />.
+    /// </summary>
+    [CascadingParameter]
+    public EditContext? EditContext { get; set; }
+
     /// <inheritdoc />
     public override string? ElementClass => CssClassBuilder.Create("nt-button-group")
         .AddFromAdditionalAttributes(AdditionalAttributes)
@@ -65,11 +74,14 @@ public partial class NTButtonGroup<TObjectType> : TnTComponentBase {
         .AddClass("nt-button-group-size-medium", ButtonSize == Size.Medium)
         .AddClass("nt-button-group-size-large", ButtonSize == Size.Large)
         .AddClass("nt-button-group-size-xl", ButtonSize is Size.Largest or Size.XL)
+        .AddClass(EditContext?.FieldCssClass(in _fieldIdentifier), EditContext is not null)
         .Build();
 
     /// <inheritdoc />
     public override string? ElementStyle => CssStyleBuilder.Create()
         .AddFromAdditionalAttributes(AdditionalAttributes)
+        .AddVariable("btn-grp-error-color", ErrorColor)
+        .AddVariable("btn-grp-on-error-color", OnErrorColor)
         .Build();
 
     /// <summary>
@@ -79,12 +91,16 @@ public partial class NTButtonGroup<TObjectType> : TnTComponentBase {
     public bool EnableRipple { get; set; } = true;
 
     /// <summary>
-    ///     The child content that defines the group items.
+    ///The color used to indicate an error state in the user interface.
     /// </summary>
     [Parameter]
-    public RenderFragment? ChildContent { get; set; }
+    public TnTColor ErrorColor { get; set; } = TnTColor.Error;
 
-    private readonly List<NTButtonGroupItem<TObjectType>> _items = [];
+    /// <summary>
+    ///The color used to on <see cref="ErrorColor"/>.
+    /// </summary>
+    [Parameter]
+    public TnTColor OnErrorColor { get; set; } = TnTColor.OnError;
 
     /// <summary>
     ///     Invoked whenever selection toggles and passes the impacted item.
@@ -115,6 +131,12 @@ public partial class NTButtonGroup<TObjectType> : TnTComponentBase {
     /// </summary>
     [Parameter]
     public EventCallback<TObjectType?> SelectedKeyChanged { get; set; }
+
+    /// <summary>
+    ///     The expression used to identify the field being bound.
+    /// </summary>
+    [Parameter]
+    public Expression<Func<TObjectType?>>? SelectedKeyExpression { get; set; }
 
     /// <summary>
     ///     The on-tint color used when a button is selected.
@@ -158,6 +180,10 @@ public partial class NTButtonGroup<TObjectType> : TnTComponentBase {
     [Parameter]
     public TnTColor? TintColor { get; set; } = TnTColor.SurfaceTint;
 
+    private string? _name => _fieldIdentifier.FieldName;
+    private readonly List<NTButtonGroupItem<TObjectType>> _items = [];
+    private FieldIdentifier _fieldIdentifier;
+
     /// <summary>
     ///     Tracks a registered item so the group can render it.
     /// </summary>
@@ -174,11 +200,19 @@ public partial class NTButtonGroup<TObjectType> : TnTComponentBase {
     /// </summary>
     internal void UnregisterItem(NTButtonGroupItem<TObjectType> item) {
         if (item is not null && _items.Remove(item)) {
-
             if (SelectedKey is not null && EqualityComparer<TObjectType>.Default.Equals(SelectedKey, item.Key)) {
                 SelectedKey = default;
             }
             StateHasChanged();
+        }
+    }
+
+    /// <inheritdoc />
+    protected override void OnParametersSet() {
+        base.OnParametersSet();
+
+        if (EditContext is not null && SelectedKeyExpression is not null) {
+            _fieldIdentifier = FieldIdentifier.Create(SelectedKeyExpression);
         }
     }
 
@@ -226,6 +260,10 @@ public partial class NTButtonGroup<TObjectType> : TnTComponentBase {
         SelectedKey = nextKey;
 
         await SelectedKeyChanged.InvokeAsync(nextKey);
+
+        if (EditContext is not null && _fieldIdentifier.FieldName is not null) {
+            EditContext.NotifyFieldChanged(_fieldIdentifier);
+        }
 
         if (item is not null) {
             await OnSelectionChanged.InvokeAsync(item);

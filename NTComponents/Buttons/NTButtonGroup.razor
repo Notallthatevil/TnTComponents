@@ -13,6 +13,7 @@
 			 id="@ElementId"
 			 role="group"
 			 aria-label="@AriaLabel">
+
 			@foreach (var item in _items) {
 				@if (string.IsNullOrEmpty(item.Label) && item.StartIcon is not null && item.EndIcon is null) {
 					<TnTImageButton class="@($"btn-group-btn{(IsSelectedItem(item) ? " btn-group-selected" : null)}")"
@@ -53,5 +54,13 @@
 				}
 			}
 		</div>
+		@if (EditContext is not null) {
+			@if (!string.IsNullOrWhiteSpace(_name)) {
+				<input type="hidden" name="@_name" value="@SelectedKey" />
+			}
+			<div class="tnt-supporting-text" style="@CssStyleBuilder.Create().AddForegroundColor(TextColor).Build()">
+				<ValidationMessage class="tnt-supporting-text tnt-validation-message" For="SelectedKeyExpression" style="@CssStyleBuilder.Create().AddForegroundColor(ErrorColor).Build()"/>
+			</div>
+		}
 	</DeferRendering>
 </CascadingValue>
