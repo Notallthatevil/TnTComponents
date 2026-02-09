@@ -1,3 +1,10 @@
+# [1.17.0](https://github.com/Notallthatevil/NTComponents/compare/v1.16.2...v1.17.0) (2026-02-09)
+
+
+### Features
+
+* **NTButtonGroup:** add Blazor form validation support ([c4527d5](https://github.com/Notallthatevil/NTComponents/commit/c4527d54e9d127ae74928cfccf9195a00fe3094b))
+
 ## [1.16.2](https://github.com/Notallthatevil/NTComponents/compare/v1.16.1...v1.16.2) (2026-02-06)
 
 
