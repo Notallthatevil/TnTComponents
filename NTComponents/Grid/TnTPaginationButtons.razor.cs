@@ -78,10 +78,8 @@ public partial class TnTPaginationButtons {
 
     /// <inheritdoc />
     protected override void Dispose(bool disposing) {
-        if (_lastUsedState is not null) {
-            _lastUsedState.TotalItemCountChangedCallback -= PageCountChangedAsync;
-            _lastUsedState = null;
-        }
+        _lastUsedState?.TotalItemCountChangedCallback -= PageCountChangedAsync;
+        _lastUsedState = null;
         base.Dispose(disposing);
     }
 }
