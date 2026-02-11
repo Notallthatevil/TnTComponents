@@ -172,7 +172,6 @@ public partial class TnTTypeahead<TItem> {
     private TItem? _focusedItem { get; set; }
 
     private TnTDebouncer _debouncer = default!;
-    private bool _focused;
     private TnTInputText _inputBox = default!;
     private IEnumerable<TItem> _items = [];
     private bool _itemSelected;
@@ -214,16 +213,6 @@ public partial class TnTTypeahead<TItem> {
         if (RefocusAfterSelect) {
             await _inputBox.SetFocusAsync();
         }
-        await InvokeAsync(StateHasChanged);
-    }
-
-    private async Task OnBlurAsync() {
-        _focused = false;
-        await InvokeAsync(StateHasChanged);
-    }
-
-    private async Task OnFocusAsync() {
-        _focused = true;
         await InvokeAsync(StateHasChanged);
     }
 

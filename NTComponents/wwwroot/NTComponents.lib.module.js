@@ -384,6 +384,11 @@ window.NTComponents = {
             }
         }
     },
+    stopEnter: (event) => {
+        if (event.key === 'Enter') {
+            event.stopPropagation();
+        }
+    },
     formKeyDownSupportingTextHandler: (event) => {
         const input = event.target;
         const container = input.closest('.tnt-input-container');
