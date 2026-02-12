@@ -1,4 +1,4 @@
-﻿@use '../Styles/_Variables/_colors.scss' as colors;
+@use '../Styles/_Variables/_colors.scss' as colors;
 @use '../Styles/_Variables/_typescale.scss' as typescale;
 @use '../Styles/_Variables/_elevation.scss' as elevation;
 
@@ -29,19 +29,22 @@ $fg-color: var(--tnt-dialog-fg-color);
     ::deep .tnt-dialog-header {
         position: relative;
         min-height: 16px;
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr 50px;
+        grid-template-rows: auto;
         align-items: center;
-        justify-content: space-between;
         color: inherit;
 
         h2 {
             @include typescale.tnt-headline-small;
             display: inline;
             color: inherit;
+            grid-column: 1;
         }
 
         button.tnt-components {
             color: inherit;
+            grid-column: 2;
         }
     }
 

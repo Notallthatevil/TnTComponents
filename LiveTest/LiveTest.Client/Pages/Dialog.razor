@@ -1,8 +1,17 @@
-﻿@page "/dialog"
+@page "/dialog"
+@using NTComponents
+@inject ITnTDialogService DialogService
+@rendermode InteractiveAuto
 <h3>Dialog</h3>
-
 <LiveTest.Client.Components.DialogComponent />
 
-@code {
 
+<TnTButton OnClickCallback="@OpenConfirmationDialog">
+	Confirmation
+</TnTButton>
+@code {
+	private async Task OpenConfirmationDialog()
+	{
+		await DialogService.OpenConfirmationDialogAsync(EventCallback.Empty);
+	}
 }
