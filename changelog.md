@@ -1,3 +1,16 @@
+# [1.20.0](https://github.com/Notallthatevil/NTComponents/compare/v1.19.0...v1.20.0) (2026-02-12)
+
+
+### Bug Fixes
+
+* **enum:** add missing comma in TnTColor enum ([13792c0](https://github.com/Notallthatevil/NTComponents/commit/13792c0c5eb74f61c1e2f7e18ff0d1dc22c1b819))
+
+
+### Features
+
+* **dialog:** refactor dialog trigger and header layout ([dc7c251](https://github.com/Notallthatevil/NTComponents/commit/dc7c251dd3f5fb140ee61847e6d8cfeebe8068f1))
+* **typeahead:** improve type safety and binding ([b96eb18](https://github.com/Notallthatevil/NTComponents/commit/b96eb18e036cea06dd6049ec6ac7bd4786fab0f2))
+
 # [1.19.0](https://github.com/Notallthatevil/NTComponents/compare/v1.18.0...v1.19.0) (2026-02-12)
 
 
