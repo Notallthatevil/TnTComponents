@@ -14,7 +14,7 @@
 	</select>
 </label>
 
-<TnTTypeahead ItemsLookupFunc="SearchFunc" Label="Typeahead" Appearance="@Appearance" ItemSelectedCallback="@((Item item) => SelectedItems.Add(item))"SupportingText="Support" ErrorMessage="My Error Message" >
+<TnTTypeahead TItem="Item" ItemsLookupFunc="SearchFunc" Label="Typeahead" Appearance="@Appearance" ItemSelectedCallback="@((Item item) => SelectedItems.Add(item))" SupportingText="Support" ErrorMessage="My Error Message" >
 	<Tooltip>My tooltip</Tooltip>
 	<ResultTemplate>
 		@context.Name @context.Email
@@ -31,14 +31,14 @@
 <br />
 <br />
 <br />
-Value: @_value;
+Value: @_value
 <br />
 <br />
 <br />
 <br />
 
 
-<TnTTypeahead @bind-Value="_value" ItemsLookupFunc="SearchFunc" Appearance="@Appearance" ValueToStringFunc="@(item => item.Name)" ResetValueOnSelect="false" ItemSelectedCallback="@((Item item) => SelectedItems.Add(item))" />
+<TnTTypeahead TItem="Item" Value="_value" ValueChanged="@(v => _value = v)" ItemsLookupFunc="SearchFunc" Appearance="@Appearance" ValueToStringFunc="@(item => item.Name)" ResetValueOnSelect="false" ItemSelectedCallback="@((Item item) => SelectedItems.Add(item))" />
 
 @foreach (var item in SelectedItems) {
 	<span>
@@ -47,11 +47,11 @@ Value: @_value;
 }
 
 @code {
-	private string? _value;
+    private string? _value;
 
 	private IQueryable<Item> Items = new List<Item>().AsQueryable();
 
-	private List<Item> SelectedItems = [];
+    private List<Item> SelectedItems = new List<Item>();
 	private FormAppearance Appearance = FormAppearance.Outlined;
 
 	private class Item {
@@ -77,10 +77,10 @@ Value: @_value;
 
 	private async Task<IEnumerable<Item>> SearchFunc(string? search, CancellationToken cancellationToken = default) {
 		await Task.Delay(1000, cancellationToken);
-		if (!string.IsNullOrWhiteSpace(search)) {
+        if (!string.IsNullOrWhiteSpace(search)) {
 			return Items.Where(x => x.Name.Contains(search, StringComparison.OrdinalIgnoreCase));
 		}
-		return [];
+		return Array.Empty<Item>();
 	}
 
 }
