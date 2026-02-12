@@ -1,3 +1,11 @@
+# [1.18.0](https://github.com/Notallthatevil/NTComponents/compare/v1.17.1...v1.18.0) (2026-02-12)
+
+
+### Features
+
+* **input:** prevent Enter key propagation in inputs ([316fdd5](https://github.com/Notallthatevil/NTComponents/commit/316fdd563c8b30970512104918aab70e60f72b6f))
+* **typeahead:** add Blazor form validation support ([ea5be23](https://github.com/Notallthatevil/NTComponents/commit/ea5be2380c0acbd1363cfc35eb0ff42a1e737222))
+
 ## [1.17.1](https://github.com/Notallthatevil/NTComponents/compare/v1.17.0...v1.17.1) (2026-02-09)
 
 
