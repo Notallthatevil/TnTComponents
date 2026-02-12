@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
+using System.Linq.Expressions;
 using NTComponents.Core;
 
 namespace NTComponents;
@@ -161,10 +163,22 @@ public partial class TnTTypeahead<TItem> {
     public EventCallback<string> ValueChanged { get; set; }
 
     /// <summary>
+    ///     An expression that identifies the value to be validated.
+    /// </summary>
+    [Parameter]
+    public Expression<Func<TItem?>>? ValueExpression { get; set; }
+
+    /// <summary>
     ///     Function used to convert an item to its string representation for display.
     /// </summary>
     [Parameter]
     public Func<TItem, string> ValueToStringFunc { get; set; } = item => item?.ToString() ?? string.Empty;
+
+    /// <summary>
+    ///     The cascading edit context used for form validation.
+    /// </summary>
+    [CascadingParameter]
+    private EditContext? EditContext { get; set; }
 
     /// <summary>
     ///     The currently focused item in the suggestion list.
@@ -177,9 +191,13 @@ public partial class TnTTypeahead<TItem> {
     private bool _itemSelected;
     private int _lastDebounceMilliseconds = -1;
     private bool _searching;
+    private string? _displayErrorMessage;
+    private FieldIdentifier? _fieldIdentifier;
 
     /// <inheritdoc />
     public void Dispose() {
+        EditContext?.OnValidationStateChanged -= HandleValidationStateChanged;
+
         _debouncer?.Dispose();
         _debouncer = null!;
 
@@ -187,8 +205,21 @@ public partial class TnTTypeahead<TItem> {
     }
 
     /// <inheritdoc />
+    protected override void OnInitialized() {
+        base.OnInitialized();
+
+        EditContext?.OnValidationStateChanged += HandleValidationStateChanged;
+
+        _displayErrorMessage = ErrorMessage;
+    }
+
+    /// <inheritdoc />
     protected override void OnParametersSet() {
         base.OnParametersSet();
+
+        if (EditContext is not null && ValueExpression is not null) {
+            _fieldIdentifier = FieldIdentifier.Create(ValueExpression);
+        }
 
         // Only recreate debouncer if the delay actually changed
         if (_lastDebounceMilliseconds != DebounceMilliseconds) {
@@ -196,6 +227,8 @@ public partial class TnTTypeahead<TItem> {
             _debouncer = new TnTDebouncer(DebounceMilliseconds);
             _lastDebounceMilliseconds = DebounceMilliseconds;
         }
+
+        UpdateValidationState();
     }
 
     /// <summary>
@@ -210,6 +243,9 @@ public partial class TnTTypeahead<TItem> {
         _focusedItem = default;
         _itemSelected = true;
         await ItemSelectedCallback.InvokeAsync(item);
+
+        EditContext?.Validate();
+
         if (RefocusAfterSelect) {
             await _inputBox.SetFocusAsync();
         }
@@ -230,6 +266,8 @@ public partial class TnTTypeahead<TItem> {
             if (string.IsNullOrWhiteSpace(searchValue)) {
                 _searching = false;
                 _items = [];
+
+                EditContext?.Validate();
             }
             else {
                 _items = [];
@@ -280,5 +318,18 @@ public partial class TnTTypeahead<TItem> {
                     break;
             }
         }
+    }
+
+    private void HandleValidationStateChanged(object? sender, ValidationStateChangedEventArgs e) {
+        UpdateValidationState();
+    }
+
+    private void UpdateValidationState() {
+        var messages = _fieldIdentifier.HasValue
+            ? EditContext?.GetValidationMessages(_fieldIdentifier.Value)
+            : EditContext?.GetValidationMessages();
+
+        _displayErrorMessage = messages?.Any() == true ? ErrorMessage : null;
+        InvokeAsync(StateHasChanged);
     }
 }
