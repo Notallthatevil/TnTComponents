@@ -1,3 +1,10 @@
+# [1.19.0](https://github.com/Notallthatevil/NTComponents/compare/v1.18.0...v1.19.0) (2026-02-12)
+
+
+### Features
+
+* **TnTColor:** add assert-related color values to enum ([54995cb](https://github.com/Notallthatevil/NTComponents/commit/54995cbb323088d6f0114db179dca95609685e71))
+
 # [1.18.0](https://github.com/Notallthatevil/NTComponents/compare/v1.17.1...v1.18.0) (2026-02-12)
 
 
