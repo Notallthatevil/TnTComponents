@@ -337,6 +337,26 @@ public enum TnTColor {
     ///     Color used for content that appears on information containers.
     /// </summary>
     OnInfoContainer
+
+    /// <summary>
+    ///     Assert color, used for assertion messages and indicators.
+    /// </summary>
+    Assert,
+
+    /// <summary>
+    ///     Color used for content that appears on assert color.
+    /// </summary>
+    OnAssert,
+
+    /// <summary>
+    ///     Container color for the assert color, used for less prominent assert indicators.
+    /// </summary>
+    AssertContainer,
+
+    /// <summary>
+    ///     Color used for content that appears on assert containers.
+    /// </summary>
+    OnAssertContainer
 }
 
 /// <summary>
