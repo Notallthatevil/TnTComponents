@@ -386,6 +386,12 @@ window.NTComponents = {
     },
     stopEnter: (event) => {
         if (event.key === 'Enter') {
+            // Prevent the default action (such as submitting a surrounding form)
+            // in addition to stopping propagation so that selecting an item with Enter
+            // in a typeahead does not cause the form to submit.
+            if (typeof event.preventDefault === 'function') {
+                event.preventDefault();
+            }
             event.stopPropagation();
         }
     },
