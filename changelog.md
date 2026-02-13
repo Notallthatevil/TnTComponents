@@ -1,3 +1,10 @@
+## [1.20.4](https://github.com/Notallthatevil/NTComponents/compare/v1.20.3...v1.20.4) (2026-02-13)
+
+
+### Bug Fixes
+
+* **tests:** update key event handlers to use onkeydown for currency and text inputs ([a240250](https://github.com/Notallthatevil/NTComponents/commit/a240250baf2c6dbf174957f03c28d49ff867daad))
+
 ## [1.20.3](https://github.com/Notallthatevil/NTComponents/compare/v1.20.2...v1.20.3) (2026-02-13)
 
 
