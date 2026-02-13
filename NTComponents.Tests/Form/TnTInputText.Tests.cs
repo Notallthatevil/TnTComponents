@@ -404,7 +404,8 @@ public class TnTInputText_Tests : BunitContext {
         var input = cut.Find("input");
 
         // Assert
-        input.HasAttribute("onkeydown").Should().BeFalse();
+        var onKeyDown = input.GetAttribute("onkeydown");
+        onKeyDown.Should().Be("NTComponents.formKeyDownSupportingTextHandler(event)");
         input.HasAttribute("onkeyup").Should().BeFalse();
     }
 
@@ -538,7 +539,9 @@ public class TnTInputText_Tests : BunitContext {
         var input = cut.Find("input[type=tel]");
 
         // Assert
-        input.GetAttribute("onkeypress").Should().Contain("NTComponents.enforcePhoneFormat(event)");
+        var onKeyDown = input.GetAttribute("onkeydown");
+        onKeyDown.Should().Contain("NTComponents.enforcePhoneFormat(event)");
+        onKeyDown.Should().Contain("NTComponents.formKeyDownSupportingTextHandler(event)");
         input.GetAttribute("onkeyup").Should().Be("NTComponents.formatToPhone(event)");
     }
 

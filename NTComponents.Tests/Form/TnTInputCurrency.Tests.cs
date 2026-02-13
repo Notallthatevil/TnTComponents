@@ -118,7 +118,9 @@ public class TnTInputCurrency_Tests : BunitContext {
         var input = cut.Find("input");
 
         // Assert
-        input.GetAttribute("onkeypress").Should().Contain("NTComponents.enforceCurrencyFormat(event)");
+        var onKeyDown = input.GetAttribute("onkeydown");
+        onKeyDown.Should().Contain("NTComponents.enforceCurrencyFormat(event)");
+        onKeyDown.Should().Contain("NTComponents.formKeyDownSupportingTextHandler(event)");
         input.GetAttribute("onkeyup").Should().Be("NTComponents.formatToCurrency(event)");
     }
 

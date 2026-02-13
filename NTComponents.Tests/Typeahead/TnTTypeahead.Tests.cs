@@ -77,7 +77,7 @@ public class TnTTypeahead_Tests : BunitContext {
         items.First().GetAttribute("class").Should().Contain("tnt-focused");
 
         // Act
-        await input.KeyDownAsync(new KeyboardEventArgs { Key = "ArrowDown" });
+        await input.KeyUpAsync(new KeyboardEventArgs { Key = "ArrowDown" });
 
         // Get fresh references after keydown
         items = cut.FindAll(".tnt-typeahead-list-item");
@@ -102,21 +102,21 @@ public class TnTTypeahead_Tests : BunitContext {
 
         // Test wrapping from last to first with ArrowDown Navigate to last item
         for (int i = 0; i < items.Count - 1; i++) {
-            await input.KeyDownAsync(new KeyboardEventArgs { Key = "ArrowDown" });
+            await input.KeyUpAsync(new KeyboardEventArgs { Key = "ArrowDown" });
         }
 
         items = cut.FindAll(".tnt-typeahead-list-item");
         items.Last().GetAttribute("class").Should().Contain("tnt-focused");
 
         // Act - ArrowDown from last item should wrap to first
-        await input.KeyDownAsync(new KeyboardEventArgs { Key = "ArrowDown" });
+        await input.KeyUpAsync(new KeyboardEventArgs { Key = "ArrowDown" });
 
         // Assert
         items = cut.FindAll(".tnt-typeahead-list-item");
         items.First().GetAttribute("class").Should().Contain("tnt-focused");
 
         // Test wrapping from first to last with ArrowUp Act - ArrowUp from first item should wrap to last
-        await input.KeyDownAsync(new KeyboardEventArgs { Key = "ArrowUp" });
+        await input.KeyUpAsync(new KeyboardEventArgs { Key = "ArrowUp" });
 
         // Assert
         items = cut.FindAll(".tnt-typeahead-list-item");
@@ -137,14 +137,14 @@ public class TnTTypeahead_Tests : BunitContext {
         items.Should().HaveCountGreaterThan(1);
 
         // Move focus to second item first
-        await input.KeyDownAsync(new KeyboardEventArgs { Key = "ArrowDown" });
+        await input.KeyUpAsync(new KeyboardEventArgs { Key = "ArrowDown" });
 
         // Get fresh references after first keydown
         items = cut.FindAll(".tnt-typeahead-list-item");
         items[1].GetAttribute("class").Should().Contain("tnt-focused");
 
         // Act
-        await input.KeyDownAsync(new KeyboardEventArgs { Key = "ArrowUp" });
+        await input.KeyUpAsync(new KeyboardEventArgs { Key = "ArrowUp" });
 
         // Get fresh references after second keydown
         items = cut.FindAll(".tnt-typeahead-list-item");
@@ -171,7 +171,7 @@ public class TnTTypeahead_Tests : BunitContext {
         items.First().GetAttribute("class").Should().Contain("tnt-focused");
 
         // Act - Navigate to second item
-        await input.KeyDownAsync(new KeyboardEventArgs { Key = "ArrowDown" });
+        await input.KeyUpAsync(new KeyboardEventArgs { Key = "ArrowDown" });
 
         // Get fresh references after keydown
         items = cut.FindAll(".tnt-typeahead-list-item");
@@ -389,7 +389,7 @@ public class TnTTypeahead_Tests : BunitContext {
         await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
 
         // Act
-        await input.KeyDownAsync(new KeyboardEventArgs { Key = "Enter" });
+        await input.KeyUpAsync(new KeyboardEventArgs { Key = "Enter" });
 
         // Assert
         selectedItem.Should().Be("Apple");
@@ -413,7 +413,7 @@ public class TnTTypeahead_Tests : BunitContext {
 
         // Act - Press Enter key to select focused item
         var keyboardEventArgs = new KeyboardEventArgs { Key = "Enter" };
-        await input.KeyDownAsync(keyboardEventArgs);
+        await input.KeyUpAsync(keyboardEventArgs);
 
         // Assert 
         // Verify the item was selected (indicating the component handled the event)
@@ -446,7 +446,7 @@ public class TnTTypeahead_Tests : BunitContext {
         items.Should().HaveCountGreaterThan(0);
 
         // Act - The exact behavior depends on component internals, so let's just verify the parameter setting
-        await input.KeyDownAsync(new KeyboardEventArgs { Key = "Escape" });
+        await input.KeyUpAsync(new KeyboardEventArgs { Key = "Escape" });
 
         // Assert - Verify the component parameter is configured correctly
         cut.Instance.ResetValueOnEscape.Should().BeTrue();
@@ -464,7 +464,7 @@ public class TnTTypeahead_Tests : BunitContext {
         await Task.Delay(400, Xunit.TestContext.Current.CancellationToken);
 
         // Act
-        await input.KeyDownAsync(new KeyboardEventArgs { Key = "Escape" });
+        await input.KeyUpAsync(new KeyboardEventArgs { Key = "Escape" });
 
         // Assert - Verify the component parameter is configured correctly
         cut.Instance.ResetValueOnEscape.Should().BeFalse();
@@ -604,10 +604,10 @@ public class TnTTypeahead_Tests : BunitContext {
         cut.FindAll(".tnt-typeahead-list-item").Should().BeEmpty();
 
         // Act & Assert - Should not throw
-        await input.KeyDownAsync(new KeyboardEventArgs { Key = "ArrowDown" });
-        await input.KeyDownAsync(new KeyboardEventArgs { Key = "ArrowUp" });
-        await input.KeyDownAsync(new KeyboardEventArgs { Key = "Enter" });
-        await input.KeyDownAsync(new KeyboardEventArgs { Key = "Escape" });
+        await input.KeyUpAsync(new KeyboardEventArgs { Key = "ArrowDown" });
+        await input.KeyUpAsync(new KeyboardEventArgs { Key = "ArrowUp" });
+        await input.KeyUpAsync(new KeyboardEventArgs { Key = "Enter" });
+        await input.KeyUpAsync(new KeyboardEventArgs { Key = "Escape" });
     }
 
     [Fact]
@@ -625,11 +625,11 @@ public class TnTTypeahead_Tests : BunitContext {
         items.First().GetAttribute("class").Should().Contain("tnt-focused");
 
         // Act - Navigation should not change focus on single item
-        await input.KeyDownAsync(new KeyboardEventArgs { Key = "ArrowDown" });
+        await input.KeyUpAsync(new KeyboardEventArgs { Key = "ArrowDown" });
         items = cut.FindAll(".tnt-typeahead-list-item");
         items.First().GetAttribute("class").Should().Contain("tnt-focused");
 
-        await input.KeyDownAsync(new KeyboardEventArgs { Key = "ArrowUp" });
+        await input.KeyUpAsync(new KeyboardEventArgs { Key = "ArrowUp" });
         items = cut.FindAll(".tnt-typeahead-list-item");
 
         // Assert
@@ -1050,7 +1050,7 @@ public class TnTTypeahead_Tests : BunitContext {
     //    var input = cut.Find("input");
 
     //    // Act - Press Enter key in a normal text input (not typeahead)
-    //    await input.KeyDownAsync(new KeyboardEventArgs { Key = "Enter" });
+    //    await input.KeyUpAsync(new KeyboardEventArgs { Key = "Enter" });
 
     //    // Assert
     //    // Verify the form WAS submitted (normal behavior for forms)
@@ -1079,7 +1079,7 @@ public class TnTTypeahead_Tests : BunitContext {
     //    focusedItems.Should().HaveCount(1, "An item should be focused for this test");
 
     //    // Act - Press Enter key to select focused item
-    //    await input.KeyDownAsync(new KeyboardEventArgs { Key = "Enter" });
+    //    await input.KeyUpAsync(new KeyboardEventArgs { Key = "Enter" });
 
     //    // Assert
     //    // Verify the item was selected
