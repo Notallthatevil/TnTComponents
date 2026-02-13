@@ -1,3 +1,10 @@
+## [1.20.2](https://github.com/Notallthatevil/NTComponents/compare/v1.20.1...v1.20.2) (2026-02-13)
+
+
+### Bug Fixes
+
+* **input:** switch key event handlers to onkeydown ([9b19ce4](https://github.com/Notallthatevil/NTComponents/commit/9b19ce4bb59d204fa83956fa1b8c20e01e01b304))
+
 ## [1.20.1](https://github.com/Notallthatevil/NTComponents/compare/v1.20.0...v1.20.1) (2026-02-13)
 
 
