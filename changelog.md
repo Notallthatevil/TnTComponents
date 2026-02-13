@@ -1,3 +1,10 @@
+## [1.20.3](https://github.com/Notallthatevil/NTComponents/compare/v1.20.2...v1.20.3) (2026-02-13)
+
+
+### Bug Fixes
+
+* **style:** adjust progress bar top spacing in TnTTypeahead ([ca5adf7](https://github.com/Notallthatevil/NTComponents/commit/ca5adf7cbeea57ddff85288cd02fa46ce28b511f))
+
 ## [1.20.2](https://github.com/Notallthatevil/NTComponents/compare/v1.20.1...v1.20.2) (2026-02-13)
 
 
