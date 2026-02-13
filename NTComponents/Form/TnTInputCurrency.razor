@@ -20,7 +20,7 @@
                maxlength="@GetMaxLength()"
                min="@GetMinValue()"
                max="@GetMaxValue()"
-               onkeypress="NTComponents.enforceCurrencyFormat(event); NTComponents.formKeyDownSupportingTextHandler(event)"
+               onkeydown="NTComponents.enforceCurrencyFormat(event); NTComponents.formKeyDownSupportingTextHandler(event)"
                onkeyup="NTComponents.formatToCurrency(event)"
                cultureCode="@CultureCode"
                currencyCode="@CurrencyCode"
