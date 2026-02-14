@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 
 namespace NTComponents.Tests.Editors;
@@ -313,5 +315,150 @@ public class TnTMarkdownEditor_Tests : BunitContext {
 
         // Assert
         cut.Instance.Value.Should().Be(value);
+    }
+
+    [Fact]
+    public async Task WithEditContext_UpdateValue_NotifiesBoundFields() {
+        // Arrange
+        var model = new MarkdownEditorModel();
+        var editContext = new EditContext(model);
+        var notifiedFields = new List<string>();
+        editContext.OnFieldChanged += (_, args) => notifiedFields.Add(args.FieldIdentifier.FieldName);
+
+        var cut = Render<TnTMarkdownEditor>(p => p
+            .Add(x => x.ValueExpression, () => model.Value)
+            .Add(x => x.RenderedHtmlExpression, () => model.RenderedHtml)
+            .AddCascadingValue(editContext));
+
+        // Act
+        await cut.Instance.UpdateValue("# Test", "<body><p>Content</p></body>");
+
+        // Assert
+        notifiedFields.Should().Contain(nameof(MarkdownEditorModel.Value));
+        notifiedFields.Should().Contain(nameof(MarkdownEditorModel.RenderedHtml));
+    }
+
+    [Fact]
+    public void ValidationMessages_Render_When_EditContext_Present() {
+        // Arrange
+        var model = new MarkdownEditorModel();
+        var editContext = new EditContext(model);
+
+        var cut = Render<TnTMarkdownEditor>(p => p
+            .Add(x => x.ValueExpression, () => model.Value)
+            .Add(x => x.RenderedHtmlExpression, () => model.RenderedHtml)
+            .AddCascadingValue(editContext));
+
+        // Act
+        var supportingText = cut.FindAll(".tnt-supporting-text");
+
+        // Assert
+        supportingText.Should().ContainSingle();
+    }
+
+    [Fact]
+    public void SupportingText_Renders_When_Set() {
+        // Arrange
+        var supportingTextValue = "Helpful hint.";
+
+        // Act
+        var cut = Render<TnTMarkdownEditor>(p => p
+            .Add(x => x.SupportingText, supportingTextValue));
+
+        // Assert
+        cut.Find(".tnt-supporting-text").TextContent.Should().Contain(supportingTextValue);
+    }
+
+    [Fact]
+    public void SupportingText_DoesNotRender_When_Empty_And_NoValidation() {
+        // Arrange
+        var cut = Render<TnTMarkdownEditor>();
+
+        // Act
+        var supportingText = cut.FindAll(".tnt-supporting-text");
+
+        // Assert
+        supportingText.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void SupportingText_Renders_With_EditContext() {
+        // Arrange
+        var model = new MarkdownEditorModel();
+        var editContext = new EditContext(model);
+        var supportingTextValue = "Validation help.";
+
+        // Act
+        var cut = Render<TnTMarkdownEditor>(p => p
+            .Add(x => x.ValueExpression, () => model.Value)
+            .Add(x => x.RenderedHtmlExpression, () => model.RenderedHtml)
+            .Add(x => x.SupportingText, supportingTextValue)
+            .AddCascadingValue(editContext));
+
+        // Assert
+        cut.Find(".tnt-supporting-text").TextContent.Should().Contain(supportingTextValue);
+    }
+
+    [Fact]
+    public async Task InvalidClass_Applied_When_Value_Invalid() {
+        // Arrange
+        var model = new MarkdownEditorModel();
+        var editContext = new EditContext(model);
+        var messageStore = new ValidationMessageStore(editContext);
+
+        var cut = Render<TnTMarkdownEditor>(p => p
+            .Add(x => x.ValueExpression, () => model.Value)
+            .Add(x => x.RenderedHtmlExpression, () => model.RenderedHtml)
+            .AddCascadingValue(editContext));
+
+        // Act
+        await cut.InvokeAsync(() => {
+            messageStore.Add(new FieldIdentifier(model, nameof(MarkdownEditorModel.Value)), "Required");
+            editContext.NotifyValidationStateChanged();
+        });
+
+        // Assert
+        cut.WaitForAssertion(() => cut.Find("div.tnt-markdown-editor").ClassList.Should().Contain("invalid"));
+    }
+
+    [Fact]
+    public async Task WithBlurCallback_HandleBlurAsync_InvokesCallback() {
+        // Arrange
+        var blurInvoked = false;
+        var cut = Render<TnTMarkdownEditor>(p => p
+            .Add(x => x.OnBlurCallback, EventCallback.Factory.Create<FocusEventArgs>(this, _ => blurInvoked = true)));
+
+        // Act
+        await cut.Instance.HandleBlurAsync();
+
+        // Assert
+        blurInvoked.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task WithEditContext_HandleBlurAsync_NotifiesBoundFields() {
+        // Arrange
+        var model = new MarkdownEditorModel();
+        var editContext = new EditContext(model);
+        var notifiedFields = new List<string>();
+        editContext.OnFieldChanged += (_, args) => notifiedFields.Add(args.FieldIdentifier.FieldName);
+
+        var cut = Render<TnTMarkdownEditor>(p => p
+            .Add(x => x.ValueExpression, () => model.Value)
+            .Add(x => x.RenderedHtmlExpression, () => model.RenderedHtml)
+            .AddCascadingValue(editContext));
+
+        // Act
+        await cut.Instance.HandleBlurAsync();
+
+        // Assert
+        notifiedFields.Should().Contain(nameof(MarkdownEditorModel.Value));
+        notifiedFields.Should().Contain(nameof(MarkdownEditorModel.RenderedHtml));
+    }
+
+    private sealed class MarkdownEditorModel {
+        public string? Value { get; set; }
+
+        public MarkupString? RenderedHtml { get; set; }
     }
 }

@@ -172,6 +172,12 @@ export function onLoad(element, dotNetElementRef) {
                                 dotNetRef.invokeMethodAsync("UpdateValue", text, easyMDE.options.previewRender(text));
                             }
                         });
+                        easyMDE.codemirror.on("blur", function () {
+                            const dotNetRef = elementDotNetRefMap.get(newValue);
+                            if (dotNetRef) {
+                                dotNetRef.invokeMethodAsync("HandleBlurAsync");
+                            }
+                        });
                     }
                 }
 

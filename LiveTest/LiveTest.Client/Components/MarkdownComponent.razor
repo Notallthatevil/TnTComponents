@@ -1,15 +1,29 @@
-<NTComponents.TnTMarkdownEditor @bind-Value="_value" @bind-RenderedHtml="_markdown" />
+@using NTComponents
 
+<TnTForm Model="Model" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
 
-<NTComponents.TnTRow>
-    @_value
-</NTComponents.TnTRow>
-<NTComponents.TnTRow>
-    @_markdown
-</NTComponents.TnTRow>
-
-
-@code {
-    private string? _value;
-    private MarkupString? _markdown;
-}
+    <TnTCard Appearance="CardAppearance.Outlined">
+        <TnTRow>
+            <TnTColumn S="12">
+                <TnTMarkdownEditor @bind-Value="Model.Value"
+                                  @bind-RenderedHtml="Model.RenderedHtml"
+                                  OnBlurCallback="HandleBlurAsync" />
+            </TnTColumn>
+        </TnTRow>
+        <TnTRow>
+            <TnTColumn S="12">
+                <TnTButton Type="ButtonType.Submit">Submit</TnTButton>
+            </TnTColumn>
+        </TnTRow>
+        <TnTRow>
+            <TnTColumn S="12">
+                <div>@SubmitMessage</div>
+                <div>@BlurMessage</div>
+                <div>Markdown: @Model.Value</div>
+                <div>Rendered HTML: @RenderedHtmlValue</div>
+            </TnTColumn>
+        </TnTRow>
+    </TnTCard>
+</TnTForm>
