@@ -1,3 +1,10 @@
+# [1.21.0](https://github.com/Notallthatevil/NTComponents/compare/v1.20.4...v1.21.0) (2026-02-14)
+
+
+### Features
+
+* **markdown-editor:** add form validation and UX improvements ([4187d2c](https://github.com/Notallthatevil/NTComponents/commit/4187d2c8f865ad6837e4b3892f63aaa8c16dac96))
+
 ## [1.20.4](https://github.com/Notallthatevil/NTComponents/compare/v1.20.3...v1.20.4) (2026-02-13)
 
 
